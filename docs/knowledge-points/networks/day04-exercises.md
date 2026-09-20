@@ -93,7 +93,7 @@
 
 - A. HTTP、FTP、SMTP
 - B. TCP、UDP
-- C. **IP、ICMP、ARP**
+- C. IP、ICMP、ARP
 - D. Ethernet、PPP、Wi-Fi
 
 **11.** 关于"端口号"，下列说法**正确**的是（ ）。
