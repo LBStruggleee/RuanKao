@@ -7,6 +7,8 @@
 > 本试卷的试题中共有 75 个空格，需要全部解答，每个空格 1 分，满分 75 分。
 > 每个空格对应一个序号，有 A、B、C、D 四个选项，请选择一个最恰当的选项作为解答。
 
+> **转录约定**：本文逐字转录原卷文字，原卷印刷中的错别字、异体拼写与病句一律保留，并在其后标注 **【存疑：原文如此，应为"…"】**；仅对标点、空格与排版（如选项换行）作格式统一，不改动能改动原文用字的任何内容。题目附注中凡涉及图形的说明，一律只给出**原图的结构性数据**（边与权值、节点与分支条件、类图结构等），**不给出计算结果或推导结论**——关键路径、路径数目、时差、语法树等请自行计算推导，对答案时再核对 `2021H1-morning-key.md`。
+
 ---
 
 ## ⏱️ 计时记录（做完后填写）
@@ -37,14 +39,14 @@
 
 ## 关于图形题的说明（务必先读）
 
-原试卷为 PDF，下列题目在原卷中以**图形/图片**形式出现，Markdown 无法直接呈现。本文已尽可能给出**文字化说明**与**依据公开真题解析复原的描述**（一律标注 **【存疑：图形复原】**，与原卷图形可能在细节上存在差异）。涉及图形的题目：
+原试卷为 PDF，下列题目在原卷中以**图形/图片**形式出现，Markdown 无法直接呈现。本文已尽可能给出**依据原图复原的结构性数据**（边与权值、节点与分支条件、类图结构等，一律标注 **【存疑：图形复原】**，与原卷图形可能在细节上存在差异）。**附注只给结构性数据，计算与推导请自行完成。**涉及图形的题目：
 
 - 第 17-18 题：软件项目活动图（AOE 网，顶点 A～J）
 - 第 25 题：页面变换表及状态位/访问位/修改位含义图
 - 第 26-28 题：前驱图与进程执行图（P1～P6，信号量 S1～S6）
 - 第 34 题：白盒测试流程图
 - 第 41-43 题：UML 状态图（含组合状态 C，子状态 A、B）
-- 第 44-47 题：命令模式类图（Broker / Stock / Operation）
+- 第 44-47 题：股票交易类图（Broker / Stock / Operation 等）
 - 第 48 题：四个语法树图形选项（D 选项原卷标注"暂无"）
 - 第 49 题：有限自动机（DFA）状态转换图
 - 第 50 题：foo()、hoo() 代码（原卷为图片，已依据原卷文字层复原排版）
@@ -182,7 +184,7 @@
 
 （15）　A. 对每一个基本加工，应该有一个加工逻辑
 
-　　　　B. 加工逻辑描述输入数据流变换位输出数据的加工规则
+　　　　B. 加工逻辑描述输入数据流变换位【存疑：原文"变换位"，应为"变换为"】输出数据的加工规则
 
 　　　　C. 加工逻辑必须实现加工的数据结构和算法
 
@@ -206,7 +208,19 @@
 
 > 【图】原试卷此处为软件项目活动图（AOE 网，顶点为 A～J 的里程碑，边上权重为活动持续天数），见原卷 PDF 第 5 页。Markdown 版无法呈现该图。
 >
-> 【存疑：图形复原】据公开真题解析：**关键路径为 A-D-F-H-J，总工期 48 天**；各活动总时差为 **AC=8 天、BE=21 天、FI=14 天、HJ=0（关键活动）**。
+> 【存疑：图形复原】据原图复原 AOE 网结构：顶点 A～J（A 为开始事件、J 为结束事件），各活动及持续天数（天）如下：
+>
+> | 活动 | 时长 | 活动 | 时长 |
+> |------|------|------|------|
+> | A→B | 3 | F→G | 3 |
+> | A→C | 6 | F→H | 20 |
+> | A→D | 10 | F→I | 4 |
+> | B→E | 15 | G→J | 7 |
+> | C→F | 4 | H→J | 10 |
+> | D→F | 8 | I→H | 1 |
+> | E→G | 2 | I→J | 12 |
+>
+> 关键路径长度与各活动总时差请自行计算。
 
 （17）　A. 20　　B. 25　　C. 27　　D. 48
 
@@ -350,9 +364,9 @@
 
 ---
 
-**34.** 用白盒测试技术对下面流程图进行测试，至少采用 （34） 个测试用例才可以实现路径覆盖。
+**34.** 用白盒测试技术对下面流程图进行测试，至少采用 （34） 个测试用力【存疑：原文"测试用力"，应为"测试用例"】才可以实现路径覆盖。
 
-> 【存疑：图形复原】原卷为白盒测试流程图（见原卷 PDF 第 9 页）。据公开真题解析：该流程图含 3 条可执行路径，故实现路径覆盖至少需 **3** 个测试用例。
+> 【存疑：图形复原】原卷为白盒测试流程图（见原卷 PDF 第 9 页）。据原图复原其结构：入口→**判定 1**（条件 `(X=0) && (Y>2)`）→ 一支经"语句 A"后到出口、另一支进入**判定 2**（条件 `(X<1) && (Y=1)`）；判定 2 的一支经"语句 B"后到出口、另一支不经过任何语句直接到出口。可执行路径数目请自行统计。
 
 （34）　A. 3　　B. 4　　C. 6　　D. 8
 
@@ -406,7 +420,7 @@
 
 **41-43.** 当 UML 状态用于对系统、类或用例的动态方面建模时，通常是对 （41） 建模。以下 UML 状态图中，假设活动的状态是 A，事件 b=0 发生并且 a>5，发生条件是 C 状态到 D 状态的转换条件的是 （42） ，D 变为活动的状态，有关状态图的叙述中，不正确的是 （43） 。
 
-> 【存疑：图形复原】原卷为 UML 状态图（见原卷 PDF 第 11 页）。据公开真题解析：**C 为组合状态，其内部包含子状态 A 和 B**；状态间转换由事件触发并受监护条件约束。
+> 【存疑：图形复原】原卷为 UML 状态图（见原卷 PDF 第 11 页）。据原图复原：**C 为组合状态，其内部包含子状态 A 和 B**。
 
 （41）　A. 系统的词汇　　B. 反应型对象　　C. 活动流程　　D. 对象快照
 
@@ -430,7 +444,15 @@
 
 **44-47.** 股票交易中，股票代理（Broker）根据客户发出的股票操作指示进行股票的买卖，设计如下所示类图。该设计模式采用 （44） 模式将一个请求封装为一个对象，从而使得以不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作，其中， （45） 声明执行操作的接口。该模式属于 （46） 模式，该模式适用于： （47） 。
 
-> 【存疑：图形复原】原卷为命令模式类图（见原卷 PDF 第 12 页）。据公开真题解析与标准 Command 结构：**Operation 声明执行操作的接口**；**SellOperation / BuyOperation / ViewOperation 是具体命令**，各自封装对应的股票操作并实现 Operation 接口；**Broker 是调用者（Invoker）**，持有命令对象并按客户指示调用其执行方法；**Stock 是接收者（Receiver）**，真正执行买入/卖出/查看逻辑。
+> 【存疑：图形复原】原卷为股票交易类图（见原卷 PDF 第 12 页）。据原图复原类图结构：
+>
+> - **Operation**（位于类图顶部）：含 `+execute()`
+> - **SellOperation**、**BuyOperation**、**ViewOperation**（中间一行，三者结构相同）：各含属性 `-stock:Stock` 与方法 `+execute()`，并向上指向 Operation（实现关系）
+> - **Stock**（位于左侧的类）
+> - **Broker**（下方）：含 `operator:Operation`，其 `+execute()` 中调用 `operator.execute()`
+> - **StockDemo**（左下）：负责创建上述对象并组装
+>
+> 各类在该设计模式中的对应角色请自行判断。
 
 （44）　A. 命令（Command）　　B. 观察者（Observer）
 
@@ -464,7 +486,7 @@ F → id
 
 > 【图】第 48 题四个选项 A、B、C 在原卷中均为语法树图形，D 选项原卷标注"暂无"，见原卷 PDF 第 13 页。Markdown 版无法呈现。
 >
-> 【存疑：图形复原】据文法与运算符优先级（∗ 高于 +，∗ 左结合）：a + b∗c∗d 的唯一语法树应为 **根为 +，左子树为 a（id），右子树为 ∗**；右子树 ∗ 的左子树为 b∗c（其根为 ∗，左右子树为 b、c），右子树为 d。
+> 请先依据上文文法自行推导 a + b∗c∗d 的语法树（注意 ∗ 的优先级与结合性），再与原卷四个图形选项对照后作答。
 
 （48）　A.（图形选项，见原卷）　　B.（图形选项，见原卷）
 
@@ -561,7 +583,7 @@ U = {A, B, C, D, E, H}，F = {A→B, B→DH, A→H, C→E}
 
 ---
 
-**58.** 当二叉树的结点数目确定时， （58） 的高度一定是最小的。
+**58.** 当二叉树的结点数目确定时， （58）是的高度【存疑：原文"是的高度"，应为"的高度"】一定是最小的。
 
 （58）　A. 二叉排序树　　B. 完全二叉树　　C. 线索二叉树　　D. 最优二叉树
 
@@ -611,7 +633,7 @@ U = {A, B, C, D, E, H}，F = {A→B, B→DH, A→H, C→E}
 
 ---
 
-**63.** 最大子段和问题描述为，在 n 个整数（包含负数）的数组 A 中，求之和最大的非空连续子数组。如数组 A=（−2, 11, −4, 13, −5, −2），其中子数组 B=（11, −4, 13）具有最大子段和 20（11−4+13=20）。求解该问题，可以将数组分为两个 n/2 个整数的子数组，最大子段或者在前半段，或者在后天段，或者跨越中间元素，通过该方法继续划分问题，直至最后求出最大子段和，该算法的时间复杂度为 （63） 。
+**63.** 最大尺寸和【存疑：原文"尺寸和"，应为"子段和"】问题描述为，在 n 个整数（包含负数）的数组 A 中，求之和最大的非空连续子数组。如数组 A=（−2, 11, −4, 13, −5, −2），其中子数组 B=（11, −4, 13）具有最大子段和 20（11−4+13=20）。求解该问题，可以将数组分为两个 n/2 个整数的子数组，最大子段或或者【存疑：原文"或或者"，应为"或者"】在前半段，或者在后半段，或者跨越中间元素，通过该方法继续划分问题，直至最后求出最大子段和，该算法的时间复杂度为 （63） 。
 
 （63）　A. O(nlgn)　　B. O(n²)　　C. O(n²lgn)　　D. O(n³)
 
@@ -665,9 +687,9 @@ U = {A, B, C, D, E, H}，F = {A→B, B→DH, A→H, C→E}
 
 **71-75.** 计算机专业英语（阅读以下英文段落，为 71-75 各空选择最恰当的选项）
 
-> Designing object-oriented software is hard, and designing （71） object-oriented software is even harder. You must find pertinent（相关的） objects, factor them into class at the right granularity, define class interfaces and inheritances, and establish key relationships among them. You design should be specific to the problem at hand but also （72） enough to address future problems and requirements. You also want to avoid redesign, or at least minimize it. Experienced object-oriented designers will tell you that a reusable and flexible design is difficult if not impossible to get "right" the first time. Before a design is finished, they usually try to reuse it several times, modifying it each time.
+> Designing object-oriented software is hard, and designing （71） object-oriented software is even harder. You must find pertinent（相关的） objects, factor them into class at the right granularity, define class interfaces and inheritances, and establish key relationships among them. You design【存疑：原卷如此，应为 "Your design"】 should be specific to the problem at hand but also （72） enough to address future problems and requirements. You also want to avoid redesign, or at least minimize it. Experienced object-oriented designers will tell you that a reusable and flexible design is difficult if not impossible to get "right" the first time. Before a design is finished, they usually try to reuse it several times, modifying it each time.
 >
-> Yet experienced object-oriented designers do make good designs. Meanwhile new designers are （73） by the options available and tend to fall back on non-object-oriented techniques they've used before. lt takes a long time for novices to learn what good object-oriented design is all about. Experienced designers evidently know something inexperienced ones don't. What is it?
+> Yet experienced object-oriented designers do make good designs. Meanwhile new designers are （73） by the options available and tend to fall back on non-object-oriented techniques they've used before. lt Takes【存疑：原卷如此，应为 "It takes"】 a long time for novices to learn what good object-oriented design is all about. Experienced designers evidently know something inexperienced ones don't. What is it?
 >
 > One thing expert designers know not to do is solve every problem from first principles. Rather, they reuse solutions that have worked for them in the past. When they find a good （74） . They use it again and again. Such experience is part of what makes them experts. Consequently, you'll find （75） patterns of classes and communicating objects in many object-oriented systems.
 
