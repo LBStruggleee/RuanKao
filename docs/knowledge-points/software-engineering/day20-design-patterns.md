@@ -697,13 +697,13 @@ abstract class Subject {
     protected List<Observer> observers = new ArrayList<>();   // ← 填空点：List<Observer>
     public void attach(Observer o) { observers.add(o); }
     public void detach(Observer o) { observers.remove(o); }
-    public void notify() {
+    public void notifyObservers() {                            // 注意：Java 中不能定义 notify()（Object 的 final 方法）
         for (Observer o : observers) { o.update(); }          // ← 填空点：遍历调用 update
     }
 }
 class ConcreteSubject extends Subject {
     private int state;
-    public void setState(int s) { this.state = s; notify(); } // ← 填空点：状态改变后通知
+    public void setState(int s) { this.state = s; notifyObservers(); } // ← 填空点：状态改变后通知
 }
 class ConcreteObserver implements Observer {
     public void update() { /* 拉取主题状态、更新自己 */ }
@@ -719,14 +719,14 @@ protected:
     std::vector<Observer*> observers;
 public:
     void attach(Observer* o) { observers.push_back(o); }
-    void notify() { for (auto* o : observers) o->update(); }
+    void notifyObservers() { for (auto* o : observers) o->update(); }
 };
 ```
 
 **大题常考填空点**：
 1. Subject 的成员 `List<Observer> observers`（元素类型 = **抽象观察者**）；
-2. `notify()` 内遍历 `o.update();`；
-3. 具体主题 `setState()` 末尾调 `notify();`（**漏掉这步是常见丢分点**）；
+2. `notifyObservers()` 内遍历 `o.update();`；
+3. 具体主题 `setState()` 末尾调 `notifyObservers();`（**漏掉这步是常见丢分点**）；
 4. `attach/detach` 的签名（由调用处反推）。
 
 **试题三答题模板**（选模式 + 解释，3 分）：
