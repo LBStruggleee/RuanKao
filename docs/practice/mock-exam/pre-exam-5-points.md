@@ -2,8 +2,10 @@
 
 > **用途**：Day 30（10/20）晚上 Step 4「全面复盘」后，由**人类本人**填写的个性化清单。
 > **填写依据**：① 本次模拟（`subject2-questions.md` 4 道大题）的真实失分点；
-> ② 历年选择题错题中的高频错题（`docs/practice/review-round2.md` / `review-round3.md`
-> 的错题清单，以及各卷 `-morning-key.md` 末尾的"常见丢分重灾区"）。
+> ② 历年选择题高频错题——`docs/practice/top10-errors.md`（**Phase 2 高频错题 TOP 10**，
+> 每个 TOP 含"知识点 → 为什么易错 → 正确套路 → 真题例题 → 举一反三变式"），
+> 辅以 `docs/practice/review-round2.md` / `review-round3.md` 的错题清单与各卷
+> `-morning-key.md` 末尾的"常见丢分重灾区"。
 >
 > ⚠️ **填写规则**：
 > - 每点写清「知识点 / 为什么易错 / 考前怎么看（指向具体文件的具体章节/题号）」三栏；
@@ -39,13 +41,15 @@
   ③ 原图权值没提取全时只能靠猜（本仓库多卷标【存疑：图形复原】）；
   ④"一旦延期就影响工期"= 关键活动（时差为 0），与"非关键活动可吸收延迟"混淆。
 - **考前怎么看**：
-  1. 重算 `docs/practice/papers/2019H2-morning-key.md` Q17-18——关键路径 **ABFJL** 与
+  1. 先过 `docs/practice/top10-errors.md` **TOP 1**（判定步骤 5 步 + 2 条举一反三变式），
+     盖住"正确套路"自己复述一遍；
+  2. 重算 `docs/practice/papers/2019H2-morning-key.md` Q17-18——关键路径 **ABFJL** 与
      **ADGIJL**（总工期 22 天，2 条），活动 BE 总时差 = LS − ES = 6 − 4 = **2 天**；
-  2. 再算 `docs/practice/papers/2021H1-morning-key.md` Q17-18——关键路径 A-D-F-H-J
+  3. 再算 `docs/practice/papers/2021H1-morning-key.md` Q17-18——关键路径 A-D-F-H-J
      （48 天），各活动总时差 AC=8 / BE=21 / FI=14 / HJ=0；
-  3. 错题对照：`docs/practice/review-round3.md`（卷 5 第 17–18，关键路径与关键活动）、
+  4. 错题对照：`docs/practice/review-round3.md`（卷 5 第 17–18，关键路径与关键活动）、
      `review-round2.md`（卷 3 第 18–19，关键路径与松弛时间）；
-  4. 默写一遍口诀：**"最早取大、最晚取小；总时差 = LS − ES；时差为 0 是关键活动。"**
+  5. 默写一遍口诀：**"最早取大、最晚取小；总时差 = LS − ES；时差为 0 是关键活动。"**
 
 ### 第 2 点：页式 / 段页式地址转换
 
@@ -58,11 +62,13 @@
   ③ 段页式题漏掉段表那一层，位数换算算错；
   ④ 十六进制与二进制换算时位数对不齐。
 - **考前怎么看**：
-  1. 重算 `docs/practice/papers/2020H2-morning-key.md` Q24——页面 4K，逻辑地址 3C20H
+  1. 先过 `docs/practice/top10-errors.md` **TOP 2**（页式 + 位示图公式 + 变式），
+     盖住"正确套路"自己复述一遍；
+  2. 重算 `docs/practice/papers/2020H2-morning-key.md` Q24——页面 4K，逻辑地址 3C20H
      → 页内偏移 C20H、页号 3 → 查表得块号 6 → 物理地址 **6C20H**；
-  2. 段页式结构看 `docs/practice/papers/2022H2-morning-key.md` Q27（段页式地址结构）
+  3. 段页式结构看 `docs/practice/papers/2022H2-morning-key.md` Q27（段页式地址结构）
      与 `2022H1-morning-key.md` Q36（段页式位数换算）；
-  3. 固定套路写一遍：**"除以页大小得页号、取余得偏移；物理地址 = 块号 × 页大小 + 偏移"**。
+  4. 固定套路写一遍：**"除以页大小得页号、取余得偏移；物理地址 = 块号 × 页大小 + 偏移"**。
 
 ### 第 3 点：E-R 联系类型判定与关系模式转换（下午试题二）
 
@@ -77,14 +83,16 @@
   ③ 新增实体的关系模式**漏掉外键属性**（如紧急联系人漏"职员号"）；
   ④ 关系模式填空只补一个属性——要把需求属性清单与关系模式**逐项对照**找全空缺。
 - **考前怎么看**：
-  1. 精读 `docs/practice/subject2/database-notes.md` 二·第 2 步（联系类型判定口诀 +
+  1. 先过 `docs/practice/top10-errors.md` **TOP 5**（候选码判定 4 步 + Armstrong 公理），
+     与本点的联系类型判定同属"数据库基础硬通货"，选择题下午题双考；
+  2. 精读 `docs/practice/subject2/database-notes.md` 二·第 2 步（联系类型判定口诀 +
      量词句读法）+ 第 4 步（E-R → 关系模式转换规则）+「主键 / 外键判定规则」；
-  2. 重做本模拟 `docs/practice/mock-exam/subject2-questions.md` **试题二**
+  3. 重做本模拟 `docs/practice/mock-exam/subject2-questions.md` **试题二**
      （2022下营销公司：1:1 店长 + 两个 1:n + 新增实体，三杀考点），对答案见
      `subject2-key.md` 的【存疑：推导答案】与逐空推导；
-  3. 错题对照：`docs/practice/papers/2020H2-morning-key.md` Q17-18 之外的数据库题——
-     候选码与主属性（2019H2 Q52-53、2021H1 Q52-53）、关系代数表达式构造
-     （2019H2 Q54-55、2021H2 Q54-55）。
+  4. 错题对照：`docs/practice/papers/2019H2-morning-key.md` Q52-53、
+     `2021H1-morning-key.md` Q52-53（候选码与主属性）、`2023H1-morning-key.md` Q52-54
+     （Armstrong 公理）、关系代数表达式构造（2019H2 Q54-55、2021H2 Q54-55）。
 
 ### 第 4 点：动态规划状态转移（下午试题四）
 
@@ -122,13 +130,16 @@
   ④ 下午试题三的"问题 3 加什么模式"只写模式名不解释角色对应（要写"本需求中 X 是主题、
      Y 是观察者"）。
 - **考前怎么看**：
-  1. 过一遍 `docs/practice/subject2/patterns-algo-notes.md` 一·1.1（场景关键词 → 模式
+  1. 先过 `docs/practice/top10-errors.md` **TOP 9**（意图 → 模式速记 + 桥接/适配/装饰
+     辨析 + 2 条变式），盖住"正确套路"自己复述一遍；
+  2. 过一遍 `docs/practice/subject2/patterns-algo-notes.md` 一·1.1（场景关键词 → 模式
      映射秒选表）+ 1.2（六个高频模式：意图 + 角色结构 + 代码特征）+ 1.3（填空通用三招）；
-  2. 本模拟 `subject2-key.md` **试题三问题 3**（观察者模式 + 角色对应解释）；
-  3. 选择题模式连错：`docs/practice/papers/2021H2-morning-key.md` Q44-46（中介者三连）、
+  3. 本模拟 `subject2-key.md` **试题三问题 3**（观察者模式 + 角色对应解释）；
+  4. 选择题模式连错：`docs/practice/papers/2021H2-morning-key.md` Q44-46（中介者三连）、
      `2020H2-morning-key.md` Q44-47（设计模式四连）、`2023H1-morning-key.md` 试题五
      （策略模式完整代码题，本卷未选作大题，可当选择题读）；
-  4. 考前 30 分钟只看 1.1 秒选表 + 1.2 的角色结构图。
+  5. 考前 30 分钟只看 top10-errors.md 的速查表第 13 行（设计模式）+ 1.1 秒选表
+     + 1.2 的角色结构图。
 
 ---
 
@@ -153,5 +164,9 @@
    `错误原因/用时` 记录到 `reflection.md`）；下午大题每天 1 道保持手感
    （从 `../subject2/*-exercises.md` 未做过的题里选）。
 3. **Day 33**：只过本清单 5 个点 + `patterns-algo-notes.md` 一·1.1 秒选表；不再做新题。
+   计算型考点（关键路径 / 页式地址 / 候选码）必须在草稿纸上**重算**，不能只看公式。
 4. **Day 34（考前一天）**：确认证件（准考证、身份证）、文具、考点路线；
    晚上 23:00 前休息，**不熬夜背书**。
+5. **进考场前 30 秒**：`docs/practice/top10-errors.md` 末尾的「30 秒速查表」（20 行
+   公式口诀）从第 1 行念到第 20 行，**卡壳的那一行**就是考场上有概率丢分的地方——
+   进考场前在脑子里把那一行再默一遍。
