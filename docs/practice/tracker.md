@@ -1,53 +1,52 @@
-# 软考软件设计师 - 25天冲刺（9/29开学版）
+# 软考软件设计师 - 24天冲刺（9/30开学版）
 
-> 📅 考试日期：2026-10-24；学习期 9/29–10/23 共 25 天，10/24 考试
-> 📊 当前状态：**学习包全部就绪，9/29正式开学**——原34天内容压缩为25天：Phase 1 Day1-14全保留（9/29–10/12），真题8→4 + 回归3→1 + 冲刺3→1；诊断第一批6/10，数据结构每天+30min
+> 📅 考试日期：2026-10-24；学习期 9/30–10/23 共 24 天，10/24 考试（9/29休息）
+> 📊 当前状态：**学习包全部就绪，9/30正式开学**——原34天内容压缩为24天：Phase 1 Day1-14全保留（9/30–10/13），真题8→3 + 回归3→1 + 冲刺3→1；诊断第一批6/10，数据结构每天+30min
 > 🎯 目标：选择 55+ / 大题 50+（折算前），先保 45 再冲高
-> ⚠️ 表中 ✅ = 资料已交付 ≠ 已学会；正确率 __% 待回填，以下方25天日期表打卡为准
+> ⚠️ 表中 ✅ = 资料已交付 ≠ 已学会；正确率 __% 待回填，以下方24天日期表打卡为准
 
 ## 倒计时
 
-距考试还有 **25天**（9/29起算；10/24考试）
+距考试还有 **24天**（9/30起算；10/24考试）
 
-## 每日打卡（9/29开学版，以此表为准）
+## 每日打卡（9/30开学版，以此表为准）
 
-### 25天日期映射（原Day = 材料编号，新Day = 9/29起算）
+### 24天日期映射（原Day = 材料编号，新Day = 9/30起算）
 
 | 日期 | 新Day | 原Day | 今日内容 | 关键文件 | 学完 |
 |------|------|------|---------|---------|------|
-| 9/29 | D1 | 原D1 | OS进程/PV + 数据结构诊断收尾 | os/day01-process.md， data-structures/day01-diagnostic.md | ⬜ |
-| 9/30 | D2 | 原D2 | OS内存管理（地址转换手算） | os/day02-memory.md | ⬜ |
-| 10/1 | D3 | 原D3 | OS磁盘文件 + OS框架图 | os/day03-disk.md | ⬜ |
-| 10/2 | D4 | 原D4 | 网络分层协议 | networks/day04-protocols.md | ⬜ |
-| 10/3 | D5 | 原D5 | TCP + 子网划分（重点计算） | networks/day05-tcp.md | ⬜ |
-| 10/4 | D6 | 原D6 | 信息安全 + 网络框架图 | networks/day06-security.md | ⬜ |
-| 10/5 | D7 | 原D7 | 关系代数 + SQL | databases/day07-sql.md | ⬜ |
-| 10/6 | D8 | 原D8 | 范式 + E-R图（大题核心） | databases/day08-er.md | ⬜ |
-| 10/7 | D9 | 原D9 | DB收尾 + 阶段1测验45题/60min | databases/day09-summary.md， practice/stage1-quiz.md | ⬜ |
-| 10/8 | D10 | 原D10 | CPU/寻址/流水线 | architecture/day10-cpu.md | ⬜ |
-| 10/9 | D11 | 原D11 | Cache/总线 | architecture/day11-cache.md | ⬜ |
-| 10/10 | D12 | 原D12 | 过程模型/DFD | software-engineering/day12-process.md | ⬜ |
-| 10/11 | D13 | 原D13 | 设计原则/测试/McCabe | software-engineering/day13-test.md | ⬜ |
-| 10/12 | D14 | 原D14 | 数据结构补漏 + 综合测验60题/90min | practice/phase1-comprehensive-quiz.md | ⬜ |
-| 10/13 | D15 | 原D22 | 真题2023H1（有真答案册，最可靠） | papers/2023H1-morning-questions.md + key | ⬜ |
-| 10/14 | D16 | 原D25 | 真题2019H2（零分歧） | papers/2019H2-morning-questions.md + key | ⬜ |
-| 10/15 | D17 | 原D18 | 真题2021H2 | papers/2021H2-morning-questions.md + key | ⬜ |
-| 10/16 | D18 | 原D21 | 真题2022H2 | papers/2022H2-morning-questions.md + key | ⬜ |
-| 10/17 | D19 | 原D23 | 错题回归 + TOP10 | practice/review-round3.md， top10-errors.md | ⬜ |
-| 10/18 | D20 | 原D26 | 选择全真模拟2018H1/150min | papers/2018H1-mock-questions.md + key | ⬜ |
-| 10/19 | D21 | 原D27 | 大题DFD+UML（含入门） | subject2/dfd-uml-*， day17-uml.md， day23-dfd-intro.md | ⬜ |
-| 10/20 | D22 | 原D28 | 大题数据库ER | subject2/database-* | ⬜ |
-| 10/21 | D23 | 原D29 | 大题模式+算法（含入门） | subject2/patterns-algo-*， day20-design-patterns.md | ⬜ |
-| 10/22 | D24 | 原D30+31 | 全真2018H2选择+大题 + 最终漏洞清单 | papers/2018H2-mock-*， mock-exam/subject2-*， day31-targeted-review.md | ⬜ |
-| 10/23 | D25 | 原D32+33 | 速记卡 + 考前手册（轻度，不做新题） | day32-sprint.md， day33-pre-exam.md， strategies/* | ⬜ |
+| 9/30 | D1 | 原D1 | OS进程/PV + 数据结构诊断收尾 | os/day01-process.md， data-structures/day01-diagnostic.md | ⬜ |
+| 10/1 | D2 | 原D2 | OS内存管理（地址转换手算） | os/day02-memory.md | ⬜ |
+| 10/2 | D3 | 原D3 | OS磁盘文件 + OS框架图 | os/day03-disk.md | ⬜ |
+| 10/3 | D4 | 原D4 | 网络分层协议 | networks/day04-protocols.md | ⬜ |
+| 10/4 | D5 | 原D5 | TCP + 子网划分（重点计算） | networks/day05-tcp.md | ⬜ |
+| 10/5 | D6 | 原D6 | 信息安全 + 网络框架图 | networks/day06-security.md | ⬜ |
+| 10/6 | D7 | 原D7 | 关系代数 + SQL | databases/day07-sql.md | ⬜ |
+| 10/7 | D8 | 原D8 | 范式 + E-R图（大题核心） | databases/day08-er.md | ⬜ |
+| 10/8 | D9 | 原D9 | DB收尾 + 阶段1测验45题/60min | databases/day09-summary.md， practice/stage1-quiz.md | ⬜ |
+| 10/9 | D10 | 原D10 | CPU/寻址/流水线 | architecture/day10-cpu.md | ⬜ |
+| 10/10 | D11 | 原D11 | Cache/总线 | architecture/day11-cache.md | ⬜ |
+| 10/11 | D12 | 原D12 | 过程模型/DFD | software-engineering/day12-process.md | ⬜ |
+| 10/12 | D13 | 原D13 | 设计原则/测试/McCabe | software-engineering/day13-test.md | ⬜ |
+| 10/13 | D14 | 原D14 | 数据结构补漏 + 综合测验60题/90min | practice/phase1-comprehensive-quiz.md | ⬜ |
+| 10/14 | D15 | 原D22 | 真题2023H1（有真答案册，最可靠） | papers/2023H1-morning-questions.md + key | ⬜ |
+| 10/15 | D16 | 原D25 | 真题2019H2（零分歧） | papers/2019H2-morning-questions.md + key | ⬜ |
+| 10/16 | D17 | 原D18 | 真题2021H2 | papers/2021H2-morning-questions.md + key | ⬜ |
+| 10/17 | D18 | 原D23 | 错题回归 + TOP10 | practice/review-round3.md， top10-errors.md | ⬜ |
+| 10/18 | D19 | 原D26 | 选择全真模拟2018H1/150min | papers/2018H1-mock-questions.md + key | ⬜ |
+| 10/19 | D20 | 原D27 | 大题DFD+UML（含入门） | subject2/dfd-uml-*， day17-uml.md， day23-dfd-intro.md | ⬜ |
+| 10/20 | D21 | 原D28 | 大题数据库ER | subject2/database-* | ⬜ |
+| 10/21 | D22 | 原D29 | 大题模式+算法（含入门） | subject2/patterns-algo-*， day20-design-patterns.md | ⬜ |
+| 10/22 | D23 | 原D30+31 | 全真2018H2选择+大题 + 最终漏洞清单 | papers/2018H2-mock-*， mock-exam/subject2-*， day31-targeted-review.md | ⬜ |
+| 10/23 | D24 | 原D32+33 | 速记卡 + 考前手册（轻度，不做新题） | day32-sprint.md， day33-pre-exam.md， strategies/* | ⬜ |
 | 10/24 | 考试 | 原D34 | 上午选择 + 下午大题 | — | ⬜ |
 
 > 压缩说明：
-> - 砍掉的4套真题（2020H2/2021H1/2022H1回忆版/2019H1）转选做，时间多再补；2022H1后半截是回忆版，优先级最低。
+> - 砍掉的5套真题（2020H2/2021H1/2022H1回忆版/2022H2/2019H1）转选做，时间多再补；2022H1后半截是回忆版、2022H2有教材-法条冲突题，优先级最低。
 > - 原回归日3→1：UML/模式/DFD入门并入10/19和10/21上午，大题专项当天先看入门再做题。
 > - 原查漏Day31并入10/22晚上（产出最终漏洞清单），原冲刺Day32+33并入10/23（上午速记卡，下午物资+早睡）。
 > - 每日7h：Phase1上午3h输入 + 下午2.5h刷题 + 晚上1.5h错题；真题日上午2.5h计时 + 下午对答案 + 晚上回看；诊断首批6/10，Phase1每晚+30min补数据结构（树/排序/队列）。
-> - 检查点：10/7阶段1测验≥27/45；10/12综合≥36/60；4套真题稳定55+；10/22模拟选择≥45且大题≥36。
+> - 检查点：10/8阶段1测验≥27/45；10/13综合≥36/60；3套真题稳定55+；10/22模拟选择≥45且大题≥36。
 
 ### 原34天材料索引（存档，✅=资料就绪≠已学）
 
