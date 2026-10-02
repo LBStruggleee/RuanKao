@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>速查卡 · OS 磁盘与文件（软考软件设计师 · 新 Day 3）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Reference · 速查卡 01</p>
+    <h1>OS 磁盘与文件一页纸（Day 3 全考点压缩）</h1>
+    <p class="meta">
+      来源：<a href="../docs/knowledge-points/os/day03-disk.md">day03-disk.md</a>（口径以此为准）｜
+      配套课程：<a href="0011-disk-scheduling.html">Lesson 0011 磁盘调度</a> · <a href="0012-file-system-structures.html">Lesson 0012 文件系统</a><br>
+      用法：冲刺期遮住右栏默写；打印后贴手边。
+    </p>
+  </header>
+
+  <h2>① 磁盘存取时间（三段式）</h2>
+  <span class="formula">Ta = 寻道 Ts + 旋转延迟 Tr + 传输 Tt ｜ 调度算法只优化寻道！</span>
+  <table class="tight">
+    <tr><th>量</th><th>公式 / 口径</th></tr>
+    <tr><td>转一圈</td><td class="num">60 ÷ 转速(r/min) 秒</td></tr>
+    <tr><td>平均旋转延迟</td><td class="num">半圈 = 30 ÷ 转速（7200r/min → 4.17 ms）</td></tr>
+    <tr><td>传输 1 扇区</td><td class="num">转一圈 ÷ 每道扇区数（读整道 = 转一圈，别混）</td></tr>
+    <tr><td>物理地址</td><td>（柱面号，磁头号，扇区号）；扇区 = 最小读写单位；柱面 = 各面同半径磁道集合</td></tr>
+  </table>
+
+  <h2>② 六种磁盘调度算法（必考计算）</h2>
+  <table class="tight">
+    <tr><th>算法</th><th>策略</th><th>关键口径</th></tr>
+    <tr><td>FCFS</td><td>按到达顺序</td><td>公平无饥饿，最慢</td></tr>
+    <tr><td>SSTF</td><td>每次选最近请求</td><td><strong>会饥饿、非最优</strong></td></tr>
+    <tr><td>SCAN</td><td>单向走<strong>到物理端点</strong>再反向</td><td>端点空走算距离</td></tr>
+    <tr><td>C-SCAN</td><td>单向服务，端到端<strong>空跳</strong>继续同向</td><td>回程<strong>不服务但计入距离</strong>（看清口径）</td></tr>
+    <tr><td>LOOK</td><td>SCAN 但只到<strong>最远请求</strong>折返</td><td>SCAN − LOOK = 端点空走 × 2</td></tr>
+    <tr><td>C-LOOK</td><td>C-SCAN 但跳回<strong>最远请求</strong></td><td>—</td></tr>
+  </table>
+  <p><strong>基准例题结果</strong>（0–199 柱面、起点 100、朝 0、请求 108,90,88,60,130,40,160,20）：</p>
+  <table class="tight">
+    <tr><th>算法</th><th>FCFS</th><th>SSTF</th><th>SCAN</th><th>LOOK</th><th>C-SCAN</th><th>C-LOOK</th></tr>
+    <tr><td>总寻道距离</td><td class="num">476</td><td class="num">236</td><td class="num">260</td><td class="num"><strong>220</strong> 最优</td><td class="num">390</td><td class="num">272</td></tr>
+  </table>
+  <p>三个结论：① 任何算法都优于 FCFS；② <strong>LOOK(220) &lt; SSTF(236) ⇒ SSTF 非最优</strong>；③ SCAN/C-SCAN 与 LOOK/C-LOOK 的差全部来自「要不要走到端点」。<br>
+  <strong>平均寻道 = 总距离 ÷ 请求个数</strong>（476÷8=59.5；分母不是移动段数）。C-SCAN 若题目口径不含回程：390 − 199 = 191。</p>
+
+  <h2>③ 文件逻辑 / 物理结构</h2>
+  <p>逻辑结构（用户视角）：<strong>流式</strong>（字节串）/ <strong>记录式</strong>（记录集合）。成组：<code>g = 块 ÷ 记录长度，向下取整</code>（512/80 → 6 条，碎片 32 B）。</p>
+  <table class="tight">
+    <tr><th></th><th>连续</th><th>链接</th><th>索引</th></tr>
+    <tr><td>FCB 存</td><td>首块号+长度</td><td>首块号</td><td>索引块指针</td></tr>
+    <tr><td>随机存取</td><td>✅ 首块+i</td><td>❌ <strong>必须顺链</strong></td><td>✅ 查表</td></tr>
+    <tr><td>增长 / 碎片</td><td>❌ 外部碎片</td><td>✅ 好增长</td><td>✅ 好增长（索引表占空间）</td></tr>
+    <tr><td>典型</td><td>CD-ROM</td><td>FAT</td><td>ext2/3/4、NTFS</td></tr>
+  </table>
+
+  <h2>④ 索引容量与混合索引（两条公式）</h2>
+  <span class="formula">项数 = 索引块 ÷ 块号字节（4KB/4B → 1024 = 2¹⁰）｜ n 级容量 = 项数ⁿ × 块</span>
+  <p><strong>一级 4 MB → 二级 4 GB → 三级 4 TB</strong>（每多一级 ×1024）。</p>
+  <p>混合索引（10 直接 + 1/2/3 间接）读数据 I/O：<strong>直接 1 次、一级 2、二级 3、三级 4</strong> —— <em>索引块也算一次磁盘读</em>。<br>
+  例：5 MB → 块 1280 → 二级间接区（1034 起）→ 3 次 I/O。</p>
+
+  <h2>⑤ FAT · FCB/inode · 硬软链接</h2>
+  <table class="tight">
+    <tr><th>点</th><th>一句话</th></tr>
+    <tr><td>FAT</td><td>显式链接；表项 = <strong>下一盘块号</strong>；<strong>0 = 空闲，−1 = 末块</strong>；链接式≠索引式；仍非真随机</td></tr>
+    <tr><td>FCB vs inode</td><td>FCB 含文件名+属性+地址；<strong>inode 不含文件名</strong>（在目录项）；目录本身也是文件</td></tr>
+    <tr><td>硬链接</td><td>共享 inode；删原文件<strong>仍可访问</strong>；❌ 不能跨文件系统</td></tr>
+    <tr><td>软链接</td><td>存路径字符串；删原文件<strong>立即失效</strong>；✅ 可跨文件系统</td></tr>
+  </table>
+
+  <h2>⑥ 14 条必背速记（遮右栏默写）</h2>
+  <table class="tight">
+    <tr><th>#</th><th>提示</th><th>答案</th></tr>
+    <tr><td>1</td><td>磁盘调度只优化哪段？</td><td>寻道时间（Ta=寻道+旋转+传输）</td></tr>
+    <tr><td>2</td><td>7200r/min 半圈？</td><td>4.17 ms（一圈 8.33）</td></tr>
+    <tr><td>3</td><td>SSTF 两大罪？</td><td>会饥饿、非最优</td></tr>
+    <tr><td>4</td><td>SCAN vs LOOK？</td><td>走到底 vs 最远请求；差 = 端点空走 × 2</td></tr>
+    <tr><td>5</td><td>C-SCAN 回程？</td><td>不服务但计入距离</td></tr>
+    <tr><td>6</td><td>平均寻道分母？</td><td>请求个数（÷8=27.5 类）</td></tr>
+    <tr><td>7</td><td>块因子算法？</td><td>块÷记录长度，向下取整</td></tr>
+    <tr><td>8</td><td>随机快 + 好增长的结构？</td><td>索引分配（连续随机快/链接好增长）</td></tr>
+    <tr><td>9</td><td>4KB 块 4B 号，项数？</td><td>1024 = 2¹⁰</td></tr>
+    <tr><td>10</td><td>一二三级索引容量？</td><td>4MB / 4GB / 4TB</td></tr>
+    <tr><td>11</td><td>混合索引 I/O 次数？</td><td>直接1、一级2、二级3、三级4（索引块也算）</td></tr>
+    <tr><td>12</td><td>FAT 特殊值？</td><td>0=空闲，−1=末块；表项=下一块号</td></tr>
+    <tr><td>13</td><td>inode 不含什么？</td><td>文件名（在目录项，支持硬链接）</td></tr>
+    <tr><td>14</td><td>硬链接删原文件后？</td><td>仍可访问（软链接则失效）</td></tr>
+  </table>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="../lessons/0011-disk-scheduling.html">Lesson 0011 磁盘调度</a>
+      <a href="../lessons/0012-file-system-structures.html">Lesson 0012 文件系统</a>
+      <a href="../docs/knowledge-points/os/day03-disk.md">完整笔记 day03-disk.md（含 OS 三天框架图）</a>
+    </div>
+    <p>有记不住的条目 → 回对应课程重走交互环节，或直接问 ZCode。</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0005 · 哈夫曼树与编码（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0005（数据结构 · 5/9）</p>
+    <h1>哈夫曼树与编码：贪心合并，短码给高频</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0004-tree-traversals.html">0004 四种遍历与重建</a><br>
+      考点定位：WPL 计算必考（<a href="../docs/practice/papers/2019H2-morning-key.md">2019H2-Q64/65</a> 原题）、节点总数 2n−1、前缀码判别
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    两件事：①给出几个权值，<strong>3 分钟算出 WPL</strong>（带权路径长度）——用「内部节点求和」这条捷径，比逐叶算深度快一倍；②记住哈夫曼树的三个数字特征（n−1 次合并、2n−1 个节点、没有度为 1 的节点）。
+  </div>
+
+  <h2>一、它解决什么问题</h2>
+    <p>压缩：字符出现频率不同，<strong>高频字符用短编码</strong>，总长才能最短。哈夫曼树 = 让「总长」最省的那棵二叉树——<strong>带权路径长度（WPL）最小的二叉树</strong>。</p>
+  <span class="formula">路径长度 = 从根到该节点的边数　　WPL = Σ（权值 × 路径长度），对所有叶子求和</span>
+
+  <h2>二、构造：每步合并最小的两个（贪心）</h2>
+  <ol>
+    <li>把所有权值看成一片「小树森林」；</li>
+    <li>取<strong>当前权值最小</strong>的两棵合并，新根权 = 两权之和，放回森林；</li>
+    <li>重复直到只剩一棵树。</li>
+  </ol>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：权 {2, 3, 4, 5, 8}：</p>
+    <p>2+3=5 → 4+5=9 → 5+8=13 → 9+13=22。合并了 4 次（= n−1）。</p>
+    <p style="margin-bottom:0;"><strong>WPL 捷径</strong>：每次合并产生的新权 = 这棵子树所有叶子的深度贡献 → <strong>WPL = 所有内部节点（新权）之和</strong> = 5+9+13+22 = <strong>49</strong>。不用逐叶数深度。</p>
+  </div>
+  <div class="callout tip">
+    <span class="tag">💡 三个数字特征（必背）</span>
+    n 个叶子的哈夫曼树：合并 <strong>n−1</strong> 次；节点总数 <strong>2n−1</strong>；<strong>没有度为 1 的节点</strong>（n₁=0）。第三条与 Lesson 0003 的 n₀=n₂+1 联立：n = n₀+n₂、n₀=n₂+1 → n = 2n₀ − 1。
+  </div>
+
+  <h2>三、哈夫曼编码：左 0 右 1 的前缀码</h2>
+  <p>从根走到每个叶子，<strong>左转记 0、右转记 1</strong>，得到的 0/1 串就是该字符的编码。因为字符都在叶子上（没有谁的路经过谁），<strong>任何编码都不可能是另一个编码的前缀</strong>——这叫<strong>前缀码</strong>，解码时不会歧义。</p>
+  <div class="callout warn">
+    <span class="tag">⚠ 判别技巧</span>
+    集合 {0, 10, 110, 111} ✔ 合法（画出正好 4 个叶子）；{1, 10, 11} ✘——1 既是 10 又是 11 的前缀（对应「1」不是叶子而在路径上）。判断题就考这一眼。
+  </div>
+
+  <h2>四、动手：亲手贪心合并，看 WPL 怎么长出来</h2>
+  <div id="hlab"></div>
+  <div class="callout tip">
+    <span class="tag">💡 观察任务</span>
+    合并完成后看 WPL 的两行验证：内部节点求和（快）与 Σ权×深度（慢）必须相等。之后用 <strong>{1,2,3,4,5}</strong> 重置再走一遍——下面测验里就有它。
+  </div>
+
+  <h2>五、自查（全对过课）</h2>
+  <div id="quiz-ds5"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>构造 = 每步合并当前最小两权（贪心）；WPL 捷径 = <strong>所有内部节点权之和</strong>。</li>
+      <li>n 叶哈夫曼树：合并 n−1 次、共 2n−1 节点、n₁ = 0。</li>
+      <li>编码 = 左 0 右 1 的<strong>前缀码</strong>；判合法 = 没有任何编码是别人的前缀。</li>
+      <li>WPL 最小 ⇒ 高频权值离根近（路径短）。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0004-tree-traversals.html">← 上一课 0004 四种遍历与重建</a>
+      <a href="0006-graphs-intro.html">下一课 → 0006 图：概念与遍历</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么内部节点求和等于 WPL」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/tree-lab.js"></script>
+<script src="../assets/huffman-lab.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+HuffmanLab.mount("hlab", { weights: [2, 3, 4, 5, 8] });
+
+Quiz.render("quiz-ds5", {
+  title: "本课自查（7 题，动笔合并再作答）",
+  passNote: "7/7，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "权值 {1, 2, 3, 4, 5} 构造哈夫曼树，WPL 是多少？（先动笔：1+2=3 → 3+3=6 → 4+5=9 → 6+9=15）",
+      options: ["33", "39", "32", "35"],
+      answer: 0,
+      opts: [
+        "✓ WPL = 内部节点权之和 = 3+6+9+15 = 33。（验证：3×2+4×2+5×2+1×3+2×3 = 33 ✓）",
+        "39 是把最深层算成 4 层——逐叶数深度时数错了层。",
+        "32 差 1，多半漏乘某个权。",
+        "35 无出处（可能 4+5 合并顺序记错）。"
+      ],
+      explain: "捷径：WPL = 每次合并产生的新权之和（本题 3、6、9、15）。在 0005 实验室用 {1,2,3,4,5} 走一遍即可亲眼验证。",
+      source: "docs/practice/papers/2019H2-morning-key.md Q64/65 同类 ｜ Lesson 0005 §二"
+    },
+    {
+      q: "n 个叶子的哈夫曼树，节点总数是？",
+      options: ["2n − 1", "2n", "2n + 1", "n − 1"],
+      answer: 0,
+      opts: [
+        "✓ 哈夫曼树没有度为 1 的节点（n₁=0）：n = n₀+n₂ 且 n₀ = n₂+1 → n = 2n₀ − 1。",
+        "2n 多算了一个。",
+        "2n+1 反了方向。",
+        "n−1 是合并次数，不是节点数。"
+      ],
+      explain: "三件套：合并 n−1 次、节点 2n−1、n₁ = 0（Lesson 0003 的 n₀=n₂+1 推出来的）。",
+      source: "Lesson 0005 §二"
+    },
+    {
+      q: "权值 {2, 3, 4, 5, 8} 的哈夫曼树，第一二三次合并依次是？",
+      options: ["2+3、4+5、5+8", "2+3、3+4、4+5", "4+5、5+8、8+2", "2+3、4+5、9+8"],
+      answer: 0,
+      opts: [
+        "✓ 每步取当前最小两权：2+3=5；此时权集合 {4,5,5,8} 取 4+5=9；{5,8,9} 取 5+8=13。",
+        "3 已经和 2 合并成 5 了，不能再拿 3+4。",
+        "4+5 不是第一步（2+3 更小）。",
+        "第三步当前最小是 5 和 8（9 还在森林里，9 比它们大）。"
+      ],
+      explain: "贪心 = 每一步只看当前森林里最小的两个；合并后的新权放回去参与后续比较。",
+      source: "Lesson 0005 §二"
+    },
+    {
+      q: "下列编码集合中，是合法前缀码的是？",
+      options: ["{0, 10, 110, 111}", "{1, 10, 11}", "{0, 01, 10}", "{00, 0, 11}"],
+      answer: 0,
+      opts: [
+        "✓ 任何一个都不是别人的前缀——对应一棵 4 叶哈夫曼树。",
+        "1 同时是 10 和 11 的前缀 → 解码歧义。",
+        "0 是 01 的前缀 → 歧义。",
+        "0 是 00 的前缀 → 歧义。"
+      ],
+      explain: "判别口诀：任取两个编码，短的那个不是长的开头 → 合法。哈夫曼编码天然满足（字符都在叶子上）。",
+      source: "Lesson 0005 §三"
+    },
+    {
+      q: "哈夫曼树中度为 1 的节点（n₁）个数是？",
+      options: ["0", "1", "n − 1", "不定"],
+      answer: 0,
+      opts: [
+        "✓ 每次合并都是『二对一』，绝没有独生子——n₁ = 0 是哈夫曼树的结构标志。",
+        "任何建成的哈夫曼树都不会有度 1 节点。",
+        "n−1 是合并次数。",
+        "确定是 0，不是不定。"
+      ],
+      explain: "由 n₀ = n₂ + 1（Lesson 0003）+ n₁ = 0 → 总节点 = 2n₀ − 1。",
+      source: "Lesson 0005 §二 ｜ 0003 §三"
+    },
+    {
+      q: "构建哈夫曼树采用的算法策略是？",
+      options: ["贪心：每步合并当前最小的两棵", "动态规划：自底向上填表", "分治：先分左右再合并", "回溯：不行就退一步"],
+      answer: 0,
+      opts: [
+        "✓ 每一步做『当下看起来最好』的选择（合并最小两权），且不回头——典型贪心。",
+        "动态规划要维护子问题解表，这里不需要。",
+        "分治是『切一半各自解决』（如归并排序），合并对象不是一半对一半。",
+        "哈夫曼每步都确定，从不需要回溯。"
+      ],
+      explain: "上午卷爱把『贪心/DP/分治/回溯』混在选项里；哈夫曼 = 贪心的标准案例。",
+      source: "Lesson 0005 §二"
+    },
+    {
+      q: "高频字符对应短编码、低频字符对应长编码，其原因是？",
+      options: ["WPL 最小化：高频权值被放到离根近的浅层", "编码必须按字母序分配", "树必须左右对称", "解码器只认识短编码"],
+      answer: 0,
+      opts: [
+        "✓ WPL = Σ权×深度，贪心合并自动让大权落在浅层——总编码长度（WPL）最小。",
+        "频率与字母序无关。",
+        "哈夫曼树通常不对称。",
+        "解码靠前缀码的唯一性，长短无碍。"
+      ],
+      explain: "一句话：哈夫曼 = 用树形贪心实现『高频短码』的压缩最优。",
+      source: "Lesson 0005 §一、§三"
+    }
+  ]
+});
+</script>
+</body>
+</html>

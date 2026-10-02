@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>错题本 · 作答记录与错题整理（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+<style>
+.nb-cards { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1rem 0; }
+.nb-card { flex: 1 1 140px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .8rem 1rem; }
+.nb-card .num { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; }
+.nb-card.bad .num { color: var(--bad); }
+.nb-card.good .num { color: var(--ok); }
+.nb-card span { color: var(--ink-soft); font-size: .82rem; }
+.nb-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin: .8rem 0; }
+.nb-item { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--bad); border-radius: 10px; padding: .8rem 1rem; margin: .7rem 0; }
+.nb-item.solved { border-left-color: var(--ok); }
+.nb-item .q { font-weight: 700; margin: .2rem 0; }
+.nb-item .meta { color: var(--ink-soft); font-size: .84rem; margin: .25rem 0; }
+.nb-item .pair { font-size: .92rem; margin: .3rem 0; }
+.nb-item .pair .ok { color: var(--ok); font-weight: 700; }
+.nb-item .pair .no { color: var(--bad); }
+.nb-item details { margin-top: .4rem; font-size: .88rem; color: var(--ink-soft); }
+.nb-item summary { cursor: pointer; color: var(--accent); }
+.nb-group { font-size: .9rem; }
+.nb-warn { background: var(--warn-soft); border: 1px solid #ecc4a4; border-radius: 10px; padding: .7rem 1rem; margin: .8rem 0; font-size: .9rem; }
+.nb-okbar { background: var(--ok-soft); border: 1px solid #bcd8cd; border-radius: 10px; padding: .7rem 1rem; margin: .8rem 0; font-size: .9rem; }
+.nb-verdict { min-height: 1.4em; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Reference · 错题本</p>
+    <h1>错题本：作答自动记录与错题整理</h1>
+    <p class="meta">
+      数据来源：各课程页的<strong>每一次作答</strong>（quiz.js 自动写入本机存储，含整题快照与解析）｜
+      返回：<a href="../reference/ds-learning-path.html">课程总目录</a>
+    </p>
+  </header>
+
+  <div id="storageBar"></div>
+
+  <h2>一、总览（每道题按「最新一次作答」判定状态）</h2>
+  <div class="nb-cards" id="cards"></div>
+  <div id="groupTable"></div>
+
+  <h2>二、整理与导出</h2>
+  <div class="card">
+    <p style="margin-top:0;">筛选后，下方列表即你的错题清单。<strong>「导出 Markdown」</strong>按你 <a href="../docs/practice/reflection.md">reflection.md</a> 的错题四要素模板生成（题目→错因(留空自填)→正确思路→知识点），可直接粘进去；<strong>「导出 JSON」</strong>是完整历史备份（可换机器/换浏览器导入合并）。</p>
+    <div class="nb-bar no-print">
+      <select id="fStatus">
+        <option value="wrong">只看待重做错题</option>
+        <option value="solved">只看已攻克（曾错过现已对）</option>
+        <option value="all">全部已答题</option>
+      </select>
+      <select id="fCourse"><option value="">全部课程</option></select>
+      <button class="btn" id="btnRedrill">▶ 只练待重做错题</button>
+      <button class="btn ghost" id="btnMD">导出 Markdown</button>
+      <button class="btn ghost" id="btnJSON">导出 JSON 备份</button>
+      <label class="btn ghost" style="cursor:pointer;">导入 JSON<input type="file" id="fileJSON" accept=".json,application/json" style="display:none;"></label>
+      <button class="btn ghost" id="btnClear">清空记录</button>
+      <button class="btn ghost" id="btnRefresh">↺ 刷新</button>
+    </div>
+    <p class="nb-verdict" id="verdict"></p>
+  </div>
+
+  <div id="list"></div>
+  <div id="redrill"></div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../docs/practice/reflection.md">reflection.md（错题四要素登记处）</a>
+      <a href="../docs/practice/tracker.md">tracker.md（正确率回填处）</a>
+    </div>
+    <p>工作流建议：课程页答题（自动记录）→ 来错题本筛选「待重做」→ <strong>只练错题</strong>直到清零 → 导出 Markdown 把仍错的粘进 reflection.md → 里程碑日（10/8、10/13、10/22）把各组得分抄进 tracker。</p>
+    <p>💬 想要别的整理维度（比如按知识点聚合、按日期统计正确率曲线），直接告诉 ZCode。</p>
+  </div>
+
+</div>
+
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = text;
+    return n;
+  }
+  function fmtTime(t) { return new Date(t).toLocaleString("zh-CN", { hour12: false }); }
+  function letter(i) { return "ABCDEFGH".charAt(i); }
+  function optText(r, i) { return r.options && r.options[i] !== undefined ? letter(i) + ". " + r.options[i] : String(i); }
+  function download(name, text) {
+    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  var verdict = document.getElementById("verdict");
+
+  /* ---------- 存储状态条 ---------- */
+  function renderStorageBar() {
+    var bar = document.getElementById("storageBar");
+    bar.textContent = "";
+    if (AnswerStore.lsOK()) {
+      bar.appendChild(el("div", "nb-okbar", "✓ 自动记录已开启：本机浏览器的课程页作答会实时存入这里。换浏览器/换机器时用「导出 JSON → 导入 JSON」迁移。"));
+    } else {
+      bar.appendChild(el("div", "nb-warn", "⚠ 当前环境未开放本地存储（常见于内嵌浏览器打开 file:// 页面）。本次会话内仍可记录与整理；要持久保存：①改用系统浏览器（Edge/Chrome）直接双击打开课程 HTML；②或每次答完点「导出 JSON」，下次「导入 JSON」合并。"));
+    }
+  }
+
+  /* ---------- 总览 ---------- */
+  function renderSummary() {
+    var s = AnswerStore.summary();
+    var cards = document.getElementById("cards");
+    cards.textContent = "";
+    [["累计作答次数", s.attempts, ""],
+     ["覆盖题目数", s.questions, ""],
+     ["待重做错题", s.wrong.length, "bad"],
+     ["已攻克（曾错现对）", s.solved.length, "good"]].forEach(function (c) {
+      var d = el("div", "nb-card" + (c[2] ? " " + c[2] : ""));
+      d.appendChild(el("b", "num", String(c[1])));
+      d.appendChild(el("span", null, c[0]));
+      cards.appendChild(d);
+    });
+
+    var gt = document.getElementById("groupTable");
+    gt.textContent = "";
+    var keys = Object.keys(s.groups).sort();
+    if (!keys.length) { return; }
+    gt.appendChild(el("h3", null, "各组最新得分（对照 tracker 合格线回填）"));
+    var table = el("table", "tight nb-group");
+    var head = el("tr");
+    ["课程", "组", "最新正确 / 题数", "正确率"].forEach(function (h) { head.appendChild(el("th", null, h)); });
+    table.appendChild(head);
+    keys.forEach(function (k) {
+      var g = s.groups[k];
+      var tr = el("tr");
+      tr.appendChild(el("td", null, g.lesson));
+      tr.appendChild(el("td", null, g.quiz));
+      tr.appendChild(el("td", "num", g.correct + " / " + g.total));
+      tr.appendChild(el("td", "num", Math.round(g.correct / g.total * 100) + "%"));
+      table.appendChild(tr);
+    });
+    gt.appendChild(table);
+  }
+
+  /* ---------- 列表 ---------- */
+  function currentFilter() {
+    return {
+      status: document.getElementById("fStatus").value,
+      course: document.getElementById("fCourse").value
+    };
+  }
+
+  function renderList() {
+    var s = AnswerStore.summary();
+    var f = currentFilter();
+    var pool = f.status === "wrong" ? s.wrong : (f.status === "solved" ? s.solved : s.wrong.concat(s.solved));
+    if (f.course) { pool = pool.filter(function (r) { return r.lesson === f.course; }); }
+    pool.sort(function (a, b) { return b.t - a.t; });
+
+    var list = document.getElementById("list");
+    list.textContent = "";
+    list.appendChild(el("h2", null, "三、清单（" + pool.length + " 题，按最近作答排序）"));
+    if (!pool.length) {
+      list.appendChild(el("p", null, f.status === "wrong" ? "没有待重做错题——去课程页继续推进，或切换筛选。" : "还没有作答记录：先去课程页答题（自动记录）。"));
+      return;
+    }
+    pool.forEach(function (r) {
+      var d = el("div", "nb-item" + (r.right ? " solved" : ""));
+      var head = el("p", "meta", "");
+      head.appendChild(el("b", null, r.lesson + " · " + r.quiz + " · Q" + (r.index + 1)));
+      head.appendChild(document.createTextNode("　" + fmtTime(r.t) + (r.right ? "　状态：已攻克" : "　状态：待重做")));
+      d.appendChild(head);
+      d.appendChild(el("p", "q", r.q));
+      var pair = el("p", "pair");
+      if (!r.right) { pair.appendChild(el("span", "no", "✗ 你的答案：" + optText(r, r.chosen))); }
+      pair.appendChild(el("span", "ok", (r.right ? "✓ 答对：" : "　✓ 正确答案：") + optText(r, r.answer)));
+      d.appendChild(pair);
+      var det = el("details");
+      det.appendChild(el("summary", null, "解析与出处"));
+      det.appendChild(el("p", null, (r.explain || "（无）")));
+      if (r.source) { det.appendChild(el("p", null, "出处：" + r.source)); }
+      if (r.opts) {
+        var ul = el("ul");
+        r.options.forEach(function (t, i) {
+          var li = el("li", i === r.answer ? "ok" : null);
+          li.textContent = (i === r.answer ? "✓ " : "✗ ") + letter(i) + ". " + t + (r.opts[i] ? "：" + r.opts[i] : "");
+          ul.appendChild(li);
+        });
+        det.appendChild(ul);
+      }
+      d.appendChild(det);
+      list.appendChild(d);
+    });
+  }
+
+  /* ---------- 课程下拉 ---------- */
+  function renderCourseOptions() {
+    var sel = document.getElementById("fCourse");
+    var cur = sel.value;
+    var lessons = {};
+    AnswerStore.all().forEach(function (r) { lessons[r.lesson] = true; });
+    sel.textContent = "";
+    sel.appendChild(el("option", null, "全部课程")).value = "";
+    Object.keys(lessons).sort().forEach(function (l) {
+      sel.appendChild(el("option", null, l)).value = l;
+    });
+    sel.value = cur;
+  }
+
+  /* ---------- 导出 Markdown（对齐错题四要素） ---------- */
+  function exportMD() {
+    var s = AnswerStore.summary();
+    var lines = [];
+    var d = new Date();
+    var pad = function (x) { return (x < 10 ? "0" : "") + x; };
+    var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes());
+    lines.push("# 错题本导出（" + fmtTime(Date.now()) + "）");
+    lines.push("");
+    lines.push("> 由 teach 课程页自动生成。「错因」留空请自填（当时为什么选错）；");
+    lines.push("> 仍错的题可整段粘进 docs/practice/reflection.md 的对应日期错题区。");
+    lines.push("");
+    lines.push("## 得分速览（对照 tracker 合格线）");
+    lines.push("");
+    lines.push("| 课程 | 组 | 最新正确/题数 | 正确率 |");
+    lines.push("|---|---|---|---|");
+    Object.keys(s.groups).sort().forEach(function (k) {
+      var g = s.groups[k];
+      lines.push("| " + g.lesson + " | " + g.quiz + " | " + g.correct + " / " + g.total + " | " + Math.round(g.correct / g.total * 100) + "% |");
+    });
+    function block(r, tag) {
+      var out = [];
+      out.push("### [" + tag + "] " + r.lesson + " · " + r.quiz + " · Q" + (r.index + 1) + "（" + fmtTime(r.t) + "）");
+      out.push("- **题目**：" + r.q);
+      if (!r.right) { out.push("- **我的答案**：" + optText(r, r.chosen)); }
+      out.push("- **正确答案**：" + optText(r, r.answer));
+      out.push("- **错因**：（自填）");
+      out.push("- **正确思路**：" + (r.explain || "（见出处）"));
+      if (r.source) { out.push("- **知识点/出处**：" + r.source); }
+      return out;
+    }
+    if (s.wrong.length) {
+      lines.push("");
+      lines.push("## 待重做错题（" + s.wrong.length + "）");
+      s.wrong.sort(function (a, b) { return a.lesson.localeCompare(b.lesson) || a.index - b.index; })
+        .forEach(function (r) { lines.push(""); lines = lines.concat(block(r, "待重做")); });
+    }
+    if (s.solved.length) {
+      lines.push("");
+      lines.push("## 已攻克（曾错过，最新一次答对——考前扫一眼即可）");
+      s.solved.sort(function (a, b) { return a.lesson.localeCompare(b.lesson) || a.index - b.index; })
+        .forEach(function (r) { lines.push(""); lines = lines.concat(block(r, "已攻克")); });
+    }
+    download("错题本-" + stamp + ".md", lines.join("\n"));
+    verdict.textContent = "✓ 已导出 Markdown（含得分速览 " + Object.keys(s.groups).length + " 组、待重做 " + s.wrong.length + " 题、已攻克 " + s.solved.length + " 题）。";
+  }
+
+  /* ---------- 重练错题 ---------- */
+  function redrill() {
+    var s = AnswerStore.summary();
+    var box = document.getElementById("redrill");
+    box.textContent = "";
+    if (!s.wrong.length) {
+      verdict.textContent = "没有待重做错题，无需重练。";
+      return;
+    }
+    verdict.textContent = "";
+    var qs = s.wrong.slice(0, 20).map(function (r) {
+      return {
+        q: r.q, options: r.options, answer: r.answer,
+        opts: r.opts || undefined, explain: r.explain, source: r.source || ("原题：" + r.lesson)
+      };
+    });
+    var holder = el("div");
+    holder.id = "redrillQuiz";
+    box.appendChild(holder);
+    Quiz.render("redrillQuiz", {
+      title: "待重做错题重练（最多 20 题，全对即清零）",
+      passNote: qs.length + "/" + qs.length,
+      shuffle: true,
+      onDone: function () {
+        verdict.textContent = "重练完成——刷新后按最新一次作答重新判定状态。";
+      }
+    });
+  }
+
+  /* ---------- 事件 ---------- */
+  document.getElementById("fStatus").addEventListener("change", renderList);
+  document.getElementById("fCourse").addEventListener("change", renderList);
+  document.getElementById("btnRefresh").addEventListener("click", function () {
+    refresh();
+    verdict.textContent = "已刷新（按最新一次作答判定）。";
+  });
+  document.getElementById("btnMD").addEventListener("click", exportMD);
+  document.getElementById("btnJSON").addEventListener("click", function () {
+    var d = new Date();
+    var pad = function (x) { return (x < 10 ? "0" : "") + x; };
+    download("作答记录-" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + ".json", AnswerStore.exportJSON());
+    verdict.textContent = "✓ 已导出 JSON 备份（全部历史尝试）。";
+  });
+  document.getElementById("fileJSON").addEventListener("change", function (ev) {
+    var file = ev.target.files[0];
+    if (!file) { return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var res = AnswerStore.importJSON(String(reader.result));
+      verdict.textContent = res.error ? "✗ 导入失败：" + res.error
+        : "✓ 导入完成：新增 " + res.added + " 条，现有 " + res.total + " 条。";
+      refresh();
+    };
+    reader.readAsText(file, "utf-8");
+    ev.target.value = "";
+  });
+  document.getElementById("btnClear").addEventListener("click", function () {
+    if (confirm("确定清空全部作答记录？建议先「导出 JSON」备份。")) {
+      AnswerStore.clear();
+      refresh();
+      verdict.textContent = "已清空。";
+    }
+  });
+  document.getElementById("btnRedrill").addEventListener("click", redrill);
+
+  function refresh() {
+    renderStorageBar();
+    renderSummary();
+    renderCourseOptions();
+    renderList();
+  }
+  refresh();
+})();
+</script>
+</body>
+</html>

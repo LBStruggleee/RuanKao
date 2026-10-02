@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference · 课程总目录（序号 = 学习顺序，软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Reference · 课程总目录</p>
+    <h1>课程总目录：序号从小到大 = 你的学习顺序</h1>
+    <p class="meta">
+      依据：<a href="../docs/strategies/high-frequency-topics.md">高频必考清单</a>（数据结构与算法 = 上午卷 <b>10–12 题</b>，单科最大头）+ 24 天计划晚间 +30min 数据结构档 ｜ 路线变更记录：<a href="../learning-records/0002-restart-from-data-structures.md">LR-0002</a>
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 顺序这样定</span>
+    你要求按序号学习，所以<strong>课程编号已按学习顺序重排</strong>：0001–0009 数据结构从头学 → 0010–0013 操作系统回补（磁盘段）→ 0014 之后按 24 天计划日历逐科续建（网络/数据库/组成/软工）。以后说「继续」我就建<strong>下一个序号</strong>的课，永远不用想「下一课是哪个」。
+  </div>
+
+  <h2>第一部分 · 数据结构（0001–0009，从头学）</h2>
+  <table>
+    <tr><th>课号</th><th>内容</th><th>考试考法（考频）</th><th>状态</th></tr>
+    <tr><td><a href="../lessons/0001-arrays-and-linked-lists.html">0001 数组与链表</a></td><td>内存模型、随机/顺序存取、插入删除代价、地址公式</td><td>顺序表 vs 链表对比、地址计算小题（每年）</td><td><strong>✔ 已建，从这里开始</strong></td></tr>
+    <tr><td><a href="../lessons/0002-stacks-and-queues.html">0002 栈与队列</a></td><td>后进先出/先进先出、循环队列、栈在表达式/递归中的角色</td><td>进出栈序列模拟、循环队列判满判空（高频）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0003-binary-tree-basics.html">0003 二叉树：概念与性质</a></td><td>节点/度/深度、满树与完全树、n₀ = n₂ + 1</td><td>树叶数/度数关系计算（高频，如 2019H2-Q59）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0004-tree-traversals.html">0004 四种遍历与序列重建</a></td><td>先/中/后/层序 + 由「先+中」「中+后」重建二叉树</td><td>遍历还原必考（先+中→后 等）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0005-huffman.html">0005 哈夫曼树与编码</a></td><td>构造过程、带权路径长度 WPL、前缀码</td><td>WPL 计算必考（2019H2-Q64/65）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0006-graphs-intro.html">0006 图：概念与遍历</a></td><td>有向/无向、度、邻接矩阵/邻接表、DFS/BFS</td><td>连通数、遍历序列判断（高频）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0007-graph-algorithms.html">0007 图四大算法</a></td><td>Prim/Kruskal、Dijkstra、拓扑排序、关键路径 ve/vl</td><td>关键路径 ve取max/vl取min 必考计算</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0008-searching.html">0008 查找：折半与哈希</a></td><td>折半查找过程、哈希构造、冲突处理、ASL 手算</td><td>线性/二次探测、链地址法 ASL（高频）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td><a href="../lessons/0009-sorting.html">0009 排序总表</a></td><td>六大算法过程、稳定性「快选希堆」、复杂度对照</td><td>稳定性/复杂度/手算一轮（必考）</td><td><strong>✔ 已建</strong></td></tr>
+    <tr><td>🏁 出关测试</td><td><a href="../docs/knowledge-points/data-structures/day01-diagnostic.md">30 题摸底卷</a>（计时 40 分钟）</td><td colspan="2">≥ 24/30 → 数据结构达标，只留晚间回看；&lt; 24 → 按错题定位重学对应课</td></tr>
+  </table>
+
+  <h2>第二部分 · 操作系统回补（0010–0013，已建）</h2>
+  <table>
+    <tr><th>课号</th><th>内容</th><th>说明</th><th>状态</th></tr>
+    <tr><td><a href="../lessons/0010-disk-foundation.html">0010 磁盘是怎么工作的（先修）</a></td><td>盘面/磁道/扇区/柱面、读盘四步、换算三件套</td><td>0011 的前置直觉课，含换算训练器</td><td>✔ 已建</td></tr>
+    <tr><td><a href="../lessons/0011-disk-scheduling.html">0011 磁盘调度</a></td><td>存取时间三段式、六算法、寻道计算</td><td>配磁头预测模拟器；必考计算</td><td>✔ 已建</td></tr>
+    <tr><td><a href="../lessons/0012-file-system-structures.html">0012 文件系统与索引计算</a></td><td>三种物理结构、索引 4MB/4GB/4TB、FAT/inode</td><td>配索引容量训练器</td><td>✔ 已建</td></tr>
+    <tr><td><a href="../lessons/0013-day03-os-exercises.html">0013 OS 综合练习卷（25 题）</a></td><td>进程 5 + 内存 6 + 磁盘 8 + 文件 6</td><td>逐选项解析版；0011–0012 的验收卷</td><td>✔ 已建</td></tr>
+  </table>
+  <p style="font-size:.9rem; color:var(--ink-soft);">注：OS 还有<strong>进程管理（Day 1）与内存管理（Day 2）</strong>未学，将在数据结构出关后按同样「直觉课 → 计算课 → Drill」结构建课续编（0014 起），或穿插进行——到时按你的进度定。</p>
+
+  <h2>怎么排进这 22 天</h2>
+  <div class="card">
+    <ul style="margin:.2rem 0; padding-left:1.3rem;">
+      <li><strong>每天晚上 30–45 分钟一课</strong>——24 天计划本来就给数据结构留了晚间 +30 分钟档，正好用上；上午照走主线（计划日的输入 + 原资料的练习）。</li>
+      <li><strong>按序号走就行</strong>：0001 → 0002 → …，出关测试在 0009 之后。考频最高的树/排序/图都排在这条线上，不会漏。</li>
+      <li>10/14（Phase 1 收尾）前出不了关也没关系：<strong>10/14 的综合测验卷里数据结构占 10 题</strong>，就是阶段验收；10/21 的算法大题专项会再次踩到这条线。</li>
+      <li>每课学完做当课交互测验；错题照旧进 <a href="../docs/practice/reflection.md">reflection.md</a>。</li>
+    </ul>
+  </div>
+
+  <h2>与原资料的关系</h2>
+  <p>本目录是教学层，全部口径与仓库资料一致：诊断卷出自 <a href="../docs/knowledge-points/data-structures/day01-diagnostic.md">day01-diagnostic.md</a>（只读）；OS 段四课对应 <a href="../docs/knowledge-points/os/day03-disk.md">day03-disk.md</a> 与 <a href="../docs/knowledge-points/os/day03-exercises.md">day03-exercises.md</a>；下午算法大题以 <a href="../docs/practice/subject2/patterns-algo-exercises.md">patterns-algo-exercises.md</a> 为实战。原资料零改动。</p>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="mistake-notebook.html">📓 错题本（作答自动记录）</a>
+      <a href="../lessons/0001-arrays-and-linked-lists.html">从 Lesson 0001 数组与链表开始 →</a>
+      <a href="../lessons/0010-disk-foundation.html">OS 回补段（0010–0013）</a>
+      <a href="../docs/practice/tracker.md">24 天打卡表</a>
+    </div>
+    <p>💬 想调整顺序随时说——目录是地图不是合同，但新课编号永远递增，学过的序号不会变。</p>
+  </div>
+
+</div>
+</body>
+</html>
