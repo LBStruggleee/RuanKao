@@ -86,6 +86,7 @@ def page_html(rel_to_root, title, crumb, body):
 </div>
 </div>
 {badge}
+<script src="{rel_root}assets/sidebar.js"></script>
 </body>
 </html>""".format(title=title, rel_root=rel_root, rel_self=rel_self, crumb=crumb, body=body,
                  nav=NAV_TMPL.format(rel_root=rel_root, rel_self=rel_self),
