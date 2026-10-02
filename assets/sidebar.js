@@ -11,6 +11,11 @@
 (function () {
   "use strict";
 
+  // 防重复注入：若页面不小心引入两次本脚本，第二个实例直接退出，
+  // 否则两套 sidebar/overlay/toggle 互相错位，点 ☰ 会打开已脱离 DOM 的旧侧边栏
+  if (window.__rkSidebarLoaded) return;
+  window.__rkSidebarLoaded = true;
+
   var LESSONS = [
     { id: "0001", title: "数组与链表", file: "0001-arrays-and-linked-lists.html" },
     { id: "0002", title: "栈与队列", file: "0002-stacks-and-queues.html" },
