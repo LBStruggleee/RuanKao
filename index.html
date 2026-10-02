@@ -85,7 +85,9 @@
         return new URL(h, location.href).href;
       }
       function internalHtml(a) {
-        if (!a || a.target === '_blank') { return false; }
+        /* 注意：Docsify 会给绝对 http 链接强加 target="_blank"（externalLinkTarget），
+           但这些链接是本站的交互课程页——必须在同页接管，不能跳过 */
+        if (!a) { return false; }
         var h = a.getAttribute('href') || '';
         if (!/\.html$/.test(h)) { return false; }
         if (/^https?:\/\//.test(h)) { return a.origin === location.origin; }
