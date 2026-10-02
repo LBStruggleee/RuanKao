@@ -164,8 +164,8 @@
   document.head.appendChild(themeEl);
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=4：深浅色改挂全局 html.dark，移除独立主题逻辑
+  // v=5：移动端圆圈可拖拽移动（贴边+位置记忆）
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=4";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=5";
   document.head.appendChild(rail);
 })();

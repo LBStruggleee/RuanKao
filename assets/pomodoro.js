@@ -26,6 +26,7 @@
   var FOCUS = 25 * 60;
   var BREAK = 5 * 60;
   var KEY = "rkPomodoroState";
+  var POS_KEY = "rkPomodoroPos";      // 移动端圆圈拖拽位置
   var RING_C = 169.6;               // r=27 的圆周长（进度环）
 
   function today() {
@@ -279,7 +280,84 @@
       if (rail.classList.contains("open") && !rail.contains(e.target)) collapse();
     }, true);
 
-    circle.addEventListener("click", openModal);
+    // —— 拖拽移动（位移超阈值判定为拖拽，否则视为点按打开弹窗） ——
+    var dragState = null;
+    var suppressClick = false;
+    var DRAG_THRESHOLD = 8;
+
+    function clampPos(x, y) {
+      var w = circle.offsetWidth, h = circle.offsetHeight;
+      var maxX = Math.max(4, window.innerWidth - w - 4);
+      var maxY = Math.max(4, window.innerHeight - h - 4);
+      return { x: Math.min(Math.max(4, x), maxX), y: Math.min(Math.max(4, y), maxY) };
+    }
+    function setPos(x, y, animate) {
+      var pt = clampPos(x, y);
+      circle.style.left = pt.x + "px";
+      circle.style.top = pt.y + "px";
+      circle.style.right = "auto";
+      circle.style.bottom = "auto";
+      if (animate) {
+        circle.style.transition = "left .25s ease-out, top .25s ease-out";
+        setTimeout(function () { circle.style.transition = ""; }, 300);
+      }
+    }
+    function loadPos() {
+      try {
+        var p = JSON.parse(localStorage.getItem(POS_KEY) || "null");
+        if (p && typeof p.x === "number" && typeof p.y === "number") setPos(p.x, p.y);
+      } catch (e) {}
+    }
+    function savePos() {
+      try {
+        localStorage.setItem(POS_KEY, JSON.stringify({
+          x: parseFloat(circle.style.left) || 0,
+          y: parseFloat(circle.style.top) || 0
+        }));
+      } catch (e) {}
+    }
+
+    circle.addEventListener("pointerdown", function (e) {
+      var r = circle.getBoundingClientRect();
+      dragState = { startX: e.clientX, startY: e.clientY, origX: r.left, origY: r.top, moved: false };
+      try { circle.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    circle.addEventListener("pointermove", function (e) {
+      if (!dragState) return;
+      var dx = e.clientX - dragState.startX, dy = e.clientY - dragState.startY;
+      if (!dragState.moved && Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) return;
+      dragState.moved = true;
+      circle.classList.add("dragging");
+      setPos(dragState.origX + dx, dragState.origY + dy);
+    });
+    function endDrag() {
+      if (!dragState) return;
+      var wasMoved = dragState.moved;
+      dragState = null;
+      circle.classList.remove("dragging");
+      if (!wasMoved) return;
+      // 松手贴边：X 吸附较近一侧，Y 原地保留
+      var r = circle.getBoundingClientRect();
+      var toLeft = (r.left + r.width / 2) < window.innerWidth / 2;
+      setPos(toLeft ? 12 : window.innerWidth - r.width - 12, r.top, true);
+      savePos();
+      suppressClick = true;                 // 本次拖拽不触发弹窗
+      setTimeout(function () { suppressClick = false; }, 350);
+    }
+    circle.addEventListener("pointerup", endDrag);
+    circle.addEventListener("pointercancel", endDrag);
+    circle.addEventListener("click", function () {
+      if (suppressClick) return;
+      openModal();
+    });
+    loadPos();
+    window.addEventListener("resize", function () {
+      if (circle.style.left) {
+        var r = circle.getBoundingClientRect();
+        setPos(r.left, r.top);
+        savePos();
+      }
+    });
     modal.addEventListener("click", function (e) {
       if (e.target === modal) closeModal();       // 点遮罩关闭
     });

@@ -860,9 +860,17 @@ html.dark .pomo-start { color: #0e2a22; }
   font: inherit;
   cursor: pointer;
   padding: 0;
+  touch-action: none;            /* 拖拽移动时禁止页面滚动 */
   transition: transform 0.15s ease;
 }
 .pomo-circle:active { transform: scale(0.92); }
+.pomo-circle.dragging {
+  transition: none;
+  transform: scale(1.1);
+  opacity: 0.95;
+  box-shadow: 0 12px 30px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+}
 @media (max-width: 1279.98px) {
   .pomo-circle { display: flex; }
   .pomo-glass { display: none !important; }
