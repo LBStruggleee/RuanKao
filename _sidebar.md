@@ -37,6 +37,8 @@
   - 设计模式与保底
     - [0026 设计模式](lessons/0026-design-patterns.html)
     - [0027 保底专项：法规·标准·多媒体·英语](lessons/0027-bonus.html)
+  - 大题专项
+    - [0028 试题四：算法填空答题套路](lessons/0028-algo-blanks.html)
 
 - **📓 错题本**
   - [作答记录与错题整理](reference/mistake-notebook.html)

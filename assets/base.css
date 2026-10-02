@@ -376,6 +376,20 @@ button.btn.ghost {
 .sortlab-cell.locked { background: var(--accent-soft); border-color: var(--accent); }
 .sortlab-stat { color: var(--ink-soft); font-size: .88rem; margin: .4rem 0 0; }
 
+/* ---------- 代码填空推演器（blank-trainer.js） ---------- */
+.bt-item { margin-top: 1rem; }
+.bt-code { position: relative; }
+.bt-blank {
+  display: inline-block; min-width: 4.2em; text-align: center;
+  background: var(--gold-soft); color: var(--gold);
+  border: 1.5px dashed var(--gold); border-radius: 6px;
+  padding: 0 .3em; margin: 0 .15em; font-weight: 700;
+}
+.bt-blank.ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); border-style: solid; }
+.bt-blank.bad { background: var(--bad-soft); color: var(--bad); border-color: var(--bad); border-style: solid; }
+.bt-blankcard { margin-top: .8rem; }
+.bt-blankcard > p:first-child { margin: .2rem 0 .5rem; }
+
 /* ---------- 逐选项解析 ---------- */
 .q-explain .q-whywrong { display: block; margin-top: .15rem; color: var(--bad); }
 .q-explain .q-whyright { display: block; margin-top: .15rem; color: var(--ok); }
