@@ -1,58 +1,62 @@
-# 软考软件设计师 - 30天零基础冲刺备考仓库
+# 软考软件设计师 · 备考复习站
 
-> 📅 考试时间：2026年下半年（距离开考约30天）
-> 🎯 目标：一次性通过软件设计师（中级）考试
-> 📊 当前基础：零基础 | 学习能力：强
+> 🌐 **在线阅读（手机/电脑均可）**：**<https://lbstruggleee.github.io/RuanKao/>**
+> 📅 考试时间：**2026 年 10 月 24 日** ｜ 🎯 目标：一次性通过软件设计师（中级）｜ 📊 基础：零基础 · 学习能力强
+> 💡 本站内容仅供学习交流使用
 
----
+一套**完整的软考软件设计师备考系统**：28 节交互课程（即时判分 + 逐选项解析）+ 全大纲知识点精讲 + 10 套历年真题（含逐题解析与勘误）+ 下午卷全部 5 道大题专项 + 自动记录的**错题本**。网站在线阅读，仓库保存全部源文件。
+
+## 🌐 在线站点有什么
+
+| 板块 | 内容 | 直达 |
+|------|------|------|
+| 🎓 交互课程（28 课） | 数据结构 9 课 · OS 6 课 · 网络 3 课 · 数据库 2 课 · 组成 2 课 · 软工 3 课 · 设计模式 · 法规保底 · 算法大题套路 | [课程总目录](https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html) |
+| 📓 错题本 | 每次作答自动记录，按题判定「待重做 / 已攻克」，支持只练错题、导出 Markdown/JSON | [错题本](https://lbstruggleee.github.io/RuanKao/reference/mistake-notebook.html) |
+| 📚 知识点精讲 | OS / 网络 / 数据库 / 组成 / 软工 / 数据结构 全部笔记（Markdown 在线渲染 + 全站搜索） | 站内侧边栏「📚 知识点精讲」 |
+| ✍️ 刷题与真题 | 2018–2023 上午卷 10 套（逐题解析、多源勘误）+ 下午卷大题专项 + 全真模拟 | 站内侧边栏「✍️ 刷题与真题」 |
+| 🎯 应试策略 | 考试技巧 · 高频必考清单 · 速查手册 · 考前冲刺材料 | 站内侧边栏「🎯 应试策略」 |
+
+交互课程特色：每个考点配**动手实验室**（磁盘调度模拟器、PV 操作模拟器、页面置换、索引容量/换算训练器、排序步进等），测验**逐选项解析**（选错告诉你错在哪、正确答案为什么对），作答自动进错题本。
 
 ## 📋 仓库结构
 
 ```
-├── README.md                    # 项目总览与导航
-├── docs/
-│   ├── exam-guide.md            # 考试大纲与格式详解
-│   ├── study-plan.md            # 总体备考策略与方法论
-│   ├── schedule/
-│   │   └── 30-day-plan.md       # 30天详细日程表
-│   ├── knowledge-points/        # 各科目知识点精讲
-│   │   ├── data-structures/     # 数据结构与算法
-│   │   ├── os/                  # 操作系统
-│   │   ├── networks/            # 计算机网络
-│   │   ├── databases/           # 数据库系统
-│   │   ├── software-engineering/# 软件工程
-│   │   └── architecture/        # 计算机组成与体系结构
-│   ├── materials/               # 资料推荐与索引
-│   ├── practice/                # 刷题与模拟工具
-│   └── strategies/              # 应试策略与技巧
-└── tools/                       # 辅助工具脚本
+├── index.html                  # Docsify 站点入口（GitHub Pages）
+├── _sidebar.md                 # 站点侧边栏导航
+├── lessons/                    # 交互课程（28 课，HTML，可独立打开）
+├── reference/                  # 课程总目录 · 错题本 · 速查卡
+├── assets/                     # 课程组件库（测验/模拟器/训练器/作答存储）
+├── docs/                       # 知识点精讲 · 真题转录与解析 · 计划与策略
+│   ├── exam-guide.md           # 考试大纲与格式详解
+│   ├── schedule/               # 冲刺日程
+│   ├── knowledge-points/       # 各科目知识点精讲（day01–day33）
+│   ├── practice/               # 真题卷 · 大题专项 · 反思与清单
+│   └── strategies/             # 应试策略
+├── practice_dd/                # 真题 PDF 原件（本地持有，不入库）
+└── tools/                      # 辅助工具脚本
 ```
 
 ## 📚 考试科目
 
 | 科目 | 内容 | 题型 | 时间 |
 |------|------|------|------|
-| 信息系统基础知识 | 数据结构、算法、OS、网络、数据库、软件工程等 | 75道选择题 | 150分钟 |
-| 软件设计 | UML、设计模式、架构设计、数据库设计等 | 4道大题 | 90分钟 |
+| 基础知识（上午卷） | 数据结构、OS、网络、数据库、组成、软工、法规等 | 75 道选择题 | 150 分钟 |
+| 应用技术（下午卷） | DFD、数据库设计、UML、算法填空、设计模式 | 5 道案例分析大题 | 210 分钟 |
 
-## 📅 30天冲刺总览
+## 📅 冲刺安排
 
-| 阶段 | 时间 | 重点 |
-|------|------|------|
-| 第一阶段 | Day 1-10 | 核心知识体系搭建（数据结构+OS+网络+数据库） |
-| 第二阶段 | Day 11-20 | 软件工程+设计+历年真题训练 |
-| 第三阶段 | Day 21-27 | 模拟考试+薄弱环节突破 |
-| 第四阶段 | Day 28-30 | 冲刺复习+心态调整 |
+24 天计划（9/30–10/23）与每日打卡以 [docs/practice/tracker.md](docs/practice/tracker.md) 为唯一权威；阶段安排：核心知识 → 真题实战 → 大题专项 → 考前冲刺。
 
 ## 🔗 快速入口
 
-- [考试指南](docs/exam-guide.md)
-- [30天计划](docs/schedule/30-day-plan.md)
-- [备考策略](docs/study-plan.md)
-- [知识点精讲](docs/knowledge-points/)
-- [资料推荐](docs/materials/)
-- [刷题记录](docs/practice/)
+- 🌐 **在线阅读**：<https://lbstruggleee.github.io/RuanKao/>
+- 🎓 课程总目录：<https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html>
+- 📓 错题本：<https://lbstruggleee.github.io/RuanKao/reference/mistake-notebook.html>
+- 📖 考试指南：[docs/exam-guide.md](docs/exam-guide.md)
+- 🗓 24 天打卡表：[docs/practice/tracker.md](docs/practice/tracker.md)
+- 📚 知识点精讲：[docs/knowledge-points/](docs/knowledge-points/)
+- ✍️ 真题与解析：[docs/practice/](docs/practice/)
 
 ---
 
-**加油！30天足够改变结果 💪**
+**28 课 + 10 套真题，足够改变结果 💪**

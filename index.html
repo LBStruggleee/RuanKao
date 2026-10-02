@@ -27,10 +27,25 @@
       background: rgba(14,107,92,.06); margin: 1em 0; padding: .6em 1em; color: #3c4a56;
     }
     .markdown-section table { display: table; width: 100%; }
+    #rk-badge {
+      position: fixed; right: 12px; bottom: 12px; z-index: 999;
+      background: var(--theme-color); color: #fff; font-size: 12px;
+      padding: 6px 12px; border-radius: 999px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25); user-select: none;
+    }
+    @media (max-width: 720px) {
+      .markdown-section table { display: block; overflow-x: auto; }
+      .app-nav { position: absolute; }
+    }
   </style>
 </head>
 <body>
-  <div id="app">加载中…（首次打开需从 CDN 拉取 Docsify，请耐心一秒）</div>
+  <nav>
+    <a href="#/">🏠 首页</a>
+    <a href="reference/ds-learning-path.html">🎓 交互课程</a>
+    <a href="reference/mistake-notebook.html">📓 错题本</a>
+  </nav>
+  <div id="app">加载中…</div>
   <script>
     window.$docsify = {
       name: '软考软件设计师 · 备考站',
@@ -55,5 +70,20 @@
   <script src="assets/vendor/prism-cpp.min.js"></script>
   <script src="assets/vendor/prism-python.min.js"></script>
   <script src="assets/vendor/prism-bash.min.js"></script>
+  <div id="rk-badge"></div>
+  <script>
+    (function () {
+      var badge = document.getElementById('rk-badge');
+      function tick() {
+        var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+        badge.textContent = d > 1 ? '📅 距 10/24 考试还有 ' + d + ' 天'
+          : d === 1 ? '📅 明天考试，加油！'
+          : d === 0 ? '📅 今天考试！'
+          : '🏁 考试已结束，感谢使用本站';
+      }
+      tick();
+      setInterval(tick, 3600000);
+    })();
+  </script>
 </body>
 </html>

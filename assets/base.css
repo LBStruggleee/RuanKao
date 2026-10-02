@@ -400,6 +400,12 @@ button.btn.ghost {
 .q-all li { margin: .25rem 0; line-height: 1.65; }
 .q-all li.ok { color: var(--ok); font-weight: 600; }
 
+/* ---------- 移动端适配 ---------- */
+@media (max-width: 720px) {
+  .page { padding: 1.4rem .9rem 3rem; }
+  table { display: block; overflow-x: auto; }
+}
+
 /* ---------- 打印 ---------- */
 @media print {
   body { background: #fff; }
