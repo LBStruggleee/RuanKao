@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
+  <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="软考软件设计师（中级）备考站：28 节交互式课程（即时判分 + 逐选项解析）、全大纲知识点文档、10 套历年真题、错题本——纯静态 HTML，手机电脑皆可" />
   <title>软考软件设计师 · 备考站 | RuanKao</title>
@@ -17,7 +18,7 @@
     .cards .card p { color: var(--ink-soft); font-size: .88rem; margin: .3rem 0 0; }
     #rk-badge {
       position: fixed; right: 12px; bottom: 12px; z-index: 999;
-      background: var(--accent); color: #fff; font-size: 12px;
+      background: var(--accent); color: var(--on-accent); font-size: 12px;
       padding: 6px 12px; border-radius: 999px;
       box-shadow: 0 2px 10px rgba(0,0,0,.25); user-select: none;
     }

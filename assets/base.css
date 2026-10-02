@@ -22,6 +22,64 @@
   --serif: "Georgia", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
   --sans: -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
   --mono: "Cascadia Code", "Consolas", "JetBrains Mono", monospace;
+
+  /* 组件级派生色（全局深色在 html.dark 中整体覆写） */
+  --on-accent: #fff;         /* 松绿底上的文字 */
+  --on-warn: #fff;           /* 赭石底上的文字 */
+  --on-ink: #f3efe6;         /* 深墨底上的文字（成绩条等） */
+  --accent-border: var(--accent-border);
+  --warn-border: var(--warn-border);
+  --gold-border: var(--gold-border);
+  --gold-ink: var(--gold-ink);
+  --row-alt: var(--row-alt);        /* 表格隔行 */
+  --input-bg: var(--input-bg);       /* 输入框/实验室节点底 */
+  --tab-bg: var(--tab-bg);         /* 模拟器页签底 */
+  --sim-track-a: var(--sim-track-a);    /* 磁盘轨道渐变起 */
+  --sim-track-b: var(--sim-track-b);    /* 磁盘轨道渐变止 */
+  --sim-tick: var(--sim-tick);       /* 轨道刻度/树图边 */
+  --sim-pin-bg: var(--sim-pin-bg);     /* 磁道柱 */
+  --sim-pin-ink: var(--sim-pin-ink);
+  --sim-pin-border: var(--sim-pin-border);
+  --lesson-num-bg: var(--lesson-num-bg);  /* 侧边栏当前课号底 */
+  --link-underline: rgba(14, 107, 92, .35);
+}
+
+/* ---------- 全局深色模式（html.dark，由 assets/theme.js 维护） ---------- */
+html.dark {
+  color-scheme: dark;
+  --paper: #1e1c17;
+  --card: #282520;
+  --ink: #e8e4da;
+  --ink-soft: #a39d8e;
+  --line: #3d3931;
+  --accent: #5cc2a2;
+  --accent-soft: rgba(92, 194, 162, 0.14);
+  --warn: #e08a4e;
+  --warn-soft: rgba(224, 138, 78, 0.15);
+  --gold: #dcb95e;
+  --gold-soft: rgba(220, 185, 94, 0.15);
+  --ok: #7cc884;
+  --ok-soft: rgba(124, 200, 132, 0.14);
+  --bad: #ef7b72;
+  --bad-soft: rgba(239, 123, 114, 0.15);
+  --on-accent: #10231e;
+  --on-warn: #2a1508;
+  --on-ink: #1e1c17;
+  --accent-border: rgba(92, 194, 162, 0.4);
+  --warn-border: rgba(224, 138, 78, 0.4);
+  --gold-border: rgba(220, 185, 94, 0.4);
+  --gold-ink: #dcb95e;
+  --row-alt: #26231d;
+  --input-bg: #232019;
+  --tab-bg: #2c2820;
+  --sim-track-a: #3f3a2e;
+  --sim-track-b: #4a4436;
+  --sim-tick: #5a5340;
+  --sim-pin-bg: #4a463a;
+  --sim-pin-ink: #cfc8b4;
+  --sim-pin-border: #5d5744;
+  --lesson-num-bg: rgba(92, 194, 162, 0.2);
+  --link-underline: rgba(92, 194, 162, 0.4);
 }
 
 * { box-sizing: border-box; }
@@ -79,7 +137,7 @@ h2 {
 }
 h3 { font-size: 1.08rem; margin: 1.6rem 0 .6rem; }
 p { margin: .7rem 0; }
-a { color: var(--accent); text-decoration-color: rgba(14,107,92,.35); }
+a { color: var(--accent); text-decoration-color: var(--link-underline); }
 a:hover { text-decoration-color: var(--accent); }
 strong { color: var(--ink); }
 em { color: var(--warn); font-style: normal; font-weight: 600; }
@@ -100,13 +158,13 @@ pre code { background: none; padding: 0; color: inherit; }
 .formula {
   display: block;
   background: var(--gold-soft);
-  border: 1px solid #e2d3a8;
+  border: 1px solid var(--gold-border);
   border-radius: 8px;
   padding: .55rem .9rem;
   margin: .8rem 0;
   font-family: var(--mono);
   font-size: .95rem;
-  color: #4a3c10;
+  color: var(--gold-ink);
 }
 
 /* ---------- 卡片与标注 ---------- */
@@ -120,11 +178,11 @@ pre code { background: none; padding: 0; color: inherit; }
 }
 .callout { border-radius: 10px; padding: .85rem 1.1rem; margin: 1rem 0; font-size: .95rem; }
 .callout .tag { font-weight: 700; margin-right: .4em; }
-.callout.warn { background: var(--warn-soft); border: 1px solid #ecc4a4; }
+.callout.warn { background: var(--warn-soft); border: 1px solid var(--warn-border); }
 .callout.warn .tag { color: var(--warn); }
-.callout.tip { background: var(--accent-soft); border: 1px solid #bcd8cd; }
+.callout.tip { background: var(--accent-soft); border: 1px solid var(--accent-border); }
 .callout.tip .tag { color: var(--accent); }
-.callout.mission { background: var(--gold-soft); border: 1px solid #e2d3a8; }
+.callout.mission { background: var(--gold-soft); border: 1px solid var(--gold-border); }
 .callout.mission .tag { color: var(--gold); }
 
 /* ---------- 表格 ---------- */
@@ -137,7 +195,7 @@ table {
 }
 th, td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; vertical-align: top; }
 th { background: var(--accent-soft); color: var(--ink); font-weight: 700; }
-tr:nth-child(even) td { background: #faf7f0; }
+tr:nth-child(even) td { background: var(--row-alt); }
 table.tight td, table.tight th { padding: .35rem .55rem; }
 .num { text-align: right; font-family: var(--mono); }
 
@@ -157,7 +215,7 @@ table.tight td, table.tight th { padding: .35rem .55rem; }
 .q-option {
   text-align: left;
   font: inherit;
-  background: #fbf8f1;
+  background: var(--input-bg);
   border: 1.5px solid var(--line);
   border-radius: 8px;
   padding: .5rem .8rem;
@@ -183,7 +241,7 @@ table.tight td, table.tight th { padding: .35rem .55rem; }
 
 .quiz-score {
   background: var(--ink);
-  color: #f3efe6;
+  color: var(--on-ink);
   border-radius: 12px;
   padding: 1rem 1.3rem;
   margin-top: 1.2rem;
@@ -197,7 +255,7 @@ table.tight td, table.tight th { padding: .35rem .55rem; }
 button.btn {
   font: inherit;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   padding: .5rem 1.1rem;
@@ -215,31 +273,31 @@ button.btn.ghost {
 .dsim-tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
 .dsim-tab {
   font: inherit; font-size: .88rem;
-  background: #f1ecdf; color: var(--ink-soft);
+  background: var(--tab-bg); color: var(--ink-soft);
   border: 1.5px solid var(--line); border-radius: 999px;
   padding: .28rem .85rem; cursor: pointer;
 }
 .dsim-tab:hover { border-color: var(--accent); color: var(--accent); }
-.dsim-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.dsim-tab.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
 .dsim-track-wrap { overflow-x: auto; padding: .4rem 0 0; }
 .dsim-track { position: relative; height: 96px; min-width: 560px; }
 .dsim-rail {
   position: absolute; left: 0; right: 0; top: 34px; height: 6px;
-  background: linear-gradient(90deg, #c9bfa8, #d8d0bc);
+  background: linear-gradient(90deg, var(--sim-track-a), var(--sim-track-b));
   border-radius: 3px;
 }
-.dsim-tick { position: absolute; top: 40px; width: 1px; height: 8px; background: #b5ab93; }
+.dsim-tick { position: absolute; top: 40px; width: 1px; height: 8px; background: var(--sim-tick); }
 .dsim-tick-label { position: absolute; top: 50px; transform: translateX(-50%); font-size: .7rem; color: var(--ink-soft); font-family: var(--mono); }
 .dsim-pin {
   position: absolute; top: 8px; transform: translateX(-50%);
   width: 24px; height: 24px; border-radius: 50% 50% 50% 4px;
-  background: #d9d2bf; color: #6c6250;
-  border: 1.5px solid #b8ae95;
+  background: var(--sim-pin-bg); color: var(--sim-pin-ink);
+  border: 1.5px solid var(--sim-pin-border);
   font-size: .68rem; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   transition: background .25s, color .25s, transform .25s;
 }
-.dsim-pin.served { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateX(-50%) scale(1.12); }
+.dsim-pin.served { background: var(--accent); border-color: var(--accent); color: var(--on-accent); transform: translateX(-50%) scale(1.12); }
 .dsim-head {
   position: absolute; top: 14px; transform: translateX(-50%);
   transition: left .45s cubic-bezier(.4, 0, .2, 1);
@@ -250,7 +308,7 @@ button.btn.ghost {
   border-top: 12px solid var(--warn);
 }
 .dsim-head .cap {
-  background: var(--warn); color: #fff; font-size: .68rem; font-weight: 700;
+  background: var(--warn); color: var(--on-warn); font-size: .68rem; font-weight: 700;
   border-radius: 5px; padding: .05rem .35rem; margin-bottom: 2px; text-align: center;
   white-space: nowrap;
 }
@@ -260,7 +318,7 @@ button.btn.ghost {
 .dsim-choices { display: flex; flex-wrap: wrap; gap: .45rem; }
 .dsim-choice {
   font: inherit; font-family: var(--mono); font-weight: 700;
-  background: #fbf8f1; border: 1.5px solid var(--line); border-radius: 8px;
+  background: var(--input-bg); border: 1.5px solid var(--line); border-radius: 8px;
   padding: .35rem .8rem; cursor: pointer; min-width: 3.4rem;
 }
 .dsim-choice:hover:not(:disabled) { border-color: var(--accent); }
@@ -273,7 +331,7 @@ button.btn.ghost {
 .dsim-log-step .seg { color: var(--ink-soft); font-size: .82rem; display: block; margin-left: 1.2em; }
 .dsim-log-step b { font-family: var(--mono); color: var(--accent); }
 .dsim-log-step .void { color: var(--warn); font-weight: 600; }
-.dsim-done { background: var(--gold-soft); border: 1px solid #e2d3a8; border-radius: 10px; padding: .8rem 1rem; margin-top: .8rem; }
+.dsim-done { background: var(--gold-soft); border: 1px solid var(--gold-border); border-radius: 10px; padding: .8rem 1rem; margin-top: .8rem; }
 .dsim-done .total { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--gold); }
 .dsim-hint { color: var(--warn); font-size: .88rem; margin-top: .5rem; min-height: 1.3em; }
 .dsim-actions { display: flex; gap: .5rem; margin-top: .7rem; flex-wrap: wrap; }
@@ -284,7 +342,7 @@ button.btn.ghost {
 .icap label { font-size: .9rem; color: var(--ink-soft); }
 .icap select, .icap input {
   font: inherit; padding: .3rem .5rem; border: 1.5px solid var(--line);
-  border-radius: 7px; background: #fbf8f1; color: var(--ink);
+  border-radius: 7px; background: var(--input-bg); color: var(--ink);
 }
 .icap-derive {
   background: #2d353d; color: #e8e3d8; border-radius: 10px;
@@ -306,7 +364,7 @@ button.btn.ghost {
   color: var(--ink-soft);
 }
 .lesson-footer .nav { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: .8rem; }
-.win-box { background: var(--accent-soft); border: 1px solid #bcd8cd; border-radius: 10px; padding: .9rem 1.1rem; margin: 1.4rem 0; }
+.win-box { background: var(--accent-soft); border: 1px solid var(--accent-border); border-radius: 10px; padding: .9rem 1.1rem; margin: 1.4rem 0; }
 .win-box .tag { font-weight: 700; color: var(--accent); }
 
 /* ---------- 换算训练器（conversion-drill.js） ---------- */
@@ -328,17 +386,17 @@ button.btn.ghost {
 .tlab, .sq-lab, .glab, .sortlab, .hlab { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.2rem; margin: 1.1rem 0; }
 .tlab-tree { position: relative; width: 100%; }
 .tlab-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.tlab-edge { stroke: #b5ab93; stroke-width: 8; vector-effect: non-scaling-stroke; }
+.tlab-edge { stroke: var(--sim-tick); stroke-width: 8; vector-effect: non-scaling-stroke; }
 .tlab-node {
   position: absolute; transform: translate(-50%, -50%);
   width: 44px; height: 44px; border-radius: 50%;
-  background: #fbf8f1; border: 2px solid #b8ae95;
+  background: var(--input-bg); border: 2px solid var(--sim-pin-border);
   font-family: var(--mono); font-weight: 700; font-size: .95rem; color: var(--ink);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all .2s; z-index: 2;
 }
 .tlab-node:hover { border-color: var(--accent); }
-.tlab-node.visited { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tlab-node.visited { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .tlab-node.hit { background: var(--ok-soft); border-color: var(--ok); }
 .tlab-node.wrong { background: var(--bad-soft); border-color: var(--bad); animation: dsim-shake .3s; }
 .tlab-node.hroot { background: var(--gold-soft); border-color: var(--gold); }
@@ -350,26 +408,26 @@ button.btn.ghost {
 .glab-v {
   position: absolute; transform: translate(-50%, -50%);
   width: 46px; height: 46px; border-radius: 50%;
-  background: #fbf8f1; border: 2px solid #b8ae95;
+  background: var(--input-bg); border: 2px solid var(--sim-pin-border);
   font-family: var(--mono); font-weight: 700; cursor: pointer;
   display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 2;
 }
 .glab-v:hover { border-color: var(--accent); }
-.glab-v.visited { background: var(--accent); border-color: var(--accent); color: #fff; }
+.glab-v.visited { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .glab-v.wrong { background: var(--bad-soft); border-color: var(--bad); animation: dsim-shake .3s; }
 .glab-e {
   position: absolute; transform: translate(-50%, -50%);
   min-width: 2rem; height: 1.7rem; border-radius: 999px;
-  background: #fbf8f1; border: 1.5px solid #b8ae95;
+  background: var(--input-bg); border: 1.5px solid var(--sim-pin-border);
   font-family: var(--mono); font-weight: 700; font-size: .85rem; cursor: pointer; z-index: 2;
 }
 .glab-e:hover { border-color: var(--accent); }
-.glab-e.chosen { background: var(--accent); border-color: var(--accent); color: #fff; }
+.glab-e.chosen { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .glab-e.rejected { background: var(--bad-soft); border-color: var(--bad); text-decoration: line-through; }
 .sortlab-row { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; margin-top: .5rem; }
 .sortlab-cell {
   min-width: 2.6rem; text-align: center; font-family: var(--mono); font-weight: 700;
-  border: 1.5px solid var(--line); border-radius: 8px; padding: .35rem .4rem; background: #fbf8f1;
+  border: 1.5px solid var(--line); border-radius: 8px; padding: .35rem .4rem; background: var(--input-bg);
   transition: all .2s;
 }
 .sortlab-cell.hit { background: var(--warn-soft); border-color: var(--warn); }
@@ -493,6 +551,19 @@ body.sidebar-open .sidebar-toggle { display: none; }  /* 展开时用侧边栏�
 }
 .sidebar-close:hover { color: var(--ink); }
 
+.sidebar-actions { display: flex; align-items: center; gap: 0.15rem; }
+.sidebar-theme {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.4rem;
+}
+.sidebar-theme:hover { color: var(--ink); background: var(--accent-soft); }
+
 .sidebar-section { padding: 0.4rem 0; }
 .sidebar-title {
   font-size: 0.78rem;
@@ -540,7 +611,7 @@ body.sidebar-open .sidebar-toggle { display: none; }  /* 展开时用侧边栏�
 }
 .sidebar-link.active .lesson-num {
   color: var(--accent);
-  background: #d4e8e0;
+  background: var(--lesson-num-bg);
 }
 
 body.sidebar-open .page {
@@ -584,7 +655,9 @@ body.sidebar-open .page {
   --pg-fallback: rgba(255, 253, 248, 0.95);
   color: var(--pg-ink);
 }
-.pomo-dark {
+html.dark .pomo-glass,
+html.dark .pomo-circle,
+html.dark .pomo-modal-card {
   --pg-ink: #e8edf0;
   --pg-ink-soft: #9aa7b1;
   --pg-bg: rgba(30, 38, 46, 0.58);
@@ -751,12 +824,12 @@ body.sidebar-open .page {
 .pomo-btns button:active { transform: scale(0.95); }
 .pomo-start {
   background: var(--pg-accent);
-  color: #fff;
+  color: var(--on-accent);
   border: 0;
   box-shadow: 0 2px 8px var(--pg-accent-soft);
 }
 .pomo-start:hover { filter: brightness(1.08); }
-.pomo-dark .pomo-start { color: #0e2a22; }
+html.dark .pomo-start { color: #0e2a22; }
 .pomo-reset {
   background: var(--pg-bg);
   color: var(--pg-ink-soft);

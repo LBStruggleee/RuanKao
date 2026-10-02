@@ -16,6 +16,9 @@ SITE = "https://lbstruggleee.github.io/RuanKao/"
 
 MD_EXTS = ["tables", "fenced_code"]
 
+# 防闪屏：渲染前按 localStorage/系统偏好给 <html> 挂 dark 类
+FOUC = '<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>'
+
 NAV_TMPL = """<nav class="topnav">
   <a href="{rel_root}index.html">🏠 网站首页</a>
   <a href="{rel_self}index.html">📖 文档目录</a>
@@ -68,6 +71,7 @@ def page_html(rel_to_root, title, crumb, body):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{fouc}
 <title>{title} · 软考软件设计师备考站</title>
 <link rel="stylesheet" href="{rel_root}assets/base.css">
 </head>
@@ -88,7 +92,7 @@ def page_html(rel_to_root, title, crumb, body):
 {badge}
 <script src="{rel_root}assets/sidebar.js"></script>
 </body>
-</html>""".format(title=title, rel_root=rel_root, rel_self=rel_self, crumb=crumb, body=body,
+</html>""".format(title=title, rel_root=rel_root, rel_self=rel_self, crumb=crumb, body=body, fouc=FOUC,
                  nav=NAV_TMPL.format(rel_root=rel_root, rel_self=rel_self),
                  gh=SITE + "blob/main/" + src_path, src_path=src_path, badge=BADGE)
 
@@ -179,6 +183,7 @@ SEARCH_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <title>搜索 · 软考软件设计师备考站</title>
 <link rel="stylesheet" href="assets/base.css">
 </head>

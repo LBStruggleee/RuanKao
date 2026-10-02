@@ -58,7 +58,10 @@
     var html = '<nav class="sidebar" id="sidebar">';
     html += '<div class="sidebar-header">';
     html += '<a href="' + REL_ROOT + 'index.html" class="sidebar-brand">📚 软考备考站</a>';
+    html += '<span class="sidebar-actions">';
+    html += '<button class="sidebar-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button>';
     html += '<button class="sidebar-close" id="sidebarClose" aria-label="收起侧边栏">×</button>';
+    html += '</span>';
     html += '</div>';
 
     html += '<div class="sidebar-section">';
@@ -155,9 +158,14 @@
     inject();
   }
 
+  // 全站深浅色主题（html.dark，theme.js 自带防重入守卫）
+  var themeEl = document.createElement("script");
+  themeEl.src = REL_ROOT + "assets/theme.js";
+  document.head.appendChild(themeEl);
+
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=3：移动端圆圈+弹窗、深浅色主题、站点配色统一
+  // v=4：深浅色改挂全局 html.dark，移除独立主题逻辑
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=3";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=4";
   document.head.appendChild(rail);
 })();

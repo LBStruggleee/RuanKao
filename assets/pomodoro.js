@@ -7,8 +7,9 @@
  *   桌面（≥1280px）—— 贴右缘玻璃胶囊，点击 morph 展开为卡片
  *   移动（<1280px）—— 右下角小圆圈：环形进度 + 中央倒计时，
  *                      点开屏幕中央的玻璃弹窗进行操作
- * 配色：绑定站点色板（浅色=暖纸+松绿/旧金），支持深色模式
- *   （默认跟随系统 prefers-color-scheme，可手动切换并记住）
+ * 配色：跟随全站主题（assets/theme.js 维护的 html.dark），
+ *   浅色=暖纸白玻璃 + 深松绿/旧金，深色由 base.css 的
+ *   html.dark .pomo-glass 等选择器整体覆写 --pg-* 变量。
  *
  * 计时：
  *   - 专注 25 分钟 / 休息 5 分钟，到点提示音并自动切换模式
@@ -25,7 +26,6 @@
   var FOCUS = 25 * 60;
   var BREAK = 5 * 60;
   var KEY = "rkPomodoroState";
-  var THEME_KEY = "rkPomodoroTheme";
   var RING_C = 169.6;               // r=27 的圆周长（进度环）
 
   function today() {
@@ -84,31 +84,6 @@
   function remaining() {
     if (!state.running) return state.remain;
     return (state.endAt - Date.now()) / 1000;
-  }
-
-  /* ---------- 主题（浅色/深色） ---------- */
-
-  function systemDark() {
-    return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  }
-  function currentTheme() {
-    var t = null;
-    try { t = localStorage.getItem(THEME_KEY); } catch (e) {}
-    return t === "dark" || t === "light" ? t : (systemDark() ? "dark" : "light");
-  }
-  function applyTheme() {
-    var dark = currentTheme() === "dark";
-    [rail, circle, els.mcard].forEach(function (el) {
-      if (el) el.classList.toggle("pomo-dark", dark);
-    });
-    els.themeBtns.forEach(function (b) {
-      b.textContent = dark ? "☀️" : "🌙";
-      b.title = dark ? "切换浅色模式" : "切换深色模式";
-    });
-  }
-  function toggleTheme() {
-    try { localStorage.setItem(THEME_KEY, currentTheme() === "dark" ? "light" : "dark"); } catch (e) {}
-    applyTheme();
   }
 
   /* ---------- 渲染 ---------- */
@@ -229,7 +204,7 @@
       '<span class="pomo-chev">▾</span>' +
       "</button>" +
       '<div class="pomo-body">' +
-      '<div class="pomo-row1"><span class="pomo-mode focus">专注</span><button class="pomo-theme" type="button" aria-label="切换深浅色">🌙</button></div>' +
+      '<div class="pomo-row1"><span class="pomo-mode focus">专注</span><button class="pomo-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button></div>' +
       '<div class="pomo-time">25:00</div>' +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" type="button">开始</button>' +
@@ -262,7 +237,7 @@
       '<div class="pomo-modal-card" role="dialog" aria-label="番茄钟设置">' +
       '<div class="pomo-row1"><span class="pomo-mode focus">专注</span>' +
       '<span class="pomo-mactions">' +
-      '<button class="pomo-theme" type="button" aria-label="切换深浅色">🌙</button>' +
+      '<button class="pomo-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button>' +
       '<button class="pomo-close" type="button" aria-label="关闭">×</button>' +
       "</span></div>" +
       '<div class="pomo-time">25:00</div>' +
@@ -286,13 +261,11 @@
     els.mMode = els.mcard.querySelector(".pomo-mode");
     els.starts = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-start, .pomo-modal .pomo-start"));
     els.dones = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-done, .pomo-modal .pomo-done"));
-    els.themeBtns = Array.prototype.slice.call(document.querySelectorAll(".pomo-theme"));
 
     // 恢复上次计时：仍在跑 → 继续倒计时；离开期间已到点 → 按完成处理
     if (state.running && (state.endAt - Date.now()) / 1000 <= 0) {
       finish();
     }
-    applyTheme();
     render();
     setInterval(tick, 250);
 
@@ -318,20 +291,9 @@
       else collapse();
     });
 
-    if (window.matchMedia) {
-      try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
-        if (!storedThemeSet()) applyTheme();
-      }); } catch (e) {}
-    }
-
     els.starts.forEach(function (b) { b.addEventListener("click", onStart); });
     Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-reset, .pomo-modal .pomo-reset"))
       .forEach(function (b) { b.addEventListener("click", onReset); });
-    els.themeBtns.forEach(function (b) { b.addEventListener("click", toggleTheme); });
-  }
-
-  function storedThemeSet() {
-    try { var t = localStorage.getItem(THEME_KEY); return t === "dark" || t === "light"; } catch (e) { return false; }
   }
 
   if (document.readyState === "loading") {
