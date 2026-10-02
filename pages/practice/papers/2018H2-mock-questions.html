@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2018 年下半年 软件设计师 上午试卷（Day 30 全真模拟卷） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 2018H2-mock-questions.md</div>
+<h1>2018 年下半年 软件设计师 上午试卷（Day 30 全真模拟卷）</h1>
+<blockquote>
+<p>全国计算机技术与软件专业技术资格（水平）考试
+<strong>2018 年下半年 软件设计师 上午试卷（综合知识）</strong>
+原卷考试时间：9:00～11:30　共 150 分钟｜<strong>本场模拟安排：Day 30 上午 8:30～11:00（150 分钟）</strong></p>
+<p>本试卷的试题中共有 75 个空格，需要全部解答，每个空格 1 分，满分 75 分。
+每个空格对应一个序号，有 A、B、C、D 四个选项，请选择一个最恰当的选项作为解答。</p>
+</blockquote>
+<hr />
+<h3>📌 试卷来源与用途披露（务必先读）</h3>
+<ul>
+<li><strong>试卷来源</strong>：本卷为 <strong>2018 年下半年（201811）软件设计师上午真题</strong>的逐字转录，非新编模拟题，也非任何机构押题卷。题目内容与原卷一致，仅做排版格式统一。</li>
+<li><strong>用途</strong>：用于 <strong>Day 30 上午 8:30～11:00 的全真模拟</strong>。这是冲刺计划中<strong>唯一一套"非已交付 8 套真题"的上午整卷练习</strong>，目的是在考前用一套<strong>未做过、未对过答案</strong>的整卷检验"限时 150 分钟 + 涂卡"的完整应试流程。</li>
+<li><strong>答案来源披露（重要）</strong>：本地<strong>没有 2018 下半年官方答案册</strong>（<code>practice_dd/</code> 下的解析 PDF 只覆盖 2017–2019 上，不含 2018 下）。本卷答案取自<strong>网络多来源交叉核对</strong>（希赛系题库全文解析、两个 CSDN 全文版、一个在线做题系统记录），<strong>均非官方阅卷答案</strong>。少数题存在来源间分歧，已在答案文件中逐题标注来源与裁决理由。详见 <code>2018H2-mock-key.md</code> 开头的"答案来源说明"。</li>
+<li><strong>与 Day 26 模拟卷的关系</strong>：Day 26 的模拟卷用的是 <strong>2018 年上半年（201805）上午卷</strong>，本卷是 <strong>2018 年下半年（201811）上午卷</strong>，两套<strong>题目完全不同</strong>（2018 上考浮点对阶/海明码/中断/SSH/增量模型/Lisp/三对角矩阵，本卷考补码/奇校验/流水线/DES/演化模型/前趋图 PV/贪心区间覆盖）。本卷的英语阅读（71-75）主题为 Brooks《人月神话》"项目工作手册（project workbook）"，与 2018 上的英语题亦完全不同，<strong>无重复收题风险</strong>。</li>
+</ul>
+<hr />
+<h3>⏱️ 考试节奏提示（写在最上面，做题前默读一遍）</h3>
+<ol>
+<li><strong>先易后难</strong>：1-75 题按顺序做，但<strong>任何一题卡住超过 2 分钟立即标记跳过</strong>。计算题（4、17-18、23、27、28、34-35、50、53-56、58、62-65）留到最后集中做。</li>
+<li><strong>标记跳过</strong>：在题号前画「△」表示"需回看"，画「✗」表示"完全不会"。先做完一遍再回头清「△」。</li>
+<li><strong>涂卡策略</strong>：<strong>不要做完一题涂一题</strong>（频繁切换试卷与答题卡浪费时间）。建议<strong>每 20 题集中涂一次</strong>（1-20、21-40、41-60、61-75），或全部做完后统一涂。</li>
+<li><strong>最后 15 分钟（10:45 起）必须做的事</strong>：①检查答题卡是否涂满 75 格、有无错位（题号与选项是否对齐）；②清点所有「✗」题并猜一个答案（<strong>绝不留空</strong>，猜也有 25% 命中率）；③检查多空连题（9-10、17-18、24-26、39-40、41-43、44-47、53-56、55-56、60-61、62-65、71-75）是否漏答了某一空。</li>
+<li><strong>时间分配参考</strong>：前 60 题平均每题 ≤ 1.5 分钟，后 15 题（含英语）每题 ≤ 2 分钟，计算题预留 20 分钟，涂卡 + 检查预留 15 分钟。</li>
+</ol>
+<hr />
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（限时 150 分钟，目标 ≤ 120 分钟）</td>
+</tr>
+<tr>
+<td>涂卡 + 检查用时</td>
+<td>______ 分钟</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<p><strong>答题卡（在横线上填你的答案字母）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>21</th>
+<th>22</th>
+<th>23</th>
+<th>24</th>
+<th>25</th>
+<th>26</th>
+<th>27</th>
+<th>28</th>
+<th>29</th>
+<th>30</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>31</th>
+<th>32</th>
+<th>33</th>
+<th>34</th>
+<th>35</th>
+<th>36</th>
+<th>37</th>
+<th>38</th>
+<th>39</th>
+<th>40</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>41</th>
+<th>42</th>
+<th>43</th>
+<th>44</th>
+<th>45</th>
+<th>46</th>
+<th>47</th>
+<th>48</th>
+<th>49</th>
+<th>50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>51</th>
+<th>52</th>
+<th>53</th>
+<th>54</th>
+<th>55</th>
+<th>56</th>
+<th>57</th>
+<th>58</th>
+<th>59</th>
+<th>60</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>61</th>
+<th>62</th>
+<th>63</th>
+<th>64</th>
+<th>65</th>
+<th>66</th>
+<th>67</th>
+<th>68</th>
+<th>69</th>
+<th>70</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>71</th>
+<th>72</th>
+<th>73</th>
+<th>74</th>
+<th>75</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>做完前<strong>不要</strong>翻看 <code>2018H2-mock-key.md</code>（答案与解析文件）。</p>
+</blockquote>
+<hr />
+<h2>关于图形题的说明（务必先读）</h2>
+<p>原试卷为 PDF 扫描件，下列题目在原卷中以<strong>图形/图片</strong>形式出现，Markdown 无法直接呈现。本文已尽可能给出<strong>依据原图与题库解析复原的结构性数据</strong>（一律标注 <strong>【存疑：图形复原】</strong>，与原卷图形可能在细节上存在差异）。<strong>附注只给结构性数据，计算与推导请自行完成，不含任何答案或结论。</strong>涉及图形的题目：</p>
+<ul>
+<li><strong>第 4 题</strong>：系统可靠性框图（部件串并联结构）</li>
+<li><strong>第 17-18 题</strong>：项目活动图（AOE 网，里程碑 A～J）</li>
+<li><strong>第 21 题</strong>：二叉表达式树</li>
+<li><strong>第 24-26 题</strong>：进程前趋图 + PV 操作程序</li>
+<li><strong>第 34-35 题</strong>：程序伪代码（用于路径覆盖测试与 McCabe 度量）</li>
+<li><strong>第 41-43 题</strong>：UML 组件图</li>
+<li><strong>第 44-47 题</strong>：超市销售系统类图</li>
+<li><strong>第 49 题</strong>：NFA 状态转换图</li>
+<li><strong>第 50 题</strong>：函数 f、g 的代码</li>
+<li><strong>第 59 题</strong>：二叉排序树</li>
+<li><strong>第 60-61 题</strong>：图 G 的邻接矩阵</li>
+<li><strong>第 62-65 题</strong>：公路与房子示意图（<strong>全部数据已在题干文字中给出，图形仅作示意</strong>）</li>
+<li><strong>第 68 题</strong>：TCP/IP 层次对应图（四个选项均为图形）</li>
+</ul>
+<p><strong>建议</strong>：图形题若手边有原卷 PDF 或电子版原图，对照原图做题；没有原图时按本文说明作答，并在对答案时重点核对。本文对<strong>无法从文本源确认完整结构</strong>的图（尤其第 17-18 题活动图、第 60-61 题邻接矩阵）只给出已确认的部分结构，并明确标注局限。</p>
+<hr />
+<h2>一、选择题（第 1-75 题，每题 1 分，共 75 分）</h2>
+<p><strong>1.</strong> CPU 在执行指令的过程中，会自动修改 （1） 的内容，以便使其保持的总是将要执行的下一条指令的地址。</p>
+<p>（1）　A. 指令寄存器　　B. 程序计数器</p>
+<p>C. 地址寄存器　　D. 指令译码器</p>
+<hr />
+<p><strong>2.</strong> 在微机系统中，BIOS（基本输入输出系统）保存在 （2） 中。</p>
+<p>（2）　A. 主板上的 ROM　　B. CPU 的寄存器</p>
+<p>C. 主板上的 RAM　　D. 虚拟存储器</p>
+<hr />
+<p><strong>3.</strong> 采用 n 位补码（包含一个符号位）表示数据， （3） 。</p>
+<blockquote>
+<p>【存疑：原卷选项中的上标在 OCR 中被平排为普通数字】原卷选项的 n、n-1 均为指数上标。</p>
+</blockquote>
+<p>（3）　A. 可以直接表示数值 2ⁿ　　B. 可以直接表示数值 −2ⁿ</p>
+<p>C. 可以直接表示数值 2ⁿ⁻¹　　D. 可以直接表示数值 −2ⁿ⁻¹</p>
+<hr />
+<p><strong>4.</strong> 某系统由下图所示的部件构成，每个部件的千小时可靠度都为 R，该系统的千小时可靠度为 （4） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为可靠性框图。结构为：<strong>3 个部件并联构成一个子系统，该子系统再与另外 2 个部件并联构成的子系统串联</strong>。选项中的 3、2 均为并联部件数（指数上标，OCR 中被平排）。</p>
+</blockquote>
+<p>（4）　A. 3R/2 + 2R/3　　B. R/3 + R/2</p>
+<p>C. (1 − (1 − R)³)(1 − (1 − R)²)　　D. (1 − (1 − R)³ − (1 − R)²)</p>
+<hr />
+<p><strong>5.</strong> 以下关于采用一位奇校验方法的叙述中，正确的是 （5） 。</p>
+<p>（5）　A. 若所有奇数位出错，则可以检测出该错误但无法纠正错误</p>
+<p>B. 若所有偶数位出错，则可以检测出该错误并加以纠正</p>
+<p>C. 若有奇数个数据位出错，则可以检测出该错误但无法纠正错误</p>
+<p>D. 若有偶数个数据位出错，则可以检测出该错误并加以纠正</p>
+<hr />
+<p><strong>6.</strong> 下列关于流水线方式执行指令的叙述中，不正确的是 （6） 。</p>
+<p>（6）　A. 流水线方式可提高单条指令的执行速度</p>
+<p>B. 流水线方式下可同时执行多条指令</p>
+<p>C. 流水线方式提高了各部件的利用率</p>
+<p>D. 流水线方式提高了系统的吞吐率</p>
+<hr />
+<p><strong>7.</strong> DES 是 （7） 算法。</p>
+<p>（7）　A. 公开密钥加密　　B. 共享密钥加密</p>
+<p>C. 数字签名　　　　D. 认证</p>
+<hr />
+<p><strong>8.</strong> 计算机病毒的特征不包括 （8） 。</p>
+<p>（8）　A. 传染性　　B. 触发性</p>
+<p>C. 隐蔽性　　D. 自毁性</p>
+<hr />
+<p><strong>9. / 10.</strong> MD5 是 （9） 算法，对任意长度的输入计算得到的结果长度为 （10） 位。</p>
+<p>（9）　A. 路由选择　　B. 摘要</p>
+<p>C. 共享密钥　　D. 公开密钥</p>
+<p>（10）　A. 56　　B. 128</p>
+<p>C. 140　　D. 160</p>
+<hr />
+<p><strong>11.</strong> 使用 Web 方式收发电子邮件时，以下描述错误的是 （11） 。</p>
+<p>（11）　A. 无须设置简单邮件传输协议</p>
+<p>B. 可以不设置帐号密码登录</p>
+<p>C. 邮件可以插入多个附件</p>
+<p>D. 未发送邮件可以保存到草稿箱</p>
+<hr />
+<p><strong>12.</strong> 有可能无限期拥有的知识产权是 （12） 。</p>
+<p>（12）　A. 著作权　　　　B. 专利权</p>
+<p>C. 商标权　　　　D. 集成电路布图设计权</p>
+<hr />
+<p><strong>13.</strong> （13） 是构成我国保护计算机软件著作权的两个基本法律文件。</p>
+<p>（13）　A. 《软件法》和《计算机软件保护条例》</p>
+<p>B. 《中华人民共和国著作权法》和《计算机软件保护条例》</p>
+<p>C. 《软件法》和《中华人民共和国著作权法》</p>
+<p>D. 《中华人民共和国版权法》和《计算机软件保护条例》</p>
+<hr />
+<p><strong>14.</strong> 某软件程序员接受一个公司（软件著作权人）委托开发完成一个软件，三个月后又接受另一公司委托开发功能类似的软件，此程序员仅将受第一个公司委托开发的软件略作修改即提交给第二家公司，此种行为 （14） 。</p>
+<p>（14）　A. 属于开发者的特权</p>
+<p>B. 属于正常使用著作权</p>
+<p>C. 不构成侵权</p>
+<p>D. 构成侵权</p>
+<hr />
+<p><strong>15.</strong> 结构化分析的输出不包括 （15） 。</p>
+<p>（15）　A. 数据流图　　B. 数据字典</p>
+<p>C. 加工逻辑　　D. 结构图</p>
+<hr />
+<p><strong>16.</strong> 某航空公司拟开发一个机票预订系统，旅客预订机票时使用信用卡付款。付款通过信用卡公司的信用卡管理系统提供的接口实现。若采用数据流图建立需求模型，则信用卡管理系统是 （16） 。</p>
+<p>（16）　A. 外部实体　　B. 加工</p>
+<p>C. 数据流　　D. 数据存储</p>
+<hr />
+<p><strong>17. / 18.</strong> 某软件项目的活动图如下图所示，其中顶点表示项目里程碑，连接顶点的边表示包含的活动，边上的数字表示活动的持续时间（天），则完成该项目的最少时间为 （17） 天。活动 FG 的松驰时间为 （18） 天。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷活动图含 10 个里程碑 A～J。<strong>已从多源解析确认的结构</strong>：从起点到里程碑 F 的最长前段为 <strong>A→D→F，合计 18 天</strong>；F 之后有两条到达终点 J 的并行支路——<strong>F→G→J（其中 FG 为 3 天、GJ 为 7 天）</strong>与 <strong>F→H→J</strong>；原图另含 B、C、E、I 等里程碑及其关联边（<strong>其边与权值未能从文本源完整确认</strong>）。完整边集与全部权值请对照原卷活动图；若手边无原图，可先做后续题目，对答案时核对 <code>2018H2-mock-key.md</code> 的完整推导。</p>
+</blockquote>
+<p>（17）　A. 20　　B. 37</p>
+<p>C. 38　　D. 46</p>
+<p>（18）　A. 9　　B. 10</p>
+<p>C. 18　　D. 26</p>
+<hr />
+<p><strong>19.</strong> 以下叙述中， （19） 不是一个风险。</p>
+<p>（19）　A. 由另一个小组开发的子系统可能推迟交付，导致系统不能按时交付客户</p>
+<p>B. 客户不清楚想要开发什么样的软件，因此开发小组开发原型帮助其确定需求</p>
+<p>C. 开发团队可能没有正确理解客户的需求</p>
+<p>D. 开发团队核心成员可能在系统开发过程中离职</p>
+<hr />
+<p><strong>20.</strong> 对布尔表达式进行短路求值是指：无须对表达式中所有操作数或运算符进行计算就可确定表达式的值。对于表达式 "a or ((c &lt; d) and b)"， （20） 时可进行短路计算。</p>
+<p>（20）　A. d 为 true　　B. a 为 true</p>
+<p>C. b 为 true　　D. c 为 true</p>
+<hr />
+<p><strong>21.</strong> 下面二叉树表示的简单算术表达式为 （21） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为二叉表达式树，叶子结点为 10、20、30、40。已确认的结构：<strong>根结点为运算符"−"（最后计算）；其左孩子为运算符"<em>"（其次计算）、右孩子为叶子 40；"</em>"的左孩子为叶子 10、右孩子为运算符"+"（最先计算）；"+"的左右孩子分别为叶子 20、30。</strong></p>
+</blockquote>
+<p>（21）　A. 10 * 20 + 30 − 40</p>
+<p>B. 10 * (20 + 30 − 40)</p>
+<p>C. 10 * (20 + 30) − 40</p>
+<p>D. 10 * 20 + (30 − 40)</p>
+<hr />
+<p><strong>22.</strong> 在程序运行过程中， （22） 时涉及整型数据转换为浮点型数据的操作。</p>
+<p>（22）　A. 将浮点型变量赋值给整型变量</p>
+<p>B. 将整型常量赋值给整型变量</p>
+<p>C. 将整型变量与浮点型变量相加</p>
+<p>D. 将浮点型常量与浮点型变量相加</p>
+<hr />
+<p><strong>23.</strong> 某计算机系统中互斥资源 R 的可用数为 8，系统中有 3 个进程 P1、P2 和 P3 竞争 R，且每个进程都需要 i 个 R，该系统可能会发生死锁的最小 i 值为 （23） 。</p>
+<p>（23）　A. 1　　B. 2</p>
+<p>C. 3　　D. 4</p>
+<hr />
+<p><strong>24. / 25. / 26.</strong> 进程 P1、P2、P3、P4 和 P5 的前趋图如下所示：</p>
+<blockquote>
+<p>【存疑：图形复原】已确认的前趋图共 6 条有向边：<strong>P1→P2、P1→P3、P2→P3、P2→P4、P3→P5、P4→P5</strong>。即：P1 无前趋；P2 的前趋是 P1；P3 的前趋是 P1、P2；P4 的前趋是 P2；P5 的前趋是 P3、P4。</p>
+</blockquote>
+<p>若用 PV 操作控制这 5 个进程的同步与互斥的程序如下，那么程序中的空①和空②处应分别为 （24） ；空③和空④处应分别为 （25） ；空⑤和空⑥处应分别为 （26） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷 PV 程序（按信号量 S1～S6 与前趋边一一对应，初值均为 0）结构如下，其中"…"表示进程自身的处理代码：</p>
+<p><code>P1: …;  V(S1);  ①            // P1 无前趋，后继为 P2、P3
+P2: ②;  …;  V(S3);  V(S4)     // P2 前趋 P1，后继为 P3、P4
+P3: P(S2);  ③;  …;  ④         // P3 前趋 P1、P2，后继为 P5
+P4: …;  ⑤                     // P4 前趋 P2，后继为 P5
+P5: ⑥;  …                     // P5 前趋 P3、P4，无后继</code></p>
+</blockquote>
+<p>（24）　A. V（S1）和 P（S2）　　B. P（S1）和 V（S2）</p>
+<p>C. V（S1）和 V（S2）　　D. V（S2）和 P（S1）</p>
+<p>（25）　A. V（S3）和 V（S5）　　B. P（S3）和 V（S5）</p>
+<p>C. V（S3）和 P（S5）　　D. P（S3）和 P（S5）</p>
+<p>（26）　A. P（S6）和 P（S5）V（S6）　　B. V（S5）和 V（S5）V（S6）</p>
+<p>C. V（S6）和 P（S5）P（S6）　　D. P（S6）和 P（S5）P（S6）</p>
+<hr />
+<p><strong>27.</strong> 某文件管理系统在磁盘上建立了位示图（bitmap），记录磁盘的使用情况。若磁盘上物理块的编号依次为：0，1，2，…；系统中的字长为 32 位，位示图中字的编号依次为：0，1，2，…，每个字中的一个二进制位对应文件存储器上的一个物理块，取值 0 和 1 分别表示物理块是空闲或占用。假设操作系统将 2053 号物理块分配给某文件，那么该物理块的使用情况在位示图中编号为 （27） 的字中描述。</p>
+<p>（27）　A. 32　　B. 33</p>
+<p>C. 64　　D. 65</p>
+<hr />
+<p><strong>28.</strong> 某操作系统文件管理采用索引节点法。每个文件的索引节点有 8 个地址项，每个地址项大小为 4 字节，其中 5 个地址项为直接地址索引，2 个地址项是一级间接地址索引，1 个地址项是二级间接地址索引，磁盘索引块和磁盘数据块大小均为 1KB。若要访问文件的逻辑块号分别为 1 和 518，则系统应分别采用 （28） 。</p>
+<p>（28）　A. 直接地址索引和一级间接地址索引</p>
+<p>B. 直接地址索引和二级间接地址索引</p>
+<p>C. 一级间接地址索引和一级间接地址索引</p>
+<p>D. 一级间接地址索引和二级间接地址索引</p>
+<hr />
+<p><strong>29.</strong> 某企业拟开发一个企业信息管理系统，系统功能与多个部门的业务相关。现希望该系统能够尽快投入使用，系统功能可以在使用过程中不断改善。则最适宜采用的软件过程模型为 （29） 。</p>
+<p>（29）　A. 瀑布模型　　　　B. 原型模型</p>
+<p>C. 演化（迭代）模型　　D. 螺旋模型</p>
+<hr />
+<p><strong>30.</strong> 能力成熟度模型集成（CMMI）是若干过程模型的综合和改进。连续式模型和阶段式模型是 CMMI 提供的两种表示方法，而连续式模型包括 6 个过程域能力等级，其中 （30） 使用量化（统计学）手段改变和优化过程域，以应对客户要求的改变和持续改进计划中的过程域的功效。</p>
+<p>（30）　A. CL2（已管理的）　　B. CL3（已定义级的）</p>
+<p>C. CL4（定量管理的）　　D. CL5（优化的）</p>
+<hr />
+<p><strong>31.</strong> 在 ISO/IEC 9126 软件质量模型中，可靠性质量特性是指在规定的一段时间内和规定的条件下，软件维持在其性能水平有关的能力，其质量子特性不包括 （31） 。</p>
+<p>（31）　A. 安全性　　B. 成熟性</p>
+<p>C. 容错性　　D. 易恢复性</p>
+<hr />
+<p><strong>32.</strong> 以下关于模块化设计的叙述中，不正确的是 （32） 。</p>
+<p>（32）　A. 尽量考虑高内聚、低耦合，保持模块的相对独立性</p>
+<p>B. 模块的控制范围在其作用范围内</p>
+<p>C. 模块的规模适中</p>
+<p>D. 模块的宽度、深度、扇入和扇出适中</p>
+<hr />
+<p><strong>33.</strong> 某企业管理信息系统中，采购子系统根据材料价格、数量等信息计算采购的金额，并给财务子系统传递采购金额、收款方和采购日期等信息，则这两个子系统之间的耦合类型为 （33） 耦合。</p>
+<p>（33）　A. 数据　　B. 标记</p>
+<p>C. 控制　　D. 外部</p>
+<hr />
+<p><strong>34. / 35.</strong> 对以下的程序伪代码（用缩进表示程序块）进行路径覆盖测试，至少需要 （34） 个测试用例。采用 McCabe 度量法计算其环路复杂度为 （35） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为伪代码图片。已确认的结构：伪代码含变量 x、y、z，为<strong>两重嵌套的选择结构</strong>——外层判断 x 是否大于 0：</p>
+<p><code>若 x &gt; 0:
+    若 y &gt; 0: …      // x&gt;0 时由 y 的取值分支，z 不参与比较
+    否则:    …
+否则:
+    若 z &gt; 0: …      // x≤0 时由 z 的取值分支，y 不参与比较
+    否则:    …</code></p>
+</blockquote>
+<p>（34）　A. 2　　B. 4</p>
+<p>C. 6　　D. 8</p>
+<p>（35）　A. 2　　B. 3</p>
+<p>C. 4　　D. 5</p>
+<hr />
+<p><strong>36.</strong> 某商场的销售系统所使用的信用卡公司信息系统的数据格式发生了更改，因此对该销售系统进行的修改属于 （36） 维护。</p>
+<p>（36）　A. 改正性　　B. 适应性</p>
+<p>C. 改善性　　D. 预防性</p>
+<hr />
+<p><strong>37.</strong> 在面向对象方法中，继承用于 （37） 。</p>
+<p>（37）　A. 在已存在的类的基础上创建新类</p>
+<p>B. 在已存在的类中添加新的方法</p>
+<p>C. 在已存在的类中添加新的属性</p>
+<p>D. 在已存在的状态中添加新的状态</p>
+<hr />
+<p><strong>38.</strong> （38） 多态是指操作（方法）具有相同的名称、且在不同的上下文中所代表的含义不同。</p>
+<p>（38）　A. 参数　　B. 包含</p>
+<p>C. 过载　　D. 强制</p>
+<hr />
+<p><strong>39. / 40.</strong> 在某销售系统中，客户采用扫描二维码进行支付。若采用面向对象方法开发该销售系统，则客户类属于 （39） 类，二维码类属于 （40） 类。</p>
+<p>（39）　A. 接口　　B. 实体</p>
+<p>C. 控制　　D. 状态</p>
+<p>（40）　A. 接口　　B. 实体</p>
+<p>C. 控制　　D. 状态</p>
+<hr />
+<p><strong>41. / 42. / 43.</strong> 下图所示 UML 图为 （41） ，用于展示 （42） 。①和②分别表示 （43） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷图形中央为一个 UML <strong>构件（component）图标</strong>（矩形框带两个小矩形凸出标识）；构件框上引出两个接口符号，其中<strong>位置①处的接口以"小球 + 实线"（lollipop）形式标注，位置②处的接口以"半圆开口 + 实线"（socket）形式标注</strong>。请按 UML 常规图示语义判断二者分别为供接口还是需接口。</p>
+</blockquote>
+<p>（41）　A. 类图　　B. 组件图</p>
+<p>C. 通信图　　D. 部署图</p>
+<p>（42）　A. 一组对象、接口、协作和它们之间的关系</p>
+<p>B. 收发消息的对象的结构组织</p>
+<p>C. 组件之间的组织和依赖</p>
+<p>D. 面向对象系统的物理模型</p>
+<p>（43）　A. 供接口和供接口　　B. 需接口和需接口</p>
+<p>C. 供接口和需接口　　D. 需接口和供接口</p>
+<hr />
+<p><strong>44. / 45. / 46. / 47.</strong> 假设现在要创建一个简单的超市销售系统，顾客将毛巾、饼干、酸奶等物品（Item）加入购物车（Shopping_Cart），在收银台（Checkout）人工（Manual）或自动（Auto）地将购物车中每个物品的价格汇总到总价格后结帐。这一业务需求的类图（方法略）设计如下图所示，采用了 （44） 模式。其中 （45） 定义以一个 Checkout 对象为参数的 accept 操作，由子类实现此 accept 操作。此模式为 （46） ，适用于 （47） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷类图含 5 个类：<strong>Item（物品）、Shopping_Cart（购物车）、Checkout（收银台）、Manual（人工）、Auto（自动）</strong>。已确认的结构：Shopping_Cart 与 Item 之间为<strong>聚集（aggregation）</strong>关系（一个购物车包含多个物品）；<strong>Manual 与 Auto 继承 Checkout</strong>；<strong>Item 中声明 accept 操作，其参数为一个 Checkout 对象，由 Item 的子类实现该 accept 操作</strong>；Checkout 中定义对购物车内各物品的汇总/结帐操作。</p>
+</blockquote>
+<p>（44）　A. 观察者（Observer）　　B. 访问者（Visitor）</p>
+<p>C. 策略（Strategy）　　D. 桥接器（Bridge）</p>
+<p>（45）　A. Item　　B. Shopping_Cart</p>
+<p>C. Checkout　　D. Manual 和 Auto</p>
+<p>（46）　A. 创建型对象模式　　B. 结构型对象模式</p>
+<p>C. 行为型类模式　　D. 行为型对象模式</p>
+<p>（47）　A. 必须保存一个对象在某一个时刻的（部分）状态</p>
+<p>B. 想在不明确指定接收者的情况下向多个对象中的一个提交一个请求</p>
+<p>C. 需要对一个对象结构中的对象进行很多不同的并且不相关的操作</p>
+<p>D. 在不同的时刻指定、排列和执行请求</p>
+<hr />
+<p><strong>48.</strong> 在以阶段划分的编译器中， （48） 阶段的主要作用是分析程序中的句子结构是否正确。</p>
+<p>（48）　A. 词法分析　　B. 语法分析</p>
+<p>C. 语义分析　　D. 代码生成</p>
+<hr />
+<p><strong>49.</strong> 下图所示为一个不确定有限自动机（NFA）的状态转换图。该 NFA 可识别字符串 （49） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为 NFA 状态转换图。已确认的结构：<strong>状态 0 为初态</strong>；由初态引出的转移边上标记的字符均为 <strong>0</strong>（即可识别串的首字符必为 0）；<strong>进入终态前的最后一条转移边上标记的字符均为 0</strong>（即可识别串的尾字符必为 0）。</p>
+</blockquote>
+<p>（49）　A. 0110　　B. 0101</p>
+<p>C. 1100　　D. 1010</p>
+<hr />
+<p><strong>50.</strong> 函数 f 和 g 的定义如下图所示。执行函数 f 时若采用引用（call by reference）方式调用函数 g（a），则函数 f 的返回值为 （50） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为函数代码图片。依据题库解析中的运算过程复原如下（变量名与写法可能与原卷略有差异，<strong>语义与数值关系已核对一致</strong>）：</p>
+<p>```
+g(x):                     // 引用调用时 x 与实参 a 共享同一存储单元
+    m := 5 * x
+    x := m - 1
+    return x + m</p>
+<p>f():
+    a := 2
+    c := g(a)             // 引用（call by reference）方式调用
+    return a + c
+```</p>
+</blockquote>
+<p>（50）　A. 14　　B. 18</p>
+<p>C. 24　　D. 28</p>
+<hr />
+<p><strong>51.</strong> 数据库系统中的视图、存储文件和基本表分别对应数据库系统结构中的 （51） 。</p>
+<p>（51）　A. 模式、内模式和外模式</p>
+<p>B. 外模式、模式和内模式</p>
+<p>C. 模式、外模式和内模式</p>
+<p>D. 外模式、内模式和模式</p>
+<hr />
+<p><strong>52.</strong> 在分布式数据库中， （52） 是指用户或应用程序不需要知道逻辑上访问的表具体如何分块存储。</p>
+<p>（52）　A. 逻辑透明　　B. 位置透明</p>
+<p>C. 分片透明　　D. 复制透明</p>
+<hr />
+<p><strong>53. / 54.</strong> 设有关系模式 R（A1, A2, A3, A4, A5, A6），函数依赖集 F = {A1→A3, A1A2→A4, A5A6→A1, A3A5→A6, A2A5→A6}。关系模式 R 的一个主键是 （53） ，从函数依赖集 F 可以推出关系模式 R （54） 。</p>
+<blockquote>
+<p>【存疑：原文如此，应为「F = {…}」】原卷 OCR 中函数依赖集 F 的左花括号缺失，转录时已按题库解析补齐；依赖式与原卷一致。</p>
+</blockquote>
+<p>（53）　A. A1A4　　B. A2A5</p>
+<p>C. A3A4　　D. A4A5</p>
+<p>（54）　A. 不存在传递依赖，故 R 为 1NF</p>
+<p>B. 不存在传递依赖，故 R 为 2NF</p>
+<p>C. 存在传递依赖，故 R 为 3NF</p>
+<p>D. 每个非主属性完全函数依赖于主键，故 R 为 2NF</p>
+<hr />
+<p><strong>55. / 56.</strong> 给定关系 R（A, B, C, D）和 S（C, D, E），若关系 R 与 S 进行自然连接运算，则运算后的元组属性列数为 （55） ；关系代数表达式 π1,4(σ2=5(R⋈S)) 与 （56） 等价。</p>
+<blockquote>
+<p>【存疑：原卷题式如此】σ2=5 中的 2、5 与 π1,4 中的 1、4 均为<strong>列序号</strong>（对 R 与 S 的属性列按顺序编号），不是属性值。</p>
+</blockquote>
+<p>（55）　A. 4　　B. 5</p>
+<p>C. 6　　D. 7</p>
+<p>（56）　A. πA,D(σC=D(R×S))</p>
+<p>B. πR.A,R.D(σR.B=S.C(R×S))</p>
+<p>C. πA,R.D(σR.C=S.D(R×S))</p>
+<p>D. πR.A,R.D(σR.B=S.E(R×S))</p>
+<hr />
+<p><strong>57.</strong> 栈的特点是后进先出，若用单链表作为栈的存储结构，并用头指针作为栈顶指针，则 （57） 。</p>
+<p>（57）　A. 入栈和出栈操作都不需要遍历链表</p>
+<p>B. 入栈和出栈操作都需要遍历链表</p>
+<p>C. 入栈操作需要遍历链表而出栈操作不需要</p>
+<p>D. 入栈操作不需要遍历链表而出栈操作需要</p>
+<hr />
+<p><strong>58.</strong> 已知某二叉树的先序遍历序列为 A B C D E F、中序遍历序列为 B A D C F E，则可以确定该二叉树 （58） 。</p>
+<p>（58）　A. 是单支树（即非叶子结点都只有一个孩子）</p>
+<p>B. 高度为 4（即结点分布在 4 层上）</p>
+<p>C. 根结点的左子树为空</p>
+<p>D. 根结点的右子树为空</p>
+<hr />
+<p><strong>59.</strong> 可以构造出下图所示二叉排序树（二叉检索树、二叉查找树）的关键码序列是 （59） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为二叉排序树，10 个关键码。已确认的结构：<strong>根结点为 23；根的左孩子为 17、右孩子为 40；17 的左孩子为 10、右孩子为 19；19 的左孩子为 13；40 的左孩子为 31、右孩子为 91；31 的左孩子为 27、右孩子为 65。</strong> 请判断哪个插入序列能构造出该树。</p>
+</blockquote>
+<p>（59）　A. 10 13 17 19 23 27 31 40 65 91</p>
+<p>B. 23 40 91 17 19 10 31 65 27 13</p>
+<p>C. 23 19 40 27 17 13 10 91 65 31</p>
+<p>D. 27 31 40 65 91 13 10 17 23 19</p>
+<hr />
+<p><strong>60. / 61.</strong> 图 G 的邻接矩阵如下图所示（顶点依次表示为 v0、v1、v2、v3、v4、v5），G 是 （60） 。对 G 进行广度优先遍历（从 v0 开始），可能的遍历序列为 （61） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为 6×6 邻接矩阵图片。已确认的结构：<strong>矩阵不对称</strong>（例如 v0→v1 有弧而 v1→v0 无弧）；<strong>从 v0 出发的出边（邻接点）为 v1 与 v2</strong>。矩阵其余元素未能从文本源完整确认，完整矩阵请对照原卷。</p>
+</blockquote>
+<p>（60）　A. 无向图　　B. 有向图</p>
+<p>C. 完全图　　D. 强连通图</p>
+<p>（61）　A. v0、v1、v2、v3、v4、v5</p>
+<p>B. v0、v2、v4、v5、v1、v3</p>
+<p>C. v0、v1、v3、v5、v2、v4</p>
+<p>D. v0、v2、v4、v3、v5、v1</p>
+<hr />
+<p><strong>62. / 63. / 64. / 65.</strong> 在一条笔直公路的一边有许多房子，现要安装消防栓，每个消防栓的覆盖范围远大于房子的面积，如下图所示。现求解能覆盖所有房子的最少消防栓数和安装方案（问题求解过程中，可将房子和消防栓均视为直线上的点）。</p>
+<blockquote>
+<p>【存疑：图形复原】本组题的图形仅为<strong>直线上的房子/消防栓示意</strong>，<strong>全部计算数据已在题干文字中给出</strong>（房子坐标与消防栓覆盖半径），无需图形即可完整作答。</p>
+</blockquote>
+<p>该问题求解算法的基本思路为：从左端的第一栋房子开始，在其右侧 m 米处安装一个消防栓，去掉被该消防栓覆盖的所有房子。在剩余的房子中重复上述操作，直到所有房子被覆盖。算法采用的设计策略为 （62） ；对应的时间复杂度为 （63） 。</p>
+<p>假设公路起点 A 的坐标为 0，消防栓的覆盖范围（半径）为 20 米，10 栋房子的坐标为（10, 20, 30, 35, 60, 80, 160, 210, 260, 300），单位为米。根据上述算法，共需要安装 （64） 个消防栓。以下关于该求解算法的叙述中，正确的是 （65） 。</p>
+<p>（62）　A. 分治　　B. 动态规划</p>
+<p>C. 贪心　　D. 回溯</p>
+<p>（63）　A. O(lg n)　　B. O(n)</p>
+<p>C. O(n lg n)　　D. O(n²)</p>
+<p>（64）　A. 4　　B. 5</p>
+<p>C. 6　　D. 7</p>
+<p>（65）　A. 肯定可以求得问题的一个最优解</p>
+<p>B. 可以求得问题的所有最优解</p>
+<p>C. 对有些实例，可能得不到最优解</p>
+<p>D. 只能得到近似最优解</p>
+<hr />
+<p><strong>66.</strong> 使用 ADSL 接入 Internet，用户端需要安装 （66） 协议。</p>
+<p>（66）　A. PPP　　B. SLIP</p>
+<p>C. PPTP　　D. PPPoE</p>
+<hr />
+<p><strong>67.</strong> 下列命令中，不能用于诊断 DNS 故障的是 （67） 。</p>
+<p>（67）　A. netstat　　B. nslookup</p>
+<p>C. ping　　D. tracert</p>
+<hr />
+<p><strong>68.</strong> 以下关于 TCP/IP 协议和层次对应关系的表示中，正确的是 （68） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷四个选项<strong>均为 TCP/IP 四层（应用层 / 传输层 / 网际层 / 网络接口层）与各协议的对应关系图</strong>，差别仅在于各协议被挂接到哪一层。可据以判定的关键结构事实：<strong>HTTP、SMTP、FTP、Telnet 基于 TCP；SNMP 基于 UDP</strong>。</p>
+</blockquote>
+<p>（68）　A. 选项 A 的对应图　　B. 选项 B 的对应图</p>
+<p>C. 选项 C 的对应图　　D. 选项 D 的对应图</p>
+<hr />
+<p><strong>69.</strong> 把 CSS 样式表与 HTML 网页关联，不正确的方法是 （69） 。</p>
+<p>（69）　A. 在 HTML 文档的 <code>&lt;head&gt;</code> 标签内定义 CSS 样式</p>
+<p>B. 用 <code>@import</code> 引入样式表文件</p>
+<p>C. 在 HTML 文档的 <code>&lt;!-- --&gt;</code> 标签内定义 CSS 样式</p>
+<p>D. 用 <code>&lt;link&gt;</code> 标签链接网上可访问的 CSS 样式表文件</p>
+<hr />
+<p><strong>70.</strong> 使用 （70） 命令可以释放当前主机自动获取的 IP 地址。</p>
+<p>（70）　A. ipconfig/all　　B. ipconfig/reload</p>
+<p>C. ipconfig/release　　D. ipconfig/reset</p>
+<hr />
+<p><strong>71. / 72. / 73. / 74. / 75.</strong> 阅读以下英文短文，回答 71-75 题。</p>
+<p>The project workbook is not so much a separate document as it is a structure imposed on the documents that the project will be producing anyway. All the documents of the project need to be part of this （71）. This includes objectives, external specifications, interface specifications, technical standards, internal specifications and administrative memoranda（备忘录）.</p>
+<p>Technical prose is almost immortal. If one examines the genealogy（手册） of a customer manual for a piece of hardware or software, one can trace not only the ideas, but also many of the very sentences and paragraphs back to the first （72） proposing the product or explaining the first design. For the technical writer, the paste-pot is as mighty as the pen.</p>
+<p>Since this is so, and since tomorrow's product-quality manuals will grow from today's memos, it is very important to get the structure of the documentation right. The early design of the project （73） ensures that the documentation structure itself is crafted, not haphazard. Moreover, the establishment of a structure molds later writing into segments that fit into that structure.</p>
+<p>The second reason for the project workbook is control of the distribution of （74）. The problem is not to restrict information, but to ensure that relevant information gets to all the people who need it.</p>
+<p>The first step is to number all memoranda, so that ordered lists of titles are available and each worker can see if he has what he wants. The organization of the workbook goes well beyond this to establish a tree-structure of memoranda. The （75） allows distribution lists to be maintained by subtree, if that is desirable.</p>
+<p>（71）　A. structure　　B. specification</p>
+<p>C. standard　　D. objective</p>
+<p>（72）　A. objective　　B. memoranda</p>
+<p>C. standard　　D. specification</p>
+<p>（73）　A. title　　B. list</p>
+<p>C. workbook　　D. quality</p>
+<p>（74）　A. product　　B. manual</p>
+<p>C. document　　D. information</p>
+<p>（75）　A. list　　B. document</p>
+<p>C. tree-structure　　D. number</p>
+<hr />
+<h2>二、分模块计分表（做完后回填）</h2>
+<blockquote>
+<p>做完后对照 <code>2018H2-mock-key.md</code> 的答案速查表回填，用于定位薄弱科目。总分 ____ / 75。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>题号</th>
+<th>题数</th>
+<th>答对数</th>
+<th>正确率</th>
+<th>备注（错题号）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础（组成与体系结构）</td>
+<td>1-6</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>网络与信息安全</td>
+<td>7-11, 66-70</td>
+<td>10</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>知识产权与标准化</td>
+<td>12-14</td>
+<td>3</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>软件工程与项目管理</td>
+<td>15-19, 29-36</td>
+<td>13</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>程序设计语言</td>
+<td>20-22, 48-50</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>23-28</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>面向对象·UML·设计模式</td>
+<td>37-47</td>
+<td>11</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据库系统</td>
+<td>51-56</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>57-65</td>
+<td>9</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>计算机英语</td>
+<td>71-75</td>
+<td>5</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td>1-75</td>
+<td><strong>75</strong></td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>判定规则（对齐上午合格线 45/75 = 60%）：</strong>
+- 总分 ≥ 45 分：合格，上午科目维持现状，重心转向下午题专项。
+- 总分 &lt; 45 分：当日错题全部回看对应笔记，并把正确率 &lt; 60% 的科目列入二轮重点。
+- 本卷为<strong>考前最后一套整卷</strong>，无论结果如何，重点都在"错题四要素"登记与盲区补强，而非分数本身。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/2018H2-mock-questions.md">docs/practice/papers/2018H2-mock-questions.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

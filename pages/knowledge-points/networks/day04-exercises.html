@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 4（9/24）计算机网络① 练习题：网络分层模型与协议归属（20 道选择题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 networks 📁 day04-exercises.md</div>
+<h1>Day 4（9/24）计算机网络① 练习题：网络分层模型与协议归属（20 道选择题）</h1>
+<blockquote>
+<p>说明：本题是 Day 4 的章节题，<strong>重点突击"层级判断/协议归属"这一高频题型</strong>。
+题目分布：<strong>层级判断/协议归属 12 题（1–12）</strong>、端口号 4 题（13–16）、封装/解封装 2 题（17–18）、传输层特性与综合 2 题（19–20）。
+<strong>完整答案解析在文件末尾</strong>。建议先独立完成（约 30 分钟），再对答案。
+做题时<strong>先想"这是哪一层的协议/设备/数据单元"，再看选项</strong>——这是网络选择题的通用解法。</p>
+</blockquote>
+<hr />
+<h2>附：Day 4 笔记「快速自测」速答</h2>
+<ol>
+<li><strong>物理、数据链路、网络、传输、会话、表示、应用</strong>（口诀：物联网传会表应）。</li>
+<li><strong>网络层（网际层）</strong>——ARP 把 <strong>IP 地址解析为 MAC 地址</strong>。</li>
+<li><strong>网络层</strong>——ping/traceroute 是应用层程序，但用的是网络层 ICMP 协议。</li>
+<li><strong>TCP/UDP 首部（传输层）</strong>；IP 首部里没有端口。</li>
+<li>帧是<strong>数据链路层</strong>；分组/IP 数据报是<strong>网络层</strong>；报文段是<strong>传输层</strong>；比特是<strong>物理层</strong>。</li>
+<li>交换机 = <strong>数据链路层</strong>（MAC）；路由器 = <strong>网络层</strong>（IP）；集线器 = <strong>物理层</strong>。</li>
+<li><strong>表示层</strong>（加密、压缩、编码转换）。</li>
+<li><strong>数据链路层</strong>（FCS 是唯一加尾部的那一层）。</li>
+<li><strong>TCP 和 UDP 都用（端口 53）</strong>。</li>
+<li>SMTP <strong>25（发）</strong>、POP3 <strong>110（收）</strong>、IMAP <strong>143</strong>。</li>
+<li><strong>应用层、传输层、网际层、网络接口层</strong>。</li>
+<li>服务器 <strong>67</strong>、客户端 <strong>68</strong>，传输层用 <strong>UDP</strong>。</li>
+</ol>
+<hr />
+<h2>第一部分：层级判断 / 协议归属（1–12，本日重点）</h2>
+<p><strong>1.</strong> OSI 参考模型共有 7 层，<strong>从下到上</strong>依次是物理层、数据链路层、（ ）、传输层、会话层、表示层、应用层。</p>
+<ul>
+<li>A. 网络层</li>
+<li>B. 互联网层</li>
+<li>C. 会话层</li>
+<li>D. 表示层</li>
+</ul>
+<p><strong>2.</strong> 在 OSI 参考模型中，<strong>HTTP 协议</strong>工作在（ ）。</p>
+<ul>
+<li>A. 传输层</li>
+<li>B. 会话层</li>
+<li>C. 表示层</li>
+<li>D. 应用层</li>
+</ul>
+<p><strong>3.</strong> 在 TCP/IP 体系结构中，<strong>ARP（地址解析协议）</strong>属于（ ）。</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 传输层</li>
+<li>C. 网际层</li>
+<li>D. 网络接口层</li>
+</ul>
+<p><strong>4.</strong> <strong>ICMP（互联网控制报文协议）</strong>工作在 OSI 的（ ）。</p>
+<ul>
+<li>A. 物理层</li>
+<li>B. 数据链路层</li>
+<li>C. 网络层</li>
+<li>D. 应用层</li>
+</ul>
+<p><strong>5.</strong> 下列协议中，工作在<strong>传输层</strong>的是（ ）。</p>
+<ul>
+<li>A. HTTP</li>
+<li>B. ARP</li>
+<li>C. TCP</li>
+<li>D. IP</li>
+</ul>
+<p><strong>6.</strong> 下列协议中，属于<strong>网络层</strong>协议的是（ ）。</p>
+<ul>
+<li>A. Telnet</li>
+<li>B. UDP</li>
+<li>C. ICMP</li>
+<li>D. SMTP</li>
+</ul>
+<p><strong>7.</strong> 下列网络设备中，工作在<strong>数据链路层</strong>的是（ ）。</p>
+<ul>
+<li>A. 中继器</li>
+<li>B. 集线器</li>
+<li>C. 二层交换机</li>
+<li>D. 路由器</li>
+</ul>
+<p><strong>8.</strong> 在网络体系结构中，<strong>"帧"（Frame）</strong>是（ ）的数据单元。</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 传输层</li>
+<li>C. 网络层</li>
+<li>D. 数据链路层</li>
+</ul>
+<p><strong>9.</strong> 在 OSI 参考模型中，负责<strong>数据加密、数据压缩和编码转换</strong>的是（ ）。</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 表示层</li>
+<li>C. 会话层</li>
+<li>D. 传输层</li>
+</ul>
+<p><strong>10.</strong> 在 TCP/IP 体系结构中，下列<strong>全部属于网际层</strong>的协议组合是（ ）。</p>
+<ul>
+<li>A. HTTP、FTP、SMTP</li>
+<li>B. TCP、UDP</li>
+<li>C. IP、ICMP、ARP</li>
+<li>D. Ethernet、PPP、Wi-Fi</li>
+</ul>
+<p><strong>11.</strong> 关于"端口号"，下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 端口号存放在 IP 首部中，用于标识主机</li>
+<li>B. 端口号存放在 TCP/UDP 首部中，用于区分同一主机上的不同应用进程</li>
+<li>C. 端口号的范围是 0–1023</li>
+<li>D. 端口号由网络层协议负责分配</li>
+</ul>
+<p><strong>12.</strong> 关于 <strong>DHCP（动态主机配置协议）</strong>，下列说法正确的是（ ）。</p>
+<ul>
+<li>A. DHCP 属于传输层协议，用于自动分配 IP 地址</li>
+<li>B. DHCP 属于应用层协议，使用 TCP 的 67 端口</li>
+<li>C. DHCP 属于应用层协议，服务器使用 67 端口、客户端使用 68 端口，传输层使用 UDP</li>
+<li>D. DHCP 属于网络层协议，与 ARP 配合工作</li>
+</ul>
+<hr />
+<h2>第二部分：常见端口号（13–16）</h2>
+<p><strong>13.</strong> <strong>FTP（文件传输协议）</strong>使用的<strong>控制连接</strong>端口号是（ ）。</p>
+<ul>
+<li>A. 20</li>
+<li>B. 21</li>
+<li>C. 23</li>
+<li>D. 80</li>
+</ul>
+<p><strong>14.</strong> 用户<strong>接收</strong>电子邮件时通常使用的协议及端口号是（ ）。</p>
+<ul>
+<li>A. SMTP，25</li>
+<li>B. POP3，110</li>
+<li>C. Telnet，23</li>
+<li>D. DNS，53</li>
+</ul>
+<p><strong>15.</strong> <strong>HTTPS</strong> 使用的默认端口号是（ ）。</p>
+<ul>
+<li>A. 80</li>
+<li>B. 443</li>
+<li>C. 8080</li>
+<li>D. 161</li>
+</ul>
+<p><strong>16.</strong> 关于 <strong>DNS</strong>，下列说法正确的是（ ）。</p>
+<ul>
+<li>A. DNS 只使用 UDP 协议，端口号为 53</li>
+<li>B. DNS 只使用 TCP 协议，端口号为 53</li>
+<li>C. DNS 使用 TCP 和 UDP 协议，端口号均为 53</li>
+<li>D. DNS 使用 TCP 的 53 端口和 UDP 的 110 端口</li>
+</ul>
+<hr />
+<h2>第三部分：封装与解封装（17–18）</h2>
+<p><strong>17.</strong> 主机 A 通过浏览器向 Web 服务器发送 HTTP 请求时，发送方数据的<strong>封装顺序</strong>（自上而下）是（ ）。</p>
+<ul>
+<li>A. IP 数据报 → TCP 报文段 → HTTP 报文 → 帧 → 比特</li>
+<li>B. HTTP 报文 → TCP 报文段 → IP 数据报 → 帧 → 比特</li>
+<li>C. HTTP 报文 → IP 数据报 → TCP 报文段 → 比特 → 帧</li>
+<li>D. 比特 → 帧 → IP 数据报 → TCP 报文段 → HTTP 报文</li>
+</ul>
+<p><strong>18.</strong> 路由器在转发 IP 数据报时，需要处理并重新封装的是（ ）。</p>
+<ul>
+<li>A. 仅物理层的比特流</li>
+<li>B. 仅应用层报文</li>
+<li>C. 网络层及以下：读取 IP 首部选路，并重新封装新的链路层帧</li>
+<li>D. 传输层及应用层的全部头部</li>
+</ul>
+<hr />
+<h2>第四部分：传输层特性与综合（19–20）</h2>
+<p><strong>19.</strong> 下列关于 <strong>TCP 与 UDP</strong> 的叙述中，正确的是（ ）。</p>
+<ul>
+<li>A. TCP 是无连接的、不可靠的协议；UDP 是面向连接的、可靠的协议</li>
+<li>B. TCP 和 UDP 都提供进程到进程的通信，TCP 面向连接、可靠，UDP 无连接、不可靠但开销小</li>
+<li>C. UDP 保证数据不丢失、不重复、有序到达</li>
+<li>D. 视频会议、语音通话等实时应用必须使用 TCP 以保证质量</li>
+</ul>
+<p><strong>20.</strong> <strong>HTTPS</strong> 是 HTTP 与 <strong>TLS/SSL</strong> 的组合。从 OSI 分层的角度看，TLS/SSL 完成的数据加密功能，最贴近 OSI 的哪一层？（ ）</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 表示层</li>
+<li>C. 会话层</li>
+<li>D. 传输层</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<h3>第一部分：层级判断 / 协议归属</h3>
+<p><strong>1. A</strong> OSI 从下到上七层依次为：<strong>物理层(1)、数据链路层(2)、网络层(3)、传输层(4)、会话层(5)、表示层(6)、应用层(7)</strong>。口诀：<strong>「物联网传会表应」</strong>。B 选项"互联网层"是 TCP/IP 的叫法（网际层），不是 OSI 的层名。（知识点：OSI 七层顺序；对应 <code>day04-protocols.md</code> §二）</p>
+<p><strong>2. D</strong> HTTP 是为浏览器与 Web 服务器之间传输网页的应用层协议，属<strong>应用层</strong>。A 传输层是 TCP/UDP；C 表示层负责加密/压缩/编码转换；B 会话层负责会话管理。（知识点：应用层协议归属；对应 <code>day04-protocols.md</code> §2.7）</p>
+<p><strong>3. C</strong> <strong>ARP 属于 TCP/IP 的网际层</strong>（与 IP 同层），作用是把 <strong>IP 地址解析为 MAC 地址</strong>。ARP 报文直接封装在以太网帧中传输（不用 IP 封装），所以有人误以为它属于网络接口层/链路层——<strong>这是最典型的易错点，软考按网际层（网络层）作答</strong>。（知识点：ARP 层级归属；对应 <code>day04-protocols.md</code> §2.3、§6.3）</p>
+<p><strong>4. C</strong> ICMP 与 IP 同属<strong>网络层</strong>，用于差错报告与网络控制。<strong>易错点</strong>：ping、traceroute 是<strong>应用层的程序</strong>，但它们调用的是<strong>网络层的 ICMP 协议</strong>——"程序在哪一层"和"用哪个协议"是两回事。（知识点：ICMP 层级归属；对应 <code>day04-protocols.md</code> §2.3）</p>
+<p><strong>5. C</strong> 传输层的代表协议是 <strong>TCP 和 UDP</strong>。A HTTP 是应用层；B ARP 是网络层（网际层）；D IP 是网络层。（知识点：传输层协议；对应 <code>day04-protocols.md</code> §2.4）</p>
+<p><strong>6. C</strong> 网络层协议有 <strong>IP、ICMP、IGMP、ARP</strong> 及路由协议（RIP/OSPF/BGP）。A Telnet 应用层（23 端口）；B UDP 传输层；D SMTP 应用层（25 端口，发邮件）。（知识点：网络层协议集合；对应 <code>day04-protocols.md</code> §6.3）</p>
+<p><strong>7. C</strong> <strong>二层交换机</strong>和网桥工作在<strong>数据链路层</strong>（根据 <strong>MAC 地址</strong>转发）。中继器、集线器工作在<strong>物理层</strong>（只放大/转发比特信号，不识别地址）；路由器工作在<strong>网络层</strong>（根据 <strong>IP 地址</strong>转发）。（知识点：网络设备与层级；对应 <code>day04-protocols.md</code> §四「对照表」）</p>
+<p><strong>8. D</strong> 各层数据单元（PDU）：应用层 = 报文（Message），传输层 = 报文段/数据报（Segment/Datagram），网络层 = 分组/IP 数据报（Packet），<strong>数据链路层 = 帧（Frame）</strong>，物理层 = 比特（Bit）。（知识点：PDU 与层级；对应 <code>day04-protocols.md</code> §四「对照表」）</p>
+<p><strong>9. B</strong> <strong>表示层</strong>负责数据表示形式的转换：<strong>加密与解密、压缩与解压、编码转换</strong>。这是表示层的标志性功能，几乎必考。注意区分：会话层负责"会话的建立/维持/终止与同步"，应用层负责"为用户进程提供网络服务"。（知识点：表示层职责；对应 <code>day04-protocols.md</code> §2.6）</p>
+<p><strong>10. C</strong> <strong>IP、ICMP、ARP</strong> 同属 TCP/IP <strong>网际层</strong>。A（HTTP/FTP/SMTP）是应用层；B（TCP/UDP）是传输层；D（Ethernet/PPP/Wi-Fi）是网络接口层。<strong>注意 D 里的 Wi-Fi 是 802.11，属于网络接口层，不是"无线网络层"</strong>。（知识点：TCP/IP 网际层协议集合；对应 <code>day04-protocols.md</code> §6.3）</p>
+<p><strong>11. B</strong> 端口号位于 <strong>TCP/UDP 首部</strong>（传输层），用于<strong>区分同一主机上的不同应用进程</strong>（进程到进程的复用与分用）。<strong>IP 首部只有 IP 地址，没有端口号</strong>，A 错；端口号范围是 <strong>0–65535</strong>（0–1023 只是熟知端口），C 错；端口号的分配与使用由传输层负责，D 错。（知识点：端口号概念；对应 <code>day04-protocols.md</code> §2.4、§七）</p>
+<p><strong>12. C</strong> DHCP 是<strong>应用层</strong>协议，为客户端自动分配 IP 地址等配置信息；传输层使用 <strong>UDP</strong>，<strong>服务器端口 67、客户端端口 68</strong>。DHCP 不是传输层或网络层协议。（知识点：DHCP 层级与端口；对应 <code>day04-protocols.md</code> §6.1、§七）</p>
+<h3>第二部分：常见端口号</h3>
+<p><strong>13. B</strong> FTP 使用<strong>两条 TCP 连接</strong>：<strong>控制连接（传命令）端口 21</strong>，<strong>数据连接（传文件）端口 20</strong>（主动模式）。题目问的是"控制连接"，故选 21。（知识点：FTP 端口；对应 <code>day04-protocols.md</code> §6.1、§七）</p>
+<p><strong>14. B</strong> <strong>接收</strong>邮件用 POP3（端口 <strong>110</strong>）或 IMAP（143）；<strong>发送</strong>邮件用 SMTP（25）。A 把"发"和"收"弄反了，这是最常见的一组易错搭配。（知识点：邮件协议端口；对应 <code>day04-protocols.md</code> §6.1）</p>
+<p><strong>15. B</strong> <strong>HTTPS = HTTP + TLS/SSL</strong>，默认端口 <strong>443</strong>；HTTP 默认 80。8080 常作为 HTTP 的备用端口，161 是 SNMP。（知识点：HTTPS 端口；对应 <code>day04-protocols.md</code> §6.1、§七）</p>
+<p><strong>16. C</strong> DNS <strong>既用 TCP 又用 UDP，端口都是 53</strong>：一般域名查询走 UDP（快、开销小）；区域传送（主从 DNS 同步）和超过 512 字节的大响应走 TCP。这是 DNS 的特殊之处，考试常考。（知识点：DNS 端口与传输协议；对应 <code>day04-protocols.md</code> §6.1）</p>
+<h3>第三部分：封装与解封装</h3>
+<p><strong>17. B</strong> 封装是<strong>自上而下逐层加头</strong>：应用层生成 <strong>HTTP 报文</strong> → 传输层加 TCP 首部成 <strong>TCP 报文段</strong> → 网络层加 IP 首部成 <strong>IP 数据报</strong> → 链路层加帧头和帧尾成 <strong>帧</strong> → 物理层转成<strong>比特流</strong>。A 把 TCP 和 IP 的顺序颠倒了；C 把 IP 与 TCP 的顺序、帧与比特的顺序都弄错了；D 是<strong>解封装</strong>（接收方）的顺序，不是封装。（知识点：封装过程；对应 <code>day04-protocols.md</code> §五）</p>
+<p><strong>18. C</strong> 路由器工作在<strong>网络层</strong>：收到帧后解封装到网络层，<strong>读取 IP 首部中的目的地址、查路由表决定下一跳</strong>，然后重新封装成<strong>新的链路层帧</strong>（源/目的 MAC 都换成新一段链路上的）再发出。路由器<strong>不读 TCP/UDP 和应用层首部</strong>（除非做 NAT 等特殊处理）。因此它处理的是"网络层及以下"。（知识点：路由器转发与封装；对应 <code>day04-protocols.md</code> §五「关键结论 5」）</p>
+<h3>第四部分：传输层特性与综合</h3>
+<p><strong>19. B</strong> TCP 与 UDP 都在传输层、都提供<strong>进程到进程</strong>（端到端）通信：<strong>TCP 面向连接、可靠</strong>（确认、重传、流量与拥塞控制），<strong>UDP 无连接、不可靠但开销小、速度快</strong>。C 恰好说反了（"保证不丢失不重复有序"是 TCP）；D 也反了——<strong>实时音视频恰恰优先选 UDP</strong>（允许少量丢包、要求低延迟）。TCP 的握手机制与拥塞控制见 Day 5。（知识点：TCP vs UDP；对应 <code>day04-protocols.md</code> §6.2）</p>
+<p><strong>20. B</strong> HTTPS 中 <strong>TLS/SSL 提供加密</strong>，其功能最贴近 OSI 的<strong>表示层</strong>（加密、压缩、编码转换正是表示层的职责）。TLS 实际工作在传输层之上、应用层之下（"会话层/表示层"的位置），但按 OSI 功能划分，加密属于<strong>表示层</strong>。<strong>易错点</strong>：不要因为 HTTPS 是"应用"就选应用层。（知识点：表示层功能识别 + HTTPS 组成；对应 <code>day04-protocols.md</code> §2.6、§6.1）</p>
+<hr />
+<h2>做完后的自我评估</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>题号</th>
+<th>答对数</th>
+<th>目标</th>
+<th>未达标怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>层级判断 / 协议归属</strong></td>
+<td>1–12</td>
+<td>__ / 12</td>
+<td><strong>≥ 10</strong>（<strong>3、4、11 必须对</strong>）</td>
+<td>回看 <code>day04-protocols.md</code> §二（逐层职责）、§六（协议归属总表），把 §九「快速自测」12 题口述一遍</td>
+</tr>
+<tr>
+<td>端口号</td>
+<td>13–16</td>
+<td>__ / 4</td>
+<td>≥ 3</td>
+<td>回看 <code>day04-protocols.md</code> §七「必背端口表」，用分组记忆法重记</td>
+</tr>
+<tr>
+<td>封装 / 解封装</td>
+<td>17–18</td>
+<td>__ / 2</td>
+<td><strong>全对</strong></td>
+<td>回看 <code>day04-protocols.md</code> §五 ASCII 图，自己默写一遍五层封装过程</td>
+</tr>
+<tr>
+<td>传输层特性 / 综合</td>
+<td>19–20</td>
+<td>__ / 2</td>
+<td>≥ 2</td>
+<td>回看 <code>day04-protocols.md</code> §2.4、§6.2；TCP 细节见 Day 5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>层级判断题（1–12）是本日核心</strong>。如果 3（ARP）、4（ICMP）、11（端口号位置）有任何一道错，说明"协议归属"还没建立起来——请回到 <code>day04-protocols.md</code> §六，把<strong>四类协议归属表</strong>（应用/传输/网际/接口）整体背一遍，再看 §6.4 的四个易错陷阱。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/networks/day04-exercises.md">docs/knowledge-points/networks/day04-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

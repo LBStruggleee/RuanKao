@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 5（9/25）计算机网络② 练习题：TCP 连接管理 + 子网划分（20 道选择题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 networks 📁 day05-exercises.md</div>
+<h1>Day 5（9/25）计算机网络② 练习题：TCP 连接管理 + 子网划分（20 道选择题）</h1>
+<blockquote>
+<p>说明：本题是 Day 5 的章节题。<strong>子网划分计算题（1–8）是本日核心</strong>，每题都给出完整手算步骤，做完必须能达到"换一组数字也能算对"。
+题目分布：<strong>子网划分计算 8 题（1–8）</strong>、TCP 连接管理 6 题（9–14）、拥塞控制 3 题（15–17）、UDP 与综合 3 题（18–20）。
+<strong>完整答案与解析在文件末尾</strong>。建议独立完成（约 40 分钟，计算题务必打草稿）再对答案。
+<strong>做题纪律</strong>：计算题<strong>不许口算</strong>——写出掩码、块大小、网络地址再选答案。</p>
+</blockquote>
+<hr />
+<h2>附：Day 5 笔记「快速自测」速答</h2>
+<ol>
+<li>三次握手：<strong>SYN → SYN+ACK → ACK</strong>。</li>
+<li>客户端发 SYN 后进 <strong>SYN-SENT</strong>；服务器收 SYN 后进 <strong>SYN-RCVD</strong>。</li>
+<li><strong>客户端</strong>先进入 ESTABLISHED。</li>
+<li>被动关闭方收到 FIN 后先回 <strong>ACK</strong>，进入 <strong>CLOSE-WAIT</strong>。</li>
+<li>TIME-WAIT 等 <strong>2MSL</strong>：保证最后的 ACK 到达 + 清除网络残留报文。</li>
+<li>慢开始：每 RTT <strong>加倍</strong>（指数）。</li>
+<li>cwnd 达到 ssthresh 后转<strong>拥塞避免（线性 +1）</strong>。</li>
+<li>3 个重复 ACK：<strong>ssthresh = cwnd/2，cwnd = ssthresh</strong>（不回 1）。</li>
+<li>超时：<strong>cwnd = 1</strong>。</li>
+<li>TCP 首部 <strong>20 字节</strong>，UDP <strong>8 字节</strong>。</li>
+<li>流量控制由<strong>接收方</strong>（rwnd）限制，拥塞控制由<strong>发送方</strong>（cwnd）限制；实际窗口 = <strong>min(rwnd, cwnd)</strong>。</li>
+<li>192.168.1.130/26 网络地址 = <strong>192.168.1.128</strong>。</li>
+<li>/28 可用主机数 = <strong>14</strong>。</li>
+<li>每子网 25 台主机 → <strong>/27</strong>，C 类 /24 可划 <strong>8</strong> 个。</li>
+<li>192.168.0.0/24 ~ 3.0/24 聚合 = <strong>192.168.0.0/22</strong>。</li>
+<li>跨网段时 ARP 求<strong>默认网关</strong>的 MAC。</li>
+</ol>
+<hr />
+<h2>第一部分：子网划分计算（1–8，本日重点）</h2>
+<p><strong>1.</strong> 某主机 IP 地址为 <strong>192.168.1.130/26</strong>，其<strong>网络地址</strong>是（ ）。</p>
+<ul>
+<li>A. 192.168.1.0</li>
+<li>B. 192.168.1.64</li>
+<li>C. 192.168.1.128</li>
+<li>D. 192.168.1.192</li>
+</ul>
+<p><strong>2.</strong> 某主机 IP 地址为 <strong>10.20.30.75/28</strong>，该子网的<strong>可用主机数</strong>为（ ）。</p>
+<ul>
+<li>A. 12</li>
+<li>B. 14</li>
+<li>C. 16</li>
+<li>D. 30</li>
+</ul>
+<p><strong>3.</strong> 某主机 IP 地址为 <strong>172.16.55.200/20</strong>，该子网的<strong>广播地址</strong>是（ ）。</p>
+<ul>
+<li>A. 172.16.55.255</li>
+<li>B. 172.16.48.255</li>
+<li>C. 172.16.63.255</li>
+<li>D. 172.16.79.255</li>
+</ul>
+<p><strong>4.</strong> 将 <strong>192.168.1.0/24</strong> 划分为若干子网，要求每个子网能容纳 <strong>25 台</strong>主机。则应使用的子网掩码与可划分的子网数分别是（ ）。</p>
+<ul>
+<li>A. 255.255.255.224，8 个</li>
+<li>B. 255.255.255.240，16 个</li>
+<li>C. 255.255.255.192，4 个</li>
+<li>D. 255.255.255.224，6 个</li>
+</ul>
+<p><strong>5.</strong> 主机 A 的 IP 为 <strong>192.168.1.100/26</strong>，主机 B 的 IP 为 <strong>192.168.1.200/26</strong>。关于二者是否在同一子网，正确的是（ ）。</p>
+<ul>
+<li>A. 在同一子网，因为前三个字节相同</li>
+<li>B. 不在同一子网，A 的网络地址是 192.168.1.64，B 的是 192.168.1.192</li>
+<li>C. 不在同一子网，A 的网络地址是 192.168.1.0，B 的是 192.168.1.192</li>
+<li>D. 在同一子网，因为都在 192.168.1.0/24 内</li>
+</ul>
+<p><strong>6.</strong> 某子网需要容纳 <strong>50 台</strong>主机，为最节省地址空间，应使用的子网掩码是（ ）。</p>
+<ul>
+<li>A. 255.255.255.128（/25）</li>
+<li>B. 255.255.255.192（/26）</li>
+<li>C. 255.255.255.224（/27）</li>
+<li>D. 255.255.255.240（/28）</li>
+</ul>
+<p><strong>7.</strong> 某路由器的路由表中有 4 条路由：<strong>192.168.0.0/24、192.168.1.0/24、192.168.2.0/24、192.168.3.0/24</strong>，且这 4 个网络地址连续、起始地址满足对齐要求。经路由聚合（构成超网）后，可合并为（ ）。</p>
+<ul>
+<li>A. 192.168.0.0/23</li>
+<li>B. 192.168.0.0/22</li>
+<li>C. 192.168.0.0/21</li>
+<li>D. 192.168.0.0/20</li>
+</ul>
+<p><strong>8.</strong> 路由器两个接口之间的点对点链路使用 IP <strong>202.100.10.5/30</strong>。关于该链路所用地址，正确的是（ ）。</p>
+<ul>
+<li>A. 网络地址是 202.100.10.4，可用主机地址 2 个</li>
+<li>B. 网络地址是 202.100.10.0，可用主机地址 2 个</li>
+<li>C. 网络地址是 202.100.10.4，可用主机地址 4 个</li>
+<li>D. 网络地址是 202.100.10.5，可用主机地址 1 个</li>
+</ul>
+<hr />
+<h2>第二部分：TCP 连接管理（9–14）</h2>
+<p><strong>9.</strong> TCP 建立连接时，第二次握手的报文段中，控制位与序号/确认号的正确组合是（ ）。</p>
+<ul>
+<li>A. SYN=1，seq=x</li>
+<li>B. ACK=1，seq=x+1，ack=y+1</li>
+<li>C. SYN=1，ACK=1，seq=y，ack=x+1</li>
+<li>D. FIN=1，ACK=1，seq=y，ack=x+1</li>
+</ul>
+<p><strong>10.</strong> TCP 建立连接采用三次握手，而<strong>不是</strong>两次握手。其主要原因是（ ）。</p>
+<ul>
+<li>A. 两次握手无法区分数据报文与确认报文</li>
+<li>B. 两次握手不能防止已失效的连接请求报文段突然到达服务器，导致服务器错误地建立连接并浪费资源</li>
+<li>C. 两次握手时服务器无法确定自己的序号</li>
+<li>D. 两次握手无法实现流量控制</li>
+</ul>
+<p><strong>11.</strong> TCP 释放连接的过程中，被动关闭方（通常是服务器）收到对方的 FIN 后，先发送 ACK，此时它进入的状态是（ ）。</p>
+<ul>
+<li>A. TIME-WAIT</li>
+<li>B. LAST-ACK</li>
+<li>C. CLOSE-WAIT</li>
+<li>D. FIN-WAIT-2</li>
+</ul>
+<p><strong>12.</strong> 主动关闭方在四次挥手后要进入 <strong>TIME-WAIT</strong> 状态并等待 <strong>2MSL</strong>，其主要目的是（ ）。</p>
+<ul>
+<li>A. 等待对方发完剩余数据</li>
+<li>B. 确认对方的连接已完全关闭</li>
+<li>C. 保证最后的 ACK 能到达对方，并让本连接的所有报文段从网络中消失</li>
+<li>D. 防止新的连接复用旧端口号</li>
+</ul>
+<p><strong>13.</strong> TCP 发送方发出一个报文段，其序号 <strong>seq = 1001</strong>，携带 <strong>500 字节</strong>数据。接收方正确收到后返回的确认报文中，确认号 <strong>ack</strong> 应为（ ）。</p>
+<ul>
+<li>A. 1000</li>
+<li>B. 1001</li>
+<li>C. 1500</li>
+<li>D. 1501</li>
+</ul>
+<p><strong>14.</strong> 在 TCP 三次握手中，<strong>最先</strong>进入 ESTABLISHED（连接建立）状态的是（ ）。</p>
+<ul>
+<li>A. 客户端</li>
+<li>B. 服务器</li>
+<li>C. 客户端与服务器同时</li>
+<li>D. 由谁先打开决定</li>
+</ul>
+<hr />
+<h2>第三部分：拥塞控制（15–17）</h2>
+<p><strong>15.</strong> TCP 拥塞控制中，发送方连续收到 <strong>3 个重复确认</strong>后触发快重传与快恢复，此时拥塞窗口 cwnd 与慢开始门限 ssthresh 的变化是（ ）。</p>
+<ul>
+<li>A. ssthresh = cwnd/2，cwnd = 1</li>
+<li>B. ssthresh = cwnd/2，cwnd = ssthresh</li>
+<li>C. ssthresh = cwnd，cwnd = ssthresh</li>
+<li>D. ssthresh = cwnd/2，cwnd = cwnd/2 + 1</li>
+</ul>
+<p><strong>16.</strong> 在 TCP 拥塞控制的<strong>慢开始</strong>阶段，拥塞窗口 cwnd 的大小随传输轮次（RTT）的变化规律是（ ）。</p>
+<ul>
+<li>A. 每经过 1 个 RTT 增加 1（线性增长）</li>
+<li>B. 每经过 1 个 RTT 加倍（指数增长）</li>
+<li>C. 保持不变</li>
+<li>D. 每经过 1 个 RTT 减半</li>
+</ul>
+<p><strong>17.</strong> 某 TCP 连接的 ssthresh 初值为 16，cwnd 从 1 开始按慢开始 → 拥塞避免的规律增长。若在 <strong>cwnd = 24</strong> 时发生<strong>超时</strong>，则超时后 ssthresh 与 cwnd 分别变为（ ）。</p>
+<ul>
+<li>A. ssthresh = 12，cwnd = 12</li>
+<li>B. ssthresh = 12，cwnd = 1</li>
+<li>C. ssthresh = 24，cwnd = 1</li>
+<li>D. ssthresh = 16，cwnd = 1</li>
+</ul>
+<hr />
+<h2>第四部分：UDP 与综合（18–20）</h2>
+<p><strong>18.</strong> 关于 TCP 与 UDP 报文首部的开销，正确的是（ ）。</p>
+<ul>
+<li>A. TCP 首部固定 20 字节，UDP 首部固定 8 字节</li>
+<li>B. TCP 首部固定 8 字节，UDP 首部固定 20 字节</li>
+<li>C. 两者首部都是 20 字节</li>
+<li>D. TCP 首部 20 字节起、UDP 首部 20 字节起</li>
+</ul>
+<p><strong>19.</strong> 下列应用中，<strong>最适合</strong>使用 UDP 作为传输层协议的是（ ）。</p>
+<ul>
+<li>A. FTP 文件传输</li>
+<li>B. SMTP 电子邮件发送</li>
+<li>C. 实时视频会议</li>
+<li>D. Telnet 远程登录</li>
+</ul>
+<p><strong>20.</strong> 主机 A（IP 为 192.168.1.50/24）要访问 Internet 上的某服务器，其默认网关为 192.168.1.1。主机 A 在封装以太网帧时，需要通过 ARP 获取的 MAC 地址是（ ）。</p>
+<ul>
+<li>A. 目的服务器的 MAC 地址</li>
+<li>B. 本网段广播地址对应的 MAC</li>
+<li>C. 默认网关 192.168.1.1 的 MAC 地址</li>
+<li>D. 主机 A 自己的 MAC 地址</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<h3>第一部分：子网划分计算</h3>
+<p><strong>1. C</strong> 用 5 步法：</p>
+<pre><code>① /26 → 掩码 255.255.255.192，块大小 = 256 − 192 = 64，h = 6
+② 网络地址 = IP AND 掩码：
+   前三段照抄 → 192.168.1；第四段：130 ÷ 64 = 2 余 2 → 2 × 64 = 128
+   ∴ 网络地址 = 192.168.1.128
+</code></pre>
+<p>二进制验证：130 = 10000010，掩码第四段 192 = 11000000，AND = 10000000 = 128 ✓
+（D 选项 192.168.1.192 是"下一个子网"的网络地址，是常见干扰项。）
+（知识点：网络地址 = IP AND 掩码；对应 <code>day05-tcp.md</code> §八 模板第 2 步、例题 1）</p>
+<p><strong>2. B</strong> /28 → 主机位 h = 32 − 28 = <strong>4</strong>，可用主机数 = <strong>2⁴ − 2 = 16 − 2 = 14</strong>。
+<strong>易错点</strong>：C 选项 16 忘了减 2（网络地址与广播地址不可用）；A 选项 12 是把 16 减去了别的数。<strong>"可用主机数 = 2^h − 2"这一步永远不能忘</strong>。
+（知识点：可用主机数；对应 <code>day05-tcp.md</code> §八 模板第 4 步、§7.3 对照表）</p>
+<p><strong>3. C</strong> 用 5 步法：</p>
+<pre><code>① /20 → 掩码 255.255.240.0，第三段块大小 = 256 − 240 = 16，h = 12
+② 第三段：55 ÷ 16 = 3 余 7 → 3 × 16 = 48 → 网络地址 = 172.16.48.0
+③ 广播地址：第三段 = 48 + 16 − 1 = 63；第四段（掩码为 0）全 1 → 255
+   ∴ 广播地址 = 172.16.63.255
+</code></pre>
+<p><strong>易错点</strong>：A 选项 172.16.55.255 是"把最后一段改成 255"的直觉错误；广播地址必须是<strong>主机位全部置 1</strong>，即网络地址 + 块大小 − 1。
+（知识点：广播地址；对应 <code>day05-tcp.md</code> §八 模板第 3 步、例题 2）</p>
+<p><strong>4. A</strong></p>
+<pre><code>① 先定主机位：要求 2^h − 2 ≥ 25。h=5 → 30 ≥ 25 ✓（h=4 只有 14，不够）
+② 掩码：n = 32 − 5 = 27 → 255.255.255.224
+③ 借用位数 b = 27 − 24 = 3 → 子网数 = 2³ = 8
+   每个子网可用主机 = 2⁵ − 2 = 30（≥ 25 ✓）
+</code></pre>
+<p><strong>易错点</strong>：C 选项（/26）虽然每个子网 62 台够用，但"最省"意味着<strong>刚好够用即可</strong>，/26 只能划 4 个，且浪费更多地址；D 选项的"6 个"是常见的瞎猜数字（误以为 254/30 ≈ 8 或用别的方法）。<strong>"给定主机数求掩码"先定 h，再得 n = 32 − h。</strong>
+（知识点：给定主机数求掩码与子网数；对应 <code>day05-tcp.md</code> §八 例题 4）</p>
+<p><strong>5. B</strong> 用 5 步法分别算两台主机的网络地址：</p>
+<pre><code>① 同为 /26，块大小 = 64
+② A：100 ÷ 64 = 1 余 36 → 1 × 64 = 64 → 网络地址 192.168.1.64
+   B：200 ÷ 64 = 3 余 8  → 3 × 64 = 192 → 网络地址 192.168.1.192
+④ 网络地址不同（.64 ≠ .192）→ 不在同一子网
+</code></pre>
+<p><strong>易错点</strong>：A/D 选项"前三个字节相同就同一子网"是典型陷阱——<strong>/26 时第四段被切成 4 个子网（0/64/128/192）</strong>；判断是否同子网<strong>必须算网络地址</strong>。C 选项把 A 的网络地址算成 .0，是块大小取错（取 256 或没做 AND）的结果。
+（知识点：同子网判断；对应 <code>day05-tcp.md</code> §八 例题 5）</p>
+<p><strong>6. B</strong> "最节省"= 可用主机数<strong>刚好 ≥ 需求</strong>的最小主机位：</p>
+<pre><code>h = 7 (/25) → 126 台（够，但浪费）
+h = 6 (/26) → 62 台 ≥ 50 ✓，且 h=5 (/27) 只有 30 &lt; 50 不够
+∴ 选 /26，掩码 255.255.255.192
+</code></pre>
+<p>A 选项 /25 也能容纳，但<strong>不够节省</strong>；C 选项 /27 只有 30 台<strong>根本不够</strong>。<strong>关键在"最节省"三个字：找满足需求的最小 h。</strong>
+（知识点：VLSM 按需定掩码；对应 <code>day05-tcp.md</code> §9.3 VLSM 例题）</p>
+<p><strong>7. B</strong></p>
+<pre><code>4 个 /24 连续网络要聚合 → 需 2^k = 4 → k = 2 → 前缀 = 24 − 2 = 22
+检查块对齐：第三段 0、1、2、3 = 00000(000/001/010/011)，前 6 位都相同（000000）
+∴ 聚合后 = 192.168.0.0/22（掩码 255.255.252.0）
+</code></pre>
+<p>验证：/22 第三段块大小 = 256 − 252 = 4 → 覆盖 192.168.0.0 ~ 192.168.3.255，正好是 4 个 /24 ✓
+<strong>易错点</strong>：A 选项 /23 只能合并 2 个网络；C/D 前缀太短（合并 8 个/16 个）。<strong>聚合的规律：合并 2^k 个连续网络，前缀就减 k。</strong>
+（知识点：CIDR / 路由聚合 / 超网；对应 <code>day05-tcp.md</code> §9.2）</p>
+<p><strong>8. A</strong></p>
+<pre><code>① /30 → 掩码 255.255.255.252，块大小 = 256 − 252 = 4，h = 2
+② 第四段：5 ÷ 4 = 1 余 1 → 1 × 4 = 4 → 网络地址 = 202.100.10.4
+④ 可用主机数 = 2² − 2 = 2（即 202.100.10.5 和 202.100.10.6，恰好给链路两端）
+</code></pre>
+<p>/30 是<strong>点对点链路</strong>的经典用法：一个子网只有 2 个可用地址，正好分配给链路两端的两个接口，<strong>不浪费任何一个地址</strong>。D 选项把 IP 本身当网络地址，是最基础的错误。
+（知识点：/30 点对点链路；对应 <code>day05-tcp.md</code> §7.3 对照表、§八 模板）</p>
+<h3>第二部分：TCP 连接管理</h3>
+<p><strong>9. C</strong> 第二次握手是服务器对客户端 SYN 的确认 + 服务器自己的 SYN：<strong>SYN=1, ACK=1, seq=y（服务器随机初值）, ack=x+1（确认客户端的 SYN，SYN 占 1 个序号）</strong>。B 选项是<strong>第三次</strong>握手的内容（seq=x+1, ack=y+1）；A 缺少 ACK 与确认号；D 的 FIN 是<strong>挥手</strong>阶段才出现的控制位。
+（知识点：三次握手报文内容；对应 <code>day05-tcp.md</code> §2.1、§2.4）</p>
+<p><strong>10. B</strong> <strong>两次握手无法防止"已失效的连接请求"</strong>：若客户端的一个旧 SYN 因网络滞留迟到，服务器会回 SYN+ACK 并<strong>单方面建立连接、分配资源</strong>，而客户端根本没想建立这个连接，资源就白白浪费。第三次握手正是让服务器<strong>确认客户端确实收到了自己的 SYN 并在场</strong>。C 错——服务器可在第二次握手中确定自己的序号；A、D 与握手次数无关。
+（知识点：三次握手必要性；对应 <code>day05-tcp.md</code> §2.3）</p>
+<p><strong>11. C</strong> 四次挥手中，被动关闭方收到对方 FIN 后，先回 ACK 并进入 <strong>CLOSE-WAIT</strong>（"关闭等待"——<strong>自己还有数据没发完，先别断</strong>）；等数据发完再发 FIN，进入 <strong>LAST-ACK</strong>。<strong>易错点</strong>：A（TIME-WAIT）是<strong>主动关闭方</strong>的状态；D（FIN-WAIT-2）也是主动关闭方的状态；B（LAST-ACK）是发完 FIN 之后的状态，不是收到 FIN 时。
+（知识点：四次挥手状态变迁；对应 <code>day05-tcp.md</code> §3.1、§3.2）</p>
+<p><strong>12. C</strong> TIME-WAIT 等 2MSL 有两个目的：<strong>① 保证最后的 ACK（第 ④ 段）能到达对方</strong>——若丢失，对方会重传 FIN，本端在 2MSL 内还能收到并重发 ACK；<strong>② 让本连接的所有报文段都从网络中消失</strong>，防止迟到报文干扰同 socket 的新连接。A 错（数据在 CLOSE-WAIT 阶段已发完）；B 太笼统；D 没抓住要害。
+（知识点：TIME-WAIT 与 2MSL；对应 <code>day05-tcp.md</code> §3.2）</p>
+<p><strong>13. D</strong> 确认号 = <strong>期望收到的下一个字节的编号</strong> = 本次数据的第一个字节编号 + 数据长度 = <strong>1001 + 500 = 1501</strong>。即"1501 之前的所有数据（1001~1500，共 500 字节）我都收到了"。C（1500）是"最后一个字节的编号"，不是确认号；B（1001）等于没确认任何数据。
+（知识点：序号与确认号；对应 <code>day05-tcp.md</code> §1、§2.4）</p>
+<p><strong>14. A</strong> 三次握手中，<strong>客户端</strong>发出第 ③ 段（对服务器 SYN 的确认）后即进入 ESTABLISHED；<strong>服务器</strong>必须<strong>收到第 ③ 段后</strong>才从 SYN-RCVD 进入 ESTABLISHED。所以<strong>客户端先建立连接</strong>。
+（知识点：连接建立时序；对应 <code>day05-tcp.md</code> §2.2）</p>
+<h3>第三部分：拥塞控制</h3>
+<p><strong>15. B</strong> 快重传/快恢复（收到 3 个重复 ACK）的处理是：<strong>ssthresh = cwnd / 2，cwnd = ssthresh</strong>（即 cwnd 减半但<strong>不回到 1</strong>），随后进入拥塞避免线性增长。<strong>易错点</strong>：A 选项的"cwnd = 1"是<strong>超时</strong>才有的处理——超时说明网络严重拥塞，要狠狠降；3 个重复 ACK 说明只是偶发丢一包，网络基本通畅，温和降即可。<strong>"超时回 1，重复 ACK 减半"</strong>。
+（知识点：快重传与快恢复；对应 <code>day05-tcp.md</code> §6.1、§6.2）</p>
+<p><strong>16. B</strong> 慢开始阶段 cwnd <strong>每经过 1 个 RTT 加倍</strong>（1→2→4→8→…，<strong>指数增长</strong>）。"慢开始"的"慢"指的是<strong>起点小（cwnd=1）</strong>，而不是增长慢——恰恰相反，它增长得最快。A（线性 +1）是<strong>拥塞避免</strong>阶段的特征；D 是丢包后的反应。
+（知识点：慢开始增长规律；对应 <code>day05-tcp.md</code> §6.1）</p>
+<p><strong>17. B</strong></p>
+<pre><code>超时处理：ssthresh = cwnd / 2 = 24 / 2 = 12；cwnd = 1（重新慢开始）
+此后：cwnd = 1 → 2 → 4 → 8 → 12（达到新 ssthresh）→ 转拥塞避免线性增长
+</code></pre>
+<p>A 选项（cwnd=12）是<strong>快恢复</strong>的处理（3 个重复 ACK 时的反应），不是超时的；超时必须把 cwnd <strong>重置为 1</strong>。
+（知识点：超时与快恢复的区分；对应 <code>day05-tcp.md</code> §6.3 完整演算）</p>
+<h3>第四部分：UDP 与综合</h3>
+<p><strong>18. A</strong> <strong>TCP 首部固定 20 字节</strong>（含选项时最大 60 字节），<strong>UDP 首部固定 8 字节</strong>（源端口、目的端口、长度、校验和各 2 字节）。这正是"TCP 开销大、UDP 开销小"的直接来源。
+（知识点：TCP/UDP 首部开销；对应 <code>day05-tcp.md</code> §四）</p>
+<p><strong>19. C</strong> 实时视频/语音会议要求<strong>低延迟</strong>、能容忍<strong>少量丢包</strong>，TCP 的确认/重传机制反而增加延迟，因此<strong>优先选 UDP</strong>。A（FTP）、B（SMTP）、D（Telnet）都要求可靠传输，用 TCP。
+（知识点：UDP 的应用场景；对应 <code>day05-tcp.md</code> §四）</p>
+<p><strong>20. C</strong> 主机 A 用掩码算出目的服务器<strong>不在本网段</strong>（192.168.1.0/24），于是把数据包交给<strong>默认网关 192.168.1.1</strong>。以太网帧按 MAC 封装，因此 ARP 求的是<strong>默认网关（路由器本网段接口）的 MAC 地址</strong>，而<strong>不是</strong>目的服务器的 MAC。IP 头里的目的 IP 仍是服务器不变，只有链路层的目的 MAC 是网关的。<strong>易错点</strong>：A 是最典型的错误——跨网段时目的主机在<strong>另一个链路</strong>上，本网段的 ARP 广播根本到不了它。
+（知识点：默认网关与 ARP 的关系；对应 <code>day05-tcp.md</code> §9.4）</p>
+<hr />
+<h2>做完后的自我评估</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>题号</th>
+<th>答对数</th>
+<th>目标</th>
+<th>未达标怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>子网划分计算</strong></td>
+<td>1–8</td>
+<td>__ / 8</td>
+<td><strong>≥ 7（必须全对更好）</strong></td>
+<td>这是<strong>必考计算点</strong>。回看 <code>day05-tcp.md</code> §八「5 步法模板」，把 5 道例题<strong>遮住答案独立重算一遍</strong>；错因几乎都是：① 块大小算错（256 − 掩码值）；② 忘记 −2；③ 忘记"网络/广播地址不可用"；④ 同子网判断没算网络地址。每错一道，自己<strong>换一组数字再编一道</strong>练手。</td>
+</tr>
+<tr>
+<td>TCP 连接管理</td>
+<td>9–14</td>
+<td>__ / 6</td>
+<td>≥ 5（11、12 必须对）</td>
+<td>回看 <code>day05-tcp.md</code> §二、§三 的两张状态变迁表，能默画三次握手/四次挥手时序图；重点背"为什么三次/四次""TIME-WAIT 等 2MSL 的原因"。</td>
+</tr>
+<tr>
+<td>拥塞控制</td>
+<td>15–17</td>
+<td>__ / 3</td>
+<td>全对</td>
+<td>回看 <code>day05-tcp.md</code> §6.1–6.3，把 §6.3 演算表自己重画一遍；<strong>超时 vs 重复 ACK</strong> 的处理差异必须分清。</td>
+</tr>
+<tr>
+<td>UDP 与综合</td>
+<td>18–20</td>
+<td>__ / 3</td>
+<td>≥ 2</td>
+<td>回看 <code>day05-tcp.md</code> §四（TCP/UDP 对比表）、§9.4（默认网关 + ARP）。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>子网计算题（1–8）是本日核心</strong>。若 1、3、5 这类"求网络地址/广播地址/同子网判断"的题有任何一道错，说明 5 步法第 2、3 步还没形成肌肉记忆——请回到 <code>day05-tcp.md</code> §八，把模板逐字抄写一遍，再算 5 道例题。<strong>计算题的目标是 100% 正确</strong>，它是网络部分最稳定的得分点。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/networks/day05-exercises.md">docs/knowledge-points/networks/day05-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

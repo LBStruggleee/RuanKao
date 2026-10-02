@@ -1,135 +1,80 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="软考软件设计师（中级）零基础 24 天冲刺备考站：交互式课程（即时判分 + 逐选项解析）、知识点精讲、历年真题、错题本" />
+  <meta name="description" content="软考软件设计师（中级）备考站：28 节交互式课程（即时判分 + 逐选项解析）、全大纲知识点文档、10 套历年真题、错题本——纯静态 HTML，手机电脑皆可" />
   <title>软考软件设计师 · 备考站 | RuanKao</title>
-  <link rel="stylesheet" href="assets/vendor/vue.css" />
-  <link rel="stylesheet" href="assets/vendor/prism-ghcolors.css" />
+  <link rel="stylesheet" href="assets/base.css" />
   <style>
-    :root {
-      --theme-color: #0e6b5c;
-      --accent: #0e6b5c;
-      --sidebar-nav-link-color: #2c3e50;
-      --textColor: #34495e;
-      --headingColor: #22303c;
-      --background: #f8f6f0;
-      --sidebarBackground: #fffdf8;
-    }
-    body { color: var(--textColor); }
-    .app-nav a.active, .app-nav a:hover, .markdown-section a,
-    .search .search-keyword, .sidebar ul li.active > a { color: var(--accent); }
-    .sidebar { background: var(--sidebarBackground); }
-    .markdown-section h2 { border-bottom: 2px solid rgba(14,107,92,.25); padding-bottom: .3rem; }
-    .markdown-section blockquote {
-      border-left: 4px solid var(--theme-color);
-      background: rgba(14,107,92,.06); margin: 1em 0; padding: .6em 1em; color: #3c4a56;
-    }
-    .markdown-section table { display: table; width: 100%; }
+    .hero { text-align: left; padding: 1rem 0 .6rem; }
+    .hero h1 { font-family: var(--serif); font-size: 1.9rem; margin: .2rem 0 .4rem; }
+    .hero p { color: var(--ink-soft); margin: .2rem 0; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .9rem; margin: 1.2rem 0; }
+    .card a { text-decoration: none; }
+    .cards .card { margin: 0; }
+    .cards .card b { color: var(--accent); }
+    .cards .card p { color: var(--ink-soft); font-size: .88rem; margin: .3rem 0 0; }
     #rk-badge {
       position: fixed; right: 12px; bottom: 12px; z-index: 999;
-      background: var(--theme-color); color: #fff; font-size: 12px;
+      background: var(--accent); color: #fff; font-size: 12px;
       padding: 6px 12px; border-radius: 999px;
       box-shadow: 0 2px 10px rgba(0,0,0,.25); user-select: none;
     }
     @media (max-width: 720px) {
-      .markdown-section table { display: block; overflow-x: auto; }
-      .app-nav { position: absolute; }
+      .page { padding: 1.4rem .9rem 3rem; }
+      table { display: block; overflow-x: auto; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="#/">🏠 首页</a>
-    <a href="reference/ds-learning-path.html">🎓 交互课程</a>
-    <a href="reference/mistake-notebook.html">📓 错题本</a>
-  </nav>
-  <div id="app">加载中…</div>
-  <script>
-    window.$docsify = {
-      name: '软考软件设计师 · 备考站',
-      repo: 'LBStruggleee/RuanKao',
-      loadSidebar: true,
-      subMaxLevel: 3,
-      noCompileLinks: ['.*\\.html$'],
-      auto2top: true,
-      search: {
-        maxAge: 86400000,
-        paths: 'auto',
-        placeholder: '全站搜索…',
-        noData: '没有找到相关结果',
-        depth: 3
-      }
-    };
-  </script>
-  <script src="assets/vendor/docsify.min.js"></script>
-  <script src="assets/vendor/search.min.js"></script>
-  <script src="assets/vendor/prism-core.min.js"></script>
-  <script src="assets/vendor/prism-clike.min.js"></script>
-  <script src="assets/vendor/prism-c.min.js"></script>
-  <script src="assets/vendor/prism-cpp.min.js"></script>
-  <script src="assets/vendor/prism-python.min.js"></script>
-  <script src="assets/vendor/prism-bash.min.js"></script>
-  <div id="rk-badge"></div>
-  <script>
-    /* 自愈：任何被缓存旧版页面劫持出的 .html 路由（#/lessons/xxx.html），
-       一律立即跳回独立页面——交互课程只能以独立页形式运行 */
-    (function () {
-      function heal() {
-        if (/\.html$/.test(location.hash)) {
-          location.replace(location.origin + location.pathname + location.hash.slice(1));
-        }
-      }
-      window.addEventListener("hashchange", heal);
-      heal();
-    })();
-  </script>
-  <script>
-    /* 站内 .html 页面（交互课程/错题本/目录）直通：在捕获阶段接管点击，
-       绕过 Docsify 的哈希路由（否则 .html 会被当 Markdown 渲染成静态文本）。
-       兼容三种链接形态：绝对 URL / 相对路径 / Docsify 编译出的 #/... 路由
-       （后者来自被缓存的旧版 _sidebar.md，同样接管）。 */
-    (function () {
-      function targetOf(a) {
-        var h = a.getAttribute('href') || '';
-        if (/^https?:\/\//.test(h)) { return h; }
-        if (h.indexOf('#/') === 0) { return location.origin + location.pathname + h.slice(1); }
-        return new URL(h, location.href).href;
-      }
-      function internalHtml(a) {
-        /* 注意：Docsify 会给绝对 http 链接强加 target="_blank"（externalLinkTarget），
-           但这些链接是本站的交互课程页——必须在同页接管，不能跳过 */
-        if (!a) { return false; }
-        var h = a.getAttribute('href') || '';
-        if (!/\.html$/.test(h)) { return false; }
-        if (/^https?:\/\//.test(h)) { return a.origin === location.origin; }
-        return true;
-      }
-      document.addEventListener('click', function (e) {
-        if (e.defaultPrevented || e.button !== 0 ||
-            e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
-        var a = e.target && e.target.closest ? e.target.closest('a') : null;
-        if (!internalHtml(a)) { return; }
-        e.preventDefault();
-        e.stopPropagation();
-        location.href = targetOf(a);
-      }, true);
-    })();
-  </script>
-  <script>
-    (function () {
-      var badge = document.getElementById('rk-badge');
-      function tick() {
-        var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
-        badge.textContent = d > 1 ? '📅 距 10/24 考试还有 ' + d + ' 天'
-          : d === 1 ? '📅 明天考试，加油！'
-          : d === 0 ? '📅 今天考试！'
-          : '🏁 考试已结束，感谢使用本站';
-      }
-      tick();
-      setInterval(tick, 3600000);
-    })();
-  </script>
+<div class="page">
+  <header class="lesson-header hero">
+    <p class="kicker">软考软件设计师（中级）· 公开复习站</p>
+    <h1>零基础冲刺 · 交互课程 + 全大纲文档 + 真题解析</h1>
+    <p>📅 考试：<b>2026 年 10 月 24 日</b> ｜ 纯静态 HTML，无需登录，手机/电脑皆可，内容离线可用</p>
+    <p>本站内容仅供学习交流使用 · 源码与原资料见
+      <a href="https://github.com/LBStruggleee/RuanKao">GitHub 仓库</a></p>
+  </header>
+
+  <div class="cards">
+    <div class="card"><a href="reference/ds-learning-path.html"><b>🎓 交互课程（28 课）</b>
+      <p>按序号学习：数据结构 → OS → 网络 → 数据库 → 组成 → 软工 → 设计模式 → 算法大题套路。每课配实验室与逐选项解析测验。</p></a></div>
+    <div class="card"><a href="reference/mistake-notebook.html"><b>📓 错题本</b>
+      <p>课程作答自动记录，按题判定「待重做 / 已攻克」，只练错题，支持导出 Markdown / JSON。</p></a></div>
+    <div class="card"><a href="pages/index.html"><b>📖 知识点文档（89 篇全文）</b>
+      <p>docs/ 原资料全文 HTML 版：考试大纲、六大科目精讲、24 天计划、真题转录与逐题解析、应试策略。</p></a></div>
+    <div class="card"><a href="search.html"><b>🔍 全站搜索</b>
+      <p>按关键词检索全部文档（如：子网、候选码、Belady、关键路径）。</p></a></div>
+    <div class="card"><a href="pages/practice/tracker.html"><b>🗓 24 天打卡表</b>
+      <p>进度唯一权威：日期映射、检查点合格线、各真题卷勘误结论。</p></a></div>
+    <div class="card"><a href="pages/exam-guide.html"><b>📖 考试大纲与格式</b>
+      <p>上午卷 / 下午卷题型、分值与合格线——先看这个再开始。</p></a></div>
+    <div class="card"><a href="https://github.com/LBStruggleee/RuanKao"><b>🗂 GitHub 仓库</b>
+      <p>全部源文件与原资料索引（真题 PDF 原件本地持有）。</p></a></div>
+  </div>
+
+  <div class="callout warn">
+    <span class="tag">⚠ 新访客请先看</span>
+    上午卷 75 道选择题（合格 45）与下午卷 5 道大题（合格 36/60 折算）<strong>分别计分</strong>。
+    建议路线：交互课程按序号过一遍 → 对应科目原资料文档精读 → 真题卷计时实战 → 错题本每天清零。
+  </div>
+</div>
+
+<div id="rk-badge"></div>
+<script>
+  (function () {
+    var badge = document.getElementById('rk-badge');
+    function tick() {
+      var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+      badge.textContent = d > 1 ? '📅 距 10/24 考试还有 ' + d + ' 天'
+        : d === 1 ? '📅 明天考试，加油！'
+        : d === 0 ? '📅 今天考试！'
+        : '🏁 考试已结束，感谢使用本站';
+    }
+    tick();
+    setInterval(tick, 3600000);
+  })();
+</script>
 </body>
 </html>

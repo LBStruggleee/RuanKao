@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>科目二（下午卷）答题模板总集 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2-notes.md</div>
+<h1>科目二（下午卷）答题模板总集</h1>
+<blockquote>
+<p><strong>适用</strong>：软考中级·软件设计师 科目二（下午试卷），考试时间 14:00-16:30（150 分钟）
+<strong>结构</strong>：试题一 DFD（必答）/ 试题二 数据库设计（必答）/ 试题三 UML（必答）/ 试题四 算法 C 填空（必答）/ 试题五 C++ 设计模式 与 试题六 Java 设计模式（<strong>二选一</strong>）
+<strong>分值</strong>：每题 15 分，共 5 题 75 分，<strong>合格线 45 分</strong></p>
+<p><strong>本文是"总集"</strong>：四类题型的<strong>核心模板与口诀</strong>集中在此，便于考前（Day 32-33）一页纸回顾。
+完整版模板 + 真题例句 + 丢分点解析见三个专项文件：
+- DFD + UML → <code>docs/practice/subject2/dfd-uml-notes.md</code>（配套 <code>dfd-uml-exercises.md</code> / <code>dfd-uml-key.md</code>）
+- E-R + SQL → <code>docs/practice/subject2/database-notes.md</code>（配套 <code>database-exercises.md</code> / <code>database-key.md</code>）
+- 设计模式 + 算法 → <code>docs/practice/subject2/patterns-algo-notes.md</code>（配套 <code>patterns-algo-exercises.md</code> / <code>patterns-algo-key.md</code>）
+- 全真模拟卷 → <code>docs/practice/mock-exam/subject2-{questions,key}.md</code></p>
+</blockquote>
+<hr />
+<h2>〇、考场策略（先记住这些，再学模板）</h2>
+<ol>
+<li><strong>时间分配</strong>：150 分钟 5 题，<strong>每题上限 25 分钟</strong>，剩余时间回头补难题。不要在一道题上死磕。</li>
+<li><strong>五/六选一策略</strong>：试题五（C++）与试题六（Java）选<strong>平时得分高的那道</strong>，<strong>不要临场换</strong>。</li>
+<li><strong>绝不留空</strong>：下午卷<strong>按步骤给分</strong>。写出实体名/数据流名/类名/角色名/数组下标都能拿分，空着一定是 0 分。</li>
+<li><strong>答案用【说明】原词</strong>：名称类填空（外部实体、数据存储、类名、属性）<strong>照抄题目原词</strong>，不要自创同义词。</li>
+<li><strong>先读【说明】再读图</strong>：所有大题都是"【说明】是答案来源，图是定位线索"。先读说明圈关键句，再对着图填空。</li>
+<li><strong>分数观</strong>：合格 45/75，四类题各拿 10-12 分即可，<strong>不求满分求稳定</strong>。</li>
+</ol>
+<hr />
+<h2>一、试题一：DFD 答题模板（15 分）</h2>
+<blockquote>
+<p>题目套路：【说明】列 4-6 项功能 → 给上下文图（图1-1）+ 0 层图（图1-2）→
+问题1 填外部实体 → 问题2 填数据存储 → 问题3 补缺失数据流 → 问题4 加工逻辑描述/分解。
+<strong>按四步顺序作答，每步对应一个问题，稳拿 12 分以上。</strong></p>
+</blockquote>
+<h3>四步法</h3>
+<table>
+<thead>
+<tr>
+<th>步</th>
+<th>对应问题</th>
+<th>核心口诀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>外部实体</td>
+<td>找"人"、找"设备"、找"外部系统"；排除"数据"、排除"系统自己"</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据存储</td>
+<td>找"存储/保存/记录/维护/写入/读取"等动词，被存储的名词即存储名</td>
+</tr>
+<tr>
+<td>3</td>
+<td>补数据流</td>
+<td>数据流平衡三规则（见下）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>加工逻辑</td>
+<td>结构化语言三层结构 / 加工分解切动词短语</td>
+</tr>
+</tbody>
+</table>
+<h3>数据流平衡三规则（问题 3 最高频丢分点）</h3>
+<ol>
+<li><strong>守恒规则</strong>：每个加工有输入且有输出，且输入足以产生输出。</li>
+<li><strong>父子图平衡</strong>：子图输入/输出集合 = 父图对应加工的输入/输出集合（数据守恒，可合并分解但不能多不能少）。</li>
+<li><strong>无悬空流</strong>：每条数据流必须一端连加工；禁止实体↔实体、存储↔存储直连。</li>
+</ol>
+<p><strong>三类常见错误（官方答案原文，逐字背，遇"分解注意哪些错误"直接默写）</strong>：
+① 加工有输入但是没有输出；② 加工有输出但是没有输入；③ 加工的输入不足以产生输出。</p>
+<h3>补数据流要点</h3>
+<ul>
+<li>带"<strong>历史/批量/记录/已存</strong>"字样的输入只能来自<strong>数据存储</strong>（<code>D→P</code>），不能是 <code>P→P</code>。</li>
+<li><strong>同名数据流被多个加工读取时，每条都要单独画</strong>（画了一条不等于画了两条）。</li>
+<li><strong>答案三要素</strong>：数据流名称 + 起点 + 终点，缺一不可；编号用图中的 <code>E/D/P</code> 编号。</li>
+</ul>
+<h3>得分技巧</h3>
+<p>照抄原词 / 存储名后缀灵活（表/信息表/文件/记录均给分）/ 问题 3 先列每个加工的输入输出清单再找缺腿的 / 上下文图与 0 层图实体必须守恒 / 问题 4 必须有 IF-THEN-ENDIF 等结构化关键字。</p>
+<blockquote>
+<p>详见 <code>dfd-uml-notes.md</code>（含 2020 下/2021 下真题例句与完整得分技巧表）</p>
+</blockquote>
+<hr />
+<h2>二、试题二：数据库设计答题模板（15 分）</h2>
+<blockquote>
+<p>题目套路：【需求分析结果】列 3-5 个实体及属性 → 【概念模型设计】给不完整 E-R 图 →
+【逻辑结构设计】给不完整关系模式 → 问题1 补联系 → 问题2 填属性空 →
+问题3 主键外键 → 问题4 扩展设计（m:n 变化/规范化分解）。</p>
+</blockquote>
+<h3>E-R 三步法</h3>
+<table>
+<thead>
+<tr>
+<th>步</th>
+<th>动作</th>
+<th>找什么句式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>需求→实体</td>
+<td>"XX 信息包括：……"（被描述的主体是实体）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>实体→联系</td>
+<td><strong>量词句</strong>："一个/一名/多张/只属于/至少有"</td>
+</tr>
+<tr>
+<td>3</td>
+<td>联系/实体→属性</td>
+<td>属性挂在拥有它的实体上，关系属性挂联系上</td>
+</tr>
+</tbody>
+</table>
+<h3>联系类型判定口诀（核心）</h3>
+<blockquote>
+<p><strong>两端都唯一 → 1:1；一端唯一一端不唯一 → 1:n；两端都不唯一 → m:n</strong></p>
+<p>"唯一" = 该端实体对象在这个联系中只出现一次。判别动作：把需求里的量词逐对写成
+"X 端：唯一 / Y 端：不唯一"的对照，再套口诀。</p>
+<p>⚠️ "经理""主管"<strong>不是独立实体</strong>，是职员的<strong>岗位</strong>——把岗位画成新实体是最常见错误。</p>
+</blockquote>
+<h3>E-R → 关系模式转换规则（直接决定问题 2/3/4 的分）</h3>
+<table>
+<thead>
+<tr>
+<th>联系类型</th>
+<th>转换规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1:1</td>
+<td>把任一端主键放另一端（可两端都放）</td>
+</tr>
+<tr>
+<td>1:n</td>
+<td><strong>把 1 端主键放进 n 端关系模式</strong>（最高频考点）</td>
+</tr>
+<tr>
+<td>m:n</td>
+<td><strong>必须转成独立关系</strong>，主键 = 两端主键的组合</td>
+</tr>
+</tbody>
+</table>
+<h3>关系模式填空两类缺项（都要填！）</h3>
+<ol>
+<li><strong>需求属性清单里有、模式里缺的属性</strong>（对照"XX 信息包括"逐项排查）；</li>
+<li><strong>1:n 联系的 1 端主键</strong>（作为外键放进 n 端）。</li>
+</ol>
+<blockquote>
+<p>例：2021 下试题二维修单 (d) = <strong>车牌号 + 员工号</strong>（车牌号是需求清单缺项，员工号是 1:n 转换项）。</p>
+</blockquote>
+<h3>主键 / 外键判定</h3>
+<ul>
+<li><strong>主键</strong>：看"XX 号唯一标识……每一个元组"那句（没明说时用自然唯一标识，如车牌号）；</li>
+<li><strong>外键</strong>：关系模式中引用别的关系主键的属性——<strong>填空时新加进去的属性，到主外键题里也要算外键</strong>。</li>
+</ul>
+<h3>规范化题模板（数据冗余题，背熟套话）</h3>
+<blockquote>
+<p>存在<strong>数据冗余、修改异常、插入异常、删除异常</strong>等问题。
+应将关系模式分解为：模式1（…）+ 模式2（…）。</p>
+</blockquote>
+<h3>SQL 考法（上午卷为主，下午备考点）</h3>
+<p>四类考法：CREATE TABLE（含主外键约束 FOREIGN KEY … REFERENCES）/ SELECT（JOIN 连接、子查询、GROUP BY 分组聚合）/ GRANT·REVOKE（权限）/ CREATE VIEW。</p>
+<blockquote>
+<p>详见 <code>database-notes.md</code>（每类配真题例句：2023 上 GRANT / 2017 上 分组聚合 / 2019 下 等价连接）</p>
+</blockquote>
+<hr />
+<h2>三、试题三：UML 答题模板（15 分）</h2>
+<blockquote>
+<p>题目套路：【说明】+ 用例图（图3-1）+ 类图（图3-2）→
+问题1 填参与者/用例/关系 → 问题2 填类名或属性 → 问题3 填关系/属性解释/设计模式。</p>
+</blockquote>
+<h3>类图填空三招</h3>
+<table>
+<thead>
+<tr>
+<th>招</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>名词找类</td>
+<td>【说明】中带英文括号注的核心名词几乎都是类；"X 包括 A、B、C"或"X 分为 A 和 B 两类"→ 一个泛化层级（X 父类，A/B/C 子类）</td>
+</tr>
+<tr>
+<td>动词找方法</td>
+<td>动词短语 = 类的方法；方法名用【说明】原动词或其英文括号注</td>
+</tr>
+<tr>
+<td>关键词判关系</td>
+<td>见下表</td>
+</tr>
+</tbody>
+</table>
+<h3>类间六关系（符号 + 代码级判别）</h3>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>UML 符号</th>
+<th>代码级特征</th>
+<th>口诀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>泛化</td>
+<td>空心三角<strong>实线</strong>箭头，子→父</td>
+<td><code>extends</code></td>
+<td>is-a，继承</td>
+</tr>
+<tr>
+<td>实现</td>
+<td>空心三角<strong>虚线</strong>箭头</td>
+<td><code>implements</code></td>
+<td>实现接口</td>
+</tr>
+<tr>
+<td>关联</td>
+<td>实线（可有多重性）</td>
+<td>成员变量持有引用</td>
+<td>has-a，长期持有</td>
+</tr>
+<tr>
+<td>聚合</td>
+<td><strong>空心菱形</strong>，整体→部分</td>
+<td>部分可独立存在（外部传入）</td>
+<td>整体与部分可分离</td>
+</tr>
+<tr>
+<td>组合</td>
+<td><strong>实心菱形</strong>，整体→部分</td>
+<td>部分随整体创建/销毁（构造里 new）</td>
+<td>同生共死</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td>虚线箭头</td>
+<td>局部变量/方法参数</td>
+<td>临时使用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>聚合 vs 组合</strong>：部分能否脱离整体单独存在——能（班级与学生）→ 聚合；不能（汽车与发动机）→ 组合。</p>
+<h3>用例图三关系</h3>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>方向</th>
+<th>判别口诀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;&lt;include&gt;&gt;</code></td>
+<td>基用例 → 被包含用例</td>
+<td><strong>必然发生</strong>、公共抽取</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;extend&gt;&gt;</code></td>
+<td>扩展用例 → 基用例</td>
+<td><strong>条件触发</strong>、可选异常</td>
+</tr>
+<tr>
+<td>泛化</td>
+<td>子用例 → 父用例</td>
+<td>特殊化</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记方向</strong>：include 箭头从"必然触发的用例"指向"被抽取的公共用例"；extend 箭头从"可选/异常用例"指向"基用例"——<strong>两者方向相反</strong>。</p>
+<h3>属性提取</h3>
+<ul>
+<li>父类属性 = "系统中存储了每个 XX 的……"后面的共有属性；</li>
+<li>子类属性 = "对于 XX，还需记录……"后面的特有属性；</li>
+<li>关联类属性 = 描述<strong>两者关系本身</strong>的属性（如"经纪负责该房产的起止时间"），<strong>不是</strong>任一类的自身属性。</li>
+</ul>
+<h3>试题三问题 3 常考：设计模式速选</h3>
+<table>
+<thead>
+<tr>
+<th>题干特征词</th>
+<th>模式</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态变化通知关注者</td>
+<td>观察者</td>
+<td>一对多依赖，自动通知</td>
+</tr>
+<tr>
+<td>多种格式/算法可互换</td>
+<td>策略</td>
+<td>算法封装成类可替换</td>
+</tr>
+<tr>
+<td>统一接口封装多子系统</td>
+<td>外观</td>
+<td>高层一致接口</td>
+</tr>
+<tr>
+<td>减少对象数量省内存</td>
+<td>享元</td>
+<td>共享细粒度对象</td>
+</tr>
+<tr>
+<td>撤销/恢复原状态</td>
+<td>备忘录</td>
+<td>保存状态以便恢复</td>
+</tr>
+<tr>
+<td>层叠菜单/树形/部分-整体</td>
+<td>组合</td>
+<td>统一对待单个与组合对象</td>
+</tr>
+<tr>
+<td>多对象交互由中介协调</td>
+<td>中介者</td>
+<td>封装一组对象交互</td>
+</tr>
+<tr>
+<td>动态增加职责</td>
+<td>装饰</td>
+<td>包装扩展功能</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解释题万能模板</strong>：XX 模式适合……（标准定义）。本需求中"…"对应……角色，"…"对应……角色，当……发生时……，故选 XX 模式。</p>
+<blockquote>
+<p>详见 <code>dfd-uml-notes.md</code>（含顺序图/状态图/活动图读图要点）</p>
+</blockquote>
+<hr />
+<h2>四、试题四：算法填空答题模板（C 语言，15 分）</h2>
+<h3>填空四步法</h3>
+<ol>
+<li><strong>读【说明】理清算法目标</strong>（输入是什么、输出是什么、策略是什么）；</li>
+<li><strong>读代码标循环不变量</strong>（每层循环在干什么、数组含义）；</li>
+<li><strong>从边界条件反推空位</strong>（i 从 0 还是 1？j &lt; n 还是 &lt;= n？）；</li>
+<li><strong>代入小例子验证</strong>（手算一个 3×3 或 n=3 的例子，空位对不对一下就出来）。</li>
+</ol>
+<h3>DP 题专属：状态转移三件套</h3>
+<ol>
+<li><strong>定义状态</strong>：<code>D[i][j]</code> / <code>m[i][j]</code> 的含义；</li>
+<li><strong>写状态转移方程</strong>：由左/上/左上推出（序列型），或按区间长度枚举断点（区间型）；</li>
+<li><strong>定边界与遍历序</strong>：<code>D[0][j]</code>、<code>D[i][0]</code> 初值；外层枚举什么、内层枚举什么。</li>
+</ol>
+<blockquote>
+<p>序列型例：编辑距离（2021 下试题四）；区间型例：矩阵连乘（2022 上试题四，枚举断点 k，<code>m[i][j] = min(m[i][k]+m[k+1][j]+代价)</code>）。</p>
+</blockquote>
+<h3>常考算法骨架清单</h3>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>核心结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动态规划（最高频）</td>
+<td>双重循环 + 状态转移 + 边界初始化</td>
+</tr>
+<tr>
+<td>排序</td>
+<td>快排划分（双边/单边指针）、归并合并</td>
+</tr>
+<tr>
+<td>查找</td>
+<td>二分（循环条件与 mid 取整）、哈希冲突处理</td>
+</tr>
+<tr>
+<td>树的遍历</td>
+<td>递归先/中/后序（栈的压入顺序）</td>
+</tr>
+<tr>
+<td>图遍历</td>
+<td>DFS 栈/递归、BFS 队列 + visited 标记</td>
+</tr>
+<tr>
+<td>贪心</td>
+<td>排序 + 单向扫描 + 局部最优策略</td>
+</tr>
+</tbody>
+</table>
+<h3>得分技巧</h3>
+<p>算法空写出<strong>数组下标或变量名</strong>也能拿分；不会做就先把循环结构与变量声明抄进空位，再按小例子推。</p>
+<blockquote>
+<p>详见 <code>patterns-algo-notes.md</code>（含 Java vs C++ 语言细节对照）</p>
+</blockquote>
+<hr />
+<h2>五、试题五/六：设计模式答题模板（C++ / Java 二选一，15 分）</h2>
+<h3>大题三步法</h3>
+<ol>
+<li><strong>读【说明】定位场景关键词判模式</strong>（用本文 §三的速选表或 <code>patterns-algo-notes.md</code> 的秒选表）；</li>
+<li><strong>对照类图找角色对应</strong>（谁是 Abstraction / ConcreteSubject / FlyweightFactory …）；</li>
+<li><strong>依多态与继承关系填代码空</strong>（抽象类定义接口、具体类实现接口、客户端面向抽象编程）。</li>
+</ol>
+<h3>填空通用三招</h3>
+<ul>
+<li><strong>招 1</strong>：抽象类/接口中的<strong>方法签名</strong>空 → 抄【说明】里的动词或类图中的方法名；</li>
+<li><strong>招 2</strong>：子类/具体实现类中的<strong>方法体</strong>空 → 调用被聚合的成员对象的方法（委托），或返回自身状态；</li>
+<li><strong>招 3</strong>：客户端/调用处空 → <strong>面向抽象类型声明变量</strong>（<code>Abstraction abs = new ConcreteImpl()</code>）。</li>
+</ul>
+<h3>Java vs C++ 细节对照</h3>
+<table>
+<thead>
+<tr>
+<th>点</th>
+<th>C++</th>
+<th>Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象接口</td>
+<td>纯虚函数 <code>virtual void f() = 0</code></td>
+<td><code>interface</code> 或抽象类 <code>abstract</code></td>
+</tr>
+<tr>
+<td>继承</td>
+<td><code>class A : public B</code></td>
+<td><code>class A extends B</code></td>
+</tr>
+<tr>
+<td>实现接口</td>
+<td><code>class A : public Iface</code></td>
+<td><code>class A implements Iface</code></td>
+</tr>
+<tr>
+<td>对象持有</td>
+<td>指针 <code>Iface* obj</code> + <code>new</code></td>
+<td>引用 <code>Iface obj</code> + <code>new</code></td>
+</tr>
+<tr>
+<td>内存管理</td>
+<td>析构函数 <code>virtual ~A()</code></td>
+<td>无（GC）</td>
+</tr>
+</tbody>
+</table>
+<h3>高频模式角色结构（考前默写）</h3>
+<ul>
+<li><strong>工厂方法</strong>：Product（抽象产品）/ ConcreteProduct / Factory（抽象工厂，声明 Create）/ ConcreteFactory（实现 Create 返回 ConcreteProduct）</li>
+<li><strong>观察者</strong>：Subject（attach/detach/notify）/ ConcreteSubject（状态）/ Observer（update）/ ConcreteObserver</li>
+<li><strong>策略</strong>：Strategy（算法接口）/ ConcreteStrategyA、B / Context（持有 Strategy 引用，调用其方法）</li>
+<li><strong>享元</strong>：Flyweight（共享状态接口）/ ConcreteFlyweight / FlyweightFactory（维护共享对象池）</li>
+<li><strong>备忘录</strong>：Originator（创建/恢复备忘录）/ Memento（保存状态）/ Caretaker（保管备忘录）</li>
+</ul>
+<blockquote>
+<p>详见 <code>patterns-algo-notes.md</code>（7 个高频模式的意图+角色结构+代码特征，附 2020-2023 考频）</p>
+</blockquote>
+<hr />
+<h2>六、高频丢分点总表（做完真题后对照回填）</h2>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>高频丢分点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DFD</td>
+<td>加工"有输出无输入"漏补输入流；"历史/批量"输入误走 P→P（应 D→P）；同名数据流被多加工读取只画一条；结构化语言写成自然语言（无关键字）；分解三错误背不全</td>
+</tr>
+<tr>
+<td>E-R</td>
+<td>联系类型判错（量词句没逐对对照）；关系模式填空<strong>漏属性</strong>（需求清单缺项 + 1:n 主键两项都要填）；把岗位/经理画成独立实体；填空新加的属性到主外键题漏算外键；m:n 忘转独立关系；规范化题套话写不全</td>
+</tr>
+<tr>
+<td>UML</td>
+<td>聚合/组合/关联判错；关联类属性误填类的自身属性；父类与子类属性互相串填；include/extend 混淆（必然 vs 条件，箭头方向相反）；类名不用【说明】英文原名</td>
+</tr>
+<tr>
+<td>算法</td>
+<td>循环边界差 1；DP 状态转移方程推不出（没先手算小例子）；数组下标写错（0 基 vs 1 基没看清）</td>
+</tr>
+<tr>
+<td>设计模式</td>
+<td>模式判错（场景关键词没记住）；角色结构默写不出（谁继承谁、谁聚合谁）；方法签名空不照【说明】原动词；客户端空不用抽象类型声明</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>七、考前冲刺用法（Day 32-33）</h2>
+<ul>
+<li><strong>Day 32 上午</strong>：把本文 §一~§五的<strong>口诀与速查表</strong>逐节默写一遍（不是看一遍）：DFD 四步法+三规则、E-R 判定口诀+转换规则、类间六关系、模式速选表、DP 三件套。</li>
+<li><strong>Day 32 下午</strong>：背诵记忆性内容（范式定义、设计模式意图、SQL 四类语法）。</li>
+<li><strong>Day 33（考前一天，轻度）</strong>：只看本文 + 三个专项 notes 的"得分技巧汇总"表，不做新题。</li>
+<li><strong>进考场前 30 分钟</strong>：只看本文 §〇 考场策略 + §六 高频丢分点总表。</li>
+</ul>
+<hr />
+<h2>八、错题回填区（做完每套大题后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>试题</th>
+<th>题型</th>
+<th>问题/空</th>
+<th>我的答案</th>
+<th>正确答案</th>
+<th>丢分原因</th>
+<th>对应模板章节</th>
+<th>已回看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>回看承诺</strong>：每个丢分点至少回看一次本文对应章节，并在第二天错题回顾时重做该问。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2-notes.md">docs/practice/subject2-notes.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

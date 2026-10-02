@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 6（9/26）计算机网络③：网络安全 + 网络阶段收尾 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 networks 📁 day06-security.md</div>
+<h1>Day 6（9/26）计算机网络③：网络安全 + 网络阶段收尾</h1>
+<blockquote>
+<p><strong>考试定位</strong>：信息安全在科目一（75 道选择题）中约占 <strong>5%</strong> 分值（3–4 题），<strong>概念性为主、短期可速成</strong>——是"背熟就得分"的典型板块，性价比极高。计算题极少，几乎全是"概念辨析 + 归属判断 + 攻防配对"。
+<strong>本日结构</strong>：Step 1 信息安全基础（§1–§15）→ Step 2 网络阶段知识框架图（§16，<strong>网络阶段收尾交付物，可单独打印冲刺</strong>）。
+<strong>学习建议</strong>：先按 §1→§15 顺序学完并做完 <code>day06-exercises.md</code> 的 15 道安全题，再用 §16 的框架图把 Day 4–6 串成一张图；晚上按 <code>reflection.md</code> 的指引重做 Day 4–5 高混淆度题。</p>
+</blockquote>
+<hr />
+<h2>一、信息安全总览：CIA 三要素与 5 大安全服务</h2>
+<h3>1.1 CIA 三要素（信息安全的目标）</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    信息安全三大目标（CIA）                        │
+├──────────────┬──────────────────────────────────────────────────┤
+│ 机密性 C     │ 信息只被授权的人看到      → 靠【加密】实现         │
+│ Integrity I  │ 信息不被篡改、完整无误    → 靠【摘要/数字签名】实现│
+│ 可用性 A     │ 系统随时可用、不被搞瘫    → 靠【防火墙/抗 DDoS】   │
+└──────────────┴──────────────────────────────────────────────────┘
+</code></pre>
+<p>扩展的两个常考点：
+- <strong>真实性（身份认证）</strong>：确认"你是你声称的人" → 靠【数字签名 / 证书 / 口令】。
+- <strong>抗否认性（不可否认性）</strong>：发出后不能抵赖"我没发过" → <strong>只有数字签名能做到</strong>（因为私钥只有你有）。</p>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：<strong>数字签名本身不提供机密性</strong>。签名只是"盖了个章"，报文仍是明文。要同时保密，必须先加密再签名（或用数字信封）。考题常出现"数字签名能保证机密性"的错项。</p>
+</blockquote>
+<h3>1.2 ISO 7498-2 定义的 5 大安全服务（OSI 安全体系，必背）</h3>
+<table>
+<thead>
+<tr>
+<th>安全服务</th>
+<th>作用</th>
+<th>典型实现手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>认证服务</strong></td>
+<td>验证对等实体身份 / 数据来源真实性</td>
+<td>数字签名、数字证书、口令、Kerberos</td>
+</tr>
+<tr>
+<td><strong>访问控制</strong></td>
+<td>决定谁能访问什么资源、有何权限</td>
+<td>ACL、防火墙规则、RBAC</td>
+</tr>
+<tr>
+<td><strong>数据机密性</strong></td>
+<td>防止信息被窃听</td>
+<td>对称/非对称加密</td>
+</tr>
+<tr>
+<td><strong>数据完整性</strong></td>
+<td>防止数据被篡改、重排、丢失</td>
+<td>报文摘要、HMAC、数字签名</td>
+</tr>
+<tr>
+<td><strong>抗否认服务</strong></td>
+<td>防止发送方/接收方抵赖</td>
+<td>数字签名 + 可信第三方（CA/时间戳）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>记忆口诀：<strong>「认、控、保、完、否」</strong>——认证、访问控制、机密性、完整性、抗否认。</p>
+</blockquote>
+<hr />
+<h2>二、对称加密体制（DES / 3DES / AES / SM4）</h2>
+<p><strong>核心特征</strong>：加密和解密<strong>用同一个密钥</strong>（或由一个推出另一个）。又叫"单钥/私钥/共享密钥"加密。</p>
+<h3>2.1 三大主流算法对比（必背表）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>有效密钥长度</th>
+<th>分组长度</th>
+<th>轮数</th>
+<th>结构</th>
+<th>现状与特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DES</strong></td>
+<td><strong>56 位</strong>（输入 64 位，其中 8 位是奇偶校验，实际只用 56 位）</td>
+<td><strong>64 位</strong></td>
+<td>16 轮</td>
+<td>Feistel 网络</td>
+<td><strong>已被破解</strong>（穷举可破），速度极快；不再用于新系统，软考仍常作为"经典对称算法"出现</td>
+</tr>
+<tr>
+<td><strong>3DES</strong></td>
+<td><strong>112 位</strong>（2 密钥）或 <strong>168 位</strong>（3 密钥，每把 56 位）</td>
+<td><strong>64 位</strong></td>
+<td>48 轮（3×16）</td>
+<td>Feistel</td>
+<td>用 3 把 DES 密钥做"加密-解密-加密"（EDE）；<strong>安全但慢</strong>，是 DES→AES 的过渡方案；兼容单 DES（三把密钥相同时退化为 DES）</td>
+</tr>
+<tr>
+<td><strong>AES</strong></td>
+<td><strong>128 / 192 / 256 位</strong>（三种规格，对应 AES-128/192/256）</td>
+<td><strong>128 位</strong></td>
+<td><strong>10 / 12 / 14 轮</strong></td>
+<td>SP 网络（<strong>不是</strong> Feistel）</td>
+<td><strong>当前主流国际标准</strong>；速度快、安全性高；分组长度固定 128 位，<strong>与密钥长度无关</strong></td>
+</tr>
+<tr>
+<td><strong>SM4</strong></td>
+<td><strong>128 位</strong></td>
+<td><strong>128 位</strong></td>
+<td>32 轮</td>
+<td>SP 网络</td>
+<td><strong>中国国家密码标准</strong>，用于无线局域网 WAPI 等</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>高频易错点（连考多年）</strong>：
+1. <strong>AES 的分组长度固定是 128 位</strong>，不随密钥长度变化！密钥可以 128/192/256，但<strong>分组永远是 128 位</strong>。选项里"AES 分组长度可以是 192/256 位"是错的。
+2. <strong>DES 密钥长度说 56 位</strong>（有效），不是说 64 位——64 位里有 8 位是校验位，不参与加密。
+3. <strong>3DES 密钥长度是 112 位或 168 位</strong>（3×56），不是"3×64=192 位"。
+4. 轮数对应关系：<strong>AES-128 → 10 轮，AES-192 → 12 轮，AES-256 → 14 轮</strong>（密钥每长 64 位多 2 轮）。</p>
+</blockquote>
+<h3>2.2 对称加密的优缺点</h3>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong>速度快</strong>（比非对称快 100–1000 倍），适合加密<strong>大量数据</strong></td>
+<td>① <strong>密钥分发困难</strong>：通信前必须安全地把密钥送给对方</td>
+</tr>
+<tr>
+<td>② 算法公开、计算开销小、易于硬件实现</td>
+<td>② <strong>密钥规模爆炸</strong>：n 个人两两通信需 <strong>n(n−1)/2</strong> 个密钥（10 人 = 45 个，100 人 = 4950 个）</td>
+</tr>
+<tr>
+<td>③ 加密效率高，适合文件/硬盘/链路加密</td>
+<td>③ <strong>无法实现抗否认</strong>（双方密钥相同，谁都能伪造）</td>
+</tr>
+<tr>
+<td></td>
+<td>④ <strong>无法直接做数字签名</strong>（公钥体系才能签名）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、非对称加密体制（RSA / ECC / SM2）</h2>
+<p><strong>核心特征</strong>：使用<strong>一对密钥</strong>——公钥（公开）和私钥（保密），由数学难题保证"由公钥推不出私钥"。</p>
+<h3>3.1 两条用法（务必分清，这是全部考点的基础）</h3>
+<pre><code>① 公钥加密 → 私钥解密   ⇒  实现【机密性】（谁都能加密，只有你能解密）
+   场景：A 用 B 的公钥加密 → 只有 B 的私钥能解开
+
+② 私钥加密 → 公钥解密   ⇒  实现【数字签名 / 身份认证 / 抗否认】（只有你能&quot;签&quot;，谁都能&quot;验&quot;）
+   场景：A 用 A 的私钥&quot;签名&quot; → 所有人用 A 的公钥验证&quot;这确实是 A 发的&quot;
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：<strong>"公钥加密"和"私钥签名"不是同一件事</strong>。问"如何保证机密性"选<strong>用对方公钥加密</strong>；问"如何实现数字签名/抗否认"选<strong>用自己私钥签名</strong>。</p>
+</blockquote>
+<h3>3.2 主流算法对比</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>密钥长度</th>
+<th>数学基础</th>
+<th>特点与现状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RSA</strong></td>
+<td><strong>1024 / 2048 / 4096 位</strong>（常用 2048）</td>
+<td><strong>大整数因子分解困难</strong></td>
+<td>事实标准，应用最广；<strong>速度慢</strong>，通常只加密小数据（如会话密钥）或做签名；可同时用于加密和签名</td>
+</tr>
+<tr>
+<td><strong>ECC</strong></td>
+<td><strong>160–256 位</strong>（常用 256）</td>
+<td><strong>椭圆曲线离散对数困难</strong></td>
+<td><strong>同等安全性下密钥更短</strong>（256 位 ECC ≈ 3072 位 RSA 的安全性），速度快、省带宽，适合移动端/物联网</td>
+</tr>
+<tr>
+<td><strong>DSA</strong></td>
+<td>1024 位</td>
+<td>离散对数困难</td>
+<td><strong>只能用于数字签名，不能用于加密</strong>（软考常考的辨析点）</td>
+</tr>
+<tr>
+<td><strong>SM2</strong></td>
+<td>256 位</td>
+<td>椭圆曲线</td>
+<td><strong>中国国家密码标准</strong>，替代 RSA/ECC 商用</td>
+</tr>
+<tr>
+<td><strong>Diffie-Hellman</strong></td>
+<td>—</td>
+<td>离散对数困难</td>
+<td><strong>密钥交换协议</strong>（协商对称密钥用），<strong>本身不加密数据</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>高频易错点</strong>：
+1. <strong>DSA 只能签名不能加密</strong>；<strong>DH 只能交换密钥不能加密</strong>。
+2. 非对称加密<strong>不适合加密大量数据</strong>——慢且有长度上限（RSA 加密明文长度不能超过密钥长度）。"用 RSA 加密整个文件"是错的。
+3. <strong>ECC 不是"RSA 的缩写版本"</strong>，两者数学基础完全不同；ECC 的优势是"短密钥同等安全"。</p>
+</blockquote>
+<h3>3.3 非对称加密的优缺点</h3>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong>密钥分发容易</strong>：公钥可公开，无需秘密通道</td>
+<td>① <strong>速度极慢</strong>，不适合大量数据加密</td>
+</tr>
+<tr>
+<td>② <strong>密钥规模小</strong>：n 个人只需 <strong>2n</strong> 个密钥（每人一对）</td>
+<td>② 计算复杂、消耗 CPU</td>
+</tr>
+<tr>
+<td>③ 可实现<strong>数字签名、抗否认</strong></td>
+<td>③ 需要可信机制（PKI）保证"这个公钥真的是那个人的"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>四、对称 vs 非对称对比（必背表）</h2>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>对称加密</th>
+<th>非对称加密</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密钥数量</td>
+<td><strong>1 个</strong>（双方共享）</td>
+<td><strong>1 对</strong>（公钥 + 私钥）</td>
+</tr>
+<tr>
+<td>密钥分发</td>
+<td><strong>困难</strong>（需安全通道）</td>
+<td><strong>容易</strong>（公钥可公开）</td>
+</tr>
+<tr>
+<td>n 人通信密钥数</td>
+<td><strong>n(n−1)/2</strong></td>
+<td><strong>2n</strong></td>
+</tr>
+<tr>
+<td>速度</td>
+<td><strong>快</strong>（适合大量数据）</td>
+<td><strong>慢</strong>（适合小数据/密钥/签名）</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>较低（密钥需保密传递）</td>
+<td><strong>较高</strong>（私钥不外传）</td>
+</tr>
+<tr>
+<td>数字签名/抗否认</td>
+<td><strong>不能</strong></td>
+<td><strong>能</strong></td>
+</tr>
+<tr>
+<td>典型算法</td>
+<td>DES / 3DES / AES / SM4</td>
+<td>RSA / ECC / DSA / SM2</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>文件加密、链路加密、会话数据加密</td>
+<td>密钥分发、数字签名、身份认证</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话总结</strong>：<strong>对称加密负责"干活"（加密大量数据），非对称加密负责"分钥匙"和"签字"</strong>。这正是数字信封和 HTTPS 的设计思想。</p>
+</blockquote>
+<hr />
+<h2>五、数字信封：混合加密的标准玩法（必考）</h2>
+<p><strong>问题背景</strong>：对称加密快但密钥送不出去；非对称加密能安全送密钥但太慢。<strong>数字信封把两者拼起来</strong>——用非对称加密保护对称密钥，用对称加密保护真正的数据。</p>
+<h3>5.1 流程图解</h3>
+<pre><code>发送方 A                                     接收方 B
+──────────                                  ──────────
+① 随机生成一次性会话密钥 K（对称）
+② 用 K 加密明文 M      →  密文 C
+③ 用 B 的【公钥】加密 K →  数字信封 E
+④ 发送  C + E  ────────────────────────→   ⑤ 用 B 的【私钥】解 E → 得到 K
+                                           ⑥ 用 K 解 C → 得到明文 M
+</code></pre>
+<h3>5.2 关键结论（看到就选）</h3>
+<ol>
+<li><strong>会话密钥 K 是随机生成、用完即弃的</strong>——每次通信换一把，即使泄露也只影响一次会话。</li>
+<li><strong>数字信封 = 用接收方公钥加密的对称会话密钥</strong>。只有接收方的私钥能拆开信封，所以 K 不会泄露给第三方。</li>
+<li><strong>只有接收方能解开</strong>——保证了<strong>机密性</strong>。但数字信封<strong>不提供抗否认</strong>（A 可以否认"我没发过"），抗否认要靠数字签名（§7）。</li>
+<li>传递顺序记牢：<strong>明文用对称密钥加密，对称密钥用接收方公钥加密</strong>。反过来（用对称加密传公钥）是错的。</li>
+</ol>
+<hr />
+<h2>六、报文摘要与消息认证码（MD5 / SHA / HMAC / SM3）</h2>
+<h3>6.1 什么是报文摘要（Hash）</h3>
+<p>把任意长度的输入 M 压缩成<strong>固定长度</strong>的输出 H(M)，又叫<strong>散列值/哈希值/指纹</strong>。</p>
+<p><strong>四个必备性质</strong>（必考）：
+1. <strong>定长输出</strong>：无论输入多长，输出长度固定。
+2. <strong>单向性（不可逆）</strong>：<strong>由摘要无法反推出原文</strong>——这是摘要与加密的根本区别（加密是可逆的）。
+3. <strong>雪崩效应</strong>：输入改 1 个比特，输出"面目全非"。
+4. <strong>抗碰撞</strong>：找不到两个不同输入给出相同摘要（计算上不可行）。</p>
+<blockquote>
+<p><strong>用途</strong>：① <strong>完整性校验</strong>（对比摘要就知道有没有被改）；② <strong>数字签名</strong>（先摘要再签名，提高效率）；③ <strong>口令存储</strong>（数据库存 hash 不存明文）；④ 文件去重/秒传。</p>
+</blockquote>
+<h3>6.2 常见摘要算法（输出长度必背！）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th><strong>输出长度</strong></th>
+<th>安全现状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MD5</strong></td>
+<td><strong>128 位</strong></td>
+<td><strong>已被破解</strong>（可构造碰撞，王小云 2004 年攻破）；<strong>不能用于安全签名/数字证书</strong>，但仍广泛用于<strong>文件完整性校验、网盘去重</strong>（不抗攻击但够用）</td>
+</tr>
+<tr>
+<td><strong>SHA-1</strong></td>
+<td><strong>160 位</strong></td>
+<td><strong>已不安全</strong>（2017 年 SHAttered 实际碰撞），主流系统已弃用</td>
+</tr>
+<tr>
+<td><strong>SHA-256</strong></td>
+<td><strong>256 位</strong></td>
+<td><strong>安全，当前主流</strong>（SHA-2 家族，TLS/区块链广泛使用）</td>
+</tr>
+<tr>
+<td><strong>SHA-512</strong></td>
+<td><strong>512 位</strong></td>
+<td>安全（SHA-2 家族）</td>
+</tr>
+<tr>
+<td><strong>SM3</strong></td>
+<td><strong>256 位</strong></td>
+<td><strong>中国国家密码标准</strong>，配合 SM2/SM4 使用</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>必考数字记忆法</strong>：<strong>MD5 = 128，SHA-1 = 160，SHA-256 = 256</strong>。题目最爱问"MD5 的摘要长度是多少"，答案 <strong>128 位</strong>；"SHA-1 比 MD5 长多少"，160 − 128 = <strong>32 位</strong>。</p>
+</blockquote>
+<h3>6.3 报文摘要 vs 消息认证码 HMAC（高频辨析）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>报文摘要（如 MD5）</th>
+<th>HMAC（如 HMAC-SHA256）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有密钥吗</td>
+<td><strong>无密钥</strong></td>
+<td><strong>有密钥</strong></td>
+</tr>
+<tr>
+<td>防篡改</td>
+<td>能检测<strong>意外</strong>损坏</td>
+<td>能检测<strong>恶意</strong>篡改（攻击者无密钥，伪造不出正确值）</td>
+</tr>
+<tr>
+<td>防伪造</td>
+<td><strong>不能</strong>（谁都能算）</td>
+<td><strong>能</strong></td>
+</tr>
+<tr>
+<td>身份认证</td>
+<td>不能</td>
+<td><strong>能</strong>（证明消息来自持有该密钥的人）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>结论</strong>：单纯摘要<strong>只能防"改"，不能防"伪造"</strong>——任何人都能算 MD5。要证明"这消息确实是我发的且没被改过"，需要 <strong>HMAC（有密钥的摘要）</strong> 或 <strong>数字签名（用私钥签摘要）</strong>。</p>
+</blockquote>
+<hr />
+<h2>七、数字签名（原理 + 完整流程）</h2>
+<h3>7.1 原理</h3>
+<p>发送方用<strong>自己的私钥</strong>对报文（或其摘要）加密，得到"签名"；接收方用<strong>发送方的公钥</strong>验证。因为<strong>私钥只有发送方有</strong>，所以：</p>
+<ul>
+<li><strong>身份认证</strong>：能验过，说明确实是用那个私钥签的 → 证明身份。</li>
+<li><strong>抗否认</strong>：发送方事后不能说"这不是我签的"——只有他的私钥能签出来。</li>
+<li><strong>完整性</strong>：签名是对摘要做的，报文被改一个字，验证必然失败。</li>
+</ul>
+<h3>7.2 完整流程（签名 + 加密，混合方案，重点）</h3>
+<p>实际系统（如 HTTPS、PGP）中，签名与加密<strong>同时使用</strong>：</p>
+<pre><code>发送方 A                                          接收方 B
+──────────                                       ──────────
+1. 生成会话密钥 K（对称，随机）
+2. 密文 C = E_K(M)                  ← 对称加密，保机密
+3. 摘要 D = H(M)
+4. 签名 S = E_SKa(D)                ← A 用【A 的私钥】签摘要
+5. 信封 E = E_PKb(K)                ← 用【B 的公钥】加密会话密钥
+6. 发送  C + S + E  ─────────────────────────→  7. K = D_SKb(E)      ← B 用【B 的私钥】拆信封
+                                                  8. M = D_K(C)        ← 对称解密
+                                                  9. D' = H(M)         ← 重算摘要
+                                                 10. D = D_PKa(S)      ← 用【A 的公钥】验签名
+                                                 11. D' == D ? 验证通过 : 被篡改
+</code></pre>
+<blockquote>
+<p><strong>三把钥匙各管一件事</strong>，务必分清：
+- <strong>A 的私钥</strong> → 签名（证明"A 发的"）
+- <strong>B 的公钥</strong> → 加密会话密钥（保证"只有 B 能看"）
+- <strong>B 的私钥</strong> → 拆信封（B 才能读）
+- <strong>A 的公钥</strong> → 验签名（B 验证 A 的身份）</p>
+</blockquote>
+<h3>7.3 常考辨析</h3>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>用什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>机密性（别人看不懂）</td>
+<td>对称加密 + 数字信封（B 的公钥加密 K）</td>
+</tr>
+<tr>
+<td>完整性（没被改过）</td>
+<td>报文摘要 / HMAC</td>
+</tr>
+<tr>
+<td>身份认证（确认是 A）</td>
+<td>数字签名（A 的私钥）</td>
+</tr>
+<tr>
+<td>抗否认（A 不能赖账）</td>
+<td><strong>只有数字签名</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>八、PKI / CA 与数字证书</h2>
+<h3>8.1 为什么需要 CA（解决什么问题）</h3>
+<p>非对称加密的公钥是公开的，但<strong>你怎么知道"这个公钥真的是张三的"？</strong> 攻击者可以把自己的公钥冒充张三的公钥发给你（<strong>中间人攻击</strong>）。<strong>PKI 就是为了解决"公钥与身份的绑定可信"问题。</strong></p>
+<p><strong>PKI（Public Key Infrastructure，公钥基础设施）</strong> = 硬件 + 软件 + 人员 + 策略 + 规程的集合，功能是<strong>创建、管理、保存、发放和吊销数字证书</strong>。</p>
+<h3>8.2 PKI 的组成部分</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CA（证书颁发机构）</strong></td>
+<td><strong>核心</strong>。负责签发证书——用自己的私钥对"身份 + 公钥"签名</td>
+</tr>
+<tr>
+<td><strong>RA（注册机构）</strong></td>
+<td>受理证书申请、审核身份（不签发，只初审）</td>
+</tr>
+<tr>
+<td><strong>证书库/目录</strong></td>
+<td>存放已签发证书，供公开查询</td>
+</tr>
+<tr>
+<td><strong>CRL（证书吊销列表）</strong></td>
+<td>记录<strong>提前作废</strong>的证书（私钥泄露、换公司等）。现代系统用 <strong>OCSP</strong> 实时查询</td>
+</tr>
+<tr>
+<td><strong>密钥管理中心</strong></td>
+<td>生成/备份/恢复/销毁密钥</td>
+</tr>
+</tbody>
+</table>
+<h3>8.3 数字证书是什么</h3>
+<p><strong>数字证书 = CA 用自己私钥签名过的"（持有者身份 + 持有者公钥 + 有效期）"</strong>（X.509 标准格式）。</p>
+<pre><code>┌──────────────── X.509 证书（简化）──────────────────┐
+│ 版本号 / 序列号                                     │
+│ 持有者：CN=www.example.com（身份标识）              │
+│ 持有者公钥：&lt;RSA 2048 位公钥&gt;                       │
+│ 有效期：2026-01-01 ~ 2027-01-01                     │
+│ 签发者：CN=Let's Encrypt CA                         │
+│ CA 的签名：&lt;用 CA 私钥对以上内容的摘要加密&gt;          │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>验证链（信任的传递）</strong>：你<strong>预先信任</strong>根 CA（浏览器/操作系统内置根证书）→ 用根 CA 的公钥验证中间 CA 的证书 → 用中间 CA 的公钥验证终端证书。这就叫<strong>证书链</strong>。</p>
+<blockquote>
+<p><strong>核心结论</strong>：<strong>信任 CA，就信任 CA 签发的证书</strong>。你不需要认识张三，你只需要认识 CA——CA 用它的信誉担保"这个公钥是张三的"。</p>
+</blockquote>
+<h3>8.4 证书验证的 4 个步骤（HTTPS 实际在做）</h3>
+<ol>
+<li><strong>验证签名</strong>：用 CA 公钥验证证书上的签名（证书没被伪造）。</li>
+<li><strong>检查有效期</strong>：当前时间在"有效期起止"之内。</li>
+<li><strong>检查吊销状态</strong>：查 CRL / OCSP，证书是否已被作废。</li>
+<li><strong>域名匹配</strong>：证书里的持有者名称（CN/SAN）与访问的域名一致。</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：CA 签发证书用的是 <strong>CA 自己的私钥</strong>，不是用申请人的私钥；申请人验证证书用的是 <strong>CA 的公钥</strong>，不是申请人自己的公钥。</p>
+</blockquote>
+<hr />
+<h2>九、安全协议与层级归属（层级判断题专用）</h2>
+<table>
+<thead>
+<tr>
+<th>协议/技术</th>
+<th>工作层次</th>
+<th>用途与要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IPSec</strong></td>
+<td><strong>网络层（IP 层）</strong></td>
+<td>对所有 IP 报文加密/认证，与上层应用无关（VPN 主力）</td>
+</tr>
+<tr>
+<td><strong>SSL / TLS</strong></td>
+<td>传输层<strong>之上</strong>、应用层<strong>之下</strong>（OSI 中对应表示层/会话层位置）</td>
+<td>为应用层数据加密；<strong>HTTPS = HTTP over TLS</strong>，端口 <strong>443</strong></td>
+</tr>
+<tr>
+<td><strong>SSH</strong></td>
+<td><strong>应用层</strong></td>
+<td>安全远程登录（替代 Telnet），端口 <strong>22</strong></td>
+</tr>
+<tr>
+<td><strong>HTTPS</strong></td>
+<td>应用层（底层用 TLS）</td>
+<td>HTTP + TLS，端口 <strong>443</strong></td>
+</tr>
+<tr>
+<td><strong>PGP</strong></td>
+<td>应用层</td>
+<td>邮件加密（混合加密 + 数字签名，Web of Trust）</td>
+</tr>
+<tr>
+<td><strong>SET</strong></td>
+<td>应用层</td>
+<td>安全电子交易（信用卡支付，国内少用）</td>
+</tr>
+<tr>
+<td><strong>S/MIME</strong></td>
+<td>应用层</td>
+<td>安全邮件（配合 X.509 证书）</td>
+</tr>
+<tr>
+<td><strong>WPA2/WPA3、802.11i</strong></td>
+<td><strong>数据链路层</strong></td>
+<td>无线接入加密（PSK / 企业级 802.1X）</td>
+</tr>
+<tr>
+<td><strong>L2TP / PPTP</strong></td>
+<td><strong>数据链路层（二层隧道）</strong></td>
+<td>VPN 隧道，本身<strong>不加密</strong>，通常配 IPSec 使用</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>三个经典陷阱</strong>：
+1. <strong>IPSec 在网络层</strong>，<strong>TLS 在传输层之上</strong>——别混。
+2. <strong>SSH 是应用层</strong>（端口 22），虽然名字里带 "Shell"，但它是标准应用层协议。
+3. <strong>L2TP/PPTP 是二层隧道协议，本身不提供加密</strong>（L2TP 常与 IPSec 配对：L2TP/IPSec）。</p>
+</blockquote>
+<hr />
+<h2>十、HTTPS 与 TLS 握手全过程（重点）</h2>
+<p><strong>HTTPS = HTTP + TLS/SSL</strong>，默认端口 <strong>443</strong>（HTTP 是 80）。核心思想：<strong>握手阶段用非对称加密（安全地协商出对称密钥），之后的应用数据全部用对称加密（保证速度）</strong>。</p>
+<h3>10.1 TLS 握手时序图（TLS 1.2 简化版，必看）</h3>
+<pre><code>   客户端 Client                                        服务器 Server
+      │                                                      │
+      │ ① ClientHello：                                       │
+      │    支持的 TLS 版本 + 客户端随机数 + 密码套件列表  ───→ │
+      │                                                      │
+      │ ② ServerHello：                                       │
+      │  ←── 选定的 TLS 版本 + 服务器随机数 + 选定密码套件      │
+      │ ③ 服务器发送【数字证书】（含服务器公钥）+ 证书链 ───── │
+      │ ④ ServerHelloDone（我发完了）                          │
+      │                                                      │
+      │    ⑤ 客户端验证证书：                                 │
+      │       用 CA 公钥验签 + 有效期 + 吊销状态 + 域名匹配     │
+      │    ⑥ 客户端生成预主密钥 PreMasterSecret，             │
+      │       用【服务器公钥】加密后发送（ClientKeyExchange）   │
+      │  ────────────────────────────────────────────────→     │
+      │                                                      │
+      │  双方各自计算：主密钥 = f(客户端随机数, 服务器随机数,   │
+      │                        预主密钥)  → 派生会话密钥        │
+      │                                                      │
+      │ ⑦ 客户端发 Finished（用会话密钥加密，含握手摘要）─→    │
+      │ ⑧ 服务器发 Finished                          ←──       │
+      │                                                      │
+      │ ══════ 握手结束，之后应用层 HTTP 数据全用对称密钥加密 ═│
+</code></pre>
+<h3>10.2 必考结论</h3>
+<ol>
+<li><strong>握手用非对称，通信用对称</strong>——这是性能与安全的平衡，几乎必考。</li>
+<li><strong>两个随机数 + 预主密钥</strong>一起生成会话密钥；随机数的作用是<strong>防重放</strong>（每次握手都不同，同样的预主密钥每次也导出不同的会话密钥）。</li>
+<li>客户端验证服务器身份靠<strong>证书</strong>；服务器验证客户端身份（可选，如网银）靠<strong>要求客户端出示证书</strong>。</li>
+<li><strong>TLS 在传输层之上、应用层之下</strong>；按 OSI 功能划分，加密功能对应<strong>表示层</strong>（见 <code>day04-protocols.md</code> §2.6）。</li>
+<li><strong>对称密钥（会话密钥）每次连接重新协商</strong>，用完即弃。</li>
+</ol>
+<h3>10.3 SSL 与 TLS 的关系（常考名称辨析）</h3>
+<ul>
+<li><strong>SSL（Secure Socket Layer）</strong>：网景公司 1995 年提出，已<strong>完全废弃</strong>（SSL 3.0 2015 年被正式废弃，POODLE 攻击）。</li>
+<li><strong>TLS（Transport Layer Security）</strong>：SSL 3.0 的<strong>标准化继承者</strong>（TLS 1.0 ≈ SSL 3.1）。<strong>如今"SSL 证书""SSL/TLS"通常都指 TLS</strong>。</li>
+<li><strong>TLS 1.2</strong>：目前最广泛部署；<strong>TLS 1.3</strong>（2018 年）：握手压缩到 <strong>1-RTT</strong>（甚至 0-RTT）、<strong>废弃 RSA 密钥交换</strong>（强制使用支持完美前向安全 PFS 的 ECDHE）、移除 SHA-1/MD5 等弱算法。</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：考试若问"HTTPS 用什么协议保证安全"，答 <strong>TLS/SSL</strong>（现在统一说 TLS）；若问"SSL 是否仍在使用"，答<strong>已被 TLS 取代、不再安全</strong>。</p>
+</blockquote>
+<hr />
+<h2>十一、常见网络攻击与防御（配对记忆，高频）</h2>
+<blockquote>
+<p><strong>考法</strong>：几乎全是"给出攻击名称/场景 → 选防御措施"，或反向。<strong>把下表的攻防配对背熟，这 3–4 分就稳了。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>攻击</th>
+<th>原理（一句话）</th>
+<th>典型场景</th>
+<th>防御措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SQL 注入</strong></td>
+<td>把恶意 SQL 拼进用户输入，欺骗服务器执行</td>
+<td>登录框输 <code>' OR 1=1 --</code> 绕过认证</td>
+<td><strong>参数化查询/预编译语句</strong>（最根本）、输入过滤与转义、最小权限原则、错误信息屏蔽、WAF</td>
+</tr>
+<tr>
+<td><strong>XSS（跨站脚本）</strong></td>
+<td>向网页注入恶意脚本，在<strong>受害者浏览器</strong>里执行，盗取 Cookie/会话</td>
+<td>评论区插入 <code>&lt;script&gt;</code></td>
+<td><strong>输出转义</strong>（HTML 实体编码，最根本）、<strong>CSP</strong> 内容安全策略、<strong>HttpOnly Cookie</strong>（脚本读不到 Cookie）、输入校验</td>
+</tr>
+<tr>
+<td><strong>CSRF（跨站请求伪造）</strong></td>
+<td>趁受害者<strong>已登录</strong>，诱导其点击伪造链接，借其身份发请求</td>
+<td>钓鱼网站里"转账"按钮</td>
+<td><strong>Anti-CSRF Token</strong>、<strong>SameSite Cookie</strong>、验证 <strong>Referer/Origin</strong>、敏感操作二次验证</td>
+</tr>
+<tr>
+<td><strong>DDoS（分布式拒绝服务）</strong></td>
+<td>傀儡机（肉鸡/僵尸网络）发海量流量或请求，<strong>耗尽带宽或资源</strong></td>
+<td>流量清洗事件</td>
+<td>流量清洗/CDN 分流、限流与验证码、<strong>黑洞路由</strong>、Anycast 分散流量、弹性扩容</td>
+</tr>
+<tr>
+<td><strong>中间人攻击（MITM）</strong></td>
+<td>攻击者冒充双方，<strong>拦截并转发/篡改</strong>通信</td>
+<td>公共 WiFi 窃听、伪造 AP</td>
+<td><strong>TLS/HTTPS</strong>（配合证书验证）、证书锁定、VPN、不在公共 WiFi 用明文服务</td>
+</tr>
+<tr>
+<td><strong>重放攻击</strong></td>
+<td>截获合法报文，<strong>原样重发</strong>以骗取服务</td>
+<td>截获并重放登录报文/转账请求</td>
+<td><strong>时间戳</strong>、<strong>随机数/挑战-应答</strong>、<strong>一次性令牌（nonce）</strong>、序列号</td>
+</tr>
+<tr>
+<td><strong>网络钓鱼</strong></td>
+<td>伪造邮件/短信/网站，骗取账号密码等敏感信息</td>
+<td>假银行邮件</td>
+<td>安全意识教育、核对域名、<strong>MFA 多因素认证</strong>、浏览器/邮件网关拦截</td>
+</tr>
+<tr>
+<td><strong>暴力破解</strong></td>
+<td>穷举口令或密钥</td>
+<td>弱口令被扫</td>
+<td>强口令策略、<strong>登录失败锁定/限流</strong>、验证码、<strong>加盐慢哈希（bcrypt）</strong></td>
+</tr>
+<tr>
+<td><strong>字典攻击</strong></td>
+<td>用常见密码字典逐一尝试</td>
+<td>弱口令被扫</td>
+<td>同上；禁止使用常见密码</td>
+</tr>
+<tr>
+<td><strong>社会工程学</strong></td>
+<td>利用人的心理弱点（冒充客服/领导）骗取信息</td>
+<td>电话诈骗</td>
+<td>安全培训、制度流程、交叉核实</td>
+</tr>
+<tr>
+<td><strong>DNS 劫持/污染</strong></td>
+<td>篡改 DNS 解析结果，诱导到假站点</td>
+<td>假银行网站</td>
+<td><strong>DNSSEC</strong>、<strong>DoH/DoT</strong>（加密 DNS）、本地 hosts 校验</td>
+</tr>
+<tr>
+<td><strong>ARP 欺骗</strong></td>
+<td>伪造 ARP 应答，冒充网关</td>
+<td>局域网窃听</td>
+<td>静态 ARP 绑定、交换机动态 ARP 检测（DAI）、端口安全</td>
+</tr>
+<tr>
+<td><strong>APT（高级持续性威胁）</strong></td>
+<td>长期潜伏、定向渗透</td>
+<td>针对性攻击</td>
+<td>纵深防御、态势感知、零信任、终端检测响应（EDR）</td>
+</tr>
+</tbody>
+</table>
+<h3>11.1 XSS 与 CSRF 的区别（年年必考的辨析）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>XSS 跨站脚本</th>
+<th>CSRF 跨站请求伪造</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>攻击对象</strong></td>
+<td><strong>网站本身</strong>（注入脚本到页面）</td>
+<td><strong>用户</strong>（借用户身份发请求）</td>
+</tr>
+<tr>
+<td><strong>核心动作</strong></td>
+<td>在受害者浏览器里<strong>执行攻击者的脚本</strong></td>
+<td>借受害者的登录态<strong>发送攻击者构造的请求</strong></td>
+</tr>
+<tr>
+<td><strong>是否需要注入站点</strong></td>
+<td><strong>需要</strong>（站点有注入漏洞）</td>
+<td>不需要（站点本身可能没漏洞）</td>
+</tr>
+<tr>
+<td><strong>是否需要用户已登录</strong></td>
+<td>不一定</td>
+<td><strong>必须</strong>（否则没有可盗用的身份）</td>
+</tr>
+<tr>
+<td><strong>最根本防御</strong></td>
+<td><strong>输出转义</strong></td>
+<td><strong>Token / SameSite Cookie</strong></td>
+</tr>
+<tr>
+<td><strong>关系</strong></td>
+<td>XSS 常是 CSRF 的"跳板"——XSS 偷到 Token 后可绕过 CSRF 防护</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话区分</strong>：<strong>XSS 是"在你的浏览器里跑我的代码"，CSRF 是"用你的身份发我的请求"。</strong></p>
+</blockquote>
+<h3>11.2 拒绝服务（DoS）的常见手段（补充）</h3>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SYN Flood</strong></td>
+<td>疯狂发 SYN 但不完成第三次握手，把服务器<strong>半连接队列</strong>耗尽（TCP 半连接攻击）</td>
+</tr>
+<tr>
+<td><strong>Smurf</strong></td>
+<td>用伪造的<strong>源 IP（受害者）</strong>向广播地址发 ICMP，放大流量</td>
+</tr>
+<tr>
+<td><strong>Teardrop</strong></td>
+<td>发送<strong>分片重叠</strong>的畸形 IP 分组，导致目标系统崩溃（系统漏洞型）</td>
+</tr>
+<tr>
+<td><strong>Land</strong></td>
+<td>源地址与目的地址相同，导致系统循环处理</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>十二、防火墙（包过滤 / 应用级网关 / 状态检测）</h2>
+<h3>12.1 防火墙的三种主要技术（必背对比表）</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>工作层次</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>包过滤防火墙</strong></td>
+<td><strong>网络层 + 传输层</strong></td>
+<td>依据 <strong>IP 地址、端口号、协议号、传输方向</strong>逐条匹配规则，决定放行/丢弃</td>
+<td>速度快、对应用透明、处理开销小</td>
+<td><strong>不检查应用层数据</strong>，无法防御应用层攻击（SQL 注入/XSS）；无法识别伪造源 IP 的某些攻击；规则维护易出错</td>
+</tr>
+<tr>
+<td><strong>应用级网关（应用代理）</strong></td>
+<td><strong>应用层</strong></td>
+<td>内外网通信必须先连到代理，代理<strong>完全理解应用协议</strong>后中转</td>
+<td>安全性最高、可检查应用内容、可审计日志</td>
+<td><strong>速度慢</strong>；<strong>每种协议需单独的代理程序</strong>；对客户端可能不透明（需配置代理）</td>
+</tr>
+<tr>
+<td><strong>电路级网关</strong></td>
+<td><strong>会话层</strong></td>
+<td>只代理<strong>连接建立</strong>过程（如 SOCKS），不检查应用内容</td>
+<td>比应用代理快，比包过滤多一层保护</td>
+<td>不检查应用内容；需客户端支持</td>
+</tr>
+<tr>
+<td><strong>状态检测防火墙</strong></td>
+<td><strong>网络层 ~ 应用层</strong></td>
+<td>维护<strong>连接状态表</strong>：首包按安全规则严格检查并记录状态，<strong>后续包按状态表直接放行</strong></td>
+<td><strong>兼顾安全与性能</strong>（不用每个包都查规则）——<strong>当前主流</strong></td>
+<td>实现复杂、仍需配合应用层检查</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：
+1. <strong>包过滤防火墙看不到应用层数据</strong>——所以它<strong>挡不住 SQL 注入/XSS</strong>（这些是应用层攻击）。这是最常考的一条。
+2. <strong>状态检测的核心是"状态表"</strong>——它知道"这是一个已建立的 TCP 连接的第 N 个包"，而不是把每个包都当新连接处理。
+3. 应用级网关能<strong>理解应用协议</strong>，所以能审计和过滤内容，代价是慢。</p>
+</blockquote>
+<h3>12.2 防火墙的部署与局限</h3>
+<p><strong>部署方式</strong>：
+- <strong>DMZ（非军事区/隔离区）</strong>：放在"内网—DMZ—外网"三区域之间，DMZ 里放<strong>对外提供服务的服务器</strong>（Web、邮件、DNS）。外网只能进 DMZ，<strong>不能直接进内网</strong>。
+- <strong>默认拒绝（白名单）原则</strong>：除非规则明确允许，否则一律拒绝。这是防火墙的基本安全原则。</p>
+<p><strong>防火墙的 5 大局限</strong>（常考"防火墙不能做什么"）：
+1. <strong>防外不防内</strong>——对来自内网的攻击基本无能为力（据统计多数攻击来自内部）。
+2. <strong>不能防范绕过它的流量</strong>（拨号、私接 WiFi、U盘）。
+3. <strong>不能防止应用层攻击</strong>（包过滤型；需 WAF/应用层防火墙）。
+4. <strong>不能对加密流量做内容检查</strong>（除非由它终结 TLS，否则看不到内容）。
+5. <strong>单点故障</strong>——防火墙本身宕机则全网断连（需双机热备）。</p>
+<hr />
+<h2>十三、入侵检测 IDS 与入侵防御 IPS</h2>
+<h3>13.1 IDS（Intrusion Detection System，入侵检测系统）</h3>
+<p><strong>功能</strong>：实时监测网络/系统中的可疑行为，<strong>发现入侵并告警</strong>。</p>
+<p><strong>部署</strong>：<strong>旁路部署</strong>（镜像/分光方式接在网络关键节点），<strong>不在数据转发路径上</strong>。</p>
+<p><strong>两类检测技术（必考辨析）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>检测技术</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>误用检测（特征检测）</strong></td>
+<td>像"病毒库"——把<strong>已知攻击的特征模式</strong>建库，匹配即报警</td>
+<td><strong>准确率高</strong>（报了基本都是真攻击）、误报低</td>
+<td><strong>只能发现已知攻击</strong>，<strong>漏报新型攻击（0day）</strong>；需持续更新特征库</td>
+</tr>
+<tr>
+<td><strong>异常检测</strong></td>
+<td>先建立"正常行为基线"，<strong>偏离基线</strong>即报警</td>
+<td>能发现<strong>未知攻击</strong></td>
+<td><strong>误报率高</strong>（新业务、正常波动都可能报）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>蜜罐（Honeypot）</strong>：故意暴露的"诱饵"系统，引诱攻击者进入，<strong>捕获其行为特征</strong>，用于研究和预警。</p>
+<h3>13.2 IPS（Intrusion Prevention System，入侵防御系统）</h3>
+<p><strong>功能</strong>：不仅检测，还能<strong>直接阻断</strong>（丢弃恶意包、断开连接、阻断 IP）。</p>
+<p><strong>部署</strong>：<strong>串联部署</strong>（inline），<strong>位于数据转发路径上</strong>，因此<strong>要求低延迟、高可用</strong>（一旦故障会影响网络通畅）。</p>
+<h3>13.3 IDS vs IPS（必背对比）</h3>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>IDS 入侵检测</th>
+<th>IPS 入侵防御</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>部署方式</strong></td>
+<td><strong>旁路</strong>（镜像流量）</td>
+<td><strong>串联</strong>（在线）</td>
+</tr>
+<tr>
+<td><strong>响应方式</strong></td>
+<td>只<strong>告警/记录</strong>，不干预</td>
+<td><strong>主动阻断/丢弃</strong>恶意流量</td>
+</tr>
+<tr>
+<td><strong>处理时序</strong></td>
+<td>检测在传输<strong>之后</strong>（事后告警）</td>
+<td>在转发<strong>过程中</strong>实时阻断</td>
+</tr>
+<tr>
+<td><strong>对网络的影响</strong></td>
+<td>不影响正常转发</td>
+<td>在转发路径上，故障可能断网</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>审计、取证、安全运营监控</td>
+<td>边界防护、实时拦截</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话</strong>：<strong>IDS 是"摄像头"（只看不拦），IPS 是"保安"（发现就拦）</strong>。</p>
+</blockquote>
+<hr />
+<h2>十四、VPN 与 IPSec 基础</h2>
+<h3>14.1 VPN 是什么</h3>
+<p><strong>VPN（Virtual Private Network，虚拟专用网络）</strong>：在<strong>公共网络（Internet）之上</strong>建立专用的、加密的通信隧道，效果如同拉了一根专用专线，但<strong>成本远低于专线</strong>。</p>
+<p><strong>VPN 的四项关键技术</strong>：
+1. <strong>隧道技术</strong>：把一种协议的包封装进另一种协议的包里传输。
+2. <strong>加密技术</strong>：保证隧道内数据机密性。
+3. <strong>身份认证</strong>：确认接入者身份（用户名口令、证书、预共享密钥）。
+4. <strong>密钥管理</strong>：协商与分发密钥（如 IKE）。</p>
+<h3>14.2 IPSec（网络层安全协议，VPN 主力）</h3>
+<p><strong>IPSec 工作在网络层（IP 层）</strong>，对上层数据透明保护。两个核心协议：</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>协议号</th>
+<th>提供的安全服务</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AH（Authentication Header，认证头）</strong></td>
+<td><strong>51</strong></td>
+<td><strong>数据完整性 + 身份认证 + 防重放</strong></td>
+<td><strong>不加密！不提供机密性</strong>（数据仍是明文，只是不能改、不能伪造）</td>
+</tr>
+<tr>
+<td><strong>ESP（Encapsulating Security Payload，封装安全载荷）</strong></td>
+<td><strong>50</strong></td>
+<td><strong>加密（机密性）+ 完整性 + 认证 + 防重放</strong></td>
+<td>最常用；<strong>AH 能做的 ESP 都能做，ESP 还能加密</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>高频易错点</strong>：<strong>AH 不提供加密/机密性</strong>！"用 AH 保证数据保密性"是错的；要保密必须用 <strong>ESP</strong>。</p>
+</blockquote>
+<h3>14.3 IPSec 的两种工作模式（必考，会画图区分）</h3>
+<pre><code>【传输模式 Transport】只保护 IP 上层载荷（端到端，主机到主机）
+
+  ┌─────────┬───────────────────────┐
+  │ IP 头   │  AH/ESP + TCP/UDP 数据 │   ← 原 IP 头保留，AH/ESP 插在 IP 头和载荷之间
+  └─────────┴───────────────────────┘
+
+【隧道模式 Tunnel】加密整个原 IP 包，套上新的 IP 头（站点到站点，VPN 网关到网关）
+
+  ┌─────────────┬───────────────────────────────┐
+  │ 新 IP 头     │  AH/ESP + 【原 IP 头 + 载荷】  │  ← 整个原包被保护，源/目的地址被隐藏
+  └─────────────┴───────────────────────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>保护范围</th>
+<th>典型场景</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>传输模式</strong></td>
+<td><strong>仅保护 IP 载荷</strong>（IP 头不保护）</td>
+<td>主机到主机的端到端加密</td>
+<td>开销小；原 IP 头暴露（可被流量分析）</td>
+</tr>
+<tr>
+<td><strong>隧道模式</strong></td>
+<td><strong>保护整个原 IP 数据报</strong>（含原 IP 头）</td>
+<td><strong>VPN 网关到网关</strong>（分支机构互联）、主机到网关</td>
+<td><strong>隐藏内部源/目的地址</strong>，安全性更高；开销更大；<strong>IPSec VPN 最常用隧道模式</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>其他 IPSec 组件</strong>：
+- <strong>SA（Security Association，安全关联）</strong>：一个<strong>单向</strong>的逻辑连接（双向通信需两个 SA），由 <strong>SPI（安全参数索引）+ 目的 IP + 安全协议（AH/ESP）</strong> 唯一标识。
+- <strong>IKE（Internet Key Exchange）</strong>：自动协商 SA 和密钥的协议，基于 <strong>Diffie-Hellman</strong> 算法安全交换密钥。</p>
+<h3>14.4 常见 VPN 对比</h3>
+<table>
+<thead>
+<tr>
+<th>VPN 类型</th>
+<th>工作层次</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IPSec VPN</strong></td>
+<td><strong>网络层（三层）</strong></td>
+<td>保护所有 IP 流量；适合<strong>站点到站点</strong>互联；客户端需安装软件</td>
+</tr>
+<tr>
+<td><strong>SSL/TLS VPN</strong></td>
+<td><strong>应用层/传输层（七层）</strong></td>
+<td>用浏览器即可接入，<strong>无需安装客户端</strong>；可做<strong>细粒度</strong>（到应用/URL）权限控制；适合<strong>远程接入</strong></td>
+</tr>
+<tr>
+<td><strong>MPLS VPN</strong></td>
+<td>数据链路/网络层之间（标签交换）</td>
+<td>运营商提供，<strong>隔离而非加密</strong>（QoS 有保障）；常被称为"专线替代"</td>
+</tr>
+<tr>
+<td><strong>L2TP / PPTP</strong></td>
+<td><strong>数据链路层（二层隧道）</strong></td>
+<td>封装 PPP 帧；<strong>本身不加密</strong>，通常与 IPSec 配对使用（L2TP/IPSec）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>十五、无线局域网安全（WEP → WPA → WPA2 → WPA3，简表）</h2>
+<table>
+<thead>
+<tr>
+<th>标准</th>
+<th>加密算法</th>
+<th>现状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WEP</strong></td>
+<td>RC4（24 位 IV，缺陷致命）</td>
+<td><strong>已完全破解</strong>，几分钟即可破，绝不可用</td>
+</tr>
+<tr>
+<td><strong>WPA</strong></td>
+<td>RC4 + <strong>TKIP</strong>（加长 IV、动态密钥）</td>
+<td>WEP 的过渡补丁，已不推荐</td>
+</tr>
+<tr>
+<td><strong>WPA2</strong></td>
+<td><strong>AES + CCMP</strong>（802.11i 标准）</td>
+<td><strong>当前主流</strong>，企业版配合 802.1X + RADIUS 认证</td>
+</tr>
+<tr>
+<td><strong>WPA3</strong></td>
+<td>AES + <strong>SAE</strong>（替代 PSK 的对等认证）</td>
+<td>新一代，<strong>抗离线暴力破解</strong>、强制<strong>完美前向安全（PFS）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>关联：<strong>SM4 是我国 WAPI 无线安全标准</strong>使用的对称算法（见 §2.1）。</p>
+</blockquote>
+<hr />
+<h2>十六、【Step 2 交付物】网络阶段整张知识框架图（Day 4–6 冲刺一页纸）</h2>
+<blockquote>
+<p><strong>使用方法</strong>：这是<strong>网络阶段（Day 4–6）的收尾总览</strong>。冲刺阶段（Day 31–34）单独看这一节即可覆盖网络的全部骨架。每个节点后面的 <code>→ day0X-*.md §N</code> 是<strong>回查路径</strong>——哪一块想不起来就翻过去看细节。</p>
+</blockquote>
+<h3>16.1 总框架：一张图看懂计算机网络三天</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                        计算机网络（Day 4–6）                                │
+│                                                                             │
+│  ┌─────────────────────┐  ┌──────────────────────┐  ┌────────────────────┐  │
+│  │  Day 4 分层模型      │  │  Day 5 TCP + 子网划分 │  │  Day 6 网络安全     │  │
+│  │  （骨架/协议归属）    │  │  （机制 + 计算）       │  │  （概念 + 攻防配对） │  │
+│  └──────────┬──────────┘  └──────────┬───────────┘  └─────────┬──────────┘  │
+│             │                        │                        │             │
+│   OSI 七层 / TCP-IP 四层      TCP 连接管理 + 拥塞控制      加密体系（5 层楼） │
+│   封装/解封装                 IP 编址 + 子网划分 5 步法      数字签名/证书/PKI │
+│   协议归属总表 + 端口号表     CIDR / 超网 / VLSM            攻击与防御配对    │
+│                                                       防火墙 / IDS / IPS / VPN│
+└─────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3>16.2 板块一：分层模型与协议归属（Day 4）</h3>
+<p><strong>必背：OSI 七层 vs TCP/IP 四层对照</strong>（详见 <code>day04-protocols.md</code> §四）</p>
+<pre><code> OSI 七层                    TCP/IP 四层          代表协议 / 设备 / PDU
+───────────────────────────────────────────────────────────────────
+7 应用层          ┐         ┌─ 应用层        HTTP/HTTPS/FTP/SMTP/POP3
+6 表示层          ├─ 合并 ─→│                 IMAP/DNS/Telnet/SSH/SNMP/DHCP
+5 会话层          ┘         └────────────────  （加密/压缩/编码 = 表示层）
+───────────────────────────────────────────────────────────────────
+4 传输层          ─────────→   传输层          TCP/UDP（PDU: 报文段）
+───────────────────────────────────────────────────────────────────
+3 网络层          ─────────→   网际层          IP/ICMP/ARP/IGMP（PDU: 分组）
+                                                    设备：路由器
+───────────────────────────────────────────────────────────────────
+2 数据链路层      ┐         ┌─ 网络接口层      Ethernet/PPP/Wi-Fi（PDU: 帧）
+1 物理层          ┘ 合并 ─→│                     设备：交换机/网桥、集线器/中继器
+───────────────────────────────────────────────────────────────────
+</code></pre>
+<p><strong>Day 4 六条核心结论</strong>：
+1. <strong>口诀「物联网传会表应」</strong>（物/链/网/传/会/表/应，自下而上）。
+2. <strong>ARP 属网际层（网络层）</strong>——把 IP 解析为 MAC；虽不经 IP 封装，但软考按<strong>网际层</strong>作答。（day04 §2.3、§6.3）
+3. <strong>ICMP 属网络层</strong>；ping/traceroute 是<strong>应用层程序</strong>，"程序在哪层"≠"用哪个协议"。（day04 §2.3）
+4. <strong>端口号在 TCP/UDP 首部（传输层）</strong>，<strong>IP 首部没有端口号</strong>。（day04 §2.4）
+5. <strong>封装自上而下逐层加头</strong>：报文→报文段→IP 数据报→帧→比特；解封装相反。（day04 §五）
+6. <strong>加密/压缩/编码转换 = 表示层</strong>；HTTPS 里的 TLS 加密功能对应表示层。（day04 §2.6）</p>
+<p><strong>必背端口号</strong>（day04 §七）：FTP <strong>20/21</strong>、SSH <strong>22</strong>、Telnet <strong>23</strong>、SMTP <strong>25</strong>、DNS <strong>53</strong>、DHCP <strong>67/68</strong>（UDP）、TFTP <strong>69</strong>（UDP）、HTTP <strong>80</strong>、POP3 <strong>110</strong>、IMAP <strong>143</strong>、SNMP <strong>161</strong>（UDP）、HTTPS <strong>443</strong>、RDP <strong>3389</strong>。</p>
+<h3>16.3 板块二：TCP 连接管理与子网划分（Day 5）</h3>
+<p><strong>TCP 连接管理</strong>（详见 <code>day05-tcp.md</code> §二–§六）：</p>
+<pre><code>三次握手：  C ──SYN, seq=x──→ S          C: SYN-SENT
+           C ←─SYN+ACK, seq=y, ack=x+1── S  S: SYN-RCVD
+           C ──ACK, seq=x+1, ack=y+1→ S     C 先 ESTABLISHED
+
+四次挥手：  A ──FIN──→ B                     A: FIN-WAIT-1 → FIN-WAIT-2
+           B ──ACK──→ A                     B: CLOSE-WAIT（数据没发完，先别断）
+           B ──FIN──→ A                     B: LAST-ACK
+           A ──ACK──→ B，等 2MSL → CLOSED    A: TIME-WAIT（2MSL）
+</code></pre>
+<ul>
+<li><strong>为什么三次</strong>：防止"已失效的旧连接请求"迟到导致服务器白白分配资源。</li>
+<li><strong>TIME-WAIT 等 2MSL</strong>：① 保证最后的 ACK 到达；② 让本连接残留报文从网络消失。</li>
+<li><strong>TCP 首部固定 20B，UDP 固定 8B</strong>；UDP 无连接、不可靠、快，实时音视频优先选 UDP。</li>
+</ul>
+<p><strong>拥塞控制四算法</strong>（day05 §6）：</p>
+<pre><code>慢开始：cwnd 每 RTT 加倍（指数，1→2→4→8…，&quot;慢&quot;指起点小）
+拥塞避免：cwnd 达 ssthresh 后每 RTT +1（线性）
+快重传：连续 3 个重复 ACK → 立即重传，不等超时
+快恢复：ssthresh = cwnd/2，cwnd = ssthresh（不回 1！）
+超时（最严重）：ssthresh = cwnd/2，cwnd = 1（回 1！）
+</code></pre>
+<blockquote>
+<p>一句话区分：<strong>"3 个重复 ACK = 偶发丢包，温和减半；超时 = 严重拥塞，打回 1"。</strong></p>
+</blockquote>
+<p><strong>子网划分 5 步法</strong>（day05 §八，<strong>必考计算，目标 100%</strong>）：</p>
+<pre><code>① 看前缀 n → 掩码值与块大小（块大小 = 256 − 掩码值所在段）
+② 网络地址 = IP AND 掩码（所在段 = ⌊IP ÷ 块大小⌋ × 块大小）
+③ 广播地址 = 网络地址 + 块大小 − 1（主机位全 1）
+④ 可用主机数 = 2^h − 2（h = 32 − n；−2 是网络地址和广播地址）
+⑤ 子网数 = 2^b（b = 借用位数 = n − 原前缀）
+</code></pre>
+<p><strong>关键对照表</strong>（day05 §7.3）：<code>/30→2 主机</code>、<code>/29→6</code>、<code>/28→14</code>、<code>/27→30</code>、<code>/26→62</code>、<code>/25→126</code>、<code>/24→254</code>。
+<strong>CIDR/超网</strong>：合并 <strong>2^k 个连续网络，前缀减 k</strong>（4 个 /24 → /22）。<strong>VLSM</strong>：按各子网主机数<strong>分别定掩码</strong>，节约地址。<strong>跨网段时 ARP 求默认网关的 MAC</strong>（不是目的主机的）。</p>
+<h3>16.4 板块三：信息安全（Day 6）</h3>
+<p><strong>加密体系"五层楼"</strong>（本日 §2–§8，从下到上背）：</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│ ⑤ PKI / CA 证书        ← 解决&quot;这公钥真是那人的吗&quot;（信任链）   │
+├─────────────────────────────────────────────────────────────┤
+│ ④ 数字签名（A 私钥签摘要）  ← 身份认证 + 抗否认 + 完整性       │
+├─────────────────────────────────────────────────────────────┤
+│ ③ 报文摘要 MD5/SHA/HMAC ← 完整性（MD5=128 / SHA-1=160 /       │
+│                             SHA-256=256；HMAC 带密钥能防伪造）  │
+├─────────────────────────────────────────────────────────────┤
+│ ② 数字信封（B 公钥加密会话密钥 K）← 解决对称密钥的分发         │
+├─────────────────────────────────────────────────────────────┤
+│ ① 加密算法：对称 DES/3DES/AES（快、量大）                     │
+│              非对称 RSA/ECC（慢、管钥匙+签名）                 │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>安全协议层级</strong>（本日 §九）：<strong>IPSec = 网络层</strong>（AH 只认证不加密 / ESP 加密+认证；传输 vs 隧道模式）；<strong>TLS = 传输层之上</strong>（HTTPS = HTTP+TLS，443）；<strong>SSH = 应用层</strong>（22）；<strong>WPA2/WPA3 = 链路层</strong>。</p>
+<p><strong>HTTPS 握手一句话</strong>：<strong>握手用非对称（安全协商出对称会话密钥），通信用对称（保证速度）</strong>（本日 §十）。</p>
+<p><strong>攻防配对四条高频</strong>（本日 §十一）：
+- <strong>SQL 注入</strong> → <strong>参数化查询/预编译</strong>（+ 输入过滤、最小权限）
+- <strong>XSS</strong> → <strong>输出转义</strong>（+ CSP、HttpOnly Cookie）——"在你浏览器跑我的代码"
+- <strong>CSRF</strong> → <strong>Token / SameSite Cookie</strong>——"用你身份发我的请求"
+- <strong>重放攻击</strong> → <strong>时间戳 / 随机数挑战 / 一次性 Token</strong></p>
+<p><strong>防护设备三件套</strong>（本日 §12–§14）：
+- <strong>防火墙</strong>：包过滤（网络层，快但看不到应用层）/ 应用级网关（应用层，慢但安全）/ <strong>状态检测（状态表，当前主流）</strong>；局限：防外不防内、不挡应用层攻击。
+- <strong>IDS vs IPS</strong>：<strong>旁路部署只告警 = 摄像头</strong>；<strong>串联部署会阻断 = 保安</strong>；误用检测查已知（漏报新攻击）、异常检测查未知（误报高）。
+- <strong>VPN</strong>：公网上建加密隧道；<strong>IPSec VPN 三层、SSL VPN 七层（免装客户端）、MPLS 隔离不加密</strong>。</p>
+<h3>16.5 网络阶段 20 条必记结论（冲刺自测，遮住右侧回忆）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>结论</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>OSI 七层自下而上：物理/链路/网络/传输/会话/表示/应用</td>
+<td>day04 §二</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ARP 属<strong>网际层</strong>，把 <strong>IP 解析为 MAC</strong></td>
+<td>day04 §2.3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ICMP 属<strong>网络层</strong>；ping 是应用层程序但用 ICMP</td>
+<td>day04 §2.3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>端口号在 <strong>TCP/UDP 首部</strong>，IP 首部没有</td>
+<td>day04 §2.4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>加密/压缩/编码转换 = <strong>表示层</strong></td>
+<td>day04 §2.6</td>
+</tr>
+<tr>
+<td>6</td>
+<td>封装：报文→报文段→IP 数据报→帧→比特</td>
+<td>day04 §五</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DNS <strong>TCP+UDP 都用，端口都是 53</strong></td>
+<td>day04 §七</td>
+</tr>
+<tr>
+<td>8</td>
+<td>DHCP 应用层，UDP，<strong>服务器 67 / 客户端 68</strong></td>
+<td>day04 §6.1</td>
+</tr>
+<tr>
+<td>9</td>
+<td>三次握手 <strong>SYN→SYN+ACK→ACK</strong>，<strong>客户端</strong>先 ESTABLISHED</td>
+<td>day05 §2</td>
+</tr>
+<tr>
+<td>10</td>
+<td>TIME-WAIT 等 <strong>2MSL</strong>：保证最后 ACK 到达 + 清除残留报文</td>
+<td>day05 §3.2</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>超时 cwnd=1；3 个重复 ACK cwnd 减半</strong>（不回 1）</td>
+<td>day05 §6</td>
+</tr>
+<tr>
+<td>12</td>
+<td>可用主机数 = <strong>2^h − 2</strong>（/28 = 14，不是 16）</td>
+<td>day05 §八</td>
+</tr>
+<tr>
+<td>13</td>
+<td>路由聚合：合并 <strong>2^k 个网络，前缀减 k</strong></td>
+<td>day05 §9.2</td>
+</tr>
+<tr>
+<td>14</td>
+<td>跨网段时 ARP 求<strong>默认网关</strong>的 MAC</td>
+<td>day05 §9.4</td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>AES 分组固定 128 位</strong>，密钥 128/192/256，轮数 10/12/14</td>
+<td>day06 §2.1</td>
+</tr>
+<tr>
+<td>16</td>
+<td><strong>MD5 = 128 位，SHA-1 = 160 位，SHA-256 = 256 位</strong></td>
+<td>day06 §6.2</td>
+</tr>
+<tr>
+<td>17</td>
+<td>数字签名 = <strong>用发送方私钥加密摘要</strong>，<strong>不提供机密性</strong></td>
+<td>day06 §7</td>
+</tr>
+<tr>
+<td>18</td>
+<td>HTTPS <strong>握手用非对称、通信用对称</strong>，端口 <strong>443</strong></td>
+<td>day06 §十</td>
+</tr>
+<tr>
+<td>19</td>
+<td><strong>IPSec 在网络层；AH 只认证不加密，ESP 才加密</strong></td>
+<td>day06 §14</td>
+</tr>
+<tr>
+<td>20</td>
+<td><strong>IDS 旁路只告警（摄像头），IPS 串联会阻断（保安）</strong></td>
+<td>day06 §13</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>十七、快速自测（遮住答案速答）</h2>
+<ol>
+<li>信息安全 CIA 三要素是？答：<strong>机密性、完整性、可用性</strong>。</li>
+<li>只有谁能提供抗否认？答：<strong>数字签名</strong>（因为私钥只有发送方有）。</li>
+<li>DES 有效密钥长度？分组长度？答：<strong>56 位 / 64 位</strong>。</li>
+<li>3DES 的密钥长度？答：<strong>112 位或 168 位</strong>。</li>
+<li>AES 分组长度？密钥长度？答：<strong>分组固定 128 位；密钥 128/192/256 位</strong>。</li>
+<li>AES-128/192/256 分别几轮？答：<strong>10 / 12 / 14 轮</strong>。</li>
+<li>对称加密最大的缺点？答：<strong>密钥分发困难</strong>（n 人需 n(n−1)/2 个密钥）。</li>
+<li>n 个人用非对称加密需要几个密钥？答：<strong>2n 个</strong>（每人一对）。</li>
+<li>RSA 的数学基础？答：<strong>大整数因子分解困难</strong>。</li>
+<li>ECC 的优势？答：<strong>密钥短、同等安全</strong>（256 位 ECC ≈ 3072 位 RSA）。</li>
+<li>DSA 能用来加密吗？答：<strong>不能，只能签名</strong>。</li>
+<li>数字信封里，"信封"是用什么加密的？答：<strong>接收方的公钥</strong>（加密的是对称会话密钥 K）。</li>
+<li>MD5 / SHA-1 / SHA-256 的输出长度？答：<strong>128 / 160 / 256 位</strong>。</li>
+<li>报文摘要与加密的根本区别？答：<strong>摘要不可逆（单向）</strong>。</li>
+<li>HMAC 比普通摘要多了什么？答：<strong>带密钥，能防伪造、能认证</strong>。</li>
+<li>数字签名能保证机密性吗？答：<strong>不能</strong>，只能保证身份认证、抗否认、完整性。</li>
+<li>CA 签发证书用谁的私钥？验证证书用谁的公钥？答：<strong>CA 的私钥 / CA 的公钥</strong>。</li>
+<li>证书验证的 4 个步骤？答：<strong>验签名、查有效期、查吊销（CRL/OCSP）、域名匹配</strong>。</li>
+<li>HTTPS 握手阶段用什么加密？通信用什么加密？答：<strong>非对称 / 对称</strong>。</li>
+<li>HTTPS 默认端口？答：<strong>443</strong>。</li>
+<li>XSS 和 CSRF 最根本的防御分别是？答：<strong>输出转义 / Token（或 SameSite Cookie）</strong>。</li>
+<li>防重放攻击的三种手段？答：<strong>时间戳、随机数/挑战-应答、一次性令牌</strong>。</li>
+<li>包过滤防火墙工作在哪层？能挡 SQL 注入吗？答：<strong>网络层+传输层；挡不住</strong>（应用层攻击）。</li>
+<li>状态检测防火墙的核心数据结构？答：<strong>连接状态表</strong>。</li>
+<li>IDS 与 IPS 的部署方式与响应区别？答：<strong>IDS 旁路只告警；IPS 串联会阻断</strong>。</li>
+<li>IPSec 的 AH 能加密吗？答：<strong>不能</strong>，只做认证/完整性；加密用 <strong>ESP</strong>。</li>
+<li>IPSec 隧道模式保护什么？答：<strong>整个原 IP 数据报</strong>（含原 IP 头）。</li>
+<li>IPSec 工作在哪层？答：<strong>网络层</strong>。</li>
+</ol>
+<hr />
+<h2>十八、本节在考试中的位置与学习建议</h2>
+<p><strong>在科目一（75 道选择题、合格线 45）中的定位</strong>：
+- 信息安全约 <strong>5% 分值（3–4 题）</strong>，加上网络其他内容（Day 4–5），整个计算机网络板块是<strong>"背熟就稳、计算拿满"</strong>的性价比板块。
+- <strong>出题形式（几乎全是选择题）</strong>：
+  1. <strong>概念辨析</strong>：对称 vs 非对称、摘要 vs 加密、签名 vs 加密、IDS vs IPS、XSS vs CSRF。
+  2. <strong>数字记忆</strong>：DES 56 位、AES 分组 128 位、MD5/SHA-1/SHA-256 输出长度、端口号。
+  3. <strong>攻防配对</strong>：给攻击选防御（SQL 注入→参数化查询、XSS→输出转义、CSRF→Token、重放→随机数/时间戳）。
+  4. <strong>层级归属</strong>：IPSec 网络层、TLS 传输层之上、SSH 应用层。
+  5. <strong>HTTPS 握手</strong>：握手非对称 / 通信用对称。</p>
+<p><strong>学习建议（按时间排）</strong>：
+1. <strong>上午 1.5h</strong>：按 §1–§15 顺序学，<strong>重点把四张对比表背三遍</strong>（对称 vs 非对称、摘要算法长度、攻防配对、防火墙三类）。
+2. <strong>上午 1.5h</strong>：做 <code>day06-exercises.md</code> 前 15 道安全题，错题回到对应章节。
+3. <strong>下午 2.5h</strong>：做后 10 道<strong>网络综合题</strong>（Day 4–6 混合），之后用 §16 框架图把三天串起来，<strong>能默写 §16.5 的 20 条结论</strong>。
+4. <strong>晚上 1.5h</strong>：按 <code>docs/practice/reflection.md</code> 的 Day 6 指引<strong>重做 Day 4–5 高混淆度题</strong>（子网计算 + ARP/ICMP/端口 + TCP 状态），并在标记区登记仍错的知识点。</p>
+<p><strong>与后续阶段的衔接</strong>：信息安全的概念在 Day 14 综合测验和 Day 31–34 冲刺阶段会反复出现；本节 §16 的框架图是<strong>网络阶段唯一的"一页纸"复习材料</strong>，请确保能独立复述其结构。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/networks/day06-security.md">docs/knowledge-points/networks/day06-security.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

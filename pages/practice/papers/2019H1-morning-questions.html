@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2019 年上半年 软件设计师 上午试卷（真题卷 7） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 2019H1-morning-questions.md</div>
+<h1>2019 年上半年 软件设计师 上午试卷（真题卷 7）</h1>
+<blockquote>
+<p>全国计算机技术与软件专业技术资格（水平）考试
+<strong>2019 年上半年 软件设计师 上午试卷</strong>
+（考试时间 9:00～11:30　共 150 分钟）</p>
+<p>本试卷的试题中共有 75 个空格，需要全部解答，每个空格 1 分，满分 75 分。
+每个空格对应一个序号，有 A、B、C、D 四个选项，请选择一个最恰当的选项作为解答。</p>
+<p><strong>转录约定</strong>：本文逐字转录原卷文字，原卷印刷中的错别字、异体拼写与病句一律保留，并在其后标注 <strong>【存疑：原文如此，应为"…"】</strong>；仅对标点、空格与排版（如选项换行、上下标统一为 ²/ⁿ 等）作格式统一，不改动能改动原文用字的任何内容。题目附注中凡涉及图形的说明，一律只给出<strong>原图的结构性数据</strong>（边与权值、节点与分支条件、活动表等），<strong>不给出计算结果或推导结论</strong>——关键路径、哈希表内容、语法树等请自行计算推导，对答案时再核对 <code>2019H1-morning-key.md</code>。</p>
+</blockquote>
+<hr />
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（限时 150 分钟，目标 ≤ 120 分钟）</td>
+</tr>
+<tr>
+<td>涂卡 + 检查用时</td>
+<td>______ 分钟</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<p><strong>答题卡（在横线上填你的答案字母）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>21</th>
+<th>22</th>
+<th>23</th>
+<th>24</th>
+<th>25</th>
+<th>26</th>
+<th>27</th>
+<th>28</th>
+<th>29</th>
+<th>30</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>31</th>
+<th>32</th>
+<th>33</th>
+<th>34</th>
+<th>35</th>
+<th>36</th>
+<th>37</th>
+<th>38</th>
+<th>39</th>
+<th>40</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>41</th>
+<th>42</th>
+<th>43</th>
+<th>44</th>
+<th>45</th>
+<th>46</th>
+<th>47</th>
+<th>48</th>
+<th>49</th>
+<th>50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>51</th>
+<th>52</th>
+<th>53</th>
+<th>54</th>
+<th>55</th>
+<th>56</th>
+<th>57</th>
+<th>58</th>
+<th>59</th>
+<th>60</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>61</th>
+<th>62</th>
+<th>63</th>
+<th>64</th>
+<th>65</th>
+<th>66</th>
+<th>67</th>
+<th>68</th>
+<th>69</th>
+<th>70</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>71</th>
+<th>72</th>
+<th>73</th>
+<th>74</th>
+<th>75</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+<td>____</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>做完前<strong>不要</strong>翻看 <code>2019H1-morning-key.md</code>（答案与解析文件）。</p>
+</blockquote>
+<hr />
+<h2>关于图形题的说明（务必先读）</h2>
+<p>原试卷为 PDF，下列题目在原卷中以<strong>图形/图片</strong>形式出现，Markdown 无法直接呈现。本文已尽可能给出<strong>依据原图复原的结构性数据</strong>（活动表、目录树结构、代码排版等，一律标注 <strong>【存疑：图形复原】</strong>，与原卷图形可能在细节上存在差异）。<strong>附注只给结构性数据，计算与推导请自行完成。</strong>涉及图形的题目：</p>
+<ul>
+<li>第 18 题：项目活动持续时间与依赖关系表（原卷为表格图片）</li>
+<li>第 26 题：文件系统目录结构树</li>
+<li>第 42-43 题：UML 图（对象生命线与消息）</li>
+<li>第 49 题：NFA 状态转换图</li>
+<li>第 50 题：函数 f、g 的 C 代码（原卷为图片）</li>
+<li>第 57 题：n 阶三对角矩阵示意图</li>
+<li>第 59 题：双端队列示意图</li>
+<li>第 60 题：四个哈希表图形选项</li>
+<li>第 62-65 题：矩阵连乘递归式图片</li>
+</ul>
+<p><strong>建议</strong>：图形题若手边有原卷 PDF（本地 <code>practice_dd/软件设计师2017至2019年试题分析与解答.pdf</code> 含本卷"上午试题分析与解答"扫描页），对照原图做题；没有原图时按本文说明作答，并在对答案时重点核对。</p>
+<hr />
+<h2>一、选择题（第 1-75 题，每题 1 分，共 75 分）</h2>
+<p><strong>1.</strong> 计算机执行指令的过程中，需要由 （1） 产生每条指令的操作信号并将信号送往相应的部件进行处理，以完成指定的操作。</p>
+<p>（1）　A. CPU 的控制器　　B. CPU 的运算器</p>
+<p>C. DMA 控制器　　D. Cache 控制器</p>
+<hr />
+<p><strong>2.</strong> DMA 控制方式是在 （2） 之间直接建立数据通路进行数据的交换处理。</p>
+<p>（2）　A. CPU 与主存　　B. CPU 与外设</p>
+<p>C. 主存与外设　　D. 外设与外设</p>
+<hr />
+<p><strong>3.</strong> CPU 访问存储器时，被访问数据一般聚集在一个较小的连续存储区域中。若一个存储单元已被访问，则其邻近的存储单元有可能还要被访问，该特性被称为 （3） 。</p>
+<p>（3）　A. 数据局部性　　B. 指令局部性</p>
+<p>C. 空间局部性　　D. 时间局部性</p>
+<hr />
+<p><strong>4.</strong> 某系统由 3 个部件构成，每个部件的千小时可靠度都为 R，该系统的千小时可靠度为 (1-(1-R)²)R，则该系统的构成方式是 （4） 。</p>
+<p>（4）　A. 3 个部件串联</p>
+<p>B. 3 个部件并联</p>
+<p>C. 前两个部件并联后与第三个部件串联</p>
+<p>D. 第一个部件与后两个部件并联构成的子系统串联</p>
+<hr />
+<p><strong>5.</strong> 在 （5） 校验方法中，采用模 2 运算来构造校验位。</p>
+<p>（5）　A. 水平奇偶　　B. 垂直奇偶</p>
+<p>C. 海明码　　D. 循环冗余</p>
+<hr />
+<p><strong>6.</strong> 以下关于 RISC（精简指令系统计算机）技术的叙述中，错误的是 （6） 。</p>
+<p>（6）　A. 指令长度固定、指令种类尽量少</p>
+<p>B. 指令功能强大、寻址方式复杂多样</p>
+<p>C. 增加寄存器数目以减少访问次数</p>
+<p>D. 用硬布线电路实现指令解码，快速完成指令译码</p>
+<hr />
+<p><strong>7.</strong> （7） 防火墙是内部网和外部网的隔离点，它可对应用层的通信数据流进行监控和过滤。</p>
+<p>（7）　A. 包过滤　　B. 应用级网关</p>
+<p>C. 数据库　　D. Web</p>
+<hr />
+<p><strong>8.</strong> 下述协议中与安全电子邮箱服务无关的是 （8） 。</p>
+<p>（8）　A. SSL　　B. HTTPS</p>
+<p>C. MIME　　D. PGP</p>
+<hr />
+<p><strong>9-10.</strong> 用户 A 和 B 要进行安全通信，通信过程需确认双方身份和消息不可否认。A 和 B 通信时可使用 （9） 来对用户的身份进行认证；使用 （10） 确保消息不可否认。</p>
+<p>（9）　A. 数字证书　　B. 消息加密</p>
+<p>C. 用户私钥　　D. 数字签名</p>
+<p>（10）　A. 数字证书　　B. 消息加密</p>
+<p>C. 用户私钥　　D. 数字签名</p>
+<hr />
+<p><strong>11.</strong> 震网（Stuxnet）病毒是一种破坏工业基础设施的恶意代码，利用系统漏洞攻击工业控制系统，是一种危害性极大的 （11） 。</p>
+<p>（11）　A. 引导区病毒　　B. 宏病毒</p>
+<p>C. 木马病毒　　D. 蠕虫病毒</p>
+<hr />
+<p><strong>12.</strong> 刘某完全利用任职单位的实验材料、实验室和不对外公开的技术资料完成了一项发明。以下关于该发明的权利归属的叙述中，正确的是 （12） 。</p>
+<p>（12）　A. 无论刘某与单位有无特别约定，该项成果都属于单位</p>
+<p>B. 原则上应归单位所有，但若单位与刘某对成果的归属有特别约定时遵从约定</p>
+<p>C. 取决于该发明是否是单位分派给刘某的</p>
+<p>D. 无论刘某与单位有无特别约定，该项成果都属于刘某</p>
+<hr />
+<p><strong>13-14.</strong> 甲公司购买了一工具软件，并使用该工具软件开发了新的名为"恒友"的软件。甲公司在销售新软件的同时，向客户提供工具软件的复制品，则该行为 （13） 。甲公司未对"恒友"软件注册商标就开始推向市场，并获得用户的好评。三个月后，乙公司也推出名为"恒友"的类似软件，并对之进行了商标注册，则其行为 （14） 。</p>
+<p>（13）　A. 侵犯了著作权　　B. 不构成侵权行为</p>
+<p>C. 侵犯了专利权　　D. 属于不正当竞争</p>
+<p>（14）　A. 侵犯了著作权　　B. 不构成侵权行为</p>
+<p>C. 侵犯了商标权　　D. 属于不正当竞争</p>
+<hr />
+<p><strong>15.</strong> 数据流图建模应遵循 （15） 的原则。</p>
+<p>（15）　A. 自顶向下、从具体到抽象</p>
+<p>B. 自顶向下、从抽象到具体</p>
+<p>C. 自底向上、从具体到抽象</p>
+<p>D. 自底向上、从抽象到具体</p>
+<hr />
+<p><strong>16.</strong> 结构化设计方法中使用结构图来描述构成软件系统的模块以及这些模块之间的调用关系。结构图的基本成分不包括 （16） 。</p>
+<p>（16）　A. 模块　　B. 调用</p>
+<p>C. 数据　　D. 控制</p>
+<hr />
+<p><strong>17.</strong> 10 个成员组成的开发小组，若任意两人之间都有沟通路径，则一共有 （17） 条沟通路径。</p>
+<p>（17）　A. 100　　B. 90</p>
+<p>C. 50　　D. 45</p>
+<hr />
+<p><strong>18.</strong> 某项目的活动持续时间及其依赖关系如下表所示，则完成该项目的最少时间为 （18） 天。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷此处为表格图片，依据原图复原如下（"依赖关系"列为该活动的前置活动；A11 在原卷部分网络转写中误作 "All"，已按原图更正）：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>活动</th>
+<th>持续时间（天）</th>
+<th>依赖关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>8</td>
+<td>-</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>15</td>
+<td>-</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>15</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>10</td>
+<td>-</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>10</td>
+<td>A2，A4</td>
+</tr>
+<tr>
+<td>A6</td>
+<td>5</td>
+<td>A1，A2</td>
+</tr>
+<tr>
+<td>A7</td>
+<td>20</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>A8</td>
+<td>25</td>
+<td>A4</td>
+</tr>
+<tr>
+<td>A9</td>
+<td>15</td>
+<td>A3，A6</td>
+</tr>
+<tr>
+<td>A10</td>
+<td>15</td>
+<td>A5，A7</td>
+</tr>
+<tr>
+<td>A11</td>
+<td>7</td>
+<td>A9</td>
+</tr>
+<tr>
+<td>A12</td>
+<td>10</td>
+<td>A8，A10，A11</td>
+</tr>
+</tbody>
+</table>
+<p>（18）　A. 43　　B. 45</p>
+<p>C. 50　　D. 55</p>
+<hr />
+<p><strong>19.</strong> 以下不属于软件项目风险的是 （19） 。</p>
+<p>（19）　A. 团队成员可以进行良好沟通</p>
+<p>B. 团队成员离职</p>
+<p>C. 团队成员缺乏某方面培训</p>
+<p>D. 招不到符合项目技术要求的团队成员</p>
+<hr />
+<p><strong>20.</strong> 通用的高级程序设计语言一般都会提供描述数据、运算、控制和数据传输的语言成分，其中，控制包括顺序、 （20） 和循环结构。</p>
+<p>（20）　A. 选择　　B. 递归</p>
+<p>C. 递推　　D. 函数</p>
+<hr />
+<p><strong>21.</strong> 以编译方式翻译 C/C++ 源程序的过程中， （21） 阶段的主要任务是对各条语句的结构进行合法性分析。</p>
+<p>（21）　A. 词法分析　　B. 语义分析</p>
+<p>C. 语法分析　　D. 目标代码生成</p>
+<hr />
+<p><strong>22.</strong> 在对高级语言源程序进行编译或解释处理的过程中，需要不断收集、记录和使用源程序中一些相关符号的类型和特征等信息，并将其存入 （22） 中。</p>
+<p>（22）　A. 哈希表　　B. 符号表</p>
+<p>C. 堆栈　　D. 队列</p>
+<hr />
+<p><strong>23-24.</strong> 在单处理机系统中，采用先来先服务调度算法。系统中有 4 个进程 P1、P2、P3、P4（假设进程按此顺序到达），其中 P1 为运行状态，P2 为就绪状态，P3 和 P4 为等待状态，且 P3 等待打印机，P4 等待扫描仪。若 P1 （23） ，则 P1、P2、P3 和 P4 的状态应分别为 （24） 。</p>
+<p>（23）　A. 时间片到　　B. 释放了扫描仪</p>
+<p>C. 释放了打印机　　D. 已完成</p>
+<p>（24）　A. 等待、就绪、等待和等待</p>
+<p>B. 运行、就绪、运行和等待</p>
+<p>C. 就绪、运行、等待和等待</p>
+<p>D. 就绪、就绪、等待和运行</p>
+<hr />
+<p><strong>25.</strong> 某文件系统采用位示图（bitmap）记录磁盘的使用情况。若计算机系统的字长为 64 位，磁盘的容量为 1024GB，物理块的大小为 4MB，那么位示图的大小需要 （25） 个字。</p>
+<p>（25）　A. 1200　　B. 2400</p>
+<p>C. 4096　　D. 9600</p>
+<hr />
+<p><strong>26.</strong> 若某文件系统的目录结构如下图所示，假设用户要访问文件 book2.doc，且当前工作目录为 MyDrivers，则该文件的绝对路径和相对路径分别为 （26） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷目录树的结构为：根节点为 <code>MyDrivers</code>，其下有 <code>user1</code>、<code>user2</code> 等子目录（另有 Hotfix、update 等子目录）；<code>user1</code> 下有 <code>book1.doc</code> 等文件，<code>user2</code> 下有文件 <code>book2.doc</code>。被访问文件为 <code>user2</code> 下的 <code>book2.doc</code>，当前工作目录为 <code>MyDrivers</code>。</p>
+</blockquote>
+<p>（26）　A. MyDrivers\user2\ 和 \user2\</p>
+<p>B. \MyDrivers\user2\ 和 \user2\</p>
+<p>C. \MyDrivers\user2\ 和 user2\</p>
+<p>D. MyDrivers\user2\ 和 user2\</p>
+<hr />
+<p><strong>27.</strong> PV 操作是操作系统提供的具有特定功能的原语。利用 PV 操作可以 （27） 。</p>
+<p>（27）　A. 保证系统不发生死锁</p>
+<p>B. 实现资源的互斥使用</p>
+<p>C. 提高资源利用率</p>
+<p>D. 推迟进程使用共享资源的时间</p>
+<hr />
+<p><strong>28.</strong> 从减少成本和缩短研发周期考虑，要求嵌入式操作系统能运行在不同的微处理器平台上，能针对硬件变化进行结构与功能上的配置。该要求体现了嵌入式操作系统的 （28） 。</p>
+<p>（28）　A. 可定制性　　B. 实时性</p>
+<p>C. 可靠性　　D. 易移植性</p>
+<hr />
+<p><strong>29.</strong> 以下关于系统原型的叙述中，不正确的是 （29） 。</p>
+<p>（29）　A. 可以帮助导出系统需求并验证需求的有效性</p>
+<p>B. 可以用来探索特殊的软件解决方案</p>
+<p>C. 可以用来指导代码优化</p>
+<p>D. 可以用来支持用户界面设计</p>
+<hr />
+<p><strong>30.</strong> 以下关于极限编程（XP）的最佳实践的叙述中，不正确的是 （30） 。</p>
+<p>（30）　A. 只处理当前的需求，使设计保持简单</p>
+<p>B. 编写完程序之后编写测试代码</p>
+<p>C. 可以按日甚至按小时为客户提供可运行的版本</p>
+<p>D. 系统最终用户代表应该全程配合 XP 团队</p>
+<hr />
+<p><strong>31.</strong> 在 ISO/IEC 9126 软件质量模型中，软件质量特性 （31） 包含质量子特性安全性。</p>
+<p>（31）　A. 功能性　　B. 可靠性</p>
+<p>C. 效率　　D. 可维护性</p>
+<hr />
+<p><strong>32.</strong> 已知模块 A 给模块 B 传递数据结构 X，则这两个模块的耦合类型为 （32） 。</p>
+<p>（32）　A. 数据耦合　　B. 公共耦合</p>
+<p>C. 外部耦合　　D. 标记耦合</p>
+<hr />
+<p><strong>33.</strong> Theo Mandel 在其关于界面设计所提出的三条"黄金准则"中，不包括 （33） 。</p>
+<p>（33）　A. 用户操纵控制　　B. 界面美观整洁</p>
+<p>C. 减轻用户的记忆负担　　D. 保持界面一致</p>
+<hr />
+<p><strong>34.</strong> 以下关于测试的叙述中，正确的是 （34） 。</p>
+<p>（34）　A. 实际上，可以采用穷举测试来发现软件中的所有错误</p>
+<p>B. 错误很多的程序段在修改后错误一般会非常少</p>
+<p>C. 测试可以用来证明软件没有错误</p>
+<p>D. 白盒测试技术中，路径覆盖法往往能比语句覆盖法发现更多的错误</p>
+<hr />
+<p><strong>35.</strong> 招聘系统要求求职的人年龄在 20 岁到 60 岁之间（含），学历为本科、硕士或者博士，专业为计算机科学与技术、通信工程或者电子工程。其中 （35） 不是好的测试用例。</p>
+<p>（35）　A.（20, 本科, 电子工程）</p>
+<p>B.（18, 本科, 通信工程）</p>
+<p>C.（18, 大专, 电子工程）</p>
+<p>D.（25, 硕士, 生物学）</p>
+<hr />
+<p><strong>36.</strong> 系统交付用户使用了一段时间后发现，系统的某个功能响应非常慢。修改了某模块的一个算法使其运行速度得到了提升，则该行为属于 （36） 维护。</p>
+<p>（36）　A. 改正性　　B. 适应性</p>
+<p>C. 改善性　　D. 预防性</p>
+<hr />
+<p><strong>37.</strong> 一个类中可以拥有多个名称相同而参数表（参数类型或参数个数或参数类型顺序）不同的方法，称为 （37） 。</p>
+<p>（37）　A. 方法标记　　B. 方法调用</p>
+<p>C. 方法重载　　D. 方法覆盖</p>
+<hr />
+<p><strong>38.</strong> 采用面向对象方法进行软件开发时，将汽车作为一个系统。以下 （38） 之间不属于组成（Composition）关系。</p>
+<p>（38）　A. 汽车和座位　　B. 汽车和车窗</p>
+<p>C. 汽车和发动机　　D. 汽车和音乐系统</p>
+<hr />
+<p><strong>39.</strong> 进行面向对象设计时，就一个类而言，应该仅有一个引起它变化的原因，这属于 （39） 设计原则。</p>
+<p>（39）　A. 单一责任　　B. 开放-封闭</p>
+<p>C. 接口分离　　D. 里氏替换</p>
+<hr />
+<p><strong>40.</strong> 聚合对象是指一个对象 （40） 。</p>
+<p>（40）　A. 只有静态方法</p>
+<p>B. 只有基本类型的属性</p>
+<p>C. 包含其它对象</p>
+<p>D. 只包含基本类型的属性和实例方法</p>
+<hr />
+<p><strong>41.</strong> 在 UML 图中， （41） 图用于展示所交付系统中软件和硬件之间的物理关系。</p>
+<p>（41）　A. 类　　B. 组件</p>
+<p>C. 通信　　D. 部署</p>
+<hr />
+<p><strong>42-43.</strong> 下图所示 UML 图为 （42） ，用于展示系统中 （43） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷图形的结构为：图上方自左至右排列 4 个对象（生命线），依次为 <code>Student</code>、<code>TranscriptBuilder</code>、<code>Seminar</code>、<code>Printer</code>；各对象向下延伸虚线生命线，生命线之间有带箭头的实线消息自上而下依次为 <code>new(student)</code>、<code>getSeminars()</code>、<code>loop [for each seminar]</code>（其内含 <code>getMark()</code>、<code>calculateMark()</code>、<code>print</code>）、<code>printStudentPage</code>。图形中不含用例（椭圆）与活动（圆角矩形）符号。</p>
+</blockquote>
+<p>（42）　A. 用例图　　B. 活动图</p>
+<p>C. 序列图　　D. 交互图</p>
+<p>（43）　A. 一个用例和一个对象的行为</p>
+<p>B. 一个用例和多个对象的行为</p>
+<p>C. 多个用例和一个对象的行为</p>
+<p>D. 多个用例和多个对象的行为</p>
+<hr />
+<p><strong>44-46.</strong> 以下设计模式中， （44） 模式使多个对象都有机会处理请求，将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理为止，从而避免请求的发送者和接收者之间的耦合关系； （45） 模式提供一种方法顺序访问一个聚合对象中的各个元素，且不需要暴露该对象的内部表示。这两种模式均为 （46） 。</p>
+<p>（44）　A. 责任链（Chain of Responsibility）　　B. 解释器（Interpreter）</p>
+<p>C. 命令（Command）　　D. 迭代器（Iterator）</p>
+<p>（45）　A. 责任链（Chain of Responsibility）　　B. 解释器（Interpreter）</p>
+<p>C. 命令（Command）　　D. 迭代器（Iterator）</p>
+<p>（46）　A. 创建型对象模式　　B. 结构型对象模式</p>
+<p>C. 行为型对象模式　　D. 行为型类模式</p>
+<hr />
+<p><strong>47.</strong> 观察者（Observer）模式适用于 （47） 。</p>
+<p>（47）　A. 访问一个聚合对象的内容而无须暴露它的内部表示</p>
+<p>B. 减少多个对象或类之间的通信复杂性</p>
+<p>C. 将对象的状态恢复到先前的状态</p>
+<p>D. 一对多对象依赖关系，当一个对象修改后，依赖它的对象都自动得到通知</p>
+<hr />
+<p><strong>48.</strong> 在以阶段划分的编译器中， （48） 阶段的主要作用是分析构成程序的字符及由字符按照构造规则构成的符号是否符合程序语言的规定。</p>
+<p>（48）　A. 词法分析　　B. 语法分析</p>
+<p>C. 语义分析　　D. 代码生成</p>
+<hr />
+<p><strong>49.</strong> 下图所示为一个不确定有限自动机（NFA）的状态转换图，与该 NFA 等价的 DFA 是 （49） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为 NFA 状态转换图：状态集为 S0～S5（S0 为初态），输入符号为 0、1，状态间用标以 0/1 的有向边连接。四个选项 A、B、C、D 均为 DFA 状态转换图图形，见原卷 PDF。Markdown 版无法呈现各图形选项，请对照原图作答。</p>
+</blockquote>
+<p>（49）　A.（图形选项，见原卷）　　B.（图形选项，见原卷）</p>
+<p>C.（图形选项，见原卷）　　D.（图形选项，见原卷）</p>
+<hr />
+<p><strong>50.</strong> 函数 f、g 的定义如下，执行表达式"y=f(2)"的运算时，函数调用 g(la) 分别采用引用调用（call by reference）方式和值调用（call by value）方式，则该表达式求值结束后 y 的值分别为 （50） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷中该代码为图片，以下为依据原卷图形复原的代码（f、g 左右并排排版）：</p>
+</blockquote>
+<pre><code class="language-c">int f(int x)                int g(int x)
+{                           {
+    int la = x + 1;             x = x * x + 1;
+    g(la);                      return x;
+    return la * x;          }
+}
+</code></pre>
+<p>（50）　A. 9、6　　B. 20、6</p>
+<p>C. 20、9　　D. 30、9</p>
+<hr />
+<p><strong>51.</strong> 给定关系 R（A, B, C, D, E）和关系 S（A, C, E, F, G），对其进行自然连接运算 R ⋈ S 后其结果集的属性列为 （51） 。</p>
+<p>（51）　A. R.A, R.C, R.E, S.A, S.C, S.E</p>
+<p>B. R.A, R.B, R.C, R.D, R.E, S.F, S.G</p>
+<p>C. R.A, R.B, R.C, R.D, R.E, S.A, S.C, S.E</p>
+<p>D. R.A, R.B, R.C, R.D, R.E, S.A, S.C, S.E, S.F, S.G</p>
+<hr />
+<p><strong>52-53.</strong> 假设关系 R<U, F>，U={A1, A2, A3, A4}，</p>
+<pre><code>F={A1A3→A2, A1A2→A3, A2→A4}
+</code></pre>
+<p>那么在关系 R 中 （52） ，和候选关键字中必定含有属性 （53） 。</p>
+<p>（52）　A. 有 1 个候选关键字 A2A3</p>
+<p>B. 有 1 个候选关键字 A2A4</p>
+<p>C. 有 2 个候选关键字 A1A2 和 A1A3</p>
+<p>D. 有 2 个候选关键字 A1A2 和 A2A3</p>
+<p>（53）　A. A1，其中 A1A2A3 主属性，A4 为非主属性</p>
+<p>B. A2，其中 A2A3A4 主属性，A1 为非主属性</p>
+<p>C. A2A3，其中 A2A3 为主属性，A1A4 为非主属性</p>
+<p>D. A2A4，其中 A2A4 为主属性，A1A3 为非主属性</p>
+<hr />
+<p><strong>54.</strong> 要将部门表 Dept 中 name 列的修改权限赋予用户 Ming，并允许 Ming 将该权限授予他人。实现该要求的 SQL 语句如下：</p>
+<pre><code>GRANT UPDATE(name) ON TABLE Dept TO Ming （54） ；
+</code></pre>
+<p>（54）　A. FOR ALL　　B. CASCADE</p>
+<p>C. WITH GRANT OPTION　　D. WITH CHECK OPTION</p>
+<hr />
+<p><strong>55.</strong> 若事务 T1 对数据 D1 加了共享锁，事务 T2T3 分别对数据 D2 和数据 D3 加了排它锁，则事务 （55） 。</p>
+<p>（55）　A. T1 对数据 D2D3 加排它锁都成功，T2T3 对数据 D1 加共享锁成功</p>
+<p>B. T1 对数据 D2D3 加排它锁都失败，T2T3 对数据 D1 加排它锁成功</p>
+<p>C. T1 对数据 D2D3 加共享锁都成功，T2T3 对数据 D1 加共享锁成功</p>
+<p>D. T1 对数据 D2D3 加共享锁都失败，T2T3 对数据 D1 加共享锁成功</p>
+<hr />
+<p><strong>56.</strong> 当某一场地故障时，系统可以使用其他场地上的副本而不至于使整个系统瘫痪。这称为分布式数据库的 （56） 。</p>
+<p>（56）　A. 共享性　　B. 自治性</p>
+<p>C. 可用性　　D. 分布性</p>
+<hr />
+<p><strong>57.</strong> 某 n 阶的三对角矩阵 A 如下图所示，按行将元素存储在一维数组 M 中，设 a1,1 存储在 M[1]，那么 ai,j（1 ≤ i, j ≤ n 且 ai,j 位于三条对角线中）存储在 M （57） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为 n 阶三对角矩阵示意图：一个 n 行 n 列的方阵，仅主对角线、主对角线紧邻的上一条对角线与下一条对角线上可能为非零元素，其余位置均为零元素。</p>
+</blockquote>
+<p>（57）　A. i+2j　　B. 2i+j</p>
+<p>C. i+2j-2　　D. 2i+j-2</p>
+<hr />
+<p><strong>58.</strong> 具有 3 个结点的二叉树有 5 种，可推测出具有 4 个结点的二叉树有 （58） 种。</p>
+<p>（58）　A. 10　　B. 11</p>
+<p>C. 14　　D. 15</p>
+<hr />
+<p><strong>59.</strong> 双端队列是指在队列的两个端口都可以加入和删除元素，如下图所示。现在要求元素进队列和出队列必须在同一端口，即从 A 端进队的元素必须从 A 端出、从 B 端进队的元素必须从 B 端出，则对于 4 个元素的序列 a、b、c、d，若要求前 2 个元素（a、b）从 A 端口按次序全部进入队列，后两个元素（c、d）从 B 端口按次序全部进入队列，则不可能得到的出队序列是 （59） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷为双端队列示意图：一条水平队列，左端端口标记为 A，右端端口标记为 B，两端均可入队与出队。</p>
+</blockquote>
+<p>（59）　A. d、a、b、c　　B. d、c、b、a</p>
+<p>C. b、a、d、c　　D. b、d、c、a</p>
+<hr />
+<p><strong>60.</strong> 设散列函数为 H(key) = Key % 11，对于关键码序列（23, 40, 91, 17, 19, 10, 31, 65, 26），用线件探杳法【存疑：原文"线件探杳法"，应为"线性探测法"】解决冲突构造的哈希表为 （60） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷四个选项 A、B、C、D 均为 11 槽哈希表（地址 0～10）的图形，各槽填入的关键码不同，见原卷 PDF。Markdown 版无法呈现各图形选项，请对照原图作答。</p>
+</blockquote>
+<p>（60）　A.（图形选项，见原卷）　　B.（图形选项，见原卷）</p>
+<p>C.（图形选项，见原卷）　　D.（图形选项，见原卷）</p>
+<hr />
+<p><strong>61.</strong> 对于有序表（8, 15, 19, 23, 26, 31, 40, 65, 91【存疑：原文此处缺右括号，应为"91）"】，用二分法进行查找时，可能的关键字比较顺序为 （61） 。</p>
+<p>（61）　A. 26, 23, 19　　B. 26, 8, 19</p>
+<p>C. 26, 40, 65　　D. 26, 31, 40</p>
+<hr />
+<p><strong>62-65.</strong> 已知矩阵 Am∗n 和 Bn∗p 相乘的时间复杂度为 O(mnp)。矩阵相乘满足结合律，如三个矩阵 A、B、C 相乘的顺序可以是 (A∗B)∗C 也可以是 A∗(B∗C)。不同的相乘顺序所需进行的乘法次数可能有很大的差别。因此确定 n 个矩阵相乘的最优计算顺序是一个非常重要的问题。已知确定 n 个矩阵 A1A2⋯An 相乘的计算顺序具有最优子结构，即 A1A2⋯An 的最优计算顺序包含其子问题 A1A2⋯Ak 和 Ak+1Ak+2⋯An（1 ≤ k &lt; n）的最优计算顺序。可以列出其递归式为：</p>
+<blockquote>
+<p>【存疑：图形复原】原卷此处为递归式图片，依据原图文字层复原如下（m[i, i] = 0；Ai 的维度为 pi−1 ∗ pi）：</p>
+</blockquote>
+<pre><code>m[i, j] = min { m[i, k] + m[k+1, j] + pi−1 ∗ pk ∗ pj }    （i ≤ k &lt; j）
+</code></pre>
+<p>其中，Ai 的维度为 pi−1 ∗ pi，m[i, j] 表示 AiAi+1⋯Aj 最优计算顺序的相乘次数。</p>
+<p>先采用自底向上的方法求 n 个矩阵相乘的最优计算顺序。则求解该问题的算法设计策略为 （62） 。算法的时间复杂度为 （63） ，空间复杂度为 （64） 。给定一个实例，（p0p1……p5）=（20, 15, 4, 10, 20, 25），最优计算顺序为 （65） 。</p>
+<p>（62）　A. 分治法　　B. 动态规划法</p>
+<p>C. 贪心法　　D. 回溯法</p>
+<p>（63）　A. O(n²)　　B. O(n²lgn)</p>
+<p>C. O(n³)　　D. O(2ⁿ)</p>
+<p>（64）　A. O(n²)　　B. O(n²lgn)</p>
+<p>C. O(n³)　　D. O(2ⁿ)</p>
+<p>（65）　A. (((A1 × A2) × A3) × A4) × A5</p>
+<p>B. A1 × (A2 × (A3 × (A4 × A5)))</p>
+<p>C. ((A1 × A2) × A3) × (A4 × A5)</p>
+<p>D. (A1 × A2) × ((A3 × A4) × A5)</p>
+<hr />
+<p><strong>66.</strong> 浏览器开启了无痕浏览模式后， （66） 依然会被保存下来。</p>
+<p>（66）　A. 浏览历史　　B. 搜索历史</p>
+<p>C. 下载文件　　D. 临时文件</p>
+<hr />
+<p><strong>67.</strong> 下面是 HTTP 的一次请求过程，正确的顺序是 （67） 。</p>
+<p>① 浏览器向 DNS 服务器发出域名解析请求并获得结果</p>
+<p>② 在浏览器中输入 URL，并按下回车键</p>
+<p>③ 服务器将网页数据发送给浏览器</p>
+<p>④ 根据目的 IP 地址和端口号，与服务器建立 TCP 连接</p>
+<p>⑤ 浏览器向服务器发送数据请求</p>
+<p>⑥ 浏览器解析收到的数据并显示</p>
+<p>⑦ 通信完成，断开 TCP 连接</p>
+<p>（67）　A. ②①④⑤③⑦⑥　　B. ②①⑤④③⑦⑥</p>
+<p>C. ②①④⑤③⑥⑦　　D. ②①④③⑤⑦⑥</p>
+<hr />
+<p><strong>68.</strong> TCP 和 UDP 协议均提供了 （68） 能力。</p>
+<p>（68）　A. 连接管理　　B. 差错校验和重传</p>
+<p>C. 流量控制　　D. 端口寻址</p>
+<hr />
+<p><strong>69.</strong> 在 Windows 命令行窗口中使用 （69） 命令可以查看本机 DHCP 服务是否己启用【存疑：原文"己启用"，应为"已启用"】。</p>
+<p>（69）　A. ipconfig　　B. ipconfig/all</p>
+<p>C. ipconfig/renew　　D. ipconfig/release</p>
+<hr />
+<p><strong>70.</strong> 下列无线网络技术中，覆盖范围最小的是 （70） 。</p>
+<p>（70）　A. 802.15.1 蓝牙　　B. 802.11n 无线局域网</p>
+<p>C. 802.15.4 ZigBee　　D. 802.16m 无线城域网</p>
+<hr />
+<p><strong>71-75.</strong> 计算机专业英语（阅读以下英文段落，为 71-75 各空选择最恰当的选项）</p>
+<blockquote>
+<p>A project is a <em>temporary</em> （71） of unique, complex, and connected activities having one goal or purpose and that must be completed by a specific time, within budget, and according to （72） .</p>
+<p>Project management is the process of scoping, planning, staffing, organizing, directing, and controlling the development of a(n) （73） system at a minimum cost within a specified time frame.</p>
+<p>For any systems development project, effective project management is necessary to ensure that the project meets the （74） , is developed within an acceptable budget, and fulfills customer expectations and specifications. Project management is a process that starts at the beginning of a project, extends through a project, and doesn't culminate until the project is completed.</p>
+<p>The prerequisite for good project management is a well-defined system development process. Process management is an ongoing activity that documents, manages the use of, and improves an organization's chosen methodology (the "process") for system development. Process management is concerned with the activities, deliverables, and quality standards to be applied to （75） project(s).</p>
+</blockquote>
+<p>（71）　A. task　　B. work</p>
+<p>C. sequence　　D. activity</p>
+<p>（72）　A. specifications　　B. rules</p>
+<p>C. estimates　　D. designs</p>
+<p>（73）　A. perfect　　B. acceptable</p>
+<p>C. controlled　　D. completed</p>
+<p>（74）　A. deadline　　B. specification</p>
+<p>C. expectation　　D. requirement</p>
+<p>（75）　A. a single　　B. a particular</p>
+<p>C. some　　D. all</p>
+<hr />
+<h2>做完后</h2>
+<ol>
+<li>核对答案：打开同目录 <code>2019H1-morning-key.md</code>（含答案速查 + 逐题解析 + 知识点归属 + 分科统计 + 错题登记 + 与前卷对比）。</li>
+<li>填写答题卡得分，计算各科正确率，回填 <code>2019H1-morning-key.md</code> 的分科统计表与 <code>tracker.md</code> 对应 Day 行。</li>
+<li>错题按「错题四要素」登记到 <code>reflection.md</code> 对应小节与 <code>2019H1-morning-key.md</code> 的错题登记区。</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/2019H1-morning-questions.md">docs/practice/papers/2019H1-morning-questions.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

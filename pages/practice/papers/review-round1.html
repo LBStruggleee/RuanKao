@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>错题回归日 ①：真题卷 1 / 卷 2 错题重做清单 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 review-round1.md</div>
+<h1>错题回归日 ①：真题卷 1 / 卷 2 错题重做清单</h1>
+<blockquote>
+<p><strong>适用日</strong>：Day 17（10/7）。本清单是 <strong>Step 1</strong> 的执行文件：把 Day 15–16（真题卷 1 = 2020 下半年、真题卷 2 = 2021 上半年）<strong>最值得重做的题</strong>集中起来，<strong>闭卷重做一遍</strong>并记录正确率。</p>
+<p><strong>选题原则（为什么是这些题）</strong>：
+1. <strong>计算题优先</strong>：计算题错了 = <strong>解题过程坏了</strong>（不是记忆缺口），重做是唯一修复手段；
+2. <strong>【存疑：图形复原】题</strong>：原图缺失、靠文字复原做的题，最容易"看错图"或"代错数"，必须对照原卷 PDF 重做一遍；
+3. <strong>4 道分歧题</strong>（卷 2 第 3、60、63、71–75 题）：题库间答案不一，重做时<strong>自己推一遍</strong>再对 key 的推导，把结论钉死；
+4. <strong>解析里标注了"常见陷阱/否定式审题"的题</strong>：这类题换个壳子还会再考。</p>
+<p><strong>执行纪律</strong>：
+- <strong>闭卷</strong>，不翻 key、不翻笔记；计算题<strong>必须打草稿写过程</strong>，不允许口算。
+- 每题填 <code>重做结果（对/错）</code> 与 <code>用时</code>；<strong>仍错的题</strong>今晚必须回到 <code>reflection.md</code> Day 17 节按"错题四要素"登记。
+- 重做顺序建议按下表分组进行：先计算题（脑子最清醒时做），再分歧题，最后图形/概念题。</p>
+<p><strong>配套文件</strong>：题目见 <code>2020H2-morning-questions.md</code> / <code>2021H1-morning-questions.md</code>；答案与解析见对应 <code>-key.md</code>。</p>
+</blockquote>
+<hr />
+<h2>一、重做清单（22 题）</h2>
+<h3>1.1 计算题组（错了 = 过程坏了，优先重做）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（重做时要盯的点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>卷 1 · 4–5</strong></td>
+<td>CPI 与 MIPS</td>
+<td>连环题：第 5 题要用第 4 题算出的 CPI，<strong>不能自己另取一个</strong>；MIPS = 主频 ÷ CPI，注意 G/M 换算（1G = 10⁹）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>卷 1 · 24</strong></td>
+<td>页式地址转换</td>
+<td>页大小 4K = 2¹² → 低 12 位是偏移；<strong>页号查表得块号，块号拼接偏移</strong>（不是相加）；3C20H → 页号 3 → 块号 6 → 6C20H</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>卷 1 · 26</strong></td>
+<td>索引文件最大长度</td>
+<td>1KB 索引块 / 4B 地址项 = <strong>256 项</strong>；直接 5 + 一级 2×256 + 二级 256² = <strong>66053 KB</strong>。易错：把 256 算成 1024，或漏算直接项</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>卷 1 · 27</strong></td>
+<td>PV 信号量取值范围</td>
+<td>初值 = 可用资源数（= 最大值 5）；n 个进程申请时最多 (n−5) 个等待 → <strong>最小值 −(n−5)</strong>。易错：只想到正值、忘掉负数</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>卷 1 · 62–63</strong></td>
+<td>快排划分 + 时间复杂度</td>
+<td>以<strong>最后一个元素</strong>为基准，逐个比较交换，<strong>每一趟必须列出交换后的数组状态</strong>；63 题问的是"一趟划分"的时间 = <strong>O(n)</strong>，不是整个排序的 O(nlgn)</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>卷 2 · 17–18</strong></td>
+<td>关键路径与总时差</td>
+<td>关键路径 = <strong>最长</strong>路径，其长度 = 最短工期；总时差 = Vl(终点) − Ve(起点) − 活动时长。易错：把总时差 ≥ 16 的活动误判为关键活动（HJ 时差 = 0 才是关键活动）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>卷 2 · 24</strong></td>
+<td>位示图字数</td>
+<td>块数 = 2048GB ÷ 8MB = 2¹⁸；位示图 2¹⁸ bit ÷ 字长 2⁷ = <strong>2048 个字</strong>。易错：容量单位换算错（GB→MB 乘 1024）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>卷 2 · 25</strong></td>
+<td>改进型 Clock 页面置换</td>
+<td>被淘汰页<strong>必须在内存</strong>（0/2/4）；<strong>两轮扫描</strong>：第一轮找访问位=0，全为 1 则<strong>清零后</strong>第二轮找修改位=0 的页 → 淘汰页 0</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>卷 2 · 26–28</strong></td>
+<td>前驱图与 PV 操作</td>
+<td><strong>三空连环</strong>：每条前驱边对应一对 P/V，信号量初值均为 0；<strong>前驱数 = P 操作数，后继数 = V 操作数</strong>。易错：题号与空位错位、P/V 写反</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>卷 2 · 52–53</strong></td>
+<td>候选码与冗余依赖</td>
+<td>属性闭包<strong>逐个求</strong>：A⁺缺 C、E，C⁺缺 A、B、D、H → <strong>AC 是唯一候选码</strong>；冗余依赖 = 能被其余依赖推出的那条（A→H 可由 A→B、B→DH 推出）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>卷 2 · 57</strong></td>
+<td>栈与队列模拟</td>
+<td>边入栈边出队，<strong>每一步记下栈内元素</strong>；本题 S 中元素最多 4 个（栈底→栈顶 a,c,e,f）。易错：只数最大值不算状态</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>卷 2 · 62</strong></td>
+<td>建堆</td>
+<td>从第 ⌊n/2⌋ 个结点起<strong>向前</strong>调整，<strong>每次调整后要继续下滤</strong>（本题 2 与 8 交换后还要再调整 2 的子树）。易错：只调一次就停</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>卷 2 · 34</strong></td>
+<td>白盒路径覆盖</td>
+<td>先<strong>列出全部可执行路径</strong>（本题 3 条），一条路径一个用例 → 至少 3 个。易错：按语句数或判定数猜用例数</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<h3>1.2 分歧题组（4 处，自己推一遍再对 key）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（分歧点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td><strong>卷 2 · 3</strong></td>
+<td>DMA 传送周期</td>
+<td>DMA 每传送一个数据占用一个<strong>总线周期</strong>（信管网/软考达人/rkpass 一致）；部分题库给"存储周期"——DMA 的是"经总线的一次访存"</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>卷 2 · 60</strong></td>
+<td>哈希线性探查的同义词</td>
+<td>线性探查<strong>探查序列里不都是同义词</strong>（可能挤过来别的关键字的同义词）。<strong>反例</strong>：m=5 插 1,6,2,7 后查 7，途中比较的 6 %5=1 ≠ 7%5=2</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>16</td>
+<td><strong>卷 2 · 63</strong></td>
+<td>分治法时间复杂度</td>
+<td>最大子段和分治：T(n) = 2T(n/2) + O(n)，主定理 case 2 → <strong>O(nlgn)</strong>；部分题库的 O(n²) 是朴素枚举的复杂度，不是分治</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>17</td>
+<td><strong>卷 2 · 71–75</strong></td>
+<td>计算机英语（GoF《设计模式》引言）</td>
+<td>答案 <strong>C B D D A</strong>，与 GoF 原书逐句核对过（reusable / general / overwhelmed / solution / recurring）；部分题库把 overwhelmed 误判为其它项</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<h3>1.3 图形/概念陷阱组（【存疑：图形复原】+ 否定式审题）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（重做时要盯的点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18</td>
+<td><strong>卷 1 · 17–18</strong></td>
+<td>AOE 网关键路径（图形题）</td>
+<td>【存疑：图形复原】关键路径有 <strong>2 条</strong>（ABFJL、ADGIJL，均 22 天）。易错：只数出一条、或把"最长路径"理解成"边最多的路径"</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>19</td>
+<td><strong>卷 1 · 35–36</strong></td>
+<td>白盒语句覆盖 vs 路径覆盖（图形题）</td>
+<td>【存疑：图形复原】语句覆盖<strong>只需 1 个用例</strong>（用例①两判定皆真），路径覆盖<strong>必须 4 个用例全用</strong>（4 条路径各走一条）。易错：以为"覆盖越强用例越多"就往多了选</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>20</td>
+<td><strong>卷 1 · 48</strong></td>
+<td>传值与传引用</td>
+<td><strong>按引用</strong>绑定的形参才改原变量；本题 hoo 的 a 是引用、x 是值，且<strong>用的是减 1 之后的 x</strong>：6×4=24（不是 6×5=30）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>21</td>
+<td><strong>卷 1 · 41–43</strong></td>
+<td>UML 类图与对象图</td>
+<td>【存疑：图形复原】<strong>抽象类（类名斜体）不能有直接对象</strong>；对象图是<strong>某一时刻</strong>对象及关系的快照；对象图的多重性必须与类图一致</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>22</td>
+<td><strong>卷 2 · 41–43</strong></td>
+<td>UML 状态图（图形题）</td>
+<td>【存疑：图形复原】状态图对<strong>反应型对象</strong>建模；<strong><code>when(b=5)</code> 是变化事件不是时间事件</strong>；<strong>"状态由事件触发"是错的</strong>——事件触发的是<strong>转换（迁移）</strong>，不是状态本身</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>补做项（可选，时间够再加）</strong>：卷 1 第 7 题（认证 vs 加密 / 主动被动攻击）、卷 1 第 16 题（模块规模"越小越好"是错的）、卷 1 第 54–55 题（自然连接与三种外连接行数 2/4/4/6）、卷 1 第 65 题（渐进增长率 lgn &lt; n^(2/3) &lt; 1000n &lt; n⁴ &lt; 2ⁿ &lt; n!）、卷 2 第 36 题（改索引方法更快 = <strong>完善性</strong>维护）、卷 2 第 70 题（网络设计"最短故障时间"优先）。这些都是"换个数字/场景还会再考"的概念陷阱。</p>
+</blockquote>
+<hr />
+<h2>二、重做正确率统计表（做完后填写）</h2>
+<blockquote>
+<p><strong>算法</strong>：正确率 = 对题数 ÷ 实际重做题数（没做完的题<strong>不计入分母</strong>，但要写明原因）。
+<strong>判定规则</strong>：重做正确率 ≥ 80% ⇒ 该知识点"已修复"；60%–80% ⇒ 隔 3 天再重做一次；&lt; 60% ⇒ 回 Phase 1 笔记<strong>整章重看</strong>，不能只背答案。</p>
+</blockquote>
+<h3>2.1 分组统计</h3>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>题数</th>
+<th>重做对题数</th>
+<th>实际重做题数</th>
+<th>正确率</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 计算题组（题 1–13）</td>
+<td>13</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td>② 分歧题组（题 14–17）</td>
+<td>4</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td>③ 图形/概念陷阱组（题 18–22）</td>
+<td>5</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>22</strong></td>
+<td>____</td>
+<td>____</td>
+<td><strong>____%</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 按知识点回填（填进 knowledge-checklist.md 二轮重点清单的"我的正确率"列）</h3>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>知识点</th>
+<th>涉及题号</th>
+<th>重做正确率</th>
+<th>是否仍错（&gt;1 题错就打 ☑）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础</td>
+<td>CPI/MIPS 连环计算</td>
+<td>卷1·4–5</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>页式地址转换</td>
+<td>卷1·24</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>索引文件最大长度</td>
+<td>卷1·26</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>PV 信号量取值范围</td>
+<td>卷1·27、卷2·26–28</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>位示图 / 改进型 Clock</td>
+<td>卷2·24–25</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>关键路径与总时差</td>
+<td>卷1·17–18、卷2·17–18</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>白盒覆盖标准</td>
+<td>卷1·35–36、卷2·34</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>候选码与冗余依赖</td>
+<td>卷2·52–53</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>快排划分 / 建堆 / 排序性质</td>
+<td>卷1·62–63、卷2·57、卷2·62</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>哈希冲突处理</td>
+<td>卷2·60</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>分治时间复杂度</td>
+<td>卷2·63</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>UML 类图/对象图/状态图</td>
+<td>卷1·41–43、卷2·41–43</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>程序设计语言</td>
+<td>传值与传引用</td>
+<td>卷1·48</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>计算机基础</td>
+<td>DMA 传送周期</td>
+<td>卷2·3</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>英语</td>
+<td>GoF 设计模式引言</td>
+<td>卷2·71–75</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 汇总打卡（誊抄到 tracker.md Day 17 行）</h3>
+<pre><code class="language-text">错题重做正确率（Day 15–16 共 22 题）：______ / ______ = ______%
+其中：计算题组 ______% ｜ 分歧题组 ______% ｜ 图形/概念组 ______%
+仍错题数：______ 题  ｜  仍错知识点（打 ☑ 的项）：____________
+</code></pre>
+<hr />
+<h2>三、重做后的固定动作</h2>
+<ol>
+<li><strong>仍错的题</strong>：按"错题四要素"（题目 → 错因 → 正确思路 → 知识点）登记到 <code>docs/practice/reflection.md</code> 的 <strong>Day 17 节</strong>；计算题必须把<strong>每一步中间量</strong>写出来。</li>
+<li><strong>把 2.2 表的正确率回填</strong>到 <code>knowledge-checklist.md</code> 的「二轮重点清单 · 我的正确率」列；<strong>&lt; 60% 的项升级为 ⭐ 必刷</strong>。</li>
+<li><strong>把 2.3 的汇总填到</strong> <code>tracker.md</code> Day 17 行的「正确率」列（格式建议：<code>重做 __% + 25题 __%</code>）。</li>
+<li><strong>Phase 2 节奏检查</strong>：若重做正确率 &lt; 60%，说明 Day 15–16 的错题没有真正消化，Day 18 起每天先抽 30 分钟重做本清单里仍错的题，再做新卷。</li>
+<li><strong>分歧题归档</strong>：卷 2 的 4 处分歧（第 3、60、63、71–75 题）推导过程已在 key 文件中钉死，考前<strong>不再变动</strong>，当作结论记住即可。</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/review-round1.md">docs/practice/papers/review-round1.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

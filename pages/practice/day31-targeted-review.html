@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 31（10/21）查漏补缺（弹性日）工作单 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 day31-targeted-review.md</div>
+<h1>Day 31（10/21）查漏补缺（弹性日）工作单</h1>
+<blockquote>
+<p>📅 <strong>今天</strong>：2026-10-21（周三），距考试 <strong>3 天</strong>　｜　<strong>考试</strong>：2026-10-24（周六）
+🎯 <strong>考试时间</strong>：科目一 9:00–11:30（75 选择，合格 45）／科目二 14:00–16:30（5 道大题，合格 45）</p>
+<p><strong>弹性日三原则（贴在桌前）</strong>：
+1. <strong>不学新知识</strong>——今天不碰任何没见过的考点，只补已经暴露的漏洞；
+2. <strong>复习内容由 Day 30 全真模拟的失分决定</strong>——模拟考得差的点，今天定向突破（先做 §〇 决策树）；
+3. <strong>保持手感但不刷题</strong>——Step 3 只做 20 道选择保持节奏，不刷新卷子、不做新大题。</p>
+<p>🚫 <strong>今天不做的事</strong>：不做新真题卷、不重抄整套错题、不翻新笔记章节。卡住的地方先记下来，晚上统一回看。</p>
+<p><strong>今日全部产出在本文一个文件里</strong>：§〇 决策记录 → §一 定向复习 → §二 <strong>最终漏洞清单</strong>（今天最重要的产出，考前两天只看它）→ §三 20 题手感 → §四 打卡。</p>
+</blockquote>
+<hr />
+<h2>日程总览表</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>时长</th>
+<th>步骤</th>
+<th>目标（做到什么算过关）</th>
+<th>对应文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上午 8:30–11:30</td>
+<td><strong>3 h</strong></td>
+<td><strong>Step 1</strong> 定向复习</td>
+<td>按"考前必须再看的 5 个点"逐点补漏：每点过材料 + 默速记卡 + 做 2 道自测小题（先做后对）</td>
+<td><code>docs/practice/mock-exam/pre-exam-5-points.md</code> + 本文 §一</td>
+</tr>
+<tr>
+<td>下午 14:00–16:30</td>
+<td><strong>2.5 h</strong></td>
+<td><strong>Step 2</strong> 错题本最后一轮筛查</td>
+<td>只看"仍错"的题，产出「最终漏洞清单」——<strong>考前两天（Day 32/33）只看这张表</strong></td>
+<td><code>reflection.md</code> + <code>review-round1/2/3.md</code> + 8 套 key + <code>top10-errors.md</code></td>
+</tr>
+<tr>
+<td>晚上 19:00–20:30</td>
+<td><strong>1.5 h</strong></td>
+<td><strong>Step 3</strong> 保持手感</td>
+<td>本文 §三 的 20 道选择，<strong>30 分钟做完</strong>（平均 1.5 分钟/题），目标正确率 <strong>≥ 80%</strong></td>
+<td>本文 §三</td>
+</tr>
+<tr>
+<td>20:30–20:45</td>
+<td><strong>15 min</strong></td>
+<td>打卡</td>
+<td>填本文 §四 打卡区，调整明日 Day 32 计划</td>
+<td>本文 §四 + <code>day32-sprint.md</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⏰ <strong>节奏建议</strong>：每个时间块之间休息 10–15 分钟。弹性日不强求"学满 7 小时"——<strong>漏洞清零比时长重要</strong>：若 §二 的漏洞清单在下午 15:30 就填完且只剩 2–3 条，剩下的时间回看 <code>pre-exam-5-points.md</code> 的默认 5 点即可，不要自己加题。</p>
+</blockquote>
+<hr />
+<h2>〇、弹性日决策树（先做这一步，约 10 分钟）</h2>
+<blockquote>
+<p><strong>为什么先做这一步</strong>：弹性日的复习内容<strong>由 Day 30 全真模拟的失分决定</strong>。不看模拟得分就开复习 = 瞎忙。先花 10 分钟把下面三个空填了，今天的重心就定了。</p>
+</blockquote>
+<h3>决策流程</h3>
+<pre><code>                        Day 30 全真模拟自评结果
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+   下午大题 &lt; 36/60          两科都达标               上午选择 &lt; 45/75
+  （折算 &lt; 45/75）        （大题 ≥36 且选择 ≥45）        （含 Day 26 选择模拟）
+        │                        │                        │
+        ▼                        ▼                        ▼
+  Step 1 重心放            标准流程（Step 1          Step 1 重心放
+  【大题模板】            定向 5 点 + Step 2        【高频错题 TOP 10】
+                         筛查 + Step 3 手感题）          逐条过
+        │                        │                        │
+        └────────────────────────┴────────────────────────┘
+                                 │
+                                 ▼
+                    填下方「决策记录区」→ 开始 Step 1
+</code></pre>
+<h3>三条分支的具体执行差异</h3>
+<table>
+<thead>
+<tr>
+<th>分支</th>
+<th>Step 1（上午 3h）怎么用</th>
+<th>Step 2 / Step 3 是否变</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. 大题 &lt; 36/60</strong>（大题薄弱）</td>
+<td>上午<strong>先花 60 分钟</strong>回看 <code>docs/practice/subject2-notes.md</code> 的<strong>五张口诀表</strong>（§一 DFD 四步法 / §二 E-R 联系判定+转换规则 / §三 UML 类图填空三招+六关系 / §四 算法填空四步法+DP 三件套 / §五 设计模式大题三步法），<strong>重做 Day 30 模拟中得分 &lt; 8 分的那道大题</strong>（只重做错的小问，不重抄题）；剩下 120 分钟按本文 §一 的 5 点指引中<strong>大题相关的那几点</strong>（第 3/4/5 点）优先过。</td>
+<td>不变。Step 2 仍做漏洞筛查，Step 3 的 20 题里大题相关考点（E-R、DP、模式）本身就占 6 道，顺带练。</td>
+</tr>
+<tr>
+<td><strong>B. 选择 &lt; 45/75</strong>（选择薄弱）</td>
+<td>上午<strong>先花 90 分钟</strong>把 <code>docs/practice/top10-errors.md</code> 的 <strong>10 条逐条过</strong>：每条盖住"正确套路"自己复述，复述不出或卡壳的，回到对应 <code>-key.md</code> 的真题例题里<strong>重算推导</strong>；剩下 90 分钟按本文 §一 的 5 点指引中<strong>计算型的那几点</strong>（第 1/2 点）优先过。</td>
+<td>不变。Step 2 的第 4 步（TOP10 逐条自评）是今天<strong>必做且最重要</strong>的一步。</td>
+</tr>
+<tr>
+<td><strong>C. 两科都达标</strong>（标准流程）</td>
+<td>直接按本文 §一 的<strong>默认 5 点</strong>（或你的自填版）逐点复习，每点约 35 分钟。</td>
+<td>不变。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>如果两科都没达标</strong>：以<strong>大题 &lt; 36</strong> 为主（大题 15 分/题、提分空间大），选择部分在 Step 2 的 TOP10 自评里补。</p>
+</blockquote>
+<h3>决策记录区（留空，人类填写）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我的模拟得分（Day 30）</td>
+<td>上午选择 <strong><em>_</em>_ / 75　｜　下午大题 </strong><strong><em>_ / 60（折算 </em></strong>___ / 75）</td>
+</tr>
+<tr>
+<td>落在哪条分支</td>
+<td>□ A 大题薄弱（大题模板）　□ B 选择薄弱（TOP10）　□ C 两科达标（标准流程）</td>
+</tr>
+<tr>
+<td>若两科都差，以哪边为主</td>
+<td>□ 大题优先　□ 选择优先　理由：<strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>今日实际重心（晚上回填）</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</td>
+</tr>
+<tr>
+<td>决策填写时间</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>一、Step 1：按"考前必须再看的 5 个点"定向复习（上午 3h）</h2>
+<h3>0. 先读清单，决定用"自填版"还是"默认版"</h3>
+<blockquote>
+<p><strong>必做动作</strong>：打开 <code>docs/practice/mock-exam/pre-exam-5-points.md</code>，翻到开头「📝 打卡区」的这行：
+<strong>「本清单 5 点是否替换为个性化版本 | ☐ 是（替换了第 ____ 点）　☐ 否（用默认版）」</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>今天上午怎么用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>勾了「否」或没填</strong> → 用<strong>默认版 5 点</strong></td>
+<td>直接按下面 §一·1～5 的逐点指引做（每点约 35 分钟）。这是<strong>多数人的情况</strong>——默认 5 点已按"丢分概率 × 分值"排好序。</td>
+</tr>
+<tr>
+<td><strong>勾了「是」</strong> → 用<strong>自填版</strong></td>
+<td>用下面「自填版通用指引模板」为你的每个自填点搭一个三栏（回看材料 / 速记卡 / 自测小题），按 <code>pre-exam-5-points.md</code> 的「个性化替换区」里你写的"考前怎么看"逐点执行；<strong>被保留未替换的点</strong>仍用本文对应小节的指引。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>自填版通用指引模板（每个自填点复制一份，填满再做）</strong></p>
+<pre><code>### 第 ___ 点（自填）：____________（知识点名）
+
+- **回看材料**（照 pre-exam-5-points.md 该点「考前怎么看」里你写的文件+章节/题号）：
+  1. ____________________（文件 + 章节/题号）
+  2. ____________________
+- **3 分钟速记卡**（该点的公式/口诀/判定步骤，浓缩成 3–5 行，合上文件能默写）：
+  - ____________________
+- **自测小题 2 道**（自己出或从错题里选 2 道，先做后对；不要和本文 §三 的 20 题重复）：
+  - 小题 1：________________________________________
+  - 小题 2：________________________________________
+- **答案**：____________________
+</code></pre>
+<p><strong>时间分配（标准流程 / 情况 C）</strong></p>
+<table>
+<thead>
+<tr>
+<th>点</th>
+<th>内容</th>
+<th>建议时长</th>
+<th>性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 点</td>
+<td>关键路径与总时差（松弛时间）</td>
+<td>35 min</td>
+<td>🔢 计算硬通货（必须在草稿纸上重算，不能只看公式）</td>
+</tr>
+<tr>
+<td>第 2 点</td>
+<td>页式 / 段页式地址转换</td>
+<td>35 min</td>
+<td>🔢 计算硬通货</td>
+</tr>
+<tr>
+<td>第 3 点</td>
+<td>E-R 联系判定与关系模式转换</td>
+<td>40 min</td>
+<td>✏️ 大题（试题二）+ 选择双考</td>
+</tr>
+<tr>
+<td>第 4 点</td>
+<td>动态规划状态转移</td>
+<td>35 min</td>
+<td>✏️ 大题（试题四）+ 选择双考</td>
+</tr>
+<tr>
+<td>第 5 点</td>
+<td>设计模式角色结构与场景关键词</td>
+<td>35 min</td>
+<td>✏️ 大题（试题五/六 + 试题三问题 3）+ 选择双考</td>
+</tr>
+<tr>
+<td>小计</td>
+<td></td>
+<td><strong>3 h</strong></td>
+<td>休息时间见缝插针，每点结束站起走 2 分钟</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>统一纪律</strong>：每点都是「<strong>过材料 → 遮住速记卡默写一遍 → 做自测小题 → 对答案</strong>」四步，<strong>自测小题必须先做后对</strong>。做错的，在 §二 的最终漏洞清单里记一条。</p>
+</blockquote>
+<hr />
+<h3>第 1 点：关键路径与总时差（松弛时间）计算</h3>
+<p><strong>回看材料</strong>（按顺序，前两条是核心）：</p>
+<ol>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 1</strong>（判定步骤 5 步 + 变式 A/B），<strong>盖住"正确套路"自己复述一遍</strong>；</li>
+<li><strong>重算</strong> <code>docs/practice/papers/2019H2-morning-key.md</code> <strong>Q17-18</strong>——关键路径 <strong>ABFJL</strong> 与 <strong>ADGIJL</strong>（总工期 22 天，2 条），活动 BE 总时差 = LS − ES = 6 − 4 = <strong>2 天</strong>（⚠️ 该题边权值为 OCR 复原，做题前对照解析书原图核对权值）；</li>
+<li><strong>再算</strong> <code>docs/practice/papers/2021H1-morning-key.md</code> <strong>Q17-18</strong>——关键路径 A-D-F-H-J（48 天），各活动总时差 <strong>AC=8 / BE=21 / FI=14 / HJ=0</strong>；</li>
+<li>错题对照：<code>docs/practice/papers/review-round3.md</code> <strong>题 12</strong>（卷 7 = 2019H1 第 18 题，表格型关键路径，官方解析书 55 天）、<code>docs/practice/papers/review-round2.md</code>（卷 3 = 2021H2 第 18–19 题）；</li>
+<li>笔记章节：<code>docs/knowledge-points/software-engineering/day13-test.md</code> 项目管理（关键路径 / PERT / 风险）。</li>
+</ol>
+<p><strong>3 分钟速记卡</strong>（合上文件默写）</p>
+<pre><code>关键路径 = 源点到汇点的【最长路径】，其长度 = 【最短工期】（不是边最多的路径！）
+正向求 Ve：从左向右，取【大】 max{ Ve(i) + d(i,j) }，源点 Ve = 0
+逆向求 Vl：从右向左，取【小】 min{ Vl(j) − d(i,j) }，汇点 Vl = Ve(汇点)
+活动总时差（松弛）= LS − ES = Vl(终点) − Ve(起点) − 活动时长
+总时差 = 0 的活动 = 【关键活动】；&quot;延期 x 天是否影响工期&quot;⇔ 比较 x 与总时差
+一个 AOE 网可有多条【等长】关键路径——找全再选答案
+口诀：最早取大、最晚取小；总时差 = LS − ES；时差为 0 是关键活动
+</code></pre>
+<p><strong>自测小题 2 道（先做，答案在本点末尾折叠区）</strong></p>
+<p><strong>自测 1-1</strong>：某工程 AOE 网如下（顶点为事件，边上数字为活动天数）：</p>
+<pre><code>        ┌──a=3──▶ V2 ──c=4──▶ V4 ──g=7──▶ V6
+       │          │            │
+V1 ────┤          └──e=5──▶ V5 ──h=4──▶ V6
+       │                       ▲
+       └──b=2──▶ V3 ──d=6──▶ V4
+</code></pre>
+<p>（边集：V1→V2=3、V1→V3=2、V2→V4=4、V3→V4=6、V2→V5=5、V4→V5=2、V4→V6=7、V5→V6=4）</p>
+<p>问：① 关键路径是哪条？总工期多少天？② 活动 V2→V5（e）的总时差是多少天？③ 哪些活动只要延期 1 天就会影响总工期？</p>
+<p><strong>自测 1-2</strong>：某项目活动表如下（只给出前驱关系与工期）：</p>
+<table>
+<thead>
+<tr>
+<th>活动</th>
+<th>紧前活动</th>
+<th>工期（天）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>—</td>
+<td>5</td>
+</tr>
+<tr>
+<td>B</td>
+<td>—</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C</td>
+<td>A</td>
+<td>4</td>
+</tr>
+<tr>
+<td>D</td>
+<td>A</td>
+<td>6</td>
+</tr>
+<tr>
+<td>E</td>
+<td>B</td>
+<td>7</td>
+</tr>
+<tr>
+<td>F</td>
+<td>C</td>
+<td>3</td>
+</tr>
+<tr>
+<td>G</td>
+<td>D、E</td>
+<td>5</td>
+</tr>
+<tr>
+<td>H</td>
+<td>F、G</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>问：① 关键路径是哪条？总工期多少天？② 活动 E 的总时差是多少天？③ 若活动 E 延期 2 天，总工期是否变化？变成多少？</p>
+<details>
+<summary>【答案】自测 1-1 与 1-2（做完再展开）</summary>
+
+**自测 1-1 答案**：
+- ① 正向求 Ve：Ve(V1)=0；Ve(V2)=3；Ve(V3)=2；Ve(V4)=max(3+4, 2+6)=8；Ve(V5)=max(3+5, 8+2)=10；Ve(V6)=max(8+7, 10+4)=max(15,14)=15。
+  **关键路径 = V1→V3→V4→V6（2+6+7=15），总工期 15 天**（其余路径：V1→V2→V4→V6=14、V1→V3→V4→V5→V6=14、V1→V2→V5→V6=12，均短于 15，故本题只有 1 条关键路径）。
+- ② 逆向求 Vl：Vl(V6)=15；Vl(V5)=15−4=11；Vl(V4)=min(15−7, 11−2)=8。
+  活动 e（V2→V5）总时差 = Vl(V5) − Ve(V2) − 5 = 11 − 3 − 5 = **3 天**。
+- ③ **关键活动 = 总时差为 0 的活动**：V1→V3（0）、V3→V4（0）、V4→V6（0）。这三条边上任意一条延期 1 天，总工期立即变 16 天。
+  （对照：V1→V2 时差 1、V2→V4 时差 1、V4→V5 时差 1、V5→V6 时差 1、V2→V5 时差 3，均能吸收 1 天延迟。）
+
+**自测 1-2 答案**：
+- ① ES/EF：A(0,5)、B(0,3)、C(5,9)、D(5,11)、E(3,10)、F(9,12)、G(11,16)、H(16,20)。
+  **关键路径 = A→D→G→H（5+6+5+4=20），总工期 20 天**（A→C→F→H=16、B→E→G→H=19，均短）。
+- ② 逆向求 LS：H(16,20)、G(11,16)、F(13,16)、E(4,11)、D(5,11)、C(9,12)、B(1,4)、A(0,5)。
+  **活动 E 总时差 = LS − ES = 4 − 3 = 1 天**。
+- ③ E 延期 2 天 > 时差 1 天 ⇒ **总工期变化**：E 的 EF 变成 3+2+7=12，G 的 ES 变成 max(11, 12)=12，H 的 ES 变成 17，**总工期 20 → 21 天（增加 1 天 = 延期量 − 时差）**。
+  （判定套路：x ≤ 总时差 ⇒ 工期不变；x > 总时差 ⇒ 工期增加 x − 总时差。）
+
+</details>
+
+<hr />
+<h3>第 2 点：页式 / 段页式地址转换</h3>
+<p><strong>回看材料</strong>：</p>
+<ol>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 2</strong>（页式 + 位示图公式 + 变式 A/B），<strong>盖住"正确套路"自己复述一遍</strong>；</li>
+<li><strong>重算</strong> <code>docs/practice/papers/2020H2-morning-key.md</code> <strong>Q24</strong>——页面 4K，逻辑地址 3C20H → 页内偏移 C20H、页号 3 → 查表得块号 6 → 物理地址 <strong>6C20H</strong>（<strong>拼接不是相加</strong>）；</li>
+<li>段页式结构：<code>docs/practice/papers/2022H2-morning-key.md</code> <strong>Q27</strong>（段页式地址结构：段号 10 位 / 页号 10 位 / 偏移 12 位）与 <code>docs/practice/papers/2022H1-morning-key.md</code> <strong>Q36</strong>（段页式位数换算，"最大允许"≠"大小均为"）；</li>
+<li>笔记章节：<code>docs/knowledge-points/os/day02-memory.md</code> §3.3（页式地址转换：乘页大小 / 二进制切位）、§4.2（段式加段基址、段页式先段表后页表）；</li>
+<li>默写固定套路（见下方速记卡）。</li>
+</ol>
+<p><strong>3 分钟速记卡</strong>（合上文件默写）</p>
+<pre><code>页大小 = 2^k ⇒ 逻辑地址【低 k 位 = 页内偏移】，高位 = 页号
+页号是【查表的键】，查表得到的【块号】才是结果
+物理地址 = 块号 × 2^k + 偏移（即二进制【拼接】，不是相加！）
+固定套路口诀：除以页大小得页号、取余得偏移；物理地址 = 块号 × 页大小 + 偏移
+段页式 = 段号 + 页号 + 页内偏移：先查【段表】得页表始址，再查【页表】得块号
+段式 ≠ 页式：页式乘页大小（块号拼接偏移）、段式加段基址（段基址 + 偏移）
+常用换算：4K = 2¹²、8K = 2¹³、16K = 2¹⁴、1K = 2¹⁰
+</code></pre>
+<p><strong>自测小题 2 道（先做，答案在本点末尾折叠区）</strong></p>
+<p><strong>自测 2-1</strong>：某系统采用页式存储管理，页面大小为 <strong>8KB</strong>。逻辑地址为 <strong>5F3AH</strong>，查页表知页号对应的物理块号为 <strong>9</strong>。求：① 页号与页内偏移各是多少（偏移用十六进制写）？② 物理地址是多少？</p>
+<p><strong>自测 2-2</strong>：某计算机采用<strong>段页式</strong>存储管理，逻辑地址共 <strong>32 位</strong>，其中<strong>段号 8 位、页号 12 位</strong>，其余为页内偏移。求：① 页内偏移占几位？页大小是多少？② 该系统最多允许多少个段？每个段最多允许有多少页？</p>
+<details>
+<summary>【答案】自测 2-1 与 2-2（做完再展开）</summary>
+
+**自测 2-1 答案**：
+- ① 8KB = 2¹³，故低 13 位为页内偏移。
+  5F3AH = 24378；24378 ÷ 8192 = 2 余 7998 ⇒ **页号 = 2**；余数 7998 = **1F3AH**（验算：2 × 2000H = 4000H，5F3AH − 4000H = **1F3AH**）⇒ **页内偏移 = 1F3AH**。
+  （二进制切位验算：5F3AH = 0101 1111 0011 1010B，低 13 位 = 1 1111 0011 1010B = 1F3AH，高 3 位 = 010B = 2 ✓）
+- ② 物理地址 = 块号 × 页大小 + 偏移 = 9 × 8192 + 7998 = 73728 + 7998 = **81722 = 13F3AH**。
+  （验算：9 × 2000H = 12000H，12000H + 1F3AH = **13F3AH** ✓。块号 9 拼到高位，偏移照抄——这就是"拼接不是相加"。）
+
+**自测 2-2 答案**：
+- ① 页内偏移位数 = 32 − 8 − 12 = **12 位** ⇒ 页大小 = 2¹² = 4096 B = **4 KB**。
+- ② 段号 8 位 ⇒ 最多 **2⁸ = 256** 个段；页号 12 位 ⇒ 每个段最多允许 **2¹² = 4096** 页（是**上限**，不是"每个段都正好 4096 页"——段内页数随段大小变化）。
+
+</details>
+
+<hr />
+<h3>第 3 点：E-R 联系类型判定与关系模式转换（下午试题二）</h3>
+<p><strong>回看材料</strong>：</p>
+<ol>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 5</strong>（候选码判定 4 步 + Armstrong 公理 + 变式 A/B），与本点的联系类型判定同属"数据库基础硬通货"，<strong>选择题下午题双考</strong>；</li>
+<li>精读 <code>docs/practice/subject2/database-notes.md</code> <strong>二·第 2 步</strong>（联系类型判定口诀 + 量词句读法）+ <strong>第 4 步</strong>（E-R → 关系模式转换规则）+「主键 / 外键判定规则」；</li>
+<li><strong>重做</strong>本模拟 <code>docs/practice/mock-exam/subject2-questions.md</code> <strong>试题二</strong>（2022 下营销公司：1:1 店长 + 两个 1:n + 新增实体，三杀考点），对答案见同目录 <code>subject2-key.md</code>（⚠️ 该题答案页源缺失、为推导答案并标【存疑：推导答案】，(d) 已修正为"车牌号 + 员工号"）；</li>
+<li>错题对照（选择题）：<code>docs/practice/papers/2019H2-morning-key.md</code> <strong>Q52-53</strong>（候选码与主属性）、<code>docs/practice/papers/2021H1-morning-key.md</code> <strong>Q52-53</strong>（唯一候选码 AC + 冗余依赖）、<code>docs/practice/papers/2023H1-morning-key.md</code> <strong>Q52-54</strong>（Armstrong 公理 + 候选码与主属性）；</li>
+<li>笔记章节：<code>docs/knowledge-points/databases/day08-er.md</code> §2.2（候选码 4 步法：L/N/R/LR 分类 + 闭包）、§5.2（E-R 转关系模式规则表）。</li>
+</ol>
+<p><strong>3 分钟速记卡</strong>（合上文件默写）</p>
+<pre><code>联系类型判定口诀（读需求里的量词句）：
+  两端都唯一（每个 X 只有一个 Y、每个 Y 只有一个 X）⇒ 1:1
+  一端唯一（每个 X 只有一个 Y，但一个 Y 可对应多个 X）⇒ 1:n
+  两端都不唯一（一个 X 可对应多个 Y，一个 Y 也可对应多个 X）⇒ m:n
+  ⚠️ &quot;至少一位&quot;&quot;可服务多位&quot;= 上界不限 = n，别看成 1:1
+E-R → 关系模式转换规则：
+  1:1 ⇒ 任一端的关系加【对方的主键】作外键
+  1:n ⇒ 【n 端】的关系加【1 端的主键】作外键（外键加错端是最常见丢分）
+  m:n ⇒ 【新建】一个关系，主键 = 两端主键的【组合】
+主键 = 唯一确定一个元组的【最小】属性组；外键 = 引用其它关系主键的属性
+候选码 4 步：① 只在左出现⇒必含；只在右出现⇒必排除；两侧都有⇒待定
+            ② 对待定属性求闭包 X⁺；③ X⁺ = U ⇒ X 是候选码；④ 候选码的属性都是主属性
+Armstrong：伪传递 = X→Y 且 WY→Z ⇒ XW→Z（不是传递律！）
+关系模式填空：把需求属性清单与关系模式【逐项对照】，找全所有空缺（常常漏填外键）
+</code></pre>
+<p><strong>自测小题 2 道（先做，答案在本点末尾折叠区）</strong></p>
+<p><strong>自测 3-1</strong>：某商场管理系统中：
+- ① 每家专卖店只有一名店长，每名店长只负责一家专卖店；
+- ② 一名销售员可服务多位顾客，一位顾客也可接受多名销售员的服务；
+- ③ 每位顾客有一个唯一的会员档案，记录其消费积分。
+问：① 专卖店与店长、② 销售员与顾客 的联系类型分别是什么？② 转换成关系模式时，外键应加在哪一端 / 还是新建关系？</p>
+<p><strong>自测 3-2</strong>：关系模式 R(A, B, C, D)，函数依赖集 F = {A→B, B→C, C→D}。求：① R 的候选码；② 主属性是哪些；③ A→C 能否由 F 推出？用哪条公理？</p>
+<details>
+<summary>【答案】自测 3-1 与 3-2（做完再展开）</summary>
+
+**自测 3-1 答案**：
+- ① 专卖店 ↔ 店长：两端都唯一（每家一名、每名一家）⇒ **1:1**。
+- ② 销售员 ↔ 顾客：两端都不唯一（一名服务多位、一位接受多名）⇒ **m:n**。
+- ③ 转换规则：
+  - 1:1（专卖店—店长）：**任一端**加对方主键作外键（如"店长"关系加"专卖店号"，或"专卖店"关系加"店长号"——选在查询多的一端即可）；
+  - m:n（销售员—顾客）：**必须新建**一个关系（如"服务记录"），主键 = 销售员号 + 顾客号（两端主键的**组合**）。
+  （③ 的"唯一会员档案"是实体属性，不是联系类型判定条件，别被带偏。）
+
+**自测 3-2 答案**：
+- ① 属性分类：A 只出现在 F 的左部 ⇒ 必在候选码中；D 只出现在右部 ⇒ 必不在；B、C 两侧都有 ⇒ 待定。
+  A⁺ = {A} → {A,B} → {A,B,C} → {A,B,C,D} = U ⇒ **A 是唯一候选码**。
+  （验算：B⁺ = {B,C,D} ≠ U、C⁺ = {C,D} ≠ U，均不是候选码。）
+- ② **主属性 = {A}**（候选码的属性才是主属性；B、C、D 都是非主属性）。
+- ③ **能**。由 A→B、B→C，用**传递律**得 A→C；再由 A→C、C→D，再用传递律得 A→D。
+  （⚠️ 若题干是"X→Y 且 WY→Z ⇒ XW→Z"，那是**伪传递律**，不是传递律——两者年年有人混。）
+
+</details>
+
+<hr />
+<h3>第 4 点：动态规划状态转移（下午试题四）</h3>
+<p><strong>回看材料</strong>：</p>
+<ol>
+<li>精读 <code>docs/practice/subject2/patterns-algo-notes.md</code> <strong>二·2.2</strong>（DP 题专属：状态转移三件套）+ <strong>2.3</strong>（常考算法骨架·动态规划）+ <strong>2.4</strong>（得分技巧）；</li>
+<li><strong>重做</strong>本模拟 <code>docs/practice/mock-exam/subject2-questions.md</code> <strong>试题四</strong>（2021 上凸多边形最优三角剖分），把题干递推式与 C 代码三重循环<strong>逐项对齐</strong>；对答案见同目录 <code>subject2-key.md</code>（含空(1) 的 OCR 存疑说明与判读）；</li>
+<li>选择题 DP 连环错：<code>docs/practice/papers/2019H1-morning-key.md</code> <strong>Q62-65</strong>（矩阵连乘 DP 四空连环）；</li>
+<li>默写口诀（见下方速记卡）；<strong>内层/外层循环的枚举对象必须能脱口而出</strong>。</li>
+</ol>
+<p><strong>3 分钟速记卡</strong>（合上文件默写）</p>
+<pre><code>判定：最优子结构 + 重叠子问题 ⇒ 动态规划（不是分治、不是贪心）
+区间 DP 三重循环固定套路：
+  外层枚举【区间规模 r】→ 中层枚举【左端点 i】（右端点 j = i + r − 1）→ 内层枚举【切点 k】
+  口诀：外层规模、中层左端、内层切点；右端点 = 左端点 + 规模 − 1
+状态转移三件套 = 状态定义 / 边界条件 / 递推式（填空题常把三件套各挖一空）
+典型时空复杂度：时间 O(n³) / 空间 O(n²)（空间只看声明的二维数组，不看循环次数！）
+递归输出函数的空通常是【参数的对称变换】：(i, S[i][j]) 配 (S[i][j]+1, j)
+得分技巧：读说明→标循环不变量→由边界和递推式【反推】空位，不要顺着读代码
+</code></pre>
+<p><strong>自测小题 2 道（先做，答案在本点末尾折叠区）</strong></p>
+<p><strong>自测 4-1</strong>：下面是区间型动态规划（矩阵连乘 / 最优三角剖分类）的核心代码骨架，(1)~(4) 各应填什么？</p>
+<pre><code class="language-c">for (r = 2; r &lt;= n; r++)              // (1) ____________________
+    for (i = 1; i &lt;= n - r + 1; i++)  // (2) ____________________
+    {
+        j = i + r - 1;                // (3) ____________________
+        for (k = i; k &lt; j; k++)       // (4) ____________________
+            m[i][j] = min(m[i][j], m[i][k] + m[k+1][j] + p[i-1]*p[k]*p[j]);
+    }
+</code></pre>
+<p><strong>自测 4-2</strong>：三个矩阵连乘，维数分别为 A₁: 10×5、A₂: 5×20、A₃: 20×3（即 p₀=10, p₁=5, p₂=20, p₃=3）。求：① 最少乘法次数；② 最优括号化方案（在哪个位置断开）？要求写出 m[1][2]、m[2][3]、m[1][3] 的计算过程。</p>
+<details>
+<summary>【答案】自测 4-1 与 4-2（做完再展开）</summary>
+
+**自测 4-1 答案**：
+- (1) **枚举区间规模 r**（从 2 到 n：先算所有长度为 2 的区间，再长度为 3……保证算 m[i][j] 时它依赖的更短区间已算完）；
+- (2) **枚举左端点 i**（右端点由规模推出，上界 n−r+1 保证 j ≤ n）；
+- (3) **右端点 j = i + r − 1**；
+- (4) **枚举切点 k**（在 i 与 j−1 之间，把区间 [i,j] 切成 [i,k] 与 [k+1,j] 两段）。
+  口诀对照：**外层规模、中层左端、内层切点**。方向记反是本题最常见的错——规模一定在最外层，否则依赖的子问题还没算。
+
+**自测 4-2 答案**：
+- 边界：m[1][1] = m[2][2] = m[3][3] = 0。
+- 长度 2：m[1][2] = p₀p₁p₂ = 10×5×20 = **1000**；m[2][3] = p₁p₂p₃ = 5×20×3 = **300**。
+- 长度 3（m[1][3]，在 k=1 或 k=2 断开）：
+  - k=1：m[1][1] + m[2][3] + p₀p₁p₃ = 0 + 300 + 10×5×3 = 300 + 150 = **450**；
+  - k=2：m[1][2] + m[3][3] + p₀p₂p₃ = 1000 + 0 + 10×20×3 = 1000 + 600 = **1600**。
+  - 取最小 ⇒ **m[1][3] = 450**，断开点 **k = 1**。
+- 结论：① **最少乘法次数 = 450 次**；② 最优方案 **(A₁(A₂A₃))**——先算 A₂A₃（5×20×3=300 次，得 5×3 矩阵），再算 A₁×该结果（10×5×3=150 次），合计 450 次。若用 (A₁A₂)A₃ 则需 1000+600=1600 次。
+
+</details>
+
+<hr />
+<h3>第 5 点：设计模式角色结构与场景关键词（试题五/六 + 试题三问题 3）</h3>
+<p><strong>回看材料</strong>：</p>
+<ol>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 9</strong>（意图 → 模式速记 + 桥接/适配/装饰辨析 + 2 条变式），<strong>盖住"正确套路"自己复述一遍</strong>；</li>
+<li>过一遍 <code>docs/practice/subject2/patterns-algo-notes.md</code> <strong>一·1.1</strong>（场景关键词 → 模式映射秒选表）+ <strong>1.2</strong>（六个高频模式：意图 + 角色结构 + 代码特征）+ <strong>1.3</strong>（填空通用三招）；</li>
+<li>本模拟 <code>docs/practice/mock-exam/subject2-key.md</code> <strong>试题三问题 3</strong>（观察者模式 + 角色对应解释——要写"本需求中 X 是主题、Y 是观察者"，不能只写模式名）；</li>
+<li>选择题模式连错：<code>docs/practice/papers/2021H2-morning-key.md</code> <strong>Q44-46</strong>（中介者三连）、<code>docs/practice/papers/2020H2-morning-key.md</code> <strong>Q44-47</strong>（Builder 四连）、<code>docs/practice/papers/2022H2-morning-key.md</code> <strong>Q44-47</strong>（责任链 + 适配器）；</li>
+<li>笔记章节：<code>docs/knowledge-points/software-engineering/day20-design-patterns.md</code> §2.2（场景关键词 → 模式识别表）。</li>
+</ol>
+<p><strong>3 分钟速记卡</strong>（合上文件默写）</p>
+<pre><code>场景关键词 → 模式映射（秒选）：
+  状态变化自动通知依赖者      ⇒ 观察者（Observer）
+  统一接口访问多个子系统      ⇒ 外观（Facade）
+  撤销 / 恢复对象状态          ⇒ 备忘录（Memento）
+  多种可替换的算法 / 格式      ⇒ 策略（Strategy）
+  树形 / 部分 - 整体结构       ⇒ 组合（Composite）
+  多对象交互由第三方协调      ⇒ 中介者（Mediator）
+  请求沿一条链传递处理         ⇒ 责任链（Chain of Responsibility）
+  抽象与实现两个维度独立变化  ⇒ 桥接（Bridge）
+GoF 分类：创建型 5 / 结构型 7 / 行为型 11
+结构型 7 个（对象模式）：适桥组装外享代（适配器/桥接/组合/装饰/外观/享元/代理）
+易混辨析：策略 vs 状态、外观 vs 中介者、组合 vs 装饰、观察者 vs 发布-订阅、桥接 vs 适配器
+填空题的空几乎都在【角色类的声明】上：抽象类/接口名、被聚合的成员变量类型、方法签名
+Java vs C++ 细节：abstract vs virtual、new 返回对象 vs 指针、List 声明 vs ArrayList 实例化
+</code></pre>
+<p><strong>自测小题 2 道（先做，答案在本点末尾折叠区）</strong></p>
+<p><strong>自测 5-1</strong>：将下列场景关键词与模式连线，并写出该模式的意图：</p>
+<table>
+<thead>
+<tr>
+<th>场景关键词</th>
+<th>模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 一个对象状态变化时，所有依赖它的对象自动得到通知</td>
+<td>A. 备忘录</td>
+</tr>
+<tr>
+<td>② 需要保存对象在某个时刻的状态，以便日后恢复</td>
+<td>B. 外观</td>
+</tr>
+<tr>
+<td>③ 为一组子系统提供统一的访问入口，客户端不关心子系统细节</td>
+<td>C. 观察者</td>
+</tr>
+<tr>
+<td>④ 定义一系列算法，把它们各自封装，且可以互相替换</td>
+<td>D. 策略</td>
+</tr>
+</tbody>
+</table>
+<p><strong>自测 5-2</strong>：① 观察者模式中，主题（Subject）类里应声明一个什么类型的成员变量？notify()（通知）方法里做什么？② "图形（圆 / 方形）× 绘图程序（V1 / V2）两个维度各自独立扩展"——这描述的是哪个模式？判别依据是什么？</p>
+<details>
+<summary>【答案】自测 5-1 与 5-2（做完再展开）</summary>
+
+**自测 5-1 答案**：
+- ① —— **C. 观察者**（意图：定义对象间的一对多依赖，当一个对象状态改变时，所有依赖者自动得到通知并更新）；
+- ② —— **A. 备忘录**（意图：在不破坏封装的前提下，捕获并保存对象的内部状态，以便日后恢复到该状态）；
+- ③ —— **B. 外观**（意图：为子系统中的一组接口提供一个一致的界面/统一入口）；
+- ④ —— **D. 策略**（意图：定义一系列算法，各自封装成可互换的对象，使算法可独立于客户端变化）。
+  （辨析：② 的"撤销/恢复"常和"命令模式"混——命令模式记录的是**操作**，备忘录记录的是**状态**。）
+
+**自测 5-2 答案**：
+- ① 主题类应声明一个**观察者集合**类型的成员变量，如 Java 的 `List<Observer> observers = new ArrayList<>();`（声明用接口类型 List，实例化用 ArrayList）；notify() 方法**遍历该集合**，对每个注册的观察者调用其更新方法 `observer.update()`。注册方法名通常是 `attach()/register()`，注销是 `detach()/unregister()`。
+- ② **桥接模式（Bridge）**。判别依据：类图是"**两个独立的继承维度 + 一个聚合关系**"——图形维度（圆/方形）与绘图程序维度（V1/V2）各自独立扩展，用聚合（把绘图程序对象作为图形类的成员）连接二者，而不是多层继承。把"抽象部分与其实现部分分离，使二者可以独立变化"是桥接；"接口转换"才是适配器。
+
+</details>
+
+<hr />
+<h3>自填点 6 / 7 空白模板（若你有个性化的点要补）</h3>
+<blockquote>
+<p>弹性日最常见的个性化补充：<strong>前趋图 PV 填空连环错</strong>（TOP 3）、<strong>索引文件容量计算</strong>（TOP 4）、<strong>哈希冲突与同义词</strong>（TOP 7）、<strong>白盒覆盖与 McCabe</strong>（TOP 8）、<strong>校验码位数</strong>（TOP 10）——这些点不在默认 5 点里，但若在 §二 筛查时发现它们<strong>仍错</strong>，在这里补成第 6/7 点，按上面"自填版通用指引模板"执行。</p>
+</blockquote>
+<p><strong>第 6 点（自填）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></p>
+<ul>
+<li><strong>知识点</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>为什么易错</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>回看材料</strong>（具体文件 + 章节/题号）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></li>
+<li><strong>3 分钟速记卡</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</li>
+<li><strong>自测小题 2 道</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</li>
+<li><strong>答案</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_____</li>
+</ul>
+<p><strong>第 7 点（自填）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></p>
+<ul>
+<li><strong>知识点</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>为什么易错</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>回看材料</strong>（具体文件 + 章节/题号）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong></li>
+<li><strong>3 分钟速记卡</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</li>
+<li><strong>自测小题 2 道</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</li>
+<li><strong>答案</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_____</li>
+</ul>
+<hr />
+<h2>二、Step 2：错题本最后一轮筛查（下午 2.5h）</h2>
+<blockquote>
+<p><strong>今天下午只做一件事：产出「最终漏洞清单」</strong>——一张只列"<strong>到现在仍然错</strong>"的知识点的表。考前两天（Day 32 / Day 33）<strong>只看这张表</strong>，不再翻全部错题。</p>
+</blockquote>
+<h3>⚠️ 筛查纪律（先读，不守纪律等于白干）</h3>
+<ol>
+<li><strong>只看"仍错"的题，不再重做已会的</strong>——已经修复的题，今天<strong>一眼都不看</strong>（验证方式：遮住答案，能 30 秒内口述出正确解法 = 已修复，跳过）；</li>
+<li><strong>只"看思路 + 口述正确解法"，不重新计算整套题</strong>——计算题只复述<strong>公式与步骤</strong>（如"关键路径：正向取大、逆向取小、总时差 = LS − ES"），具体数字<strong>不重算</strong>；</li>
+<li><strong>重算的手感留到 Step 3</strong>——晚上 20 道选择就是练计算手感的，下午别把精力花光；</li>
+<li><strong>每发现一条仍错的知识点，立刻写进「最终漏洞清单」</strong>，不要"先记在脑子里最后一起写"——下午 16:30 前必须把表填完。</li>
+</ol>
+<h3>筛查流程（四步，按顺序）</h3>
+<h4>第 1 步（40 分钟）：翻 <code>docs/practice/reflection.md</code>——各日"今日错题（错题四要素）"区</h4>
+<ul>
+<li>从 <strong>Day 1</strong> 一路翻到 <strong>Day 30</strong>，只看<strong>「今日错题」</strong>区和各阶段收尾日的<strong>「仍错知识点标记区」</strong>（Day 3 / Day 6 / Day 7 / Day 8 …，打了 ☑ 的项）；</li>
+<li><strong>判据</strong>：同一个知识点在<strong>不同日出现 ≥ 2 次</strong>（如"页式地址转换"在 Day 2 错过、Day 3 综合卷又错、Day 15 真题卷 Q24 又错）⇒ 列入最终漏洞清单，"出现次数"填实际次数；</li>
+<li>各日错题区的模板长这样（找不到就说明你那天没登记——<strong>没登记的日子跳过，不要回头补登记</strong>，弹性日不补旧账）：
+  ```
+  <strong>错题 1：</strong>（题目简述）</li>
+<li><strong>错因</strong>：…  - <strong>正确思路</strong>：…  - <strong>知识点</strong>：…
+  ```</li>
+<li>⚠️ <strong>跳过"高混淆度重做题清单"</strong>——那是各日 Step 3 的重做指引，不是错题登记；只看<strong>实际登记的错题</strong>。</li>
+</ul>
+<h4>第 2 步（40 分钟）：翻 <code>docs/practice/review-round1.md</code> / <code>review-round2.md</code> / <code>review-round3.md</code> 的"仍错"登记区</h4>
+<ul>
+<li>每卷末尾都有<strong>统计表</strong>（重做结果 / 判定 / 按知识点回填表）：</li>
+<li><code>review-round1.md</code>：判定规则 <strong>≥80% 已修复 / 60–80% 隔 3 天重做 / &lt;60% 回笔记整章重看</strong>；</li>
+<li><code>review-round2.md</code>：同上规则；</li>
+<li><code>review-round3.md</code>（三轮收口，门槛上调）：<strong>≥85% = Phase 2 错题全部修复</strong>；<strong>70–85%</strong> 把错的部分 Day 25 再做一次；<strong>&lt;70%</strong> 回 Phase 1 笔记整章重看。</li>
+<li><strong>重点看 <code>review-round3.md</code> 的 §3.2「按知识点回填」表</strong>里<strong>仍打 ☑</strong> 的行（"是否仍错"列）——这是三轮回归后<strong>唯一仍然没修好的</strong>知识点，优先级最高；</li>
+<li><strong>如果当时没回填</strong>（表格是空的）：把三轮清单里"重做结果"为<strong>错</strong>的题组对应的知识点记下来，同样列入漏洞清单。</li>
+</ul>
+<h4>第 3 步（30 分钟）：翻 8 套真题 key 里标 ⚠️ / 【存疑】/ 勘误的题——<strong>只确认口径，不重算</strong></h4>
+<blockquote>
+<p>⚠️ <strong>这些是"来源问题不是你的问题"</strong>：题库间答案不一、或图形/OCR 复原不可靠。<strong>确认一遍 key 里钉死的结论即可，不必重算</strong>——考场不会遇到同一道争议题，但<strong>口径必须统一</strong>，免得考前犹豫。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>卷</th>
+<th>题号</th>
+<th>结论（key 已钉死，照此记住）</th>
+<th>一句话口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>卷 3（2021 下）</td>
+<td><strong>Q23 = B</strong>、<strong>Q58 = B</strong>、<strong>Q61 = B</strong></td>
+<td>已勘误修正（提交 <code>650cc27</code>）</td>
+<td>Q58"入队出队同端点"是栈不是队列；Q61 两顶点可互相不可达</td>
+</tr>
+<tr>
+<td>卷 4（2022 上）</td>
+<td><strong>Q24 = C</strong>（自然连接 6 列）、<strong>Q40 = A</strong>（0/1 背包 605）</td>
+<td>独立复算修正</td>
+<td>⚠️ 该卷 Q35–75 为网络回忆版，Q1–34 才是原卷题</td>
+</tr>
+<tr>
+<td>卷 5（2022 下）</td>
+<td><strong>Q13 翻译权</strong></td>
+<td><strong>教材口径 B / 法条指向 D</strong></td>
+<td><strong>答题按 B</strong>，同时知悉《条例》原文为"自然语言文字"指 D</td>
+</tr>
+<tr>
+<td>卷 6（2023 上）</td>
+<td><strong>Q55 = B</strong>（SQL 授权）、<strong>Q68 = D</strong>（默认主页路径）</td>
+<td>key 已据标准语法 + 2011 下原题改判</td>
+<td>GRANT 语法 <code>&lt;权限&gt; ON &lt;对象&gt; TO &lt;用户&gt; [WITH GRANT OPTION]</code>，<strong>ON 不能漏</strong></td>
+</tr>
+<tr>
+<td>卷 7（2019 上）</td>
+<td><strong>Q14 = B</strong>（未注册商标不受保护）、<strong>Q56 = C</strong>（可用性）、<strong>Q67 = A</strong>（疑似官方勘误）</td>
+<td>解析书答案</td>
+<td>Q18 = <strong>D 55 天</strong>（部分网文误给 50）；Q56"故障后仍能用"= 可用性</td>
+</tr>
+<tr>
+<td>卷 8（2019 下）</td>
+<td><strong>Q17-18 AOE</strong></td>
+<td>⚠️ 边权值 OCR 不可靠</td>
+<td>key 推导：关键路径 <strong>ABFJL / ADGIJL 共 22 天</strong>、C 不在关键路径、<strong>BE 时差 2 天</strong>；做题前对照原卷图核权值</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>动作</strong>：以上 6 行逐行读一遍，<strong>能复述结论的打 ✓</strong>；复述不出的，在漏洞清单里记一条（"状态"填"口径仍模糊"，"考前怎么看"填"进考场前再读一遍本表"）。</li>
+</ul>
+<h4>第 4 步（40 分钟）：翻 <code>docs/practice/top10-errors.md</code>——10 条逐条自评</h4>
+<blockquote>
+<p><strong>这是 Step 2 的收口动作</strong>：每条盖住"正确套路"，<strong>30 秒内口述</strong>该条的核心公式/判定步骤。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>TOP</th>
+<th>知识点</th>
+<th>核心口诀（默念一遍）</th>
+<th>自评</th>
+<th>仍错的，考前怎么看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AOE 关键路径与总时差</td>
+<td>最长路径 = 最短工期；正向 Ve 取大、逆向 Vl 取小；松弛 = Vl(终) − Ve(始) − 时长；时差 0 = 关键活动</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重算 2019H2 Q17-18、2021H1 Q17-18</td>
+</tr>
+<tr>
+<td>2</td>
+<td>页式地址转换 / 位示图</td>
+<td>页大小 2^k → 低 k 位偏移；块号<strong>拼接</strong>偏移（不是相加）；字数 = 块数 ÷ 字长</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重算 2020H2 Q24、2021H1 Q24</td>
+</tr>
+<tr>
+<td>3</td>
+<td>前趋图 PV 填空（信号量初值）</td>
+<td>前 P 后 V 一对配；初值：互斥 1、同步 0、资源 = 可用数；范围 −(n−初值) ~ 初值</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2019H2 Q23-25、2022H1 Q58-61</td>
+</tr>
+<tr>
+<td>4</td>
+<td>索引文件容量（多级索引）</td>
+<td>项数 = 索引块 ÷ 地址项；最大 = 直接 + 一级×项 + 二级×项²</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重算 2020H2 Q25-26</td>
+</tr>
+<tr>
+<td>5</td>
+<td>候选码判定 / Armstrong</td>
+<td>只左必含、只右必排除；闭包 = U 即候选码；伪传递 X→Y, WY→Z ⇒ XW→Z</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2021H1 Q52-53、2023H1 Q52-54</td>
+</tr>
+<tr>
+<td>6</td>
+<td>二叉树下标 / 树的度→叶子数</td>
+<td>根 1：左 2i 右 2i+1；根 0：左 2i+1 右 2i+2；二叉树 n₀ = n₂+1；一般树 n₀ = 1 + Σ(i−1)nᵢ</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2022H1 Q28、2019H2 Q59</td>
+</tr>
+<tr>
+<td>7</td>
+<td>哈希表构造与冲突（线性探查）</td>
+<td>冲突 = 异关键字同地址；线性探查 H+i (mod m)；<strong>探查序列里不都是同义词</strong></td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2019H1 Q60、2021H1 Q60</td>
+</tr>
+<tr>
+<td>8</td>
+<td>白盒覆盖标准 / McCabe</td>
+<td>语句 &lt; 判定 &lt; 条件 &lt; 判定-条件 &lt; 路径；V(G) = 判定数+1 = E−N+2 = 区域数（含图外）</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2020H2 Q35-36、2019H2 Q34-35</td>
+</tr>
+<tr>
+<td>9</td>
+<td>设计模式识别 / GoF 分类</td>
+<td>结构型 7：适桥组装外享代；桥接 = 抽象与实现两维度独立变化</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2019H2 Q44-47、2021H2 Q44-46</td>
+</tr>
+<tr>
+<td>10</td>
+<td>校验码（海明 / CRC）</td>
+<td>海明 2^k ≥ n+k+1；位序分解为 2 的幂之和定分组；CRC 用模 2（异或）除法</td>
+<td>☐ 已修复　☐ 仍模糊</td>
+<td>重做 2023H1 Q3、2019H1 Q5</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>自评结果处理</strong>：<strong>仍模糊</strong>的条数若 ≥ 4 条，说明上午选择的漏洞比想象的深——把 §〇 的决策记录改一下（"今日实际重心"补上"TOP10 回看"），并在漏洞清单里把每条都单独列一行（不要合并，合并了考前来不及看）。</p>
+</blockquote>
+<h3>🎯 最终漏洞清单（今天最重要的产出 · 考前两天只看它）</h3>
+<blockquote>
+<p><strong>填写规则</strong>：
+- <strong>只列"到现在仍然错"的知识点</strong>——已经修复的一律不列（哪怕它出现过 5 次）；
+- <strong>"出现次数"</strong> = 在 <code>reflection.md</code> 各日错题区 + <code>review-round1/2/3.md</code> 仍错登记 + <code>top10-errors.md</code> 自评"仍模糊"里<strong>累计出现的次数</strong>（估计值即可）；
+- <strong>"状态"</strong> 填 <code>仍模糊</code> / <code>口径不清</code> / <code>过程会跳步</code>（三选一，比"不会"更具体，考前才知道该看什么）；
+- <strong>"考前怎么看"</strong> 必须写<strong>具体文件 + 具体题号/章节</strong>（如"重算 2020H2 Q24"），不要写"多看看"；
+- <strong>"已解决"</strong> 考前每解决一条勾一条——<strong>Day 33 晚上这张表应该只剩 0–2 条</strong>。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>知识点</th>
+<th>出现次数</th>
+<th>状态</th>
+<th>考前怎么看（文件 + 题号）</th>
+<th>已解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>3</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>4</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>5</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>6</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>7</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>8</td>
+<td>______</td>
+<td>____</td>
+<td>______</td>
+<td>______</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>填写示例</strong>（照此格式填，填完删掉本行）：<code>关键路径与总时差 | 4 次 | 过程会跳步 | 重算 2019H2 Q17-18 + 2021H1 Q17-18（草稿纸写 Ve/Vl 表） | ☐</code></p>
+<p><strong>用法</strong>：<strong>Day 32</strong>（明天）上午框架图回顾时，先过本表再过框架图；<strong>Day 33</strong> 只过本表 + <code>pre-exam-5-points.md</code> 的 5 点，<strong>不做新题</strong>。进考场前 30 秒，把本表从第 1 行念到最后一行——<strong>卡壳的那一行</strong>就是考场上有概率丢分的地方，在脑子里把那道题再默算一遍。</p>
+</blockquote>
+<h3>Step 2 收口自检（16:30 前完成）</h3>
+<ul>
+<li>[ ] <code>reflection.md</code> 翻完了（Day 1 → Day 30 的错题区 + ☑ 标记区）</li>
+<li>[ ] <code>review-round1/2/3.md</code> 三张统计表看完了（重点 round3 的 §3.2）</li>
+<li>[ ] 8 套 key 的 ⚠️/【存疑】/勘误 6 行口径确认完（能复述的打 ✓）</li>
+<li>[ ] <code>top10-errors.md</code> 10 条自评做完（每条勾了"已修复"或"仍模糊"）</li>
+<li>[ ] <strong>最终漏洞清单已填完</strong>，且每条都写了具体的"考前怎么看"</li>
+<li>[ ] 漏洞清单条数：______ 条（填这个数到 §四 打卡区）</li>
+</ul>
+<hr />
+<h2>三、Step 3：保持手感 20 道选择题（晚上 1.5h）</h2>
+<blockquote>
+<p><strong>目的</strong>：<strong>保持手感不是新学</strong>。这 20 题覆盖默认 5 点 + TOP10 高频点 + 七个科目，<strong>你应该做得又快又对</strong>。</p>
+<p>⏱️ <strong>计时建议</strong>：<strong>30 分钟做完</strong>（平均 1.5 分钟/题），可以用手机计时；超时说明有知识点在"现场回忆"而非"脱口而出"——记下来。
+🎯 <strong>目标正确率：≥ 80%（16/20）</strong>。低于 80% 不是"手感问题"，是<strong>有漏洞没补干净</strong>——回看 §二 的最终漏洞清单。</p>
+<p><strong>✅ 题目都是干净题</strong>：本套 20 题<strong>不含任何分歧/勘误/存疑题</strong>（卷 3 Q23/58/61、卷 5 Q13、卷 7 Q67 等"来源问题"一律不选），计算题数字均独立复算，可以放心对答案。</p>
+</blockquote>
+<h3>3.1 题目（先计时做完，再翻 3.2 的答案）</h3>
+<p><strong>1.</strong>（OS · 页式地址转换）某系统采用页式存储管理，页面大小为 <strong>4KB</strong>。某进程的逻辑地址为 <strong>2A5CH</strong>，查页表知页号对应的物理块号为 <strong>5</strong>，则物理地址为（　　）。</p>
+<p>A. 7A5CH　　B. 2A5CH　　C. 5A5CH　　D. A5CH</p>
+<p><strong>2.</strong>（OS · 前趋图与 PV 操作）为实现前趋关系 <strong>P1→P2</strong> 与 <strong>P1→P3</strong>，分别为两条前趋边设置同步信号量 S1、S2。下列说法正确的是（　　）。</p>
+<p>A. S1、S2 初值均为 1；P1 的末尾分别 P(S1)、P(S2)
+B. S1、S2 初值均为 0；P1 的末尾分别 V(S1)、V(S2)，P2、P3 的开头分别 P(S1)、P(S2)
+C. S1、S2 初值均为 0；P2、P3 的末尾分别 V(S1)、V(S2)，P1 的开头分别 P(S1)、P(S2)
+D. S1、S2 初值均为 1；P1 的开头分别 V(S1)、V(S2)</p>
+<p><strong>3.</strong>（OS · 位示图）某磁盘容量为 <strong>1024GB</strong>，物理块大小为 <strong>4MB</strong>，位示图每位记录一个块的使用状态，字长为 <strong>64 位</strong>，则位示图需要的字数为（　　）。</p>
+<p>A. 4096　　B. 2048　　C. 8192　　D. 16384</p>
+<p><strong>4.</strong>（网络 · ARP）关于 ARP 协议，下列说法正确的是（　　）。</p>
+<p>A. ARP 属于数据链路层，因为它的报文不使用 IP 封装
+B. ARP 属于传输层，用于把端口号解析为 IP 地址
+C. ARP 将 IP 地址解析为 MAC 地址，在软考中按网际层（网络层）作答
+D. ARP 用于将 MAC 地址解析为 IP 地址</p>
+<p><strong>5.</strong>（网络 · 子网划分）某主机的 IP 地址为 <strong>192.168.10.130/26</strong>，其网络地址与广播地址分别是（　　）。</p>
+<p>A. 192.168.10.128　/　192.168.10.191
+B. 192.168.10.0　/　192.168.10.255
+C. 192.168.10.128　/　192.168.10.255
+D. 192.168.10.64　/　192.168.10.127</p>
+<p><strong>6.</strong>（网络 · 端口号）下列协议与端口号的对应关系中，正确的是（　　）。</p>
+<p>A. SMTP — 110　　B. POP3 — 25　　C. DNS — 53　　D. Telnet — 22</p>
+<p><strong>7.</strong>（数据库 · 候选码）关系模式 R(A, B, C, D)，函数依赖集 F = {A→B, B→C, C→D}。下列说法正确的是（　　）。</p>
+<p>A. 候选码为 A，主属性为 A
+B. 候选码为 (A, B)，主属性为 A、B
+C. 候选码为 A，主属性为 A、B、C、D
+D. 候选码为 C，因为 C→D</p>
+<p><strong>8.</strong>（数据库 · E-R 联系类型）某管理系统中：① 每家专卖店只有一名店长，每名店长只负责一家专卖店；② 一名销售员可服务多位顾客，一位顾客也可接受多名销售员的服务。① 与 ② 的联系类型分别是（　　）。</p>
+<p>A. 1:1 和 1:n　　B. 1:n 和 m:n　　C. 1:1 和 m:n　　D. m:n 和 1:1</p>
+<p><strong>9.</strong>（数据库 · 范式）关系模式 R(A, B, C, D)，函数依赖集 F = {A→B, B→C, C→D}。R 的最高范式等级是（　　）。</p>
+<p>A. 1NF　　B. 2NF　　C. 3NF　　D. BCNF</p>
+<p><strong>10.</strong>（组成 · 流水线）某指令流水线由 4 个子过程组成，各子过程执行时间分别为 <strong>10ns、15ns、20ns、10ns</strong>。若连续执行 <strong>100 条</strong>指令，流水线总执行时间为（　　）。</p>
+<p>A. 2035ns　　B. 2000ns　　C. 55ns　　D. 2125ns</p>
+<p><strong>11.</strong>（组成 · Cache 组相联）主存地址为 <strong>32 位</strong>，Cache 数据区容量 <strong>64KB</strong>，块大小 <strong>64B</strong>，采用 <strong>8 路组相联</strong>映射。主存地址中 Tag、组号、块内偏移各占（　　）位。</p>
+<p>A. Tag 19、组号 7、偏移 6　　B. Tag 18、组号 8、偏移 6
+C. Tag 19、组号 8、偏移 5　　D. Tag 20、组号 6、偏移 6</p>
+<p><strong>12.</strong>（组成 · 系统可靠性）某系统由三个部件组成，其中部件 1 与部件 2 <strong>并联</strong>后，再与部件 3 <strong>串联</strong>。若各部件可靠度均为 <strong>0.8</strong>，系统可靠度为（　　）。</p>
+<p>A. 0.768　　B. 0.512　　C. 0.896　　D. 0.96</p>
+<p><strong>13.</strong>（软工 · 设计模式）"为多个子系统提供一个统一的访问接口，使客户端无需了解子系统的内部细节。"这描述的是（　　）模式。</p>
+<p>A. 适配器（Adapter）　　B. 外观（Facade）　　C. 中介者（Mediator）　　D. 代理（Proxy）</p>
+<p><strong>14.</strong>（软工 · 耦合）下列模块间耦合类型中，<strong>耦合性最强</strong>（最差）的是（　　）。</p>
+<p>A. 数据耦合　　B. 标记耦合　　C. 公共耦合　　D. 内容耦合</p>
+<p><strong>15.</strong>（软工 · 白盒测试）某程序的控制流程图有 <strong>12 条边、9 个节点</strong>，则该程序的 McCabe 环路复杂度 V(G) = （　　）。</p>
+<p>A. 3　　B. 4　　C. 5　　D. 6</p>
+<p><strong>16.</strong>（数据结构 · 树的度）一棵树中有 5 个度为 3 的结点、3 个度为 1 的结点，没有度为 2 的结点，则该树的叶子结点数为（　　）。</p>
+<p>A. 8　　B. 10　　C. 11　　D. 13</p>
+<p><strong>17.</strong>（数据结构 · 哈希表）用<strong>线性探查法</strong>处理冲突，哈希函数 H(key) = key mod 5，依次插入关键字 <strong>1、6、2、7</strong>。则查找关键字 7 时需要比较的次数为（　　）。</p>
+<p>A. 1　　B. 2　　C. 3　　D. 4</p>
+<p><strong>18.</strong>（数据结构 · 排序）下列排序算法中，时间复杂度为 <strong>O(nlgn)</strong> 且<strong>稳定</strong>的是（　　）。</p>
+<p>A. 快速排序　　B. 堆排序　　C. 归并排序　　D. 简单选择排序</p>
+<p><strong>19.</strong>（数学 · 排列组合）将 5 封不同的信随机投入 3 个不同的信箱，要求每个信箱至少 1 封，共有（　　）种不同的投法。</p>
+<p>A. 150　　B. 60　　C. 120　　D. 243</p>
+<p><strong>20.</strong>（专业英语）"The ______ pattern defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically."（GoF）</p>
+<p>A. Singleton　　B. Observer　　C. Strategy　　D. Decorator</p>
+<hr />
+<h3>3.2 答案与解析（每题标注知识点 + 在练哪个漏洞）</h3>
+<p><strong>1. C。</strong>
+- 推导：4KB = 2¹²，故逻辑地址<strong>低 12 位为页内偏移</strong>。2A5CH = 0010 1010 0101 1100B，低 12 位 = <strong>A5CH</strong>（偏移），高 4 位 = 0010B = <strong>2</strong>（页号）；查表得块号 5 ⇒ 物理地址 = 块号 × 4KB + 偏移 = 5 × 1000H + A5CH = <strong>5A5CH</strong>。
+- 【知识点】页式地址转换（TOP 2）　【出题意图】练"<strong>块号拼接偏移，不是相加</strong>"这个最高频的错——A（7A5CH）是把页号 2 与块号 5 相加（2+5=7）；B（2A5CH）是把页号直接当块号；D（A5CH）是只取偏移。
+- ✅ 自检：若选 A，回看 <code>2020H2-morning-key.md</code> Q24（3C20H → 6C20H）。</p>
+<p><strong>2. B。</strong>
+- 推导：同步信号量初值 = 0；每条前趋边 Pi→Pj 对应"<strong>Pi 结束处 V，Pj 开头 P</strong>"（口诀：前 P 后 V 一对配，初值看资源：互斥 1、同步 0）。P1→P2 ⇒ P1 末尾 V(S1)、P2 开头 P(S1)；P1→P3 ⇒ P1 末尾 V(S2)、P3 开头 P(S2)。
+- 【知识点】前趋图与 PV 操作（TOP 3）　【出题意图】练<strong>初值（同步 0）+ P/V 方向（前驱 V 在后、后继 P 在前）</strong>——A/D 初值错（同步信号量不是 1）；C 把 P/V 填反了位置（P2/P3 无后驱 P1，开头 P 会立刻阻塞）。
+- ✅ 自检：若选 C，回看 <code>2019H2-morning-key.md</code> Q23-25（三空连环）。</p>
+<p><strong>3. A。</strong>
+- 推导：块数 = 1024GB ÷ 4MB = 2²⁰ MB ÷ 2² MB = 2¹⁸ = 262144 块（每位记录 1 块，共需 2¹⁸ 位）；字长 64 = 2⁶ 位 ⇒ 字数 = 2¹⁸ ÷ 2⁶ = 2¹² = <strong>4096</strong> 个字。
+- 【知识点】位示图（TOP 2 变式）　【出题意图】练<strong>容量单位 2 进制换算</strong>——B（2048）是忘记把 GB 换成 MB 多除了一次；C（8192）/ D（16384）是块数或字长换算错。
+- ✅ 自检：若算错，回看 <code>2021H1-morning-key.md</code> Q24（2048GB / 8MB / 128 位 → 2048 字）。</p>
+<p><strong>4. C。</strong>
+- 推导：ARP 把 <strong>IP 解析为 MAC</strong>，为 IP 服务；虽然 ARP 报文不经 IP 封装（直接装在以太网帧里），但<strong>软考按网际层（网络层）作答</strong>。
+- 【知识点】协议层级归属（网络高频陷阱）　【出题意图】练"<strong>ARP 不属链路层</strong>"这个陷阱——A 就是这条陷阱；B/D 把功能与层级全弄反。
+- ✅ 自检：若选 A，回看 <code>docs/knowledge-points/networks/day04-protocols.md</code> §2.3、§6.3。</p>
+<p><strong>5. A。</strong>
+- 推导：/26 ⇒ 掩码 255.255.255.192，块大小 = 256 − 192 = <strong>64</strong>；130 落在 128–191 段（64×2=128）⇒ <strong>网络地址 = 192.168.10.128</strong>（主机位全 0），<strong>广播地址 = 192.168.10.191</strong>（网络地址 + 块大小 − 1）；可用主机 = 2⁶ − 2 = 62。
+- 【知识点】子网划分 5 步法　【出题意图】练<strong>块大小 + 广播地址不是"末段改 255"</strong>——B 是按 C 类默认 /24 算的；C 正是"把最后一段改成 255"的经典错误；D 落错了段（64–127）。
+- ✅ 自检：若选 B/C，回看 <code>docs/knowledge-points/networks/day05-tcp.md</code> §八 5 道例题。</p>
+<p><strong>6. C。</strong>
+- 推导：DNS = <strong>53</strong>（TCP + UDP 都用：查询走 UDP、区域传送走 TCP）。SMTP = 25 发 / POP3 = 110 收（A、B 把"发""收"记反）；Telnet = 23 明文、SSH = 22 加密（D 把两者混了）。
+- 【知识点】端口号表（必背 15 个）　【出题意图】练<strong>SMTP/POP3 记反</strong>与<strong>Telnet 23 / SSH 22 混淆</strong>——这两组是端口题里唯二的稳定陷阱。
+- ✅ 自检：若选 D，回看 <code>day04-protocols.md</code> §七必背端口表。</p>
+<p><strong>7. A。</strong>
+- 推导：属性分类——A 只在 F 左部出现 ⇒ 必在候选码中；D 只在右部 ⇒ 必不在；B、C 两侧都有 ⇒ 待定。A⁺ = {A}→{A,B}→{A,B,C}→{A,B,C,D} = U ⇒ <strong>A 是唯一候选码</strong>；<strong>主属性 = {A}</strong>（候选码的属性才是主属性）。
+- 【知识点】候选码判定 4 步法（TOP 5）　【出题意图】练"<strong>主属性 ≠ 所有属性</strong>"——C 就是这个错；B 把待定属性也算进候选码（B⁺ = {B,C,D} ≠ U）；D 让"只在右侧"的 C 当候选码（C⁺ = {C,D} ≠ U）。
+- ✅ 自检：若选 C，回看 <code>2021H1-morning-key.md</code> Q52-53（唯一候选码 AC）。</p>
+<p><strong>8. C。</strong>
+- 推导：① 两端都唯一（每家一名、每名一家）⇒ <strong>1:1</strong>；② 两端都不唯一（一名服务多位、一位接受多名）⇒ <strong>m:n</strong>。
+- 【知识点】E-R 联系类型判定（默认第 3 点）　【出题意图】练<strong>量词句读法</strong>——A 把 ② 看成 1:n（只读到"一名销售员服务多位"这一侧）；B/D 两句都判错。
+- ✅ 自检：若选 A，重做 <code>mock-exam/subject2-questions.md</code> 试题二（同款商场场景）。</p>
+<p><strong>9. B。</strong>
+- 推导：候选码 A（A⁺ = U）；<strong>单属性候选码不存在部分依赖 ⇒ 满足 2NF</strong>；但存在传递依赖 A→B→C（B 不是候选码，A→B 且 B→C ⇒ A→C）⇒ <strong>不满足 3NF</strong>。故 R ∈ <strong>2NF</strong>。
+- 【知识点】范式判断流程　【出题意图】练"<strong>2NF 管部分依赖、3NF 管传递依赖</strong>"的分界——A（1NF）误以为有非原子属性或漏了 2NF 判定；C/D 忽略了传递依赖的存在。
+- ✅ 自检：若选 C，回看 <code>docs/knowledge-points/databases/day08-er.md</code> §3.3 范式判断流程图（5 步）。</p>
+<p><strong>10. A。</strong>
+- 推导：流水线周期 = 最长段 = <strong>Δt = 20ns</strong>；第一条指令走完全程 = 10+15+20+10 = 55ns；后续每条只需 20ns ⇒ T = Σt + (n−1)Δt = 55 + 99 × 20 = <strong>2035ns</strong>。
+- 【知识点】流水线执行时间（公式型记忆题）　【出题意图】练"<strong>周期取最长段、别用三段之和</strong>"以及"<strong>别漏 (n−1)</strong>"——B（2000）= 100×20，漏了第一条的非流水建立时间；C（55）只算了一条；D（2125）= 55 + 100×20.7 之类的口算错。
+- ✅ 自检：若选 B，回看 <code>docs/knowledge-points/architecture/day10-cpu.md</code> §4 流水线公式。</p>
+<p><strong>11. A。</strong>
+- 推导：块内偏移 = log₂64B = <strong>6</strong> 位；Cache 总行数 = 64KB ÷ 64B = 1024 = 2¹⁰，8 路组相联 ⇒ 组数 = 2¹⁰ ÷ 2³ = 2⁷ ⇒ <strong>组号 7 位</strong>；位数守恒 ⇒ Tag = 32 − 7 − 6 = <strong>19 位</strong>。
+- 【知识点】Cache 组相联地址结构（位数守恒律）　【出题意图】练"<strong>路数翻倍 ⇒ 组号 −1 位、Tag +1 位</strong>"——B（18/8/6）组数算成 2⁸；C（19/8/5）块大小当成 32B；D（20/6/6）路数当 4。
+- ✅ 自检：若选 B，回看 <code>docs/knowledge-points/architecture/day11-cache.md</code> §3 三映射地址结构。</p>
+<p><strong>12. A。</strong>
+- 推导：先并后串。并联部分 = 1 − (1−0.8)(1−0.8) = 1 − 0.2² = <strong>0.96</strong>；再串联部件 3 ⇒ R = 0.96 × 0.8 = <strong>0.768</strong>。
+- 【知识点】可靠性串/并联（高频计算）　【出题意图】练"<strong>并联 1−(1−R)²、串联相乘</strong>"以及<strong>先并后串的运算顺序</strong>——B（0.512 = 0.8³）把系统当成全串联；C（0.896）把并联结果当 1−0.2×... 口算错；D（0.96）漏串了部件 3。
+- ✅ 自检：若选 B，回看 <code>2019H2-morning-key.md</code> Q2（同类反解题）。</p>
+<p><strong>13. B。</strong>
+- 推导：<strong>外观（Facade）</strong> = 为子系统提供统一入口/界面。适配器 = 接口转换；中介者 = 用一个中介对象解耦多对象间的直接交互；代理 = 控制对其它对象的访问。
+- 【知识点】设计模式意图识别（TOP 9）　【出题意图】练<strong>外观 vs 中介者 vs 适配器</strong>的意图区分——"统一访问入口"是外观的标志词；"多对象交互由第三方协调"才是中介者。
+- ✅ 自检：若选 C，回看 <code>patterns-algo-notes.md</code> 一·1.1 秒选表。</p>
+<p><strong>14. D。</strong>
+- 推导：耦合由弱到强 = 非直接 → 数据 → 标记 → 控制 → 外部 → 公共 → <strong>内容</strong>。内容耦合（一个模块直接访问另一模块的内部数据或代码）最强、最差。
+- 【知识点】耦合七级（口诀：无直数标控外公内）　【出题意图】练<strong>七级排序</strong>——C（公共耦合）是次强的，常被误选为最强；A（数据耦合）是理想耦合。
+- ✅ 自检：若选 C，回看 <code>docs/knowledge-points/software-engineering/day13-test.md</code> §2 耦合七级表。</p>
+<p><strong>15. C。</strong>
+- 推导：V(G) = E − N + 2 = 12 − 9 + 2 = <strong>5</strong>。三种等价算法：= 判定节点数 + 1（本题 4 个判定 + 1 = 5）；= 区域数（含图外区域，共 5 个区域）。
+- 【知识点】McCabe 环路复杂度（TOP 8）　【出题意图】练"<strong>漏掉 +2</strong>"这个最常见错误——A（3）= E−N 少了 +2；B（4）= 只数判定节点数 / 或只数图内 4 个区域漏了图外区域；D（6）多算。
+- ✅ 自检：若选 A/B，回看 <code>2019H2-morning-key.md</code> Q34-35（路径数 + McCabe）。</p>
+<p><strong>16. C。</strong>
+- 推导：一般树的叶子数公式 n₀ = 1 + Σ_{i≥1}(i−1)·nᵢ = 1 + (3−1)×5 + (1−1)×3 = 1 + 10 + 0 = <strong>11</strong>。
+- 【知识点】树的度与叶子数（TOP 6）　【出题意图】练"<strong>一般树公式 ≠ 二叉树公式</strong>"——B（10）是忘了 "+1"；D（13）/A（8）是公式代错或误用二叉树 n₀ = n₂+1（本题二叉树公式根本不适用，因为没有度为 2 的结点这一前提不成立）。
+- ✅ 自检：若选 B，回看 <code>2019H2-morning-key.md</code> Q59（同类公式题）。</p>
+<p><strong>17. C。</strong>
+- 推导：先造表（H = key mod 5，地址 0–4）：
+  - 插 1：H(1)=1，位 1 空 ⇒ <strong>1 → 位 1</strong>；
+  - 插 6：H(6)=1，位 1 占 ⇒ 探查位 2 ⇒ <strong>6 → 位 2</strong>；
+  - 插 2：H(2)=2，位 2 占 ⇒ 探查位 3 ⇒ <strong>2 → 位 3</strong>；
+  - 插 7：H(7)=2，位 2、位 3 均占 ⇒ 探查位 4 ⇒ <strong>7 → 位 4</strong>。
+  查找 7：从 H(7)=2 开始顺次探查，<strong>位 2（是 6，≠7）→ 位 3（是 2，≠7）→ 位 4（是 7 ✓）⇒ 比较 3 次</strong>。
+- 【知识点】线性探查哈希表（TOP 7）　【出题意图】练"<strong>必须逐个元素画表</strong>"——A（1 次）以为 H(7)=2 命中；B（2 次）少算一次冲突；D（4 次）多数了空位探查。
+- ✅ 自检：若选 A，回看 <code>2019H1-morning-key.md</code> Q60（线性探查造表）。</p>
+<p><strong>18. C。</strong>
+- 推导：<strong>归并排序</strong> = O(nlgn) 且<strong>稳定</strong>。快排平均 O(nlgn) 但<strong>不稳定</strong>且最坏 O(n²)；堆排 O(nlgn)、原地 O(1) 但<strong>不稳定</strong>；简单选择 O(n²) 且<strong>不稳定</strong>。
+- 【知识点】排序算法时空复杂度与稳定性　【出题意图】练"<strong>稳定 / 不稳定</strong>"分界——口诀：不稳定的 = "快选希堆"（快排、选择、希尔、堆）。A 是最常见误选（把快排的 O(nlgn) 当稳定）。
+- ✅ 自检：若选 A，回看 <code>docs/knowledge-points/data-structures/index.md</code> 排序对比表。</p>
+<p><strong>19. A。</strong>
+- 推导：容斥原理。总投法（无限制）= 3⁵ = 243；减至少一个信箱空 = C(3,1)×2⁵ = 3×32 = 96；加两个信箱空 = C(3,2)×1⁵ = 3 ⇒ <strong>243 − 96 + 3 = 150</strong>。
+  （等价做法：第二类 Stirling 数 S(5,3) = 25，再全排列 3! = 6 ⇒ 25 × 6 = 150。）
+- 【知识点】排列组合 / 容斥原理（数学）　【出题意图】练<strong>容斥的"多减了要加回"</strong>——D（243）是无限制总数；C（120）= A(5,3) 类的误算；B（60）漏了加回最后一步。
+- ✅ 自检：若选 D，注意题干"每个信箱至少 1 封"这个限制。</p>
+<p><strong>20. B。</strong>
+- 推导：题干是 <strong>观察者（Observer）</strong> 模式的经典意图定义（GoF 原书原文）：定义对象间的一对多依赖，当一个对象状态改变时，所有依赖者被自动通知并更新。Singleton = 单例（保证一个类只有一个实例）；Strategy = 策略（算法族可互换）；Decorator = 装饰（动态加职责）。
+- 【知识点】专业英语 + 设计模式意图（默认第 5 点）　【出题意图】练<strong>英语题的"关键词定位"</strong>——"one-to-many dependency""notified and updated automatically" = 观察者；上午卷 71–75 题靠这一招定位，不用全句翻译。
+- ✅ 自检：若选 D，回看 <code>patterns-algo-notes.md</code> 一·1.2 六个高频模式的英文意图。</p>
+<hr />
+<h3>3.3 得分统计表与判定</h3>
+<p><strong>答题卡（做完先填这张，再对答案）</strong></p>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我的答案</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+</tr>
+<tr>
+<td>对/错</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+<td>　</td>
+</tr>
+</tbody>
+</table>
+<p><strong>正解</strong>：1.C 2.B 3.A 4.C 5.A 6.C 7.A 8.C 9.B 10.A 11.A 12.A 13.B 14.D 15.C 16.C 17.C 18.C 19.A 20.B</p>
+<p><strong>得分统计</strong></p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>做题用时</td>
+<td>______ 分钟（目标 ≤ 30 分钟）</td>
+</tr>
+<tr>
+<td>正确题数</td>
+<td>______ / 20</td>
+</tr>
+<tr>
+<td>正确率</td>
+<td>______%</td>
+</tr>
+<tr>
+<td>错题题号</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>______</td>
+</tr>
+<tr>
+<td>错题集中在哪个科目</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>______</td>
+</tr>
+<tr>
+<td>错题知识点是否已在 §二 漏洞清单里</td>
+<td>□ 是（都有，说明筛查到位）　□ 否（有新知识点，<strong>立刻补进漏洞清单</strong>）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>判定（对号入座）</strong></p>
+<table>
+<thead>
+<tr>
+<th>正确率</th>
+<th>判定</th>
+<th>明天（Day 32）怎么调整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 80%（16/20 及以上）</strong></td>
+<td>✅ <strong>手感在</strong></td>
+<td>按 <code>day32-sprint.md</code> 标准流程走：框架图 + 速记卡 + 大题模板默写。晚上可提前 30 分钟休息。</td>
+</tr>
+<tr>
+<td><strong>60% – 80%（12–15 分）</strong></td>
+<td>⚠️ <strong>有降温风险</strong></td>
+<td>明天做 Day 32 速记卡时，<strong>把今天错的那几道题对应的知识点所在的卡片优先过两遍</strong>（如 Q1 错 ⇒ 卡"页式地址"，Q15 错 ⇒ 卡"McCabe"）；错题涉及的笔记章节，明天上午框架图回顾时多停 5 分钟。</td>
+</tr>
+<tr>
+<td><strong>&lt; 60%（11 分及以下）</strong></td>
+<td>🔴 <strong>不是手感问题，是漏洞没补干净</strong></td>
+<td>明天上午<strong>先回看 §二 的最终漏洞清单</strong>（每条的"考前怎么看"逐条执行），再框架图回顾；<code>day32-sprint.md</code> 的 Step 1 顺延到下午，Step 2 速记卡不变。<strong>不要刷新题</strong>——越刷越慌。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>📌 <strong>无论正确率多少</strong>：错题只要<strong>不是因为粗心</strong>（如选项看错、加减算错），就必须把该知识点补进 §二 的最终漏洞清单——<strong>这才是弹性日"查漏"的完整闭环</strong>。</p>
+</blockquote>
+<hr />
+<h2>四、打卡区（晚上 20:45 前填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>今日实际重心（A 大题 / B 选择 / C 标准）</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_</td>
+</tr>
+<tr>
+<td>Step 1 完成情况</td>
+<td>默认 5 点过了 <strong><em>_ / 5 点　｜　自测小题对了 </em></strong>_ / 10 道　｜　自填点补了 ____ 点</td>
+</tr>
+<tr>
+<td><strong>最终漏洞清单条数</strong></td>
+<td>______ 条（这是今天最重要的数字）</td>
+</tr>
+<tr>
+<td>漏洞清单里最难的一条</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_</td>
+</tr>
+<tr>
+<td>Step 2 筛查完成度</td>
+<td>reflection ☐　review-round1/2/3 ☐　8 套 key 口径 ☐　TOP10 自评 ☐</td>
+</tr>
+<tr>
+<td><strong>20 题正确率</strong></td>
+<td><strong><em>_</em>_ / 20 = </strong><strong><em>_%　｜　用时 </em></strong>___ 分钟</td>
+</tr>
+<tr>
+<td>20 题判定</td>
+<td>☐ ≥80% 手感在　☐ 60–80% 有降温风险　☐ &lt;60% 回看漏洞清单</td>
+</tr>
+<tr>
+<td>今日学习总时长</td>
+<td>______ h（弹性日不强求学满，漏洞清零即可）</td>
+</tr>
+<tr>
+<td><strong>明日 Day 32 计划调整</strong></td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_<br>（若 20 题 60–80%：<br>明天速记卡优先过 ______ 卡；<br>若 &lt; 60%：明天上午先过漏洞清单再框架图）</td>
+</tr>
+<tr>
+<td>睡眠计划</td>
+<td>今晚 ______ 点前休息（考前 3 天起不熬夜）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>明日（Day 32）预告</strong>：<code>docs/practice/day32-sprint.md</code>——框架图回顾（上午 3h）+ 记忆性内容速记卡（下午 2h）+ 高频考点清单（0.5h）+ 大题模板默写验收（晚上 1.5h）。<strong>今天填的「最终漏洞清单」明天上午第一件事就是过它。</strong></p>
+<p><strong>考前倒计时提醒</strong>：今天 Day 31（10/21）→ Day 32（10/22）→ Day 33（10/23，考前轻度复习）→ <strong>Day 34（10/24，考试日）</strong>。从现在起，<strong>每多睡一小时比多看一小时书更值钱</strong>。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/day31-targeted-review.md">docs/practice/day31-targeted-review.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

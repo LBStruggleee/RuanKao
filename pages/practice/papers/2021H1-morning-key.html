@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2021 年上半年 软件设计师 上午试卷 —— 答案速查 · 逐题解析 · 统计与错题登记 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 2021H1-morning-key.md</div>
+<h1>2021 年上半年 软件设计师 上午试卷 —— 答案速查 · 逐题解析 · 统计与错题登记</h1>
+<blockquote>
+<p>配套试卷：<code>2021H1-morning-questions.md</code></p>
+<p>⚠️ <strong>答案来源说明（重要）</strong>：本地 <code>practice_dd/2020~2023答案/2021年上半年上午试卷答案.pdf</code>
+经提取核对，其内容为<strong>试卷正文的副本，不含任何答案</strong>（19 页，与试卷 18 页内容一致，仅多出空白页）。
+因此本文件的<strong>参考答案取自已公开的真题答案</strong>，并经 <strong>3 个以上独立来源交叉核对</strong>：
+① 希赛 qicoder 电子书《2021年上半年软设考试上午真题（专业解析+参考答案）》；
+② 信管网（cnitpm.com）2021年上半年软件设计师上午真题及答案；
+③ 软考达人 / rkpass.cn / 51CTO 等题库逐题解析（用于分歧题裁决）。
+<strong>【存疑：答案非从本地"答案PDF"取得，系公开参考答案】</strong></p>
+<p>⚠️ <strong>已修正的分歧题</strong>（多数来源一致，少数来源错误，已在解析中说明）：
+<strong>第 3 题</strong>（B 总线周期：信管网+软考达人+rkpass+腾讯云一致，qicoder 的 C 存储周期为错误答案）、
+<strong>第 60 题</strong>（D：以构造反例证明，信管网的 C 为以讹传讹）、
+<strong>第 63 题</strong>（A O(nlgn)：主定理推导，信管网的 B O(n²) 错误）、
+<strong>第 71-75 题</strong>（C、B、D、D、A：与 GoF《设计模式》原书原文逐句核对一致，信管网的 B、D、A、D、D 错误）。</p>
+<p>⚠️ <strong>解析</strong>由本人撰写（题目与答案均为真题），以"为什么对 + 考什么 + 干扰项为何错"为原则；
+涉及图形的题目（17-18、25、26-28、34、41-43、44-47、48、49、50、51）解析中
+的图形复原均标注 <strong>【存疑：图形复原】</strong>，与原卷图形可能在细节上存在差异。</p>
+</blockquote>
+<hr />
+<h2>一、答案速查（1-75）</h2>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>A</strong></td>
+<td>16</td>
+<td><strong>B</strong></td>
+<td>31</td>
+<td><strong>D</strong></td>
+<td>46</td>
+<td><strong>D</strong></td>
+<td>61</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>D</strong></td>
+<td>17</td>
+<td><strong>D</strong></td>
+<td>32</td>
+<td><strong>C</strong></td>
+<td>47</td>
+<td><strong>B</strong></td>
+<td>62</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>B</strong></td>
+<td>18</td>
+<td><strong>B</strong></td>
+<td>33</td>
+<td><strong>B</strong></td>
+<td>48</td>
+<td><strong>A</strong></td>
+<td>63</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>C</strong></td>
+<td>19</td>
+<td><strong>B</strong></td>
+<td>34</td>
+<td><strong>A</strong></td>
+<td>49</td>
+<td><strong>D</strong></td>
+<td>64</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>C</strong></td>
+<td>20</td>
+<td><strong>A</strong></td>
+<td>35</td>
+<td><strong>D</strong></td>
+<td>50</td>
+<td><strong>C</strong></td>
+<td>65</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>B</strong></td>
+<td>21</td>
+<td><strong>B</strong></td>
+<td>36</td>
+<td><strong>C</strong></td>
+<td>51</td>
+<td><strong>D</strong></td>
+<td>66</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>C</strong></td>
+<td>22</td>
+<td><strong>A</strong></td>
+<td>37</td>
+<td><strong>A</strong></td>
+<td>52</td>
+<td><strong>C</strong></td>
+<td>67</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>B</strong></td>
+<td>23</td>
+<td><strong>B</strong></td>
+<td>38</td>
+<td><strong>C</strong></td>
+<td>53</td>
+<td><strong>D</strong></td>
+<td>68</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>B</strong></td>
+<td>24</td>
+<td><strong>B</strong></td>
+<td>39</td>
+<td><strong>C</strong></td>
+<td>54</td>
+<td><strong>C</strong></td>
+<td>69</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>D</strong></td>
+<td>25</td>
+<td><strong>A</strong></td>
+<td>40</td>
+<td><strong>D</strong></td>
+<td>55</td>
+<td><strong>B</strong></td>
+<td>70</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>A</strong></td>
+<td>26</td>
+<td><strong>D</strong></td>
+<td>41</td>
+<td><strong>B</strong></td>
+<td>56</td>
+<td><strong>C</strong></td>
+<td>71</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>D</strong></td>
+<td>27</td>
+<td><strong>B</strong></td>
+<td>42</td>
+<td><strong>B</strong></td>
+<td>57</td>
+<td><strong>C</strong></td>
+<td>72</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>D</strong></td>
+<td>28</td>
+<td><strong>C</strong></td>
+<td>43</td>
+<td><strong>D</strong></td>
+<td>58</td>
+<td><strong>B</strong></td>
+<td>73</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>B</strong></td>
+<td>29</td>
+<td><strong>D</strong></td>
+<td>44</td>
+<td><strong>A</strong></td>
+<td>59</td>
+<td><strong>B</strong></td>
+<td>74</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>C</strong></td>
+<td>30</td>
+<td><strong>C</strong></td>
+<td>45</td>
+<td><strong>A</strong></td>
+<td>60</td>
+<td><strong>D</strong></td>
+<td>75</td>
+<td><strong>A</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>对答案计分</strong>：<strong><em>_</em>_ / 75 = </strong>____%</p>
+<hr />
+<h2>二、逐题解析（含知识点归属）</h2>
+<blockquote>
+<p>格式：<code>答案 | 【科目】知识点 | 解析</code></p>
+</blockquote>
+<p><strong>1. A</strong>｜【计算机基础】CPU 组成
+<strong>程序计数器（PC）</strong>存放将要执行的下一条指令在内存中的地址。指令寄存器（IR）存放当前正在执行的指令；主存地址寄存器（MAR）存放 CPU 当前访问的内存单元地址；状态条件寄存器（PSW）存放程序状态字（标志位与控制位）。</p>
+<p><strong>2. D</strong>｜【计算机基础】CISC 与 RISC
+RISC 的主要特点：<strong>使用简单指令、长度固定</strong>、<strong>大量通用寄存器</strong>、<strong>硬布线（组合逻辑）控制</strong>、<strong>适合流水线</strong>；CISC 指令复杂、长度可变、寄存器较少、<strong>普遍采用微程序（微码）控制</strong>。故 D 正确，A、B、C 均说反了。</p>
+<p><strong>3. B</strong>｜【计算机基础】输入/输出控制方式
+DMA（直接存储器存取）传送时，DMAC 接管<strong>系统总线</strong>，在内存与外设之间直接交换数据，<strong>每传送一个数据占用一个总线周期</strong>（一个 DMA 周期相当于一次总线读/写周期）。</p>
+<blockquote>
+<p>⚠️ <strong>分歧题</strong>：部分资料（如希赛 qicoder）给 C 存储周期，理由"传送时间只与内存相关"，该说法不完整——DMA 传送的是"经总线的一次访存"，占用的是总线周期。信管网、软考达人、rkpass、腾讯云题库均给 <strong>B</strong>，本题取 B。</p>
+</blockquote>
+<p><strong>4. C</strong>｜【计算机基础】存储体系
+闪存是<strong>非易失性</strong>存储器（掉电不丢失，A 对）；以<strong>块</strong>为单位擦除（B 对）；在嵌入式系统中可代替 ROM（D 对）。但闪存<strong>不能按字节改写</strong>、写入前需先擦除整块，速度与随机访问能力不适合替代 RAM/主存，故"常用来代替主存"错误，选 C。</p>
+<p><strong>5. C</strong>｜【计算机基础】磁盘
+磁盘<strong>旋转等待时间</strong>（寻道完成后等待目标扇区转到磁头下）与转速成反比，转速提高一倍则旋转等待时间<strong>减半</strong>，C 正确。平均寻道时间由磁头移动决定、与转速无关（B 错）；平均存取时间 = 寻道时间 + 旋转等待时间 + 传输时间，由于寻道时间不变，存取时间不会恰好减半（A 错）；数据传输速率确实会随转速提高，但本题官方答案为 C（最直接、确定的定量关系）。</p>
+<p><strong>6. B</strong>｜【计算机基础】中断与异常
+<strong>中断</strong>来自处理器<strong>外部</strong>（I/O 完成、DMA 传送结束、外部信号等）；<strong>异常</strong>来自处理器<strong>内部</strong>（除数为 0、缺页、地址越界、非法指令等）。故"DMA 传送结束"为中断、"除运算时除数为 0"为异常，选 B。</p>
+<p><strong>7. C</strong>｜【网络·信息安全】安全协议
+<strong>SSH</strong>（Secure Shell）是<strong>安全的远程登录协议</strong>，在传输层对数据加密并可端口转发。TLS 是传输层安全协议（用于加密应用层数据，本身不是远程登录协议）；TCP 是传输层协议；TFTP 是简单文件传输协议（基于 UDP，不安全）。</p>
+<p><strong>8. B</strong>｜【网络·信息安全】攻击类型
+<strong>拒绝服务（DoS / DDoS）</strong>的首要目标是使被攻击对象<strong>耗尽资源或过载，不能继续提供服务</strong>（破坏可用性）。跨站脚本（XSS）攻击用户浏览器窃取信息；信息篡改破坏完整性；口令猜测以冒充合法用户。</p>
+<p><strong>9. B</strong>｜【网络·信息安全】加密算法
+<strong>RSA</strong> 是非对称加密算法（公钥加密/私钥解密，可用于加密与数字签名）。DES、AES 均为<strong>对称</strong>加密算法；MD5 是<strong>报文摘要</strong>算法（不可逆，不是加密算法）。</p>
+<p><strong>10. D</strong>｜【网络·信息安全】SQL 注入
+SQL 注入通过在输入中嵌入恶意 SQL 片段，欺骗后端数据库执行，其<strong>首要目标是获得（绕过认证获取）对数据库的访问权限</strong>并窃取/篡改数据。破坏 Web 服务是 DoS 的目标；攻击用户浏览器是 XSS 的目标。</p>
+<p><strong>11. A</strong>｜【网络·信息安全】网络层安全
+<strong>IPSec</strong> 工作在<strong>网络层（IP 层）</strong>，为 <strong>IP 数据报</strong>提供加密（ESP）与认证（AH）服务。HTTPS 是应用层（HTTP over TLS）；TLS 位于传输层之上为应用层加密；PP2P 不是加密协议。</p>
+<p><strong>12. D</strong>｜【知识产权】软件著作权保护范围
+软件著作权保护<strong>源程序、目标程序、软件文档</strong>。<strong>开发软件所用的思想、处理过程、操作方法或数学概念等不受保护</strong>（思想与表达二分法），故"开发软件所有的操作方法"不受保护，选 D。</p>
+<p><strong>13. D</strong>｜【知识产权】商标注册
+商标法：两个或两个以上申请人在同一种或类似商品上以<strong>相同或近似</strong>商标申请注册的，<strong>初步审定并公告申请在先</strong>的；<strong>同日申请</strong>的，初步审定并公告<strong>使用在先</strong>的。甲、乙于<strong>同日（2020-07-07）</strong>分别申请"宏达""鸿达"（两商标读音近似、商品类似），乙第一次使用"鸿达"（2019-05）<strong>早于</strong>甲使用"宏达"（2019-07），故乙的"鸿达"能获准注册，选 D。</p>
+<p><strong>14. B</strong>｜【知识产权】侵权复制品的善意取得
+《计算机软件保护条例》第 30 条：软件复制品的<strong>善意持有人</strong>（不知道也没有合理理由知道是侵权复制品）<strong>不承担赔偿责任</strong>；但知道后<strong>应当停止使用、销毁</strong>该侵权复制品；若停止使用并销毁将造成<strong>重大损失</strong>，可以<strong>向著作权人支付合理费用后继续使用</strong>。故 C 企业的使用行为仍属侵权，但支付合理费用后可继续使用，选 B。</p>
+<p><strong>15. C</strong>｜【软件工程】数据字典与加工逻辑
+加工逻辑用于<strong>描述输入数据流变换为输出数据流的加工规则</strong>（可用结构化语言、判定树、判定表表示），它规定"做什么"而非"如何实现"，<strong>不需要给出具体的数据结构和算法实现</strong>，故 C 的说法不正确。A、B、D 均为正确叙述。</p>
+<p><strong>16. B</strong>｜【软件工程】模块设计原则
+模块的<strong>作用范围</strong>（受该模块内一个判定影响的模块集合）应当<strong>限制在其控制范围</strong>（该模块本身及其下属模块）<strong>之内</strong>，这样判定结果的传递路径最短、模块耦合最低。若作用范围超出控制范围，判定结果要绕过层级传递，导致高耦合。</p>
+<p><strong>17. D</strong>｜【软件工程】AOE 网与关键路径
+关键路径是从源点到汇点的<strong>最长路径</strong>，其长度即最短工期。本图最长路径为 <strong>A-D-F-H-J，长度 48 天</strong>（A→D=10、D→F=8、F→H=20、H→J=10，合计 48），故选 D。（【存疑：图形复原】顶点 A～J 的活动图见原卷 PDF 第 5 页。据原图复原的完整边集：A→B=3、A→C=6、A→D=10、B→E=15、C→F=4、D→F=8、E→G=2、F→G=3、F→H=20、F→I=4、G→J=7、H→J=10、I→H=1、I→J=12。）</p>
+<p><strong>18. B</strong>｜【软件工程】总时差
+"晚 16 天开始不影响工期"即该活动的<strong>总时差 ≥ 16 天</strong>。各活动总时差：<strong>AC=8 天、BE=21 天、FI=14 天、HJ=0 天（关键活动）</strong>。只有 <strong>BE 的总时差 21 ≥ 16</strong>，晚 16 天开始仍在时差范围内，不影响总工期，选 B。（【存疑：图形复原】总时差 = Vl(终点) − Ve(起点) − 活动时长；据此复算 Ve(J)=48、Vl(C)=14、Vl(E)=39、Vl(I)=36，得 AC=8、BE=21、FI=14、HJ=0，与上述一致。）</p>
+<p><strong>19. B</strong>｜【软件工程】风险管理
+风险是<strong>可能发生、可能带来损失</strong>的事件；可以<strong>预测</strong>风险、通过<strong>干预减少损失</strong>，但<strong>无法完全避免</strong>（"能预测到就能避免"错误地把风险当作确定事件）。故 B 的叙述不正确。</p>
+<p><strong>20. A</strong>｜【数据结构】表达式后缀式
+<code>a∗(b+c/d)−e</code>：先算最内层 <code>c/d</code> → 后缀 <code>cd/</code>；再 <code>b + c/d</code> → <code>bcd/+</code>；再 <code>a ∗ (...)</code> → <code>abcd/+∗</code>；最后 <code>− e</code> → <strong><code>abcd/+∗e−</code></strong>。后缀式 = 对表达式树做后序遍历，操作数在前、操作符跟在其两个操作数之后。</p>
+<p><strong>21. B</strong>｜【软件工程·程序设计语言】编译过程
+<strong>语义分析</strong>阶段进行<strong>静态语义检查</strong>（类型一致性检查、变量作用域与唯一性检查等）。词法分析识别单词（token）；语法分析检查语法结构（是否符合文法）；目标代码生成已处于编译后端。</p>
+<p><strong>22. A</strong>｜【软件工程·程序设计语言】Java 语言特征
+Java 采用<strong>即时编译（JIT）</strong>（① 对）：先将源码编译为字节码，运行时由 JIT 把热点代码编译为本地码；Java 对象在<strong>堆空间</strong>分配（③ 对），由 GC 自动回收；Java <strong>不</strong>做静态优化编译（② 错），基本类型变量在栈上但<strong>对象不在栈空间</strong>分配（④ 错）。故 ①③，选 A。</p>
+<p><strong>23. B</strong>｜【软件工程】云计算部署模型
+云基础设施<strong>为某个客户单独构建和使用</strong>属于<strong>私有云</strong>。公有云面向公众；社区云由有共同需求的多个组织共享；混合云是上述两种或多种的组合。</p>
+<p><strong>24. B</strong>｜【操作系统】位示图
+磁盘物理块数 = 2048GB ÷ 8MB = 2048×1024 MB ÷ 8 MB = <strong>262144 = 2¹⁸</strong> 块。位示图每块用 1 bit 记录，共需 <strong>2¹⁸ bit</strong>。字长 128 bit，则所需字数 = 2¹⁸ ÷ 2⁷ = <strong>2¹¹ = 2048</strong> 个字，选 B。</p>
+<p><strong>25. A</strong>｜【操作系统】页面置换（改进型 Clock）
+被淘汰页必须<strong>在内存</strong>：由页面变换表，在内存的是页 <strong>0、2、4</strong>。三者<strong>访问位均为 1</strong>，第一轮扫描找不到访问位为 0 的页，将访问位清零后第二轮优先淘汰<strong>修改位为 0</strong> 的页——页 0 的修改位为 0（页 2、页 4 修改位为 1），故淘汰<strong>页 0</strong>，选 A。（【存疑：图形复原】页面变换表见原卷 PDF 第 6 页。）</p>
+<p><strong>26. D</strong>｜【操作系统】前驱图与 PV 操作
+P2 有 <strong>1 个前趋（P1）</strong>，执行前 a 处需 1 个 <strong>P 操作</strong>（等待 P1 通知）→ <code>P(S1)</code>；P2 有 <strong>2 个后继（P3、P4）</strong>，执行后 b 处需 2 个 <strong>V 操作</strong>通知后继 → <code>V(S2)V(S3)</code>。故 a、b 处填 <code>P(S1)</code> 和 <code>V(S2)V(S3)</code>，选 D。（【存疑：图形复原】前驱图见原卷 PDF 第 7 页。）</p>
+<p><strong>27. B</strong>｜【操作系统】前驱图与 PV 操作
+P3 有 <strong>1 个后继（P5）</strong>，执行后 c 处需 1 个 <strong>V 操作</strong> → <code>V(S4)</code>；P4 有 <strong>1 个前趋（P2）</strong>，执行前 d 处需 1 个 <strong>P 操作</strong> → <code>P(S3)</code>。故 c、d 处填 <code>V(S4)</code> 和 <code>P(S3)</code>，选 B。（【存疑：图形复原】）</p>
+<p><strong>28. C</strong>｜【操作系统】前驱图与 PV 操作
+P5 有 <strong>2 个前趋（P3、P4）</strong>，执行前 e 处需 2 个 <strong>P 操作</strong> → <code>P(S4)P(S5)</code>；P5 有 <strong>1 个后继（P6）</strong>，执行后 f 处需 1 个 <strong>V 操作</strong> → <code>V(S6)</code>。故 e、f 处填 <code>P(S4)P(S5)</code> 和 <code>V(S6)</code>，选 C。（【存疑：图形复原】）</p>
+<p><strong>29. D</strong>｜【软件工程】螺旋模型
+螺旋模型将<strong>风险分析</strong>引入瀑布模型（A 对），把开发划分为若干<strong>螺旋周期</strong>，每个周期大致经历瀑布式阶段（B 对），适合<strong>大规模、复杂、高风险</strong>项目（C 对）。螺旋模型本身<strong>不强调快速提供初始版本</strong>（快速提供初始版本让用户测试是<strong>原型模型/增量模型</strong>的特点），故 D 的陈述不正确。</p>
+<p><strong>30. C</strong>｜【软件工程】螺旋模型
+螺旋模型<strong>支持需求动态变化</strong>（A 对）、<strong>要求开发人员具备风险分析能力</strong>（B 对）、过多迭代会<strong>增加成本、延迟提交</strong>（D 对）。由于每个周期都要进行风险分析，<strong>开发成本较高</strong>，"开发成本低"不正确，选 C。</p>
+<p><strong>31. D</strong>｜【软件工程】耦合性
+<strong>内容耦合</strong>是最强的耦合：一个模块<strong>直接访问另一模块的内部数据</strong>，或<strong>通过非正常入口转入另一模块内部</strong>。数据耦合通过参数传递数据（最弱）；公共耦合共享全局数据结构；外部耦合访问同一外部环境（如同一外部设备/文件）。</p>
+<p><strong>32. C</strong>｜【软件工程】详细设计
+<strong>详细设计</strong>的主要任务：为每个模块设计<strong>算法</strong>、<strong>数据结构</strong>、<strong>数据库的物理（存储）结构</strong>、模块的详细处理流程等。<strong>模块之间的接口设计</strong>属于<strong>概要设计</strong>（总体设计）阶段的任务，选 C。</p>
+<p><strong>33. B</strong>｜【软件工程】软件文档
+文档是软件产品的重要组成部分（A 对），编制文档在软件开发中占有突出地位、工作量很大（C 对），高质量文档对软件效益有重要意义（D 对）。文档<strong>对开发活动同样重要</strong>（需求、设计、测试、评审均以文档为依据），"只对维护有用、对开发意义不大"不正确，选 B。</p>
+<p><strong>34. A</strong>｜【软件工程】白盒测试·路径覆盖
+路径覆盖要求所选用例覆盖程序中<strong>所有可执行路径</strong>。该流程图共有 <strong>3 条可执行路径</strong>，每条路径需一个用例，故至少 <strong>3</strong> 个测试用例，选 A。（【存疑：图形复原】流程图见原卷 PDF 第 9 页。据原图复原结构：入口→判定 1 <code>(X=0)&amp;&amp;(Y&gt;2)</code> → 一支经"语句 A"到出口、另一支进判定 2 <code>(X&lt;1)&amp;&amp;(Y=1)</code>；判定 2 一支经"语句 B"到出口、另一支不经任何语句直接到出口。三条路径：判定1-A-出口、判定1-判定2-出口、判定1-判定2-B-出口。）</p>
+<p><strong>35. D</strong>｜【软件工程】软件可维护性公式
+<strong>可维护性</strong> = <strong>1/（1+MTTR）</strong>（MTTR 越小越易维护）。对比：<strong>可靠性</strong> = MTTF/（1+MTTF）；<strong>可用性</strong> = MTBF/（1+MTBF)（MTBF = MTTF + MTTR）。A 是可靠性公式，C 是可用性公式变形，B 无意义。</p>
+<p><strong>36. C</strong>｜【软件工程】软件维护类型
+<strong>完善性（改善性）维护</strong>：为<strong>改进性能、增加新功能、提升效率或可维护性</strong>而修改软件。本题"修改索引方法以更快得到搜索结果"属于提高性能的完善性维护。正确性维护改错误；适应性维护适应环境变化；预防性维护为提高可维护性而主动修改。</p>
+<p><strong>37. A</strong>｜【软件工程】面向对象分析（OOA）
+OOA 的活动顺序通常为：<strong>认定对象 → 组织对象（建立对象间关系/分类结构）→ 描述对象间的相互作用 → 确定对象的操作</strong>。B、C、D 混入了"定义属性""识别包"等其他活动或打乱了顺序。</p>
+<p><strong>38. C</strong>｜【软件工程】面向对象设计原则
+<strong>接口分离原则（ISP）</strong>：<strong>不应该强迫客户依赖于他们不用的方法</strong>——接口属于客户（使用者），不属于它所在的类层次结构；应使用多个专门的接口而非单一臃肿接口。这常与"依赖于抽象、不依赖于具体（DIP）"配合使用。单一责任（SRP）强调一个类只有一个变化原因；开放—封闭（OCP）强调对扩展开放、对修改封闭；里氏替换（LSP）强调子类型必须能替换父类型。</p>
+<p><strong>39. C</strong>｜【软件工程】面向对象
+Bird 是 Parrot 的<strong>父类</strong>：Parrot 对象可以当作 Bird 看待（"is-a"），但 <strong>Bird 对象不能当作 Parrot 看待</strong>（父类不具有子类特有的成员），故 C 的叙述不正确。cat、bird、parrot 均可直接或间接视为 Animal 的对象（A、B、D 正确）。</p>
+<p><strong>40. D</strong>｜【软件工程】面向对象
+<strong>多态</strong>：同一消息（方法调用）发送给不同对象，各对象按自身类型产生不同的行为（Animal 的 move() 在 Bird、Cat、Parrot 中有各自的实现）。封装是隐藏内部细节；继承是子类复用父类成员；消息传递是对象间通信机制。</p>
+<p><strong>41. B</strong>｜【软件工程·UML】状态图建模对象
+UML 状态图用于对<strong>反应型对象</strong>（reactive object）建模——其行为由外部事件驱动、在有限状态间转换的对象（如电梯、订票机、协议实体）。状态图描述该对象在其生命周期中经历的状态、转换、事件与动作。</p>
+<p><strong>42. B</strong>｜【软件工程·UML】状态转换触发条件
+从<strong>组合状态 C</strong>（其内部含子状态 A、B）到 D 的转换，其触发条件是<strong>一旦状态 A 和 B 的所有动作完成</strong>（即组合状态内部的迁移完成、do 活动结束），才能发生 C→D 的转换，选 B。（【存疑：图形复原】状态图见原卷 PDF 第 11 页。）</p>
+<p><strong>43. D</strong>｜【软件工程·UML】状态图基本概念
+<strong>状态由事件触发</strong>的说法错误：<strong>状态转换（迁移）由事件触发</strong>，状态本身是对象在生命周期中的一种条件/情形（被进入和退出，而非被"触发"）。A（动作可在状态内或转换时执行）、B（事件发生且无监护条件则离开当前状态、终止 do 活动）均正确；C 中 <code>when(b=5)</code> 在 UML 中表示<strong>变化事件</strong>（change event，条件为真时触发），若按原卷写"时间事件"则也不准确，但本题官方答案为 D。</p>
+<p><strong>44. A</strong>｜【软件工程·设计模式】命令模式
+题干即命令模式的定义："<strong>将一个请求封装为一个对象</strong>，从而可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作"，即 <strong>Command（命令）模式</strong>。观察者用于一对多通知；状态用于状态驱动行为；中介者用于解解对象间直接通信。（【存疑：图形复原】类图见原卷 PDF 第 12 页。）</p>
+<p><strong>45. A</strong>｜【软件工程·设计模式】命令模式的角色
+<strong>Command（此处为 Operation）</strong> 是抽象命令，<strong>声明执行操作的接口</strong>（execute）。SellOperation/BuyOperation/ViewOperation 是<strong>具体命令</strong>（实现接口、绑定接收者）；<strong>Broker 是调用者（Invoker）</strong>；<strong>Stock 是接收者（Receiver）</strong>，真正执行业务。</p>
+<p><strong>46. D</strong>｜【软件工程·设计模式】模式分类
+命令模式属于<strong>行为型对象</strong>模式（关注对象间职责分配与请求的处理顺序，封装请求为对象）。创建型关注对象创建；结构型关注对象组合。</p>
+<p><strong>47. B</strong>｜【软件工程·设计模式】命令模式适用场景
+命令模式适用于：需要<strong>抽象出执行的动作（请求）以参数化某对象</strong>时（把"做什么"封装成命令传给调用者）；需要支持<strong>撤销/恢复</strong>、<strong>请求排队</strong>或<strong>记录日志</strong>时。A 是观察者适用场景；C 是状态模式适用场景；D 是中介者模式适用场景。</p>
+<p><strong>48. A</strong>｜【软件工程·程序设计语言】文法与语法树
+由文法（E→E+T|T，T→F∗T|F，F→id），∗ 的优先级高于 + 且左结合：<code>a+b∗c∗d</code> 的推导为 E ⇒ E+T ⇒ a + T ⇒ a + T∗F ⇒ a + T∗d ⇒ a + F∗d ⇒ a + b∗d... 更严格地，<code>b∗c∗d</code> 由 T ⇒ T∗F 链式产生，故语法树<strong>根为 +，左子树为 a，右子树为 ∗（其左子树为 b∗c 的 ∗ 结点、右子树为 d）</strong>。四个选项中只有 A 与该结构相符，选 A。（【存疑：图形复原】四个图形选项见原卷 PDF 第 13 页，D 选项原卷标注"暂无"。）</p>
+<p><strong>49. D</strong>｜【软件工程·程序设计语言】有限自动机
+据原卷 DFA 图与公开解析：该自动机为<strong>非确定的有限自动机</strong>（状态转换存在不确定性），且它<strong>不能识别以 bab 结尾</strong>的串，选 D。（【存疑：图形复原】DFA 图见原卷 PDF 第 13 页。）</p>
+<p><strong>50. C</strong>｜【软件工程·程序设计语言】传值与传引用
+<code>foo(5)</code>：形参 x（值）=5，局部 <code>a=2</code>。调用 <code>hoo(a, x)</code>：hoo 的 <code>&amp;x</code> 是<strong>引用</strong>，绑定到 foo 的 a（初值 2）；hoo 的 y 是<strong>值</strong>，=5。
+hoo 内：<code>y = y+10</code> → y=15（局部副本，不影响 foo 的 x）；<code>x = y - x</code> → 引用的 a = 15 - 2 = <strong>13</strong>。
+返回后 <code>print(a, x)</code> 输出 <strong>13, 5</strong>，选 C。（【存疑：代码为图片，排版依据原卷文字层复原，见 PDF 第 14 页。】）</p>
+<p><strong>51. D</strong>｜【数据库】E-R 图转关系模式
+<strong>多对多（*:*）联系</strong>必须<strong>转换成一个独立的关系模式</strong>，其属性包含两端实体的主键（作外键）及联系自身的属性，主键为两端实体主键的组合。1:1 与 1:*（或 *:1）联系可合并到某一端实体对应的关系中，不必独立。（【存疑：图形复原】E-R 图见原卷 PDF 第 14 页。）</p>
+<p><strong>52. C</strong>｜【数据库】函数依赖与候选码
+求属性闭包：A→B、B→DH，得 A⁺={A,B,D,H}，缺 C、E，故 A 不是候选码；C→E，C⁺={C,E}，缺 A、B、D、H，C 也不是。<strong>AC</strong>：A⁺C⁺={A,B,C,D,E,H}=U，且去掉 A 或 C 均不再闭包为 U（A、C 互不可达），故 <strong>AC 是唯一候选码</strong>，选 C。</p>
+<p><strong>53. D</strong>｜【数据库】传递依赖与冗余依赖
+<strong>传递依赖</strong>：A→B 且 B→DH（B 不决定 A），故 <strong>A→D</strong> 为传递依赖；同理 <strong>A→H</strong> 也可由 A→B→H 推出（传递依赖）。<strong>冗余依赖</strong>：F 中已显式给出 <strong>A→H</strong>，但它可由 A→B、B→DH（含 B→H）推出，故 <strong>A→H 是冗余函数依赖</strong>。综合为"存在传递依赖 A→D 和 A→H，并且还存在冗余函数依赖"，选 D。</p>
+<p><strong>54. C</strong>｜【数据库】关系代数
+最外层先按"销售部 1"筛员工：对 <strong>E</strong> 的第 3 个属性（部门名）做选择。字符串常量须加引号 → <strong>σ3='销售部1'(E)</strong>，选 C。（A、B 缺引号；B、D 操作关系 C 错误。）</p>
+<p><strong>55. B</strong>｜【数据库】关系代数
+筛选商品"华为 Mate40"并保留连接所需属性：对 <strong>C</strong> 的第 2 个属性（商品名）做选择 σ2='HUAWEI Mate40'，再投影保留 <strong>商品号、商品名</strong>（C 的第 1、2 列）以便后续与 EC 按商品号连接，故为 <strong>π1,2(σ2='HUAWEI Mate40'(C))</strong>，选 B。（A 投影 2,3 是商品名、库存数，丢失商品号无法连接；C、D 操作关系 EC 错误。）</p>
+<p><strong>56. C</strong>｜【数据库】关系代数
+按"2020 年 11 月 11 日"筛销售记录：对 <strong>EC</strong> 的第 4 个属性（销售日期）做选择 → <strong>σ4='2020 年 11 月 11 日'(EC)</strong>，选 C。（EC 的第 4 列才是销售日期；C 关系无销售日期属性，A、B 错；D 用了第 3 列销售数，错。）</p>
+<p><strong>57. C</strong>｜【数据结构】栈与队列
+入栈序 a,b,c,d,e,f，出队序 b,d,f,e,c,a。模拟：a,b 入栈 → 弹 b；c,d 入栈 → 弹 d；e,f 入栈 → 栈内为 a,c,e,f → 弹 f,e,c,a。<strong>S 中元素最多为 4 个，此时栈底到栈顶为 a, c, e, f</strong>，选 C。
+（验证：出队序 b,d,f,e,c,a 正由该栈操作序列产生——弹 b 前入 a,b；弹 d 前入 c,d；之后入 e,f，依次弹 f、e、c、a。）</p>
+<p><strong>58. B</strong>｜【数据结构】二叉树
+结点数固定时，<strong>完全二叉树</strong>的高度（深度）<strong>最小</strong>：n 个结点的完全二叉树高度为 ⌊log₂n⌋+1，这是所有 n 结点二叉树中的最小高度（除最下层外各层均填满）。二叉排序树、线索二叉树形态可退化成链（高度可达 n）；最优二叉树（哈夫曼树）优化的是带权路径长度而非高度。</p>
+<p><strong>59. B</strong>｜【数据结构】数组与稀疏矩阵
+稀疏矩阵的压缩存储常用<strong>三元组顺序表</strong>（线性表存储非零元的行、列、值）与<strong>十字链表</strong>（按行、列建立链表）。二维数组是稀疏矩阵的普通（非压缩）存储；邻接矩阵用于图；双向链表、索引顺序表不是稀疏矩阵的压缩存储方式。</p>
+<p><strong>60. D</strong>｜【数据结构】哈希表·线性探查
+线性探查法在发生冲突时顺序向后探测。查找 e 成功且与多个关键字比较时，这些关键字位于 e 的起始位置之后连续的槽中，<strong>第一个关键字可以不是 e 的同义词</strong>——它可能是因冲突被"顺延"过来的其他关键字的同义词或普通元素。</p>
+<blockquote>
+<p>⚠️ <strong>分歧题（构造反例证明）</strong>：取 m=5，依次插入 1, 6, 2, 7。H(1)=1→槽1；H(6)=1 冲突→槽2；H(2)=2 冲突→槽3；H(7)=2 冲突→槽3(2)→槽4。查 e=7：从槽2 起，依次比较 <strong>6、2、7</strong> 才找到。其中 <strong>6%5=1 ≠ 7%5=2</strong>，即 6 <strong>不是</strong> 7 的同义词。故"都是 e 的同义词"（信管网答案 C）错误，<strong>D</strong> 正确。</p>
+</blockquote>
+<p><strong>61. C</strong>｜【数据结构】排序
+第一趟结束后能确定某个元素最终位置的排序：
+- <strong>冒泡排序</strong>：一趟后最大（小）元素"沉底"到最终位置 ✓；
+- <strong>简单选择排序</strong>：一趟选出的最小（大）元素放入最终位置 ✓；
+- <strong>堆排序</strong>：初始建堆并调整后，堆顶元素到位 ✓；
+- <strong>快速排序</strong>：一趟划分后基准元素到达最终位置 ✓。
+<strong>直接插入排序</strong>（一趟只把一个元素插入前部有序区，后续还可能移动）与<strong>归并排序</strong>（一趟只保证段内有序）都不能确定最终位置。故 ②③④⑤，选 C。</p>
+<p><strong>62. C</strong>｜【数据结构】堆
+对 A=(2,8,7,1,3,5,6,4)（下标 1..8）自第 ⌊n/2⌋=4 个结点起向前调整（大顶堆）：
+- 调整 1（A[4]=1，子 4）：1&lt;4 → 交换 → (2,8,7,<strong>4</strong>,3,5,6,1)
+- 调整 7（A[3]=7，子 5、6）：7 最大，不动
+- 调整 8（A[2]=8，子 4、3）：8 最大，不动
+- 调整 2（A[1]=2，子 8、7）：2&lt;8 → 与 8 交换 → (8,2,7,4,3,5,6,1)；继续调整 2 的子树：A[2]=2，子 4、3，2&lt;4 → 交换 → <strong>(8,4,7,2,3,5,6,1)</strong>
+结果为大顶堆 <strong>(8,4,7,2,3,5,6,1)</strong>，选 C。（大顶堆满足任一非叶结点 ≥ 其孩子：8≥4,7；4≥2,3；7≥5,6。）</p>
+<p><strong>63. A</strong>｜【数据结构】分治法时间复杂度
+该分治策略把规模 n 分为两个 n/2 的子问题，并花 O(n) 时间处理跨中点的合并（最大子段和的三种情形：全在前半段、全在后半段、跨中点）。故递推式 <strong>T(n) = 2T(n/2) + O(n)</strong>，由主定理（a=2, b=2, f(n)=O(n)=Θ(n^log₂2)）属 <strong>case 2</strong>，得 <strong>T(n) = O(nlgn)</strong>，选 A。</p>
+<blockquote>
+<p>⚠️ <strong>分歧题</strong>：信管网答案 B（O(n²)）错误——那是不做分治的朴素枚举复杂度；分治法每层 O(n)、共 O(lgn) 层。</p>
+</blockquote>
+<p><strong>64. C</strong>｜【数据结构】算法设计策略
+问题具有<strong>最优子结构</strong>（最优解包含子问题的最优解）与<strong>重叠子问题</strong>（子问题被反复求解）两个性质，正是<strong>动态规划</strong>的适用特征（自底向上/记忆化存储子问题解，避免重复计算）。分治要求子问题独立；贪心需贪心选择性质；回溯是穷举解空间。</p>
+<p><strong>65. D</strong>｜【数据结构】算法设计策略
+以<strong>广度优先</strong>方式搜索解空间（状态空间树）的策略是<strong>分支限界法</strong>（常配合剪枝/限界函数求最优解）。深度优先搜索解空间是<strong>回溯法</strong>；动态规划与贪心不是解空间搜索策略。</p>
+<p><strong>66. D</strong>｜【网络】IPv6
+IPv6 地址长度为 <strong>128 bit</strong>（16 个字节，写作 8 组 4 位十六进制数，如 2001:db8::1）。IPv4 为 32 bit。</p>
+<p><strong>67. A</strong>｜【网络】应用层协议
+在地址栏输入 <code>www.abc.com</code>，浏览器默认用 <strong>HTTP</strong>（端口 80）访问该网站。DNS 负责把域名解析为 IP 地址（是解析过程的参与者，但浏览器发出的应用层请求是 HTTP）；TCP 是传输层协议；FTP 是文件传输协议。</p>
+<p><strong>68. A</strong>｜【网络】电子邮件协议
+<strong>SMTP</strong>（简单邮件传输协议）用于<strong>客户端向邮件服务器发送</strong>邮件（端口 25，加密版 SMTPS 端口 465）。POP3（端口 110）与 IMAP4（端口 143）用于从服务器<strong>接收/读取</strong>邮件；MIME 是邮件内容格式扩展（支持附件、多语言），不是收发协议。</p>
+<p><strong>69. B</strong>｜【网络】网络命令
+<code>ipconfig /flushdns</code> 清除本地 <strong>DNS 解析缓存</strong>。<code>/release</code> 释放（DHCP 租约的）IP 地址；<code>/displaydns</code> <strong>显示</strong>（不清除）DNS 缓存内容；<code>/registerdns</code> 向 DNS 服务器重新注册本机的名称与地址。</p>
+<p><strong>70. B</strong>｜【网络】网络系统设计
+网络设计目标（低成本、高性能、高可靠、高安全等）相互制约、不可能全部最优。本题官方答案取 <strong>B</strong>：在网络系统中<strong>可用性/可靠性（最短的故障时间）优先级最高</strong>，设计时应优先保证最短的故障时间（故障时间越长，业务损失越大）。故"尽量让最短的故障时间目标达到最优"最为合理。</p>
+<p><strong>71. C</strong>｜【英语】上下文：设计模式引言（GoF《设计模式》原文）
+"设计面向对象软件很难，而设计<strong>可复用的（reusable）</strong>面向对象软件就更难了。" 与后文 "a reusable and flexible design..." 呼应。runnable（可运行的）、right（正确的）、pertinent（相关的，前文已出现）均不合语境。</p>
+<blockquote>
+<p>⚠️ 本段文字出自 GoF《设计模式》第 1 章引言，逐句与原书核对一致。</p>
+</blockquote>
+<p><strong>72. B</strong>｜【英语】上下文：设计的通用性
+"你的设计应当针对手头的问题，但又要足够<strong>通用（general）</strong>，以便应对未来的问题与需求变化。" clear（清晰）、personalized（个性化）、customized（定制化）与"应对未来问题"相悖。</p>
+<p><strong>73. D</strong>｜【英语】上下文：新手的状态
+" Meanwhile new designers are <strong>overwhelmed</strong>（不知所措/应接不暇）by the options available..." overwhelmed by... 是标准搭配（被大量选择压倒）。excited（兴奋）、surprised（惊讶）不合"退回到非面向对象老办法"的语境。</p>
+<blockquote>
+<p>⚠️ 原卷 D 选项印刷为 "Foverwhelmed"，应为 "overwhelmed"，据语义与 GoF 原书选 D。</p>
+</blockquote>
+<p><strong>74. D</strong>｜【英语】上下文：复用解决方案
+"他们复用过去行之有效的解决方案。当找到一个好的<strong>解决方案（solution）</strong>时，就一次又一次地使用它。" tool（工具）、component（构件）、system（系统）在文中指代不明，solution 与 "solutions that have worked for them" 直接呼应。</p>
+<p><strong>75. A</strong>｜【英语】上下文：模式的反复出现
+"因此，你会在许多面向对象系统中发现<strong>反复出现的（recurring）</strong>类与通信对象的模式。" recurring patterns（反复出现的模式）正是"设计模式"的定义性表述。right（正确的）、experienced（有经验的）、past（过去的）均不能表达"模式反复出现"的含义。</p>
+<hr />
+<h2>三、分科正确率统计（做完后回填）</h2>
+<blockquote>
+<p>分科归属按本题库标注。总分 ____ / 75。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>题号</th>
+<th>题数</th>
+<th>答对数</th>
+<th>正确率</th>
+<th>备注（错题号）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础（组成与体系结构）</td>
+<td>1-6</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>24-28</td>
+<td>5</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>网络（含信息安全）</td>
+<td>7-11, 66-70</td>
+<td>10</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>51-56</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>20, 57-65</td>
+<td>10</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>软件工程（含面向对象·UML·设计模式·程序设计语言·云计算）</td>
+<td>15-19, 21-23, 29-50</td>
+<td>30</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>知识产权</td>
+<td>12-14</td>
+<td>3</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>计算机英语</td>
+<td>71-75</td>
+<td>5</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td>1-75</td>
+<td><strong>75</strong></td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>判定规则（对齐科目一合格线 45/75 = 60%）：</strong>
+- 总分 ≥ 45 分：合格，Phase 2 节奏正常推进。
+- 总分 &lt; 45 分：当日错题全部回看对应笔记，并把错题集中的科目列入二轮重点。
+- 单科正确率 &lt; 60%：该科进入 <code>knowledge-checklist.md</code> 二轮重点清单，次日抽 30 分钟补强。
+- 常见丢分重灾区（按本题分布）：<strong>17/18 关键路径与总时差、24 位示图计算、25 改进型 Clock 置换、26-28 前驱图 PV、35 可维护性公式、48 文法语法树、50 传值传引用、52/53 候选码与冗余依赖、54-56 关系代数表达式构造、60 线性探查同义词、61 排序一趟定位、62 建堆、63 分治时间复杂度</strong>。</p>
+<hr />
+<h2>四、错题登记区（错题四要素）</h2>
+<blockquote>
+<p>每道错题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 登记一条，复制以下模板新增。计算题必须把过程重算一遍。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述，如「第 24 题位示图大小计算」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 4：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 5：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<hr />
+<h2>五、与卷 1（2020 下半年）对比区</h2>
+<blockquote>
+<p>两卷均为 75 题、每题 1 分、合格线 45 分。做完本卷后回填，用于判断知识点迁移与薄弱环节。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>卷 1：2020 下半年</th>
+<th>卷 2：2021 上半年</th>
+<th>差异与启示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总分</td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>卷 2 相比卷 1 的变化：______</td>
+</tr>
+<tr>
+<td>计算机基础（1-6）</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>卷 2 新增 RISC/CISC 对比、中断 vs 异常辨析；继续考磁盘与闪存</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>____ / 6</td>
+<td>____ / 5</td>
+<td>卷 1 考页式地址转换 + 索引文件 + PV 信号量范围；卷 2 考<strong>位示图 + Clock 置换 + 前驱图 PV 填空</strong>（三空连环，更易连环错）</td>
+</tr>
+<tr>
+<td>网络（含安全）</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>卷 1 偏协议归属与端口；卷 2 偏<strong>攻击类型、SQL 注入、IPSec 层级、ipconfig 命令</strong>；两卷均考 IPv6/地址长度类识记</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>卷 1 考 E-R 冲突合并 + 自然/外连接行数；卷 2 考 <strong>E-R 转关系模式 + 候选码与冗余依赖 + 关系代数表达式构造</strong>（π/σ/⋈ 拼接，更重表达书写）</td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>卷 1 考后缀式 + 快排划分 + 渐进排序；卷 2 考<strong>栈/队列模拟 + 二叉树高度 + 稀疏矩阵 + 哈希同义词 + 排序一趟定位 + 建堆 + 分治递推 + 算法策略</strong>，计算量更大</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>____ / 29</td>
+<td>____ / 30</td>
+<td>卷 1 偏过程模型与设计模式（Builder 全套）；卷 2 偏<strong>风险、螺旋模型（两空）、设计原则（ISP）、维护类型、OOA 顺序、命令模式（四空）</strong>；两卷均考一道白盒覆盖</td>
+</tr>
+<tr>
+<td>知识产权</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>卷 1 考专利先申请 + 职务作品 + 保护期；卷 2 考<strong>保护范围 + 商标同日申请先用 + 侵权复制品善意取得</strong></td>
+</tr>
+<tr>
+<td>计算机英语</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>卷 1 为"系统运行与支持"主题；卷 2 为 <strong>GoF《设计模式》引言原文</strong>（与第 44-47 题命令模式呼应，可交叉印证）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>迁移结论（对答案后填写）：</strong>
+1. 两卷<strong>共同稳定考点</strong>（必拿分）：Cache/存储体系、中断、网络层与应用层协议、关系代数、候选码、后缀式、排序性质、维护四类型、设计模式分类。
+2. 本卷新增/变化较大的考点：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_
+3. 相比卷 1 退步的科目与题型：</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_
+4. 下一步（Day 17）要重点回看的知识点：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/2021H1-morning-key.md">docs/practice/papers/2021H1-morning-key.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

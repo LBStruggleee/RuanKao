@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 27 大题专项①：DFD + UML —— 答案速查 · 逐问丢分点解析 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2 📁 dfd-uml-key.md</div>
+<h1>Day 27 大题专项①：DFD + UML —— 答案速查 · 逐问丢分点解析</h1>
+<blockquote>
+<p><strong>配套练习</strong>：<code>dfd-uml-exercises.md</code>（4 道大题：DFD×2 + UML×2）
+<strong>答案来源</strong>：全部逐字转录自本地答案文本源
+<code>.superpowers/sdd/2026-09-20-34-day-exam-sprint/scratch-pm-2020年下半年下午试卷答案.txt</code>、
+<code>scratch-pm-2021年下半年下午试卷答案.txt</code>、<code>scratch-pm-2023年上半年下午试卷答案.txt</code>。
+2020–2022 年答案以"题目后紧随的答案文字"形式内嵌于试卷，2023 年以"参考答案"标注。
+源文本为 PDF 提取，存在个别 OCR 误识，均已用【存疑】标出并给出判读。</p>
+<p>⚠️ <strong>解析</strong>由本人撰写（题目与答案均为真题），原则是"每个空为什么是这个答案 +
+平衡规则/关系判定如何应用 + 易错点"；图形复原图一律标注 <strong>【存疑：图形复原】</strong>。</p>
+</blockquote>
+<hr />
+<h1>试题 A：2020 年下半年 下午试题一（智能检测系统）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>E1：检测设备　E2：管理员　E3：检测业务员　E4：监控人员</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>D1：模型信息表　D2：检测信息表　D3：基础信息表</td>
+<td>3</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>产品监测信息 P2→P3；监控规则 D3→P5；远程控制命令 E3→P5；基础信息 D3→P6</td>
+<td>5</td>
+</tr>
+<tr>
+<td>问题4</td>
+<td>结构化语言描述缺陷检测加工逻辑（见下）</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（4 分）外部实体</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：E1：检测设备　E2：管理员　E3：检测业务员　E4：监控人员</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>四个实体全部来自【说明】中出现的"人员角色/外部设备"：</li>
+<li><strong>管理员</strong>——功能 (1)(2) 的操作者（"管理员对检测标准和监控规则等基础信息设置"）</li>
+<li><strong>检测设备</strong>——功能 (5)"向检测设备发送控制指令进行处理"</li>
+<li><strong>检测业务员</strong>——功能 (5)"将检测情况展示给检测业务员……向检测业务员发送质量报警"</li>
+<li><strong>监控人员</strong>——功能 (6)"将模型运行情况发给监控人员"</li>
+<li><strong>判别要点</strong>：外部实体 = 向系统提供输入或接收系统输出的、系统之外的人/设备/外部系统。
+  判定时把【说明】每个功能里的"动作对象"圈出来即可。</li>
+<li><strong>易错点</strong>：</li>
+<li>把<strong>产品/图像</strong>误当实体——产品是系统处理的数据内容，不是外部实体；</li>
+<li>把<strong>"智能检测系统"本身</strong>当作实体；</li>
+<li>把"检测模型"当实体——模型是系统内部数据（存于 D1）。</li>
+<li><strong>答题规范</strong>：题目要求"使用说明中的语句"，必须用【说明】原词（如"检测业务员"不能简写为"业务员"）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 外部实体识别（固定 4 分题）</p>
+<hr />
+<h3>【问题2】（3 分）数据存储</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：D1：模型信息表　D2：检测信息表　D3：基础信息表</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>三个存储与三个"存储动作"一一对应：</li>
+<li><strong>D1 模型信息表</strong> ← 功能 (2)"检测模型部署"：部署的是模型 → 存模型信息</li>
+<li><strong>D2 检测信息表</strong> ← 功能 (3)"图像采集……包括产品结构，生产时间，图像信号和产品图像"：
+    这些是采集来的检测信息 → 存检测信息</li>
+<li><strong>D3 基础信息表</strong> ← 功能 (1)"基础信息管理……检测标准和监控规则等基础信息" → 存基础信息</li>
+<li><strong>定位技巧</strong>：找【说明】中的"存储/保存/记录/维护/设置"等动词，被存储的名词即存储名。</li>
+<li><strong>易错点</strong>：把"监控规则"单独算一个存储——它属于基础信息（功能 (1) 明确把"检测标准和监控规则"
+  归入基础信息），与 D3 合并；把"产品图像"当独立存储——它只是检测信息的一个字段。</li>
+<li><strong>命名</strong>：后缀"表/信息表/文件/记录"均可给分，核心词必须来自【说明】。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 数据存储识别（固定 3–4 分题）</p>
+<hr />
+<h3>【问题3】（5 分）补齐缺失的数据流</h3>
+<blockquote>
+<p><strong>答案（原文表格）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据流名称</th>
+<th>起点</th>
+<th>终点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>产品监测信息</td>
+<td>P2</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>监控规则</td>
+<td>D3</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>远程控制命令</td>
+<td>E3</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>基础信息</td>
+<td>D3</td>
+<td>P6</td>
+</tr>
+</tbody>
+</table>
+<p>【存疑：第一行"产品监测信息，起点 P2，终点 P3"疑为答案册 OCR 误识（P2/P3 与 P3/P4 误识）；
+结合【说明】功能 (4)"对图像采集所收到的产品检测信息中所有图像进行检测"，该数据流应为
+<strong>图像采集（P3）→ 缺陷检测（P4）的"产品检测信息"</strong>。名称与三要素以原卷图形编号为准。】</p>
+</blockquote>
+<p><strong>丢分点解析</strong>（数据流平衡规则如何应用）：</p>
+<p>逐个加工检查"守恒"（有输入、有输出、输入足以产生输出），回【说明】找缺的流：</p>
+<ol>
+<li><strong>监控规则 D3→P5</strong>：功能 (5)"质量检测<strong>根据监控规则</strong>对产品质量进行监控"——
+   <code>P5 质量检测</code> 需要"监控规则"作输入；监控规则属基础信息（存于 D3）。
+   复原图中 P5 仅有"检测结果"一条输入，缺规则输入 → 补一条 D3→P5。</li>
+<li><strong>远程控制命令 E3→P5</strong>：功能 (5)"（检测业务员）发起远程控制"——
+   <code>E3 检测业务员</code> 向 P5 发送远程控制命令（触发 P5 执行远程控制）。
+   P5 缺一条来自 E3 的输入 → 补 E3→P5。</li>
+<li><strong>基础信息 D3→P6</strong>：功能 (6)"在系统中部署的模型、产品的检测信息<strong>结合基础信息</strong>进行监测分析"——
+   <code>P6 模型监控</code> 需读基础信息（D3）。复原图中 P6 已有 D1、D2 输入但缺 D3 → 补 D3→P6。</li>
+<li><strong>产品检测信息 P3→P4</strong>：功能 (4)"根据检测模型和检测质量标准对<strong>图像采集所收到的产品检测信息</strong>中
+   所有图像进行检测"——<code>P4 缺陷检测</code> 的输入来自图像采集（P3）。复原图中 P4 仅有 D1 输入
+   （模型），缺被检测对象 → 补 P3→P4。</li>
+</ol>
+<p><strong>平衡规则应用要点</strong>：
+- <strong>守恒规则</strong>：一个加工的输出必须能由其输入产生。P5 只画了输出不画输入即"有输出无输入"
+  （黑洞/奇迹错误），必须补输入。
+- <strong>父子图平衡</strong>：0 层图中某个加工的输入/输出集合，必须与它分解后的子图输入/输出集合一致
+  （本题问题 4 即是把 P3/P4 再分解，分解后子加工的流要与父加工的流守恒）。
+- <strong>数据流命名</strong>：用【说明】原词名词短语（"监控规则""基础信息"），不用动词（"监控""控制"）。</p>
+<p><strong>知识点</strong>：【科目二·试题一】数据流平衡（守恒/父子图平衡/无悬空流）—— 下午卷最高频丢分点</p>
+<hr />
+<h3>【问题4】（3 分）结构化语言描述加工逻辑</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<p><code>接收到产品检测信息
+对所有图像进行检测
+IF 一个产品出现一张图像检测不合格
+THEN 该产品不合格
+     不合格产品的检测结果包括产品型号和不合格类型
+ENDIF</code></p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>结构化语言三层结构：<strong>顺序</strong>（接收→检测）+ <strong>选择</strong>（IF/THEN/ELSE/ENDIF）+ <strong>循环</strong>（DO/WHILE）。
+  本题只需顺序 + 一层 IF 选择。</li>
+<li><strong>得分点拆解</strong>（阅卷按点给分）：
+  ① 有"接收输入"语句（接收到产品检测信息）；
+  ② 有"检测"动作（对所有图像进行检测）；
+  ③ 有 IF 分支判定（一张不合格 → 产品不合格）；
+  ④ 说明不合格结果的组成（产品型号和不合格类型）。</li>
+<li><strong>易错点</strong>：</li>
+<li>写成自然语言段落（"首先系统会接收到产品检测信息，然后……"）——没有结构化关键字不得分；</li>
+<li>漏掉"检测结果包括什么"——这是【说明】功能 (4) 明确给出的输出；</li>
+<li>循环结构误用（本题是"对所有图像检测"，用顺序表述即可，不必套 WHILE）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】加工逻辑描述（结构化语言/判定表/判定树）</p>
+<h2>---</h2>
+<h1>试题 B：2021 年下半年 下午试题一（智慧农业平台）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>E1：传感器　E2：农业专家　E3：农业人员　E4：控制器</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>D1：监控处理规则表　D2：监测信息表　D3：分析结果表　D4：预测信息表</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>分析结果 P3→P5；历史监测信息 D2→P3；预测信息 P3→P5；监控处理规则 D1→P4；请求 E2→P5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题4</td>
+<td>4 个子加工 + 分解三错误（见下）</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（4 分）外部实体</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：E1：传感器　E2：农业专家　E3：农业人员　E4：控制器</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>四个实体来自【说明】的四个角色/设备：</li>
+<li><strong>传感器</strong>——功能 (2)"获取传感器上传的农作物长势、土壤墒情、气候等连续监测数据"</li>
+<li><strong>农业专家</strong>——功能 (1)"农业专家对……监控处理规则进行维护"；功能 (5)"实时给农业专家展示……"</li>
+<li><strong>农业人员</strong>——功能 (4)"根据农业人员提供的控制信息"；功能 (5)"实时向农业人员展示监测信息"</li>
+<li><strong>控制器</strong>——功能 (4)"对控制器进行远程控制"</li>
+<li><strong>易错点</strong>：</li>
+<li>把<strong>农作物/环境/土壤墒情</strong>当实体——这些是监测数据的内容（数据流名称），不是实体；</li>
+<li>把<strong>平台本身</strong>当实体；</li>
+<li>混淆"农业专家"与"农业人员"——两者是不同实体，前者维护规则、发请求，后者提供控制信息、
+    接收监测信息展示。区分它们的依据是各自关联的数据流。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 外部实体识别</p>
+<hr />
+<h3>【问题2】（4 分）数据存储</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：D1：监控处理规则表　D2：监测信息表　D3：分析结果表　D4：预测信息表</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>四个存储与【说明】中四处"存储/维护"动作一一对应：</li>
+<li><strong>D1 监控处理规则表</strong> ← 功能 (1)"信息维护……监控处理规则进行维护"</li>
+<li><strong>D2 监测信息表</strong> ← 功能 (2)"解析后将监测信息进行数据处理、可视化和<strong>存储</strong>"</li>
+<li><strong>D3 分析结果表</strong> ← 功能 (3)"将分析结果进行可视化并进行<strong>存储</strong>、远程控制"</li>
+<li><strong>D4 预测信息表</strong> ← 功能 (3)"将预测信息进行可视化和<strong>存储</strong>"</li>
+<li><strong>技巧</strong>：【说明】功能 (3) 一句话里出现两个"存储"，分别对应 D3、D4 两个表——
+  数清楚"存储"出现的次数，就数清了存储个数。</li>
+<li><strong>命名</strong>：后缀灵活（表/信息表/文件/记录），核心词用【说明】原词。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 数据存储识别</p>
+<hr />
+<h3>【问题3】（4 分）补充缺失的数据流</h3>
+<blockquote>
+<p><strong>答案（原文表格，源文本列为竖排，已整理为表格）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据流名称</th>
+<th>起点</th>
+<th>终点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分析结果</td>
+<td>P3</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>历史监测信息</td>
+<td>D2</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>预测信息</td>
+<td>P3</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>监控处理规则</td>
+<td>D1</td>
+<td>P4</td>
+</tr>
+<tr>
+<td>请求</td>
+<td>E2</td>
+<td>P5</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>丢分点解析</strong>（平衡规则应用）：</p>
+<ol>
+<li><strong>分析结果 P3→P5</strong>、<strong>预测信息 P3→P5</strong>：功能 (3)"将分析结果进行可视化""将预测信息进行可视化"
+   ——"可视化"是 <code>P5 可视化</code> 加工的职责，故 P3 要把分析结果、预测信息传给 P5。
+   复原图中 P5 仅有"监测信息"输入，缺这两条。</li>
+<li><strong>请求 E2→P5</strong>：功能 (5)"实时给农业专家展示统计分析结果和预测信息<strong>或根据农业专家请求</strong>进行展示"
+   ——<code>E2 农业专家</code> 的"请求"是 P5 按需展示的触发输入。复原图中 P5 没有任何来自 E2 的输入。</li>
+<li><strong>历史监测信息 D2→P3</strong>：功能 (3)"对<strong>历史监测信息</strong>进行综合统计和预测"——
+   <code>P3 数据处理</code> 需要"历史监测信息"作输入。
+   <strong>高频丢分点</strong>：P3 已有"实时监测信息"输入（来自 P2→P3），但"历史"信息只能来自<strong>存储 D2</strong>，
+   不能从数据采集加工直接来——<strong>实时流走加工→加工，历史/批量数据走存储→加工</strong>。</li>
+<li><strong>监控处理规则 D1→P4</strong>：功能 (4)"<strong>根据监控处理规则</strong>对分析结果进行判定"——
+   <code>P4 远程控制</code> 需读 D1。
+   <strong>注意</strong>：图中已画出 <code>D1→P3</code>（功能 (3)"根据监控处理规则进行监测分析"）——
+   <strong>同名数据流可流向不同加工，每条都要单独画</strong>，画了 D1→P3 不等于画了 D1→P4。</li>
+</ol>
+<p><strong>平衡规则应用要点</strong>：
+- 每个加工逐一核对：P3 输入有"实时监测信息 + 监控处理规则"，输出有"分析结果→D3/可视化/远程控制、
+  预测信息→D4/可视化"，其中"分析结果、预测信息给 P5"和"历史监测信息从 D2 进"就是缺的；
+- 检查每个存储的读/写是否闭合：D2 只被 P2 写、没有加工读它 → 必有一条 D2→某加工的读流。</p>
+<p><strong>知识点</strong>：【科目二·试题一】数据流平衡（实时流 vs 存储读取的区分是本题核心难点）</p>
+<hr />
+<h3>【问题4】（3 分）加工分解 + 三种常见错误</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<p><strong>"数据处理"可以分解为</strong>：监测分析实时监测信息；分析结果可视化、存储、远程控制；
+综合统计和预测历史监测信息；预测信息可视化、存储；</p>
+<p><strong>需要注意</strong>：
+1、加工有输入但是没有输出
+2、加工有输出但是没有输入
+3、加工的输入不足以产生输出</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>子加工切分</strong>：看【说明】功能 (3) 的动词短语结构。功能 (3) 包含两条并行处理线：</li>
+<li>线一（实时）：<strong>监测分析</strong>（输入实时监测信息 → 产出分析结果）→ 分析结果的<strong>可视化、存储、远程控制</strong></li>
+<li>线二（历史）：<strong>综合统计和预测</strong>（输入历史监测信息 → 产出预测信息）→ 预测信息的<strong>可视化、存储</strong></li>
+<li>故 4 个子加工：① 监测分析实时监测信息；② 分析结果可视化、存储、远程控制；
+    ③ 综合统计和预测历史监测信息；④ 预测信息可视化、存储。</li>
+<li><strong>三种常见错误</strong>是固定背诵点（2021 下答案册原文表述，务必逐字记忆，几乎每份真题答案都照此给分）：</li>
+<li>加工有输入但是没有输出（"黑洞"）</li>
+<li>加工有输出但是没有输入（"奇迹"）</li>
+<li>加工的输入不足以产生输出（输入不够支撑输出）</li>
+<li><strong>父子图平衡检查</strong>：分解后 4 个子加工的输入集合 = 父加工 P3 的输入集合
+  （实时监测信息、监控处理规则、历史监测信息），输出集合 = 父加工 P3 的输出集合
+  （分析结果、预测信息），不能多也不能少——这正是上一问补齐后的完整集合。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】加工分解 + 分解三错误（背诵点）</p>
+<h2>---</h2>
+<h1>试题 C：2020 年下半年 下午试题三（房产信息管理系统）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1(1)</td>
+<td>A1：房产经纪　A2：系统管理员　U1：审批授权　U2：修改房产信息　U3：删除房产信息</td>
+<td>7</td>
+</tr>
+<tr>
+<td>问题1(2)</td>
+<td>（a）：<code>&lt;&lt;include&gt;&gt;</code>　（b）：<code>&lt;&lt;extend&gt;&gt;</code></td>
+<td>（含在 7 分内）</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>C1：Property　C2：House　C3：Cando　C4：User　C5：Manager　C6：Agent</td>
+<td>6</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>AgentList 的主要属性：房产经纪负责该房产的起始时间和结束时间</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（7 分）参与者 / 用例 / 关系</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+A1：房产经纪
+A2：系统管理员
+U1：审批授权
+U2：修改房产信息
+U3：删除房产信息
+（a）：<code>&lt;&lt;include&gt;&gt;</code>
+（b）：<code>&lt;&lt;extend&gt;&gt;</code></p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>A1/A2</strong>：【说明】功能 (3)"系统用户（User）包括房产经纪和系统管理员（Manager）"——
+  参与者只有这两个（User 是统称，不单独画参与者）。</li>
+<li><strong>U2 修改房产信息</strong>：功能 (3)"房产经纪可以<strong>修改</strong>其负责的房产信息"——挂在 A1（房产经纪）下。
+  图中已画出"录入房产信息""查询所负责的房产信息"，缺"修改"这个动作 → U2。</li>
+<li><strong>U1 审批授权</strong>：功能 (3)"但需要经过系统管理员的<strong>审批授权</strong>"——它是"修改房产信息"的
+  <strong>必需前置步骤</strong>（修改必须先审批）。</li>
+<li><strong>U3 删除房产信息</strong>：功能 (4)"若公司确定不再销售某套房产，系统管理员将该房产信息从系统中
+  <strong>删除</strong>"——挂在 A2（系统管理员）下；图中已画出"导出房产信息列表""归档"，缺"删除" → U3。</li>
+<li><strong>（a）= <code>&lt;&lt;include&gt;&gt;</code></strong>：<strong>包含关系</strong>——如果多个用例存在共同行为，可把共同行为抽取成单独用例，
+  其他用例使用它时即构成包含（执行基用例<strong>必然</strong>执行被包含用例）。
+  本题"修改房产信息"必然触发"审批授权"这一公共行为。</li>
+<li><strong>（b）= <code>&lt;&lt;extend&gt;&gt;</code></strong>：<strong>扩展关系</strong>——用例执行中出现异常行为或可选分支时，把异常/可选分支
+  抽象为单独的扩展用例（在特定条件下<strong>才</strong>执行，扩展基用例的行为）。
+  本题"删除房产信息"是对"归档/停售"房产在"公司确定不再销售"这一<strong>可选条件</strong>下的扩展行为。</li>
+<li><strong>判别口诀</strong>：<strong>必然发生、公共抽取 → include；条件触发、可选异常 → extend</strong>。
+  箭头方向：include 从基用例指向被包含用例；extend 从扩展用例指向基用例。</li>
+<li>【存疑：(a)/(b) 各自连接图中的哪两个用例，文本源未收录图形无法确认；
+  上述配对依据【说明】的功能关系推断，关系类型（include/extend）以答案册为准】</li>
+<li><strong>易错点</strong>：把 include/extend 的箭头方向画反；把 U1 误认为"身份验证"
+  （身份验证是登录的包含用例，但题目问的 U1 关联的是"修改"这条功能线）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】用例图——参与者/用例识别 + include/extend 关系判别</p>
+<hr />
+<h3>【问题2】（6 分）类图类名</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+C1：Property
+C2：House
+C3：Cando
+C4：User
+C5：Manager
+C6：Agent</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>先定两个泛化层级的父类</strong>：</li>
+<li>功能 (1)"公司销售的<strong>房产（Property）</strong>分为<strong>住宅（House）</strong>和<strong>公寓（Cando）</strong>两类"
+    → <code>C1 = Property</code>（父类），<code>C2 = House</code>、<code>C3 = Cando</code>（两个子类）。</li>
+<li>功能 (3)"系统<strong>用户（User）</strong>包括房产经纪和<strong>系统管理员（Manager）</strong>"
+    → <code>C4 = User</code>（父类），<code>C5 = Manager</code>、<code>C6 = Agent</code>（两个子类）。</li>
+<li><strong>结构判别法</strong>：类图中 <code>C2、C3 --|&gt; C1</code> 表示 C2/C3 继承 C1，对照【说明】的
+  "X 分为 A 和 B 两类"句式即可对号入座；<code>C5、C6 --|&gt; C4</code> 同理。</li>
+<li><strong>易错点</strong>：</li>
+<li>把 C4 误填 Agent——【说明】明确"系统用户（User）<strong>包括</strong>房产经纪和系统管理员"，
+    User 是<strong>父类</strong>，Agent 是子类；</li>
+<li>类名不用【说明】给出的英文（题目图中类名用英文，用中文"房产/住宅"通常也给分，
+    但优先用括号注里的英文原名）。</li>
+<li>【存疑：原文"公寓（Cando）"，通用拼写为 Condo，答案册沿用 Cando，作答时两种拼写均给分】</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】类图类名识别（泛化层级 + "X 包括 A、B"句式）</p>
+<hr />
+<h3>【问题3】（2 分）关联类属性</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：AgentList 的主要属性有：房产经纪负责该房产的起始时间和结束时间</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>关联类（Association Class）的属性 = 描述两个类之间"关系本身"的属性</strong>，不是类的自身属性。
+  【说明】功能 (2) 最后一句："系统中会<strong>记录房产经纪负责每套房产的起始时间和终止时间</strong>"
+  → AgentList 的属性就是<strong>起始时间、结束时间</strong>。</li>
+<li><strong>易错点</strong>（高频丢分）：</li>
+<li>把 <code>C6</code>（Agent）的自身属性填进来（姓名、家庭住址、联系电话、受雇起止时间）——
+    这些是 Agent 类的属性，不是关联的属性；</li>
+<li>把 <code>C1</code>（Property）的属性填进来（地址、建造年份、销售报价等）；</li>
+<li>注意区分"<strong>受雇</strong>的起止时间"（Agent 类属性）与"<strong>负责该房产</strong>的起始/终止时间"
+    （AgentList 关联属性）——两者只差"负责某套房产"这一层，【说明】用两个不同的句子分别给出。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】关联类（Association Class）属性识别</p>
+<h2>---</h2>
+<h1>试题 D：2023 年上半年 下午试题三（数字图书馆）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>C1：Resoure　C2：ConferencePaper　C3：JounalArticle　C4：Thesis　C5：User　C6：Student　C7：Teacher　C8：Staff</td>
+<td>8</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>C1：题名、作者、发表时间、来源、被引次数、下载次数；C2：会议名称、召开时间、召开地点；C3：期刊名称、出版月份、期号、主办单位；C4：学位类别、毕业学校、专业、指导教师</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>观察者模式（原因见下）</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（8 分）类图类名</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+C1：Resoure
+C2：ConferencePaper
+C3：JounalArticle
+C4：Thesis
+C5：User
+C6：Student
+C7：Teacher
+C8：Staff
+（类名英文、中文、中英文都行，只要是正确的应该都会给分。其中C6~C8 顺序可以互换）</p>
+<p>【存疑：原文"Resoure""JounalArticle"疑为 Resource、JournalArticle 的 OCR 误识，答案册沿用此拼写；
+答题时英文/中文/中英文均可给分，C6～C8 三个子类顺序可互换】</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>两个泛化层级</strong>：</li>
+<li>功能 (2)"<strong>学术资源（Resoure）</strong>包括<strong>会议论文（ConferencePaper）</strong>、<strong>期刑论文（JounalArticle）</strong>
+    以及<strong>学位论文（Thesis）</strong>等"→ <code>C1 = Resoure</code>（父类），<code>C2/C3/C4</code> = 三个子类。</li>
+<li>功能 (3)"系统<strong>用户（User）</strong>包括<strong>在校学生（Student）</strong>，<strong>教师（Teacher）</strong>
+    以及其他<strong>在职人员（Staff）</strong>"→ <code>C5 = User</code>（父类），<code>C6/C7/C8</code> = 三个子类（顺序可互换）。</li>
+<li><strong>通用技巧</strong>：</li>
+<li>【说明】中<strong>带英文括号注</strong>的核心名词几乎都是类名；</li>
+<li>"<strong>X 包括 A、B、C</strong>"句式 = 一个泛化层级（X 是父类，A/B/C 是子类）；</li>
+<li>图中已给名的类（镜像数据库 MirrorDB、会议集 Proceeding、期刊 Edition）不填，
+     它们是 C1/C2/C3 的关联类，用于定位泛化结构。</li>
+<li><strong>易错点</strong>：把 C6/C7/C8 与某个具体用户绑定错（如把 Student 填到 C8）——
+  由于三者是并列子类，阅卷允许互换；但 C5 必须是父类 User，C1 必须是 Resoure。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】类图类名识别（泛化层级）</p>
+<hr />
+<h3>【问题2】（4 分）类的关键属性</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+C1：题名、作者、发表时间、来源、被引次数、下载次数
+C2：会议名称、召开时间、召开地点
+C3：期刊名称、出版月份、期号、主办单位
+C4：学位类别、毕业学校、专业、指导教师</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>属性提取法</strong>：找【说明】中"<strong>系统中存储了……</strong>"和"<strong>对于 XX，还需记录……</strong>"后面的名词短语。</li>
+<li><strong>C1（学术资源，父类）</strong>：功能 (2) 第二句"系统中存储了每个<strong>学术资源</strong>的题名、作者、发表时间、
+  来源（哪个镜像数据库）、被引次数、下载次数等信息"——这是<strong>所有资源共有</strong>的属性，放父类。</li>
+<li><strong>C2（会议论文）</strong>：功能 (2)"对于会议论文，还需记录<strong>会议名称，召开时间以及召开地点</strong>"——子类特有。</li>
+<li><strong>C3（期刊论文）</strong>：功能 (2)"对于期刊论文，还需记录<strong>期刊名称，出版月份，期号以及主办单位</strong>"。</li>
+<li><strong>C4（学位论文）</strong>：功能 (2)"对于学位论文，记录了<strong>学位类别（博士/硕士），毕业学校，专业及指导教师</strong>"。</li>
+<li><strong>易错点（高频）</strong>：</li>
+<li><strong>把子类属性填进父类</strong>（如把"会议名称"填给 C1）——父类属性必须是所有子类共有的；</li>
+<li><strong>把父类属性重复填进子类</strong>（如 C2 里又写"题名、作者"）——子类只填"还需记录"的特有属性；</li>
+<li>把"来源"理解成属性值——【说明】明确说"来源（哪个镜像数据库）"，它是 C1 的一个属性
+    （值是镜像数据库），不是关联关系本身。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】类图属性提取（父类共性 vs 子类特性）</p>
+<hr />
+<h3>【问题3】（3 分）设计模式结合</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+<strong>观察者模式</strong>，该模式适合当一个对象的状态发生改变时，所有依赖于它的对象都得到通知
+并被自动更新，符合问题描述中的当资源他引次数发生变化，便通知所有关注该资源的用户。</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>题干特征词 → 模式映射</strong>：
+  "若该资源的他引次数<strong>发生变化</strong>，系统可以及时<strong>通知</strong>该用户"——
+  <strong>"状态变化 + 自动通知所有依赖者"= 观察者模式（Observer，又称发布-订阅 Publish-Subscribe）</strong>。</li>
+<li><strong>模式角色对应</strong>：</li>
+<li><strong>主题（Subject / 被观察对象）</strong> = 学术资源（Resoure）——他引次数是其状态</li>
+<li><strong>观察者（Observer）</strong> = 注册了"他引通知"的用户（User）</li>
+<li><strong>注册接口</strong> = "用户对其所关注的数字资源注册他引通知"</li>
+<li><strong>通知接口</strong> = "他引次数变化时及时通知该用户"</li>
+<li><strong>解释模板</strong>（背一套，所有观察者题通用）：<blockquote>
+<p>观察者模式定义了对象间的一对多依赖关系，当一个对象的状态发生改变时，
+所有依赖于它的对象都得到通知并被自动更新。本需求中"资源他引次数"是主题状态，
+"关注该资源的用户"是观察者，他引次数变化时自动通知所有注册用户，故选观察者模式。</p>
+</blockquote>
+</li>
+<li><strong>易错点</strong>：</li>
+<li>误答"中介者模式"（多对象交互由中介协调，而非状态变化通知）；</li>
+<li>只写模式名不写原因（本题 3 分中原因解释占大头，必须答"状态变化→通知依赖者"这一机制）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】设计模式与 UML 结合——观察者模式（状态变化通知场景）</p>
+<h2>---</h2>
+<h1>📊 专项总结与错题回填</h1>
+<h2>知识点归属汇总</h2>
+<table>
+<thead>
+<tr>
+<th>试题</th>
+<th>问题</th>
+<th>知识点</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 智能检测系统</td>
+<td>问题1</td>
+<td>【试题一】DFD 外部实体识别</td>
+<td>4</td>
+</tr>
+<tr>
+<td>A</td>
+<td>问题2</td>
+<td>【试题一】DFD 数据存储识别</td>
+<td>3</td>
+</tr>
+<tr>
+<td>A</td>
+<td>问题3</td>
+<td>【试题一】数据流平衡（守恒/父子图平衡/无悬空流）</td>
+<td>5</td>
+</tr>
+<tr>
+<td>A</td>
+<td>问题4</td>
+<td>【试题一】加工逻辑描述（结构化语言）</td>
+<td>3</td>
+</tr>
+<tr>
+<td>B 智慧农业平台</td>
+<td>问题1</td>
+<td>【试题一】DFD 外部实体识别</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>问题2</td>
+<td>【试题一】DFD 数据存储识别</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>问题3</td>
+<td>【试题一】数据流平衡（实时流 vs 存储读取）</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>问题4</td>
+<td>【试题一】加工分解 + 分解三错误</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C 房产信息管理</td>
+<td>问题1</td>
+<td>【试题三】用例图：参与者/用例/include/extend</td>
+<td>7</td>
+</tr>
+<tr>
+<td>C</td>
+<td>问题2</td>
+<td>【试题三】类图类名（泛化层级）</td>
+<td>6</td>
+</tr>
+<tr>
+<td>C</td>
+<td>问题3</td>
+<td>【试题三】关联类属性</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D 数字图书馆</td>
+<td>问题1</td>
+<td>【试题三】类图类名（泛化层级）</td>
+<td>8</td>
+</tr>
+<tr>
+<td>D</td>
+<td>问题2</td>
+<td>【试题三】类图属性提取（父类共性 vs 子类特性）</td>
+<td>4</td>
+</tr>
+<tr>
+<td>D</td>
+<td>问题3</td>
+<td>【试题三】设计模式（观察者）</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h2>高频丢分点 Top（做完后对照回填到 <code>dfd-uml-notes.md</code>）</h2>
+<ol>
+<li><strong>数据流平衡</strong>：加工"有输出无输入"时漏补输入流（试题 A 问题3 的 P5、试题 B 问题3 的 P5）。</li>
+<li><strong>实时流 vs 存储读取</strong>：带"历史/批量/记录"字样的输入只能来自数据存储，不能从加工直接来
+   （试题 B 问题3 的"历史监测信息 D2→P3"）。</li>
+<li><strong>同名数据流多条并存</strong>：同一数据流被多个加工读取时，每条都要单独画
+   （试题 B 的"监控处理规则"分别流向 P3、P4）。</li>
+<li><strong>关联类属性 vs 类自身属性</strong>：关联类只填描述"两者关系"的属性（试题 C 问题3）。</li>
+<li><strong>父类属性 vs 子类属性</strong>：父类填共有属性，子类只填"还需记录"的特有属性（试题 D 问题2）。</li>
+<li><strong>include/extend 混淆</strong>：必然发生的公共行为是 include，条件触发的可选分支是 extend
+   （试题 C 问题1(2)）。</li>
+<li><strong>结构化语言无关键字</strong>：必须出现 IF/THEN/ELSE/ENDIF 等结构化关键字（试题 A 问题4）。</li>
+<li><strong>分解三错误背不全</strong>：输入无输出 / 输出无输入 / 输入不足以产生输出（试题 B 问题4，背诵点）。</li>
+</ol>
+<h2>下一步</h2>
+<ul>
+<li>错题涉及的模板步骤回看 <code>dfd-uml-notes.md</code> 对应小节（DFD 四步、UML 三招）。</li>
+<li>若时间允许，把试题 A/B 的【说明】重读一遍，默写一遍数据流平衡检查过程，强化肌肉记忆。</li>
+</ul>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2/dfd-uml-key.md">docs/practice/subject2/dfd-uml-key.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

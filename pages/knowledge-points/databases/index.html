@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据库系统 - 知识点精讲 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 databases 📁 index.md</div>
+<h1>数据库系统 - 知识点精讲</h1>
+<h2>一、关系模型基础</h2>
+<h3>1.1 基本概念</h3>
+<ul>
+<li><strong>关系</strong>：一张二维表</li>
+<li><strong>元组</strong>：一行记录</li>
+<li><strong>属性</strong>：一列字段</li>
+<li><strong>码（键）</strong>：能唯一标识元组的属性组合</li>
+<li>候选码：最小的超码</li>
+<li>主码：选定的候选码</li>
+<li>外码：引用其他关系的主码</li>
+</ul>
+<h3>1.2 关系运算</h3>
+<ul>
+<li><strong>选择（σ）</strong>：从表中选出满足条件的行</li>
+<li><strong>投影（π）</strong>：从表中选出指定的列</li>
+<li><strong>连接（⋈）</strong>：两个表的笛卡尔积中满足条件的元组</li>
+<li><strong>除（÷）</strong>：用于查询包含所有...的元组</li>
+</ul>
+<h2>二、SQL语言</h2>
+<h3>2.1 SQL基础语法</h3>
+<h4>SELECT查询</h4>
+<pre><code class="language-sql">SELECT 列名1, 列名2, ...
+FROM 表名
+WHERE 条件
+GROUP BY 分组列
+HAVING 分组条件
+ORDER BY 排序列 ASC/DESC;
+</code></pre>
+<h4>执行顺序</h4>
+<p>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</p>
+<h3>2.2 常见SQL操作</h3>
+<h4>聚合函数</h4>
+<ul>
+<li>COUNT()：计数</li>
+<li>SUM()：求和</li>
+<li>AVG()：平均值</li>
+<li>MAX()：最大值</li>
+<li>MIN()：最小值</li>
+</ul>
+<h4>多表连接</h4>
+<pre><code class="language-sql">-- 内连接
+SELECT * FROM A INNER JOIN B ON A.id = B.a_id;
+
+-- 左连接
+SELECT * FROM A LEFT JOIN B ON A.id = B.a_id;
+
+-- 自连接
+SELECT * FROM A a1, A a2 WHERE a1.pid = a2.id;
+</code></pre>
+<h4>子查询</h4>
+<pre><code class="language-sql">-- WHERE子查询
+SELECT * FROM Students WHERE score &gt; (SELECT AVG(score) FROM Students);
+
+-- FROM子查询
+SELECT T.name FROM (SELECT * FROM Students WHERE score &gt; 60) T;
+
+-- EXISTS子查询
+SELECT * FROM Students S WHERE EXISTS (SELECT * FROM Courses WHERE sid = S.id);
+</code></pre>
+<h3>2.3 SQL重点题型</h3>
+<ul>
+<li>多表连接查询</li>
+<li>分组统计 + HAVING过滤</li>
+<li>子查询（相关/不相关）</li>
+<li>嵌套查询</li>
+<li>UNION合并结果</li>
+</ul>
+<h2>三、数据库设计</h2>
+<h3>3.1 E-R模型</h3>
+<h4>基本要素</h4>
+<ul>
+<li><strong>实体</strong>：用矩形表示</li>
+<li><strong>属性</strong>：用椭圆表示</li>
+<li><strong>联系</strong>：用菱形表示</li>
+<li>1:1（一对一）</li>
+<li>1:n（一对多）</li>
+<li>m:n（多对多）</li>
+</ul>
+<h4>E-R图转换为关系模式</h4>
+<ul>
+<li>1:1联系：任一方加对方主键为外码</li>
+<li>1:n联系：n方加1方主键为外码</li>
+<li>m:n联系：新建关系，包含双方主键</li>
+</ul>
+<h3>3.2 范式</h3>
+<h4>第一范式（1NF）</h4>
+<ul>
+<li>所有属性都是原子性的（不可再分）</li>
+</ul>
+<h4>第二范式（2NF）</h4>
+<ul>
+<li>满足1NF</li>
+<li>非主属性完全依赖于主码（消除部分依赖）</li>
+</ul>
+<h4>第三范式（3NF）</h4>
+<ul>
+<li>满足2NF</li>
+<li>非主属性不传递依赖于主码（消除传递依赖）</li>
+</ul>
+<h4>BCNF</h4>
+<ul>
+<li>所有非平凡函数依赖 X→Y，X都包含码</li>
+</ul>
+<h4>范式判断方法</h4>
+<ol>
+<li>找出所有函数依赖</li>
+<li>找出候选码</li>
+<li>判断依赖类型：</li>
+<li>部分依赖 → 不满足2NF</li>
+<li>传递依赖 → 不满足3NF</li>
+</ol>
+<h2>四、数据库事务</h2>
+<h3>4.1 ACID特性</h3>
+<ul>
+<li><strong>A（原子性）</strong>：事务要么全做，要么全不做</li>
+<li><strong>C（一致性）</strong>：事务执行前后数据状态一致</li>
+<li><strong>I（隔离性）</strong>：并发事务互不干扰</li>
+<li><strong>D（持久性）</strong>：事务提交后永久保存</li>
+</ul>
+<h3>4.2 并发问题</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>描述</th>
+<th>解决级别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>脏读</td>
+<td>读到未提交的数据</td>
+<td>READ COMMITTED</td>
+</tr>
+<tr>
+<td>不可重复读</td>
+<td>同一查询结果不同</td>
+<td>REPEATABLE READ</td>
+</tr>
+<tr>
+<td>幻读</td>
+<td>读到新增/删除的行</td>
+<td>SERIALIZABLE</td>
+</tr>
+</tbody>
+</table>
+<h3>4.3 封锁协议</h3>
+<ul>
+<li><strong>共享锁（S锁）</strong>：读操作</li>
+<li><strong>排他锁（X锁）</strong>：写操作</li>
+<li><strong>两段锁协议</strong>：扩展阶段 + 收缩阶段</li>
+</ul>
+<h2>五、数据库索引</h2>
+<h3>5.1 索引类型</h3>
+<ul>
+<li><strong>聚簇索引</strong>：物理排序，每个表只有一个</li>
+<li><strong>非聚簇索引</strong>：逻辑排序，可以多个</li>
+<li><strong>B+树索引</strong>：数据库默认索引结构</li>
+</ul>
+<h3>5.2 索引优缺点</h3>
+<ul>
+<li><strong>优点</strong>：加快查询速度</li>
+<li><strong>缺点</strong>：减慢插入/更新/删除速度，占用空间</li>
+</ul>
+<h3>5.3 适合建索引的列</h3>
+<ul>
+<li>WHERE条件频繁使用的列</li>
+<li>JOIN连接条件列</li>
+<li>ORDER BY/GROUP BY列</li>
+</ul>
+<h2>六、核心计算题</h2>
+<h3>6.1 关系代数</h3>
+<ul>
+<li>将SQL转换为关系代数表达式</li>
+<li>注意选择、投影、连接、除的表示</li>
+</ul>
+<h3>6.2 E-R图转关系模式</h3>
+<ul>
+<li>实体 → 关系模式</li>
+<li>联系 → 合并到实体或新建关系</li>
+</ul>
+<h3>6.3 SQL执行顺序</h3>
+<pre><code>FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT
+</code></pre>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/databases/index.md">docs/knowledge-points/databases/index.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

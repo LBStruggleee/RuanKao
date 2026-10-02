@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2022 年上半年 软件设计师 上午试卷（真题卷 4） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 2022H1-morning-questions.md</div>
+<h1>2022 年上半年 软件设计师 上午试卷（真题卷 4）</h1>
+<blockquote>
+<p>全国计算机技术与软件专业技术资格（水平）考试
+<strong>2022 年上半年 软件设计师 上午试卷</strong>
+（考试时间 9:00～11:30　共 150 分钟）</p>
+<p>本试卷的试题中共有 75 个空格，需要全部解答，每个空格 1 分，满分 75 分。
+每个空格对应一个序号，有 A、B、C、D 四个选项，请选择一个最恰当的选项作为解答。</p>
+<p>⚠️⚠️⚠️ <strong>本卷来源说明（务必先读，影响你对本卷的信任度）</strong></p>
+<ol>
+<li><strong>第 1–34 题</strong>：逐字转录自本地仓库原卷 PDF（<code>practice_dd/2020~2023试卷/2022年上半年上午试卷.pdf</code>），<strong>真题原文，可靠</strong>。但该 PDF <strong>只有 7 页、止于第 34 题</strong>，第 35–75 页缺失；配套的"答案"PDF（<code>practice_dd/2020~2023答案/2022年上半年上午试卷答案.pdf</code>）经核对是与试卷<strong>内容完全相同的副本，不含任何答案</strong>。</li>
+<li><strong>第 35–75 题</strong>：原卷缺失，取自公开网络的<strong>回忆/整理版</strong>——CSDN《软考中级-软件设计师 2022年上半年上午题真题解析》（blog.csdn.net/weixin_45683778/article/details/147150786）与 51CTO《2022年上半年 软件设计师 上午试卷解析》PDF（a2.51cto.com/attach/202401/30/20242022sbnrjsjsdajx17.pdf）。两份来源的<strong>题目集合一致、答案一致</strong>，但都是<strong>按知识点顺序重排</strong>的整理版，<strong>题号顺序未经原卷印证</strong>，题目文字亦非原卷排版。凡此类题目均标注 <strong>【存疑：题目来源为网络回忆版，非原卷原文】</strong>。</li>
+<li><strong>第 71–75 题（英语）特别警示</strong>：两份整理版所载英语短文（"Regardless of how well designed, constructed and tested a system or application may be…"）<strong>与本仓库卷 1（2020 年下半年）第 71–75 题原文逐词相同</strong>（见 <code>2020H2-morning-questions.md</code>），系整理版误收，<strong>并非 2022 年上半年真题</strong>。2022 年上半年真正的英语题在公开渠道未见流传。本卷仍按整理版转录并标注 <strong>【存疑：本段为 2020 年下半年英语真题，被误收为本卷 71–75 题】</strong>，做完后这 5 分<strong>不计入与真实考试的对照</strong>，仅作练习。</li>
+<li>综上：<strong>本卷只有第 1–34 题是可靠真题；第 35–75 题是"据回忆版整理的、知识点正确的练习题"，题号与题序可能与真实试卷不符。</strong> 做题时心中有数即可，不影响知识点的查漏补缺。</li>
+</ol>
+<p><strong>转录约定</strong>：第 1–34 题逐字转录原卷文字，原卷印刷中的错别字、异体拼写与病句一律保留，并在其后标注 <strong>【存疑：原文如此，应为"…"】</strong>；仅对标点、空格与排版（如选项换行）作格式统一。题目附注中凡涉及图形的说明，一律只给出<strong>原图的结构性数据</strong>（边与权值、节点与分支条件、目录树结构等），<strong>不给出计算结果或推导结论</strong>——关键路径、最小生成树权值、后缀式等请自行计算推导，对答案时再核对 <code>2022H1-morning-key.md</code>。</p>
+</blockquote>
+<hr />
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（限时 150 分钟，目标 ≤ 120 分钟）</td>
+</tr>
+<tr>
+<td>涂卡 + 检查用时</td>
+<td>______ 分钟</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<p><strong>答题卡（在括号中填你的答案字母）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>1-10</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+<th>______</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11-20</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>21-30</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>31-40</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>41-50</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>51-60</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>61-70</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+<tr>
+<td>71-75</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>做完前<strong>不要</strong>翻看 <code>2022H1-morning-key.md</code>（答案与解析文件）。</p>
+</blockquote>
+<hr />
+<h2>关于图形题的说明（务必先读）</h2>
+<p>下列题目在原卷/整理版中以<strong>图形/图片</strong>形式出现，Markdown 无法直接呈现。本文已尽可能给出<strong>依据原图复原的结构性数据</strong>（一律标注 <strong>【存疑：图形复原】</strong>，与原图可能在细节上存在差异）。<strong>附注只给结构性数据，计算与推导请自行完成。</strong> 涉及图形的题目：</p>
+<ul>
+<li><strong>第 5 题</strong>：计算机系统可靠性构成框图（串联+并联结构）</li>
+<li><strong>第 36 题</strong>：段页式存储管理的地址结构图（位分段）</li>
+<li><strong>第 39-40 题</strong>：背包问题物品价值/重量表（表格，已转录）</li>
+<li><strong>第 56-57 题</strong>：Windows 文件系统目录树</li>
+<li><strong>第 58-61 题</strong>：进程前趋图与进程执行图（P1～P6，信号量 S1～S7）</li>
+<li><strong>第 62-64 题</strong>：UML 序列图（FundsTransactionManager / Account）</li>
+<li><strong>第 65-66 题</strong>：Prim 算法求最小生成树的带权无向图</li>
+<li><strong>第 69-70 题</strong>：软件项目活动图（AOE 网，里程碑 A～K）</li>
+</ul>
+<blockquote>
+<p>第 69-70 题的 AOE 图完整"边—权—顶点"对应未能从可用图像中可靠复原（见该题附注），<strong>无原图时建议先跳过，对答案时重点核对</strong>。其余图形题附注数据已足够支撑独立计算。</p>
+</blockquote>
+<hr />
+<h2>一、选择题（第 1-75 题，每题 1 分，共 75 分）</h2>
+<p><strong>1.</strong> 以下关于冯诺依曼计算机的叙述中，不正确的是 （1） 。</p>
+<p>（1）　A. 程序指令和数据都采用二进制表示</p>
+<p>B. 程序指令总是存储在主存中，而数据则存储在高速缓存中</p>
+<p>C. 程序的功能都由中央处理器（CPU）执行指令来实现</p>
+<p>D. 程序的执行工作由指令进行自动控制</p>
+<hr />
+<p><strong>2.</strong> 以下关于 SRAM 和 DRAM 存储器的叙述中正确的是 （2） 。</p>
+<p>（2）　A. 与 DRAM 相比，SRAM 集成率低【存疑：原文如此，教材通用说法为"集成度"】，功率大、不需要动态刷新</p>
+<p>B. 与 DRAM 相比，SRAM 集成率高，功率小、需要动态刷新</p>
+<p>C. 与 SRAM 相比，DRAM 集成率高，功率大、不需要动态刷新</p>
+<p>D. 与 SRAM 相比，DRAM 集成率高，功率大、需要动态刷新</p>
+<hr />
+<p><strong>3.</strong> 为了实现多级中断，保存程序现场信息最有效的方法是使用 （3） 。</p>
+<p>（3）　A. 通用寄存器　　B. 累加器　　C. 堆栈　　D. 程序计数器</p>
+<hr />
+<p><strong>4.</strong> 以下关于 RISC 和 CISC 的叙述中，不正确的是 （4） 。</p>
+<p>（4）　A. RISC 的大多指令在一个时钟周期内完成</p>
+<p>B. RISC 普遍采用微程序控制器，CISC 则普遍采用硬布线控制器</p>
+<p>C. RISC 的指令种类和寻址方式相对于 CISC 更少</p>
+<p>D. RISC 和 CISC 都采用流水线技术</p>
+<hr />
+<p><strong>5.</strong> 某计算机系统构成如下图所示，假设每个软件的千小时可靠度 R 为 0.95，则该系统的千小时可靠度约为 （5） 。</p>
+<blockquote>
+<p>【存疑：图形复原】原卷第 3 页框图（PDF 可提取文字层，无图像）。据选项表达式可还原系统结构：<strong>两个可靠度为 R 的部件串联在两端，中间是两个可靠度为 R 的部件并联</strong>（即 R —（R ∥ R）— R 的串联结构）。并联部分的可靠度为 1−(1−R)²。请据此写出系统可靠度表达式并与选项比对。</p>
+</blockquote>
+<p>（5）　A. 0.95 × (1 − (1 − 0.95)²) × 0.95</p>
+<p>B. 0.95 × (1 − 0.95)² × 0.95</p>
+<p>C. 0.95 × 2 × (1 − 0.95) × 0.95</p>
+<p>D. 0.95⁴ × (1 − 0.95)</p>
+<hr />
+<p><strong>6.</strong> 以下信息交换情形中，采用异步传输方式的是 （6） 。</p>
+<p>（6）　A. CPU 与内存储器之间交换信息</p>
+<p>B. CPU 与 PCI 总线交换信息</p>
+<p>C. CPU 与 I/O 接口交换信息</p>
+<p>D. I/O 接口与打印设备间交换</p>
+<hr />
+<p><strong>7.</strong> 下列协议中，可以用于文件安全传输的是 （7） 。</p>
+<p>（7）　A. FTP　　B. SFTP　　C. TFTP　　D. ICMP</p>
+<hr />
+<p><strong>8.</strong> 下列不属于计算机病毒的是 （8） 。</p>
+<p>（8）　A. 永恒之蓝　　B. 蠕虫　　C. 特洛伊木马　　D. DDOS</p>
+<hr />
+<p><strong>9.</strong> 以下关于杀毒软件的描述中，错误的是 （9） 。</p>
+<p>（9）　A. 应当为计算机安装杀毒软件并及时更新病毒库信息</p>
+<p>B. 安装杀毒软件可以有效防止蠕虫病毒</p>
+<p>C. 安装杀毒软件可以有效防止网站信息被篡改</p>
+<p>D. 服务器操作系统也需要安装杀毒软件</p>
+<hr />
+<p><strong>10.</strong> 通过在出口防火墙上配置 （10） 功能可以阻止外部未授权用户访问内部网络。</p>
+<p>（10）　A. ACL　　B. SNAT　　C. 入侵检测　　D. 防病毒</p>
+<hr />
+<p><strong>11.</strong> SQL 注入是常见的 Web 攻击，以下不能够有效防御 SQL 注入的手段是 （11） 。</p>
+<p>（11）　A. 对用户输入做关键字过滤</p>
+<p>B. 部署 Web 应用防火墙进行保护</p>
+<p>C. 部署入侵检测系统阻断攻击</p>
+<p>D. 定期扫描系统漏洞并及时修复</p>
+<hr />
+<p><strong>12.</strong> 甲乙丙三者分别就相同内容的发明创造，先后向专利管理部门提出申请，（12） 可以获得专利申请权。</p>
+<p>（12）　A. 甲乙丙均　　B. 先申请者　　C. 先试用者　　D. 先发明者</p>
+<hr />
+<p><strong>13.</strong> （13） 的保护期是可以延长的。</p>
+<p>（13）　A. 著作权　　B. 专利权　　C. 商标权　　D. 商业秘密权</p>
+<hr />
+<p><strong>14.</strong> 针对月收入小于等于 3500 元免征个人所得税的需求，现分别输入 3499，3500 和 3501 进行测试，则采用的测试方法 （14） 。</p>
+<p>（14）　A. 判定覆盖　　B. 边界值分析　　C. 路径覆盖　　D. 因果图</p>
+<hr />
+<p><strong>15.</strong> 以下关于软件维护的叙述中，正确的是 （15） 。</p>
+<p>（15）　A. 工作量相对于软件开发而言要小很多</p>
+<p>B. 成本相对于软件开发而言要更低</p>
+<p>C. 时间相对于软件开发而言通常更长</p>
+<p>D. 只对软件代码进行修改的行为</p>
+<hr />
+<p><strong>16.</strong> 在运行时将调用和响应调用所需执行的代码加以结合的机制是 （16） 。</p>
+<p>（16）　A. 强类型　　B. 弱类型　　C. 静态绑定　　D. 动态绑定</p>
+<hr />
+<p><strong>17.</strong> 进行面向对象系统设计时，在包的依赖关系图中不允许存在环，这属于 （17） 原则。</p>
+<p>（17）　A. 单一责任　　B. 无环依赖　　C. 依赖倒置　　D. 里氏替换</p>
+<hr />
+<p><strong>18-19.</strong> 面向对象分析的第一项活动是 （18） ；面向对象程序设计语言为面向对象 （19） 。</p>
+<p>（18）　A. 组织对象　　B. 描述对象间的相互作用　　C. 认定对象　　D. 确定对象的操作</p>
+<p>（19）　A. 用例设计　　B. 分析　　C. 需求分析　　D. 实现</p>
+<hr />
+<p><strong>20.</strong> 用 pip 安装 numpy 模块的命令为 （20） 。</p>
+<p>（20）　A. pip numpy　　B. pip install numpy　　C. install numpy　　D. import num【存疑：原文如此，应为 "import numpy"】</p>
+<hr />
+<p><strong>21.</strong> 某 Python 程序中定义 X = [1, 2]，那么 X * 2 的值为 （21） 。</p>
+<p>（21）　A. [1, 2, 1, 2]　　B. [1, 1, 2, 2]　　C. [2, 4]　　D. 出错</p>
+<hr />
+<p><strong>22.</strong> 在 Python 语言中， （22） 是一种不可变的、有序的序列结构，其中元素可以重复。</p>
+<p>（22）　A. tuple（元组）　　B. dict（字典）　　C. list（列表）　　D. set（集合）</p>
+<hr />
+<p><strong>23.</strong> 数据库中的视图是一个虚拟表。若设计师为 user 表创建一个 user1 视图，那数据字典中保存的是 （23） 。</p>
+<p>（23）　A. user1 查询语句　　B. user1 视图定义　　C. user1 查询结果　　D. 所引用的基本表</p>
+<hr />
+<p><strong>24-25.</strong> 给定关系 R（A, B, C, D）和关系 S（A, D, E, F），若对这两个关系进行自然连接运算 R⋈S 后的属性列有 （24） 个；关系代数表达式 σ(R.B &gt; S.F)(R⋈S) 与 （25） 等价。</p>
+<p>（24）　A. 4　　B. 5　　C. 6　　D. 7</p>
+<p>（25）　A. σ(2&gt;8)(R × S)</p>
+<p>B. π(1, 2, 3, 4, 7, 8)(σ(1=5 ∧ 2&gt;8 ∧ 4=6)(R × S))</p>
+<p>C. σ('2' &gt; '8')(R × S)</p>
+<p>D. π(1, 2, 3, 4, 7, 8)(σ(1=5 ∧ '2' &gt; '8' ∧ 4=6)(R × S))</p>
+<hr />
+<p><strong>26.</strong> 以下关于散列表（哈希表）及其查找特点的叙述中，正确的是 （26） 。</p>
+<p>（26）　A. 在散列表中进行查找时，只需要与待查找关键字及其同义词进行比较</p>
+<p>B. 只要散列表的装填因子不大于 1/2，就能避免冲突</p>
+<p>C. 用线性探测法解决冲突容易产生聚集问题</p>
+<p>D. 用链地址法解决冲突可确保平均查找长度为 1</p>
+<hr />
+<p><strong>27.</strong> 对长度为 n 的有序顺序表进行折半查找（即二分查找）的过程可用一颗【存疑：原文如此，应为"一棵"】判定树表示，该判定树的形态符合 （27） 的特点。</p>
+<p>（27）　A. 最优二叉树（即哈夫曼树）　　B. 平衡二叉树　　C. 完全二叉树　　D. 最小生成树</p>
+<hr />
+<p><strong>28.</strong> 已知树 T 的度为 4，且度为 4 的结点数为 7 个、度为 3 的结点数为 5 个、度为 2 的结点数为 8 个、度为 1 的结点数为 10 个，那么树 T 的叶子结点个数为 （28） 。（注：树中结点个数称为结点的度【存疑：原文如此，应为"树中结点的分支数称为结点的度"】，结点的度中的最大值称为树的度。）</p>
+<p>（28）　A. 30　　B. 35　　C. 40　　D. 49</p>
+<hr />
+<p><strong>29.</strong> 排序算法的稳定性是指将待排序列排序后，能确保排序码中的相对位置保持不变。 （29） 是稳定的排序算法。</p>
+<p>（29）　A. 冒泡排序　　B. 快速排序　　C. 堆排序　　D. 简单选择排序</p>
+<hr />
+<p><strong>30.</strong> 某图 G 的邻接表中共有奇数个表示边的表结点，则图 G （30） 。</p>
+<p>（30）　A. 有奇数个顶点　　B. 有偶数个顶点　　C. 是无向图　　D. 是有向图</p>
+<hr />
+<p><strong>31.</strong> 在 OSI 参考模型中， （31） 在物理线路上提供可靠的数据传输。</p>
+<p>（31）　A. 物理层　　B. 数据链路层　　C. 网络层　　D. 传输层</p>
+<hr />
+<p><strong>32.</strong> 在 TCP/IP 协议栈中，远程登录采用的协议为 （32） 。</p>
+<p>（32）　A. HTTP　　B. TELNET　　C. SMTP　　D. FTP</p>
+<hr />
+<p><strong>33.</strong> 浏览器开启无痕浏览模式时， （33） 仍然会被保存。</p>
+<p>（33）　A. 浏览历史　　B. 搜索历史　　C. 下载的文件　　D. 临时文件</p>
+<hr />
+<p><strong>34.</strong> 下列不属于电子邮件收发协议的是 （34） 。</p>
+<p>（34）　A. SMTP　　B. POP3　　C. IMAP　　D. FTP</p>
+<hr />
+<blockquote>
+<p>⚠️ <strong>以下第 35–75 题为网络回忆/整理版，非原卷原文</strong>（详见卷首"本卷来源说明"）。题目文字按整理版转录，题号顺序未经原卷印证。做完后在 <code>2022H1-morning-key.md</code> 中可看到逐题解析与来源标注。</p>
+</blockquote>
+<p><strong>35.</strong>【存疑：题目来源为网络回忆版，非原卷原文】已知文法 G：S → A0 | B1，A → S1 | 1，B → S0 | 0，其中 S 是开始符号。从 S 出发可以推导出 （35） 。</p>
+<p>（35）　A. 所有由 0 构成的字符串</p>
+<p>B. 所有由 1 构成的字符串</p>
+<p>C. 某些 0 和 1 个数相等的字符串</p>
+<p>D. 所有 0 和 1 个数不同的字符串</p>
+<hr />
+<p><strong>36.</strong>【存疑：题目来源为网络回忆版，非原卷原文】假设段页式存储管理系统中的地址结构如下图所示，则系统 （36） 。</p>
+<blockquote>
+<p>【存疑：图形复原】整理版地址结构图：<strong>32 位地址自高位至低位依次为：段号（第 31～22 位，共 10 位）、页号（第 21～12 位，共 10 位）、页内地址（第 11～0 位，共 12 位）</strong>。</p>
+</blockquote>
+<p>（36）　A. 最多可有 2048 个段，每个段的大小均为 2048 个页，页的大小为 2K</p>
+<p>B. 最多可有 2048 个段，每个段最大允许有 2048 个页，页的大小为 2K</p>
+<p>C. 最多可有 1024 个段，每个段的大小均为 1024 个页，页的大小为 4K</p>
+<p>D. 最多可有 1024 个段，每个段最大允许有 1024 个页，页的大小为 4K</p>
+<hr />
+<p><strong>37-38.</strong>【存疑：题目来源为网络回忆版，非原卷原文】某文件管理系统采用位示图（bitmap）记录磁盘的使用情况。如果系统的字长为 32 位，磁盘物理块的大小为 4MB，物理块依次编号为：0、1、2、…，位示图字依次编号为：0、1、2、…，那么：16385 号物理块的使用情况在位示图中的第 （37） 个字中描述；如果磁盘的容量为 1000GB，那么位示图需要 （38） 个字来表示。</p>
+<p>（37）　A. 128　　B. 256　　C. 512　　D. 1024</p>
+<p>（38）　A. 1200　　B. 3200　　C. 6400　　D. 8000</p>
+<hr />
+<p><strong>39-40.</strong>【存疑：题目来源为网络回忆版，非原卷原文】考虑下述背包问题的实例。有 5 件物品，背包容量为 100，每件物品的价值和重量如下表所示，并已经按照物品的单位重量价值从大到小排好序，根据物品单位重量价值大优先的策略装入背包中，则采用了 （39） 设计策略。考虑 0/1 背包问题（每件物品或者全部放入或者全部不装入背包）和部分背包问题（物品可以部分装入背包），求解该实例，得到的最大价值分别为 （40） 。</p>
+<table>
+<thead>
+<tr>
+<th>物品编号</th>
+<th>价值</th>
+<th>重量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>50</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>200</td>
+<td>25</td>
+</tr>
+<tr>
+<td>3</td>
+<td>180</td>
+<td>30</td>
+</tr>
+<tr>
+<td>4</td>
+<td>225</td>
+<td>45</td>
+</tr>
+<tr>
+<td>5</td>
+<td>200</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+<p>（39）　A. 分治　　B. 贪心　　C. 动态规划　　D. 回溯</p>
+<p>（40）　A. 605 和 630　　B. 605 和 605　　C. 430 和 630　　D. 630 和 430</p>
+<hr />
+<p><strong>41.</strong>【存疑：题目来源为网络回忆版，非原卷原文】一个高度为 h 的满二叉树的结点总数为 2^h − 1【存疑：整理版一处误作 "s^h − 1"，据题意应为 2^h − 1】，从根结点开始，自上而下、同层次结点从左至右，对结点按照顺序依次编号，即根结点编号为 1，其左、右孩子结点编号分别为 2 和 3，再下一层从左到右的编号为 4、5、6、7，依此类推。那么，在一棵满二叉树中，对于编号为 m 和 n 的两个结点，若 n = 2m + 1，则 （41） 。</p>
+<p>（41）　A. m 是 n 的左孩子　　B. m 是 n 的右孩子　　C. n 是 m 的左孩子　　D. n 是 m 的右孩子</p>
+<hr />
+<p><strong>42-43.</strong>【存疑：题目来源为网络回忆版，非原卷原文】对 n 个基本有序的整数进行排序，若采用插入排序算法，则时间和空间复杂度分别为 （42） ；若采用快速排序算法，则时间和空间复杂度分别为 （43） 。</p>
+<p>（42）　A. O(n²) 和 O(n)　　B. O(n) 和 O(n)　　C. O(n²) 和 O(1)　　D. O(n) 和 O(1)</p>
+<p>（43）　A. O(n²) 和 O(n)　　B. O(nlgn) 和 O(n)　　C. O(n²) 和 O(1)　　D. O(nlgn) 和 O(1)</p>
+<hr />
+<p><strong>44.</strong>【存疑：题目来源为网络回忆版，非原卷原文】在浏览器地址栏输入 ftp://ftp.tsinghua.edu.cn/ 进行访问时首先执行的操作是 （44） 。</p>
+<p>（44）　A. 域名解析　　B. 建立控制命令连接　　C. 建立文件传输连接　　D. 发送 FTP 命令</p>
+<hr />
+<p><strong>45.</strong>【存疑：题目来源为网络回忆版，非原卷原文】以下关于数据流图中基本加工的叙述中，不正确的是 （45） 。</p>
+<p>（45）　A. 对每一个基本加工，必须有一个加工规格说明</p>
+<p>B. 加工规格说明必须描述把输入数据流变换为输出数据流的加工规则</p>
+<p>C. 加工规格说明必须描述实现加工的具体流程</p>
+<p>D. 决策表可以用来表示加工规格说明</p>
+<hr />
+<p><strong>46.</strong>【存疑：题目来源为网络回忆版，非原卷原文】在划分模块时，一个模块的作用范围应该在其控制范围之内。若发现其作用范围不在其控制范围内，则 （46） 不是适当的处理方法。</p>
+<p>（46）　A. 将判定所在模块合并到父模块中，使判定处于较高层次</p>
+<p>B. 将受判定影响的模块下移到控制范围内</p>
+<p>C. 将判定上移到层次较高的位置</p>
+<p>D. 将父模块下移，使判定处于较高层次</p>
+<hr />
+<p><strong>47.</strong>【存疑：题目来源为网络回忆版，非原卷原文】在风险管理中，降低风险危害的策略不包括 （47） 。</p>
+<p>（47）　A. 回避风险　　B. 转移风险　　C. 消除风险　　D. 接受风险并控制损失</p>
+<hr />
+<p><strong>48.</strong>【存疑：题目来源为网络回忆版，非原卷原文】程序运行过程中常用参数在函数（过程）间传递信息，引用调用传递的是实参的 （48） 。</p>
+<p>（48）　A. 地址　　B. 类型　　C. 名称　　D. 值</p>
+<hr />
+<p><strong>49.</strong>【存疑：题目来源为网络回忆版，非原卷原文】算术表达式 a + (b − c) * d 的后缀式是 （49） 。（−、+、* 表示算术的减、加、乘运算，运算符的优先级和结合性遵循惯例。）</p>
+<p>（49）　A. bc − d * a +　　B. abc − d * +　　C. ab + c − d *　　D. abcd − * +</p>
+<hr />
+<p><strong>50.</strong>【存疑：题目来源为网络回忆版，非原卷原文】从减少成本和缩短研发周期考虑，要求嵌入式操作系统能运行在不同的微处理器平台上，能针对硬件变化进行结构与功能上的配置。该要求体现了嵌入式操作系统的 （50） 。</p>
+<p>（50）　A. 可定制性　　B. 实时性　　C. 可靠性　　D. 易移植性</p>
+<hr />
+<p><strong>51.</strong>【存疑：题目来源为网络回忆版，非原卷原文】在多态的几种不同形式中， （51） 多态是一种特定的多态，指同一个名字在不同上下文中可代表不同的含义。</p>
+<p>（51）　A. 参数　　B. 包含　　C. 过载　　D. 强制</p>
+<hr />
+<p><strong>52.</strong>【存疑：题目来源为网络回忆版，非原卷原文】 （52） 开发过程模型不适用于开发初期对软件需求缺乏准确全面认识的情况。</p>
+<p>（52）　A. 瀑布　　B. 演化　　C. 螺旋　　D. 增量</p>
+<hr />
+<p><strong>53-54.</strong>【存疑：题目来源为网络回忆版，非原卷原文】编译过程中，对高级语言程序语句的翻译主要考虑声明语句和可执行语句。对声明语句，主要是将需要的信息正确地填入合理组织的 （53） 中；对可执行语句，则是 （54） 。</p>
+<p>（53）　A. 符号表　　B. 栈　　C. 队列　　D. 树</p>
+<p>（54）　A. 翻译成机器代码并加以执行</p>
+<p>B. 转换成语法树</p>
+<p>C. 转换成中间代码或目标代码</p>
+<p>D. 转换成有限自动机</p>
+<hr />
+<p><strong>55.</strong>【存疑：题目来源为网络回忆版，非原卷原文】软件著作人与被许可方签订一份软件使用许可合同。若在该合同约定的时间和地域范围内，软件权利人不得再许可任何第三人以此相同的方法使用该项软件，但软件权利人可以自己使用，则该项许可使用是 （55） 。</p>
+<p>（55）　A. 独家许可使用　　B. 独占许可使用　　C. 普通许可使用　　D. 部分许可使用</p>
+<hr />
+<p><strong>56-57.</strong>【存疑：题目来源为网络回忆版，非原卷原文】Windows 文件系统的目录结构（C 盘下）如下图所示，假设用户要访问文件 f2.java，则该文件的全文件名为 （56） 。若系统当前工作目录为 ProgramFile，那么该文件的相对路径为 （57） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据整理版目录树图像复原：<strong>C 盘根目录下有 Document、ProgramFile、Zhang 等目录；ProgramFile 下含 C-prog 与 java-prog 两个子目录；java-prog 下有 f1.java、f2.java；C-prog 下有 f1.C、f2.C 等文件；Zhang 下有 f1.doc、f2.doc。</strong></p>
+</blockquote>
+<p>（56）　A. C:\f2.java</p>
+<p>B. C\Document\java-prog\f2.java</p>
+<p>C. \ProgramFile\java-prog\f2.java</p>
+<p>D. C:\ProgramFile\java-prog\f2.java</p>
+<p>（57）　A. \java-prog\　　B. java-prog\　　C. Program\java-prog　　D. \Program\java-prog</p>
+<hr />
+<p><strong>58-61.</strong>【存疑：题目来源为网络回忆版，非原卷原文】进程 P1、P2、P3、P4、P5 和 P6 的前趋图如下所示，若用 PV 操作控制进程 P1、P2、P3、P4、P5 和 P6 并发执行的过程，则需要设置 7 个信号量 S1、S2、S3、S4、S5、S6 和 S7，且信号量 S1～S7 的初值都等于零。P1～P6 的进程执行图中，a 和 b 处应分别填写 （58） ；c 和 d 处应分别填写 （59） ；e 和 f 处应分别填写 （60） ；g 和 h 处应分别填写 （61） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据整理版图像复原<strong>前趋图</strong>的偏序关系（→ 表示前趋）：<strong>P1 → P3；P2 → P3；P3 → P4；P3 → P5；P4 → P5；P4 → P6；P5 → P6</strong>。<strong>进程执行图</strong>中，每个进程的执行体前后各留有操作空，位置对应关系为：<strong>a、b 分别在 P1、P2 执行体之后；c 在 P3 执行体之前、d 在 P3 执行体之后；e 在 P4 执行体之后；f 在 P5 执行体之前；g 在 P5 执行体之后；h 在 P6 执行体之前</strong>。请据此为每个空位安排 P/V 操作（注意：只有"等待前趋"处才需要 P 操作，"通知后继"处才需要 V 操作）。</p>
+</blockquote>
+<p>（58）　A. V(S1) 和 V(S2)　　B. P(S1) 和 P(S2)　　C. P(S1) 和 V(S2)　　D. V(S1) 和 P(S2)</p>
+<p>（59）　A. P(S1)P(S2) 和 P(S3) 和 P(S4)　　B. V(S1)V(S2) 和 V(S3) 和 V(S4)</p>
+<p>C. P(S1)P(S2) 和 V(S3) 和 V(S4)　　D. V(S1)V(S2) 和 P(S3) 和 P(S4)</p>
+<p>（60）　A. P(S5)P(S6) 和 P(S4) 和 P(S5)　　B. V(S5)V(S6) 和 V(S4) 和 V(S5)</p>
+<p>C. P(S5)P(S6) 和 V(S4) 和 V(S5)　　D. V(S5)V(S6) 和 P(S4) 和 P(S5)</p>
+<p>（61）　A. P(S7) 和 P(S6)P(S7)　　B. V(S7) 和 P(S6)P(S7)　　C. P(S7) 和 V(S6)V(S7)　　D. V(S7) 和 V(S6)V(S7)</p>
+<hr />
+<p><strong>62-64.</strong>【存疑：题目来源为网络回忆版，非原卷原文】UML 序列图是业务场景的图形化表示，描述了以 （62） 顺序组织的对象之间的交互活动。某系统中的一个 UML 序列图如下图所示， （63） 表示返回消息，Account 类必须实现的方法有 （64） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据整理版图像复原：<strong>序列图含两条生命线——发起方 FundsTransactionManager 与目标对象 Account；消息自上而下依次为：① start(transID)；② checkBalance(transID)；③ Balance（虚线返回）；④ withdraw(transID)；⑤ deposit(transID)</strong>。</p>
+</blockquote>
+<p>（62）　A. 活动　　B. 时间　　C. 消息　　D. 调用</p>
+<p>（63）　A. transID　　B. balance　　C. withdraw　　D. deposit</p>
+<p>（64）　A. start()　　B. checkBalance() 和 withdraw()　　C. deposit()　　D. checkBalance()、withdraw() 和 deposit()</p>
+<hr />
+<p><strong>65-66.</strong>【存疑：题目来源为网络回忆版，非原卷原文】实现 Prim 算法利用的算法是 （65） ，采用 Prim 算法求解下图的最小生成树，该最小生成树的权值为 （66） 【存疑：整理版题干此处有错字"设计策树的权值"，据题意应为"最小生成树的权值"】。</p>
+<blockquote>
+<p>【存疑：图形复原】据整理版图像复原（图像经二值化处理后逐标签读取，个别边权依据解析文字交叉确认）：<strong>带权无向连通图，顶点为 A、B、C、D、E、F；各边权值如下——AC = 1，DF = 2，BE = 3，CF = 4，BC = 5，CD = 5，AD = 5，AB = 6，CE = 6，EF = 6</strong>。请据此求最小生成树及其权值。</p>
+</blockquote>
+<p>（65）　A. 分治法　　B. 动态规划法　　C. 贪心算法　　D. 递归算法</p>
+<p>（66）　A. 15　　B. 18　　C. 24　　D. 27</p>
+<hr />
+<p><strong>67-68.</strong>【存疑：题目来源为网络回忆版，非原卷原文】 （67） 设计模式能使一个对象的状态发生改变时通【存疑：原文如此，应为"通知"】所有依赖它的监听者。 （68） 设计模式限制类的实例对象只能有一个。</p>
+<p>（67）　A. 责任链（chain of responsibility）　　B. 命令（command）</p>
+<p>C. 抽象工厂（abstract factory）　　D. 观察者（observer）</p>
+<p>（68）　A. 原型（prototype）　　B. 工厂方法（factory method）　　C. 单例（singleton）　　D. 生成器（builder）</p>
+<hr />
+<p><strong>69-70.</strong>【存疑：题目来源为网络回忆版，非原卷原文】下图是一个软件项目的活动图，其中顶点表示项目里程碑，连接顶点的边表示包含的活动，则里程碑 （69） 在关键路径上。若在实际项目进展中，活动 AD 在活动 AC 开始 3 天后才开始，而完成活动 DG 过程中，由于有临时事件发生，实际需要 15 天才能完成，则完成该项目的最短时间比原计划多了 （70） 天。</p>
+<blockquote>
+<p>【存疑：图形复原，且复原不全】活动图（AOE 网），<strong>顶点为项目里程碑 A～K，其中 A 为开始事件、K 为结束事件</strong>；边表示活动，边权为活动天数。从可用图像中能可靠确认的内容有：<strong>存在活动 AC、活动 AD、活动 DG</strong>（题干本身即涉及），<strong>图中可见的活动天数取值有 8、10、15、20、25 等</strong>；但<strong>完整的"边—权—顶点"对应关系未能从可用图像中可靠复原</strong>（内部里程碑 C、D、F、G、I、J 的图上位置无法确认）。<strong>无原图时建议先跳过本题，对答案时到 key 文件看完整推导。</strong></p>
+</blockquote>
+<p>（69）　A. B　　B. C　　C. D　　D. I</p>
+<p>（70）　A. 8　　B. 3　　C. 5　　D. 6</p>
+<hr />
+<p><strong>71-75.</strong>【存疑：本段为 2020 年下半年英语真题原文，被整理版误收为本卷 71–75 题；2022 年上半年真正的英语题未见公开。做完后这 5 分不计入与真实考试的对照，仅作练习】</p>
+<blockquote>
+<p>Regardless of how well designed, constructed, and tested a system or application maybe, errors or bugs will inevitably occur. Once a system has been （71） , it enters operations and support.</p>
+<p>Systems support is the ongoing technical support for user, as well as the maintenance required to fix any errors, omissions, or new requirements that may arise. Before an information system can be （72） , it must be in operation. System operation is the day-to-day, week-to-week, month-to-month, and year-to-year （73） of an information system's business processes and application programs.</p>
+<p>Unlike systems analysis, design, and implementation, systems support cannot sensibly be （74） into actual phases that a support project must perform. Rather, systems support consists of four ongoing activities that are program maintenance, system recovery, technical support, and system enhancement. Each activity is a type of support project that is （75） by a particular problem, event, or opportunity encountered with the implemented system.</p>
+</blockquote>
+<p>（71）　A. designed　　B. implemented　　C. investigated　　D. analyzed</p>
+<p>（72）　A. supported　　B. tested　　C. implemented　　D. constructed</p>
+<p>（73）　A. construction　　B. maintenance　　C. execution　　D. implementation</p>
+<p>（74）　A. broke　　B. formed　　C. composed　　D. decomposed</p>
+<p>（75）　A. triggered　　B. leaded　　C. caused　　D. produced</p>
+<hr />
+<p><strong>做完后：</strong> 对答案 → <code>2022H1-morning-key.md</code>（含逐题解析、来源标注、分科统计、错题登记与与前卷对比）。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/2022H1-morning-questions.md">docs/practice/papers/2022H1-morning-questions.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

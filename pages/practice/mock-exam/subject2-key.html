@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 30 全真模拟 · 科目二下午卷（大题部分）—— 答案速查 · 逐问丢分点解析 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 mock-exam 📁 subject2-key.md</div>
+<h1>Day 30 全真模拟 · 科目二下午卷（大题部分）—— 答案速查 · 逐问丢分点解析</h1>
+<blockquote>
+<p><strong>配套练习</strong>：<code>subject2-questions.md</code>（4 道大题：DFD + E-R + UML + 算法，合计 60 分）
+<strong>答案来源</strong>：
+- 试题一（2023上试题一）：逐字转录自《2023 年上半年软件设计师下午试卷 参考答案》PDF
+  <code>.superpowers/sdd/2026-09-20-34-day-exam-sprint/scratch-pm-2023年上半年下午试卷答案.txt</code>——
+  该 PDF 本身就是官方参考答案册，题目与答案内嵌。
+- 试题三（2022上试题三）：逐字转录自 <code>scratch-pm-2022年上半年下午试卷答案.txt</code>（答案册内嵌），
+  源答案<strong>明确标注"答案不唯一"</strong>，本文给出全部可复原的参考组合 + 一组带推理的推荐答案。
+- 试题四（2021上试题四）：逐字转录自 <code>scratch-pm-2021年上半年下午试卷答案.txt</code>（答案册内嵌）。
+- 试题二（2022下试题二）：⚠️ <strong>本地所有源中均无该题答案</strong>（<code>scratch-pm-2022年下半年下午试卷答案.txt</code>
+  及其重提取件 <code>scratch-re_2020~2023答案_2022年下半年下午试卷答案.pdf.txt</code> 中该题答案页均为空白）。
+  本文答案为<strong>【存疑：推导答案】</strong>——依据【需求分析结果】逐句推导，非官方答案。</p>
+<p>⚠️ <strong>解析</strong>由本人撰写，原则是"每个空为什么是这个答案 + 规则如何应用 + 易错点"；
+图形/代码复原图与推导答案一律标注 <strong>【存疑】</strong>，不冒充官方结论。
+全文交叉链接三个大题专项模板（<code>../subject2/*-notes.md</code>），便于失分后直接回看。</p>
+</blockquote>
+<hr />
+<h1>试题一：2023 年上半年 下午试题一（农事管理服务平台）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>E1：平台管理员　E2：农户　E3：租户　E4：第三方软件</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>D1：人员表　D2：基地及地块数据表　D3：农事过程表　D4：农事活动表</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>投入品消耗 D4→P4；地块信息 D2→P5；农事过程信息 D3→P5；农事活动信息 D4→P5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>问题4</td>
+<td>农事信息请求 = 账号 + 密码 + 查询条件</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（4 分）外部实体</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：E1：平台管理员　E2：农户　E3：租户　E4：第三方软件</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>四个实体全部来自【说明】中出现的"人员角色 / 外部系统"：</li>
+<li><strong>平台管理员</strong>——功能 (1)"平台管理员管理租户"</li>
+<li><strong>租户</strong>——功能 (1)"租户管理农户并为其分配负责的地块"、功能 (2)(3)(4) 的操作者</li>
+<li><strong>农户</strong>——功能 (1) 被管理者、功能 (3)"农户根据相应农事过程提醒进行农事活动并记录"、
+    功能 (4)"农户在农事活动中设定投入品的实际消耗"</li>
+<li><strong>第三方软件</strong>——功能 (5)"系统也给其他第三方软件提供 APP 接口"</li>
+<li><strong>易错点</strong>：</li>
+<li>把<strong>"用户"</strong>误当第五个实体——功能 (5) 的"用户按查询条件发起农事信息请求"中，
+    "用户"是平台管理员/租户/农户的<strong>统称</strong>，不是独立角色；参考答案只给 4 个实体。</li>
+<li>把<strong>"农事信息请求"被错误归给某个具体实体</strong>——第三方软件走 APP 接口，
+    与内部"用户"发起的请求是同一条流（问题 4 即考这条流的组成）。</li>
+<li>把<strong>地块、作物、投入品</strong>误当实体——它们是系统处理/存储的数据，不是外部实体。</li>
+<li><strong>答题规范</strong>：题目要求"使用说明中的词语"，必须用【说明】原词
+  （"平台管理员"不能简写为"管理员"；"第三方软件"不能写成"第三方系统"）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 外部实体识别（见 <code>../subject2/dfd-uml-notes.md</code>
+一·第 1 步：外部实体识别法）</p>
+<hr />
+<h3>【问题2】（4 分）数据存储</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：D1：人员表　D2：基地及地块数据表　D3：农事过程表　D4：农事活动表</p>
+<p>（源答案附注："自拟的答案用表、信息表、记录、文件等等关键字均可"）</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>四个存储与【说明】中的四个"被记录/被设定/被维护的数据对象"一一对应：</li>
+<li><strong>D1 人员表</strong> ← 功能 (1)"人员管理……租户和农户以<strong>人员类型</strong>区分"——存的是人员</li>
+<li><strong>D2 基地及地块数据表</strong> ← 功能 (2)"租户填写基地名称、地域等描述信息，在显示的地图上
+    <strong>绘制地块</strong>"——存的是基地与地块数据（两者合一个存储，易错点见下）</li>
+<li><strong>D3 农事过程表</strong> ← 功能 (3)"租户<strong>设定</strong>作物及其从种植到采收的整个<strong>农事过程</strong>"</li>
+<li><strong>D4 农事活动表</strong> ← 功能 (3)"农户……进行<strong>农事活动并记录</strong>"</li>
+<li><strong>易错点</strong>：</li>
+<li>把"基地"和"地块"拆成两个存储——功能 (2) 把两者写在同一句描述里，参考答案合并为
+    "基地及地块数据表"；</li>
+<li>把<strong>投入品</strong>单独算一个存储——功能 (4) 的"投入品信息"未单独成表：投入品的<strong>实际消耗</strong>
+    是"农户在<strong>农事活动</strong>中设定"的，即随农事活动记录进入 D4（这正是问题 3 中
+    "投入品消耗 D4→P4"的来源）；租户维护的投入品信息也不是独立存储。</li>
+<li>把"作物"算独立存储——作物是农事过程（D3）的一部分。</li>
+<li><strong>定位技巧</strong>（<code>../subject2/dfd-uml-notes.md</code> 一·第 2 步：数据存储定位法）：
+  找【说明】中的"存储/保存/记录/维护/设定/区分"等动词，被作用的对象名词即存储名核心词；
+  后缀"表/信息表/记录/文件"均给分。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】DFD 数据存储识别</p>
+<hr />
+<h3>【问题3】（4 分）补充缺失的数据流</h3>
+<blockquote>
+<p><strong>答案（原文表格）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据流名称</th>
+<th>起点</th>
+<th>终点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>投入品消耗</td>
+<td>D4</td>
+<td>P4</td>
+</tr>
+<tr>
+<td>地块信息</td>
+<td>D2</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>农事过程信息</td>
+<td>D3</td>
+<td>P5</td>
+</tr>
+<tr>
+<td>农事活动信息</td>
+<td>D4</td>
+<td>P5</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>丢分点解析</strong>（数据流平衡规则如何应用——下午卷最高频丢分点）：</p>
+<p>逐个加工检查"守恒"（有输入、有输出、输入足以产生输出），回【说明】找缺的流：</p>
+<ol>
+<li><strong>地块信息 D2→P5 / 农事过程信息 D3→P5 / 农事活动信息 D4→P5</strong>：
+   功能 (5) 说信息服务要对"<strong>相关地块</strong>农事活动实施情况（如与<strong>农事过程</strong>比对）等
+   <strong>农事信息</strong>进行筛选、对比和统计等处理"——<code>P5 信息服务</code> 的输出是"响应信息"，
+   但输入只有"农事信息请求"一条，<strong>要处理的三类数据全缺</strong>。这些都是被存储的批量/历史数据，
+   只能从数据存储读（<code>../subject2/dfd-uml-notes.md</code> 一·第 3 步的记忆口诀：
+   <strong>"查询/统计/比对类处理只能读存储"</strong>），故补三条 D→P5 的流，名称逐一取自【说明】原词：
+   地块信息（D2）、农事过程信息（D3）、农事活动信息（D4）。</li>
+<li><strong>投入品消耗 D4→P4</strong>：功能 (4) 说投入品管理要"租户统一维护化肥、杀虫剂等投入品信息"，
+   而"农户在<strong>农事活动</strong>中设定投入品的<strong>实际消耗</strong>"——<code>P4 投入品管理</code> 要维护投入品信息，
+   缺"实际消耗"这条输入；实际消耗随农事活动记录存在 D4，故补 D4→P4。</li>
+</ol>
+<p><strong>平衡规则应用要点</strong>：</p>
+<ul>
+<li><strong>守恒规则</strong>：一个加工的输出必须能由其输入产生。P5 只画了输出（响应信息）没有数据输入，
+  属"有输出无输入"（奇迹错误），必须补输入。</li>
+<li><strong>数据流命名</strong>：用【说明】原词名词短语（"农事活动信息"而非"活动信息"）。</li>
+<li><strong>本题与 2020下/2021下 DFD 的区别</strong>：本题为"读取历史数据"型补流（全是从<strong>存储到加工</strong>），
+  没有加工到加工的实时流——做的时候先锁定"哪个加工的输出无法由输入解释"，再回【说明】找原词。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】数据流平衡（守恒规则/无悬空流）——
+见 <code>../subject2/dfd-uml-notes.md</code> 一·第 3 步</p>
+<hr />
+<h3>【问题4】（3 分）数据流的组成</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：
+- 答 1：农事信息请求 = 账号 + 密码 + 查询条件
+- 答 2：农事信息请求 = 账号 + 密码 + 0{查询条件}*
+- 答 3：农事信息请求：账号、密码、查询条件</p>
+<p>（源答案附注："格式不是绝对的，只要接近答案应该就会给分"）</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li>答案三项直接取自功能 (5) 的原句："通过接口访问的方式，提供<strong>账号，密码和查询条件</strong>
+  发起农事信息请求"。普通用户与第三方软件发起的是同一条数据流，组成相同。</li>
+<li><strong>易错点</strong>：</li>
+<li>只写"查询条件"漏掉账号密码——题干特意强调第三方软件"提供账号，密码和查询条件"，
+    账号密码是身份/权限依据，缺一不可。</li>
+<li>把"响应信息"写进请求的组成——组成是指该流<strong>携带</strong>的数据项，不是它引发的输出。</li>
+<li><strong>格式</strong>：<code>A = B + C + D</code> 或 <code>A：B、C、D</code> 均可（源答案明确格式不绝对），
+  也可以用数据字典记号 <code>0{查询条件}*</code> 表示查询条件可选/可多个（"无查询条件时默认返回
+  账号下所有信息"）。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题一】数据流组成（数据字典条目写法）</p>
+<h2>---</h2>
+<h1>试题二：2022 年下半年 下午试题二（营销公司业务管理）</h1>
+<blockquote>
+<p>⚠️ <strong>本题在本地所有答案源中均无内嵌答案</strong>（2022 下答案册该页未被提取）。
+以下全部为 <strong>【存疑：推导答案】</strong>：依据【需求分析结果】逐句推导，非官方答案。
+做完后请重点核对推导过程；若手边有官方解析，以官方解析为准并回填本文。</p>
+</blockquote>
+<h2>答案速查【存疑：推导答案】</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>推导答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>① 分公司—专卖店 1:n；② 专卖店—职员 1:n；③ 职员—专卖店（店长）1:1</td>
+<td>6</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>（a）店长、分公司编号　（b）专卖店号；（c）专卖店号　（d）分公司编号；（e）职员号　（f）专卖店号</td>
+<td>6</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>（g）紧急联系人　（h）1:n；紧急联系人（职员号，姓名，与本人关系，联系电话）</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（6 分）补充三个联系及联系类型【存疑：推导答案】</h3>
+<blockquote>
+<p><strong>推导答案</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>联系名</th>
+<th>连接的实体</th>
+<th>联系类型</th>
+<th>推导依据（需求原句）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联系1（拥有/所属）</td>
+<td>分公司 — 专卖店</td>
+<td><strong>1:n</strong></td>
+<td>「每个分公司拥有<strong>多家</strong>专卖店，每家专卖店<strong>只属于一个</strong>分公司」</td>
+</tr>
+<tr>
+<td>联系2（聘用/所属）</td>
+<td>专卖店 — 职员</td>
+<td><strong>1:n</strong></td>
+<td>「每家专卖店有<strong>多名</strong>职员，每名职员<strong>只属于一家</strong>专卖店」</td>
+</tr>
+<tr>
+<td>联系3（担任店长/负责）</td>
+<td>职员 — 专卖店</td>
+<td><strong>1:1</strong></td>
+<td>「每家专卖店<strong>只有一名</strong>店长……每名店长<strong>只负责一家</strong>专卖店」</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>丢分点解析</strong>（联系类型判定口诀如何应用——见 <code>../subject2/database-notes.md</code>
+二·第 2 步："两端都唯一 → 1:1；一端唯一 → 1:n；都不唯一 → m:n"）：</p>
+<ol>
+<li><strong>分公司—专卖店 1:n</strong>：读量词——分公司端"多家"（不唯一）、专卖店端"只属于一个"（唯一），
+   一端唯一 → <strong>1:n</strong>。1:n 联系转换到关系模式时，"n 端"关系模式加入"1 端"的主键作外键
+   ——这正是问题 2（a）要补的"分公司编号"。</li>
+<li><strong>专卖店—职员 1:n</strong>：专卖店端"多名"（不唯一）、职员端"只属于一家"（唯一）→ <strong>1:n</strong>。
+   同理，职员关系模式要加入专卖店的主键"专卖店号"作外键——即问题 2（b）。</li>
+<li><strong>职员—专卖店（店长）1:1</strong>：<strong>本题最大难点</strong>。"店长"不是新实体——需求 (3) 明确
+   "岗位有店长、营业员等"，店长是<strong>职员的一种岗位</strong>。这个 1:1 联系画在<strong>职员与专卖店之间</strong>
+   （"每家专卖店只有一名店长"=专卖店端唯一；"每名店长只负责一家专卖店"=职员端唯一；
+   两端都唯一 → <strong>1:1</strong>）。判题时若把店长画成独立实体、或把该联系误判为 1:n，
+   问题 1 会扣掉 2 分左右。</li>
+<li><strong>联系名</strong>：题目明确"联系名可用联系1、联系2、联系3；也可根据你对题意的理解取联系名"，
+  所以<strong>采分点在"两端实体 + 联系类型"</strong>，联系名随便写（写"联系1/2/3"最稳）。</li>
+<li><strong>作答格式</strong>：在答题纸上画菱形 + 连线 + 标 1:1/1:n，并写清联系名。</li>
+</ol>
+<p><strong>知识点</strong>：【科目二·试题二】E-R 联系类型判定（1:1/1:n/m:n）——
+<code>../subject2/database-notes.md</code> 二·第 2 步</p>
+<hr />
+<h3>【问题2】（6 分）关系模式填空 + 主键外键【存疑：推导答案】</h3>
+<blockquote>
+<p><strong>推导答案</strong>：</p>
+<p>（1）
+- <strong>（a）：店长、分公司编号</strong>
+- <strong>（b）：专卖店号</strong></p>
+<p>（2）
+- <strong>（c）专卖店主键：专卖店号</strong>　<strong>（d）专卖店外键：分公司编号</strong>
+- <strong>（e）职员主键：职员号</strong>　<strong>（f）职员外键：专卖店号</strong></p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>（a）店长、分公司编号</strong>：把需求 (2)"专卖店信息包括：专卖店号、专卖店名、<strong>店长</strong>、
+  <strong>分公司编号</strong>、地址、电话"逐项对照关系模式"专卖店（专卖店号，专卖店名，（a），地址，电话）"——
+  缺<strong>两个</strong>属性。最常见的丢分是只补一个（只补分公司编号、漏店长）。</li>
+<li>对照法是试题二问题 2 的通用解法（<code>../subject2/database-notes.md</code> 二·第 4 步）：
+    需求句的属性清单 ⊕ 关系模式已有属性 = 待填空缺。</li>
+<li><strong>（b）专卖店号</strong>：需求 (3)"职员信息包括：职员号、职员名、<strong>专卖店号</strong>、岗位、电话、薪资"
+  对照"职员（职员号，职员名，（b），岗位，电话，薪资）"——缺专卖店号。</li>
+<li><strong>为什么职员关系里是"专卖店号"而不是"专卖店名"</strong>：1:n 联系转换时，n 端关系加入的是
+    1 端关系的<strong>主键</strong>；专卖店的主键是专卖店号（不是专卖店名）。</li>
+<li><strong>（c）（e）主键</strong>：需求已直接给出唯一性约束——
+  "专卖店号唯一确定专卖店关系中的每一个元组"→ 专卖店主键 = 专卖店号；
+  "职员号唯一标识职员关系中的每一个元组"→ 职员主键 = 职员号。
+  （主键判定规则：能唯一确定一个元组的最小属性组，见 <code>../subject2/database-notes.md</code>
+  二·"主键 / 外键判定规则"）</li>
+<li><strong>（d）（f）外键</strong>：外键 = 本关系中引用其它关系主键的属性——
+  专卖店的"分公司编号"引用分公司关系主键 → 外键；职员的"专卖店号"引用专卖店关系主键 → 外键。</li>
+<li>【存疑：推导】专卖店关系中的“店长”若按问题 1 的 1:1 联系建模为引用职员号，
+    则"店长"也是外键（引用职员关系的职员号）。官方答案一般只要求写出最直接的
+    （d）分公司编号；若题目要求"所有外键"，店长可一并写出。作答时写"分公司编号"为主。</li>
+<li><strong>作答格式</strong>：题目要求"标注主键（实线）和外键（虚线）"——在属性下画线标注，
+  或写"主键：…　外键：…"。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题二】E-R → 关系模式转换规则（1:n 的外键加法）+ 主键/外键判定——
+<code>../subject2/database-notes.md</code> 二·第 4 步 + 主键/外键判定规则</p>
+<hr />
+<h3>【问题3】（3 分）新增实体与联系【存疑：推导答案】</h3>
+<blockquote>
+<p><strong>推导答案</strong>：</p>
+<p>（1）
+- <strong>（g）新增实体：紧急联系人</strong>
+- <strong>（h）联系类型：1:n</strong>（职员 1 — 紧急联系人 n）</p>
+<p>（2）该实体的关系模式：</p>
+<p><code>紧急联系人（职员号，姓名，与本人关系，联系电话）</code></p>
+<p>其中：主键建议（职员号，姓名）或（职员号，联系电话）；外键：职员号（引用职员关系的职员号）。</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>（g）紧急联系人</strong>：新实体取题干原词——"专卖店要求每位职员至少要填写一位
+  <strong>紧急联系人</strong>"。新实体命名必须用题干原词（扩展设计题四步模板第一步，见
+  <code>../subject2/database-notes.md</code> 二·"扩展设计题四步模板"）。</li>
+<li><strong>（h）1:n</strong>：用口诀判定——"每位职员<strong>至少要填写一位</strong>紧急联系人"，即一名职员可对应
+  <strong>多位</strong>紧急联系人（不唯一）；而每位紧急联系人只对应一名职员（唯一）。职员端唯一、
+  紧急联系人端不唯一 → <strong>1:n</strong>。</li>
+<li><strong>易错点</strong>：把"至少一位"误读为"一位"而判成 1:1。"至少一位"= 上界不限 = n。</li>
+<li><strong>1:n 的转换结果</strong>：n 端（紧急联系人）关系模式加入 1 端（职员）的主键"职员号"作外键
+    ——这正是关系模式里必须有"职员号"的原因。</li>
+<li><strong>关系模式的属性</strong>：题干已给出"姓名、与本人关系和联系电话"三项，再加外键"职员号"，
+  共四项。<strong>漏掉外键职员号是最常见的丢分点</strong>（没有职员号，紧急联系人就和职员脱钩了）。</li>
+<li><strong>主键</strong>：职员号单独不能唯一确定紧急联系人（一名职员多条记录），故主键是复合属性
+  （职员号 + 姓名/联系电话其一）；本题为开放设计，写法不唯一，写清"主键 + 外键"即可。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题二】扩展设计（新增实体 + 1:n 联系 + 关系模式转换）——
+<code>../subject2/database-notes.md</code> 二·"扩展设计题四步模板"</p>
+<h2>---</h2>
+<h1>试题三：2022 年上半年 下午试题三（地址簿管理系统）</h1>
+<blockquote>
+<p>⚠️ 源参考答案在问题 1 处明确标注：<strong>"答案不唯一，大家参考后自行判断"</strong>。
+本文先逐字转录源中可复原的参考组合，再给出一组带推理的推荐答案。</p>
+</blockquote>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>U1：按照员工姓氏的字典顺序排序；U2：按邮政编码排序；U3～U6：创建/打开/修改/保存地址簿（顺序随图而定，见下）</td>
+<td>6</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>AddressBook 属性：部门号、姓名、住址、城市、省份、邮政编码、联系电话；方法：添加/修改/删除/排序/打印地址记录 + 创建/打开/修改地址簿；PersonAddress 属性：姓名、住址、城市、省份、邮政编码、联系电话</td>
+<td>5</td>
+</tr>
+<tr>
+<td>问题3</td>
+<td>include/extend 的含义（见下，定义 + 举例双采分点）</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（6 分）U1～U6 用例名</h3>
+<blockquote>
+<p><strong>答案（原文，源标注"答案不唯一"）</strong>：</p>
+<ul>
+<li><strong>U1：按照员工姓氏的字典顺序排序</strong>（所有参考组合一致）</li>
+<li><strong>U2：按邮政编码排序</strong>（所有参考组合一致）</li>
+<li><strong>U3～U6：创建地址簿 / 打开地址簿 / 修改地址簿 / 保存地址簿</strong> 的排列
+  （具体编号对应以原卷图 3-1 中 include/extend 连线为准）</li>
+</ul>
+<p>源中列出的参考组合（逐字转录，【存疑：源 PDF 为两栏表格，提取时栏间交错，
+下列组合的 U4/U5 顺序可能存在错位】）：
+- 组合 a：U3 创建地址簿、U4 打开地址簿、U5 修改地址簿、U6 保存地址簿
+- 组合 b：U3 创建地址簿、U4 修改地址簿、U5 打开地址簿、U6 保存地址簿
+- 组合 c：U3 打开地址簿、U4 修改地址簿、U5 保存地址簿、U6 创建地址簿
+- 组合 d：U3 保存地址簿、U4 打开地址簿、U5 修改地址簿、U6 创建地址簿
+- 组合 e：U3 创建地址簿、U4 打开地址簿、U5 修改地址簿、U6 GUI（图形用户界面）</p>
+<p><strong>推荐答案（带推理）</strong>：U3 创建地址簿、U4 修改地址簿、U5 打开地址簿、U6 保存地址簿
+——理由见下方解析。</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>U1/U2 必拿分</strong>：【说明】"排序"功能明确列出两种方式——"按照员工姓氏的字典顺序或
+  邮政编码"，故 U1/U2 就是这两种排序，且在<strong>所有参考组合中都一致</strong>。用例名必须用【说明】
+  原句动词短语。</li>
+<li><strong>U3～U6 的候选集合</strong>：【说明】"地址簿的操作"列出创建地址簿、打开地址簿、修改地址簿
+  三项，且三句话里两次出现"<strong>并保存</strong>"——"保存"是被抽取出来的<strong>公共行为</strong>，单独成一个用例。
+  故 U3～U6 = {创建地址簿、打开地址簿、修改地址簿、保存地址簿}。</li>
+<li><strong>为什么答案不唯一</strong>：U3～U6 的具体编号取决于<strong>原图中 include/extend 连线连的是哪两个用例</strong>，
+  图形未提取，无法确定编号。<strong>判分时只要集合对、与图中的关系自洽即可</strong>。</li>
+<li><strong>include/extend 推理（确定相对关系）</strong>：</li>
+<li>「创建地址簿。新建一个地址簿<strong>并保存</strong>」「修改地址簿。对打开的地址簿进行修改<strong>并保存</strong>」
+    ——创建与修改<strong>必然</strong>执行保存 → <strong>创建/修改地址簿 <code>&lt;&lt;include&gt;&gt;</code> 保存地址簿</strong>。</li>
+<li>「修改地址簿。对<strong>打开的</strong>地址簿进行修改」——只有修改时才需要先打开，是<strong>可选/有条件</strong>的
+    分支 → <strong>修改地址簿 <code>&lt;&lt;extend&gt;&gt;</code> 打开地址簿</strong>（或"打开地址簿扩展修改地址簿"，
+    视原图箭头方向表述）。</li>
+<li>据此可自洽排出一组 U3～U6（如推荐答案），并把关系标在旁边。</li>
+<li><strong>易错点</strong>：</li>
+<li>把"GUI（图形用户界面）"填进 U1～U6——GUI 是系统提供的界面，不是用例
+    （源组合 e 把它列为 U6，属争议项，不建议采用）。</li>
+<li>把"管理地址记录（添加/修改/删除）"填进 U1～U6——这些在图中大概率已标明名称，
+    不在待填的 6 个空里。</li>
+<li>用例名写成动词原形或自造词（如"排序"）而非【说明】原句。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】用例图用例识别 + include/extend 关系——
+<code>../subject2/dfd-uml-notes.md</code> 二·"用例图三关系"</p>
+<hr />
+<h3>【问题2】（5 分）类 AddressBook 的属性/方法 + PersonAddress 的属性</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<ul>
+<li><strong>AddressBook 的主要属性包括</strong>：部门号（名称、编码等）、姓名、住址、城市、省份、
+  邮政编码以及联系电话等</li>
+<li><strong>AddressBook 的方法包括</strong>：添加地址记录、修改地址记录、删除地址记录、排序地址记录、
+  打印地址记录、创建地址簿、打开地址簿、修改地址簿</li>
+<li><strong>PersonAddress 的主要属性包括</strong>：姓名、住址、城市、省份、邮政编码以及联系电话等信息</li>
+</ul>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>PersonAddress 的属性 = 【说明】第一段原句</strong>："员工的地址记录包括：姓名、住址、城市、
+  省份、邮政编码以及联系电话等信息"。这是<strong>白送分</strong>，逐字抄【说明】即可。</li>
+<li><strong>AddressBook 的属性 = 地址记录属性 + 部门信息</strong>：题干"管理员在系统中为公司的
+  <strong>不同部门</strong>建立员工的地址簿"——AddressBook 按<strong>部门</strong>划分，所以必须比 PersonAddress
+  <strong>多一个"部门号（名称、编码等）"</strong>。这是本题的核心采分点：漏掉部门信息扣 1～2 分。</li>
+<li><strong>AddressBook 的方法 = 【说明】中管理员的所有操作动词</strong>（"动词找方法"，见
+  <code>../subject2/dfd-uml-notes.md</code> 二·类图填空三招·第 2 招）：</li>
+<li>管理地址记录的三个动作 → 添加地址记录、修改地址记录、删除地址记录</li>
+<li>排序功能 → 排序地址记录</li>
+<li>打印功能 → 打印地址记录</li>
+<li>地址簿操作 → 创建地址簿、打开地址簿、修改地址簿</li>
+<li>（源答案未列"保存地址簿"，但【说明】两次提到"并保存"；写上不扣分，
+    方法清单是开放采分，覆盖【说明】动词即可。）</li>
+<li><strong>易错点</strong>：</li>
+<li>把 PersonAddress 的属性又抄进 AddressBook 却<strong>漏掉部门号</strong>——两个类属性的<strong>差异点</strong>
+    （部门信息）才是本题考点；</li>
+<li>方法写成名词（如"地址记录的管理"）而非动词短语；</li>
+<li>混淆 AddressBook 与 AddressBookSystem——后者是系统，前者是按部门的地址簿。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】类图属性/方法提取（名词找属性、动词找方法）——
+<code>../subject2/dfd-uml-notes.md</code> 二·"类图填空三招"</p>
+<hr />
+<h3>【问题3】（4 分）include 和 extend 关系的含义</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<ul>
+<li><strong>include 表示包含关系</strong>，含义为：如果系统用例较多，不同的用例之间存在共同行为，
+  可以将这些共同行为提取出来，单独组成一个用例。当其他用例使用这个用例时，它们就
+  构成了包含关系。</li>
+<li><strong>extend 表示扩展关系</strong>，含义为：在用例的执行过程中，可能出现一些异常行为，也可能
+  在不同的分支行为中选择执行，这时可将异常行为与可选分支抽象为一个单独的扩展用例，
+  这样扩展用例与主用例之间就构成了扩展关系。一个用例常常有多个扩展用例。</li>
+</ul>
+<p>（源答案附注："这里包含和扩展的含义不唯一的，大家可以挑自己觉得最合理的进行记忆"）</p>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>采分结构 = 标准定义 + 本系统举例</strong>。只写定义能拿一半分，结合本系统举例（问题要求
+  "根据说明中的描述以及图 3-1 所示的用例图来说明"）才拿满：</li>
+<li><strong>include 举例</strong>：「创建地址簿」「修改地址簿」都必然执行「保存地址簿」——
+    "保存"是从多个用例中抽取的公共行为 → <code>&lt;&lt;include&gt;&gt;</code>。</li>
+<li><strong>extend 举例</strong>：只有「修改地址簿」时才需要先「打开地址簿」——打开是修改的
+    可选/有条件分支 → <code>&lt;&lt;extend&gt;&gt;</code>。</li>
+<li><strong>记忆要点</strong>（<code>../subject2/dfd-uml-notes.md</code> 二·"用例图三关系"）：</li>
+<li>include：<strong>必然执行</strong>的公共行为被抽取；箭头从基本用例指向被包含用例。</li>
+<li>extend：<strong>可选/异常分支</strong>；扩展用例指向基本用例；一个基本用例可有多个扩展用例。</li>
+<li><strong>易错点</strong>：把两者说反。记一句话区分："<strong>包含是必须的，扩展是可选的</strong>"。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题三】用例图三关系（include / extend / generalize）——
+<code>../subject2/dfd-uml-notes.md</code> 二·"用例图三关系"</p>
+<h2>---</h2>
+<h1>试题四：2021 年上半年 下午试题四（凸多边形最优三角剖分）</h1>
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+<th>分值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题1</td>
+<td>（1）i &lt;= N【见下方存疑说明】　（2）j = i + r - 1　（3）temp &lt; m[i][j]　（4）S[i][j] + 1, j</td>
+<td>8</td>
+</tr>
+<tr>
+<td>问题2</td>
+<td>（5）动态规划　（6）O(n³)　（7）O(n²)</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【问题1】（8 分）填充 C 代码空（1）～（4）</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<ul>
+<li><strong>（1）i &lt;= N</strong></li>
+<li><strong>（2）j = i + r - 1</strong></li>
+<li><strong>（3）temp &lt; m[i][j]</strong></li>
+<li><strong>（4）S[i][j] + 1, j</strong></li>
+</ul>
+<p>⚠️【存疑：源答案与代码语境不一致】空 (1) 在源代码中位于外层规模循环
+<code>for (r = 2; (1); r++)</code>（"r 为子问题规模"）的条件位置，语义上该处应为 <strong>r &lt;= N</strong>
+（子问题规模 r 从 2 增长到 N）。源答案作 "i &lt;= N"，疑为答案册 OCR 将 "r" 误识为 "i"
+（r/i 形近，本答案册同类误识多处）。两种读法表达的循环语义一致——"规模增长到 N 为止"；
+且按本文复原后的内层循环 <code>for (i = 1; i &lt;= N - r + 1; i++)</code>，内层条件的完整形式应为
+<strong>i &lt;= N - r + 1</strong>。<strong>以原卷代码版式为准</strong>；作答时填 "r &lt;= N" 或 "i &lt;= N - r + 1"
+均能被判对（看原卷该空到底在内层还是外层）。</p>
+</blockquote>
+<p><strong>丢分点解析</strong>（DP 填空通用方法见 <code>../subject2/patterns-algo-notes.md</code> 二·2.1 填空四步法）：</p>
+<ul>
+<li><strong>（2）j = i + r - 1</strong>：r 是子问题规模，即子多边形 V_{i-1}…V_j 的<strong>点数</strong>
+  （j - i + 1 = r）→ j = i + r - 1。这是 DP 区间题的固定套路：<strong>外层枚举区间长度，
+  内层枚举区间左端点，由长度和左端点算出右端点</strong>。</li>
+<li>检验：r=2 时 j=i+1（两个相邻点，m[i][i+1] 为一条边的权，退化情形）；
+    r=N 时 i=1、j=N（整个多边形），与"求解最小剖分"的目标一致。</li>
+<li><strong>（3）temp &lt; m[i][j]</strong>：k 循环在 <code>i ≤ k &lt; j</code> 范围内枚举剖分点，<code>temp</code> 是当前 k 的
+  候选权重；若 temp 比当前记录的 m[i][j] <strong>更小</strong>，则更新 m[i][j] 并记录 S[i][j] = k。</li>
+<li><strong>为什么是 <code>&lt;</code> 不是 <code>&lt;=</code></strong>：题目求<strong>最小</strong>权重；用 <code>&lt;</code> 时只在严格更小时更新，
+    保留<strong>最先找到</strong>的最小值对应的 k（S 记录其中一个最优剖分点，多个最优时任取其一）。</li>
+<li><strong>易错点</strong>：写成 <code>temp &gt; m[i][j]</code>（求最大）或 <code>temp == m[i][j]</code>。</li>
+<li><strong>初始值对照</strong>：k=i 时的初值已由循环外那句 <code>m[i][i] + m[i+1][j] +
+    get_triangle_weight(i-1, i, j)</code> 算好并置 <code>S[i][j] = i</code>（题干递归式中 k 的下界 i）。</li>
+<li><strong>（4）S[i][j] + 1, j</strong>：<code>print_triangle</code> 递归输出剖分：在 k = S[i][j] 处把多边形
+  V_{i-1}…V_j 切成两个子多边形——左半 V_{i-1}…V_k 由上一行 <code>print_triangle(i, S[i][j])</code>
+  处理，右半 V_k…V_j 由本空 <code>print_triangle(S[i][j] + 1, j)</code> 处理，随后输出当前三角形
+  <code>V(i-1)--V k--V j</code>。</li>
+<li><strong>推导技巧</strong>：递归函数的空通常是"参数的对称变换"。上一行是 <code>(i, S[i][j])</code>，
+    本行把第一参数从 i 换成 S[i][j]+1（跳过切点），第二参数保持 j。</li>
+<li><strong>检验</strong>：<code>if (i == j) return;</code> 是递归出口——切到单点即返回，与
+    <code>m[i][j] = 0 (i ≥ j)</code> 的边界一致。</li>
+<li><strong>（1）见上方存疑说明</strong>：无论填在内外哪一层，语义都是"规模/下标增长到 N 为止"。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题四】动态规划——区间 DP（最优三角剖分），状态转移三件套
+（状态定义 / 边界 / 递推式）见 <code>../subject2/patterns-algo-notes.md</code> 二·2.2</p>
+<hr />
+<h3>【问题2】（7 分）设计策略与时空复杂度</h3>
+<blockquote>
+<p><strong>答案（原文）</strong>：</p>
+<ul>
+<li><strong>（5）动态规划</strong></li>
+<li><strong>（6）O(n³)</strong>（源记作 O（n3））</li>
+<li><strong>（7）O(n²)</strong>（源记作 O（n2））</li>
+</ul>
+</blockquote>
+<p><strong>丢分点解析</strong>：</p>
+<ul>
+<li><strong>（5）动态规划</strong>：题干已经把判定条件写全——"若在 Vk 处……得到一个最优的剖分方案，
+  则该最优剖分方案应该<strong>包含这两个子凸多边形的最优剖分方案</strong>"，即<strong>最优子结构</strong>；
+  加上重叠子问题（不同区间的最优值被反复引用）→ 动态规划。</li>
+<li><strong>易错点</strong>：答成分治法或贪心。分治与 DP 的区别在于<strong>重叠子问题</strong>——本题主程序用
+    二维数组 m/S 自底向上记录所有子区间最优值（避免重复计算），这是 DP 的标志性写法。</li>
+<li><strong>（6）O(n³)</strong>：三重循环嵌套——r（规模，n 档）、i（左端点，≤n 档）、
+  k（剖分点，≤n 档）→ 最内层总执行次数为 O(n³)。</li>
+<li><strong>（7）O(n²)</strong>：两个 n×n 的二维数组 m[][] 和 S[][]（代码中 <code>int m[N+1][N+1]</code>、
+  <code>int S[N+1][N+1]</code>，各占 O(n²) 空间）→ 空间复杂度 O(n²)。</li>
+<li><strong>易错点</strong>：把空间复杂度也写成 O(n³)——空间只看<strong>声明的数据结构规模</strong>，不看循环次数。</li>
+</ul>
+<p><strong>知识点</strong>：【科目二·试题四】算法策略判定 + 复杂度分析——
+<code>../subject2/patterns-algo-notes.md</code> 二·2.3（常考算法骨架清单·动态规划）+ 2.4</p>
+<h2>---</h2>
+<h2>📊 模拟得分自评指引（做完 4 题后逐题对照）</h2>
+<blockquote>
+<p>每题 15 分。下午卷正式合格线 45/75，本模拟 4 题折算合格线 <strong>36/60</strong>。
+以下是每个分数段的含义与补救动作——<strong>失分不超过知识盲区，更多是"规则没记住/步骤跳了"</strong>。</p>
+</blockquote>
+<h3>试题一（DFD，15 分）</h3>
+<table>
+<thead>
+<tr>
+<th>分数段</th>
+<th>意味着什么</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 12 分</strong></td>
+<td>实体/存储识别 + 数据流平衡已基本过关。下午试题一可稳拿 10+ 分</td>
+<td>保持。考试时重点检查"有输出无输入"的加工；复习 <code>../subject2/dfd-uml-notes.md</code> 一·第 3 步的平衡规则即可</td>
+</tr>
+<tr>
+<td><strong>8–11 分</strong></td>
+<td>实体/存储能拿满，<strong>数据流平衡漏了 1–2 条</strong>（最常见是漏"存储→加工"的读数据流）</td>
+<td>重做本题问题 3 + <code>../subject2/dfd-uml-exercises.md</code> 试题 A/B 的问题 3；记住口诀"查询/统计/比对只能读存储"，把每个加工的输入输出写成清单逐行核对</td>
+</tr>
+<tr>
+<td><strong>&lt; 8 分</strong></td>
+<td>连实体/存储都凑不齐——【说明】没读透，没圈出"人员角色/存储动词"</td>
+<td>立刻回看 <code>../subject2/dfd-uml-notes.md</code> 一·第 1、2 步（外部实体识别法、数据存储定位法），把本题【说明】重读一遍逐功能圈词，重做问题 1/2</td>
+</tr>
+</tbody>
+</table>
+<h3>试题二（E-R + 关系模式，15 分）</h3>
+<table>
+<thead>
+<tr>
+<th>分数段</th>
+<th>意味着什么</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 12 分</strong></td>
+<td>联系类型判定 + 1:n 外键转换 + 主键外键全套熟练</td>
+<td>保持。考前把"两端都唯一 1:1、一端唯一 1:n、都不唯一 m:n"默写一遍即可</td>
+</tr>
+<tr>
+<td><strong>8–11 分</strong></td>
+<td>联系类型能判，但<strong>属性填空漏项</strong>（如本题 (a) 漏店长）或<strong>外键写错端</strong></td>
+<td>背"对照法"：需求属性清单 ⊕ 关系模式已有 = 空缺；1:n 的外键加在 n 端、且是 1 端的<strong>主键</strong>。重做本题问题 2 + <code>../subject2/database-exercises.md</code> 试题 A/C 的问题 2</td>
+</tr>
+<tr>
+<td><strong>&lt; 8 分</strong></td>
+<td>联系类型（1:1/1:n/m:n）判定靠蒙，E-R → 关系模式转换规则没掌握</td>
+<td>这是试题二的核心，必须当晚补：精读 <code>../subject2/database-notes.md</code> 二·第 2 步（判定口诀）+ 第 4 步（转换规则），把本题三条线索句的量词逐个圈出来重判一遍</td>
+</tr>
+</tbody>
+</table>
+<h3>试题三（UML，15 分）</h3>
+<table>
+<thead>
+<tr>
+<th>分数段</th>
+<th>意味着什么</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 12 分</strong></td>
+<td>用例识别 + 类属性/方法提取 + include/extend 都清楚</td>
+<td>保持。考试时类图属性题先抄【说明】原句，再找"多出来的差异属性"（如本题的部门号）</td>
+</tr>
+<tr>
+<td><strong>8–11 分</strong></td>
+<td>用例/属性能拿分，但 <strong>include/extend 说反了</strong>，或类属性漏了差异点</td>
+<td>默记"<strong>包含是必须的，扩展是可选的</strong>"；重做本题问题 2/3 + <code>../subject2/dfd-uml-exercises.md</code> 试题 C 的问题 1</td>
+</tr>
+<tr>
+<td><strong>&lt; 8 分</strong></td>
+<td>类图填空三招（名词找类、动词找方法）完全没建立</td>
+<td>当晚回看 <code>../subject2/dfd-uml-notes.md</code> 二·"类图填空三招"和"属性提取：父类共性 vs 子类特性"，把本题【说明】的名词/动词全部标注一遍再重做</td>
+</tr>
+</tbody>
+</table>
+<h3>试题四（算法 C 填空，15 分）</h3>
+<table>
+<thead>
+<tr>
+<th>分数段</th>
+<th>意味着什么</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 12 分</strong></td>
+<td>区间 DP 的"长度+左端点+枚举切点"套路已经熟练，下午试题四可拿 10+ 分</td>
+<td>保持。考前重看状态转移三件套；重点练"递归输出函数的参数对称变换"（本题空 4）</td>
+</tr>
+<tr>
+<td><strong>8–11 分</strong></td>
+<td>能填出 (2)(3)(4)，但<strong>复杂度或策略</strong>（问题 2 的 5～7 分）丢分</td>
+<td>记住：三重循环 → O(n³)；二维数组 → O(n²)；空间只看声明不看循环。看 <code>../subject2/patterns-algo-notes.md</code> 二·2.4 得分技巧汇总</td>
+</tr>
+<tr>
+<td><strong>&lt; 8 分</strong></td>
+<td>DP 递推式与代码对不上——不知道"外层枚举什么、内层枚举什么"</td>
+<td>当晚必须补：精读 <code>../subject2/patterns-algo-notes.md</code> 二·2.2（DP 状态转移三件套）+ 2.3 动态规划骨架，回到本题把题干递推式 <code>m[i][j] = min{...}</code> 与代码三重循环逐项对齐</td>
+</tr>
+</tbody>
+</table>
+<h3>总分判读</h3>
+<table>
+<thead>
+<tr>
+<th>总分（/60）</th>
+<th>相当于正式卷</th>
+<th>判读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>≥ 48</strong></td>
+<td>≥ 60/75</td>
+<td>稳过。下午大题已具备过关水平，考前保持手感即可</td>
+</tr>
+<tr>
+<td><strong>36–47</strong></td>
+<td>45–59/75</td>
+<td><strong>达标边缘</strong>。靠 1–2 个薄弱题型拉分，按上表单题补强</td>
+</tr>
+<tr>
+<td><strong>&lt; 36</strong></td>
+<td>&lt; 45/75</td>
+<td><strong>未达标</strong>。今晚（Step 4）必须完成：每题 &lt;8 分项的模板回看 + 本卷重做错题</td>
+</tr>
+</tbody>
+</table>
+<h2>---</h2>
+<h2>📋 选题与弃用记录（本卷组卷依据）</h2>
+<blockquote>
+<p>原则：<strong>完整性 &gt; 覆盖均匀 &gt; 跨年份混合</strong>。任一题"题目文本不完整或答案不存在"即弃用换题。</p>
+</blockquote>
+<h3>最终选用</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>选用</th>
+<th>题目完整性</th>
+<th>答案来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>试题一</td>
+<td>2023上 试题一 农事管理服务平台</td>
+<td>完整（说明 + 4 个问题齐）</td>
+<td>✅ 官方参考答案册内嵌，逐字转录</td>
+</tr>
+<tr>
+<td>试题二</td>
+<td>2022下 试题二 营销公司业务管理</td>
+<td>完整（需求 + 关系模式 + 3 个问题齐）</td>
+<td>⚠️ 源无答案，本文【存疑：推导答案】+ 完整推导</td>
+</tr>
+<tr>
+<td>试题三</td>
+<td>2022上 试题三 地址簿管理系统</td>
+<td>完整（说明 + 3 个问题齐）</td>
+<td>✅ 答案册内嵌（问题 1 源标"答案不唯一"）</td>
+</tr>
+<tr>
+<td>试题四</td>
+<td>2021上 试题四 凸多边形最优三角剖分</td>
+<td>完整（说明 + 递推式 + C 代码 + 2 个问题齐）</td>
+<td>✅ 答案册内嵌；代码非填空行有 OCR 损伤，已标注</td>
+</tr>
+</tbody>
+</table>
+<h3>弃用清单及原因</h3>
+<table>
+<thead>
+<tr>
+<th>弃用题</th>
+<th>弃用原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2022下 试题一（计量检定云端软件）</td>
+<td>题目完整，但<strong>答案整段缺失</strong>（答案册该页未提取，重提取件亦为空）</td>
+</tr>
+<tr>
+<td>2022下 试题三（温度控制模块 UML）</td>
+<td>题目完整，但<strong>答案整段缺失</strong>（同上）</td>
+</tr>
+<tr>
+<td>2022下 试题四（堆排序）/ 试题五、六（Facade 外观模式）</td>
+<td>题目与代码完整，但<strong>答案整段缺失</strong>（含重提取件，共 3 题全缺）</td>
+</tr>
+<tr>
+<td>2021上 试题二（社区蔬菜团购 E-R）</td>
+<td>题目完整，但<strong>答案缺失</strong>（答案册该页未提取）；E-R 候选题两题皆无答案，改选联系类型判定（1:1/1:n）更典型、推导更可靠的 2022下试题二</td>
+</tr>
+<tr>
+<td>2021上 试题三（线上抓药 APP UML）</td>
+<td>题目完整，但<strong>答案缺失</strong>（答案册第 9 页图后无答案文字）</td>
+</tr>
+<tr>
+<td>2021上 试题一（无人值守停车 DFD）/ 2022上 试题一（外卖订餐 DFD）</td>
+<td>题目与答案均完整，<strong>本卷未采用</strong>：改用带官方参考答案册（2023上）的试题一；2022上试题一的问题 3 参考答案中"配送码"数据流连答案提供者本人都标注"不确定"，故避开</td>
+</tr>
+<tr>
+<td>2023上 试题四（图遍历算法）</td>
+<td><strong>题目与 C 代码整段缺失</strong>（答案册仅存 5 个空与邻接表问题，无法做题）</td>
+</tr>
+<tr>
+<td>2020下 试题六 / 2021上 试题六 / 2022上 试题五、六 / 2023上 试题五（设计模式）</td>
+<td>题目与答案均完整，<strong>本卷未采用</strong>：本卷优先选用下午卷<strong>必答</strong>的试题四（算法）；设计模式已在 Task 29 专项覆盖，见 <code>../subject2/patterns-algo-notes.md</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>【存疑：2022下半年答案册整体提取不全】该卷 6 道题的答案在主提取件与重提取件中
+<strong>全部缺失</strong>（仅题目与代码被提取），故 2022下仅能取"题目完整"的试题二，
+且答案以【存疑：推导答案】形式给出。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/mock-exam/subject2-key.md">docs/practice/mock-exam/subject2-key.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 12（10/2）软件工程①：过程模型与需求分析 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day12-process.md</div>
+<h1>Day 12（10/2）软件工程①：过程模型与需求分析</h1>
+<blockquote>
+<p><strong>阶段定位</strong>：Phase 2 第一天。软件工程是软考的"大头"之一——科目一约 <strong>10–15%</strong> 的分值（约 8–11 分选择），科目二下午大题<strong>必考</strong>结构化分析（DFD + 数据字典 + 加工逻辑）与面向对象分析（UML）。
+<strong>本日覆盖</strong>：软件生命周期 → 过程模型对比（<strong>必考</strong>）→ 需求分析 → 结构化分析方法（DFD）。
+<strong>配套习题</strong>：<code>day12-exercises.md</code>（20 选择，过程模型对比为主）。
+<strong>说明</strong>：本文所有 ASCII 图按「CJK 字符 = 2 个显示列、等宽字体」排版，与 day08-er.md 一致；若发现错位，请检查编辑器是否使用了等宽中文字体。</p>
+</blockquote>
+<hr />
+<h2>一、软件生命周期</h2>
+<h3>1.1 三个时期与若干阶段</h3>
+<p>软件生命周期（Software Life Cycle）是软件从<strong>产生</strong>到<strong>废弃</strong>的整个过程。GB/T 8566（软件生存周期过程）把过程细分为很多类，但<strong>软考常考的经典划分</strong>是把生命周期分为三大时期：</p>
+<pre><code>┌──────────────────────────────────────────────────────────────────────────┐
+│  软件定义期（What to do）  │   软件开发期（How to do）   │  软件运行/维护期 │
+├──────────────────────────────────────────────────────────────────────────┤
+│  问题定义                  │  概要设计（总体设计）        │  运行            │
+│  可行性研究                │  详细设计                   │  维护            │
+│  需求分析                  │  编码（实现）               │  （废弃/退役）   │
+│                            │  测试                       │                  │
+└──────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>经典瀑布模型把上述过程串成一条线：</p>
+<pre><code>问题定义 → 可行性研究 → 需求分析 → 概要设计 → 详细设计 → 编码 → 测试 → 运行维护
+</code></pre>
+<h3>1.2 各阶段的任务与交付物（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>核心任务</th>
+<th>关键交付物</th>
+<th>常考陷阱</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>问题定义</strong></td>
+<td>弄清"要解决的是什么问题"</td>
+<td>问题定义报告（规模/目标）</td>
+<td>不是"怎么做"，是"做什么"</td>
+</tr>
+<tr>
+<td><strong>可行性研究</strong></td>
+<td>用最小代价在最短时间内确定问题<strong>是否值得解决、能否解决</strong></td>
+<td>可行性研究报告</td>
+<td>经济/技术/法律/操作<strong>四类</strong>可行性；成本-效益分析</td>
+</tr>
+<tr>
+<td><strong>需求分析</strong></td>
+<td>明确目标系统"必须做什么"</td>
+<td><strong>需求规格说明书（SRS）</strong></td>
+<td>SRS 是用户与开发方的<strong>基线/合同</strong></td>
+</tr>
+<tr>
+<td><strong>概要设计</strong></td>
+<td>划分模块、确定模块间接口与体系结构</td>
+<td>概要设计说明书（结构图）</td>
+<td>不写算法细节</td>
+</tr>
+<tr>
+<td><strong>详细设计</strong></td>
+<td>设计每个模块的内部算法与数据结构</td>
+<td>详细设计说明书（流程图/伪代码）</td>
+<td>不是"编码"</td>
+</tr>
+<tr>
+<td><strong>编码</strong></td>
+<td>把详细设计翻译成程序</td>
+<td>源程序</td>
+<td>语言选择在概要设计阶段就应确定</td>
+</tr>
+<tr>
+<td><strong>测试</strong></td>
+<td>发现并纠正错误</td>
+<td>测试计划、测试用例、测试报告</td>
+<td>单元→集成→系统→验收</td>
+</tr>
+<tr>
+<td><strong>运行维护</strong></td>
+<td>保证系统持续可用</td>
+<td>维护记录</td>
+<td><strong>维护是生命周期中时间最长、花费最大的阶段</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：概要设计确定模块结构，详细设计确定模块算法；"确定用什么编程语言"属于<strong>概要设计</strong>（更准确地说是概要设计/计划阶段的技术选型）而不是编码阶段。</p>
+</blockquote>
+<h3>1.3 可行性研究的四类内容</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>回答的问题</th>
+<th>典型手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>经济可行性</strong></td>
+<td>值得做吗？投入产出比？</td>
+<td><strong>成本-效益分析</strong>（投资回收期、净现值）</td>
+</tr>
+<tr>
+<td><strong>技术可行性</strong></td>
+<td>做得了吗？技术/资源够吗？</td>
+<td>技术风险评估、原型验证</td>
+</tr>
+<tr>
+<td><strong>法律可行性</strong></td>
+<td>合法吗？侵权/合同/知识产权？</td>
+<td>专利/许可调查</td>
+</tr>
+<tr>
+<td><strong>操作可行性</strong>（用户可行性）</td>
+<td>用户用得起来吗？流程跑得通吗？</td>
+<td>用户访谈、业务流程分析</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀</strong>：<strong>"钱、技、法、人"</strong> —— 经济（钱）、技术（技）、法律（法）、操作（人）。</p>
+</blockquote>
+<h3>1.4 软件维护的四种类型（生命周期末端的必考点）</h3>
+<table>
+<thead>
+<tr>
+<th>维护类型</th>
+<th>目的</th>
+<th>占比（经验值）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>改正性维护（纠错性）</strong></td>
+<td>改正交付后发现的错误</td>
+<td>~20%</td>
+</tr>
+<tr>
+<td><strong>适应性维护</strong></td>
+<td>适应<strong>环境变化</strong>（OS/硬件/业务规则改变）</td>
+<td>~25%</td>
+</tr>
+<tr>
+<td><strong>完善性维护</strong></td>
+<td>增加新功能、改进性能、提升体验</td>
+<td><strong>~50%（最大头）</strong></td>
+</tr>
+<tr>
+<td><strong>预防性维护</strong></td>
+<td>主动改进以提高<strong>可维护性</strong>、防患于未然</td>
+<td>~5%</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：题目说"用户提出增加一个报表功能"→<strong>完善性</strong>维护（不是适应性）；"操作系统升级后系统不能运行"→<strong>适应性</strong>维护（不是改正性——交付时本就是对的）。</p>
+</blockquote>
+<hr />
+<h2>二、软件过程模型（必考核心）</h2>
+<h3>2.1 瀑布模型（Waterfall）</h3>
+<p><strong>起源</strong>：W. W. Royce，1970 年《Managing the Development of Large Software Systems》。</p>
+<blockquote>
+<p>⚠️ <strong>历史真相（冷知识，偶考）</strong>：Royce 原始论文描述的其实是<strong>带反馈回溯</strong>的模型；"严格顺序、不可回溯"的瀑布是后人简化的产物。考题一般按"经典瀑布 = 线性顺序 + 文档驱动"作答。</p>
+</blockquote>
+<pre><code>问题定义 → 可行性研究 → 需求分析 → 概要设计 → 详细设计 → 编码 → 测试 → 运行维护
+   │          │            │           │          │        │       │
+   ▼          ▼            ▼           ▼          ▼        ▼       ▼
+  文档       文档         SRS        概设书      详设书     代码   测试报告
+   （每个阶段结束有&quot;里程碑评审&quot;，通过后才进入下一阶段）
+</code></pre>
+<ul>
+<li><strong>核心特征</strong>：<strong>线性顺序</strong>、<strong>文档驱动</strong>（每阶段有明确的文档交付物）、<strong>阶段评审</strong>（里程碑）。</li>
+<li><strong>优点</strong>：过程清晰、便于管理与分工、里程碑明确、文档完整（便于后期维护与人员交接）。</li>
+<li><strong>缺点</strong>：要求<strong>需求必须明确且稳定</strong>；错误积累到后期才暴露（"错误放大"）；用户很晚才见到可运行产品；灵活性差、风险后移。</li>
+<li><strong>适用场景</strong>：需求明确且稳定、技术成熟、对文档要求高的大型项目（军工、航天、金融核心系统）。</li>
+</ul>
+<h3>2.2 V 模型（V-Model）</h3>
+<p>瀑布模型的变体，把<strong>测试活动</strong>与<strong>开发活动</strong>一一对应，形成 V 字形。</p>
+<pre><code>  需求分析 ────────────────────────────────┐ 验收测试
+      ↓                                    ↑  （用户参与，确认&quot;做的是用户要的吗&quot;）
+  概要设计 ──────────────────────┐ 系统测试  ↑
+      ↓                          ↑（验证&quot;整体组装后功能对吗&quot;）
+  详细设计 ──────────┐ 集成测试  ↑
+      ↓               ↑（验证&quot;模块接口对吗&quot;）
+    编码 ──→ 单元测试 ↑（验证&quot;模块内部逻辑对吗&quot;）
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>开发阶段（左侧）</th>
+<th>对应测试阶段（右侧）</th>
+<th>测试关注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>需求分析</strong></td>
+<td><strong>验收测试</strong></td>
+<td>是否满足用户需求</td>
+</tr>
+<tr>
+<td><strong>概要设计</strong></td>
+<td><strong>系统测试</strong></td>
+<td>系统整体功能/性能</td>
+</tr>
+<tr>
+<td><strong>详细设计</strong></td>
+<td><strong>集成测试</strong></td>
+<td>模块间接口与协作</td>
+</tr>
+<tr>
+<td><strong>编码</strong></td>
+<td><strong>单元测试</strong></td>
+<td>模块内部逻辑</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心特征</strong>：<strong>开发与测试一一对应</strong>、测试活动<strong>提前规划</strong>（每完成一个开发文档即可设计对应测试用例）。</li>
+<li><strong>优点</strong>：质量保障意识前置、测试有据可依、里程碑清晰。</li>
+<li><strong>缺点</strong>：与瀑布同样要求<strong>需求明确</strong>、灵活性差；<strong>仍然是顺序模型</strong>，不解决需求变化问题。</li>
+<li><strong>适用场景</strong>：需求明确、质量/安全要求极高（医疗、汽车电子、金融）。</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>必背对应关系</strong>：需求↔验收、概设↔系统、详设↔集成、编码↔单元。题目常把"概要设计对应集成测试"设为干扰项——<strong>概要设计对应系统测试</strong>。</p>
+</blockquote>
+<h3>2.3 增量模型（Incremental）</h3>
+<p>把系统按<strong>功能优先级</strong>分解成若干<strong>增量构件</strong>，<strong>每个增量都是一个可运行的半成品</strong>，逐个开发并交付。</p>
+<pre><code>第 1 增量（核心功能）──→ 交付 1（用户可用的&quot;骨架&quot;）
+      ↓ 追加
+第 2 增量（更多功能）──→ 交付 2
+      ↓ 追加
+第 3 增量（完善功能）──→ 交付 3（最终系统）
+</code></pre>
+<ul>
+<li><strong>核心特征</strong>：<strong>分批构造、逐批交付</strong>，每个增量实现一部分功能；优先级高的先做。</li>
+<li><strong>优点</strong>：<strong>早交付早收益</strong>（用户最快用到核心功能）；风险分散到各增量；前期投资少；可从早期增量的使用中获取反馈。</li>
+<li><strong>缺点</strong>：要求<strong>开放式体系结构</strong>（构件必须能无缝集成）；增量划分困难；<strong>管理复杂</strong>（易退化为"边做边改/代码堆砌"）。</li>
+<li><strong>适用场景</strong>：需求可分优先级、需要快速交付核心功能、资金分批投入、市场机会窗口紧的项目。</li>
+</ul>
+<h3>2.4 原型模型（Prototype）</h3>
+<p>构造一个<strong>可快速运行的系统雏形</strong>，让用户<strong>试用并反馈</strong>，借此<strong>澄清与挖掘真实需求</strong>。</p>
+<pre><code>初始需求 ──→ 快速构造原型 ──→ 用户试用/评价 ──→ ┬─→ 需求明确 ──→ 丢弃原型 ──→ 正式开发
+                                                └─→ 需求不明确 ──→ 修改原型（循环）
+</code></pre>
+<p><strong>两种必须区分的变种</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>变种</th>
+<th>做法</th>
+<th>原型命运</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>抛弃型原型</strong>（探索型/实验型）</td>
+<td>快速搭建仅用于<strong>明确需求</strong>，不追求质量</td>
+<td><strong>用完即弃</strong>，正式系统重新开发</td>
+</tr>
+<tr>
+<td><strong>演化型原型</strong>（演进型）</td>
+<td>原型逐步<strong>演化为最终产品</strong></td>
+<td><strong>保留并迭代</strong>成交付系统</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心特征</strong>：<strong>快速构造 + 用户反馈 + 迭代细化需求</strong>。</li>
+<li><strong>优点</strong>：需求获取快、减少"开发人员以为的用户需求"与真实需求的偏差；用户参与度高、满意度高；适合界面驱动的系统。</li>
+<li><strong>缺点</strong>：原型可能被<strong>当作产品</strong>硬上线（质量/文档不足）；开发人员易陷入"无止境打补丁"；<strong>文档常被忽略</strong>。</li>
+<li><strong>适用场景</strong>：需求模糊、需求频繁变化、交互界面占主导、小型系统或新技术探索。</li>
+</ul>
+<h3>2.5 螺旋模型（Spiral）</h3>
+<p><strong>起源</strong>：Barry Boehm，1988 年《A Spiral Model of Software Development and Enhancement》（IEEE Computer）。</p>
+<p><strong>把瀑布与原型结合，并在每次迭代中加入风险分析</strong>，沿螺旋线一圈圈推进，<strong>每圈都完成一次"四个象限"的活动</strong>：</p>
+<pre><code>               ┌───────────────────────────────┐
+               │  ① 制定计划                    │
+               │  （目标 / 替代方案 / 约束）      │
+               │                               │
+   ┌───────────┘                               └───────────┐
+   │ ④ 客户评估                                   ② 风险分析 │
+   │ （评价成果、                                  （评估替代、 │
+   │   规划下一圈）      ←──── 螺旋一圈 ────→       识别并化解 │
+   │                                              风险、原型）│
+   └───────────┐                               ┌───────────┘
+               │  ③ 实施工程                    │
+               │  （开发与验证本圈的产品）         │
+               └───────────────────────────────┘
+</code></pre>
+<p>四个活动（每圈循环一次，<strong>必背顺序</strong>）：
+1. <strong>制定计划</strong>：确定目标、替代方案与约束。
+2. <strong>风险分析</strong>：评估备选方案、<strong>识别风险并采取手段化解</strong>（常通过构造原型降低风险）。
+3. <strong>实施工程</strong>：开发并验证本圈交付物。
+4. <strong>客户评估</strong>：客户评价成果、规划下一圈。</p>
+<ul>
+<li><strong>核心特征</strong>：<strong>风险驱动</strong>（这是它与"迭代的原型模型"最本质的区别！）、迭代 + 原型 + 瀑布的融合。</li>
+<li><strong>优点</strong>：风险<strong>早发现、早解决</strong>（成本低）；灵活、适应需求不完全明确的大项目。</li>
+<li><strong>缺点</strong>：<strong>风险分析本身成本高</strong>，需要经验丰富的领域专家；管理复杂；难以像瀑布那样定义清晰的中间交付物与验收标准（契约困难）。</li>
+<li><strong>适用场景</strong>：<strong>规模大、复杂、高风险</strong>、需求不完全明确的项目（大型企业系统、新产品研发）。</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>最高频易错点</strong>：<strong>螺旋模型 = 风险驱动</strong>。只要题干出现"风险分析/风险驱动/ Boehm"，首先想到螺旋模型。它不是"原型驱动"，也不是简单的"迭代模型"。</p>
+</blockquote>
+<h3>2.6 敏捷开发与 Scrum</h3>
+<p><strong>起源</strong>：2001 年 2 月，17 位软件先驱在美国犹他州雪鸟（Snowbird）签署《<strong>敏捷软件开发宣言</strong>》。</p>
+<p><strong>敏捷四条价值观</strong>（必背，注意是"<strong>高于</strong>"而非"否定"）：</p>
+<table>
+<thead>
+<tr>
+<th>敏捷认为更重要</th>
+<th>相较于（次要但仍有价值）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>个体和互动</strong></td>
+<td>流程和工具</td>
+</tr>
+<tr>
+<td><strong>可工作的软件</strong></td>
+<td>详尽的文档</td>
+</tr>
+<tr>
+<td><strong>客户合作</strong></td>
+<td>合同谈判</td>
+</tr>
+<tr>
+<td><strong>响应变化</strong></td>
+<td>遵循计划</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 右项并非无价值，敏捷只是认为<strong>左项更应被优先对待</strong>。题目若说"敏捷完全不需要文档/计划"——<strong>错</strong>。</p>
+</blockquote>
+<p><strong>Scrum 框架（3-3-5）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>3 个角色</strong></td>
+<td>产品负责人（Product Owner，管理产品待办列表优先级）、Scrum 教练（Scrum Master，服务团队、消除障碍、推进流程）、开发团队（自组织、跨职能）</td>
+</tr>
+<tr>
+<td><strong>3 个工件</strong></td>
+<td>产品待办列表（Product Backlog，全部需求的有序清单）、迭代待办列表（Sprint Backlog，本 Sprint 要做的）、产品增量（Increment，可用的累积成果）</td>
+</tr>
+<tr>
+<td><strong>5 个事件</strong></td>
+<td>Sprint（迭代，<strong>周期通常 2–4 周</strong>）、Sprint 计划会议、每日站会（Daily Scrum，<strong>15 分钟</strong>，三个问题：昨天做了什么/今天做什么/有什么障碍）、Sprint 评审会议、Sprint 回顾会议</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心特征</strong>：<strong>小步快跑、迭代增量、拥抱变化、客户全程参与、文档从简</strong>。</li>
+<li><strong>优点</strong>：快速响应需求变化；快速交付可用软件；沟通成本低、客户满意度高。</li>
+<li><strong>缺点</strong>：<strong>文档不足</strong>不利于后期维护与交接；对团队素质与自组织能力要求高；<strong>大规模（大团队、长周期项目）协调困难</strong>。</li>
+<li><strong>适用场景</strong>：需求变化频繁、中小型团队、互联网/面向用户的产品。</li>
+</ul>
+<h3>2.7 【必考】六大过程模型对比表</h3>
+<blockquote>
+<p>这张表是<strong>科目一的高频考点</strong>，建议整表背诵，重点记每个模型的<strong>唯一识别词</strong>。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>提出者/年代</th>
+<th>核心特征（<strong>识别词</strong>）</th>
+<th>驱动方式</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>瀑布</strong></td>
+<td>Royce, 1970</td>
+<td>线性顺序、<strong>文档驱动</strong>、阶段评审</td>
+<td>文档/里程碑</td>
+<td>过程清晰、易管理、文档完整</td>
+<td>需求须明确、错误积累晚发现、用户见产品晚、风险后移</td>
+<td>需求明确稳定、技术成熟的大型项目</td>
+</tr>
+<tr>
+<td><strong>V 模型</strong></td>
+<td>—</td>
+<td>开发与<strong>测试一一对应</strong></td>
+<td>测试/质量</td>
+<td>测试提前规划、质量有保障</td>
+<td>同瀑布：需求须明确、灵活性差</td>
+<td>需求明确、质量/安全要求极高</td>
+</tr>
+<tr>
+<td><strong>增量</strong></td>
+<td>—</td>
+<td><strong>分批构造、逐批交付</strong>可运行构件</td>
+<td>交付/优先级</td>
+<td>早交付早收益、风险分散、投资分批</td>
+<td>需开放式体系结构、增量划分难、易退化为"边做边改"</td>
+<td>需求可分优先级、需快速交付核心功能</td>
+</tr>
+<tr>
+<td><strong>原型</strong></td>
+<td>—</td>
+<td><strong>快速构造 + 用户反馈</strong>澄清需求</td>
+<td>需求/反馈</td>
+<td>需求获取快、偏差小、用户参与度高</td>
+<td>原型可能被当作产品、文档易缺失、易打补丁</td>
+<td>需求模糊、界面主导、小型系统</td>
+</tr>
+<tr>
+<td><strong>螺旋</strong></td>
+<td><strong>Boehm, 1988</strong></td>
+<td><strong>迭代 + 风险分析</strong>、四象限循环</td>
+<td><strong>风险</strong></td>
+<td>风险早发现早化解、灵活适应大项目</td>
+<td>风险分析成本高、需专家、管理与契约困难</td>
+<td><strong>大型、复杂、高风险</strong>、需求不完全明确</td>
+</tr>
+<tr>
+<td><strong>敏捷 Scrum</strong></td>
+<td>2001 宣言</td>
+<td><strong>小步快跑、拥抱变化</strong>、迭代增量</td>
+<td>变化/价值</td>
+<td>响应变化快、交付快、客户参与</td>
+<td>文档不足、依赖团队素质、大规模协调难</td>
+<td>需求变化频繁、中小型团队、互联网产品</td>
+</tr>
+</tbody>
+</table>
+<p><strong>补充速览（偶考）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>一句话特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>喷泉模型</strong></td>
+<td><strong>面向对象</strong>开发模型，迭代、<strong>无间隙</strong>（各阶段重叠、无明确边界）</td>
+</tr>
+<tr>
+<td><strong>RUP（统一过程）</strong></td>
+<td>用例驱动、以架构为中心、<strong>迭代增量</strong>；四大阶段：初始/细化/构造/移交</td>
+</tr>
+<tr>
+<td><strong>构件复用模型</strong></td>
+<td>利用可复用构件组装，强调<strong>软件复用</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>2.8 易混点辨析（四组，必看）</h3>
+<p><strong>① 螺旋 vs 原型 vs 迭代——"谁驱动"？</strong></p>
+<table>
+<thead>
+<tr>
+<th>问法</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"以<strong>风险</strong>驱动/每次迭代都做<strong>风险分析</strong>"</td>
+<td><strong>螺旋模型</strong></td>
+</tr>
+<tr>
+<td>"构造<strong>原型</strong>以<strong>明确需求</strong>，原型用完即弃"</td>
+<td><strong>抛弃型原型模型</strong></td>
+</tr>
+<tr>
+<td>"原型<strong>逐步演化</strong>为最终产品"</td>
+<td><strong>演化型原型模型</strong></td>
+</tr>
+<tr>
+<td>"把系统分成<strong>多个可运行增量</strong>分批交付"</td>
+<td><strong>增量模型</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>螺旋模型<strong>也用原型</strong>，但它用原型是<strong>手段</strong>（在"风险分析"象限中降低风险），<strong>目的</strong>是风险控制。题目若强调"每一圈都包含风险分析与原型验证"，答螺旋。</p>
+</blockquote>
+<p><strong>② 增量 vs 原型——"交付的是产品还是需求验证"？</strong></p>
+<pre><code>增量模型：每个增量 = 可运行的产品的一部分 ──→ 最终累积成完整系统（产物保留）
+原型模型：原型     = 需求的&quot;试验田&quot;        ──→ 抛弃型用完即弃（产物不保留）
+</code></pre>
+<blockquote>
+<p>一句话区分：<strong>"增量交产品，原型定需求"</strong>。增量模型关心的是<strong>分批交付</strong>；原型模型关心的是<strong>把需求问清楚</strong>。</p>
+</blockquote>
+<p><strong>③ V 模型的四对对应关系（易错）</strong></p>
+<pre><code>需求分析 ↔ 验收测试      （易错点：不是&quot;系统测试&quot;）
+概要设计 ↔ 系统测试      （易错点：不是&quot;集成测试&quot;）
+详细设计 ↔ 集成测试      （易错点：不是&quot;单元测试&quot;）
+编  码   ↔ 单元测试
+</code></pre>
+<blockquote>
+<p>记忆链：<strong>越靠左的开发文档对应越靠右的测试阶段</strong>——需求是最早的文档，对应最晚的验收测试；详细设计比概要设计更细，对应更底层的集成测试。</p>
+</blockquote>
+<p><strong>④ 敏捷不等于"无文档无计划"</strong></p>
+<p>敏捷四价值观的右项（流程工具、文档、合同、计划）<strong>仍需存在</strong>，只是优先级更低。Scrum 的 Sprint Backlog 本身就是一种轻量级计划。</p>
+<hr />
+<h2>三、需求分析</h2>
+<h3>3.1 需求工程 vs 需求分析</h3>
+<pre><code>需求工程（Requirement Engineering）
+   ├── 需求开发（本日重点）
+   │     ├── 需求获取
+   │     ├── 需求分析
+   │     ├── 需求规约（写 SRS）
+   │     └── 需求验证（评审）
+   └── 需求管理
+         ├── 需求基线
+         ├── 需求变更控制
+         ├── 需求跟踪
+         └── 需求状态管理
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>需求分析</strong>只是需求开发中的一个环节；<strong>需求工程</strong>范围更大，还包含需求管理。题目问"需求分析阶段的主要任务"时不要答"变更控制"。</p>
+</blockquote>
+<h3>3.2 需求的分类（必考）</h3>
+<pre><code>软件需求
+   ├── 功能需求     ：系统必须提供/完成的功能（&quot;做什么&quot;）
+   ├── 非功能需求   ：性能、可靠性、可用性、安全性、可维护性、可移植性等（&quot;做得多好&quot;）
+   └── 设计约束     ：必须遵守的技术/标准/平台/语言/法规限制（&quot;被限制成什么样&quot;）
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>判断标志</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>功能需求</strong></td>
+<td>描述"系统提供什么功能/服务"</td>
+<td>"用户可以查询图书借阅记录"</td>
+</tr>
+<tr>
+<td><strong>非功能需求</strong></td>
+<td>描述<strong>质量属性或性能指标</strong></td>
+<td>"查询响应时间 ≤ 2 秒""系统可用性 ≥ 99.9%""支持 500 并发"</td>
+</tr>
+<tr>
+<td><strong>设计约束</strong></td>
+<td>描述<strong>必须遵守的限制</strong></td>
+<td>"必须用 Java 开发""必须运行在国产化平台上""符合等保 2.0"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：<strong>"性能需求属于非功能需求"</strong>，不是"功能需求"。题目常把"系统每秒处理 100 笔交易"混在功能需求里。</p>
+</blockquote>
+<p>也有人按抽象层次分为：<strong>业务需求</strong>（组织为什么做）→ <strong>用户需求</strong>（用户用它完成什么）→ <strong>系统需求</strong>（系统具体要做什么，含功能/非功能）。</p>
+<h3>3.3 需求获取（Elicitation）</h3>
+<p>常用方法（多选/判断题常考）：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>特点</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>访谈</strong></td>
+<td>一对一/一对多，深入但耗时</td>
+<td>需求清晰、干系人少</td>
+</tr>
+<tr>
+<td><strong>观察（现场跟岗）</strong></td>
+<td>看真实工作流程，发现"说不出来的隐性需求"</td>
+<td>业务流程复杂、用户说不清</td>
+</tr>
+<tr>
+<td><strong>问卷调查</strong></td>
+<td>覆盖面广、可量化，但难深入</td>
+<td>用户群体大、需求浅</td>
+</tr>
+<tr>
+<td><strong>会议（JAD 联合应用开发）</strong></td>
+<td>干系人集中开会、快速达成共识</td>
+<td>干系人多、需对齐</td>
+</tr>
+<tr>
+<td><strong>原型法</strong></td>
+<td>用原型激发反馈</td>
+<td>需求模糊、界面驱动</td>
+</tr>
+<tr>
+<td><strong>用例分析</strong></td>
+<td>用用例图描述交互场景</td>
+<td>面向对象分析（OOA）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>口诀：<strong>"问、看、查、开、做（原型）、演（用例）"</strong>。</p>
+</blockquote>
+<h3>3.4 需求规约（SRS）</h3>
+<p><strong>需求规格说明书（Software Requirement Specification, SRS）</strong> 是需求分析阶段的<strong>核心交付物</strong>。</p>
+<p><strong>IEEE 830 定义的 SRS 应具备的性质</strong>（必背）：</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>正确性</strong></td>
+<td>准确描述系统行为</td>
+</tr>
+<tr>
+<td><strong>无歧义性</strong></td>
+<td>每条需求只有一种解释（不能"大概""可能"）</td>
+</tr>
+<tr>
+<td><strong>完整性</strong></td>
+<td>覆盖所有需要的需求</td>
+</tr>
+<tr>
+<td><strong>一致性</strong></td>
+<td>需求之间不能矛盾</td>
+</tr>
+<tr>
+<td><strong>可验证性</strong></td>
+<td>每条需求都可通过测试/检查确认</td>
+</tr>
+<tr>
+<td><strong>可修改性</strong></td>
+<td>结构清晰，便于变更</td>
+</tr>
+<tr>
+<td><strong>可追踪性</strong></td>
+<td>能追溯到来源（用户需求/合同）并向前关联到设计与测试</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SRS 的作用</strong>：
+- 用户与开发方之间的<strong>基线/契约</strong>（验收依据）；
+- 后续<strong>设计、编码、测试</strong>的依据；
+- 项目<strong>度量、计划与成本估算</strong>的基础。</p>
+<h3>3.5 需求验证</h3>
+<p>在 SRS 交付前确认需求"做对了"：</p>
+<ul>
+<li><strong>需求评审</strong>（同行评审，正式评审与非正式走查）——最常用；</li>
+<li><strong>原型验证</strong>（构造可执行原型让用户确认）；</li>
+<li><strong>形式化验证 / 自动化一致性检查</strong>（用工具检查一致性、完整性）；</li>
+<li><strong>编写测试用例验证</strong>（提前为每条需求设计验收测试）。</li>
+</ul>
+<blockquote>
+<p>⚠️ 需求验证<strong>不是</strong>"运行程序"——此时还没有程序可运行。</p>
+</blockquote>
+<hr />
+<h2>四、结构化分析方法（SA）</h2>
+<h3>4.1 方法概述</h3>
+<p><strong>结构化分析（Structured Analysis, SA）</strong> 由 Tom DeMarco 在 1978 年《Structured Analysis and System Specification》中系统化，是<strong>面向数据流</strong>的传统分析方法，也是<strong>软考下午科目二大题的常客</strong>。</p>
+<p><strong>核心思想</strong>：<strong>自顶向下、逐层分解</strong>（分解与抽象）——把复杂系统一层层拆成足够简单的小加工。</p>
+<p><strong>三大工具</strong>：</p>
+<pre><code>数据流图（DFD）  ── 描述系统功能与数据流向（&quot;做什么&quot;）
+数据字典（DD）   ── 严格定义 DFD 中出现的所有数据（&quot;数据是什么&quot;）
+加工逻辑（小说明）── 描述底层加工的处理规则（&quot;具体怎么做&quot;）
+</code></pre>
+<h3>4.2 DFD 的四要素（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>符号</th>
+<th>含义</th>
+<th>易错点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>外部实体</strong></td>
+<td><strong>矩形/方形</strong></td>
+<td>系统之外与系统交互的人、设备或外部系统</td>
+<td>是<strong>数据</strong>的源/宿，不是系统的组成部分</td>
+</tr>
+<tr>
+<td><strong>加工/处理</strong></td>
+<td><strong>圆角矩形（或圆形）</strong></td>
+<td>把输入数据变换为输出数据</td>
+<td>必须有<strong>输入也有输出</strong></td>
+</tr>
+<tr>
+<td><strong>数据流</strong></td>
+<td><strong>带箭头的线</strong></td>
+<td>表示数据的流动方向</td>
+<td>DFD 中<strong>只有数据流，没有控制流</strong>！</td>
+</tr>
+<tr>
+<td><strong>数据存储</strong></td>
+<td><strong>双横线 / 开口矩形</strong></td>
+<td>数据的静态保存处</td>
+<td>可以是文件、数据库表</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>DFD 与程序流程图的根本区别</strong>：DFD <strong>不表示控制逻辑</strong>（没有判断框、没有循环、没有时序），只表示"数据从哪来、到哪去、被谁加工"。这是<strong>高频考点</strong>。</p>
+<p>⚠️ 一个加工可以有<strong>多个</strong>输入/输出数据流；但<strong>每个数据流必须命名</strong>（命名应为名词/名词短语，反映数据内容）。</p>
+</blockquote>
+<h3>4.3 DFD 的分层与平衡（核心考点）</h3>
+<pre><code>顶层 DFD（关联图 / Context Diagram）
+   └─ 把整个系统看作&quot;一个加工&quot;，只画外部实体与系统之间的数据流
+      ↓ 分解
+0 层 DFD ── 系统的主要加工
+   └─ 分解
+1 层 DFD ── 某个加工的细化
+   └─ 分解
+2 层 DFD …（直到每个加工足够简单、可写出&quot;小说明&quot;为止）
+</code></pre>
+<p><strong>父图与子图的关系</strong>：上层图（父图）中的一个加工，被细化为下层图（子图）中的多个加工。</p>
+<p><strong>平衡规则（必考）</strong>：
+1. <strong>数量一致</strong>：子图的<strong>外部数据流</strong>（与外部实体/存储交互的）必须与父图中被分解加工的数据流<strong>一一对应</strong>；
+2. <strong>方向一致</strong>：输入/输出方向不能变；
+3. <strong>命名一致</strong>：数据流名称应相同（或明显等价）。</p>
+<blockquote>
+<p>口诀：<strong>"父图子图要平衡，进出数据不能变"</strong>。</p>
+</blockquote>
+<p><strong>加工编号规则</strong>：逐层编号，如 1、1.1、1.1.1，便于追溯到父加工。</p>
+<h3>4.4 完整示例：图书馆借阅系统</h3>
+<p><strong>需求描述</strong>：
+1. <strong>读者</strong>提交<strong>借书请求</strong>，系统查询图书在库情况与读者借阅记录后<strong>登记借阅</strong>，并返回<strong>借书成功</strong>消息。
+2. <strong>读者</strong>提交<strong>还书请求</strong>，系统更新图书状态、读取并更新借阅记录，必要时发出<strong>逾期催还</strong>通知。
+3. <strong>管理员</strong>提交<strong>新书入库单</strong>，系统将新书信息登记到图书信息表。</p>
+<p><strong>实体与存储识别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>外部实体</th>
+<th>数据存储</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读者</td>
+<td>D1 图书信息表</td>
+<td>记录每本图书的在库状态</td>
+</tr>
+<tr>
+<td>管理员</td>
+<td>D2 借阅记录表</td>
+<td>记录读者的借阅/归还明细</td>
+</tr>
+</tbody>
+</table>
+<p><strong>顶层 DFD（关联图）</strong>——整个系统是<strong>一个</strong>加工：</p>
+<pre><code class="language-text">        借书请求、还书请求
+┌──────┐                   ┌──────────────────┐
+│      │──────────────────►│                  │
+│      │                   │                  │
+│ 读者 │◄──────────────────│  图书馆借阅系统  │
+└──────┘                   └────────┬─────────┘
+        借书成功、逾期催还
+                                    ▲ 新书入库单
+                              ┌────────────┐
+                              │   管理员   │
+                              └────────────┘
+</code></pre>
+<p><strong>0 层 DFD</strong>——分解为 3 个加工、2 个数据存储：</p>
+<pre><code class="language-text">        借书请求                  登记借阅
+┌──────┐        ┌────────────┐                ╔══════════════╗
+│      │───────►│            │───────────────►║D2 借阅记录表 ║
+│      │        │            │                ╚══════════════╝
+│ 读者 │◄───────│ 1 借书处理 │                       │
+└──────┘        └──────┴─────┘                       │
+        借书成功       ▼ 查询在库                    │ 读取借阅记录
+                ╔══════╤═════════╗                   │
+                ║ D1 图书信息表  ║◄───────────       ▼
+                ╚═══════╧════════╝            ┌──────┬─────┐        ┌──────┐
+                        ▲                     │            │还书请求    │      │
+                        │                     │            │◄───────│      │
+                        │ 入库新书                │ 2 还书处理 │        │ 读者 │
+                        │                     └────────────┘───────►└──────┘
+         新书入库单     │                                        逾期催还
+┌────────────┐      ┌───┬────────┐
+│   管理员   │─────►   │ 3 新书入库 │
+└────────────┘      └────────────┘
+</code></pre>
+<p><strong>数据流清单与平衡校验</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据流</th>
+<th>起点</th>
+<th>终点</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>借书请求</td>
+<td>读者</td>
+<td>加工 1</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>借书成功</td>
+<td>加工 1</td>
+<td>读者</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>还书请求</td>
+<td>读者</td>
+<td>加工 2</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>逾期催还</td>
+<td>加工 2</td>
+<td>读者</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>新书入库单</td>
+<td>管理员</td>
+<td>加工 3</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>查询在库</td>
+<td>D1</td>
+<td>加工 1</td>
+<td>内部流（读）</td>
+</tr>
+<tr>
+<td>登记借阅</td>
+<td>加工 1</td>
+<td>D2</td>
+<td>内部流（写）</td>
+</tr>
+<tr>
+<td>读取借阅记录</td>
+<td>D2</td>
+<td>加工 2</td>
+<td>内部流（读）</td>
+</tr>
+<tr>
+<td>更新图书状态</td>
+<td>加工 2</td>
+<td>D1</td>
+<td>内部流（写）</td>
+</tr>
+<tr>
+<td>入库新书</td>
+<td>加工 3</td>
+<td>D1</td>
+<td>内部流（写）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>平衡校验</strong>：0 层图中"加工 1 借书处理"的输入是【借书请求、来自 D1 的查询在库】，输出是【借书成功、写入 D2 的登记借阅】。若把"1 借书处理"进一步细化为 1.1 查询、1.2 登记，则子图的外部流必须是【借书请求（入）、借书成功（出）、查询在库（入）、登记借阅（出）】——<strong>数量与方向完全一致</strong>，这就是父子图平衡。</p>
+</blockquote>
+<h3>4.5 数据字典（DD）</h3>
+<p><strong>作用</strong>：给 DFD 中出现的<strong>所有数据流、数据存储、数据项</strong>下严格定义，弥补 DFD"只画不定义"的不足。DD 与 DFD <strong>共同构成需求规约的核心</strong>。</p>
+<p><strong>四类条目</strong>：数据流条目、数据存储条目、数据项条目、加工条目（底层加工的小说明）。</p>
+<p><strong>常用符号（必背）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code></td>
+<td>等价于 / 定义为</td>
+<td><code>借书请求 = 读者证号 + 图书编号</code></td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>与（顺序连接）</td>
+<td><code>日期 = 年 + 月 + 日</code></td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>或（选择其一）</td>
+<td><code>支付方式 = 现金 | 支票 | 转账</code></td>
+</tr>
+<tr>
+<td><code>{ }</code></td>
+<td>重复（迭代）</td>
+<td><code>借阅清单 = { 图书编号 }</code>（可重复 0 次或多次）</td>
+</tr>
+<tr>
+<td><code>( )</code></td>
+<td>可选（可出现 0 次或 1 次）</td>
+<td><code>读者 = 证号 + 姓名 + (电话)</code></td>
+</tr>
+<tr>
+<td><code>[ ]</code></td>
+<td>选择（与 <code>|</code> 等价，有时用 <code>[a|b]</code>）</td>
+<td><code>性别 = [男 | 女]</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>完整示例</strong>：</p>
+<pre><code>数据流条目：借书请求 = 读者证号 + 图书编号 + 借阅日期
+数据项条目：读者证号 = {&quot;R&quot; + 6 位数字}        // 取值范围
+数据项条目：借阅日期 = 年 + 月 + 日
+数据存储条目：D2 借阅记录表 = { 读者证号 + 图书编号 + 借出日期 + 应还日期 + 状态 }
+加工条目：  详见 4.6 小说明
+</code></pre>
+<h3>4.6 加工逻辑（小说明）</h3>
+<p><strong>小说明</strong>用于描述<strong>叶子加工</strong>（不再分解的最底层加工）的处理规则。三种常用工具：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>形式</th>
+<th>特点</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>结构化语言</strong>（结构化英语/伪代码）</td>
+<td>顺序 + IF/CASE + 循环</td>
+<td>介于自然语言与程序之间，易读</td>
+<td>一般逻辑</td>
+</tr>
+<tr>
+<td><strong>判定表（决策表）</strong></td>
+<td>条件 × 动作 的<strong>表格</strong></td>
+<td>能穷举<strong>全部条件组合</strong>，不易遗漏</td>
+<td>多条件组合决策</td>
+</tr>
+<tr>
+<td><strong>判定树（决策树）</strong></td>
+<td><strong>树形图</strong></td>
+<td>直观、易理解、易沟通</td>
+<td>条件较少时</td>
+</tr>
+</tbody>
+</table>
+<p><strong>判定表的四部分</strong>（必背）：</p>
+<pre><code>┌───────────────────────────────────┐
+│ 条件定义（条件桩）                  │  ← 列出所有条件
+├───────────────────────────────────┤
+│ 条件取值组合（条件项）              │  ← 每一列是一种组合
+├───────────────────────────────────┤
+│ 动作定义（动作桩）                  │  ← 列出所有可能动作
+├───────────────────────────────────┤
+│ 动作选择（动作项）                  │  ← 每一列对应组合所选动作
+└───────────────────────────────────┘
+</code></pre>
+<p><strong>示例——"借阅审批"判定表</strong>（条件：是否为本馆读者 / 是否有逾期未还 / 在库数量是否足够）：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>规则 1</th>
+<th>规则 2</th>
+<th>规则 3</th>
+<th>规则 4</th>
+<th>规则 5</th>
+<th>规则 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是本馆读者？</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>有逾期未还？</td>
+<td>—</td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>在库数量足够？</td>
+<td>—</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>允许借阅</strong></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>提示无库</strong></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>提示先还书</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>提示办证</strong></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：<code>—</code> 表示该条件在该规则下不影响结论（<strong>无关条件</strong>）。判定表的<strong>列数 ≤ 条件数的全组合数</strong>，通过合并无关条件可以化简。</p>
+<p>⚠️ <strong>易错点</strong>：判定表最适合<strong>条件组合较多、互相牵连</strong>的场景；判定树适合<strong>条件少</strong>、需要给业务人员看的场景。题目若说"某加工有 3 个条件、每个条件 2 种取值，最多需要 <strong>2³ = 8</strong> 列"。</p>
+</blockquote>
+<hr />
+<h2>五、本日速查与记忆口诀</h2>
+<h3>5.1 一页纸结论（建议默写）</h3>
+<ol>
+<li>软件生命周期三时期：<strong>定义、开发、运行维护</strong>；维护<strong>时间最长、花费最大</strong>。</li>
+<li>可行性研究四类：<strong>经济（钱）、技术（技）、法律（法）、操作（人）</strong>。</li>
+<li><strong>瀑布 = 文档驱动</strong>；<strong>V = 开发测试对应</strong>；<strong>增量 = 分批交付</strong>；<strong>原型 = 澄清需求</strong>；<strong>螺旋 = 风险驱动</strong>；<strong>敏捷 = 拥抱变化</strong>。</li>
+<li><strong>螺旋 = Boehm 1988</strong>；四象限：<strong>计划 → 风险分析 → 实施 → 客户评估</strong>。</li>
+<li>V 模型对应：<strong>需求↔验收、概设↔系统、详设↔集成、编码↔单元</strong>。</li>
+<li>敏捷四价值观：<strong>个体互动 / 可工作软件 / 客户合作 / 响应变化</strong>（均高于右项，但不否定右项）。</li>
+<li>Scrum：<strong>3 角色 / 3 工件 / 5 事件</strong>；Sprint <strong>2–4 周</strong>；每日站会 <strong>15 分钟</strong>。</li>
+<li>需求三分类：<strong>功能 / 非功能（性能在此）/ 设计约束</strong>。</li>
+<li>SRS 七性质：<strong>正确、无歧义、完整、一致、可验证、可修改、可追踪</strong>。</li>
+<li><strong>DFD 四要素 = 外部实体（矩形）+ 加工（圆角矩形）+ 数据流（箭头）+ 数据存储（双横线）</strong>。</li>
+<li><strong>DFD 只有数据流、没有控制流</strong>；每个数据流必须命名。</li>
+<li><strong>父子图平衡</strong>：子图外部流与父加工数据流<strong>数量、方向、名称一致</strong>。</li>
+<li>DD 符号：<strong><code>= 定义、+ 与、| 或、{ } 重复、( ) 可选</code></strong>。</li>
+<li>小说明三工具：<strong>结构化语言、判定表、判定树</strong>；判定表四部分：<strong>条件桩、条件项、动作桩、动作项</strong>。</li>
+<li>增量 vs 原型：<strong>"增量交产品，原型定需求"</strong>。</li>
+</ol>
+<h3>5.2 高频陷阱清单</h3>
+<table>
+<thead>
+<tr>
+<th>陷阱</th>
+<th>正确说法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"螺旋模型是原型驱动的"</td>
+<td><strong>风险驱动</strong></td>
+</tr>
+<tr>
+<td>"V 模型中概要设计对应集成测试"</td>
+<td>概要设计对应<strong>系统测试</strong></td>
+</tr>
+<tr>
+<td>"性能需求属于功能需求"</td>
+<td>属于<strong>非功能需求</strong></td>
+</tr>
+<tr>
+<td>"敏捷开发不需要文档和计划"</td>
+<td>只是优先级更低，<strong>仍需文档与计划</strong></td>
+</tr>
+<tr>
+<td>"演化型原型用完即弃"</td>
+<td><strong>抛弃型</strong>才用完即弃</td>
+</tr>
+<tr>
+<td>"DFD 中可以画判断/循环"</td>
+<td>DFD <strong>只有数据流，没有控制流</strong></td>
+</tr>
+<tr>
+<td>"增加报表功能属于适应性维护"</td>
+<td>属于<strong>完善性维护</strong></td>
+</tr>
+<tr>
+<td>"需求分析阶段做变更控制"</td>
+<td>变更控制属于<strong>需求管理</strong>，不是需求开发</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>六、与后续日子的衔接</h2>
+<table>
+<thead>
+<tr>
+<th>本日内容</th>
+<th>后续在哪里考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>软件生命周期、维护类型</td>
+<td>Day 13（测试与维护）会把维护类型再考一遍</td>
+</tr>
+<tr>
+<td>需求分析、SRS</td>
+<td>Day 13–14（面向对象分析 OOA、UML 用例图）——<strong>用例图是 OOA 的"DFD"</strong></td>
+</tr>
+<tr>
+<td>DFD、数据字典</td>
+<td><strong>科目二下午大题</strong>结构化分析必考；Day 14 阶段测验会出一道完整 DFD 大题</td>
+</tr>
+<tr>
+<td>过程模型对比表</td>
+<td>Day 14 阶段 2 测验 + Day 30 全真模拟<strong>几乎必出一道对比题</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>学习建议</strong>：过程模型对比表<strong>今天就要背到能默写</strong>；DFD 四要素与平衡规则要能<strong>对照本日示例图讲一遍</strong>——能讲出来，下午大题的 DFD 就拿到一半分了。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day12-process.md">docs/knowledge-points/software-engineering/day12-process.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

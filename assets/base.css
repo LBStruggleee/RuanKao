@@ -406,6 +406,16 @@ button.btn.ghost {
   table { display: block; overflow-x: auto; }
 }
 
+/* ---------- 文档集顶部导航与面包屑 ---------- */
+.topnav {
+  max-width: 860px; margin: 0 auto; padding: .6rem 1.25rem;
+  display: flex; flex-wrap: wrap; gap: .4rem 1rem;
+  border-bottom: 1px solid var(--line); font-size: .9rem;
+}
+.topnav a { color: var(--ink-soft); text-decoration: none; }
+.topnav a:hover { color: var(--accent); }
+.crumb { color: var(--ink-soft); font-size: .85rem; margin-bottom: 1rem; }
+
 /* ---------- 打印 ---------- */
 @media print {
   body { background: #fff; }

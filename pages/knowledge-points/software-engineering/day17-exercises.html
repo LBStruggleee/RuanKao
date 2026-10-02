@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 17 弱项强化刷题：按二轮重点选题 25 道（含完整答案与解析） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day17-exercises.md</div>
+<h1>Day 17 弱项强化刷题：按二轮重点选题 25 道（含完整答案与解析）</h1>
+<blockquote>
+<p><strong>选题依据</strong>：全部 25 题取自 <code>docs/practice/knowledge-checklist.md</code> 的<strong>「二轮重点清单（Phase 2 每日先复习）」</strong>——即 Phase 1 阶段在 <code>reflection.md</code> 各日「仍错知识点」标记区<strong>被 2 天及以上反复点名</strong>的知识点，以及阶段测验里标 ⭐ 的计算/高频陷阱项。<strong>人类弱项科目优先</strong>：操作系统、计算机网络、数据库、计算机组成各占 4–6 题，软件工程、数据结构各 2–3 题。
+<strong>题量分布</strong>：<strong>操作系统 6（1–6）｜计算机网络 5（7–11）｜数据库 5（12–16）｜计算机组成 4（17–20）｜软件工程 3（21–23）｜数据结构 2（24–25）</strong>，共 25 题。
+<strong>建议用时</strong>：40 分钟闭卷完成（计算题必须打草稿），对答案 20 分钟。
+<strong>完整答案与解析在文件末尾</strong>。每题解析末尾标注 <code>[知识点 / 二轮重点项]</code>，做错后按该项回 Phase 1 笔记对应章节。
+<strong>所有计算题的数字均已独立重算两遍并交叉验算</strong>，可放心对答案。</p>
+</blockquote>
+<hr />
+<h2>第一部分：操作系统（1–6，来源：Day 1–3 + 二轮重点）</h2>
+<p><strong>1.</strong> 某系统采用页式存储管理，页大小为 <strong>4KB</strong>。进程的页面变换表为：页号 0→物理块 2，页号 1→物理块 4，页号 2→物理块 6，页号 3→物理块 7，页号 4→物理块 9。现有一条逻辑地址为 <strong>3A6CH</strong> 的访存指令，其对应的物理地址是（ ）。</p>
+<ul>
+<li>A. 6A6CH　　B. 7A6CH　　C. 3A6CH　　D. 7A60H</li>
+</ul>
+<p><strong>2.</strong> 某 32 位系统按字节编址，采用<strong>二级页表</strong>，页大小为 <strong>4KB</strong>，页目录项与页表项各占 <strong>4 字节</strong>，进程逻辑地址空间为 4GB。以下叙述正确的是（ ）。</p>
+<ul>
+<li>A. 一级页表（页目录）共有 2²⁰ 项，占用 4MB 空间</li>
+<li>B. 一级页表（页目录）共有 2¹⁰ 项，恰好占用 4KB（一页）空间；若某次访存 <strong>TLB 未命中</strong>且页表全部在主存中，则完成一次数据访问需要访问主存 <strong>3</strong> 次</li>
+<li>C. 二级页表的每一页可容纳 2¹² 个页表项</li>
+<li>D. 若某次访存 TLB 命中，则完成一次数据访问需要访问主存 <strong>2</strong> 次</li>
+</ul>
+<p><strong>3.</strong> 某磁盘请求队列的柱面号（磁道号）依次为 <strong>98、183、37、122、14、124、65、67</strong>，磁头当前位于 <strong>53</strong> 号柱面。若采用 <strong>最短寻道时间优先（SSTF）</strong> 算法，磁头移动的总柱面数为（ ）。</p>
+<ul>
+<li>A. 236　　B. 248　　C. 208　　D. 169</li>
+</ul>
+<p><strong>4.</strong> 某文件系统采用混合索引结构，磁盘块大小为 <strong>4KB</strong>，每个地址项占 <strong>4B</strong>（每个索引块可容纳 <strong>1024</strong> 个地址项）。若某文件的索引节点含 <strong>10 个直接地址项</strong>，则该系统能通过<strong>一级间接索引</strong>管理的文件最大为（ ）；进一步，采用<strong>三级间接索引</strong>时该系统能管理的文件最大约为（ ）。</p>
+<ul>
+<li>A. 1MB　1TB</li>
+<li>B. 4MB　4TB</li>
+<li>C. 4KB　4GB</li>
+<li>D. 4MB　4GB</li>
+</ul>
+<p><strong>5.</strong> 系统中有 3 台同类资源供 6 个进程共享（每个进程最多申请 1 台，用信号量 S 控制申请/释放，S 的初值为 3）。若 6 个进程均已发出申请，则信号量 S 的<strong>最小值</strong>为（ ）。</p>
+<ul>
+<li>A. 0　　B. −2　　C. −3　　D. −6</li>
+</ul>
+<p><strong>6.</strong> 设有 4 个作业 P1～P4，<strong>提交时刻（从 0 起计时，单位：小时）</strong> 与<strong>运行时间</strong>如下表。采用<strong>短作业优先（SJF，非抢占式）</strong> 调度算法，则这 4 个作业的<strong>平均周转时间</strong>为（ ）。</p>
+<table>
+<thead>
+<tr>
+<th>作业</th>
+<th>提交时刻</th>
+<th>运行时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>0</td>
+<td>8</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>3</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A. 8.75　　B. 9.25　　C. 10.5　　D. 11.0</li>
+</ul>
+<hr />
+<h2>第二部分：计算机网络（7–11，来源：Day 4–6 + 二轮重点）</h2>
+<p><strong>7.</strong> 某单位取得一个 C 类网络地址 <strong>192.168.10.0/24</strong>，现要划分为若干子网，要求<strong>每个子网至少容纳 25 台主机</strong>。则子网掩码应为（ ），可划分出的子网数为（ ）。</p>
+<ul>
+<li>A. 255.255.255.224（/27），8 个</li>
+<li>B. 255.255.255.240（/28），16 个</li>
+<li>C. 255.255.255.192（/26），4 个</li>
+<li>D. 255.255.255.128（/25），2 个</li>
+</ul>
+<p><strong>8.</strong> 某路由器的路由表中有 4 条连续的 C 类网络路由：<strong>192.168.0.0/24、192.168.1.0/24、192.168.2.0/24、192.168.3.0/24</strong>，且下一跳相同。若使用 <strong>CIDR</strong> 技术进行路由聚合，则聚合后的地址为（ ）。</p>
+<ul>
+<li>A. 192.168.0.0/24</li>
+<li>B. 192.168.0.0/23</li>
+<li>C. 192.168.0.0/22</li>
+<li>D. 192.168.1.0/22</li>
+</ul>
+<p><strong>9.</strong> 在 TCP/IP 体系结构中，<strong>ARP</strong> 与 <strong>ICMP</strong> 协议都工作在（ ）。</p>
+<ul>
+<li>A. 数据链路层　　B. 网络层（网际层）　　C. 传输层　　D. 应用层</li>
+</ul>
+<p><strong>10.</strong> 以下关于加密与数字签名的叙述中，<strong>错误</strong>的是（ ）。</p>
+<ul>
+<li>A. DES 算法的分组长度为 64 位，有效密钥长度为 56 位；3DES 的有效密钥长度为 168 位</li>
+<li>B. AES 算法的分组长度固定为 128 位，其密钥长度可为 128、192 或 256 位</li>
+<li>C. MD5 的报文摘要长度为 128 位，SHA-1 的报文摘要长度为 160 位</li>
+<li>D. 数字签名既能确认发送者身份、保证报文完整性，又能保证报文的机密性</li>
+</ul>
+<p><strong>11.</strong> TCP 拥塞控制中，某时刻拥塞窗口 <strong>cwnd = 24</strong>（单位：MSS），慢开始门限 <strong>ssthresh = 16</strong>。若发送方因<strong>超时</strong>触发拥塞处理，则新的 ssthresh 与 cwnd 分别为（ ）；若发送方因<strong>收到 3 个重复 ACK</strong>（快重传）触发快恢复，则新的 ssthresh 与 cwnd 分别为（ ）。</p>
+<ul>
+<li>A. 超时：ssthresh = 12，cwnd = 1；重复 ACK：ssthresh = 12，cwnd = 12</li>
+<li>B. 超时：ssthresh = 12，cwnd = 12；重复 ACK：ssthresh = 12，cwnd = 1</li>
+<li>C. 超时：ssthresh = 24，cwnd = 1；重复 ACK：ssthresh = 12，cwnd = 12</li>
+<li>D. 两种情况下 cwnd 都被置为 1，只有 ssthresh 不同</li>
+</ul>
+<hr />
+<h2>第三部分：数据库（12–16，来源：Day 7–8 + 二轮重点）</h2>
+<p><strong>12.</strong> 选课表 <strong>SC(学号, 课程号, 成绩)</strong> 中现有 4 条记录，其成绩值依次为 <strong>90、80、70、NULL</strong>（NULL 表示该记录尚无成绩）。执行 SQL 语句：</p>
+<pre><code class="language-sql">SELECT COUNT(*), COUNT(成绩), AVG(成绩) FROM SC;
+</code></pre>
+<p>查询结果三个值依次为（ ）。</p>
+<ul>
+<li>A. 4，4，80</li>
+<li>B. 4，3，80</li>
+<li>C. 4，3，60</li>
+<li>D. 3，3，80</li>
+</ul>
+<p><strong>13.</strong> 关系 R 有 5 个元组，关系 S 有 4 个元组，R 与 S 在公共属性集合上做自然连接，结果为 <strong>3</strong> 个元组。则 R 与 S 的<strong>自然连接、左外连接、右外连接、完全外连接</strong>的结果元组数依次为（ ）。</p>
+<ul>
+<li>A. 3、3、3、3</li>
+<li>B. 3、5、3、6</li>
+<li>C. 3、5、4、6</li>
+<li>D. 3、6、5、7</li>
+</ul>
+<p><strong>14.</strong> 设关系模式 R(A, B, C, D)，其函数依赖集 F = {A→B, B→C, C→A, A→D}。则 R 的候选键（候选码）个数为（ ）。</p>
+<ul>
+<li>A. 1 个（仅 A）　　B. 2 个（A 与 B）　　C. 3 个（A、B、C）　　D. 4 个（A、B、C、D）</li>
+</ul>
+<p><strong>15.</strong> 设关系模式 R(A, B, C)，其函数依赖集 F = {AB→C, C→B}。该关系模式最高满足（ ）。</p>
+<ul>
+<li>A. 1NF，不满足 2NF</li>
+<li>B. 2NF，不满足 3NF</li>
+<li>C. 3NF，不满足 BCNF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>16.</strong> 在 E-R 模型向关系模式的转换中，以下叙述<strong>错误</strong>的是（ ）。</p>
+<ul>
+<li>A. 1:1 联系可以转换为一个独立的关系模式，也可以与任意一端对应的关系模式合并（把另一端的主键与联系自身属性加入其中）</li>
+<li>B. 1:N 联系通常与 <strong>N 端</strong>对应的关系模式合并（外键加在 N 端）</li>
+<li>C. M:N 联系必须转换为一个独立的关系模式，其主键为两端实体主键的组合</li>
+<li>D. 实体间的联系一律不单独转换，只需在两端实体对应的关系中各加一个外键即可</li>
+</ul>
+<hr />
+<h2>第四部分：计算机组成（17–20，来源：Day 10–11 + 二轮重点）</h2>
+<p><strong>17.</strong> 某流水线由 5 个功能段组成，各段时间分别为 <strong>50ns、100ns、150ns、100ns、50ns</strong>（不等长段）。若连续输入 <strong>20</strong> 条指令，则该流水线的<strong>总执行时间</strong> T 与<strong>效率</strong> E 分别为（ ）。</p>
+<ul>
+<li>A. T = 2850ns，E = 60%</li>
+<li>B. T = 3300ns，E = 54.5%</li>
+<li>C. T = 3300ns，E = 83.3%</li>
+<li>D. T = 4500ns，E = 100%</li>
+</ul>
+<p><strong>18.</strong> 某计算机主存容量为 <strong>16MB</strong>，Cache 容量为 <strong>64KB</strong>，块（行）大小为 <strong>64B</strong>，采用 <strong>4 路组相联</strong>映射方式。则主存地址中 <strong>Tag（标记）字段、组号字段、块内偏移字段</strong> 的位数依次为（ ）。</p>
+<ul>
+<li>A. 8、10、6</li>
+<li>B. 10、8、6</li>
+<li>C. 18、0、6</li>
+<li>D. 10、6、8</li>
+</ul>
+<p><strong>19.</strong> 某计算机的 Cache 访问时间 t_c = 20ns，主存访问时间 t_m = 80ns，Cache 命中率 h = 0.9。则该存储系统的<strong>平均访问时间 t_a</strong>、<strong>加速比 S</strong> 与<strong>效率 e</strong> 依次为（ ）。</p>
+<ul>
+<li>A. t_a = 26ns，S ≈ 3.08，e ≈ 76.9%</li>
+<li>B. t_a = 26ns，S ≈ 4.0，e = 90%</li>
+<li>C. t_a = 38ns，S ≈ 2.1，e ≈ 52.6%</li>
+<li>D. t_a = 26ns，S ≈ 3.08，e = 90%</li>
+</ul>
+<p><strong>20.</strong> 某总线的工作频率为 <strong>100MHz</strong>，数据总线宽度为 <strong>32 位</strong>，则该总线的带宽为（ ）。</p>
+<ul>
+<li>A. 400 MB/s</li>
+<li>B. 3200 MB/s</li>
+<li>C. 400 兆位/秒</li>
+<li>D. 1600 MB/s</li>
+</ul>
+<hr />
+<h2>第五部分：软件工程（21–23，来源：Day 12–13 + 二轮重点）</h2>
+<p><strong>21.</strong> 在 V 模型中，与<strong>概要设计</strong>阶段对应的测试阶段是（ ）。</p>
+<ul>
+<li>A. 单元测试　　B. 集成测试　　C. 系统测试　　D. 验收测试</li>
+</ul>
+<p><strong>22.</strong> 某银行计息系统因国家利率政策调整，需修改计息模块的利率参数与计算逻辑；同时应客户要求新增"理财产品推荐"功能。这两种维护分别属于（ ）。</p>
+<ul>
+<li>A. 适应性维护、完善性维护</li>
+<li>B. 完善性维护、适应性维护</li>
+<li>C. 正确性维护、预防性维护</li>
+<li>D. 预防性维护、正确性维护</li>
+</ul>
+<p><strong>23.</strong> 螺旋模型（Boehm，1988）将瀑布模型与演化模型相结合，并引入<strong>风险分析</strong>。其每一个螺旋周期通常按（ ）的顺序执行。</p>
+<ul>
+<li>A. 制定计划 → 风险分析 → 实施工程 → 客户评估</li>
+<li>B. 风险分析 → 制定计划 → 实施工程 → 客户评估</li>
+<li>C. 制定计划 → 实施工程 → 风险分析 → 客户评估</li>
+<li>D. 客户评估 → 风险分析 → 制定计划 → 实施工程</li>
+</ul>
+<hr />
+<h2>第六部分：数据结构（24–25，来源：Day 1 验证 / Day 14 补漏 + 二轮重点）</h2>
+<p><strong>24.</strong> 以下关于排序算法的叙述中，<strong>错误</strong>的是（ ）。</p>
+<ul>
+<li>A. 快速排序、简单选择排序、希尔排序、堆排序都是<strong>不稳定</strong>的排序算法</li>
+<li>B. 对 n 个元素的堆，自最后一个非叶子结点起逐个向前调整以建立初始堆，其时间复杂度为 <strong>O(n)</strong></li>
+<li>C. 归并排序是<strong>稳定</strong>的排序算法，其时间复杂度为 O(nlgn)</li>
+<li>D. 快速排序在最坏情况下的时间复杂度为 O(n²)，且它是<strong>稳定</strong>的排序算法</li>
+</ul>
+<p><strong>25.</strong> 在 AOE 网中，以下关于关键路径的叙述中，<strong>错误</strong>的是（ ）。</p>
+<ul>
+<li>A. 关键路径是从源点到汇点<strong>长度最长</strong>的路径，其长度即为整个工程的<strong>最短工期</strong></li>
+<li>B. 关键活动是总时差为 0 的活动，缩短关键活动的时间可以缩短工期</li>
+<li>C. AOE 网中至少存在一条关键路径，且关键路径上的活动全部是关键活动</li>
+<li>D. 缩短任一非关键活动的时间，都可以缩短整个工期</li>
+</ul>
+<hr />
+<h2>答案速查</h2>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>答案</strong></td>
+<td>B</td>
+<td>B</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>B</td>
+<td>A</td>
+<td>C</td>
+<td>B</td>
+<td>D</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+<th>21</th>
+<th>22</th>
+<th>23</th>
+<th>24</th>
+<th>25</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>答案</strong></td>
+<td>C</td>
+<td>C</td>
+<td>D</td>
+<td>B</td>
+<td>B</td>
+<td>A</td>
+<td>A</td>
+<td>C</td>
+<td>A</td>
+<td>A</td>
+<td>D</td>
+<td>D</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建议评分线</strong>：25 题，<strong>≥ 20 为达标</strong>（80%，对齐科目一 55+ 分的强度）；<strong>&lt; 15 题说明二轮重点仍未消化</strong>，必须回 Phase 1 笔记整章重看，不能只背答案。</p>
+<hr />
+<h2>完整答案与解析</h2>
+<h3>第一部分：操作系统</h3>
+<p><strong>1. B</strong>｜<code>[页式地址转换 / 二轮重点：页式地址转换（物理 = 块号×页大小+偏移）、多级页表访存 + TLB]</code></p>
+<ul>
+<li>页大小 4KB = 2¹² → 逻辑地址<strong>低 12 位为页内偏移</strong>，高位为页号；</li>
+<li>3A6CH = <code>0011 1010 0110 1100</code>，低 12 位 = <code>1010 0110 1100</code> = <strong>A6CH</strong>（偏移），高 4 位 = <code>0011</code> = <strong>3</strong>（页号）；</li>
+<li>查页面变换表：页号 3 → 物理块号 <strong>7</strong>；</li>
+<li>物理地址 = 块号 7 × 1000H + 偏移 A6CH = <strong>7000H + A6CH = 7A6CH</strong>。</li>
+</ul>
+<blockquote>
+<p>干扰项：A（6A6CH）= 块号 6 的错误答案；C（3A6CH）= 误以为地址不变；D（7A60H）= 拼接偏移时末位算错。<strong>段式与页式不要混</strong>：页式是"块号×页大小（拼接）"，段式才是"段基址 + 偏移（相加）"。</p>
+</blockquote>
+<p><strong>2. B</strong>｜<code>[多级页表访存次数与 TLB / 二轮重点：页式地址转换 + 多级页表访存 + TLB]</code></p>
+<ul>
+<li>页大小 4KB → 页内偏移 12 位；逻辑地址 32 位 → 一个进程最多 2³²/2¹² = <strong>2²⁰ 页</strong>；</li>
+<li>一页（4KB = 2¹²B）可容纳的页表项数 = 2¹² / 2²（每项 4B）= <strong>2¹⁰ = 1024 项</strong>；</li>
+<li>故<strong>页目录（一级页表）</strong>需要 2²⁰ / 2¹⁰ = <strong>2¹⁰ = 1024 项</strong>，占 1024 × 4B = <strong>4096B = 4KB（恰好一页）</strong>；</li>
+<li><strong>TLB 未命中</strong>（页表在主存）时：读页目录项（1 次）→ 读二级页表项（1 次）→ 读数据（1 次）= <strong>3 次访存</strong>；</li>
+<li><strong>TLB 命中</strong>时：页表项已在 TLB 中，<strong>只需 1 次访存</strong>（直接读数据），D 错。</li>
+</ul>
+<blockquote>
+<p>记死：<strong>TLB 命中 = 1 次访存；二级页表未命中 = 3 次访存；一级（单级）页表未命中 = 2 次访存。</strong></p>
+</blockquote>
+<p><strong>3. A</strong>｜<code>[磁盘调度 SSTF 寻道计算 / 二轮重点：磁盘 SSTF 寻道计算]</code></p>
+<p>SSTF 每次选<strong>距当前磁头最近</strong>的请求（注意它会<strong>折返跑</strong>，必须逐段列距离）：</p>
+<pre><code>当前 53 → 选 65（距离 12）  → 移动 12
+    65 → 选 67（距离 2）    → 移动 2
+    67 → 选 37（距离 30）   → 移动 30
+    37 → 选 14（距离 23）   → 移动 23
+    14 → 选 98（距离 84）   → 移动 84
+    98 → 选 122（距离 24）  → 移动 24
+   122 → 选 124（距离 2）   → 移动 2
+   124 → 选 183（距离 59）  → 移动 59
+合计 = 12+2+30+23+84+24+2+59 = 236
+</code></pre>
+<blockquote>
+<p>干扰项 D（169）是 SCAN/LOOK 类算法的结果，C（208）是 C-LOOK 的结果——<strong>同一请求序列下不同算法结果不同，必须逐算法重算，不能混记</strong>。</p>
+</blockquote>
+<p><strong>4. B</strong>｜<code>[索引文件可管理大小 / 二轮重点：磁盘调度 SSTF + 索引文件可管理大小]</code></p>
+<ul>
+<li>4KB / 4B = <strong>1024 = 2¹⁰ 个地址项/索引块</strong>（注意：<strong>不是 256</strong>，那是 1KB 块的情形）；</li>
+<li><strong>一级间接索引</strong>：1024 × 4KB = <strong>4MB</strong>；</li>
+<li><strong>二级间接索引</strong>：1024 × 1024 × 4KB = <strong>4GB</strong>；</li>
+<li><strong>三级间接索引</strong>：1024 × 1024 × 1024 × 4KB = <strong>4TB</strong>。</li>
+</ul>
+<blockquote>
+<p>必背对照（按块大小 4KB / 地址项 4B 记一套即可）：<strong>一级 4MB / 二级 4GB / 三级 4TB</strong>。若块大小改为 1KB（地址项 256），则一级 4MB / 二级 1GB / 三级 256GB——题干的"1024 项"是本题的关键数字。</p>
+</blockquote>
+<p><strong>5. C</strong>｜<code>[PV 操作信号量值计算 / 二轮重点：PV 操作信号量值 / 死锁四条件 / 银行家算法 = 死锁避免]</code></p>
+<ul>
+<li>信号量初值 = 可用资源数 = <strong>3</strong>，这也是信号量可能取到的<strong>最大值</strong>；</li>
+<li>6 个进程各申请 1 台：先到者获得资源，3 台分完后，余下 3 个进程全部阻塞等待；</li>
+<li>信号量值 = 可用资源数 − 等待进程数 = 3 − 6 = <strong>−3</strong>，此为<strong>最小值</strong>；</li>
+<li>故 S 的取值范围为 <strong>−3 〜 3</strong>，最小值 −3。</li>
+</ul>
+<blockquote>
+<p>规律：初值为 m、n 个进程各申请 1 个资源时，S 的取值范围为 <strong>−(n−m) 〜 m</strong>（n ≥ m 时必有 n−m 个进程在等待）。</p>
+</blockquote>
+<p><strong>6. B</strong>｜<code>[调度算法（SJF 周转时间计算）/ 二轮重点：调度算法 SJF 周转时间计算]</code></p>
+<p>SJF 非抢占式：有新作业到达时，在<strong>已到达但尚未执行</strong>的作业中选运行时间最短者。</p>
+<pre><code>t=0：仅 P1 已到达          → 执行 P1，完成于 t=8
+t=8：就绪 P2(1,4) P3(2,2) P4(3,1) → 选最短 P4(1)，完成于 8+1=9
+t=9：就绪 P2(4) P3(2)     → 选最短 P3(2)，完成于 9+2=11
+t=11：就绪 P2(4)           → 执行 P2，完成于 11+4=15
+</code></pre>
+<p>周转时间 = 完成时刻 − 提交时刻：</p>
+<table>
+<thead>
+<tr>
+<th>作业</th>
+<th>提交</th>
+<th>运行</th>
+<th>完成</th>
+<th>周转时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>0</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>1</td>
+<td>4</td>
+<td>15</td>
+<td>14</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>2</td>
+<td>2</td>
+<td>11</td>
+<td>9</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>3</td>
+<td>1</td>
+<td>9</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>平均周转时间 = (8+14+9+6)/4 = 37/4 = <strong>9.25</strong>。</p>
+<blockquote>
+<p>干扰项 D（11.0）是把 SJF 误当 <strong>FCFS</strong> 的结果：FCFS 顺序 P1→P2→P3→P4，完成于 8、12、14、15，周转时间 8、11、12、12，平均 = 43/4 = 10.75。<strong>把 SJF 与 FCFS 两种调度顺序各完整跑一遍，是避免混淆的唯一办法</strong>：SJF 的关键在"<strong>t=8 时才选最短</strong>"，不是一开始就按时间最短排序。</p>
+</blockquote>
+<hr />
+<h3>第二部分：计算机网络</h3>
+<p><strong>7. A</strong>｜<code>[子网划分 5 步法 / 二轮重点：子网划分 5 步法（网络/广播/可用主机 2^h−2）+ CIDR 聚合]</code></p>
+<p>5 步法：
+1. <strong>定主机位</strong>：每个子网至少 25 台主机 → 主机位 h 需满足 2^h − 2 ≥ 25 → h = 5（2⁵−2 = 30 ≥ 25；2⁴−2 = 14 &lt; 25）；
+2. <strong>定网络位</strong>：C 类 /24 原有 24 位网络号，借走 32−24−5 = <strong>3 位作子网号</strong> → 新前缀 <strong>/27</strong>；
+3. <strong>写掩码</strong>：/27 → 255.255.255.<strong>224</strong>（224 = 1110 0000，借了 3 位）；
+4. <strong>块大小</strong> = 256 − 224 = 32 → 各子网网络地址为 .0、.32、.64、……
+5. <strong>子网数</strong> = 2³ = <strong>8 个</strong>，每个子网可用主机数 = 30。</p>
+<blockquote>
+<p>干扰项 B（/28，16 个子网）：每个子网只有 2⁴−2 = 14 台主机，<strong>不满足"至少 25 台"</strong>；C（/26）每个子网 62 台但只有 4 个子网，若题目只要求"至少 25 台且子网尽量多"，/27 才是正确解。</p>
+</blockquote>
+<p><strong>8. C</strong>｜<code>[CIDR 路由聚合 / 二轮重点：子网划分 + CIDR 聚合（2^k 个网络 → 前缀减 k）]</code></p>
+<ul>
+<li>聚合 <strong>2^k 个</strong>网络 → 前缀长度<strong>减 k</strong>；本题 4 = 2² 个网络 → /24 − 2 = <strong>/22</strong>；</li>
+<li>聚合后的地址取这些网络的<strong>共同前缀</strong>：192.168.0.0 ~ 192.168.3.0 的第三个字节为 0(0000 0000)、1(0000 0001)、2(0000 0010)、3(0000 0011)，共同前 6 位为 <code>000000</code> → 第三字节为 <strong>0</strong>；</li>
+<li>故聚合结果为 <strong>192.168.0.0/22</strong>，包含 2¹⁰ − 2 = 1022 个可用主机地址。</li>
+</ul>
+<blockquote>
+<p>规律：<strong>N 个连续且共下一跳的网络若能聚合，N 必须是 2 的幂</strong>，且起始地址必须落在块边界上（本题 192.168.0.0 恰是 /22 的块起点）。若起始地址不是块边界（如 192.168.1.0 ~ 192.168.4.0），则<strong>不能</strong>一次聚合。</p>
+</blockquote>
+<p><strong>9. B</strong>｜<code>[协议层级归属 / 二轮重点：协议层级归属（ARP/ICMP = 网络层）+ 必背端口号]</code></p>
+<ul>
+<li><strong>ARP（地址解析协议）</strong>与 <strong>ICMP（网际控制报文协议）</strong>都工作在 <strong>TCP/IP 的网络层（网际层/IP 层）</strong>；</li>
+<li>高频陷阱：ARP 报文<strong>不封装在 IP 数据报中</strong>（它由以太网帧直接承载），因此极易被误判为数据链路层；但 ARP 的职责是<strong>将 IP 地址解析为 MAC 地址</strong>，服务于 IP 协议，软考按<strong>网络层</strong>归属；</li>
+<li>同层的还有 <strong>RARP、IGMP、OSPF、RIP（用 UDP 承载但属网络层路由协议）</strong>；ICMP 的典型应用 <strong>ping、traceroute</strong> 都跑在网络层之上。</li>
+</ul>
+<p><strong>10. D</strong>｜<code>[加密算法参数与数字签名 / 二轮重点：加密算法参数（DES 56/64、3DES 168、AES 分组 128）+ 数字签名不提供机密性]</code></p>
+<ul>
+<li>A 正确：DES 分组 64 位、有效密钥 56 位（64 位中去掉 8 位校验位）；3DES 用两个或三个独立密钥，有效密钥 <strong>168</strong> 位；</li>
+<li>B 正确：AES <strong>分组长度固定 128 位</strong>，密钥 128/192/256 位对应轮数 <strong>10/12/14</strong> 轮；</li>
+<li>C 正确：MD5 摘要 <strong>128</strong> 位、SHA-1 <strong>160</strong> 位、SHA-256 <strong>256</strong> 位；</li>
+<li><strong>D 错误</strong>：数字签名用<strong>发送方私钥</strong>签名，提供的是<strong>身份认证、报文完整性、抗否认（不可抵赖）</strong>，<strong>不提供机密性</strong>——任何拿到公钥的人都能验证并看到明文。需要保密时应"先加密、后签名"或使用数字信封（用对称密钥加密内容、再用对方公钥加密该对称密钥）。</li>
+</ul>
+<p><strong>11. A</strong>｜<code>[拥塞控制 / 二轮重点：拥塞控制 cwnd（超时回 1 vs 重复 ACK 减半）]</code></p>
+<ul>
+<li>两种丢包判据的处理方式<strong>恰好相反</strong>，必须先判判据再选公式：</li>
+<li><strong>超时</strong>（重传计时器超时）→ 判定"网络严重拥塞"→ <strong>慢开始</strong>：ssthresh = cwnd/2 = 24/2 = <strong>12</strong>，<strong>cwnd = 1</strong>；</li>
+<li><strong>3 个重复 ACK</strong>（快重传）→ 判定"只是个别报文丢失"→ <strong>快恢复</strong>：ssthresh = cwnd/2 = <strong>12</strong>，<strong>cwnd = ssthresh = 12</strong>（不回 1）。</li>
+</ul>
+<blockquote>
+<p>记忆：<strong>"超时回 1，重复 ACK 减半"</strong>——这里的"减半"指 cwnd <strong>设为减半后的值</strong>（= 新 ssthresh），而不是从 1 开始慢慢爬。两个数字必须成对记：(12, 1) 与 (12, 12)。</p>
+</blockquote>
+<hr />
+<h3>第三部分：数据库</h3>
+<p><strong>12. B</strong>｜<code>[聚合与 NULL / 二轮重点：聚合与 NULL（COUNT(*) / COUNT(列) / AVG 分母）]</code></p>
+<ul>
+<li><code>COUNT(*)</code> 统计<strong>所有行</strong>（含 NULL）= <strong>4</strong>；</li>
+<li><code>COUNT(成绩)</code> 统计<strong>成绩非 NULL</strong> 的行 = <strong>3</strong>；</li>
+<li><code>AVG(成绩)</code> = (90+80+70) / <strong>3</strong> = 240/3 = <strong>80</strong>（<strong>分母不含 NULL 行</strong>）。</li>
+</ul>
+<blockquote>
+<p>干扰项 C（4，3，60）的 60 = 240/4，是把 NULL 行算进分母的结果——这是本考点的<strong>标准陷阱</strong>。四个数字必须脱口而出：<strong>COUNT(*) 数行、COUNT(列) 数非空、SUM 忽略 NULL、AVG 分母只算非空</strong>。</p>
+</blockquote>
+<p><strong>13. C</strong>｜<code>[JOIN 类型与行数 / 二轮重点：JOIN 类型与行数（左外 = 匹配 + 左表无匹配）]</code></p>
+<ul>
+<li><strong>自然连接（内连接）</strong>：只保留两表<strong>匹配</strong>的行 = <strong>3</strong>；</li>
+<li><strong>左外连接</strong>：保留 R 的<strong>全部 5 行</strong> = 3 匹配 + 2 行右侧补 NULL = <strong>5</strong>；</li>
+<li><strong>右外连接</strong>：保留 S 的<strong>全部 4 行</strong> = 3 匹配 + 1 行左侧补 NULL = <strong>4</strong>；</li>
+<li><strong>完全外连接</strong>：3 匹配 + 2 仅左 + 1 仅右 = <strong>6</strong>。</li>
+</ul>
+<blockquote>
+<p>口诀：<strong>内连接不产生无匹配行；外连接的行数 = 匹配行 + 保留表的无匹配行</strong>。判断"某个一行都没匹配的实体在结果中是否出现"——<strong>内连接：不出现；左外连接：出现（右列全 NULL）</strong>。</p>
+</blockquote>
+<p><strong>14. C</strong>｜<code>[候选码求解 / 二轮重点：候选码求解（L/N/R/LR 分类 + 闭包，多候选码要求全）]</code></p>
+<p>属性分类（只出现在左的为 L 类，只出现在右的为 R 类，两边都出现的为 LR 类）：
+- <strong>R 类</strong>：D（只在右）→ <strong>不在任何候选码中</strong>；
+- <strong>L 类</strong>：无；<strong>LR 类</strong>：A、B、C。</p>
+<p>逐个求单属性闭包：
+- A⁺ = A →(A→B) B →(B→C) C →(A→D) D = <strong>{A,B,C,D} = U</strong> ✓
+- B⁺ = B → C → A → D = <strong>U</strong> ✓
+- C⁺ = C → A → B → D = <strong>U</strong> ✓
+- D⁺ = {D} ≠ U ✗</p>
+<p>故候选键为 <strong>{A}、{B}、{C}，共 3 个</strong>。</p>
+<blockquote>
+<p>本题的<strong>最大错误源是"只求出一个候选码就停"</strong>——看到 A 是候选码就选 A。凡是属性集能互相推出的（环形依赖链），往往有<strong>多个</strong>候选码；单属性逐一求闭包是最稳的做法。N 类（只在右）属性一定不在候选码中，这是"求全"的第一步筛除。</p>
+</blockquote>
+<p><strong>15. C</strong>｜<code>[范式判断 / 二轮重点：范式判断 5 步流程 / 3NF 与 BCNF 分界]</code></p>
+<p>5 步流程：
+1. <strong>求候选码</strong>：A⁺=A ≠ U，B⁺=B ≠ U，C⁺={B,C} ≠ U；<strong>AB</strong>⁺ = {A,B,C} = U ✓，<strong>AC</strong>⁺ = {A,B,C} = U ✓（去掉 A 或 C 均不再 = U）→ 候选码 <strong>AB、AC</strong>，共两个；
+2. <strong>原子性</strong>：所有属性不可再分 → 满足 <strong>1NF</strong>；
+3. <strong>部分依赖</strong>：F 中无单属性码能决定其它属性（两个候选码都是复合码）→ <strong>无部分函数依赖</strong> → 满足 <strong>2NF</strong>；
+4. <strong>传递依赖</strong>：不存在 X→Y、Y→Z（Y 不决定 X）的链 → 满足 <strong>3NF</strong>；另一种判法：<strong>所有属性都是主属性</strong>（A、B、C 都出现在某个候选码中），直接满足 3NF；
+5. <strong>BCNF</strong>：检查每个依赖的左部是否含码——<strong>C→B 的左部 C 不是候选码</strong>（C⁺ = {B,C} ≠ U）→ 违反 BCNF。</p>
+<p>故 R 最高满足 <strong>3NF，但不满足 BCNF</strong>。</p>
+<blockquote>
+<p>这是 3NF/BCNF 分界的经典模型，务必记住判据：<strong>BCNF 要求每个函数依赖的左部都必须包含候选码</strong>；"全主属性"可保证 3NF 但<strong>不能</strong>保证 BCNF。</p>
+</blockquote>
+<p><strong>16. D</strong>｜<code>[E-R 转关系模式 / 二轮重点：E-R 转关系模式（M:N 独立建表 / 1:N 外键在 N 端 / 联系属性不丢）]</code></p>
+<ul>
+<li><strong>1:1</strong>：可独立建表，也可并入任一端（并入时把另一端主键作外键 + 联系自身属性一起带入）；</li>
+<li><strong>1:N</strong>：通常并入 <strong>N 端</strong>（把 1 端主键作外键放在 N 端关系里）——外键加错端是常见扣分点；</li>
+<li><strong>M:N</strong>：<strong>必须</strong>独立建表，属性 = 两端实体主键（作外键）+ 联系自身属性，<strong>主键必须是两端主键的组合</strong>；</li>
+<li>D 错：M:N 联系若只在两端各加外键，无法表达"哪个 A 与哪个 B 发生联系"，且联系自身的属性（如选课的"成绩""选课时间"）无处安放。</li>
+</ul>
+<hr />
+<h3>第四部分：计算机组成</h3>
+<p><strong>17. B</strong>｜<code>[不等长段流水线 / 二轮重点：不等长段流水线（T = Σt+(n−1)Δt / E = S/k）+ 已知 S 反求 n]</code></p>
+<ul>
+<li>流水线周期 Δt = <strong>最长功能段</strong> = 150ns；</li>
+<li>第 1 条指令按各段<strong>实际时间之和</strong>走完全程：Σt = 50+100+150+100+50 = <strong>450ns</strong>；</li>
+<li>总时间 <strong>T = Σt + (n−1)·Δt = 450 + (20−1)×150 = 450 + 2850 = 3300ns</strong>；</li>
+<li>效率 <strong>E = n·Σt / (k·T)</strong> = 20×450 / (5×3300) = 9000/16500 = <strong>0.5454 ≈ 54.5%</strong>。</li>
+</ul>
+<blockquote>
+<p>干扰项 C（83.3%）是<strong>误用等长段公式</strong> E = n/(k+n−1) = 20/24 = 83.3% 的结果——<strong>该公式只适用于各段时间相等的情况</strong>。不等长段必须用定义式 E = n·Σt/(k·T)。另：加速比 S = n·Σt/T = 9000/3300 ≈ 2.73（本题未问），<strong>任何效率 &gt; 100% 的答案必错</strong>。</p>
+</blockquote>
+<p><strong>18. B</strong>｜<code>[Cache 三种映射地址结构 / 二轮重点：Cache 三种映射地址结构（全相联无"字块内地址"字段）]</code></p>
+<p>位数守恒律（主存地址位数 = Tag + 组号/行号 + 块内偏移）：
+- 主存 16MB = 2²⁴ B → 主存地址 <strong>24 位</strong>；
+- 块大小 64B = 2⁶ → <strong>块内偏移 6 位</strong>；
+- Cache 行数 = 64KB/64B = <strong>1024 行</strong>；<strong>4 路组相联</strong> → 组数 = 1024/4 = <strong>256 = 2⁸</strong> → <strong>组号 8 位</strong>；
+- <strong>Tag = 24 − 6 − 8 = 10 位</strong>。</p>
+<p>对照（同一配置下三种映射，位数守恒自查）：</p>
+<table>
+<thead>
+<tr>
+<th>映射方式</th>
+<th>块内偏移</th>
+<th>行号/组号</th>
+<th>Tag</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接映射</td>
+<td>6</td>
+<td>10（行号）</td>
+<td><strong>8</strong></td>
+<td>Tag = 24−6−10</td>
+</tr>
+<tr>
+<td>全相联映射</td>
+<td>6</td>
+<td><strong>0（无行号字段）</strong></td>
+<td><strong>18</strong></td>
+<td>地址 = Tag + 偏移</td>
+</tr>
+<tr>
+<td>4 路组相联</td>
+<td>6</td>
+<td>8（组号）</td>
+<td><strong>10</strong></td>
+<td>Tag = 24−6−8</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>高频陷阱：<strong>全相联映射没有"行号/字块号"字段</strong>，全部高位都是 Tag——看到选项里全相联的 Tag 比直接映射多 10 位（行号位数），就要意识到这是"无行号字段"造成的。</p>
+</blockquote>
+<p><strong>19. A</strong>｜<code>[Cache 命中率 / 二轮重点：Cache 命中率（t_a = h·t_c+(1−h)·t_m）/ S = t_m/t_a 与 e = t_c/t_a / 反求 h]</code></p>
+<ul>
+<li>平均访问时间 <strong>t_a = h·t_c + (1−h)·t_m</strong> = 0.9×20 + 0.1×80 = 18 + 8 = <strong>26ns</strong>；</li>
+<li>加速比 <strong>S = t_m / t_a</strong> = 80/26 ≈ <strong>3.08</strong>；</li>
+<li>效率 <strong>e = t_c / t_a</strong> = 20/26 ≈ <strong>76.9%</strong>（等价公式 e = 1/(h + (1−h)·r)，其中 r = t_m/t_c = 4：e = 1/(0.9+0.1×4) = 1/1.3 ≈ 76.9%，两式互为交叉验证）。</li>
+</ul>
+<blockquote>
+<p>干扰项 D（e = 90%）误把命中率当效率；B（S = 4.0）误用 S = t_m/t_c。<strong>记住两条硬边界：加速比可以 &gt;1，效率永远 ≤100%</strong>。反求命中率的万能公式：<strong>h = (t_m − t_a)/(t_m − t_c)</strong>（如本题要求 t_a ≤ 38ns → h ≥ (80−38)/(80−20) = 42/60 = 70%）。</p>
+</blockquote>
+<p><strong>20. A</strong>｜<code>[总线带宽 / 二轮重点：总线带宽 = 频率 × 宽度/8]</code></p>
+<ul>
+<li>总线带宽 = 总线工作频率 × 数据总线宽度（位）；</li>
+<li>100MHz × 32 位 = 100 × 10⁶ × 32 = 3200 × 10⁶ <strong>位/秒（兆位/秒）</strong>；</li>
+<li>换算为字节：3200 兆位/秒 ÷ 8 = <strong>400 MB/s</strong>。</li>
+</ul>
+<blockquote>
+<p>干扰项 B（3200 MB/s）是<strong>忘记除以 8</strong> 的结果——这是本题型的头号陷阱：题目若问"MB/s"必须 ÷8，若问"兆位/秒"则不除。公式记死：<strong>带宽（MB/s）= 频率（MHz）× 宽度（位）/8</strong>。</p>
+</blockquote>
+<hr />
+<h3>第五部分：软件工程</h3>
+<p><strong>21. C</strong>｜<code>[V 模型四对对应 / 二轮重点：V 模型四对对应（需求↔验收 / 概设↔系统 / 详设↔集成 / 编码↔单元）]</code></p>
+<p>V 模型的四对对应（必背）：</p>
+<pre><code>需求分析 ↔ 验收测试      （易错点：不是&quot;系统测试&quot;）
+概要设计 ↔ 系统测试      （本题答案）
+详细设计 ↔ 集成测试      （易错点：不是&quot;单元测试&quot;）
+编  码   ↔ 单元测试
+</code></pre>
+<blockquote>
+<p>记忆链：<strong>越靠左的开发文档对应越靠右的测试阶段</strong>——需求是最早的文档，对应最晚的验收测试；详细设计比概要设计更细，对应更底层的集成测试。最常见错误是把"概要/详细设计"与"系统/集成测试"的配对颠倒。</p>
+</blockquote>
+<p><strong>22. A</strong>｜<code>[软件维护四类型判别 / 二轮重点：维护四类型判别（完善性 vs 适应性）]</code></p>
+<ul>
+<li><strong>适应性维护</strong>：为使软件<strong>适应外部环境/技术环境的变化</strong>而修改（利率政策调整、操作系统升级、硬件换代、法规变更）；</li>
+<li><strong>完善性维护</strong>：为<strong>满足用户的新需求、改进性能或增强功能</strong>而修改（新增"理财产品推荐"、加新报表、加快查询）——这类维护在四类中<strong>占比最高（约 50% 甚至更多）</strong>；</li>
+<li>正确性维护 = 改错误；预防性维护 = 为提高可维护性而主动修改。</li>
+</ul>
+<blockquote>
+<p>判别两步法：<strong>①"用户想要更多/更好" → 完善性；②"环境变了" → 适应性</strong>。题干里"政策调整"是环境信号，"应客户要求新增功能"是需求信号。</p>
+</blockquote>
+<p><strong>23. A</strong>｜<code>[螺旋模型 / 二轮重点：螺旋模型 = Boehm 1988 = 风险驱动 + 四象限顺序]</code></p>
+<p>螺旋模型（Boehm，1988）将瀑布模型与演化模型结合，<strong>以风险驱动</strong>，每个螺旋周期（四象限）按固定顺序：</p>
+<pre><code>制定计划 → 风险分析 → 实施工程 → 客户评估
+</code></pre>
+<ul>
+<li><strong>制定计划</strong>：确定目标、备选方案与约束；</li>
+<li><strong>风险分析</strong>：评估备选方案、识别风险、用原型等手段消除风险；</li>
+<li><strong>实施工程</strong>：瀑布式的开发与验证；</li>
+<li><strong>客户评估</strong>：评估成果、规划下一周期（<strong>客户评估是每圈的收尾，不是起点</strong>——D 选项把它放最前，错）。</li>
+</ul>
+<blockquote>
+<p>易错点：<strong>客户评估在最后</strong>；且螺旋模型的特点是<strong>风险驱动</strong>，不是"快速提供初始版本"（那是原型/增量模型）。</p>
+</blockquote>
+<hr />
+<h3>第六部分：数据结构</h3>
+<p><strong>24. D</strong>｜<code>[排序稳定性与建堆 / 二轮重点：排序稳定性（不稳定 = 快选希堆）+ 建堆 O(n)]</code></p>
+<ul>
+<li>A 正确：<strong>不稳定排序 = 快速、简单选择、希尔、堆</strong>（口诀：<strong>"快选希堆"</strong>）；</li>
+<li>B 正确：建堆从第 ⌊n/2⌋ 个非叶子结点起向前调整，时间复杂度为 <strong>O(n)</strong>（<strong>不是</strong> O(nlgn)）；</li>
+<li>C 正确：归并排序稳定，时间复杂度 O(nlgn)，空间复杂度 O(n)；</li>
+<li><strong>D 错误</strong>：快速排序<strong>不稳定</strong>（交换基准时可能改变相等元素的相对次序）。</li>
+</ul>
+<p><strong>25. D</strong>｜<code>[AOE 网与关键路径 / 二轮重点：图算法（关键路径 ve 取 max、vl 取 min）]</code></p>
+<ul>
+<li>A 正确：关键路径是<strong>最长路径</strong>，其长度 = <strong>最短工期</strong>；</li>
+<li>B 正确：关键活动的总时差 = 0（最早开始 = 最迟开始），缩短关键活动才能缩短工期；</li>
+<li>C 正确：AOE 网必有关键路径，关键路径上的活动都是关键活动；</li>
+<li><strong>D 错误</strong>：非关键活动有总时差 &gt; 0，缩短它<strong>只是在时差范围内</strong>，<strong>不能缩短整个工期</strong>——只有缩短<strong>关键活动</strong>（且当缩短后该活动仍在某条关键路径上）才能缩短工期。</li>
+</ul>
+<blockquote>
+<p>ve/vl 记死：<strong>ve（最早）从源点向后取 max，vl（最迟）从汇点向前取 min</strong>；活动总时差 = vl(终点) − ve(起点) − 活动时长。AOV 网与 AOE 网别混：<strong>AOV 顶点 = 活动</strong>（用拓扑排序），<strong>AOE 边 = 活动</strong>（用关键路径）。</p>
+</blockquote>
+<hr />
+<h2>错题登记区（做完后填写）</h2>
+<blockquote>
+<p>做错的题按"错题四要素"（题目 → 错因 → 正确思路 → 知识点）登记到 <code>docs/practice/reflection.md</code> 的 <strong>Day 17 节</strong>；计算题必须把每一步中间量写出来。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<hr />
+<h2>打卡汇总（誊抄到 tracker.md Day 17 行）</h2>
+<pre><code class="language-text">弱项强化 25 题：______ / 25 = ______%
+错题重做（review-round1.md）：______ / ______ = ______%
+仍错知识点：____________________________
+</code></pre>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day17-exercises.md">docs/knowledge-points/software-engineering/day17-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

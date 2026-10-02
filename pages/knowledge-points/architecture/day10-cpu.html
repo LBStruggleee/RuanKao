@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 10（9/30）计算机组成与体系结构①：CPU、指令与寻址 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 architecture 📁 day10-cpu.md</div>
+<h1>Day 10（9/30）计算机组成与体系结构①：CPU、指令与寻址</h1>
+<blockquote>
+<p>本笔记是 Day 10 的核心输入材料，对应软考「计算机组成原理」的第一部分。
+<strong>高频命题点</strong>：寻址方式的有效地址计算（每年必考 1–2 道）、指令流水线性能计算（流水线周期 / 加速比 / 吞吐率 / 效率，<strong>计算题主力</strong>）、CISC 与 RISC 对比、CPU 寄存器作用辨析。
+<strong>分值定位</strong>：组成原理在科目一（75 道选择题）中约占 <strong>8%</strong>，即 5–6 分，几乎全在选择里；其中<strong>寻址与流水线计算是最稳定的得分点</strong>——会算就拿分。
+<strong>使用方法</strong>：先通读建立地图，再遮住例题答案手算（§3 各寻址方式例题 + §4 四道流水线例题），最后做 <code>day10-exercises.md</code> 的 20 题。</p>
+</blockquote>
+<hr />
+<h2>一、CPU 的组成与工作原理</h2>
+<h3>1.1 先建立地图：从冯·诺依曼到现代 CPU</h3>
+<p>冯·诺依曼（von Neumann）结构的五大部件与核心思想：</p>
+<pre><code>        ┌──────────────────────────────────────────┐
+        │              冯·诺依曼五大部件              │
+        ├──────────────┬───────────┬───────────────┤
+        │   运算器 ALU  │  控制器 CU │  存储器  输入/输出 │
+        │  (算术+逻辑)  │ (产生控制  │ (程序+数据 (I/O 设备)│
+        │              │   信号)   │  统一存放)         │
+        └──────────────┴───────────┴───────────────┘
+        核心思想：存储程序、程序控制（指令与数据统一以二进制存放于存储器，
+                 由控制器按地址顺序自动取指、执行）
+</code></pre>
+<p>现代计算机把<strong>运算器 + 控制器</strong>集成在一起就是 CPU；存储器分为 Cache / 主存 / 辅存三级。CPU 内部通过<strong>内部总线</strong>把各部件连起来，对外通过<strong>系统总线</strong>（数据总线 DB / 地址总线 AB / 控制总线 CB）连接主存与 I/O。</p>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：冯·诺依曼结构是「指令和数据<strong>存放在同一个</strong>存储器、共用同一套地址」，与之相对的是<strong>哈佛结构</strong>（指令与数据分存两个独立存储器、两套总线，CPU 可同时取指令和取数据，常用于 DSP / 单片机）。</p>
+</blockquote>
+<h3>1.2 CPU = 运算器 + 控制器（记忆图）</h3>
+<pre><code>                    ┌─────────────────────── CPU ───────────────────────┐
+                    │                                                 │
+   ┌── 运算器 ──────────────┐                    ┌── 控制器 ────────────┐
+   │ ALU 算术逻辑单元        │                    │ PC  程序计数器        │
+   │ ACC 累加寄存器          │                    │ IR  指令寄存器        │
+   │ 通用寄存器组            │  ← 内部总线 →      │ MAR 存储器地址寄存器   │
+   │ PSW/FR 程序状态字       │                    │ MDR 存储器数据寄存器  │
+   │ (CF/ZF/SF/OF)          │                    │ 指令译码器 + 时序发生器│
+   └────────────────────────┘                    └─────────────────────┘
+                                  ↓
+                    系统总线：AB 地址 / DB 数据 / CB 控制
+                                  ↓
+                              主存 / I/O
+</code></pre>
+<p><strong>一句话记忆</strong>：运算器负责"算"（ALU + 存操作数的寄存器 + 记录结果状态的 PSW）；控制器负责"指挥"（取什么指令（PC）、存什么指令（IR）、发什么信号、给什么地址（MAR）、传什么数据（MDR））。</p>
+<h3>1.3 运算器（数据通路）</h3>
+<table>
+<thead>
+<tr>
+<th>部件</th>
+<th>作用</th>
+<th>考点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ALU（算术逻辑单元）</strong></td>
+<td>完成算术（+、−、×、÷）与逻辑（与、或、非、移位）运算；核心是<strong>加法器</strong></td>
+<td>补码加减、溢出判断在此完成</td>
+</tr>
+<tr>
+<td><strong>ACC（累加寄存器）</strong></td>
+<td>暂存 ALU 的一个操作数与运算结果</td>
+<td>单累加器结构中，一地址指令的隐含操作数</td>
+</tr>
+<tr>
+<td><strong>通用寄存器组</strong></td>
+<td>存操作数、中间结果（R0–R15 等）</td>
+<td>寄存器号位数 → 可用寄存器数</td>
+</tr>
+<tr>
+<td><strong>PSW / FR（程序状态字 / 标志寄存器）</strong></td>
+<td>存 ALU 运算结果的特征位与 CPU 工作状态</td>
+<td>见下表</td>
+</tr>
+</tbody>
+</table>
+<p><strong>PSW 标志位（必须记牢）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>名称</th>
+<th>何时置 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CF</strong>（进位/借位）</td>
+<td>Carry</td>
+<td>无符号数运算时<strong>最高位向更高位产生进位（加）或借位（减）</strong></td>
+</tr>
+<tr>
+<td><strong>ZF</strong>（零标志）</td>
+<td>Zero</td>
+<td>运算结果<strong>全 0</strong></td>
+</tr>
+<tr>
+<td><strong>SF</strong>（符号标志）</td>
+<td>Sign</td>
+<td>运算结果<strong>最高位为 1</strong>（即结果为负）</td>
+</tr>
+<tr>
+<td><strong>OF</strong>（溢出标志）</td>
+<td>Overflow</td>
+<td><strong>带符号数</strong>运算结果<strong>超出表数范围</strong>（同号相加异号，或双进位法）</td>
+</tr>
+<tr>
+<td><strong>IF</strong>（中断允许）</td>
+<td>Interrupt</td>
+<td>IF=1 允许响应可屏蔽中断</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点（CF vs OF）</strong>：CF 是给<strong>无符号数</strong>看的（是否进/借位），OF 是给<strong>带符号数</strong>看的（是否溢出）。二者相互独立：一次运算可能 CF=1 而 OF=0，也可能相反。例如 8 位运算 <code>11111111 + 00000001</code>：无符号 255+1=256 溢出 → <strong>CF=1</strong>；带符号 −1+1=0 未溢出 → <strong>OF=0</strong>。</p>
+</blockquote>
+<h3>1.4 控制器与寄存器（最高频的辨析题）</h3>
+<table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>全称</th>
+<th>存放内容</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PC</strong></td>
+<td>Program Counter（程序计数器）</td>
+<td><strong>下一条</strong>要取的指令地址</td>
+<td>取指时把 PC 送 MAR；取指后 PC 自动 +1（按指令长度），为取下一条指令做准备</td>
+</tr>
+<tr>
+<td><strong>IR</strong></td>
+<td>Instruction Register（指令寄存器）</td>
+<td><strong>当前</strong>正在执行的指令</td>
+<td>指令的操作码送<strong>指令译码器</strong>，地址码送 MAR/运算器</td>
+</tr>
+<tr>
+<td><strong>MAR</strong></td>
+<td>Memory Address Register（存储器地址寄存器，也叫 AR）</td>
+<td>要访问的<strong>内存地址</strong></td>
+<td>CPU 欲访存时，地址先送 MAR，MAR 输出送<strong>地址总线</strong></td>
+</tr>
+<tr>
+<td><strong>MDR</strong></td>
+<td>Memory Data Register（存储器数据寄存器，也叫 DR）</td>
+<td>读出/写入的<strong>数据</strong></td>
+<td>读：主存数据经数据总线 → MDR → CPU；写：CPU → MDR → 数据总线 → 主存</td>
+</tr>
+<tr>
+<td><strong>PSW</strong></td>
+<td>Program Status Word（程序状态字）</td>
+<td>标志位与工作状态</td>
+<td>见 §1.3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记忆口诀</strong>：
+- <strong>「PC 指路，IR 执令，MAR 管地址，MDR 管数据」</strong>
+- MAR 一定接<strong>地址总线（单向）</strong>，MDR 一定接<strong>数据总线（双向）</strong>——这是"哪个寄存器接哪条总线"题的唯一答案。
+- PC 的两个动作：<strong>取指前（PC → MAR）</strong>、<strong>取指后（PC 自动 +1）</strong>。顺序不能反。</p>
+<h3>1.5 控制器的两种实现：硬布线 vs 微程序（必考对比）</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>硬布线（组合逻辑）控制器</strong></th>
+<th><strong>微程序控制器</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>产生控制信号的方式</td>
+<td>用门电路、触发器等硬件逻辑直接组合产生</td>
+<td>每条机器指令编写一段<strong>微程序</strong>，存入<strong>控制存储器（CM）</strong>，逐条读出<strong>微指令</strong>产生控制信号</td>
+</tr>
+<tr>
+<td>速度</td>
+<td><strong>快</strong></td>
+<td>慢（需访问 CM）</td>
+</tr>
+<tr>
+<td>修改/扩展</td>
+<td><strong>困难</strong>（改硬件）</td>
+<td><strong>容易</strong>（改 CM 内容）</td>
+</tr>
+<tr>
+<td>结构规整性</td>
+<td>不规整</td>
+<td>规整</td>
+</tr>
+<tr>
+<td>适用</td>
+<td><strong>RISC</strong></td>
+<td><strong>CISC</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>微程序控制器的层级（记牢三级）：</strong></p>
+<pre><code>机器指令 ──(一段微程序)──► 若干条微指令 ──(微指令的每一位)──► 若干个微操作控制信号
+                            （存放于控制存储器 CM，属 ROM）
+</code></pre>
+<ul>
+<li><strong>微指令</strong>：控制存储器中的一个字，给出同时执行的<strong>一组微操作命令</strong>。</li>
+<li><strong>微程序</strong>：完成一条机器指令所需的<strong>微指令序列</strong>。</li>
+<li><strong>微指令格式</strong>：<strong>水平型</strong>（位多、并行度高、微程序短）与<strong>垂直型</strong>（位少、像机器指令、并行度低）。</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：控制存储器（CM）属于<strong>控制器</strong>的一部分，是 ROM，<strong>存放的是微程序（微指令）</strong>，不是程序、不是数据、也不是指令。CM 的容量 = 微指令字长 × 微指令条数。</p>
+</blockquote>
+<h3>1.6 指令周期与指令执行过程</h3>
+<p><strong>时序层级</strong>：<strong>指令周期 &gt; 机器周期 &gt; 时钟周期</strong>。
+- 指令周期：CPU 取出并执行一条指令所需的时间。
+- 机器周期：如取指周期、间址周期、执行周期、中断周期。
+- 时钟周期：计算机最基本的<strong>节拍</strong>信号，流水线周期就是它。</p>
+<p>一条指令的完整执行（以取数指令 <code>LOAD R0, (1000H)</code> 为例）：</p>
+<pre><code>① 取指周期  ：PC → MAR → 地址总线；CPU 发读命令；
+              主存给出指令 → 数据总线 → MDR → IR；PC 自动 +1
+② 间址周期  ：IR 中地址码(1000H) → MAR → 地址总线；发读命令；
+              主存给出操作数地址/操作数 → MDR      ← 只有间址类寻址才需要
+③ 执行周期  ：MDR 内容 → ALU/寄存器；执行实际操作（此例写入 R0）
+④ 中断周期  ：每条指令结束时，若 CPU 允许中断(IF=1)且有中断请求，
+              则保存断点(PC)、置中断向量地址 → 跳转到中断服务程序
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：<strong>间址周期不是每条指令都有的</strong>。只有操作数采用<strong>间接寻址</strong>（或需要二次访存得到有效地址）时才进入间址周期；立即寻址、直接寻址、寄存器寻址都不需要间址周期。</p>
+</blockquote>
+<hr />
+<h2>二、指令格式与地址码位数</h2>
+<h3>2.1 指令的基本格式</h3>
+<pre><code>┌────────────┬──────────────────────────────────┐
+│  操作码 OP  │          地址码 A                 │
+│ (做什么操作) │ (操作数在哪里 / 操作数本身)        │
+└────────────┴──────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>操作码（OP）位数 n</strong> → 最多可定义 <strong>2ⁿ 种</strong>不同操作。</li>
+<li><strong>地址码（A）位数 m</strong> → 决定<strong>直接寻址范围（寻址空间）</strong> = <strong>2ᵐ 个编址单元</strong>。</li>
+</ul>
+<h3>2.2 地址码位数与寻址空间的关系（必考换算）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">地址码位数 m</th>
+<th>直接寻址范围</th>
+<th>记法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">4</td>
+<td>16</td>
+<td>2⁴</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>256</td>
+<td>2⁸</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td>4 K（4096）</td>
+<td>2¹² = 2¹⁰×2² = 1024×4</td>
+</tr>
+<tr>
+<td style="text-align: center;">16</td>
+<td>64 K（65536）</td>
+<td>2¹⁶ = 2¹⁰×2⁶ = 64×1024</td>
+</tr>
+<tr>
+<td style="text-align: center;">20</td>
+<td>1 M</td>
+<td>2²⁰ = 1 M</td>
+</tr>
+<tr>
+<td style="text-align: center;">32</td>
+<td>4 G</td>
+<td>2³²</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心结论</strong>：<strong>地址码有几位，直接寻址范围就是 2 的几次方个单元</strong>。这是"指令格式 → 寻址空间"类题目的唯一考点。</p>
+<h3>2.3 按地址码个数分类的指令格式</h3>
+<p>设机器字长 16 位、主存按字编址（需要 16 位地址才能访问全部 64K 字）：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>格式</th>
+<th style="text-align: center;">各地址码位数</th>
+<th style="text-align: center;">操作码位数</th>
+<th>每个地址可寻址范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>三地址</td>
+<td>OP + A1 + A2 + A3</td>
+<td style="text-align: center;">4 + 4 + 4</td>
+<td style="text-align: center;">4</td>
+<td>16 个寄存器/单元</td>
+</tr>
+<tr>
+<td>二地址</td>
+<td>OP + A1 + A2</td>
+<td style="text-align: center;">6 + 6</td>
+<td style="text-align: center;">4</td>
+<td>64 个单元</td>
+</tr>
+<tr>
+<td>一地址</td>
+<td>OP + A</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">4</td>
+<td>4 K 单元</td>
+</tr>
+<tr>
+<td>零地址</td>
+<td>OP</td>
+<td style="text-align: center;">无</td>
+<td style="text-align: center;">16</td>
+<td>无（如 NOP、堆栈指令）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>规律（记忆）</strong>：指令字长固定时，<strong>地址码个数越少，单个地址码的位数就越多，寻址范围越大；同时留给操作码的位数越多，可定义的指令越多</strong>。一地址指令的地址码 12 位 → 2¹² = 4K，<strong>仍不足 64K</strong>——这就是为什么必须配合<strong>变址/基址寄存器</strong>（寄存器提供高位、A 提供低位）或采用<strong>双字长指令</strong>。</p>
+<h3>2.4 扩展操作码（高频设计题）</h3>
+<p><strong>思想</strong>：固定长度操作码浪费编码空间；让<strong>地址码少的指令使用较长的操作码</strong>，靠"前缀保留"实现扩展。</p>
+<p><strong>完整例题</strong>：某机器指令字长 16 位，要求设计：<strong>三地址指令 4 条、二地址指令 8 条、一地址指令 180 条、零地址指令 16 条</strong>。给出各地址码位数并验证可行性。</p>
+<p><strong>解答</strong>（逐步展开）：</p>
+<pre><code>① 三地址指令：A1/A2/A3 各 4 位 → 地址码共 12 位，操作码 4 位 → 可编码 2⁴ = 16 种
+              实际需要 4 条 → 用 4 个编码，剩 16 − 4 = 12 个编码留作扩展前缀
+② 二地址指令：A1/A2 各 4 位 → 地址码 8 位，操作码扩展为 8 位
+              可用编码 = 12(剩余前缀) × 2⁴ = 192 种
+              实际需要 8 条 → 剩 192 − 8 = 184 个编码留作扩展前缀
+③ 一地址指令：地址码 4 位，操作码扩展为 12 位
+              可用编码 = 184 × 2⁴ = 2944 种 ≥ 180 ✓（剩 2944 − 180 = 2764）
+④ 零地址指令：无地址码，操作码 16 位
+              可用编码 = 2764 × 2⁴ = 44224 种 ≥ 16 ✓
+</code></pre>
+<p><strong>结论</strong>：一地址指令的地址码为 <strong>4 位</strong>（可寻址 16 个单元），零地址指令操作码 16 位。设计可行。</p>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：可用编码数 = <strong>上一级剩余的前缀数 × 新增的位数的编码数（2^新增位数）</strong>。每一级"用掉多少、剩多少"必须逐级算清楚，不能只算第一级。</p>
+</blockquote>
+<hr />
+<h2>三、寻址方式（有效地址公式 + 例题 + 特点）</h2>
+<p><strong>两个必须先厘清的名词</strong>：
+- <strong>形式地址 A</strong>：指令的地址码字段中写的那串数（也常直接写作 A）。
+- <strong>有效地址 EA</strong>：操作数<strong>真正所在</strong>的内存地址。<strong>寻址方式不同，由 A 求 EA 的公式就不同</strong>。</p>
+<p><strong>统一例题设定</strong>（各小节例题沿用，便于对比）：</p>
+<blockquote>
+<p>某机器主存按<strong>字</strong>编址，存储字长 16 位；通用寄存器 R0–R15（寄存器号 4 位，每个寄存器 16 位），PC 为 16 位。
+指令采用单字长 16 位格式：<code>操作码(6位) | 寻址特征(2位) | 形式地址 A(8位)</code>。
+当前相关内容：<strong>(PC) = 2000H，(R1) = 2000H，(R2) = 4000H，(R3) = 0006H</strong>；
+主存部分单元内容：<strong>(1000H) = 2000H，(2000H) = 0F00H</strong>。</p>
+</blockquote>
+<h3>3.1 立即寻址（Immediate）</h3>
+<ul>
+<li><strong>公式</strong>：操作数 = <strong>A</strong>（形式地址 A 就是操作数本身，不需要有效地址）。</li>
+<li><strong>例题</strong>：<code>ADD R0, #7FH</code> → 操作数 = <strong>7FH = 127</strong>，直接参与运算。</li>
+<li><strong>特点</strong>：<strong>不访存</strong>（取操作数 0 次访存），速度最快；A 的位数决定立即数范围（8 位补码 → <strong>−128 ~ +127</strong>；无符号 → 0 ~ 255）。</li>
+<li><strong>用途</strong>：给寄存器置初值、常数运算。</li>
+<li><strong>⚠️ 易错点</strong>：立即寻址<strong>不能用于目的操作数</strong>（不能往常数里写结果）；"立即数范围"与"寻址空间"是两回事。</li>
+</ul>
+<h3>3.2 直接寻址（Direct）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = A</strong></li>
+<li><strong>例题</strong>：<code>LOAD R0, (1000H)</code> → A = 1000H → <strong>EA = 1000H</strong>，读主存 1000H 单元得操作数 = (1000H) = <strong>2000H</strong>。</li>
+<li><strong>特点</strong>：取操作数 <strong>1 次</strong>访存；寻址范围 = <strong>2^A的位数</strong>（8 位 → 256 个单元）。</li>
+<li><strong>⚠️ 易错点</strong>：直接寻址的寻址范围<strong>受地址码位数限制</strong>，寻址空间小时无法访问整个主存。</li>
+</ul>
+<h3>3.3 间接寻址（Indirect）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = (A)</strong>（A 单元里存的是有效地址，"地址的地址"）</li>
+<li><strong>例题</strong>：<code>LOAD R0, @1000H</code> → A = 1000H；EA = (1000H) = <strong>2000H</strong>；再读主存 2000H 单元得操作数 = (2000H) = <strong>0F00H</strong>。</li>
+<li><strong>特点</strong>：取操作数 <strong>2 次</strong>访存（先取 EA、再取操作数）；<strong>寻址范围由存储字长决定，不再由 A 的位数决定</strong>（存储字长 16 位 → EA 16 位 → 可寻址 <strong>2¹⁶ = 64K</strong> 单元）。</li>
+<li><strong>用途</strong>：用短地址码访问大地址空间；实现指针/间接调用。</li>
+<li><strong>⚠️ 易错点（极高频）</strong>：题目问"一次间接寻址可访问的最大存储空间"，答案是 <strong>2^(存储字长)</strong>，<strong>不是 2^(形式地址位数)</strong>。这是间接寻址存在的核心理由。</li>
+</ul>
+<h3>3.4 寄存器寻址（Register）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = Ri</strong>（操作数在寄存器 Ri 中，Ri 是寄存器号）</li>
+<li><strong>例题</strong>：<code>ADD R0, R1</code> → R0 ← (R0) + (R1) = (R0) + 2000H，<strong>不访存</strong>。</li>
+<li><strong>特点</strong>：<strong>不访存</strong>，速度快；寄存器号位数决定可用寄存器数（4 位 → 16 个）；<strong>不扩大寻址空间</strong>。</li>
+<li><strong>⚠️ 易错点</strong>：寄存器寻址的操作数在 CPU 内部，<strong>有效地址就是寄存器号</strong>，不要写成 (Ri)。</li>
+</ul>
+<h3>3.5 寄存器间接寻址（Register Indirect）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = (Ri)</strong>（寄存器里存的是操作数地址）</li>
+<li><strong>例题</strong>：<code>LOAD R0, (R1)</code> → EA = (R1) = <strong>2000H</strong>；读主存 2000H 得操作数 = <strong>0F00H</strong>。</li>
+<li><strong>特点</strong>：取操作数 <strong>1 次</strong>访存；<strong>寻址范围由寄存器位数决定</strong>（16 位寄存器 → 64K），兼具寄存器的快与间接的广。</li>
+<li><strong>用途</strong>：循环遍历数组（Ri 递增即指向下一元素）、指针参数传递。</li>
+</ul>
+<h3>3.6 基址寻址（Based）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = (Rb) + A</strong>（Rb 为基址寄存器，A 为位移量）</li>
+<li><strong>例题</strong>：<code>(R2) = 4000H</code>，A = 7FH（位移量，按无符号） → <strong>EA = 4000H + 7FH = 407FH</strong>。</li>
+<li><strong>特点</strong>：取操作数 <strong>1 次</strong>访存；<strong>基址寄存器位数决定寻址空间</strong>，A 决定在段内的浮动范围；A 位数小，故基址寄存器提供"段基址"、A 提供"段内位移"。</li>
+<li><strong>用途</strong>：<strong>程序重定位 / 多道程序在内存中浮动</strong>——整个程序搬走，只要改基址寄存器，所有指令的 EA 自动跟着走。</li>
+<li><strong>⚠️ 易错点</strong>：基址寄存器内容由<strong>操作系统/系统程序</strong>管理，对<strong>程序员不可见</strong>（这是基址与变址最本质的区别）。</li>
+</ul>
+<h3>3.7 变址寻址（Indexed）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = (Rx) + A</strong>（Rx 为变址寄存器，A 为基准地址）</li>
+<li><strong>例题</strong>：数组首址 A = 2000H，变址寄存器 (R3) = 0006H（按下标 6、每元素 1 字） → <strong>EA = 0006H + 2000H = 2006H</strong>，即第 6 个元素所在单元。</li>
+<li><strong>特点</strong>：取操作数 <strong>1 次</strong>访存；<strong>变址寄存器内容在程序执行中可变</strong>（循环中递增），A 作为基准不变。</li>
+<li><strong>用途</strong>：<strong>数组/字符串/循环</strong>处理——<code>for(i=0..n) 访问 A[i]</code> 就是变址寻址的硬件支持。</li>
+<li><strong>⚠️ 易错点</strong>：形式上基址与变址<strong>公式相同</strong>（都是 (R) + A），区别在<strong>语义</strong>：<strong>基址是"基址固定、位移变化找段内"；变址是"基准固定、变址变化遍历数组"</strong>，且<strong>变址寄存器对程序员可见、由程序修改</strong>。</li>
+</ul>
+<h3>3.8 相对寻址（Relative）</h3>
+<ul>
+<li><strong>公式</strong>：<strong>EA = (PC) + A</strong>（A 为带符号补码位移量）</li>
+<li><strong>例题</strong>：<strong>(PC) = 2000H</strong>，A = 80H（8 位补码，80H = <strong>−128</strong>） → <strong>EA = 2000H + (−128) = 2000H − 80H = 1F80H</strong>。
+  若 A = 7FH（= +127） → EA = 2000H + 7FH = <strong>207FH</strong>。</li>
+<li><strong>特点</strong>：取操作数 <strong>1 次</strong>访存；EA 随 PC 浮动，可实现<strong>向前/后两个方向的转移</strong>（A 为补码，可正可负）。</li>
+<li><strong>用途</strong>：<strong>条件转移、循环跳转</strong>——实现"与位置无关代码"（程序整体搬移，相对位移不变，跳转仍正确）。</li>
+<li><strong>⚠️ 易错点（极高频）</strong>：公式中的 <strong>(PC) 是"当前指令的下一条指令"的地址</strong>（取指完成后 PC 已自动 +1），不是当前指令地址。考试务必注意题目给的是"当前指令地址"还是"PC 当前值"。</li>
+</ul>
+<h3>3.9 八种寻址方式汇总表（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>寻址方式</th>
+<th>有效地址公式</th>
+<th style="text-align: center;">取操作数访存次数</th>
+<th>寻址范围决定因素</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立即</td>
+<td>操作数 = A</td>
+<td style="text-align: center;">0</td>
+<td>A 位数（决定立即数范围）</td>
+<td>置常数</td>
+</tr>
+<tr>
+<td>直接</td>
+<td>EA = A</td>
+<td style="text-align: center;">1</td>
+<td><strong>A 的位数</strong></td>
+<td>一般访存</td>
+</tr>
+<tr>
+<td>间接</td>
+<td>EA = (A)</td>
+<td style="text-align: center;">2</td>
+<td><strong>存储字长</strong></td>
+<td>短地址访问大空间</td>
+</tr>
+<tr>
+<td>寄存器</td>
+<td>EA = Ri</td>
+<td style="text-align: center;">0</td>
+<td>寄存器号位数</td>
+<td>快速运算</td>
+</tr>
+<tr>
+<td>寄存器间接</td>
+<td>EA = (Ri)</td>
+<td style="text-align: center;">1</td>
+<td><strong>寄存器位数</strong></td>
+<td>遍历/指针</td>
+</tr>
+<tr>
+<td>基址</td>
+<td>EA = (Rb) + A</td>
+<td style="text-align: center;">1</td>
+<td>基址寄存器位数</td>
+<td><strong>程序重定位</strong></td>
+</tr>
+<tr>
+<td>变址</td>
+<td>EA = (Rx) + A</td>
+<td style="text-align: center;">1</td>
+<td>变址寄存器位数</td>
+<td><strong>数组/循环</strong></td>
+</tr>
+<tr>
+<td>相对</td>
+<td>EA = (PC) + A</td>
+<td style="text-align: center;">1</td>
+<td>PC 位数 + A（补码）</td>
+<td><strong>转移指令</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>补充</strong>：还有<strong>基址变址寻址</strong> EA = (Rb) + (Rx) + A、<strong>堆栈寻址</strong>（隐含 SP 指向栈顶，零地址指令）等，形式都是上述公式的组合。</p>
+</blockquote>
+<h3>3.10 一道综合对比例题（把 8 种放到同一组数里）</h3>
+<p><strong>题目</strong>：沿用 §统一例题设定，A = <strong>80H</strong>（若作为补码位移则为 −128，若作为无符号则为 128），分别求下列寻址方式的有效地址或操作数：</p>
+<table>
+<thead>
+<tr>
+<th>寻址方式</th>
+<th>计算</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立即寻址</td>
+<td>操作数 = A</td>
+<td><strong>128</strong>（无符号）/ <strong>−128</strong>（补码）</td>
+</tr>
+<tr>
+<td>直接寻址</td>
+<td>EA = A = 80H</td>
+<td><strong>EA = 0080H</strong></td>
+</tr>
+<tr>
+<td>间接寻址</td>
+<td>EA = (80H)（题目未给出 (80H)，取 §3.3 例）</td>
+<td>EA = (1000H) = <strong>2000H</strong></td>
+</tr>
+<tr>
+<td>寄存器寻址（R3）</td>
+<td>操作数 = (R3)</td>
+<td><strong>0006H</strong></td>
+</tr>
+<tr>
+<td>寄存器间接（R1）</td>
+<td>EA = (R1)</td>
+<td><strong>EA = 2000H</strong></td>
+</tr>
+<tr>
+<td>基址（R2，A=7FH）</td>
+<td>EA = 4000H + 7FH</td>
+<td><strong>EA = 407FH</strong></td>
+</tr>
+<tr>
+<td>变址（R3，A=2000H）</td>
+<td>EA = 0006H + 2000H</td>
+<td><strong>EA = 2006H</strong></td>
+</tr>
+<tr>
+<td>相对（A=80H=−128）</td>
+<td>EA = 2000H − 80H</td>
+<td><strong>EA = 1F80H</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀（八种寻址）</strong>：<strong>「立即数、直接址、间接再找一次；寄存器里拿、间接寄存器指；基址搬家、变址遍历、相对跳转走 PC」</strong>。</p>
+</blockquote>
+<hr />
+<h2>四、指令流水线（Day 10 的计算核心）</h2>
+<h3>4.1 流水线原理</h3>
+<p>把一条指令的执行过程<strong>分成若干个子过程（段）</strong>，每个段由专用部件完成；多条指令的<strong>不同段在时间上重叠执行</strong>——就像工厂流水线，第一件产品还在第 3 道工序时，第二件已在第 2 道，第三件在第 1 道。</p>
+<p>经典 <strong>5 段</strong>指令流水线（MIPS 风格）：</p>
+<pre><code>指令 i    :  IF ── ID ── EX ── MEM ── WB
+指令 i+1  :        IF ── ID ── EX ── MEM ── WB
+指令 i+2  :              IF ── ID ── EX ── MEM ── WB
+           └──────────────────────────────────────► 时间
+取指 IF → 译码/读寄存器 ID → 执行/计算 EX → 访存 MEM → 写回 WB
+</code></pre>
+<ul>
+<li>每条指令仍需走完全部段，但<strong>每隔一个流水线周期就有一条指令完成</strong>。</li>
+<li><strong>流水线周期（Δt，也就是 CPU 的时钟周期）= 最长段的时间</strong>。</li>
+</ul>
+<h3>4.2 性能指标与公式（必须全部记牢）</h3>
+<p>设：流水线 <strong>k 段</strong>，各段时间 t₁, t₂, …, tₖ，<strong>流水线周期 Δt = max(t₁…tₖ)</strong>，执行 <strong>n 条指令</strong>。记 <strong>Σt = t₁ + … + tₖ</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>流水线周期</strong></td>
+<td><strong>Δt = max(t₁, …, tₖ)</strong></td>
+<td>最长的那一段就是瓶颈，决定节拍</td>
+</tr>
+<tr>
+<td><strong>流水线总时间</strong></td>
+<td><strong>T = Σt + (n − 1) · Δt</strong></td>
+<td>第 1 条走完全程 Σt，之后每 n−1 条各加一个周期 Δt</td>
+</tr>
+<tr>
+<td><strong>非流水线时间</strong></td>
+<td><strong>T₀ = n · Σt</strong></td>
+<td>不用流水线，n 条指令顺序各走 Σt</td>
+</tr>
+<tr>
+<td><strong>加速比 S</strong></td>
+<td><strong>S = T₀ / T = n·Σt / [Σt + (n−1)·Δt]</strong></td>
+<td><strong>等长段时简化为 S = k·n / (k + n − 1)</strong></td>
+</tr>
+<tr>
+<td><strong>吞吐率 TP</strong></td>
+<td><strong>TP = n / T</strong></td>
+<td>单位时间完成的指令数</td>
+</tr>
+<tr>
+<td><strong>最大吞吐率</strong></td>
+<td><strong>TP_max = 1 / Δt</strong></td>
+<td>n → ∞ 时，每个周期出 1 条</td>
+</tr>
+<tr>
+<td><strong>效率 E</strong></td>
+<td><strong>E = S / k = n·Σt / (k·T)</strong></td>
+<td>时空图中"忙"的面积占比；等长段时 <strong>E = n / (k + n − 1)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>等长段（每段都是 Δt）时的简化式</strong>（最常用）：</p>
+<pre><code>T  = (k + n − 1) · Δt
+S  = k·n / (k + n − 1)
+TP = n / [(k + n − 1)·Δt]
+E  = n / (k + n − 1)        ← 满足恒等式 S = k × E
+</code></pre>
+<p><strong>三条重要结论</strong>：
+1. <strong>n 越大，S 越接近 k</strong>（但<strong>永远不可能超过 k</strong>，k 段流水线的加速比上限就是 k）。
+2. <strong>E 永远 ≤ 1</strong>；n → ∞ 时 E → 1，但 n 有限时 E = S/k &lt; 1。
+3. <strong>Δt 由最长的段决定</strong>——流水线的性能被瓶颈段限制，要提速必须<strong>消除瓶颈</strong>：① 把瓶颈段<strong>再细分</strong>为几个子段；② 对瓶颈段<strong>重复设置（资源重复）</strong>。</p>
+<h3>4.3 例题 1：等长段（基础题，必须一遍算对）</h3>
+<blockquote>
+<p><strong>题目</strong>：某指令流水线由 <strong>5 段</strong>组成，每段执行时间均为 <strong>2 ns</strong>。连续执行 <strong>10 条</strong>指令，求流水线周期、总执行时间、加速比、吞吐率与效率。</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>Δt = 2 ns（各段等长，周期 = 任一段时间）
+k = 5，n = 10
+T = (k + n − 1)·Δt = (5 + 10 − 1) × 2 ns = 14 × 2 ns = 28 ns
+T₀= k·n·Δt = 5 × 10 × 2 = 100 ns
+S = T₀/T = 100 / 28 ≈ 3.57
+TP = n/T = 10 / 28 ns ≈ 0.357 条/ns = 3.57 × 10⁸ 条/秒
+E = S/k = 3.57 / 5 = 0.714 = 71.4 %（用 E = n/(k+n−1) = 10/14 = 71.4% 验证一致 ✓）
+</code></pre>
+<p><strong>时空图验证</strong>（横轴每格 = 1 个周期 = 2 ns；每条指令占 5 格，相邻指令错开 1 格）：</p>
+<pre><code>时间(周期):  1    2    3    4    5    6    7    8    9   10   11   12   13   14
+指令 1     : IF   ID   EX   MEM  WB   .    .    .    .    .    .    .    .    .
+指令 2     : .    IF   ID   EX   MEM  WB   .    .    .    .    .    .    .    .
+指令 3     : .    .    IF   ID   EX   MEM  WB   .    .    .    .    .    .    .
+指令 4     : .    .    .    IF   ID   EX   MEM  WB   .    .    .    .    .    .
+指令 5     : .    .    .    .    IF   ID   EX   MEM  WB   .    .    .    .    .
+   ...                                  (第 6–9 条同样逐条右移 1 格，省略)
+指令 10    : .    .    .    .    .    .    .    .    .    IF   ID   EX   MEM  WB
+</code></pre>
+<ul>
+<li>第 1 条指令在第 <strong>5</strong> 个周期完成（流水线<strong>装满</strong>需 5 个周期，即 k·Δt = Σt）；</li>
+<li>之后<strong>每个周期完成 1 条</strong>，第 10 条在第 <strong>5 + 9 = 14</strong> 个周期完成；</li>
+<li>总周期数 = <strong>k + n − 1 = 5 + 10 − 1 = 14</strong>，总时间 = 14 × 2 ns = <strong>28 ns</strong>。这与公式 T = (k+n−1)·Δt 完全一致 ✓</li>
+</ul>
+<h3>4.4 例题 2：不等长段（瓶颈段，高频考法）</h3>
+<blockquote>
+<p><strong>题目</strong>：某 4 段指令流水线，各段执行时间分别为 <strong>10 ns、15 ns、20 ns、10 ns</strong>。连续执行 <strong>100 条</strong>指令，求流水线周期、总执行时间、加速比、吞吐率与最大吞吐率。</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>Δt = max(10, 15, 20, 10) = 20 ns        ← 第 3 段是瓶颈段
+Σt = 10 + 15 + 20 + 10 = 55 ns
+k = 4，n = 100
+T = Σt + (n − 1)·Δt = 55 + 99 × 20 = 55 + 1980 = 2035 ns
+T₀= n · Σt = 100 × 55 = 5500 ns
+S = T₀/T = 5500 / 2035 ≈ 2.70
+TP = n/T = 100 / 2035 ns ≈ 0.0491 条/ns ≈ 4.91 × 10⁷ 条/秒
+TP_max = 1/Δt = 1 / 20 ns = 0.05 条/ns = 5 × 10⁷ 条/秒
+E = S/k = 2.70 / 4 = 0.676 = 67.6 %
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：不等长段的题目，<strong>T = Σt + (n−1)·Δt，不是 k·Δt + (n−1)·Δt</strong>——第 1 条指令按各段实际时间之和走完全程，而不是按最长段走 k 次。这是不等长段题最容易算错的一步。</p>
+</blockquote>
+<h3>4.5 例题 3：求效率（E = S/k 的应用）</h3>
+<blockquote>
+<p><strong>题目</strong>：某 5 段指令流水线，各段时间为 <strong>50 ns、100 ns、150 ns、100 ns、50 ns</strong>。执行 <strong>20 条</strong>指令，求流水线周期、总执行时间、加速比、效率与吞吐率。</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>Δt = max(50, 100, 150, 100, 50) = 150 ns    ← 第 3 段为瓶颈
+Σt = 50 + 100 + 150 + 100 + 50 = 450 ns
+k = 5，n = 20
+T = Σt + (n − 1)·Δt = 450 + 19 × 150 = 450 + 2850 = 3300 ns
+T₀= n · Σt = 20 × 450 = 9000 ns
+S = 9000 / 3300 ≈ 2.73
+E = S/k = 2.73 / 5 = 0.545 = 54.5 %
+   交叉验证：E = n·Σt/(k·T) = 20×450 / (5×3300) = 9000/16500 = 54.5% ✓
+TP = n/T = 20 / 3300 ns ≈ 6.06 × 10⁶ 条/秒
+TP_max = 1/150 ns ≈ 6.67 × 10⁶ 条/秒
+</code></pre>
+<p><strong>含义</strong>：效率只有 54.5%，说明流水线一半以上的时间有部件在"等"瓶颈段。把 150 ns 的第 3 段拆成 3 个 50 ns 的子段，则所有段都成 50 ns，Δt 降为 50 ns，效率与吞吐率都会大幅提升。</p>
+<h3>4.6 例题 4：已知加速比反求指令条数（逆推题型）</h3>
+<blockquote>
+<p><strong>题目</strong>：某 <strong>4 段</strong>等长指令流水线，流水线周期 Δt = 10 ns。<strong>至少连续执行多少条指令</strong>，才能使加速比达到 <strong>3.5</strong>？</p>
+</blockquote>
+<p><strong>解答</strong>（等长段，用 S = k·n/(k + n − 1) 反解 n）：</p>
+<pre><code>S = k·n / (k + n − 1) = 3.5
+代入 k = 4：  4n / (n + 3) = 3.5
+            4n = 3.5(n + 3) = 3.5n + 10.5
+            0.5n = 10.5  →  n = 21
+验证：S = 4 × 21 / (21 + 3) = 84 / 24 = 3.5 ✓
+</code></pre>
+<p><strong>答案</strong>：至少 <strong>21 条</strong>指令。</p>
+<blockquote>
+<p><strong>延伸结论</strong>：给定加速比目标 S₀，<strong>n = S₀(k − 1) / (k − S₀)</strong>。注意 <strong>S₀ 必须小于 k</strong>（加速比不可能超过段数 k），否则方程无解——这也是检查答案合理性的方法。</p>
+</blockquote>
+<h3>4.7 流水线冲突（流水线停顿的原因）</h3>
+<table>
+<thead>
+<tr>
+<th>冲突类型</th>
+<th>产生原因</th>
+<th>后果</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>结构冲突</strong>（资源冲突）</td>
+<td>多条指令<strong>同一时刻争用同一硬件</strong>（如存储器同时被取指和访存占用）</td>
+<td>停顿 1 个周期</td>
+<td>资源重复（指令 Cache / 数据 Cache 分离——哈佛结构）、停顿</td>
+</tr>
+<tr>
+<td><strong>数据冲突</strong>（数据相关）</td>
+<td>后一条指令需要前一条指令<strong>尚未写回</strong>的结果（写后读 RAW 等）</td>
+<td>等待</td>
+<td><strong>数据旁路/转发（forwarding）</strong>、编译器插入空操作、指令调度</td>
+</tr>
+<tr>
+<td><strong>控制冲突</strong></td>
+<td><strong>转移/跳转指令</strong>改变执行顺序，流水线中已取入的指令作废</td>
+<td>清空流水线</td>
+<td><strong>分支预测</strong>（静态/动态）、延迟转移、提前形成条件</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：控制冲突对流水线性能影响<strong>最大</strong>，因为一旦分支预测失败，流水线必须<strong>清空（flush）</strong>已预取的指令，代价是若干个周期的停顿。</p>
+</blockquote>
+<h3>4.8 超标量、超流水线、超标量超流水线（概念 + 吞吐率）</h3>
+<p>普通标量单流水线<strong>每个时钟周期 Δt 完成 1 条指令</strong>，最大吞吐率 TP_max = 1/Δt。要提高吞吐率，有两条路：<strong>每个周期多发</strong>（超标量）或<strong>提高节拍频率</strong>（超流水线）。</p>
+<table>
+<thead>
+<tr>
+<th>体系结构</th>
+<th>做法</th>
+<th>最大吞吐率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标量单流水线</td>
+<td>每周期发射 1 条</td>
+<td><strong>TP_max = 1/Δt</strong></td>
+</tr>
+<tr>
+<td><strong>超标量（Superscalar）</strong>，度 m</td>
+<td>硬件复制多套执行部件，每周期<strong>同时发射 m 条</strong></td>
+<td><strong>TP_max = m/Δt</strong></td>
+</tr>
+<tr>
+<td><strong>超流水线（Superpipelined）</strong>，度 n</td>
+<td>一个基本周期内细分为 n 个子周期，<strong>每个子周期发射 1 条</strong></td>
+<td><strong>TP_max = n/Δt</strong></td>
+</tr>
+<tr>
+<td><strong>超标量超流水线</strong>，度 m × n</td>
+<td>两者结合</td>
+<td><strong>TP_max = m·n/Δt</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>例</strong>：时钟周期 Δt = 10 ns。
+- 超标量（m = 3）：TP_max = 3/10 ns = <strong>3 × 10⁸ 条/秒</strong>。
+- 超流水线（n = 4）：TP_max = 4/10 ns = <strong>4 × 10⁸ 条/秒</strong>。
+- 超标量超流水线（m=3, n=4）：TP_max = 12/10 ns = <strong>1.2 × 10⁹ 条/秒</strong>。</p>
+<p><strong>记忆口诀</strong>：<strong>「超标量靠"并行多发"（横向加宽），超流水线靠"加深分段"（纵向细分）」</strong>。</p>
+<hr />
+<h2>五、CISC 与 RISC（必考对比表）</h2>
+<p><strong>背景</strong>：CISC（复杂指令集计算机）通过增加指令复杂度缩小语义差距；RISC（精简指令集计算机）通过简化指令、依靠编译优化和流水线提升性能。代表：CISC → x86；RISC → MIPS、ARM、RISC-V、龙芯。</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>CISC（复杂指令集）</strong></th>
+<th><strong>RISC（精简指令集）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>指令条数</td>
+<td><strong>多</strong>（数百条）</td>
+<td><strong>少</strong>（≤ 100 条，只保留常用指令）</td>
+</tr>
+<tr>
+<td>指令长度</td>
+<td><strong>不固定</strong>（变长）</td>
+<td><strong>固定</strong>（通常 1 个字长）</td>
+</tr>
+<tr>
+<td>指令格式</td>
+<td>种类多</td>
+<td>种类少（1–2 种）</td>
+</tr>
+<tr>
+<td>寻址方式</td>
+<td><strong>多</strong>（十几种）</td>
+<td><strong>少</strong>（寄存器/立即/相对等几种）</td>
+</tr>
+<tr>
+<td>访存指令</td>
+<td><strong>多</strong>（有内存到内存的操作）</td>
+<td><strong>少</strong>（只有 Load/Store 访存，其余寄存器-寄存器）</td>
+</tr>
+<tr>
+<td>执行时间</td>
+<td>不一致（多数多周期）</td>
+<td><strong>多数单周期</strong></td>
+</tr>
+<tr>
+<td>控制方式</td>
+<td><strong>微程序控制</strong></td>
+<td><strong>硬布线控制</strong></td>
+</tr>
+<tr>
+<td>通用寄存器数量</td>
+<td>少</td>
+<td><strong>多</strong>（大量寄存器，甚至用寄存器窗口技术）</td>
+</tr>
+<tr>
+<td>流水线</td>
+<td>实现困难</td>
+<td><strong>易实现高效流水线</strong></td>
+</tr>
+<tr>
+<td>编译</td>
+<td>编译程序设计相对简单</td>
+<td>需<strong>优化编译程序</strong>、指令调度</td>
+</tr>
+<tr>
+<td>代表</td>
+<td>x86</td>
+<td>MIPS、ARM、RISC-V、龙芯</td>
+</tr>
+</tbody>
+</table>
+<p><strong>RISC 的核心特点（记忆五条）</strong>：
+1. 指令<strong>少、长度固定、格式少</strong>；
+2. <strong>只有 Load/Store 访存</strong>（运算在寄存器间完成）；
+3. <strong>硬布线控制</strong>为主、大量寄存器；
+4. <strong>指令流水线</strong>高度优化、多数指令单周期完成；
+5. 依赖<strong>优化编译</strong>提高性能。</p>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：不要把"RISC 指令少"理解为"RISC 功能弱"——RISC 是通过<strong>编译器组合简单指令</strong>来实现复杂功能，性能靠流水线与编译优化。CISC 与 RISC 是<strong>设计哲学</strong>的差异，不是"先进与落后"。</p>
+</blockquote>
+<hr />
+<h2>六、本日必记结论（20 条，冲刺时遮住右边默写）</h2>
+<ol>
+<li><strong>CPU = 运算器 + 控制器</strong>；ALU、ACC、PSW 属于<strong>运算器</strong>；PC、IR、MAR、MDR 属于<strong>控制器</strong>。</li>
+<li><strong>PC</strong> 存<strong>下一条</strong>指令地址，取指后自动 +1；<strong>IR</strong> 存<strong>当前</strong>指令，操作码送<strong>指令译码器</strong>。</li>
+<li><strong>MAR 接地址总线（单向）</strong>，<strong>MDR 接数据总线（双向）</strong>。</li>
+<li><strong>CF</strong> 看无符号进位、<strong>OF</strong> 看带符号溢出、<strong>ZF</strong> 看是否为 0、<strong>SF</strong> 看符号位；<strong>IF</strong> 决定是否响应可屏蔽中断。</li>
+<li><strong>微程序控制器</strong>的控制存储器（CM，属 ROM）存放<strong>微程序（微指令）</strong>；<strong>硬布线控制器速度快</strong>；<strong>RISC 用硬布线、CISC 用微程序</strong>。</li>
+<li><strong>机器指令 → 微程序 → 微指令 → 微操作控制信号</strong>（三级）。</li>
+<li>指令 = <strong>操作码 + 地址码</strong>；操作码 n 位 → 最多 <strong>2ⁿ</strong> 种操作。</li>
+<li><strong>地址码 m 位 → 直接寻址范围 2ᵐ</strong>；16 位地址 → 64K。</li>
+<li><strong>间接寻址 EA = (A)</strong>，取操作数 <strong>2 次</strong>访存，寻址范围由<strong>存储字长</strong>决定（<strong>不是</strong> A 的位数）。</li>
+<li><strong>寄存器间接寻址 EA = (Ri)</strong>，1 次访存，寻址范围由<strong>寄存器位数</strong>决定。</li>
+<li><strong>基址 EA = (Rb) + A</strong> 用于<strong>程序重定位</strong>，基址寄存器对<strong>程序员不可见</strong>。</li>
+<li><strong>变址 EA = (Rx) + A</strong> 用于<strong>数组/循环</strong>，变址寄存器由<strong>程序修改</strong>。</li>
+<li><strong>相对寻址 EA = (PC) + A</strong>，A 为<strong>补码</strong>可正可负；<strong>PC 是下一条指令地址</strong>。</li>
+<li><strong>流水线周期 Δt = 最长段的时间</strong>；<strong>n 条指令 k 段流水线 T = (k + n − 1)·Δt</strong>（等长）。</li>
+<li><strong>加速比 S = T₀/T = k·n/(k+n−1)</strong>（等长段）；<strong>S &lt; k</strong>，n 越大越接近 k。</li>
+<li><strong>吞吐率 TP = n/T</strong>；<strong>最大吞吐率 TP_max = 1/Δt</strong>。</li>
+<li><strong>效率 E = S/k = n/(k+n−1)</strong>（等长段）；<strong>E ≤ 1</strong>。</li>
+<li>不等长段：<strong>T = Σt + (n−1)·Δt</strong>，<strong>S = n·Σt/T</strong>（第 1 条按实际各段时间之和走完全程）。</li>
+<li><strong>超标量 TP_max = m/Δt</strong>；<strong>超流水线 TP_max = n/Δt</strong>；<strong>超标量超流水线 TP_max = m·n/Δt</strong>。</li>
+<li>流水线三类冲突：<strong>结构冲突</strong>（争资源）、<strong>数据冲突</strong>（数据相关，用转发解决）、<strong>控制冲突</strong>（转移指令，用分支预测解决，代价最大）。</li>
+</ol>
+<hr />
+<h2>七、快速自测（遮住答案，5 分钟）</h2>
+<ol>
+<li>CPU 中存放<strong>下一条</strong>要执行指令地址的寄存器是？ → <strong>PC</strong></li>
+<li>指令的操作码送到哪里去译码？ → <strong>指令译码器（IR 的操作码字段）</strong></li>
+<li>8 位形式地址、直接寻址，可访问多少单元？ → <strong>256</strong></li>
+<li>存储字长 16 位，一次间接寻址可访问多少单元？ → <strong>65536（2¹⁶）</strong></li>
+<li>相对寻址 (PC) = 2000H、A = 80H（补码），EA = ？ → <strong>1F80H</strong></li>
+<li>5 段流水线每段 2 ns、10 条指令，总时间 = ？ → <strong>28 ns</strong></li>
+<li>上题的加速比 = ？效率 = ？ → <strong>≈ 3.57；71.4%</strong></li>
+<li>不等长段的流水线总时间公式 = ？ → <strong>T = Σt + (n−1)·Δt</strong></li>
+<li>加速比的上限是什么？ → <strong>段数 k</strong></li>
+<li>只有 Load/Store 访存、硬布线控制、定长指令——这是？ → <strong>RISC</strong></li>
+</ol>
+<blockquote>
+<p>全部答对 → 直接去做 <code>day10-exercises.md</code>；有卡顿 → 回到对应章节把例题重算一遍。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/architecture/day10-cpu.md">docs/knowledge-points/architecture/day10-cpu.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

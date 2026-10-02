@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>考前必须再看的 5 个点（Day 30 全真模拟 · Step 4 复盘产出） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 mock-exam 📁 pre-exam-5-points.md</div>
+<h1>考前必须再看的 5 个点（Day 30 全真模拟 · Step 4 复盘产出）</h1>
+<blockquote>
+<p><strong>用途</strong>：Day 30（10/20）晚上 Step 4「全面复盘」后，由<strong>人类本人</strong>填写的个性化清单。
+<strong>填写依据</strong>：① 本次模拟（<code>subject2-questions.md</code> 4 道大题）的真实失分点；
+② 历年选择题高频错题——<code>docs/practice/top10-errors.md</code>（<strong>Phase 2 高频错题 TOP 10</strong>，
+每个 TOP 含"知识点 → 为什么易错 → 正确套路 → 真题例题 → 举一反三变式"），
+辅以 <code>docs/practice/review-round2.md</code> / <code>review-round3.md</code> 的错题清单与各卷
+<code>-morning-key.md</code> 末尾的"常见丢分重灾区"。</p>
+<p>⚠️ <strong>填写规则</strong>：
+- 每点写清「知识点 / 为什么易错 / 考前怎么看（指向具体文件的具体章节/题号）」三栏；
+- <strong>失分点优先</strong>：模拟中真正丢分的地方排前面，不要只抄默认版；
+- 若模拟后没有更个性化的发现，<strong>直接使用下方"默认版 5 点"</strong>（已按已知高频失分排好序）；
+- 考前最后一天（Day 33/34）只过这 5 个点 + 错题本，不要刷新题。</p>
+<p>📝 <strong>打卡区</strong>（Step 4 完成后由人类回填）：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模拟总分（/60）</td>
+<td>______ （合格线 36，见 <code>subject2-questions.md</code> 得分汇总表）</td>
+</tr>
+<tr>
+<td>逐题得分</td>
+<td>试题一 <strong><em>_/15　试题二 </em></strong><em>/15　试题三 <strong><em>_/15　试题四 </em></strong></em>/15</td>
+</tr>
+<tr>
+<td>最丢分的 1 个点</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>______</td>
+</tr>
+<tr>
+<td>本清单 5 点是否替换为个性化版本</td>
+<td>☐ 是（替换了第 ____ 点）　☐ 否（用默认版）</td>
+</tr>
+<tr>
+<td>复盘完成时间</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2>默认版 5 点（无个性化发现时直接用）</h2>
+<blockquote>
+<p>以下 5 点基于本仓库已记录的高频失分（各卷 <code>-morning-key.md</code> 的丢分重灾区 +
+<code>review-round2/3.md</code> 错题清单 + Task 27–29 大题专项的易错点），按"丢分概率 × 分值"排序。</p>
+</blockquote>
+<h3>第 1 点：关键路径与总时差（松弛时间）计算</h3>
+<ul>
+<li><strong>知识点</strong>：AOE 网中，关键路径 = 从源点到汇点的<strong>最长路径</strong>（长度 = 最短工期）；
+  活动总时差 = LS − ES = Vl(终点) − Ve(起点) − 活动时长；<strong>关键活动总时差 = 0</strong>；
+  一个 AOE 网可有多条<strong>等长</strong>的关键路径。</li>
+<li><strong>为什么易错</strong>：
+  ① 只找出一条最长路径，<strong>漏掉等长的第二条</strong>（如 2020 下/2019 下均有 2 条）；
+  ② 记反计算方向——<strong>最早时间从左向右取大，最晚时间从右向左取小</strong>；
+  ③ 原图权值没提取全时只能靠猜（本仓库多卷标【存疑：图形复原】）；
+  ④"一旦延期就影响工期"= 关键活动（时差为 0），与"非关键活动可吸收延迟"混淆。</li>
+<li><strong>考前怎么看</strong>：</li>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 1</strong>（判定步骤 5 步 + 2 条举一反三变式），
+     盖住"正确套路"自己复述一遍；</li>
+<li>重算 <code>docs/practice/papers/2019H2-morning-key.md</code> Q17-18——关键路径 <strong>ABFJL</strong> 与
+     <strong>ADGIJL</strong>（总工期 22 天，2 条），活动 BE 总时差 = LS − ES = 6 − 4 = <strong>2 天</strong>；</li>
+<li>再算 <code>docs/practice/papers/2021H1-morning-key.md</code> Q17-18——关键路径 A-D-F-H-J
+     （48 天），各活动总时差 AC=8 / BE=21 / FI=14 / HJ=0；</li>
+<li>错题对照：<code>docs/practice/review-round3.md</code>（卷 5 第 17–18，关键路径与关键活动）、
+     <code>review-round2.md</code>（卷 3 第 18–19，关键路径与松弛时间）；</li>
+<li>默写一遍口诀：<strong>"最早取大、最晚取小；总时差 = LS − ES；时差为 0 是关键活动。"</strong></li>
+</ul>
+<h3>第 2 点：页式 / 段页式地址转换</h3>
+<ul>
+<li><strong>知识点</strong>：页面大小 2^k → 逻辑地址<strong>低 k 位为页内偏移、高位为页号</strong>；查页表由页号得
+  物理块号；<strong>物理地址 = 块号拼接偏移</strong>。段页式多一层：逻辑地址 = 段号 + 页号 + 页内偏移，
+  先查段表得页表始址，再查页表得块号。</li>
+<li><strong>为什么易错</strong>：
+  ① 忘了偏移位数（4K = 2¹²，16K = 2¹⁴）；
+  ② 把<strong>页号直接当物理块号</strong>拼接（页号是查表用的键，块号才是结果）；
+  ③ 段页式题漏掉段表那一层，位数换算算错；
+  ④ 十六进制与二进制换算时位数对不齐。</li>
+<li><strong>考前怎么看</strong>：</li>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 2</strong>（页式 + 位示图公式 + 变式），
+     盖住"正确套路"自己复述一遍；</li>
+<li>重算 <code>docs/practice/papers/2020H2-morning-key.md</code> Q24——页面 4K，逻辑地址 3C20H
+     → 页内偏移 C20H、页号 3 → 查表得块号 6 → 物理地址 <strong>6C20H</strong>；</li>
+<li>段页式结构看 <code>docs/practice/papers/2022H2-morning-key.md</code> Q27（段页式地址结构）
+     与 <code>2022H1-morning-key.md</code> Q36（段页式位数换算）；</li>
+<li>固定套路写一遍：<strong>"除以页大小得页号、取余得偏移；物理地址 = 块号 × 页大小 + 偏移"</strong>。</li>
+</ul>
+<h3>第 3 点：E-R 联系类型判定与关系模式转换（下午试题二）</h3>
+<ul>
+<li><strong>知识点</strong>：联系类型判定口诀——<strong>两端都唯一 → 1:1；一端唯一 → 1:n；都不唯一 → m:n</strong>。
+  转换规则：1:1 → 任一端加对方主键作外键；1:n → <strong>n 端</strong>关系加 <strong>1 端的主键</strong>作外键；
+  m:n → 新建关系，主键 = 两端主键的组合。主键 = 唯一确定元组的最小属性组；
+  外键 = 引用其它关系主键的属性。</li>
+<li><strong>为什么易错</strong>：
+  ① 量词句读不全，1:1 与 1:n 混淆——典型陷阱是把"每家只有一名店长、每名只负责一家"
+     （<strong>1:1</strong>）看成 1:n，或把"至少一位"（上界不限 = <strong>n</strong>）看成 1:1；
+  ② 1:n 转换时外键加错端、或写成 1 端的<strong>非主键</strong>属性（如把"专卖店名"当外键）；
+  ③ 新增实体的关系模式<strong>漏掉外键属性</strong>（如紧急联系人漏"职员号"）；
+  ④ 关系模式填空只补一个属性——要把需求属性清单与关系模式<strong>逐项对照</strong>找全空缺。</li>
+<li><strong>考前怎么看</strong>：</li>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 5</strong>（候选码判定 4 步 + Armstrong 公理），
+     与本点的联系类型判定同属"数据库基础硬通货"，选择题下午题双考；</li>
+<li>精读 <code>docs/practice/subject2/database-notes.md</code> 二·第 2 步（联系类型判定口诀 +
+     量词句读法）+ 第 4 步（E-R → 关系模式转换规则）+「主键 / 外键判定规则」；</li>
+<li>重做本模拟 <code>docs/practice/mock-exam/subject2-questions.md</code> <strong>试题二</strong>
+     （2022下营销公司：1:1 店长 + 两个 1:n + 新增实体，三杀考点），对答案见
+     <code>subject2-key.md</code> 的【存疑：推导答案】与逐空推导；</li>
+<li>错题对照：<code>docs/practice/papers/2019H2-morning-key.md</code> Q52-53、
+     <code>2021H1-morning-key.md</code> Q52-53（候选码与主属性）、<code>2023H1-morning-key.md</code> Q52-54
+     （Armstrong 公理）、关系代数表达式构造（2019H2 Q54-55、2021H2 Q54-55）。</li>
+</ul>
+<h3>第 4 点：动态规划状态转移（下午试题四）</h3>
+<ul>
+<li><strong>知识点</strong>：<strong>最优子结构 + 重叠子问题 → 动态规划</strong>。区间 DP 的三重循环固定套路：
+  <strong>外层枚举区间规模 r → 中层枚举左端点 i（右端点 j = i + r − 1）→ 内层枚举切点 k</strong>；
+  状态转移三件套 = 状态定义 / 边界条件 / 递推式；典型时空复杂度 O(n³) / O(n²)。</li>
+<li><strong>为什么易错</strong>：
+  ① 内外层循环的<strong>枚举对象分不清</strong>（规模 / 端点 / 切点谁在外层）；
+  ② 题干递推式与代码对不上——不会把 <code>m[i][j] = min{...}</code> 逐项映到三重循环；
+  ③ 空间复杂度误写成与时间相同（空间只看声明的二维数组，不看循环次数）；
+  ④ 递归输出函数的空不会填——通常是<strong>参数的对称变换</strong>（如 <code>(i, S[i][j])</code> 对
+     <code>(S[i][j]+1, j)</code>）；⑤ 策略误答成分治或贪心。</li>
+<li><strong>考前怎么看</strong>：</li>
+<li>精读 <code>docs/practice/subject2/patterns-algo-notes.md</code> 二·2.2（DP 题专属：状态转移三件套）<ul>
+<li>2.3（常考算法骨架·动态规划）+ 2.4（得分技巧）；</li>
+</ul>
+</li>
+<li>重做本模拟 <code>subject2-questions.md</code> <strong>试题四</strong>（2021上凸多边形最优三角剖分），
+     把题干递推式与 C 代码三重循环逐项对齐；对答案见 <code>subject2-key.md</code>（含空(1) 的
+     OCR 存疑说明与判读）；</li>
+<li>选择题 DP 连环错：<code>docs/practice/papers/2019H1-morning-key.md</code> Q62-65
+     （矩阵连乘 DP 四空连环）；</li>
+<li>默写一遍：<strong>"外层规模、中层左端、内层切点；右端点 = 左端点 + 规模 − 1。"</strong></li>
+</ul>
+<h3>第 5 点：设计模式角色结构与场景关键词（试题五/六 + 试题三问题 3）</h3>
+<ul>
+<li><strong>知识点</strong>：<strong>场景关键词 → 模式映射</strong>（"状态变化自动通知依赖者"= 观察者；
+  "统一接口访问多个子系统"= 外观；"撤销/恢复状态"= 备忘录；"多种可替换算法/格式"
+  = 策略；"树形/部分-整体"= 组合；"多对象交互由第三方协调"= 中介者）。
+  每个模式要记<strong>意图 + 角色结构 + 代码特征</strong>，填空题的空几乎都在角色类的声明上。</li>
+<li><strong>为什么易错</strong>：
+  ① 只背模式名不背<strong>角色结构</strong>，填空时不知该填哪个类/方法签名；
+  ② 相近模式混淆——策略 vs 状态、外观 vs 中介者、组合 vs 装饰、
+     观察者 vs 发布-订阅；
+  ③ Java/C++ 语言细节错——<code>abstract</code> vs <code>virtual</code>、<code>new</code> 返回对象 vs 指针、
+     <code>List</code> 声明 vs <code>ArrayList</code> 实例化；
+  ④ 下午试题三的"问题 3 加什么模式"只写模式名不解释角色对应（要写"本需求中 X 是主题、
+     Y 是观察者"）。</li>
+<li><strong>考前怎么看</strong>：</li>
+<li>先过 <code>docs/practice/top10-errors.md</code> <strong>TOP 9</strong>（意图 → 模式速记 + 桥接/适配/装饰
+     辨析 + 2 条变式），盖住"正确套路"自己复述一遍；</li>
+<li>过一遍 <code>docs/practice/subject2/patterns-algo-notes.md</code> 一·1.1（场景关键词 → 模式
+     映射秒选表）+ 1.2（六个高频模式：意图 + 角色结构 + 代码特征）+ 1.3（填空通用三招）；</li>
+<li>本模拟 <code>subject2-key.md</code> <strong>试题三问题 3</strong>（观察者模式 + 角色对应解释）；</li>
+<li>选择题模式连错：<code>docs/practice/papers/2021H2-morning-key.md</code> Q44-46（中介者三连）、
+     <code>2020H2-morning-key.md</code> Q44-47（设计模式四连）、<code>2023H1-morning-key.md</code> 试题五
+     （策略模式完整代码题，本卷未选作大题，可当选择题读）；</li>
+<li>考前 30 分钟只看 top10-errors.md 的速查表第 13 行（设计模式）+ 1.1 秒选表<ul>
+<li>1.2 的角色结构图。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>📝 个性化替换区（人类本人填写——默认版不用则删）</h2>
+<blockquote>
+<p>若模拟失分暴露了更紧急的盲区（如"前趋图 PV 填空连环错""浮点数范围""白盒覆盖数"
+等），按失分严重程度替换上面第 3–5 点（第 1、2 点为计算硬通货，建议保留）。</p>
+</blockquote>
+<h3>第 ___ 点（自填）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</h3>
+<ul>
+<li><strong>知识点</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>为什么易错</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li><strong>考前怎么看</strong>（指向具体文件具体章节/题号）：<strong><em>_</em></strong><strong><em>_</em></strong>______</li>
+</ul>
+<hr />
+<h2>🎯 考前最后流程建议（Day 31 查漏 / Day 32 冲刺 / Day 33 考前一天 / Day 34 考试日）</h2>
+<ol>
+<li><strong>Day 30 晚（今天）</strong>：填完本清单 + 打卡区；把 <code>subject2-key.md</code> 中每题 &lt;8 分的部分
+   重做一遍（大题只重做错的小问，不重抄题）。</li>
+<li><strong>Day 31（10/21，查漏补缺弹性日）</strong>：按 <code>docs/practice/day31-targeted-review.md</code> 的
+   决策树定重心；上午按本清单 5 点定向复习，下午错题最后一轮筛查，晚上 20 道选择题
+   保持手感。</li>
+<li><strong>Day 32（10/22，冲刺复习①）</strong>：按 <code>docs/practice/day32-sprint.md</code> 回顾六科框架图 +
+   背诵速记卡 + 默写大题模板五张表。</li>
+<li><strong>Day 33（10/23，考前一天，轻度）</strong>：只过本清单 5 个点 + <code>patterns-algo-notes.md</code>
+   一·1.1 秒选表；<strong>不做新题</strong>。计算型考点（关键路径 / 页式地址 / 候选码）在草稿纸上
+   <strong>重算</strong>一遍，不能只看公式。下午按 <code>docs/practice/day33-pre-exam.md</code> 清点证件
+   （准考证、身份证）、文具、确认考点路线；晚上 23:00 前休息，<strong>不熬夜背书</strong>。</li>
+<li><strong>Day 34（10/24，考试日）</strong>：按时参加考试——上午 9:00 选择先易后难、最后 15 分钟
+   涂卡检查；下午 14:00 大题每题 ≤25 分钟、绝不留空、五/六选一不临场换。</li>
+<li><strong>进考场前 30 秒</strong>：<code>docs/practice/top10-errors.md</code> 末尾的「30 秒速查表」（20 行
+   公式口诀）从第 1 行念到第 20 行，<strong>卡壳的那一行</strong>就是考场上有概率丢分的地方——
+   进考场前在脑子里把那一行再默一遍。</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/mock-exam/pre-exam-5-points.md">docs/practice/mock-exam/pre-exam-5-points.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

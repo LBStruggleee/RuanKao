@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 27 大题专项①：数据流图（DFD）+ UML —— 试题练习 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2 📁 dfd-uml-exercises.md</div>
+<h1>Day 27 大题专项①：数据流图（DFD）+ UML —— 试题练习</h1>
+<blockquote>
+<p><strong>适用</strong>：软考中级·软件设计师 科目二（下午卷）试题一（DFD）与试题三（UML）专项
+<strong>日期</strong>：Day 27（10/17）｜<strong>上午 3h 做题</strong>｜共 4 道大题（DFD×2 + UML×2），每题 15 分
+<strong>配套</strong>：答案与丢分点解析见 <code>dfd-uml-key.md</code>；答题模板见 <code>dfd-uml-notes.md</code>
+<strong>试题来源</strong>：全部为 2020–2023 年下半年/上半年真实下午试卷试题，逐字转录</p>
+</blockquote>
+<hr />
+<h2>⚠️ 使用说明（务必先读）</h2>
+<ol>
+<li><strong>先做题，后对答案</strong>。本文不含任何答案；做完前不要打开 <code>dfd-uml-key.md</code>。</li>
+<li><strong>图形题说明</strong>：原卷图形为 PDF 图片，本地文本源未收录图形内容。本文对每道题给出
+   <strong>结构化复原</strong>（加工/数据流/外部实体/数据存储清单，或类图的类框/关系骨架），
+   一律标注 <strong>【存疑：图形复原】</strong>。复原依据是【说明】逐句提取 + 与官方答案数据流名称交叉核对，
+   <strong>加工编号 P1～P6、"已画出/缺失"的连线划分均为推断</strong>，与原卷图形可能在细节上存在差异。
+   若手边有原卷 PDF，请对照原图做题，并在对答案时重点核对。</li>
+<li><strong>作答要求</strong>：问题 1/2 类题目要求"使用说明中的词语/语句"，答案必须从【说明】原句中提取，
+   不要自创词汇；补数据流题要写出"数据流名称 + 起点 + 终点"三要素。</li>
+<li><strong>计时</strong>：试题一（DFD）建议 40 分钟/题，试题三（UML）建议 35 分钟/题；4 题合计约 2.5–3 小时。
+   做完逐题填写计时记录区，再统一对答案。</li>
+</ol>
+<h3>本次选题（替换说明）</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>试题来源</th>
+<th>类型</th>
+<th>考点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>试题 A</td>
+<td>2020 年下半年 下午试题一</td>
+<td>DFD</td>
+<td>智能检测系统：实体/存储/补数据流/加工逻辑描述</td>
+</tr>
+<tr>
+<td>试题 B</td>
+<td>2021 年下半年 下午试题一</td>
+<td>DFD</td>
+<td>智慧农业平台：实体/存储/补数据流/加工分解与三错误</td>
+</tr>
+<tr>
+<td>试题 C</td>
+<td>2020 年下半年 下午试题三</td>
+<td>UML</td>
+<td>房产信息管理系统：用例图参与者/用例/include/extend + 类图类名 + 关联类属性</td>
+</tr>
+<tr>
+<td>试题 D</td>
+<td>2023 年上半年 下午试题三</td>
+<td>UML</td>
+<td>数字图书馆：类图类名/关键属性 + 设计模式结合</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>【存疑：选题调整】计划中拟选"2021 下半年试题三（吃金币游戏）"，但本地答案文本源中该题
+的"问题与答案"页（试卷第 9 页）未被提取（整页空白），无法逐字转录题目与答案，故改选
+内容完整、考点对口的 <strong>2020 下半年试题三（房产信息管理系统）</strong> 与 <strong>2023 上半年试题三（数字图书馆）</strong>。</p>
+</blockquote>
+<hr />
+<h1>试题 A：2020 年下半年 下午试题一（智能检测系统）</h1>
+<blockquote>
+<p><strong>来源</strong>：2020 年下半年 软件设计师 下午试卷 试题一（共 15 分）
+<strong>题型</strong>：数据流图（DFD）｜<strong>建议用时</strong>：40 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 40 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>某工厂制造企业开发了智能检测系统以有效提升检测效率，节约人力资源，该系统的主要功能包括：</p>
+<p>（1）基础信息管理。管理员对检测标准和监控规则等基础信息设置。</p>
+<p>（2）检测模型部署。管理员对常用机器学习方法建立检测模型分布。</p>
+<blockquote>
+<p>【存疑：原文"建立检测模型分布"，按题意应为"建立检测模型并部署"】</p>
+</blockquote>
+<p>（3）图像采集。实时将检测多样的产品待检测建分存储，包括产品结构，生产时间，图像信号和产品图像。</p>
+<blockquote>
+<p>【存疑：原文"实时将检测多样的产品待检测建分存储"语句不通，按题意应为"实时将检测的多样产品的待检测信息进行存储"】</p>
+</blockquote>
+<p>（4）缺陷检测。根据检测模型和检测质量标准对图像采集所收到的产品检测信息中所有图像进行检测或所有图像检测合格。若一个产品出现一张图像检测不合格，就表示该产品不合格，对不合格产品，其检测结果包括，产品型号和不合格类型。</p>
+<p>（5）质量检测。根据监控规则对产品质量进行监控，将检测情况展示给检测业务员，若不满足条件，向检测业务员发送质量报警，检测是质量发起远程控制部分，向检测设备发送控制指令进行处理。</p>
+<blockquote>
+<p>【存疑：原文"检测是质量发起远程控制部分"语句不通，按题意应为"检测业务员可发起远程控制"】</p>
+</blockquote>
+<p>（6）模型监控。在系统中部署的模型、产品的检测信息结合基础信 息进行监测分析，将模型运行情况发给监控人员。</p>
+<blockquote>
+<p>【存疑：原文"基础信 息"应为"基础信息"，系源文本断字】</p>
+</blockquote>
+<p>现采用结构化方法对智能检测系统，进行分析与设计，获得如图1-1 的上下文数据流图和图1-2 的数据流图。</p>
+<hr />
+<h3>图形结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 1-1/图 1-2 为 PDF 图片，本地文本源未收录。以下清单依据【说明】逐句提取，
+加工编号、连线为推断，与原卷图形可能在细节上存在差异。<strong>外部实体名称、数据存储名称
+是本试题的填空内容，故下列清单中一律留空（写作 E1～E4、D1～D3），请从【说明】中自行提取。</strong></p>
+</blockquote>
+<h4>图 1-1 上下文数据流图骨架</h4>
+<ul>
+<li><strong>中心加工</strong>：智能检测系统（唯一加工，方框/圆圈表示）</li>
+<li><strong>外部实体</strong>（4 个，名称待问题 1 填写）：<code>E1</code>、<code>E2</code>、<code>E3</code>、<code>E4</code></li>
+<li><strong>系统与外部实体之间的数据流</strong>（据【说明】逐句提取，<strong>未对应到具体 E 编号</strong>——
+  请根据【说明】判断每条数据流连接哪个实体）：</li>
+<li>基础信息设置（含检测标准、监控规则等）</li>
+<li>模型信息（机器学习方法 / 检测模型）</li>
+<li>产品待检测信息（产品结构、生产时间、图像信号、产品图像）</li>
+<li>检测情况 / 质量报警</li>
+<li>远程控制命令</li>
+<li>控制指令</li>
+<li>模型运行情况</li>
+</ul>
+<blockquote>
+<p>💡 <strong>判断实体归属的方法</strong>：以上 7 条流中，"基础信息设置""模型信息"只能流向<strong>管理系统的人员</strong>；
+"产品待检测信息""控制指令"分别进出<strong>检测设备</strong>；"检测情况/质量报警""远程控制命令"对接
+<strong>检测业务员</strong>；"模型运行情况"发给<strong>监控人员</strong>。逐一与【说明】的 6 项功能对照即可锁定 E1～E4。</p>
+</blockquote>
+<h4>图 1-2 数据流图骨架（0 层）</h4>
+<ul>
+<li><strong>加工</strong>（6 个，名称取自【说明】的功能名）：
+  <code>P1 基础信息管理</code>、<code>P2 检测模型部署</code>、<code>P3 图像采集</code>、<code>P4 缺陷检测</code>、<code>P5 质量检测</code>、<code>P6 模型监控</code></li>
+</ul>
+<blockquote>
+<p>【存疑：加工编号 P1～P6 按功能 (1)～(6) 顺序推断，原卷图形编号方式请以原卷为准】</p>
+</blockquote>
+<ul>
+<li><strong>数据存储</strong>（3 个，名称待问题 2 填写）：<code>D1</code>、<code>D2</code>、<code>D3</code></li>
+<li><strong>外部实体</strong>：<code>E1</code>、<code>E2</code>、<code>E3</code>、<code>E4</code>（同图 1-1）</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>关于 E/D 编号</strong>：问题 1/2 要求把名称填到具体编号（E1～E4、D1～D3），
+编号与名称的<strong>对应关系只能由原卷图形给出</strong>。若无原卷，可先确定四个实体、三个存储的
+<strong>名称集合</strong>，编号对应以原卷为准；问题 3 的平衡分析不依赖具体编号，可完整作答。</p>
+</blockquote>
+<p><strong>已画出的数据流</strong>（据【说明】复原，<strong>不含问题 3 待补的数据流</strong>；外部实体/数据存储
+作聚合示意，<strong>不暴露编号与名称的对应关系</strong>）：</p>
+<pre><code class="language-mermaid">flowchart LR
+    EXT([外部实体 E1～E4])
+    DST[(数据存储 D1～D3)]
+    EXT --&gt;|基础信息设置| P1([P1 基础信息管理])
+    EXT --&gt;|模型信息| P2([P2 检测模型部署])
+    EXT --&gt;|产品待检测信息| P3([P3 图像采集])
+    P1 --&gt;|基础信息| DST
+    P2 --&gt;|模型信息| DST
+    P3 --&gt;|检测信息| DST
+    DST --&gt;|模型信息| P4([P4 缺陷检测])
+    P4 --&gt;|检测结果| P5([P5 质量检测])
+    P5 --&gt;|检测情况/质量报警| EXT
+    P5 --&gt;|控制指令| EXT
+    DST --&gt;|模型信息| P6([P6 模型监控])
+    DST --&gt;|检测信息| P6
+    P6 --&gt;|模型运行情况| EXT
+</code></pre>
+<p><strong>逐加工平衡清单</strong>（问题 3 的作答依据——逐行检查"有输入无输出 / 有输出无输入 /
+输入不足以产生输出"，缺的流回【说明】找原词补上）：</p>
+<table>
+<thead>
+<tr>
+<th>加工</th>
+<th>已画输入</th>
+<th>已画输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1 基础信息管理</td>
+<td>基础信息设置（←外部实体）</td>
+<td>基础信息（→数据存储）</td>
+</tr>
+<tr>
+<td>P2 检测模型部署</td>
+<td>模型信息（←外部实体）</td>
+<td>模型信息（→数据存储）</td>
+</tr>
+<tr>
+<td>P3 图像采集</td>
+<td>产品待检测信息（←外部实体）</td>
+<td>检测信息（→数据存储）</td>
+</tr>
+<tr>
+<td>P4 缺陷检测</td>
+<td>模型信息（←数据存储）</td>
+<td>检测结果（→P5）</td>
+</tr>
+<tr>
+<td>P5 质量检测</td>
+<td>检测结果（←P4）</td>
+<td>检测情况/质量报警（→外部实体）、控制指令（→外部实体）</td>
+</tr>
+<tr>
+<td>P6 模型监控</td>
+<td>模型信息（←数据存储）、检测信息（←数据存储）</td>
+<td>模型运行情况（→外部实体）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 对照【说明】逐项核对：功能 (4) 说缺陷检测要处理"图像采集所收到的产品检测信息"，
+清单中 P4 却没有这条输入（只有模型信息）；功能 (5) 说质量检测"根据监控规则……监控"、
+且"检测业务员发起远程控制"，清单中 P5 只有检测结果这一条输入，缺规则与命令两条；
+功能 (6) 说模型监控要"结合基础信息"，清单中 P6 缺这一条。——这些就是问题 3 要补的流。</p>
+<p>⚠️ 上图为<strong>结构化示意</strong>，非原卷图形；完整平衡后的数据流（含问题 3 答案）见 <code>dfd-uml-key.md</code>。</p>
+</blockquote>
+<hr />
+<h3>【问题1】（4 分）</h3>
+<p>使用说明中的语句给出图1-1 中的实体E1〜E4 的名称。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>E1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<hr />
+<h3>【问题2】（3 分）</h3>
+<p>使用说明中的语句给出图1-2 中的数据存储D1〜D3 的名称。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>D1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>D2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>D3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<hr />
+<h3>【问题3】（5 分）</h3>
+<p>根据说明和图中术语，补齐图1-2 中缺失的数据及起点和终点。</p>
+<blockquote>
+<p>【存疑：原文"缺失的数据"，按题意应为"缺失的数据流"】</p>
+</blockquote>
+<p><strong>答题区</strong>（补齐数据流名称、起点、终点）：</p>
+<table>
+<thead>
+<tr>
+<th>数据流名称</th>
+<th>起点</th>
+<th>终点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>② <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>③ <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>④ <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 提示：逐个加工检查"有输入无输出 / 有输出无输入 / 输入不足以产生输出"三类不平衡，
+再回【说明】找对应的数据流名称（名称必须用【说明】原词）。</p>
+</blockquote>
+<hr />
+<h3>【问题4】（3 分）</h3>
+<p>根据说明，采用结构化语言对缺陷检测的加工逻辑进行描述。</p>
+<p><strong>答题区</strong>：</p>
+<pre><code>____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+</code></pre>
+<blockquote>
+<p>💡 提示：结构化语言 = 顺序结构 + IF/THEN/ELSE/ENDIF 选择结构 + DO/WHILE 循环结构。
+从【说明】功能 (4) 逐句翻译：接收什么输入 → 做什么检测 → 什么情况判不合格 → 不合格结果包含什么。</p>
+</blockquote>
+<h2>---</h2>
+<h1>试题 B：2021 年下半年 下午试题一（智慧农业平台）</h1>
+<blockquote>
+<p><strong>来源</strong>：2021 年下半年 软件设计师 下午试卷 试题一（共 15 分）
+<strong>题型</strong>：数据流图（DFD）｜<strong>建议用时</strong>：40 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 40 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>某现代农业种植基地为进一步提升农作物种植过程的智能化，欲开发智慧农业平台，集
+管理和销售于一体，该平台的主要功能有:</p>
+<p>（1）信息维护。农业专家对农作物、环境等监测数据的监控处理规则进行维护。</p>
+<p>（2）数据采集。获取传感器上传的农作物长势、土壤墒情、气候等连续监测数据，解
+析后将监测信息进行数据处理、可视化和存储等操作。</p>
+<p>（3）数据处理。对实时监测信息根据监控处理规则进行监测分析，将分析结果进行可
+视化并进行存储、远程控制，对历史监测信息进行综合统计和预测，将预测信息进行可视化
+和存储。</p>
+<p>（4）远程控制。根据监控处理规则对分析结果进行判定，依据判定结果自动对控制器
+进行远程控制。平台也可以根据农业人员提供的控制信息对控制器进行远程控制。</p>
+<p>（5）可视化。实时向农业人员展示监测信息：实时给农业专家展示统计分析结果和预
+测信息或根据农业专家请求进行展示。</p>
+<p>现采用结构化方法对智慧农业平台进行分析与设计，获得如图1-1 所示的上下文数据流
+图和图1-2 所示的0 层数据流图。</p>
+<hr />
+<h3>图形结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 1-1/图 1-2 为 PDF 图片，本地文本源未收录。以下清单依据【说明】逐句提取，
+加工编号、连线为推断。<strong>外部实体名称、数据存储名称是本试题填空内容，清单中一律留空。</strong></p>
+</blockquote>
+<h4>图 1-1 上下文数据流图骨架</h4>
+<ul>
+<li><strong>中心加工</strong>：智慧农业平台</li>
+<li><strong>外部实体</strong>（4 个，名称待问题 1 填写）：<code>E1</code>、<code>E2</code>、<code>E3</code>、<code>E4</code></li>
+<li><strong>系统与外部实体之间的数据流</strong>（据【说明】逐句提取，<strong>未对应到具体 E 编号</strong>）：</li>
+<li>监控处理规则（维护/更新）</li>
+<li>连续监测数据（农作物长势、土壤墒情、气候等）</li>
+<li>控制信息</li>
+<li>控制指令</li>
+<li>监测信息（实时展示）</li>
+<li>统计分析结果和预测信息（实时展示）</li>
+<li>请求（按需展示）</li>
+</ul>
+<blockquote>
+<p>💡 判断实体归属：传"监控处理规则"的是<strong>农业专家</strong>；上传"连续监测数据"的是<strong>传感器</strong>；
+发"控制信息"、收"监测信息"展示的是<strong>农业人员</strong>；收"控制指令"的是<strong>控制器</strong>；
+发"请求"、收"统计分析结果和预测信息"的是<strong>农业专家</strong>。</p>
+</blockquote>
+<h4>图 1-2 0 层数据流图骨架</h4>
+<ul>
+<li><strong>加工</strong>（5 个，名称取自【说明】的功能名）：
+  <code>P1 信息维护</code>、<code>P2 数据采集</code>、<code>P3 数据处理</code>、<code>P4 远程控制</code>、<code>P5 可视化</code></li>
+</ul>
+<blockquote>
+<p>【存疑：加工编号 P1～P5 按功能 (1)～(5) 顺序推断，原卷图形编号方式请以原卷为准】</p>
+</blockquote>
+<ul>
+<li><strong>数据存储</strong>（4 个，名称待问题 2 填写）：<code>D1</code>、<code>D2</code>、<code>D3</code>、<code>D4</code></li>
+<li><strong>外部实体</strong>：<code>E1</code>、<code>E2</code>、<code>E3</code>、<code>E4</code>（同图 1-1）</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>关于 E/D 编号</strong>：问题 1/2 的编号与名称对应关系只能由原卷图形给出。若无原卷，
+可先确定四个实体、四个存储的<strong>名称集合</strong>，编号对应以原卷为准；问题 3 的平衡分析
+不依赖具体编号，可完整作答。</p>
+</blockquote>
+<p><strong>已画出的数据流</strong>（据【说明】复原，<strong>不含问题 3 待补的数据流</strong>；外部实体/数据存储
+作聚合示意，<strong>不暴露编号与名称的对应关系</strong>）：</p>
+<pre><code class="language-mermaid">flowchart LR
+    EXT([外部实体 E1～E4])
+    DST[(数据存储 D1～D4)]
+    EXT --&gt;|连续监测数据| P2([P2 数据采集])
+    P2 --&gt;|实时监测信息| P3([P3 数据处理])
+    P2 --&gt;|监测信息| P5([P5 可视化])
+    P2 --&gt;|监测信息| DST
+    EXT --&gt;|监控处理规则| P1([P1 信息维护])
+    P1 --&gt;|监控处理规则| DST
+    DST --&gt;|监控处理规则| P3
+    P3 --&gt;|分析结果| DST
+    P3 --&gt;|预测信息| DST
+    P3 --&gt;|分析结果| P4([P4 远程控制])
+    EXT --&gt;|控制信息| P4
+    P4 --&gt;|控制指令| EXT
+    P5 --&gt;|监测信息| EXT
+    P5 --&gt;|统计分析结果和预测信息| EXT
+</code></pre>
+<p><strong>逐加工平衡清单</strong>（问题 3 的作答依据）：</p>
+<table>
+<thead>
+<tr>
+<th>加工</th>
+<th>已画输入</th>
+<th>已画输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1 信息维护</td>
+<td>监控处理规则（←外部实体）</td>
+<td>监控处理规则（→数据存储）</td>
+</tr>
+<tr>
+<td>P2 数据采集</td>
+<td>连续监测数据（←外部实体）</td>
+<td>实时监测信息（→P3）、监测信息（→P5）、监测信息（→数据存储）</td>
+</tr>
+<tr>
+<td>P3 数据处理</td>
+<td>实时监测信息（←P2）、监控处理规则（←数据存储）</td>
+<td>分析结果（→数据存储）、预测信息（→数据存储）、分析结果（→P4）</td>
+</tr>
+<tr>
+<td>P4 远程控制</td>
+<td>分析结果（←P3）、控制信息（←外部实体）</td>
+<td>控制指令（→外部实体）</td>
+</tr>
+<tr>
+<td>P5 可视化</td>
+<td>监测信息（←P2）</td>
+<td>监测信息（→外部实体）、统计分析结果和预测信息（→外部实体）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 对照【说明】逐项核对：功能 (3) 说数据处理要"将分析结果进行可视化""将预测信息进行可视化"
+——可视化是 P5 的职责，故 P3 还缺两条到 P5 的输出；功能 (3) 还说"对<strong>历史</strong>监测信息进行
+综合统计和预测"，P3 的输入里只有"实时"监测信息，缺一条来自<strong>数据存储</strong>的历史监测信息；
+功能 (4) 说远程控制"<strong>根据监控处理规则</strong>对分析结果进行判定"，P4 缺这条来自数据存储的输入；
+功能 (5) 说"或根据农业专家<strong>请求</strong>进行展示"，P5 缺一条来自农业专家的请求输入。</p>
+<p>⚠️ 注意区分：<strong>实时数据走"加工→加工"，历史/批量数据走"存储→加工"</strong>；
+同名数据流（如"监控处理规则"）被多个加工读取时，每条都要单独画。</p>
+<p>⚠️ 上图为<strong>结构化示意</strong>，非原卷图形；完整平衡后的数据流（含问题 3 答案）见 <code>dfd-uml-key.md</code>。</p>
+</blockquote>
+<hr />
+<h3>【问题1】（4 分）</h3>
+<p>使用说明中的词语，给出图1-1 中的实体E1〜E4 的名称。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>E1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>E4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<hr />
+<h3>【问题2】（4 分）</h3>
+<p>使用说明中的词语，给出图1-2 中的数据存储D1〜D4 的名称。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>D1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>D2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>D3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>D4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<blockquote>
+<p>💡 提示：【说明】中"存储"一词出现在哪几个功能里，就对应几个数据存储；
+存储名称 = 被存储对象名 + "表/信息表/文件"后缀。</p>
+</blockquote>
+<hr />
+<h3>【问题3】（4 分）</h3>
+<p>根据说明和图中术语，补充图1-2 中缺失的数据流及其起点和终点。</p>
+<p><strong>答题区</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>数据流名称</th>
+<th>起点</th>
+<th>终点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>② <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>③ <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>④ <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+<tr>
+<td>⑤ <strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 提示：注意区分"实时数据流（加工→加工）"与"读取历史数据（存储→加工）"——
+【说明】中带"历史"字样的输入只能来自数据存储，不能从采集加工直接来。</p>
+</blockquote>
+<hr />
+<h3>【问题4】（3 分）</h3>
+<p>根据说明，"数据处理"可以分解为哪些子加工？进一步进行分解时，需要注意哪三种常见的错误？</p>
+<p><strong>答题区</strong>：</p>
+<p><strong>（1）子加工（据【说明】功能 (3) 的动词短语切分）</strong>：</p>
+<ol>
+<li>
+<hr />
+</li>
+<li>
+<hr />
+</li>
+<li>
+<hr />
+</li>
+<li>
+<hr />
+</li>
+</ol>
+<p><strong>（2）分解时需要注意的三种常见错误</strong>：</p>
+<ol>
+<li>
+<hr />
+</li>
+<li>
+<hr />
+</li>
+<li>
+<hr />
+</li>
+</ol>
+<h2>---</h2>
+<h1>试题 C：2020 年下半年 下午试题三（房产信息管理系统）</h1>
+<blockquote>
+<p><strong>来源</strong>：2020 年下半年 软件设计师 下午试卷 试题三（共 15 分）
+<strong>题型</strong>：UML（用例图 + 类图）｜<strong>建议用时</strong>：35 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 35 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>某房产公司欲开发一个房产信息管理系统，其主要功能描述如下：</p>
+<p>（1）公司销售的房产（Property）分为住宅（House）和公寓（Cando）两类。针对每
+套房产，系统存储房产证明、地址、建造年份、建筑面积，销售报价、房产照片以及销售状
+态（在售，售出，停售）等信息。对于住宅，还需存储楼层、公摊面积、是否有地下室等信
+息；对于公寓，还需存储是否有阳台等信息。</p>
+<p>（2）公司雇佣了多名房产经纪（Agent），负责销售房产，系统中需要存储房产经纪的
+基本信息，包括：姓名、家庭住址、联系电话、受雇的起止时间等。一套房产同一时段仅由
+一名房产经纪负责销售，系统中会记录房产经纪负责每套房产的起始时间和终止时间。</p>
+<p>（3）系统用户（User）包括房产经纪和系统管理员（Manager），用户需经过系统身份
+验证之后才能登录系统。房产经纪登录系统之后，可以录入负责销售的房产信息，也可以查
+询所负责的房产信息。房产经纪可以修改其负责的房产信息，但需要经过系统管理员的审批
+授权。</p>
+<p>（4）系统管理员可以从系统中导出所有房产的信息列表，系统管理员定期将售出和停
+售的房产信息进行归档，若公司确定不再销售某套房产，系统管理员将该房产信息从系统中
+删除。</p>
+<p>现采用面向对象方法开发该系统，得到如图3-1 所示的用例图和图3-2 所示的初始类图。</p>
+<hr />
+<h3>图形结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 3-1（用例图）/图 3-2（初始类图）为 PDF 图片，本地文本源未收录。
+以下骨架依据【说明】复原。<strong>参与者名称、用例名称、类名是本试题填空内容，一律留空。</strong></p>
+</blockquote>
+<h4>图 3-1 用例图骨架</h4>
+<ul>
+<li>
+<p><strong>参与者</strong>（2 个，名称待问题 1 填写）：<code>A1</code>、<code>A2</code></p>
+<blockquote>
+<p>【说明】中只出现两类"人"：房产经纪、系统管理员（系统用户 User 是它们的统称，不单独画参与者）</p>
+</blockquote>
+</li>
+<li>
+<p><strong>用例</strong>（图中出现的用例框，其中 <code>U1</code>、<code>U2</code>、<code>U3</code> 名称待问题 1 填写）：</p>
+</li>
+<li>身份验证（登录）</li>
+<li>录入房产信息</li>
+<li>查询所负责的房产信息</li>
+<li>导出房产信息列表</li>
+<li>归档（售出和停售的房产信息）</li>
+<li>
+<p><code>U1</code>、<code>U2</code>、<code>U3</code></p>
+</li>
+<li>
+<p><strong>用例之间的关系</strong>：图中用例之间存在两条带箭头的虚线关系，分别标注 <code>（a）</code>、<code>（b）</code>，
+  关系类型待问题 1 第 (2) 问填写（<code>&lt;&lt;include&gt;&gt;</code> 或 <code>&lt;&lt;extend&gt;&gt;</code>）。</p>
+</li>
+</ul>
+<blockquote>
+<p>💡 <strong>判断 U1/U2/U3 归属的方法</strong>：把【说明】功能 (3)(4) 中房产经纪、系统管理员各自的动作
+与图中已有用例比对——房产经纪的动作有"录入、查询、修改"（其中"修改"未在图中出现），
+系统管理员的动作有"导出、归档、删除"（其中"删除"未在图中出现）；"审批授权"是
+"修改"的必需前置步骤。据此可锁定 U1、U2、U3。</p>
+<p>💡 <strong>判断 (a)/(b) 关系类型的方法</strong>：若"用例 X 执行时必然执行用例 Y"（Y 是 X 的必需步骤/
+公共行为被抽取），则为 <code>&lt;&lt;include&gt;&gt;</code>；若"用例 Y 只在特定条件/可选分支下才执行，扩展 X 的行为"，
+则为 <code>&lt;&lt;extend&gt;&gt;</code>。</p>
+<p>【存疑：(a)/(b) 各自连接图中的哪两个用例，文本源未收录图形，无法确认；关系类型判断见上法】</p>
+</blockquote>
+<h4>图 3-2 初始类图骨架</h4>
+<pre><code class="language-mermaid">classDiagram
+    C2 --|&gt; C1 : 泛化
+    C3 --|&gt; C1 : 泛化
+    C5 --|&gt; C4 : 泛化
+    C6 --|&gt; C4 : 泛化
+    C1 &quot;1&quot; .. &quot;0..1&quot; C6 : 关联-关联类AgentList
+    class AgentList {
+        属性待问题3填写
+    }
+</code></pre>
+<ul>
+<li><strong>待填类框</strong>（6 个，名称待问题 2 填写）：<code>C1</code>、<code>C2</code>、<code>C3</code>、<code>C4</code>、<code>C5</code>、<code>C6</code></li>
+<li><strong>结构线索</strong>（图中已画出，直接可用）：</li>
+<li><code>C2</code>、<code>C3</code> 是 <code>C1</code> 的子类（泛化关系，空心三角箭头）——【说明】"X 分为 A 和 B 两类"句式</li>
+<li><code>C5</code>、<code>C6</code> 是 <code>C4</code> 的子类（泛化关系）——【说明】"系统用户包括房产经纪和系统管理员"句式</li>
+<li><code>C1</code> 与 <code>C6</code> 之间有关联关系，中间挂<strong>关联类 <code>AgentList</code></strong>（进一步阐述两者关系）</li>
+<li><strong>属性</strong>：图中各类框的属性栏<strong>未预填</strong>，各类属性均需你自己从【说明】功能 (1)(2) 中
+  归类提取（房产类/住宅类/公寓类/用户类/经纪类各有自己的属性集合），据此判断类名；
+  <code>AgentList</code>（关联类）的属性<strong>待问题 3 填写</strong>——看【说明】功能 (2) 中
+  "记录房产经纪负责每套房产的……"，注意它不是任何一方的自身属性。</li>
+</ul>
+<hr />
+<h3>【问题1】（7 分）</h3>
+<p>（1）根据说明中描述，分别给出图3-1 中A1 到A2 所对应的参与者名称以及U1 到U3
+所对应的用例名称。</p>
+<p>（2）根据说明中描述，分别给图3-1 中（a）和（b）用例之间的关系。</p>
+<blockquote>
+<p>【存疑：原文"分别给图3-1 中"，按题意应为"分别给出图3-1 中"】</p>
+</blockquote>
+<p><strong>答题区</strong>：</p>
+<p>（1）</p>
+<ul>
+<li>A1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>A2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>U1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>U2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>U3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<p>（2）</p>
+<ul>
+<li>（a）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>（b）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<hr />
+<h3>【问题2】（6 分）</h3>
+<p>根据说明中描述，分别给图3-2 中C1〜C6 所对应的类名称。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>C1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C5：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C6：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<blockquote>
+<p>💡 提示：【说明】中每个核心名词后的英文括号注（如"房产（Property）"）几乎就是类名；
+先定两个泛化层级的父类，再定子类。</p>
+</blockquote>
+<hr />
+<h3>【问题3】（2 分）</h3>
+<p>图3-2 中AgentList 是一个英文名称，用来进一步阐述C1 和C6 之间的关系，根据说
+明中的描述，给出AgentList 的主要属性。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>AgentList 的主要属性：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：关联类的属性 = 【说明】中描述"两者关系"的属性，不是类自身的属性
+（姓名、地址等属于 <code>C6</code>，不属于 <code>AgentList</code>）。看【说明】功能 (2) 最后一句。</p>
+</blockquote>
+<h2>---</h2>
+<h1>试题 D：2023 年上半年 下午试题三（数字图书馆）</h1>
+<blockquote>
+<p><strong>来源</strong>：2023 年上半年 软件设计师 下午试卷 试题三（共 15 分）
+<strong>题型</strong>：UML（用例图 + 类图）｜<strong>建议用时</strong>：35 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 35 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>某高校图书馆购买了若干学术资源的镜像数据库（MinorDBMino）资源，现要求开发一套数
+字图书馆（Digitallibrary）系统，面向校内用户（User）提供学术资源（Resoure）浏览，检索和下
+载服务。系统的主要功能描述如下：</p>
+<blockquote>
+<p>【存疑：原文"镜像数据库（MinorDBMino）"疑为 OCR 误识，应为"镜像数据库（MirrorDB）"】
+【存疑：原文"Digitallibrary"应为"DigitalLibrary"】
+【存疑：原文"Resoure"应为"Resource"——答案册沿用 Resoure 拼写，作答时两种拼写均给分】</p>
+</blockquote>
+<p>（1）系统中存储了每个镜像数据库的基本信息，包括：数据库名称，访问地址，数据库属性
+以及数据库简介等信息，用户进入某个镜像数据库后，可以浏览检索以及下载其中的学术资源。</p>
+<p>（2）学术资源包括会议论文（ConferencePaper）、期刑论文（JounalArticle）以及学位论文
+（Thesis）等；系统中存储了每个学术资源的题名、作者、发表时间、来源（哪个镜像数据库）、
+被引次数、下载次数等信息。对于会议论文，还需记录会议名称，召开时间以及召开地点；同一
+次 会议的论文被收录在会议集（Proceeding）中。对于期刊论文，还需记录期刊名称，出版月份，
+期号以及主办单位；同一期号的论文被收录在一本期刊（Edition）中。对于学位论文，记录了学
+位类别（博士/硕士），毕业学校，专业及指导教师。会议集包含发表在该会议（在某个特定时间
+段，特定地点召开）上的所有文章。期刊的每一期在特定时间发行，其中包含若干篇文章。</p>
+<blockquote>
+<p>【存疑：原文"期刑论文"应为"期刊论文"】
+【存疑：原文"JounalArticle"应为"JournalArticle"——答案册沿用此拼写，作答时两种拼写均给分】</p>
+</blockquote>
+<p>（3）系统用户（User）包括在校学生（Student），教师（Teacher）以及其他在职人员（Staff）。
+用户使用学校的统一身份认证登录系统后，使用系统提供的各项服务。</p>
+<p>（4）系统提供多种资源检索的方式，主要包括：按照资源的题名检索（SearchByTitle），按
+照作者名称检索（SearchByAuthor），按照来源检索（SearchBySource）等。</p>
+<p>（5）用户可以下载资源，系统记录每个资源被下载的次数。</p>
+<p>现采用面向对象分析与设计方法开发该系统，得到如图3-1 所示的用例图以及图3-2 所
+示的类图。</p>
+<hr />
+<h3>图形结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 3-1（用例图）/图 3-2（类图）为 PDF 图片，本地文本源未收录。
+以下骨架依据【说明】复原。<strong>类名是本试题问题 1 填空内容，一律留空。</strong></p>
+</blockquote>
+<h4>图 3-1 用例图骨架</h4>
+<ul>
+<li><strong>参与者</strong>：校内用户（User）——图 3-1 的参与者直接给出，非填空内容</li>
+<li><strong>用例</strong>（据【说明】功能描述）：浏览资源、检索资源（题名检索 SearchByTitle / 作者名称检索
+  SearchByAuthor / 来源检索 SearchBySource）、下载资源、统一身份认证（登录）</li>
+<li>用例之间存在检索方式之间的泛化/包含关系（具体连线以原卷为准）</li>
+</ul>
+<h4>图 3-2 类图骨架</h4>
+<pre><code class="language-mermaid">classDiagram
+    C2 --|&gt; C1 : 泛化
+    C3 --|&gt; C1 : 泛化
+    C4 --|&gt; C1 : 泛化
+    C6 --|&gt; C5 : 泛化
+    C7 --|&gt; C5 : 泛化
+    C8 --|&gt; C5 : 泛化
+    MirrorDB &quot;1&quot; -- &quot;0..&quot; C1 : 来源
+    Proceeding &quot;1&quot; -- &quot;0..&quot; C2 : 收录
+    Edition &quot;1&quot; -- &quot;0..&quot; C3 : 收录
+    C5 &quot;1&quot; -- &quot;0..&quot; C1 : 检索/下载
+</code></pre>
+<ul>
+<li><strong>待填类框</strong>（8 个，名称待问题 1 填写）：<code>C1</code>、<code>C2</code>、<code>C3</code>、<code>C4</code>、<code>C5</code>、<code>C6</code>、<code>C7</code>、<code>C8</code></li>
+<li><strong>结构线索</strong>（图中已画出，直接可用）：</li>
+<li><code>C2</code>、<code>C3</code>、<code>C4</code> 是 <code>C1</code> 的子类（泛化）——【说明】功能 (2)"学术资源包括会议论文、期刊论文以及学位论文"</li>
+<li><code>C6</code>、<code>C7</code>、<code>C8</code> 是 <code>C5</code> 的子类（泛化）——【说明】功能 (3)"系统用户包括在校学生，教师以及其他在职人员"</li>
+<li>图中已给名的类（非填空）：镜像数据库（MirrorDB）、会议集（Proceeding）、期刊（Edition）</li>
+<li><strong><code>C1～C4</code> 的属性</strong>：图中属性栏留空，需从【说明】功能 (2) 提取（见问题 2）。
+  <code>C1</code> 取所有学术资源共有的属性；<code>C2/C3/C4</code> 各取"还需记录"的特有属性。</li>
+</ul>
+<hr />
+<h3>【问题1】（8 分）</h3>
+<p>根据说明中的描述，给出图3-2 中C1~C8 对应的类名。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>C1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C5：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C6：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C7：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C8：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<blockquote>
+<p>💡 提示：【说明】中带英文括号注的名词（如"会议论文（ConferencePaper）"）就是类名；
+"X 包括 A、B、C"句式对应一个泛化层级。同一层级的三个子类（C6/C7/C8）顺序可互换。</p>
+</blockquote>
+<hr />
+<h3>【问题2】（4 分）</h3>
+<p>根据说明中的描述，给出图3-2 的类C1~C4 的关键属性。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>C1：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C2：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C3：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+<li>C4：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</li>
+</ul>
+<blockquote>
+<p>💡 提示：<code>C1</code> 的属性看【说明】"系统中存储了每个学术资源的……"那一整句（所有资源共有的）；
+<code>C2/C3/C4</code> 的属性看各自主句后的"还需记录……"。不要把子类属性填进父类。</p>
+</blockquote>
+<hr />
+<h3>【问题3】（3 分）</h3>
+<p>在该系统的开发过程中遇到了新的要求：用户能够在系统中对其所关注的数字资源注册他引
+通知，若该资源的他引次数发生变化，系候可以及时通知该用户，为了实现这个新的要求，可以
+在图3-2 所示的类图中增加哪种设计模式？用150 字以内文字解释选择该模式的原因。</p>
+<blockquote>
+<p>【存疑：原文"系候"，应为"系统"】</p>
+</blockquote>
+<p><strong>答题区</strong>：</p>
+<p><strong>设计模式</strong>：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</p>
+<p><strong>原因（≤150 字）</strong>：</p>
+<pre><code>____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+____________________________________________________________________
+</code></pre>
+<blockquote>
+<p>💡 提示：题干特征词是"当某对象状态变化时，通知所有关注它的对象"——回想 <code>dfd-uml-notes.md</code>
+中"题干特征词 → 设计模式"映射表，哪一个模式对应"状态变化 + 自动通知所有依赖者"？
+答题时不要只写模式名，还要用该模式的角色如何对应本需求来解释原因。</p>
+</blockquote>
+<h2>---</h2>
+<h2>📊 做完后：自评与对答案</h2>
+<ol>
+<li>填写各题计时记录区，计算 4 题总用时：______ 分钟（目标 ≤ 150 分钟）</li>
+<li>打开 <code>dfd-uml-key.md</code>，逐题对答案，每题计算得分 /15。</li>
+<li>在下表登记，并把丢分点回填到 <code>dfd-uml-notes.md</code> 的高频考点清单：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>试题</th>
+<th>得分</th>
+<th>主要丢分点</th>
+<th>是否回看模板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>2020下·试题一 DFD 智能检测系统</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>2021下·试题一 DFD 智慧农业平台</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>2020下·试题三 UML 房产信息管理</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>2023上·试题三 UML 数字图书馆</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td></td>
+<td>____ / 60</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>合格线参考</strong>：下午卷 4 题必答 + 1 题选答，每题 15 分，合格 45 分。
+本专项 4 题若能稳定拿到 <strong>10 分/题以上</strong>，试题一与试题三即可视为过关。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2/dfd-uml-exercises.md">docs/practice/subject2/dfd-uml-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

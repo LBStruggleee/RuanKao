@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>应试策略与技巧 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · strategies 📁 exam-tips.md</div>
+<h1>应试策略与技巧</h1>
+<h2>一、选择题答题策略</h2>
+<h3>时间分配</h3>
+<ul>
+<li>总时间150分钟，75道题</li>
+<li>建议每题平均2分钟</li>
+<li>遇到不会的题先选一个标记，不要纠缠</li>
+<li>选择题目标：55-65分</li>
+</ul>
+<h3>答题技巧</h3>
+<ol>
+<li><strong>排除法</strong>：排除明显错误选项，正确率提升50%</li>
+<li><strong>绝对化选项</strong>：含"总是""一定""所有"的通常是错误选项</li>
+<li><strong>相对化选项</strong>：含"通常""一般""大多数"的通常是正确选项</li>
+<li><strong>计算题</strong>：先估算范围，再精确计算</li>
+<li><strong>不会做的</strong>：相信第一直觉，不要轻易改答案</li>
+</ol>
+<h3>常见陷阱</h3>
+<ul>
+<li>概念混淆：如进程与线程、同步与互斥</li>
+<li>条件遗漏：题目中的"除了""不包括"</li>
+<li>时间复杂度：注意最坏/平均/最好情况</li>
+<li>协议端口号：HTTP=80, HTTPS=443, FTP=21, SSH=22</li>
+</ul>
+<h2>二、大题答题策略（科目二）</h2>
+<h3>时间分配</h3>
+<ul>
+<li>总时间150分钟（14:00–16:30），5道大题（试题一~四必答 + 试题五/六二选一），每题15分</li>
+<li>建议每题平均25–28分钟，<strong>不要在一道题上花超过30分钟</strong></li>
+<li>留10分钟检查漏空的题</li>
+</ul>
+<h3>答题原则</h3>
+<ol>
+<li><strong>写满步骤</strong>：步骤分很重要，写出关键步骤就能拿分</li>
+<li><strong>先易后难</strong>：先做有把握的题</li>
+<li><strong>格式清晰</strong>：分步骤写，标清序号</li>
+<li><strong>不要空题</strong>：即使不会也要写相关内容</li>
+</ol>
+<h3>各题型答题模板</h3>
+<h4>UML建模题</h4>
+<pre><code>1. 识别参与者（Actor）
+2. 识别用例（Use Case）
+3. 画出用例图
+4. 分析关系（包含/扩展/泛化）
+5. 写出关键描述
+</code></pre>
+<h4>设计模式题</h4>
+<pre><code>1. 识别模式类型（创建/结构/行为）
+2. 画出类图结构
+3. 说明各角色职责
+4. 写出适用场景
+5. 结合题目需求说明
+</code></pre>
+<h4>数据库设计题</h4>
+<pre><code>1. 分析实体和属性
+2. 画出E-R图
+3. 转换为关系模式
+4. 写出SQL查询
+5. 分析范式级别
+</code></pre>
+<h4>架构设计题</h4>
+<pre><code>1. 分析系统需求
+2. 选择架构风格
+3. 画出组件图
+4. 说明交互方式
+5. 考虑非功能性需求
+</code></pre>
+<h2>三、时间管理</h2>
+<h3>考试当天时间表</h3>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>考前30分钟</td>
+<td>到达考场，准备物品</td>
+</tr>
+<tr>
+<td>考前15分钟</td>
+<td>调整心态，回忆框架</td>
+</tr>
+<tr>
+<td>考试开始</td>
+<td>先浏览试卷，了解题量</td>
+</tr>
+<tr>
+<td>120分钟时</td>
+<td>检查选择题是否完成</td>
+</tr>
+<tr>
+<td>考前10分钟</td>
+<td>检查答题卡是否涂完</td>
+</tr>
+</tbody>
+</table>
+<h3>答题顺序建议</h3>
+<ol>
+<li>先做有把握的选择题（快速拿分）</li>
+<li>再做有疑问的选择题（标记后做）</li>
+<li>最后做不会的选择题（猜一个）</li>
+<li>大题按顺序做，先做简单的</li>
+</ol>
+<h2>四、高频考点速记</h2>
+<h3>数据结构</h3>
+<ul>
+<li>链表反转、树遍历、图算法</li>
+<li>排序算法稳定性：冒泡/插入稳定，快速/堆排序不稳定</li>
+<li>哈希冲突解决：链地址法、开放地址法</li>
+</ul>
+<h3>操作系统</h3>
+<ul>
+<li>PV操作：P申请资源，V释放资源</li>
+<li>死锁条件：互斥、占有且等待、不可剥夺、循环等待</li>
+<li>页面置换：LRU最近最少使用</li>
+</ul>
+<h3>网络</h3>
+<ul>
+<li>TCP三次握手建立，四次挥手释放</li>
+<li>子网划分：IP地址 &amp; 子网掩码 = 网络地址</li>
+<li>HTTP无状态，HTTPS = HTTP + TLS/SSL</li>
+</ul>
+<h3>数据库</h3>
+<ul>
+<li>SQL：GROUP BY + HAVING + ORDER BY 顺序</li>
+<li>范式：1NF→2NF→3NF 逐步消除依赖</li>
+<li>事务ACID：原子性、一致性、隔离性、持久性</li>
+</ul>
+<h3>软件工程</h3>
+<ul>
+<li>敏捷开发：Scrum/Sprint</li>
+<li>测试：黑盒（等价类/边界值）/白盒（逻辑覆盖）</li>
+<li>耦合度（七级，由高到低）：内容 &gt; 公共 &gt; 外部 &gt; 控制 &gt; 标记 &gt; 数据 &gt; 非直接</li>
+<li>内聚度（七级，由低到高）：偶然 &lt; 逻辑 &lt; 时间 &lt; 过程 &lt; 通信 &lt; 顺序 &lt; 功能</li>
+</ul>
+<h2>五、心态调整</h2>
+<ol>
+<li><strong>考试不是终点</strong>：即使这次不过，也是宝贵的经验</li>
+<li><strong>尽力而为</strong>：把会的题做对，不会的尽量写步骤</li>
+<li><strong>保持自信</strong>：30天的努力不会白费</li>
+<li><strong>正常发挥</strong>：考试时不要追求完美，发挥出80%就是成功</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/strategies/exam-tips.md">docs/strategies/exam-tips.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

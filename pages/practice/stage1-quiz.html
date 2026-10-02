@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阶段 1 阶段性测验：操作系统 + 计算机网络 + 数据库（共 45 道选择题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 stage1-quiz.md</div>
+<h1>阶段 1 阶段性测验：操作系统 + 计算机网络 + 数据库（共 45 道选择题）</h1>
+<blockquote>
+<p><strong>测验范围</strong>：第一阶段全部内容——<strong>操作系统（Day 1–3）15 题 + 计算机网络（Day 4–6）15 题 + 数据库（Day 7–8）15 题</strong>。
+<strong>考试规则</strong>：<strong>计时 60 分钟</strong>，独立闭卷完成，<strong>每题 1 分，满分 45 分</strong>。
+<strong>合格参照</strong>：科目一 75 题合格线为 <strong>45 分（60%）</strong>，故本卷 <strong>27/45 为合格线</strong>，<strong>34/45 以上（75%）为冲刺阶段的目标</strong>（对应科目一 55+ 分）。
+<strong>做题纪律（分科切换节奏）</strong>：
+- <strong>OS 题</strong>：计算题<strong>必须打草稿</strong>（地址转换/寻道/信号量），口算几乎必错；
+- <strong>网络题</strong>：概念题居多，<strong>凭记忆直接选</strong>，每题不超过 40 秒，把时间留给计算题；
+- <strong>数据库题</strong>：SQL 结果题在草稿纸上<strong>逐行推导</strong>，范式题<strong>按 5 步流程走</strong>，禁止"看一眼就选"。</p>
+<p><strong>完成后</strong>：对答案 → 按题号把对错填入下方「答题卡」→ 再把各科正确率填入文末「分科正确率统计表」→
+<strong>单科正确率 &lt; 60%（&lt; 9/15）的知识点，在 <code>docs/practice/knowledge-checklist.md</code> 中标记"二轮重点"</strong>。</p>
+</blockquote>
+<hr />
+<h2>答题卡（先填这张，再对答案）</h2>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>对错</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+<th>21</th>
+<th>22</th>
+<th>23</th>
+<th>24</th>
+<th>25</th>
+<th>26</th>
+<th>27</th>
+<th>28</th>
+<th>29</th>
+<th>30</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>对错</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>31</th>
+<th>32</th>
+<th>33</th>
+<th>34</th>
+<th>35</th>
+<th>36</th>
+<th>37</th>
+<th>38</th>
+<th>39</th>
+<th>40</th>
+<th>41</th>
+<th>42</th>
+<th>43</th>
+<th>44</th>
+<th>45</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>答案</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>对错</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>第一部分：操作系统（1–15，Day 1–3）</h1>
+<p><strong>1.</strong>（【Day 1 · PCB 与进程概念】）关于进程控制块（PCB），下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. PCB 是进程存在的唯一标志，每个进程都对应一个 PCB</li>
+<li>B. PCB 在进程创建后内容就固定不变，直到进程终止</li>
+<li>C. PCB 中保存的是进程的程序代码与数据本身</li>
+<li>D. 一个 PCB 可以被同属于一个用户的多个进程共享</li>
+</ul>
+<p><strong>2.</strong>（【Day 1 · 进程状态转换】）进程因等待键盘输入而从执行态转为阻塞态。当用户输入完成、等待的事件发生时，该进程将（ ）。</p>
+<ul>
+<li>A. 直接从阻塞态回到执行态</li>
+<li>B. 先转为就绪态，被调度程序选中后才能执行</li>
+<li>C. 转为新建态后重新注册</li>
+<li>D. 直接转为终止态</li>
+</ul>
+<p><strong>3.</strong>（【Day 1 · 进程与线程】）下列关于线程的叙述中，<strong>错误</strong>的是（ ）。</p>
+<ul>
+<li>A. 线程是进程内的执行实体，是处理机调度的基本单位</li>
+<li>B. 同一进程内的多个线程共享该进程的地址空间和打开的文件</li>
+<li>C. 线程是系统中独立拥有资源的基本单位</li>
+<li>D. 线程切换的开销通常小于进程切换的开销</li>
+</ul>
+<p><strong>4.</strong>（【Day 1 · 调度算法计算】）四个作业<strong>同时到达</strong>系统，估计运行时间分别为 <strong>8、4、2、6</strong>（单位时间）。采用短作业优先（SJF）调度算法，其平均周转时间为（ ）。</p>
+<ul>
+<li>A. 10</li>
+<li>B. 12</li>
+<li>C. 8</li>
+<li>D. 15</li>
+</ul>
+<p><strong>5.</strong>（【Day 1 · 时间片轮转】）时间片轮转（RR）调度算法中，若时间片设置得过<strong>小</strong>，主要带来的问题是（ ）。</p>
+<ul>
+<li>A. 长作业长期得不到执行（饥饿）</li>
+<li>B. 上下文切换开销过大，系统效率下降</li>
+<li>C. 无法保证公平性</li>
+<li>D. 退化为先来先服务（FCFS）</li>
+</ul>
+<p><strong>6.</strong>（【Day 1 · 死锁】）下列选型中，<strong>不属于</strong>死锁产生的四个必要条件的是（ ）。</p>
+<ul>
+<li>A. 互斥（资源排他性使用）</li>
+<li>B. 请求和保持（占有并等待）</li>
+<li>C. 不剥夺（不可抢占）</li>
+<li>D. 时间片轮转</li>
+</ul>
+<p><strong>7.</strong>（【Day 1 · 死锁处理策略】）银行家算法在操作系统死锁管理中的用途是（ ）。</p>
+<ul>
+<li>A. 死锁预防（破坏必要条件）</li>
+<li>B. 死锁避免（分配前检查安全状态）</li>
+<li>C. 死锁检测与解除</li>
+<li>D. 忽略死锁（鸵鸟策略）</li>
+</ul>
+<p><strong>8.</strong>（【Day 1 · PV 操作与信号量】）某信号量的初值为 3，先后执行操作 <strong>P、P、V、P、V</strong>（P 使信号量减 1，V 使信号量加 1）。操作全部完成后，信号量的值为（ ）。</p>
+<ul>
+<li>A. 2</li>
+<li>B. 3</li>
+<li>C. 1</li>
+<li>D. 0</li>
+</ul>
+<p><strong>9.</strong>（【Day 2 · 页式地址转换】）某系统采用页式存储管理，<strong>页大小为 4KB</strong>。进程某逻辑地址为 <strong>8452</strong>（十进制），查页表得其页号对应的物理块号为 <strong>5</strong>，则该逻辑地址对应的<strong>物理地址</strong>是（ ）。</p>
+<ul>
+<li>A. 20740</li>
+<li>B. 20480</li>
+<li>C. 16764</li>
+<li>D. 24836</li>
+</ul>
+<p><strong>10.</strong>（【Day 2 · 多级页表与访存次数】）某系统采用<strong>二级页表</strong>，页表项存放在内存中。若某次访问的页表项<strong>在快表（TLB）中未命中</strong>，则从发出逻辑地址到取出所需数据，共需访问内存的次数是（ ）。</p>
+<ul>
+<li>A. 1 次</li>
+<li>B. 2 次</li>
+<li>C. 3 次</li>
+<li>D. 4 次</li>
+</ul>
+<p><strong>11.</strong>（【Day 2 · 页面置换算法】）下列页面置换算法中，会产生 <strong>Belady（贝拉迪）异常</strong>（增加物理块数反而缺页次数增加）的是（ ）。</p>
+<ul>
+<li>A. 最佳置换（OPT）</li>
+<li>B. 先进先出（FIFO）</li>
+<li>C. 最近最少使用（LRU）</li>
+<li>D. 时钟（Clock）置换</li>
+</ul>
+<p><strong>12.</strong>（【Day 2 · 缺页中断】）缺页中断是在指令执行期间发现所访问的页面不在内存中时产生的。缺页中断属于（ ）。</p>
+<ul>
+<li>A. 内部中断（程序性中断）</li>
+<li>B. 外部中断（硬件中断，如时钟中断）</li>
+<li>C. 自愿性访管中断</li>
+<li>D. 不可屏蔽的硬件故障中断</li>
+</ul>
+<p><strong>13.</strong>（【Day 3 · 磁盘调度】）在磁盘存储管理中，各种磁盘调度算法所优化的主要目标是（ ）。</p>
+<ul>
+<li>A. 减少平均寻道时间</li>
+<li>B. 减少旋转延迟时间</li>
+<li>C. 减少数据传输时间</li>
+<li>D. 减少磁盘访问的总次数</li>
+</ul>
+<p><strong>14.</strong>（【Day 3 · 寻道时间计算】）设磁盘当前磁头位于 <strong>100</strong> 号磁道，磁盘请求序列（按到达顺序）为：<strong>55、58、39、18、90、160、150、38、184</strong>。采用<strong>最短寻道时间优先（SSTF）</strong>算法，磁头移动的总距离（单位：磁道）为（ ）。</p>
+<ul>
+<li>A. 248</li>
+<li>B. 242</li>
+<li>C. 258</li>
+<li>D. 266</li>
+</ul>
+<p><strong>15.</strong>（【Day 3 · 索引文件】）某文件系统采用<strong>一级索引</strong>结构，磁盘块大小为 <strong>4KB</strong>，盘块号占 <strong>4 字节</strong>。则一级索引可管理的最大文件长度为（ ）。</p>
+<ul>
+<li>A. 4 MB</li>
+<li>B. 4 GB</li>
+<li>C. 4 TB</li>
+<li>D. 1 MB</li>
+</ul>
+<hr />
+<h1>第二部分：计算机网络（16–30，Day 4–6）</h1>
+<p><strong>16.</strong>（【Day 4 · OSI 分层模型】）在 OSI 参考模型中，负责<strong>数据格式转换、数据加密与压缩</strong>的层次是（ ）。</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 表示层</li>
+<li>C. 会话层</li>
+<li>D. 传输层</li>
+</ul>
+<p><strong>17.</strong>（【Day 4 · 协议层级归属】）下列协议中，工作在<strong>网络层（网际层）</strong>的是（ ）。</p>
+<ul>
+<li>A. ARP</li>
+<li>B. UDP</li>
+<li>C. HTTP</li>
+<li>D. SMTP</li>
+</ul>
+<p><strong>18.</strong>（【Day 4 · 端口号】）下列端口号与协议的对应关系中，<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. DNS — 110</li>
+<li>B. FTP 数据连接 — 21</li>
+<li>C. SMTP — 25</li>
+<li>D. HTTP — 8080</li>
+</ul>
+<p><strong>19.</strong>（【Day 4 · 封装与解封装】）主机通过 TCP/IP 体系发送一封电子邮件时，应用层报文交给传输层后，下一步发生的是（ ）。</p>
+<ul>
+<li>A. 传输层添加 TCP 首部构成报文段，再交给网络层添加 IP 首部构成 IP 数据报</li>
+<li>B. 传输层添加 IP 首部构成 IP 数据报，再交给数据链路层封装成帧</li>
+<li>C. 直接交给物理层转换为比特流发送</li>
+<li>D. 网络层先添加 TCP 首部，再由传输层添加 IP 首部</li>
+</ul>
+<p><strong>20.</strong>（【Day 4 · 网络设备与层级】）下列网络设备中，工作在<strong>数据链路层</strong>的是（ ）。</p>
+<ul>
+<li>A. 集线器（Hub）</li>
+<li>B. 交换机（Switch）</li>
+<li>C. 路由器（Router）</li>
+<li>D. 网关（Gateway）</li>
+</ul>
+<p><strong>21.</strong>（【Day 5 · TCP 三次握手】）TCP 三次握手过程中，服务器收到客户端的第一个 SYN 报文段后，自身的状态转换为（ ）。</p>
+<ul>
+<li>A. LISTEN → SYN-SENT</li>
+<li>B. LISTEN → SYN-RCVD</li>
+<li>C. SYN-SENT → ESTABLISHED</li>
+<li>D. ESTABLISHED → CLOSE-WAIT</li>
+</ul>
+<p><strong>22.</strong>（【Day 5 · TCP 连接释放】）TCP 连接释放时，主动关闭方在发送完最后一个 ACK 后进入 TIME-WAIT 状态并等待 2MSL。其主要目的是（ ）。</p>
+<ul>
+<li>A. 确保最后的 ACK 能可靠到达被动关闭方；同时让本次连接的报文段都从网络中消失</li>
+<li>B. 等待本端尚未发送完毕的数据全部发完</li>
+<li>C. 使拥塞窗口恢复到初始值</li>
+<li>D. 等待对端确认关闭后释放端口</li>
+</ul>
+<p><strong>23.</strong>（【Day 5 · TCP 与 UDP 对比】）下列关于 TCP 与 UDP 的比较，<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. TCP 首部固定为 8 字节，UDP 首部固定为 20 字节</li>
+<li>B. TCP 提供面向连接的可靠传输；UDP 提供无连接的不可靠传输</li>
+<li>C. TCP 支持广播和多播，UDP 只支持点对点</li>
+<li>D. UDP 由于没有拥塞控制，其数据传输比 TCP 更可靠</li>
+</ul>
+<p><strong>24.</strong>（【Day 5 · 拥塞控制】）TCP 拥塞控制中，发送方连续收到 <strong>3 个重复的 ACK</strong>（快重传事件）时，正确的处理是（ ）。</p>
+<ul>
+<li>A. 慢开始门限 ssthresh 不变，拥塞窗口 cwnd 置 1，重新开始慢开始</li>
+<li>B. ssthresh 设为当前 cwnd 的一半，cwnd 设为 ssthresh（快恢复，不回 1）</li>
+<li>C. ssthresh 设为当前 cwnd 的一半，cwnd 置 1，重新开始慢开始</li>
+<li>D. 立即进入 TIME-WAIT 状态并关闭连接</li>
+</ul>
+<p><strong>25.</strong>（【Day 5 · 子网划分计算】）某主机的 IP 地址为 <strong>192.168.10.170/26</strong>，其所在的网络地址是（ ）。</p>
+<ul>
+<li>A. 192.168.10.128</li>
+<li>B. 192.168.10.160</li>
+<li>C. 192.168.10.192</li>
+<li>D. 192.168.10.0</li>
+</ul>
+<p><strong>26.</strong>（【Day 5 · 子网划分计算】）某子网的子网掩码为 <strong>255.255.255.192</strong>，该子网内最多可分配给主机的 IP 地址数是（ ）。</p>
+<ul>
+<li>A. 62</li>
+<li>B. 64</li>
+<li>C. 126</li>
+<li>D. 254</li>
+</ul>
+<p><strong>27.</strong>（【Day 5 · CIDR 与路由聚合】）某路由器的路由表中有 4 条连续且起始地址满足对齐要求的路由：<strong>172.16.0.0/24、172.16.1.0/24、172.16.2.0/24、172.16.3.0/24</strong>。经路由聚合（构成超网）后，可合并为（ ）。</p>
+<ul>
+<li>A. 172.16.0.0/22</li>
+<li>B. 172.16.0.0/23</li>
+<li>C. 172.16.0.0/21</li>
+<li>D. 172.16.0.0/20</li>
+</ul>
+<p><strong>28.</strong>（【Day 6 · 对称加密算法】）关于 DES 加密算法，下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. DES 的有效密钥长度是 56 位，分组长度为 64 位</li>
+<li>B. DES 的有效密钥长度是 64 位，分组长度为 56 位</li>
+<li>C. DES 属于非对称加密体制，公钥可以公开</li>
+<li>D. DES 的分组长度固定为 128 位</li>
+</ul>
+<p><strong>29.</strong>（【Day 6 · 数字签名】）下列关于数字签名的说法，<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 数字签名使用发送方的私钥对报文摘要加密，可提供身份认证、抗否认和完整性保护</li>
+<li>B. 数字签名使用接收方的私钥加密，主要目的是保证报文的机密性</li>
+<li>C. 数字签名能同时保证报文的机密性和完整性</li>
+<li>D. 数字签名只能使用对称加密算法实现</li>
+</ul>
+<p><strong>30.</strong>（【Day 6 · 防火墙与入侵检测】）关于入侵检测系统（IDS）与入侵防御系统（IPS），下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. IDS 串联部署在关键链路上，发现攻击直接丢弃数据包</li>
+<li>B. IPS 旁路部署，只负责告警、不阻断攻击</li>
+<li>C. IDS 旁路部署、只告警；IPS 串联部署，发现攻击可直接阻断</li>
+<li>D. 两者的部署方式与功能完全相同</li>
+</ul>
+<hr />
+<h1>第三部分：数据库（31–45，Day 7–8）</h1>
+<blockquote>
+<p>本部分第 <strong>33、34、35</strong> 题需要基于下列表数据<strong>逐行推导</strong>（与 Day 7 笔记完全相同的三张表）。</p>
+</blockquote>
+<p><strong>S（学生表，7 行）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Sdept</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+<td>计算机系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李华</td>
+<td>计算机系</td>
+<td>20</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王芳</td>
+<td>数学系</td>
+<td>18</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>赵磊</td>
+<td>数学系</td>
+<td>21</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>钱娜</td>
+<td>信息系</td>
+<td>23</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>孙强</td>
+<td>信息系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>计算机系</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>C（课程表，4 行）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>Cname</th>
+<th>Cpno</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>数据库</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据结构</td>
+<td>NULL</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>操作系统</td>
+<td>NULL</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>编译原理</td>
+<td>2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SC（选课表，14 行）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Cno</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>1</td>
+<td>92</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>2</td>
+<td>85</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>3</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>1</td>
+<td>75</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>2</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>3</td>
+<td>90</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>2</td>
+<td>70</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>1</td>
+<td>95</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>3</td>
+<td>78</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>2</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>3</td>
+<td>55</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键事实</strong>：<strong>1001 张明</strong>选了全部 4 门课；<strong>1007 周敏</strong>一门课都没选；<strong>1002 李华</strong>的 C2 成绩为 <strong>NULL</strong>。</p>
+<hr />
+<p><strong>31.</strong>（【Day 7 · 术语对照】）在关系模型中，关系的"<strong>目</strong>"和"<strong>基数</strong>"分别是指（ ）。</p>
+<ul>
+<li>A. 目 = 行数，基数 = 列数</li>
+<li>B. 目 = 列数，基数 = 行数</li>
+<li>C. 目 = 候选码的个数，基数 = 外码的个数</li>
+<li>D. 目 = 属性的取值范围，基数 = 主码的长度</li>
+</ul>
+<p><strong>32.</strong>（【Day 7 · 三类完整性】）关系模型中"<strong>主码不能取空值，且必须唯一</strong>"这一规则，属于（ ）。</p>
+<ul>
+<li>A. 实体完整性</li>
+<li>B. 参照完整性</li>
+<li>C. 用户定义完整性</li>
+<li>D. 域完整性</li>
+</ul>
+<p><strong>33.</strong>（【Day 7 · SQL 结果推导】）执行以下查询，返回的结果是（ ）。</p>
+<pre><code class="language-sql">SELECT COUNT(*) AS a, COUNT(Grade) AS b, AVG(Grade) AS c
+FROM SC
+WHERE Cno = '2';
+</code></pre>
+<ul>
+<li>A. a = 4，b = 3，c = 81.0</li>
+<li>B. a = 4，b = 4，c = 60.75</li>
+<li>C. a = 3，b = 3，c = 81.0</li>
+<li>D. a = 4，b = 3，c = 60.75</li>
+</ul>
+<p><strong>34.</strong>（【Day 7 · 关系代数】）关系代数表达式 <strong>σ_{Sdept='计算机系'}(S)</strong> 的执行结果是（ ）。</p>
+<ul>
+<li>A. 3 行、4 列</li>
+<li>B. 7 行、4 列</li>
+<li>C. 4 行、3 列</li>
+<li>D. 3 行、3 列</li>
+</ul>
+<p><strong>35.</strong>（【Day 7 · JOIN 与 NULL】）执行以下查询，返回的行数是（ ）。</p>
+<pre><code class="language-sql">SELECT COUNT(*) FROM S LEFT JOIN SC ON S.Sno = SC.Sno;
+</code></pre>
+<ul>
+<li>A. 15</li>
+<li>B. 14</li>
+<li>C. 7</li>
+<li>D. 98</li>
+</ul>
+<p><strong>36.</strong>（【Day 7 · 集合运算】）查询"<strong>选了 C1 但没有选 C2</strong> 的学生学号"，正确的 SQL 语句是（ ）。</p>
+<ul>
+<li>A. <code>SELECT Sno FROM SC WHERE Cno='1' INTERSECT SELECT Sno FROM SC WHERE Cno='2'</code></li>
+<li>B. <code>SELECT Sno FROM SC WHERE Cno='1' EXCEPT SELECT Sno FROM SC WHERE Cno='2'</code></li>
+<li>C. <code>SELECT Sno FROM SC WHERE Cno='1' UNION SELECT Sno FROM SC WHERE Cno='2'</code></li>
+<li>D. <code>SELECT Sno FROM SC WHERE Cno='1' UNION ALL SELECT Sno FROM SC WHERE Cno='2'</code></li>
+</ul>
+<p><strong>37.</strong>（【Day 7 · 执行顺序与 WHERE/HAVING】）下列 SQL 语句中，<strong>语法上错误</strong>的是（ ）。</p>
+<ul>
+<li>A. <code>SELECT Sdept, COUNT(*) FROM S GROUP BY Sdept HAVING COUNT(*) &gt; 1</code></li>
+<li>B. <code>SELECT * FROM S WHERE Age &gt; 20</code></li>
+<li>C. <code>SELECT * FROM S WHERE AVG(Age) &gt; 20</code></li>
+<li>D. <code>SELECT Sname FROM S ORDER BY Age DESC</code></li>
+</ul>
+<p><strong>38.</strong>（【Day 7 · 关系代数与 SQL 对照】）关系代数表达式 <strong>π_{Sno,Cno}(SC) ÷ π_{Cno}(C)</strong> 所查询的是（ ）。</p>
+<ul>
+<li>A. 选修了<strong>全部</strong>课程的学生</li>
+<li>B. 至少选修了<strong>一门</strong>课程的学生</li>
+<li>C. 所有课程的课程号</li>
+<li>D. 没有选修任何课程的学生</li>
+</ul>
+<p><strong>39.</strong>（【Day 7 · SQL 语言分类】）下列 SQL 语句中，属于<strong>数据控制语言（DCL）</strong>的是（ ）。</p>
+<ul>
+<li>A. <code>CREATE TABLE</code></li>
+<li>B. <code>DELETE</code></li>
+<li>C. <code>GRANT</code></li>
+<li>D. <code>SELECT</code></li>
+</ul>
+<p><strong>40.</strong>（【Day 7 · 笛卡尔积】）关系 R(A, B) 有 20 个元组，关系 S(C) 有 5 个元组。则 R × S 的元组个数是（ ）。</p>
+<ul>
+<li>A. 100</li>
+<li>B. 25</li>
+<li>C. 4</li>
+<li>D. 400</li>
+</ul>
+<p><strong>41.</strong>（【Day 8 · 函数依赖类型】）关系模式 R(Sno, Sdept, Mname)（学号、所在系、系主任），F={Sno→Sdept, Sdept→Mname}。则 Mname 对 Sno 的依赖类型是（ ）。</p>
+<ul>
+<li>A. 完全函数依赖</li>
+<li>B. 部分函数依赖</li>
+<li>C. 传递函数依赖</li>
+<li>D. 平凡函数依赖</li>
+</ul>
+<p><strong>42.</strong>（【Day 8 · 候选码求解】）关系模式 R(A, B, C, D)，F={A→B, B→C, C→D}。R 的候选码是（ ）。</p>
+<ul>
+<li>A. A</li>
+<li>B. AB</li>
+<li>C. ABC</li>
+<li>D. ABCD</li>
+</ul>
+<p><strong>43.</strong>（【Day 8 · 范式判断】）关系模式 R(Sno, Sdept, Sloc)（学号、所在系、宿舍楼），F={Sno→Sdept, Sdept→Sloc}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>44.</strong>（【Day 8 · 3NF 与 BCNF 的分界】）关系模式 R(A, B, C)，F={AB→C, C→B}。下列关于 R 的说法，<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 候选码只有 AB，最高满足 BCNF</li>
+<li>B. 候选码为 AB 和 AC，最高满足 3NF，但不满足 BCNF</li>
+<li>C. 候选码为 A，最高满足 2NF</li>
+<li>D. 候选码为 AB 和 AC，最高满足 BCNF</li>
+</ul>
+<p><strong>45.</strong>（【Day 8 · E-R 转关系模式】）将 E-R 模型中的一个 <strong>M:N 联系</strong>转换为关系模式时，正确的做法是（ ）。</p>
+<ul>
+<li>A. 新建一个关系，其属性包含两端实体的主码以及联系本身的属性，主码为两端主码的组合</li>
+<li>B. 把一端实体的主码作为外码加入另一端实体所对应的关系</li>
+<li>C. 新建一个关系，主码从两端实体的主码中任选一个即可</li>
+<li>D. 该联系不需要转换，所需信息已包含在实体关系中</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<blockquote>
+<p><strong>对答案方法</strong>：先填答题卡 → 再逐题核对 → <strong>每道错题按"题目 → 错因 → 正确思路 → 知识点"四要素登记到 <code>reflection.md</code> 的 Day 9 节</strong>，并在 <code>knowledge-checklist.md</code> 标记"二轮重点"。
+计算题（第 4、8、9、14、25、26、27 题）错了<strong>必须把过程重算一遍</strong>，不要只看结论。</p>
+</blockquote>
+<h3>第一部分：操作系统（1–15）</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>答案</th>
+<th>知识点（出处）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>A</strong></td>
+<td>PCB 是进程存在的唯一标志（day01 §1.2）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>B</strong></td>
+<td>阻塞 → 就绪 → 执行，不可越级（day01 §2.3）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>C</strong></td>
+<td>线程是调度单位，进程才是资源分配单位（day01 §3.2）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>A</strong></td>
+<td>SJF 平均周转时间计算（day01 §4.4）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>B</strong></td>
+<td>RR 时间片过小 → 切换开销大（day01 §4.2）</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>D</strong></td>
+<td>死锁四必要条件（day01 §6.1）</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>B</strong></td>
+<td>银行家算法 = 死锁避免（day01 §6.2）</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>A</strong></td>
+<td>信号量 P/V 运算（day01 §5.2）</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>A</strong></td>
+<td>页式地址转换：物理地址 = 块号 × 页大小 + 偏移（day02 §3.4）</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>C</strong></td>
+<td>二级页表访存次数与 TLB（day02 §3.4–3.5）</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>B</strong></td>
+<td>Belady 异常只出现在 FIFO（day02 §7.3）</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>A</strong></td>
+<td>缺页中断属于内部中断（day02 §6.1）</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>A</strong></td>
+<td>磁盘调度只优化寻道时间（day03 §3.1）</td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>A</strong></td>
+<td>SSTF 寻道距离计算（day03 §3.2）</td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>A</strong></td>
+<td>一级索引可管理文件大小（day03 §6.1）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>1. A</strong>：PCB 是进程存在的唯一标志，进程与 PCB 一一对应。B 错——PCB 中的现场信息、状态、队列指针等在进程运行期间不断变化；C 错——PCB 保存的是进程的<strong>描述信息、控制信息和资源信息</strong>，程序代码本身在代码段；D 错——PCB 是进程的私有结构，不能共享。</p>
+<p><strong>2. B</strong>：阻塞态不能直接到执行态，必须先回<strong>就绪态</strong>排队，由调度程序选中后才能执行。这是五状态模型中最常考的非法转换判断。</p>
+<p><strong>3. C</strong>：<strong>进程是资源分配的基本单位，线程是处理机调度的基本单位</strong>（这是固定考点，见 day01 §3.3）。A、B、D 均正确。</p>
+<p><strong>4. A</strong>：SJF 按运行时间从短到长调度，顺序为 <strong>2 → 4 → 6 → 8</strong>。周转时间 = 完成时间 − 到达时间（同时到达，到达均为 0）：2、6、12、20。平均周转 = (2+6+12+20) ÷ 4 = <strong>10</strong>。<strong>必须画甘特图列时间轴</strong>，口算易排错顺序。</p>
+<p><strong>5. B</strong>：时间片过小 → 单位时间内上下文切换次数过多，<strong>系统效率下降</strong>；A（长作业饥饿）是 <strong>SJF</strong> 的问题；D（退化为 FCFS）是时间片<strong>过大</strong>的结果。</p>
+<p><strong>6. D</strong>：死锁四个必要条件 = 互斥、请求和保持（占有并等待）、不剥夺（不可抢占）、循环等待。时间片轮转是调度算法，与死锁条件无关。</p>
+<p><strong>7. B</strong>：银行家算法在每次资源分配前检查系统是否处于<strong>安全状态</strong>，属于<strong>死锁避免</strong>（不是预防——预防要破坏必要条件；也不是检测——检测是事后发现）。</p>
+<p><strong>8. A</strong>：3 − 1（P）= 2；2 − 1（P）= 1；1 + 1（V）= 2；2 − 1（P）= 1；1 + 1（V）= <strong>2</strong>。</p>
+<p><strong>9. A</strong>：页大小 4KB = 4096。页号 P = 8452 ÷ 4096 = <strong>2</strong>（商），页内偏移 W = 8452 mod 4096 = <strong>260</strong>。物理地址 = 块号 × 页大小 + W = 5 × 4096 + 260 = 20480 + 260 = <strong>20740</strong>。（注意：<strong>页式是"乘页大小"，段式才是"加段基址"</strong>。）</p>
+<p><strong>10. C</strong>：二级页表，TLB 未命中时需：① 访问外层页表（1 次）→ ② 访问内层页表（1 次）→ ③ 取数据（1 次）= <strong>3 次</strong>。若 <strong>TLB 命中则只需 1 次</strong>（快表查找是硬件操作，不计入访存）。</p>
+<p><strong>11. B</strong>：Belady 异常——增加分配的物理块数反而使缺页次数<strong>增加</strong>——只出现在 <strong>FIFO</strong>。OPT、LRU、Clock 都不会出现。这是 FIFO 的标志性缺陷。</p>
+<p><strong>12. A</strong>：缺页中断属于<strong>内部中断（程序性中断）</strong>，在<strong>指令执行期间</strong>产生，执行完后<strong>返回被中断的指令重新执行</strong>（这一点与一般的内部中断"返回下一条指令"不同）。外部中断指时钟、I/O 完成等硬件中断。</p>
+<p><strong>13. A</strong>：磁盘调度算法（FCFS/SSTF/SCAN/C-SCAN 等）只<strong>优化寻道时间</strong>，因为机械移动中寻道最耗时；旋转延迟与传输时间由硬件决定，调度算法一般不干预。</p>
+<p><strong>14. A</strong>：SSTF 每次选择离当前磁头最近的请求：
+100 → 90（<strong>10</strong>）→ 58（<strong>32</strong>）→ 55（<strong>3</strong>）→ 39（<strong>16</strong>）→ 38（<strong>1</strong>）→ 18（<strong>20</strong>）→ 150（<strong>132</strong>）→ 160（<strong>10</strong>）→ 184（<strong>24</strong>）。
+总距离 = 10+32+3+16+1+20+132+10+24 = <strong>248</strong>。
+<strong>必须逐段列出移动距离</strong>，并注意 SSTF 会"折返跑"、可能造成远端请求饥饿。</p>
+<p><strong>15. A</strong>：一级索引的索引项数 = 块大小 ÷ 块号字节数 = 4KB ÷ 4B = <strong>1024</strong> 项；每项指向一个 4KB 数据块 → 最大 = 1024 × 4KB = 4096KB = <strong>4 MB</strong>。（对照记忆：一级 4MB / 二级 4GB / 三级 4TB。）</p>
+<h3>第二部分：计算机网络（16–30）</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>答案</th>
+<th>知识点（出处）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td><strong>B</strong></td>
+<td>表示层：格式转换、加密、压缩（day04 §2.6）</td>
+</tr>
+<tr>
+<td>17</td>
+<td><strong>A</strong></td>
+<td>ARP 属网际层（网络层），IP↔MAC（day04 §2.3、§6.3）</td>
+</tr>
+<tr>
+<td>18</td>
+<td><strong>C</strong></td>
+<td>必背端口号（day04 §七）</td>
+</tr>
+<tr>
+<td>19</td>
+<td><strong>A</strong></td>
+<td>封装顺序：报文→报文段→IP 数据报→帧→比特（day04 §五）</td>
+</tr>
+<tr>
+<td>20</td>
+<td><strong>B</strong></td>
+<td>交换机工作在数据链路层（day04 §四）</td>
+</tr>
+<tr>
+<td>21</td>
+<td><strong>B</strong></td>
+<td>三次握手状态变迁（day05 §2.2）</td>
+</tr>
+<tr>
+<td>22</td>
+<td><strong>A</strong></td>
+<td>TIME-WAIT 等 2MSL 的原因（day05 §3.2–3.3）</td>
+</tr>
+<tr>
+<td>23</td>
+<td><strong>B</strong></td>
+<td>TCP vs UDP（day05 §四）</td>
+</tr>
+<tr>
+<td>24</td>
+<td><strong>B</strong></td>
+<td>快重传/快恢复：cwnd 减半不回 1（day05 §6.2–6.3）</td>
+</tr>
+<tr>
+<td>25</td>
+<td><strong>A</strong></td>
+<td>子网划分 5 步法求网络地址（day05 §八）</td>
+</tr>
+<tr>
+<td>26</td>
+<td><strong>A</strong></td>
+<td>可用主机数 = 2^h − 2（day05 §八）</td>
+</tr>
+<tr>
+<td>27</td>
+<td><strong>A</strong></td>
+<td>CIDR 路由聚合：2^k 个 /24 → /(24−k)（day05 §9.2）</td>
+</tr>
+<tr>
+<td>28</td>
+<td><strong>A</strong></td>
+<td>DES 参数：有效密钥 56 位 / 分组 64 位（day06 §2.1）</td>
+</tr>
+<tr>
+<td>29</td>
+<td><strong>A</strong></td>
+<td>数字签名的作用与实现（day06 §7、§7.3）</td>
+</tr>
+<tr>
+<td>30</td>
+<td><strong>C</strong></td>
+<td>IDS 旁路告警 / IPS 串联阻断（day06 §13.3）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>16. B</strong>：<strong>表示层</strong>负责数据格式转换（如 ASCII↔EBCDIC）、数据加密与数据压缩。应用层提供用户接口，会话层管理会话同步，传输层提供端到端可靠通信。</p>
+<p><strong>17. A</strong>：<strong>ARP（地址解析协议）</strong>工作在<strong>网络层（网际层）</strong>——它为 IP 服务，把 IP 地址解析为 MAC 地址。注意：ARP 报文不用 IP 封装（直接装在以太网帧里），所以常被误认为属于数据链路层，<strong>软考按"网络层"作答</strong>。UDP 是传输层，HTTP/SMTP 是应用层。</p>
+<p><strong>18. C</strong>：<strong>SMTP = 25</strong>（发邮件）。A 错——DNS = <strong>53</strong>，110 是 <strong>POP3</strong>（收邮件）；B 错——FTP <strong>控制连接 = 21，数据连接 = 20</strong>；D 错——HTTP = <strong>80</strong>，8080 只是常见的非官方备用端口。</p>
+<p><strong>19. A</strong>：封装是自上而下逐层加头：应用层报文 → 传输层加 <strong>TCP 首部</strong>成为报文段 → 网络层加 <strong>IP 首部</strong>成为 IP 数据报 → 数据链路层加帧头帧尾成为帧 → 物理层转比特流。B 错（传输层不加 IP 头）、D 错（TCP 头在 IP 头之内，顺序不能颠倒）。</p>
+<p><strong>20. B</strong>：<strong>交换机</strong>工作在数据链路层（基于 MAC 地址转发）。集线器是物理层（广播式中继），路由器是网络层（基于 IP 转发），网关工作在传输层及以上（协议转换）。</p>
+<p><strong>21. B</strong>：三次握手中，服务器在 LISTEN 状态收到客户端 SYN 后，回送 SYN+ACK，自己进入 <strong>SYN-RCVD</strong>；收到客户端的 ACK 后才进入 ESTABLISHED。客户端发 SYN 后进入 SYN-SENT。</p>
+<p><strong>22. A</strong>：TIME-WAIT 等待 2MSL 的两个目的：① <strong>保证最后的 ACK 能到达被动关闭方</strong>（若丢失，对方会重发 FIN，本端可再次重传 ACK）；② <strong>让本次连接的所有报文段都从网络中消失</strong>，防止它们干扰同一对套接字的新连接。与拥塞窗口、本端数据发送无关。</p>
+<p><strong>23. B</strong>：TCP = 面向连接、可靠、首部固定 <strong>20</strong> 字节、点对点；UDP = 无连接、不可靠、首部固定 <strong>8</strong> 字节、支持广播/多播、开销小速度快。A 的数字写反了；C 说反了（UDP 才支持广播）；D 错——"不可靠"是 UDP 的定义属性。</p>
+<p><strong>24. B</strong>：<strong>3 个重复 ACK（快重传）</strong>：ssthresh = cwnd ÷ 2，<strong>cwnd = ssthresh（减半但不回 1）</strong>，进入快恢复。<strong>超时</strong>才是 ssthresh = cwnd ÷ 2、<strong>cwnd = 1</strong>（回 1 重新慢开始）。口诀：<strong>"超时回 1，重复 ACK 减半"</strong>。</p>
+<p><strong>25. A</strong>：/26 → 掩码 255.255.255.192 → 块大小 = 256 − 192 = <strong>64</strong>；第 4 段 170 落在 <strong>128–191</strong> 这个块内（170 ÷ 64 = 2 余 42 → 块起始 128）→ 网络地址 = <strong>192.168.10.128</strong>。广播地址 = 128 + 64 − 1 = 192.168.10.191。</p>
+<p><strong>26. A</strong>：掩码 255.255.255.192 = /26 → 主机位 h = 32 − 26 = 6 → 可用主机数 = 2⁶ − 2 = <strong>62</strong>（<strong>必须减 2</strong>：网络地址与广播地址不可分配）。</p>
+<p><strong>27. A</strong>：4 个连续的 /24 且起始地址对齐 → 聚合 2² = 4 个网络，前缀减少 2 位 → <strong>172.16.0.0/22</strong>。聚合条件：被聚合的网络必须<strong>连续且起始地址对齐</strong>（第三段 0、1、2、3 的共同前缀是 22 位）。</p>
+<p><strong>28. A</strong>：DES 的<strong>分组长度为 64 位，有效密钥长度为 56 位</strong>（64 位输入中有 8 位是奇偶校验位，不参与加密运算）。"56 和 64"是最容易记反的一对；DES 属<strong>对称</strong>加密（3DES 有效密钥 168 位；AES 分组固定 128 位、密钥 128/192/256 → 轮数 10/12/14）。</p>
+<p><strong>29. A</strong>：数字签名 = <strong>发送方用自己的私钥对报文摘要加密</strong>（或对摘要做签名运算），附着在报文后发送，可提供<strong>身份认证、抗否认（不可抵赖）、完整性</strong>保护。B/C 错——<strong>数字签名不提供机密性</strong>（签名后的报文仍是明文，要保密必须再加密或用数字信封）；D 错——签名依赖<strong>非对称</strong>加密（私钥签名、公钥验签）。</p>
+<p><strong>30. C</strong>：<strong>IDS 旁路（镜像）部署</strong>，只检测并<strong>告警</strong>，不改变业务流量；<strong>IPS 串联部署</strong>，发现攻击可以<strong>直接丢弃/阻断</strong>数据包。两者是"告警 vs 阻断"的关系。</p>
+<h3>第三部分：数据库（31–45）</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>答案</th>
+<th>知识点（出处）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>31</td>
+<td><strong>B</strong></td>
+<td>目 = 列数，基数 = 行数（day07 §1.1）</td>
+</tr>
+<tr>
+<td>32</td>
+<td><strong>A</strong></td>
+<td>实体完整性（day07 §1.3）</td>
+</tr>
+<tr>
+<td>33</td>
+<td><strong>A</strong></td>
+<td>聚合函数与 NULL 的三种态度（day07 §3.5、§四例 5）</td>
+</tr>
+<tr>
+<td>34</td>
+<td><strong>A</strong></td>
+<td>σ 选择只动行、列数不变（day07 §2.1）</td>
+</tr>
+<tr>
+<td>35</td>
+<td><strong>A</strong></td>
+<td>左外连接行数 = 匹配行 + 左表无匹配行（day07 §3.7）</td>
+</tr>
+<tr>
+<td>36</td>
+<td><strong>B</strong></td>
+<td>集合运算 EXCEPT（差）（day07 §3.9）</td>
+</tr>
+<tr>
+<td>37</td>
+<td><strong>C</strong></td>
+<td>WHERE 中不能使用聚合函数（day07 §3.4、§3.6）</td>
+</tr>
+<tr>
+<td>38</td>
+<td><strong>A</strong></td>
+<td>除运算 ÷ 的"全部"语义（day07 §2.5）</td>
+</tr>
+<tr>
+<td>39</td>
+<td><strong>C</strong></td>
+<td>DDL/DML/DCL 分类（day07 §3.1）</td>
+</tr>
+<tr>
+<td>40</td>
+<td><strong>A</strong></td>
+<td>笛卡尔积行数 = 左 × 右（day07 §2.3）</td>
+</tr>
+<tr>
+<td>41</td>
+<td><strong>C</strong></td>
+<td>传递函数依赖（day08 §1.4）</td>
+</tr>
+<tr>
+<td>42</td>
+<td><strong>A</strong></td>
+<td>候选码求解：属性分类 + 闭包（day08 §2.2）</td>
+</tr>
+<tr>
+<td>43</td>
+<td><strong>B</strong></td>
+<td>范式判断 5 步流程（day08 §3.3）</td>
+</tr>
+<tr>
+<td>44</td>
+<td><strong>B</strong></td>
+<td>3NF 与 BCNF 的分界（day08 §3.5 例 11）</td>
+</tr>
+<tr>
+<td>45</td>
+<td><strong>A</strong></td>
+<td>M:N 联系的转换规则（day08 §5.2）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>31. B</strong>：<strong>目（Degree）= 关系的列数（属性个数）</strong>；<strong>基数（Cardinality）= 关系的行数（元组个数）</strong>。这是最容易被反过来问的一对术语。</p>
+<p><strong>32. A</strong>：主码非空且唯一 = <strong>实体完整性</strong>（对应 <code>PRIMARY KEY</code>）。参照完整性约束的是<strong>外码</strong>（要么为空、要么必须引用已存在的主码值）；用户定义完整性是业务约束（<code>CHECK</code> / <code>NOT NULL</code> / <code>UNIQUE</code>）。</p>
+<p><strong>33. A</strong>：C2（数据结构）共有 <strong>4</strong> 条记录：1001→85、1002→<strong>NULL</strong>、1004→70、1006→88。
+- <code>COUNT(*)</code> = <strong>4</strong>（数行，NULL 行也算 1 行）；
+- <code>COUNT(Grade)</code> = <strong>3</strong>（数非空成绩值，NULL 跳过）；
+- <code>AVG(Grade)</code> = (85+70+88) ÷ <strong>3</strong> = 243 ÷ 3 = <strong>81.0</strong>（<strong>分母是 3 不是 4</strong>！）。
+这三个数字是数据库第一大考点，必须脱口而出。</p>
+<p><strong>34. A</strong>：σ 是<strong>选择（选行）</strong>操作——只横向切割、过滤行，<strong>列数永远不变</strong>（仍是 S 的 4 列）。S 中 Sdept='计算机系' 的有 1001、1002、1007 共 <strong>3 行</strong> → 结果 <strong>3 行 4 列</strong>。（若是 π_{Sdept}(S) 才会变成 1 列、且去重为 3 行。）</p>
+<p><strong>35. A</strong>：<strong>左外连接</strong>保留左表 S 的<strong>全部 7 行</strong>：其中 6 名学生在 SC 中有匹配行共 <strong>14 行</strong>；<strong>1007 周敏没有选课</strong>，左外连接为她补一行（SC 各列为 NULL）→ 总行数 = 14 + 1 = <strong>15</strong>。若用<strong>内连接</strong>则为 14；若写 <code>FROM S, SC</code>（无条件）则是 7 × 14 = <strong>98</strong>（笛卡尔积）。</p>
+<p><strong>36. B</strong>："选了 C1 但没选 C2" = 在 C1 的学号集合中、<strong>去掉</strong>也在 C2 集合中的学号 = <strong>差运算</strong>，SQL 关键字 <code>EXCEPT</code>。A（INTERSECT）是"同时选了 C1 和 C2"；C/D（UNION / UNION ALL）是"选了 C1 或 C2"。本例结果为 1003、1005。</p>
+<p><strong>37. C</strong>：<code>WHERE AVG(Age) &gt; 20</code> <strong>语法错误</strong>——WHERE 在 GROUP BY <strong>之前</strong>执行，那时还没有分组、谈不上聚合，<strong>聚合函数只能出现在 SELECT、HAVING、ORDER BY 中</strong>。A 是 HAVING 的正确用法；B、D 均合法。</p>
+<p><strong>38. A</strong>：除运算 R ÷ S 的语义是"结果中的每个 t，与 S 中<strong>每一个</strong>元组的组合都存在于 R 中"——即"<strong>包含全部</strong>"。π_{Sno,Cno}(SC) ÷ π_{Cno}(C) = <strong>选修了全部课程的学生</strong>（本数据下只有 1001 张明）。SQL 中用 <strong>NOT EXISTS 双重否定</strong>实现同样的语义。</p>
+<p><strong>39. C</strong>：<code>GRANT</code>（授权）/ <code>REVOKE</code>（回收）属于 <strong>DCL（数据控制语言）</strong>。判据：<code>CREATE/DROP/ALTER</code> = DDL；<code>SELECT/INSERT/UPDATE/DELETE</code> = DML；<code>GRANT/REVOKE</code>（以及 <code>COMMIT/ROLLBACK</code>）= DCL。软考按三分法作答。</p>
+<p><strong>40. A</strong>：笛卡尔积 R × S 的元组数 = |R| × |S| = 20 × 5 = <strong>100</strong>。注意：写 <code>FROM R, S</code> 而忘了连接条件，得到的就是笛卡尔积——这是性能与正确性的双重灾难。</p>
+<p><strong>41. C</strong>：Sno→Sdept 且 Sdept→Mname，且 <strong>Sdept↛Sno</strong>（一个系有多个学生），三个要素齐备 → Mname <strong>传递依赖于</strong> Sno。候选码 Sno 是单属性 → 无部分依赖，故该关系最高满足 <strong>2NF</strong>（见第 43 题同类题）。</p>
+<p><strong>42. A</strong>：属性分类：A 只在左部出现（L 类）→ 必在候选码中；B、C、D 都只在右部出现（R 类）→ 一定不是候选码成员。A 的闭包 A⁺ = {A} → B → C → D = U ✅ → <strong>候选码 = A</strong>。其他选项都不是最小超码（如 ABCD 可由 A 推出全部，是超码但非候选码）。</p>
+<p><strong>43. B</strong>：按 5 步流程：① 候选码 = <strong>Sno</strong>（单属性）；② 属性原子 → 1NF；③ <strong>单属性码不可能有部分依赖</strong> → 满足 2NF 的这一半；④ Sdept→Sloc 且 Sdept↛Sno → <strong>Sloc 传递依赖于 Sno</strong> → 最高为 <strong>2NF</strong>；⑤ 不再判断（已被第 4 步拦截）。修复：拆出 (Sdept, Sloc)，Sdept 作外码。</p>
+<p><strong>44. B</strong>：求候选码：AB⁺ = {A,B} → C = U ✅；AC⁺ = {A,C} → B = U ✅ → 候选码为 <strong>AB 与 AC</strong>，<strong>A、B、C 全是主属性</strong>（没有非主属性）→ 第 3、4 步自动通过 → <strong>最高 3NF</strong>。但依赖 <strong>C→B 的左部 C 不含任何候选码</strong> → <strong>不满足 BCNF</strong>。这就是"3NF ⊄ BCNF"的标准反例（3NF 的豁免条款"Y 是主属性"在此生效，BCNF 取消了该豁免）。</p>
+<p><strong>45. A</strong>：M:N 联系<strong>必须新建一个关系</strong>，属性 = 两端实体的主码 + 联系本身的全部属性，主码 = 两端主码的组合。B 是 <strong>1:N</strong> 的做法（且方向要说"1 端并入 N 端"）；C 的主码不能任选；D 无法表达多对多关系（一行只能存一个对方实体）。</p>
+<hr />
+<h2>分科正确率统计表（做完后填写）</h2>
+<blockquote>
+<p><strong>填写规则</strong>：把答题卡上的对错按科目汇总，填入下表，并复制到 <code>docs/practice/knowledge-checklist.md</code> 的「阶段 1 测验统计」节。
+<strong>判定规则</strong>：<strong>单科正确率 &lt; 60%（&lt; 9/15）→ 该科对应知识点在 <code>knowledge-checklist.md</code> 中标记"二轮重点"</strong>；总分 &lt; 27/45（60%）→ Phase 2 每天必须额外抽 30 分钟补弱项。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>覆盖天数</th>
+<th>题号范围</th>
+<th>正确数</th>
+<th>满分</th>
+<th>正确率</th>
+<th>是否达标（≥60%）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统（OS）</td>
+<td>Day 1–3</td>
+<td>1–15</td>
+<td>____</td>
+<td>15</td>
+<td>____%</td>
+<td>□ 达标　□ 二轮重点</td>
+</tr>
+<tr>
+<td>计算机网络</td>
+<td>Day 4–6</td>
+<td>16–30</td>
+<td>____</td>
+<td>15</td>
+<td>____%</td>
+<td>□ 达标　□ 二轮重点</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>Day 7–8</td>
+<td>31–45</td>
+<td>____</td>
+<td>15</td>
+<td>____%</td>
+<td>□ 达标　□ 二轮重点</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td>Day 1–8</td>
+<td>1–45</td>
+<td>____</td>
+<td><strong>45</strong></td>
+<td>____%</td>
+<td>□ 合格（≥27）　□ 需补强</td>
+</tr>
+</tbody>
+</table>
+<p><strong>错题分布诊断（在错的题号上打勾，定位薄弱板块）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>概念记忆类</th>
+<th>计算推导类</th>
+<th>综合应用类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS（1–15）</td>
+<td>☐ 1 ☐ 2 ☐ 3 ☐ 5 ☐ 6 ☐ 7 ☐ 10 ☐ 11 ☐ 12 ☐ 13 ☐ 15</td>
+<td>☐ 4 ☐ 8 ☐ 9 ☐ 14</td>
+<td></td>
+</tr>
+<tr>
+<td>网络（16–30）</td>
+<td>☐ 16 ☐ 17 ☐ 18 ☐ 19 ☐ 20 ☐ 21 ☐ 22 ☐ 23 ☐ 24 ☐ 28 ☐ 29 ☐ 30</td>
+<td>☐ 25 ☐ 26 ☐ 27</td>
+<td></td>
+</tr>
+<tr>
+<td>数据库（31–45）</td>
+<td>☐ 31 ☐ 32 ☐ 36 ☐ 38 ☐ 39</td>
+<td>☐ 33 ☐ 34 ☐ 35 ☐ 40</td>
+<td>☐ 41 ☐ 42 ☐ 43 ☐ 44 ☐ 45</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>诊断读法</strong>：
+- <strong>概念类错得多</strong> → 回对应笔记的<strong>结论清单/对比表</strong>整体重背（OS: day01–03 必背清单；网络: day04 §七 端口表 + day05 §6 拥塞规则 + day06 §2.1 算法参数表；数据库: day07 §六 + day08 §六 各 20 条）。
+- <strong>计算类错得多</strong> → 不是"没背公式"，而是"跳步"。回笔记重算对应例题：OS 地址转换（day02 §3.4）、寻道（day03 §3.2）、索引（day03 §6）；网络子网划分（day05 §八 5 道例题）；数据库 SQL 结果（day07 §四 4 道例题）。
+- <strong>数据库综合类（41–45）错得多</strong> → 这是<strong>科目二大题的第一步</strong>，必须回 <code>day08-er.md</code> §2.2 候选码 4 步法 + §3.3 范式流程图 + §5.2 转换规则表，遮住答案把例题全部重推一遍。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/stage1-quiz.md">docs/practice/stage1-quiz.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

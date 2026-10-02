@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2023 年上半年 软件设计师 上午试卷（真题卷 6） —— 答案速查 · 逐题解析 · 统计与错题登记 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 papers 📁 2023H1-morning-key.md</div>
+<h1>2023 年上半年 软件设计师 上午试卷（真题卷 6） —— 答案速查 · 逐题解析 · 统计与错题登记</h1>
+<blockquote>
+<p>配套试卷：<code>2023H1-morning-questions.md</code></p>
+<p>⚠️ <strong>答案来源说明（重要）</strong>：本地 <code>practice_dd/2020~2023答案/2023年上半年上午试卷（参考答案）.pdf</code>
+经提取核对，其内容为<strong>真答案 + 专业解析</strong>（39 页，每题含"参考答案（n）X"标注与详细文字解析）。
+本文件即以该 PDF 为<strong>主答案源</strong>转录整理，并对其中自相矛盾处做了修正（见下方分歧题）。</p>
+<p>⚠️ <strong>已修正的分歧题</strong>（答案PDF自身结论与其解析/标准语法冲突，本键册改判，解析中给出完整推导）：
+<strong>第 55 题</strong>（答案PDF标 A「INSERT」，但其自身解题示例写作 "GRANT INSERT ON Students TO User1 WITH GRANT OPTION"，
+且标准 SQL 语法要求 <code>GRANT &lt;权限&gt; ON [TABLE] &lt;对象&gt;</code>；本题为 2011 年下半年第 51 题逐字重复，该题官方答案为 B。
+故本键册按 <strong>B「INSERT ON」</strong>）——详见第 55 题解析。</p>
+<p>⚠️ <strong>需注意的题</strong>：<strong>第 68 题</strong>（答案PDF标 D「/home/httpd」，但其解析文字先称默认根目录为 <code>/var/www/html</code> 或 <code>/var/www</code>，
+前后矛盾；本题为网络工程师 2018 年上半年第 31 题原题，官方教程答案为 <code>/home/httpd</code>，本键册按 <strong>D</strong>，
+并在解析中注明现代 Apache 发行版实际默认为 <code>/var/www/html</code>）——详见第 68 题解析。</p>
+<p>⚠️ <strong>解析</strong>由本人依据上述答案PDF的解析改写（题目与答案均为真题），以"为什么对 + 考什么 + 干扰项为何错"为原则；
+涉及图形的题目（17-18、22、26-28、34-35、41-42、44-45、64-65）解析中的图形复原均标注
+<strong>【存疑：图形复原】</strong>，与原卷图形可能在细节上存在差异；计算题给出可复核的算式。</p>
+</blockquote>
+<hr />
+<h2>一、答案速查（1-75）</h2>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+<th>题号</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>C</strong></td>
+<td>16</td>
+<td><strong>C</strong></td>
+<td>31</td>
+<td><strong>C</strong></td>
+<td>46</td>
+<td><strong>A</strong></td>
+<td>61</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>B</strong></td>
+<td>17</td>
+<td><strong>B</strong></td>
+<td>32</td>
+<td><strong>B</strong></td>
+<td>47</td>
+<td><strong>D</strong></td>
+<td>62</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>C</strong></td>
+<td>18</td>
+<td><strong>D</strong></td>
+<td>33</td>
+<td><strong>D</strong></td>
+<td>48</td>
+<td><strong>B</strong></td>
+<td>63</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>B</strong></td>
+<td>19</td>
+<td><strong>D</strong></td>
+<td>34</td>
+<td><strong>B</strong></td>
+<td>49</td>
+<td><strong>D</strong></td>
+<td>64</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>D</strong></td>
+<td>20</td>
+<td><strong>A</strong></td>
+<td>35</td>
+<td><strong>C</strong></td>
+<td>50</td>
+<td><strong>C</strong></td>
+<td>65</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>C</strong></td>
+<td>21</td>
+<td><strong>D</strong></td>
+<td>36</td>
+<td><strong>C</strong></td>
+<td>51</td>
+<td><strong>D</strong></td>
+<td>66</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>C</strong></td>
+<td>22</td>
+<td><strong>B</strong></td>
+<td>37</td>
+<td><strong>A</strong></td>
+<td>52</td>
+<td><strong>A</strong></td>
+<td>67</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>D</strong></td>
+<td>23</td>
+<td><strong>B</strong></td>
+<td>38</td>
+<td><strong>C</strong></td>
+<td>53</td>
+<td><strong>C</strong></td>
+<td>68</td>
+<td><strong>D</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>C</strong></td>
+<td>24</td>
+<td><strong>D</strong></td>
+<td>39</td>
+<td><strong>A</strong></td>
+<td>54</td>
+<td><strong>A</strong></td>
+<td>69</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>C</strong></td>
+<td>25</td>
+<td><strong>C</strong></td>
+<td>40</td>
+<td><strong>B</strong></td>
+<td>55</td>
+<td><strong>B</strong> ⚠️</td>
+<td>70</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>D</strong></td>
+<td>26</td>
+<td><strong>D</strong></td>
+<td>41</td>
+<td><strong>D</strong></td>
+<td>56</td>
+<td><strong>C</strong></td>
+<td>71</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>D</strong></td>
+<td>27</td>
+<td><strong>A</strong></td>
+<td>42</td>
+<td><strong>C</strong></td>
+<td>57</td>
+<td><strong>C</strong></td>
+<td>72</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>C</strong></td>
+<td>28</td>
+<td><strong>C</strong></td>
+<td>43</td>
+<td><strong>B</strong></td>
+<td>58</td>
+<td><strong>D</strong></td>
+<td>73</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>C</strong></td>
+<td>29</td>
+<td><strong>D</strong></td>
+<td>44</td>
+<td><strong>D</strong></td>
+<td>59</td>
+<td><strong>A</strong></td>
+<td>74</td>
+<td><strong>B</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>C</strong></td>
+<td>30</td>
+<td><strong>C</strong></td>
+<td>45</td>
+<td><strong>D</strong></td>
+<td>60</td>
+<td><strong>C</strong></td>
+<td>75</td>
+<td><strong>C</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>对答案计分</strong>：<strong><em>_</em>_ / 75 = </strong>____%</p>
+<blockquote>
+<p>⚠️ 标记题：第 55 题为<strong>分歧题</strong>（答案PDF标 A，本键册据标准语法与官方真题答案改判 B，详见解析）；
+第 68 题答案PDF解析前后矛盾（详见解析）。计分时两题均按本键册答案。</p>
+</blockquote>
+<hr />
+<h2>二、逐题解析</h2>
+<h3>计算机基础（第 1-6 题）</h3>
+<p><strong>1. C</strong>｜【组成原理】系统总线
+系统总线用于连接 <strong>CPU、主存及外设部件</strong>，是各部件间传输数据与控制信号的公共通道。B（运算器、控制器和寄存器）是 CPU 的组成部分，D（DMA/中断控制器）属外设管理部件，均不是总线"连接"的对象。</p>
+<p><strong>2. B</strong>｜【组成原理】存储体系
+DMA 控制器与中断控制器直接与主存交换数据，发出的是<strong>主存物理地址</strong>。高速缓存对 CPU 透明（由硬件映射），虚拟地址由 CPU 经 MMU 产生，扇区地址属硬盘寻址，均与 DMA/中断控制器的数据传输无关。</p>
+<blockquote>
+<p>⚠️ 题干"中断 CPU"原文如此，应为"中断控制器"（已在题目文件标注）。</p>
+</blockquote>
+<p><strong>3. C</strong>｜【组成原理】海明码
+校验位 k 需满足 <strong>2^k − 1 ≥ n + k</strong>，n = 8：k=3 时 7 ≥ 11 不成立；k=4 时 15 ≥ 12 成立，故至少 <strong>4</strong> 位。</p>
+<p><strong>4. B</strong>｜【组成原理】中断
+中断向量是<strong>中断服务程序的入口地址</strong>（中断向量表的内容）。A 是设备地址、C 是数据地址、D 是断点地址（现场保护的内容），均非中断向量。</p>
+<p><strong>5. D</strong>｜【组成原理】补码
+补码零表示唯一（A 对）、减法可转加法（B 对）、符号位可参与运算（C 对）；但负数补码与真值的对应需"取反加 1"，<strong>并不简单直观</strong>，故 D 错误（本题选错误的叙述）。</p>
+<p><strong>6. C</strong>｜【组成原理】指令流水线
+一条指令耗时 S = 2+2+1 = 5ns；流水段最长 2ns。n 条指令总时间 = S + 2×(n−1) = 5 + 2×999 = <strong>2003ns</strong>。干扰项 2008ns（误用 5ns 为段长）易错。</p>
+<h3>网络与信息安全（第 7-11、66-70 题）</h3>
+<p><strong>7. C</strong>｜【OSI 模型】
+<strong>表示层</strong>负责数据格式转换、加解密与压缩。传输层管端到端可靠传输，会话层管会话建立与同步，应用层是用户接口。</p>
+<p><strong>8. D</strong>｜【HTTPS/PKI】
+HTTPS 用非对称加密握手协商出<strong>会话密钥</strong>，再用<strong>对称加密</strong>加密后续 HTTP 消息（混合加密）。A/B 用公钥加密消息效率太低；C 方式正确但"公钥加密"描述错误。</p>
+<p><strong>9. C</strong>｜【HTTPS/PKI】
+证书被吊销列入 CRL/OCSP 后，客户端验证证书合法性失败，<strong>无法再信任服务器</strong>。服务器仍可加解密与签名（A、B 错），客户端仍可发送信息（D 错）。</p>
+<p><strong>10. C</strong>｜【信息安全】入侵防御系统（IPS）
+IPS 自身即具备<strong>阻断</strong>能力，不需"联动 IDS 才阻断"——选项 C 描述的功能实际属于 IDS 的局限，故 C 不正确。A、B、D 均为 IPS 功能。</p>
+<p><strong>11. D</strong>｜【信息安全】Web 应用防火墙（WAF）
+WAF 防护 Web 应用层攻击：登录口令暴力破解（A）、恶意注册（B）、抢票机器人（C）均可防护。<strong>流氓软件</strong>驻留用户主机，需杀毒/反恶意软件处理，超出 WAF 防护范畴。</p>
+<p><strong>66. B</strong>｜【网络协议】WWW
+万维网的控制协议是 <strong>HTTP</strong>。FTP 是文件传输，SSL 是加密协议（HTTPS = HTTP+SSL/TLS），DNS 是域名解析。</p>
+<p><strong>67. B</strong>｜【Linux】Web 服务器
+Linux 上通常用 <strong>Apache</strong> 作 Web 服务器。IIS 是 Windows 的，NFS 是网络文件系统，MySQL 是数据库。</p>
+<p><strong>68. D</strong>｜【Linux】Apache 默认 Web 目录
+按官方教程与原题（网络工程师 2018 年上半年第 31 题）答案为 <strong>/home/httpd</strong>。</p>
+<blockquote>
+<p>⚠️ 答案PDF解析自相矛盾：先写"默认根目录为 /var/www/html 或 /var/www"，又写"站点主目录是 /home/httpd"。
+考试按教程答案选 D。补充：现代 Apache 发行版（CentOS/RHEL 等）实际默认为 <code>/var/www/html</code>，
+<code>/etc/httpd</code> 是配置目录、<code>/var/log/httpd</code> 是日志目录（A、B 均非 Web 主目录）。</p>
+</blockquote>
+<p><strong>69. A</strong>｜【网络协议】SNMP
+SNMP 为应用层协议，其报文通过 <strong>UDP</strong> 传输（无连接、效率高）。TCP/IP/ICMP 均非其承载协议。</p>
+<p><strong>70. B</strong>｜【网络故障排查】
+能上即时聊天（说明 IP、链路、网卡均正常）但打不开任何网页，是<strong>域名解析</strong>失效，即 <strong>DNS 配置错误</strong>。A/C/D 都会导致连聊天也断。</p>
+<h3>知识产权（第 12-14 题）</h3>
+<p><strong>12. D</strong>｜【著作权】保护期
+<strong>署名权</strong>（及修改权、保护作品完整权）的人身权保护期<strong>不受限制</strong>。发表权有期限（作者终生及死亡后 50 年），发行权、展览权属财产权也有期限。</p>
+<p><strong>13. C</strong>｜【软件保护】
+国际上保护计算机软件知识产权的主要方式是实施<strong>版权法</strong>（以登记、授权、许可保护软件著作权）。合同法、物权法、刑法均非主要保护方式。</p>
+<p><strong>14. C</strong>｜【软件著作权】继承
+软件著作权属自然人的，其死亡后在保护期内，继承人可继承<strong>除署名权外</strong>的其他各项权利——选项 C 称"继承所有权利"错误。A、B、D 均出自《计算机软件保护条例》。</p>
+<h3>软件工程（第 15-22、29-50 题）</h3>
+<p><strong>15. C</strong>｜【数据流图】加工规格说明
+加工规格说明须描述输入数据流到输出数据流的<strong>变换规则</strong>，应是高层次、抽象的规范，<strong>不给出实现细节</strong>（实现在程序设计中描述）。A、B、D 均正确。</p>
+<p><strong>16. C</strong>｜【软件设计原则】
+好的设计原则包括模块化（A）、提高模块独立性（B）、提高抽象层次（D）。<strong>集中化</strong>不是好原则——集中设计易导致单点故障与性能瓶颈。</p>
+<p><strong>17. B</strong>｜【项目活动图】关键路径【存疑：图形复原】
+关键路径 = 开始→C→E→H→J→K→结束，长度 = 6+6+4+5+2 = <strong>23</strong>，故里程碑 <strong>E</strong> 在关键路径上（A、C、D 对应的 B、G、I 均不在最长路径上）。</p>
+<blockquote>
+<p>复原边权：开始→A；A→B 5；A→C 6；B→D 3；B→E 3；C→E 6；C→F 3；D→G 3；D→H 5；E→H 4；E→I 1；F→I 4；G→K 4；H→J 5；I→J 2；J→K 2；K→结束。</p>
+</blockquote>
+<p><strong>18. D</strong>｜【项目活动图】关键路径长度
+同上，关键路径长度 = <strong>23</strong>。其余路径均小于 23（如经 B 的路径 5+3+5+5+2+… 明显更短）。</p>
+<p><strong>19. D</strong>｜【团队管理】沟通路径
+n 人团队两两沟通路径数 = n(n−1)/2 = 8×7/2 = <strong>28</strong>。64（误用 n²）、56（误用 n(n−1) 不除 2）、32 均错。</p>
+<p><strong>20. A</strong>｜【程序设计语言】短路计算
+<code>a or …</code>：只要 <strong>a 为 true</strong>，整个表达式即确定为 true，右部不再计算——这正是短路。b/c/d 为 true 时表达式值仍需继续计算右部才能确定。</p>
+<p><strong>21. D</strong>｜【正规式】
+<code>(0|10)*</code> 生成的串中，<strong>1 不能连续出现</strong>（每个 1 后必跟 0），0 可连续（00 合法），长度无奇偶约束（如 0、00、10 长度既有奇又有偶）。</p>
+<p><strong>22. B</strong>｜【参数传递】传值/传引用【存疑：图形复原】
+hoo 第一参数传引用：<code>x = x - 1</code> 中 x 实为 a（引用），a 被改为 <strong>39</strong>；第二参数传值：hoo 内对 b 的修改不影响 foo 中 b，b 仍为 <strong>5</strong>。故输出 <code>39, 5</code>。</p>
+<blockquote>
+<p>⚠️ 原卷"call by reerence"应为"reference"（已在题目文件标注）。</p>
+</blockquote>
+<p><strong>29. D</strong>｜【增量模型】
+增量模型的优点是早交付可用产品（A）、早让用户熟悉（B）、高优先级功能多受测试（C）。但增量模型需预先规划功能并考虑扩展与兼容，<strong>设计并不更容易</strong>——D 不正确。</p>
+<p><strong>30. C</strong>｜【敏捷开发】
+<strong>Scrum（并列争求法）</strong> 以约 30 天的迭代为"冲刺"，按需求优先级实现产品。XP 重工程实践，Crystal 重团队与交流，ASD 强调自适应调整。</p>
+<p><strong>31. C</strong>｜【模块耦合】
+模块 A 用<strong>控制参数</strong>决定 B 执行哪部分语句，属<strong>控制耦合</strong>。数据耦合传数据值，标记耦合传数据结构，公共耦合共享全局数据区。</p>
+<p><strong>32. B</strong>｜【可移植性设计】
+可移植性要求<strong>不使用</strong>特定环境的专用功能（B 与此相反，故 B 不属于该规则）。A、C、D（设备相关/无关分离、平台无关语言、不依赖平台类库）均为可移植性规则。</p>
+<p><strong>33. D</strong>｜【体系结构风格】管道—过滤器
+管道—过滤器风格优点：构件高内聚低耦合（A）、支持复用（C）、支持并行执行（C 项）。它<strong>不适合交互处理应用</strong>（流式处理、无回溯），故 D 不正确。</p>
+<p><strong>34. B</strong>｜【白盒测试】路径覆盖【存疑：图形复原】
+覆盖所有路径至少 <strong>4</strong> 个用例：① 判断1(N)→结束；② 判断1(Y)→判断2(N)→…；③ 判断1(Y)→判断2(Y)→判断3(N)→…；④ 判断1(Y)→判断2(Y)→判断3(Y)→回到判断1（循环路径）。</p>
+<p><strong>35. C</strong>｜【白盒测试】McCabe 复杂度【存疑：图形复原】
+流程图有 3 个判定节点（判断1、2、3），McCabe 复杂度 V(G) = 判定节点数 + 1 = 3 + 1 = <strong>4</strong>。</p>
+<p><strong>36. C</strong>｜【软件维护】
+交付后为使用户界面更友好而改进图形输出，属<strong>改善性（完善性）维护</strong>。改正性修缺陷，适应性适应环境变化，预防性防患于未然。</p>
+<p><strong>37. A</strong>｜【面向对象】封装
+学生的属性与操作均<strong>封装</strong>在学生对象中（数据+行为组合并隐藏实现细节）。</p>
+<p><strong>38. C</strong>｜【面向对象】消息
+不同类的对象之间通过<strong>消息</strong>进行通信。继承是类间复用，多态是同一消息不同行为，重载是同名方法不同参数。</p>
+<p><strong>39. A</strong>｜【面向对象测试】层次
+测试类中定义的<strong>每个方法</strong>属于<strong>算法层</strong>（最底层，针对算法/数据结构的单元测试）。类层、模板层非标准层次，系统层针对整个系统。</p>
+<p><strong>40. B</strong>｜【面向对象设计原则】
+重用一个包中的某个类就要重用该包所有类，属<strong>共同重用原则（CRP）</strong>。共同封闭原则要求同包内变化方向一致，开放—封闭与接口分离是其它原则。</p>
+<p><strong>41. D</strong>｜【UML】序列图
+序列图描述<strong>以时间顺序组织的对象之间的交互活动</strong>。A 是用例图，B 是对象图，C 是活动图。</p>
+<p><strong>42. C</strong>｜【UML 序列图】消息顺序【存疑：图形复原】
+Loop[1..2] 内含消息 a、b，循环最少 1 次最多 2 次，<strong>先执行完循环内的 a、b，再执行最后的 c</strong>：即 a→b→a→b→c（循环 2 次后退出执行 c）。A/D 在 c 之后又执行循环内容（循环已结束），B 未执行循环。</p>
+<blockquote>
+<p>答案PDF的(42)选项 B 只印了一个"c"，系原卷选项排版异常，据解析应为 <code>c</code>（仅执行 c，未走循环）。</p>
+</blockquote>
+<p><strong>43. B</strong>｜【UML】包图
+包可拥有类、接口、构件、结点、协作、用例、图及嵌套包（A、C 对），包内同种元素不能重名（D 对）；但<strong>一个元素只能被一个包拥有</strong>（形成命名空间），故 B 不正确。</p>
+<p><strong>44. D</strong>｜【设计模式】原型模式【存疑：图形复原】
+类图中 Resume 实现 Cloneable、声明 clone()，通过<strong>复制现有对象</strong>创建新对象（避免重复初始化代码、工作经历可不同）——这是<strong>原型（Prototype）模式</strong>。单例保证唯一实例，抽象工厂创建产品族，生成器分步构建复杂对象。</p>
+<p><strong>45. D</strong>｜【设计模式】分类
+原型模式属<strong>创建型</strong>模式（与工厂、抽象工厂、生成器、单例同类）。</p>
+<p><strong>46. A</strong>｜【设计模式】策略模式
+不同季节/节假日采用不同定价（多种可相互替换的算法），适合<strong>策略（Strategy）模式</strong>——把每种定价封装成独立策略对象。状态模式强调状态驱动行为改变，观察者强调依赖者被通知，命令模式把请求封装成对象。</p>
+<p><strong>47. D</strong>｜【设计模式】策略模式意图
+策略模式意图：<strong>定义一系列算法，把它们封装起来并使它们可以相互替换</strong>。A 是命令模式，B 是观察者模式，C 是状态模式。</p>
+<p><strong>48. B</strong>｜【Python】type()
+Python 用 <strong>type()</strong> 获取对象类型（返回 <code>&lt;class 'int'&gt;</code> 等）。str() 转字符串，id() 返回对象唯一标识符，object() 是所有对象的基类。</p>
+<p><strong>49. D</strong>｜【Python】元组
+<code>(1, 2, 1, 2)</code>（A）、<code>1, 2, 1, 2</code>（B，逗号即元组）、<code>tuple()</code>（C 空元组）均可；<strong>(1)</strong> 只是整数 1（括号当表达式用），单元素元组须写 <code>(1,)</code>，故 D 不能定义元组。</p>
+<p><strong>50. C</strong>｜【Python】语法
+<strong>Python 没有 switch...case 语句</strong>（选择结构用 if...elif...else），故 C 不正确。A（for 迭代序列）、B（for/while 后可加 else）、D（支持嵌套循环）均正确。</p>
+<h3>操作系统（第 23-28 题）</h3>
+<p><strong>23. B</strong>｜【位示图】
+物理块数 = 512GB / 4MB = 131072 块；字长 64 位，一位记一块，故位示图 = 131072 / 64 = <strong>2048</strong> 个字。</p>
+<p><strong>24. D</strong>｜【磁盘调度】
+<strong>先来先服务</strong>（按请求顺序）与<strong>最短寻道时间优先</strong>（按距离当前磁道远近）都可能随时改变磁臂移动方向。电梯调度与单向扫描固定方向，不会"随时"改变。</p>
+<p><strong>25. C</strong>｜【线程】
+同一进程的各线程<strong>共享</strong>代码段、全局变量等进程资源，但<strong>栈是线程私有的</strong>——T1/T2/T3 的栈指针不能共享（C 对；D 错）。A、B 描述与共享性相反。</p>
+<p><strong>26. D</strong>｜【PV 操作】前趋图【存疑：图形复原】
+P2 完成后须通知 P3、P4，故空① = <strong>V(S3)V(S4)</strong>；P3 须等待 P1、P2 两个通知，空② = <strong>P(S2)P(S3)</strong>（S1、S2 由 P1 发，S3、S4 由 P2 发，P3 收 P2 的 S3 与 P1 的 S2）。组合为选项 D。</p>
+<p><strong>27. A</strong>｜【PV 操作】前趋图【存疑：图形复原】
+P3 完成后通知 P4，空③ = <strong>V(S5)</strong>；P4 须等待 P2、P3 两个通知，空④ = <strong>P(S4)P(S5)</strong>。组合为选项 A。</p>
+<p><strong>28. C</strong>｜【PV 操作】前趋图【存疑：图形复原】
+P5 须等待 P4 的通知，空⑤ = <strong>P(S6)</strong>；P5 完成后通知 P6，空⑥ = <strong>V(S8)</strong>。组合为选项 C。</p>
+<blockquote>
+<p>第 26-28 题三空连环：S1～S8 初值均为 0，V 操作在"通知方"执行、P 操作在"等待方"执行，依据前趋图的有向边逐条对应即可。</p>
+</blockquote>
+<h3>数据库（第 51-56 题）</h3>
+<p><strong>51. D</strong>｜【三级模式】
+视图层（外模式）是最高抽象、逻辑层（模式）次之、物理层（内模式）最低——D 称"物理层比逻辑层更高"错误。</p>
+<p><strong>52. A</strong>｜【函数依赖】Armstrong 公理
+<strong>自反律</strong>：若 Y ⊆ X ⊆ U，则 X→Y 为 F 蕴含（含 X→X）。B 是传递律，C 是分解律的变形，D 是合并律，均非自反律。</p>
+<p><strong>53. C</strong>｜【候选码】
+F = {AB→C, CD→B}：D 不在任何函数依赖右部出现 → 必在候选码中；以 AB→C 出发，A、B 也不在右部 → <strong>ABD 是候选码</strong>；由 CD→B 出发，A、C、D 不在右部 → <strong>ACD 是候选码</strong>。共 2 个。</p>
+<p><strong>54. A</strong>｜【主属性】
+ABD 与 ACD 的并集 = U = {A,B,C,D}，4 个属性均为主属性，非主属性 <strong>0</strong> 个。</p>
+<p><strong>55. B</strong>⚠️｜【SQL】授权 —— <strong>分歧题</strong>
+标准 SQL 授权语法：<code>GRANT &lt;权限&gt; ON [TABLE] &lt;对象&gt; TO &lt;用户&gt; [WITH GRANT OPTION]</code>。
+题干模板为 <code>GRANT （55） TABLE Students TO User1 （56）</code>，填 <strong>B「INSERT ON」</strong> 才能凑成
+<code>GRANT INSERT ON TABLE Students TO User1 …</code>（语法完整）；若填 A「INSERT」则变成
+<code>GRANT INSERT TABLE Students …</code>，<strong>缺少 ON，语法错误</strong>。</p>
+<blockquote>
+<p>⚠️ <strong>分歧说明</strong>：本地答案PDF标 (55)<strong>A</strong>，但其<strong>自身解题示例</strong>写的是
+<code>GRANT INSERT ON Students TO User1 WITH GRANT OPTION</code>——INSERT 与 ON 连用，自相矛盾。
+且本题是 <strong>2011 年下半年第 51、52 题逐字重复</strong>，该题官方答案为 <strong>B</strong>。
+故本键册按 <strong>B</strong>，并在此显著标注；若以答案PDF为准记 A，请自行调整。</p>
+</blockquote>
+<p><strong>56. C</strong>｜【SQL】授权传递
+允许 User1 将权限再授予他人，须加 <strong>WITH GRANT OPTION</strong>。FOR ALL、PUBLIC（授权给所有用户，非"允许转授"）、WITH CHECK OPTION（用于视图更新约束）均不合题意。</p>
+<h3>数据结构与算法（第 57-65 题）</h3>
+<p><strong>57. C</strong>｜【栈】表达式求值
+转后缀式：<code>10 40 30 5 / - * 20 +</code>。操作数栈最大深度：依次压入 10、40、30、5（<strong>4</strong> 个）才遇到第一个运算符 <code>/</code>，之后每算一次结果重新压入，深度不再增加。故容量至少为 <strong>4</strong>。</p>
+<p><strong>58. D</strong>｜【哈夫曼编码】
+合法哈夫曼编码须满足 Kraft 等式 Σ 2^(−li) = 1（且哈夫曼树无度为 1 的结点、结点总数为奇数）：
+A：4×2⁻³ + 2⁻¹ = 0.5+0.5 = 1 ✓；B：2×2⁻⁴ + 2⁻³ + 2⁻² + 2⁻¹ = 1 ✓；C：3×2⁻² + 2×2⁻³ = 0.75+0.25 = 1 ✓；
+D：2×2⁻² + 3×2⁻³ = 0.5+0.375 = <strong>0.875 ≠ 1</strong> ✗（对应哈夫曼树会出现度为 1 的结点、结点数为偶数），故 D 不可能。</p>
+<p><strong>59. A</strong>｜【图的遍历】
+邻接表存储下，BFS 每个顶点各入队/出队一次（O(n)），每条弧沿邻接表各访问一次（O(e)），总时间复杂度 <strong>O(n+e)</strong>。邻接矩阵存储才是 O(n²)。</p>
+<p><strong>60. C</strong>｜【折半查找】
+折半查找每次将区间缩小一半，比较序列须与有序表的"折半路径"一致。C 序列 90→85→61→77→42：前三次已把 42 划在区间之外，第五次不可能再取到 42 作中点，故不可能。A、B、D 均可构造。</p>
+<p><strong>61. D</strong>｜【树/森林→二叉树】
+森林转二叉树（左孩子右兄弟）：第一棵树 T1 为根，第二棵树 T2 挂在 T1 右侧，第三棵树 T3 挂在 T2 右侧——<strong>右子树包含第二、三棵树的全部结点 = n2 + n3</strong>。</p>
+<p><strong>62. D</strong>｜【排序】
+要求 O(nlgn) 且<strong>稳定</strong>：<strong>归并排序</strong>（稳定、O(nlgn)）。直接插入 O(n²)，堆排序与快速排序不稳定。</p>
+<p><strong>63. B</strong>｜【排序】
+要求 O(nlgn) 且空间 O(1)（原地）：<strong>堆排序</strong>（O(nlgn)、O(1)）。归并排序需 O(n) 辅助空间，快速排序最坏 O(n²)，直接插入 O(n²)。</p>
+<p><strong>64. C</strong>｜【算法策略】
+Kruskal 每次选当前最短且不构成环的边，属<strong>贪心法</strong>。分治需分解-合并，动态规划用子问题最优值，回溯需搜索解空间。</p>
+<p><strong>65. A</strong>｜【最小生成树】【存疑：图形复原】
+6 顶点需 5 条边。按权值升序选：AC(1) → DF(2) → BE(3) → CE(4) → CF(4)（此时 5 条边且无环），权值 = 1+2+3+4+4 = <strong>14</strong>。</p>
+<blockquote>
+<p>复原边权：AB 8；AC 1；AD 5；BC 5；CD 5；BE 3；CE 4；CF 4；DF 2；EF 9。</p>
+</blockquote>
+<h3>计算机英语（第 71-75 题）</h3>
+<blockquote>
+<p>主题：低代码（Low-code）/无代码（No-code）开发平台。</p>
+</blockquote>
+<p><strong>71. A</strong>｜【英语】可视化构建块
+"通过<strong>可视化（visual）</strong>构建块（如拖放与下拉菜单界面）实现自动代码生成"——拖放/下拉界面即图形化操作。component-based（基于构件）、object-oriented（面向对象）、structural（结构化）均不指图形界面。</p>
+<p><strong>72. B</strong>｜【英语】指代关系
+"这种<strong>自动化（automation）</strong>使用户专注于差异化部分而非编程的公分母"——this 指代上句的 automated code generation。</p>
+<p><strong>73. B</strong>｜【英语】无代码特点
+"无代码采用完全不干预（<strong>hands-off</strong>）的方式，100% 依赖可视化工具"——与前文 low-code 的 handholding（手动干预）形成对比。generic（通用的）、labor-free（免费的/免劳动的）不合语境。</p>
+<blockquote>
+<p>⚠️ 选项 A 原卷印为 "medern"，应为 "modern"（已在题目文件标注）。</p>
+</blockquote>
+<p><strong>74. B</strong>｜【英语】LCAP 特征
+"IDE 具有 API、代码模板、可复用插件模块和图形连接器等<strong>内置（built-in）</strong>功能"——后文列举的均为平台自带功能。reusable（可复用的）只描述插件模块，不能统领 APIs/连接器；existed（存在的）非固定搭配。</p>
+<blockquote>
+<p>⚠️ 选项 D 原卷印为 "well-konwn"，应为 "well-known"（已在题目文件标注）。</p>
+</blockquote>
+<p><strong>75. C</strong>｜【英语】最后一英里
+"把精力重新投向<strong>开发（development）</strong>的最后一英里"——LCAP 自动化编码的通用部分，让专业开发者专注剩余的开发工作。delivery（交付）与"自动化编码"语境不完全对应。</p>
+<hr />
+<h2>三、分科正确率统计（做完后回填）</h2>
+<blockquote>
+<p>分科归属按本题库标注。总分 ____ / 75。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>题号</th>
+<th>题数</th>
+<th>答对数</th>
+<th>正确率</th>
+<th>备注（错题号）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础（组成与体系结构）</td>
+<td>1-6</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>23-28</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>网络（含信息安全）</td>
+<td>7-11, 66-70</td>
+<td>10</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>51-56</td>
+<td>6</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>57-65</td>
+<td>9</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>软件工程（含面向对象·UML·设计模式·程序设计语言）</td>
+<td>15-22, 29-50</td>
+<td>30</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>知识产权</td>
+<td>12-14</td>
+<td>3</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td>计算机英语</td>
+<td>71-75</td>
+<td>5</td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td>1-75</td>
+<td><strong>75</strong></td>
+<td>____</td>
+<td>____%</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>判定规则（对齐科目一合格线 45/75 = 60%）：</strong>
+- 总分 ≥ 45 分：合格，Phase 2 节奏正常推进。
+- 总分 &lt; 45 分：当日错题全部回看对应笔记，并把错题集中的科目列入二轮重点。
+- 单科正确率 &lt; 60%：该科进入 <code>knowledge-checklist.md</code> 二轮重点清单，次日抽 30 分钟补强。
+- 本卷常见丢分重灾区（按本题分布）：<strong>3 海明码校验位、6 流水线时间、17/18 关键路径与长度（图）、19 沟通路径公式、23 位示图大小、26-28 前趋图 PV 三空连环、34/35 白盒路径覆盖用例数 + McCabe 复杂度（图）、53/54 候选码与主属性个数、55/56 SQL 授权语法（分歧题）、57 操作数栈容量、58 哈夫曼编码合法性、60 折半查找比较序列、61 森林转二叉树、62/63 排序稳定性与时空复杂度、64/65 Kruskal 最小生成树（图）、68 Apache 默认目录</strong>。
+- 图形题（17-18、26-28、34-35、41-42、44-45、64-65）若按复原数据做错，先核对原卷 PDF 图形再归因。</p>
+<hr />
+<h2>四、错题登记区（错题四要素）</h2>
+<blockquote>
+<p>每道错题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 登记一条，复制以下模板新增。计算题必须把过程重算一遍。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述，如「第 3 题海明码校验位计算」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 4：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 5：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<hr />
+<h2>五、与前卷对比区（做完后回填）</h2>
+<blockquote>
+<p>已做卷：卷 1（2020 下半年）、卷 2（2021 上半年）、卷 3、卷 4、卷 5，本卷为<strong>卷 6（2023 上半年）</strong>。
+各卷均为 75 题、每题 1 分、合格线 45 分。下表用于判断知识点迁移与薄弱环节。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>卷 1</th>
+<th>卷 2</th>
+<th>卷 3</th>
+<th>卷 4</th>
+<th>卷 5</th>
+<th>卷 6（本卷）</th>
+<th>差异与启示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础（1-6）</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>本卷考系统总线、DMA 地址、海明码、中断向量、补码、流水线——计算题（3、6）易错</td>
+</tr>
+<tr>
+<td>操作系统（23-28）</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>本卷考位示图、磁盘调度方向、线程共享性、<strong>前趋图 PV 三空连环（26-28）</strong>——易连环错</td>
+</tr>
+<tr>
+<td>网络（含安全）</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>____ / 10</td>
+<td>本卷考表示层、HTTPS 混合加密与证书吊销、IPS/WAF、Apache 默认目录、SNMP、DNS 故障</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>____ / 6</td>
+<td>本卷考三级模式、自反律、<strong>候选码 + 主属性个数（53/54）</strong>、SQL 授权（含分歧题 55）</td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>____ / 9</td>
+<td>____ / 9</td>
+<td>____ / 9</td>
+<td>____ / 9</td>
+<td>____ / 9</td>
+<td>____ / 9</td>
+<td>本卷考栈容量、哈夫曼合法性、BFS 复杂度、折半序列、森林转二叉树、排序时空复杂度、Kruskal</td>
+</tr>
+<tr>
+<td>软件工程（15-22, 29-50）</td>
+<td>____ / 30</td>
+<td>____ / 30</td>
+<td>____ / 30</td>
+<td>____ / 30</td>
+<td>____ / 30</td>
+<td>____ / 30</td>
+<td>本卷考 DFD 加工说明、设计原则、活动图（图）、耦合、体系结构、白盒测试（图）、维护类型、OO 概念、UML（图）、原型与策略模式、Python 三题</td>
+</tr>
+<tr>
+<td>知识产权</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>____ / 3</td>
+<td>本卷考署名权保护期、软件保护方式、软件著作权继承</td>
+</tr>
+<tr>
+<td>计算机英语</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>____ / 5</td>
+<td>本卷主题为<strong>低代码/无代码（Low-code / No-code）平台</strong></td>
+</tr>
+<tr>
+<td><strong>总分</strong></td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>____ / 75</td>
+<td>相比前卷的变化：______</td>
+</tr>
+</tbody>
+</table>
+<p><strong>迁移结论（对答案后填写）：</strong>
+1. 六卷<strong>共同稳定考点</strong>（必拿分）：Cache/存储体系、中断与流水线计算、海明码、OSI 分层、HTTPS 混合加密、关系代数与候选码、排序时空复杂度、最小生成树、维护四类型、设计模式分类与意图。
+2. 本卷新增/变化较大的考点：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_
+3. 相比前卷退步的科目与题型：</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_
+4. 下一步要重点回看的知识点：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/papers/2023H1-morning-key.md">docs/practice/papers/2023H1-morning-key.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

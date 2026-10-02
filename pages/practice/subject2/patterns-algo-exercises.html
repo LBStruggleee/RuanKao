@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 29 大题专项③：设计模式 + 算法填空 —— 试题练习 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2 📁 patterns-algo-exercises.md</div>
+<h1>Day 29 大题专项③：设计模式 + 算法填空 —— 试题练习</h1>
+<blockquote>
+<p><strong>适用</strong>：软考中级·软件设计师 科目二（下午卷）试题四（C 算法填空，15 分）与
+试题五/试题六（C++/Java 设计模式填空，15 分，五/六选一）
+<strong>日期</strong>：Day 29（10/19）｜<strong>上午 3h 做题</strong>｜共 4 道大题（算法填空×2 + 设计模式×2），每题 15 分
+<strong>配套</strong>：答案与丢分点解析见 <code>patterns-algo-key.md</code>；识别速查表与答题策略见 <code>patterns-algo-notes.md</code>
+<strong>试题来源</strong>：全部为 2020–2023 年下半年/上半年真实下午试卷试题，逐字转录</p>
+</blockquote>
+<hr />
+<h2>⚠️ 使用说明（务必先读）</h2>
+<ol>
+<li><strong>先做题，后对答案</strong>。本文不含任何答案；做完前不要打开 <code>patterns-algo-key.md</code>。</li>
+<li><strong>算法题（试题四）说明</strong>：原卷在【说明】末尾给出二维数组 d / cost 的<strong>递归式图片</strong>，
+   本地文本源未提取该公式图片。本文对公式给出 <strong>结构化说明</strong>（标注 <strong>【存疑：递归式图形未提取】</strong>），
+   只描述"有几项、每项含义"，<strong>不给出任何空的答案</strong>。C 代码骨架全部逐字转录，空 (1)~(n) 一律留空。</li>
+<li><strong>设计模式题（试题五/六）说明</strong>：原卷类图为 PDF 图片，本地文本源未收录。本文依据<strong>已完整转录的代码</strong>
+   给出 <strong>类结构清单 + 类图骨架</strong>（标注 <strong>【存疑：图形复原】</strong>），只列角色与非空代码里已写明的成员，
+   空位一律留空。若手边有原卷 PDF，请对照原图做题。</li>
+<li><strong>作答要求</strong>：算法题的空要写出完整 C 语句/表达式（含分号、等号）；设计模式题的空可能是
+   一条方法声明、一个类型名或一条语句，按代码上下文补全。计算题（如编辑距离、括号化顺序）
+   要写出推导/草表，不要只猜结果。</li>
+<li><strong>计时</strong>：试题四建议 35–40 分钟/题，试题五/六建议 30 分钟/题；4 题合计约 2.5–3 小时。
+   做完逐题填写计时记录区，再统一对答案。</li>
+</ol>
+<h3>本次选题（替换说明）</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>试题来源</th>
+<th>类型</th>
+<th>考点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>试题 A</td>
+<td>2021 年下半年 下午试题四</td>
+<td>算法填空（C）</td>
+<td>编辑距离：DP 表边界初始化 + 状态转移 + 递推式 + 策略/复杂度 + 手算实例</td>
+</tr>
+<tr>
+<td>试题 B</td>
+<td>2022 年上半年 下午试题四</td>
+<td>算法填空（C）</td>
+<td>矩阵连乘：区间 DP 三重循环 + 划分点记录 + 最优解构造 + 复杂度</td>
+</tr>
+<tr>
+<td>试题 C</td>
+<td>2021 年下半年 下午试题六</td>
+<td>设计模式（Java）</td>
+<td>享元（Flyweight）模式：抽象棋子绘制接口 + 泛型容器元素类型 + 落子逻辑</td>
+</tr>
+<tr>
+<td>试题 D</td>
+<td>2022 年上半年 下午试题五</td>
+<td>设计模式（C++）</td>
+<td>备忘录（Memento）模式：Originator 存取状态 + Memento 封装 + CareTaker 增查</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>【存疑：选题调整】算法第二题原计划选与试题 A <strong>不同算法族</strong>的排序题以覆盖"排序骨架"，但逐一核对后：
+2020 下试题四（希尔排序）的代码骨架在源文本中与答案位置错位且缺失 <code>dk</code> 赋值语句、
+2021 上试题四（凸多边形三角剖分）代码 OCR 误识较多（循环变量、函数名均误）、
+2022 下试题四（堆排序）<strong>答案整段缺失</strong>、2023 上试题四<strong>题目与代码均缺失</strong>。
+出于"题目与答案必须完整且内部自洽"的取舍，改选 <strong>2022 上试题四（矩阵连乘）</strong>——
+与试题 A 同为动态规划，但模型不同（<strong>序列型</strong> 编辑距离 vs <strong>区间型</strong> 矩阵连乘），
+恰好覆盖下午卷 DP 题的两大子类型。排序/查找/树遍历/贪心/图遍历等骨架的系统整理
+见 <code>patterns-algo-notes.md</code> 第二章"常考算法骨架清单"。</p>
+<p>【存疑：选题调整】设计模式两题按"不同模式 + 不同语言"选取：<strong>2021 下试题六（Java，享元）</strong>
+与 <strong>2022 上试题五（C++，备忘录）</strong>，覆盖"对象创建/结构"与"行为/状态恢复"两类，
+且 Java/C++ 互补，训练两种语言的填空手感。</p>
+</blockquote>
+<hr />
+<h1>试题 A：2021 年下半年 下午试题四（编辑距离）</h1>
+<blockquote>
+<p><strong>来源</strong>：2021 年下半年 软件设计师 下午试卷 试题四（共 15 分）
+<strong>题型</strong>：C 算法填空（动态规划）｜<strong>建议用时</strong>：35 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 35 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>生物学上通常采用编辑距离来定义两个物种DNA 序列的相似性，从而刻画物种之间的进化
+关系。具体来说，编辑距离是指将一个字符串变换为另一个字符所需要的最小操作次数。操作
+有三种，分别为：插入一个字符、删除一个字符以及将一个字符修改为另一个字符。用字符数
+组str1 和str2 分别表示长度为len1 和len2 的字符串，定义二维数组d 记录求解编辑距离的
+子问题最优解，则该二维数组可以递归定义为：</p>
+<blockquote>
+<p>【存疑：原文"变换为另一个字符"，按题意应为"变换为另一个字符串"】
+【存疑：原文"递归定义为："后接二维数组 d 的递推公式图片，本地文本源未提取该图片。
+公式结构说明（不含答案）：d[i][j] 表示把 str1 的前 i 个字符变成 str2 的前 j 个字符
+的最小操作次数；分为<strong>边界</strong>（i=0 或 j=0，即一个串为空时，只能全部插入/删除）与
+<strong>一般位置</strong>（字符相等时直接继承左上角；否则在"删除/插入/替换"三种操作中取最小）两大块。
+具体表达式请依据下面 C 代码的两个初始化循环与双重循环反推。】</p>
+</blockquote>
+<hr />
+<h3>【C 代码】</h3>
+<p>下面是算法的C 语言实现。</p>
+<p>（1）常量和变量说明</p>
+<pre><code class="language-text">A，B：两个字符数组
+d[][]：二维数组
+i，j：循环变量
+temp：临时变量
+</code></pre>
+<p>（2）C 程序</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#define N 100
+
+char A[N] = &quot;CTGA&quot;;
+char B[N] = &quot;ACGCTA&quot;;
+int d[N][N];
+
+int min(int a, int b) {
+    return a &lt; b ? a : b;
+}
+
+int editdistance(char *str1, int len1, char *str2, int len2) {
+    int i, j;
+    int diff;
+    int temp;
+    for (i = 0; i &lt;= len1; i ++ ) {
+        d[i][0] = i;
+    }
+    for (j = 0; j &lt;= len2; j ++ ) {
+        (1) ;
+    }
+    for (i = 1; i &lt;= len1; i ++ ) {
+        for (j = 1; j &lt;= len2; j ++ ) {
+            if ( (2) ) {
+                d[i][j] = d[i - 1][j - 1];
+            } else {
+                temp = min(d[i - 1][j] + 1, d[i][j - 1] + 1);
+                d[i][j] = min(temp,   (3)   );
+            }
+        }
+    }
+    return   (4)   ;
+}
+</code></pre>
+<blockquote>
+<p>【存疑：源码声明了变量 <code>diff</code> 但代码体中未使用，比较直接写在了空 (2) 中；
+空号位置与原卷一致，作答时按上下文补全表达式即可。】</p>
+</blockquote>
+<hr />
+<h3>【问题1】（8 分）</h3>
+<p>根据说明和C 代码，填充C 代码中的空（1）〜（4）。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（1）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（2）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（3）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（4）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：先看两个初始化循环——第一个循环已给出 <code>d[i][0] = i;</code>（行边界），空 (1) 在
+第二个循环里（列边界），两者结构对称。空 (2) 是"字符是否相等"的判断（注意下标从 1
+计数时对应字符下标要减 1）。空 (3) 是"替换"操作对应的代价项（与给出的"删除/插入"
+两项并列取 min）。空 (4) 是整个问题的最终答案所在格子。</p>
+</blockquote>
+<hr />
+<h3>【问题2】（4 分）</h3>
+<p>根据说明和C 代码，算法采用了  （5）  设计策略，时间复杂度为  （6）  （用O
+符合表示，两个字符串的长度分别用m 和n 表示）。</p>
+<blockquote>
+<p>【存疑：原文"用O 符合表示"，应为"用O 符号表示"】</p>
+</blockquote>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（5）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（6）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：判断策略看"用二维数组记录子问题最优解、自底向上填表"这一特征；
+复杂度看填表的循环嵌套层数与每层规模。</p>
+</blockquote>
+<hr />
+<h3>【问题3】（3 分）</h3>
+<p>已知两个字符串A="CTGA"和B="ACGCTA"，根据说明和C 代码，可得出这两个
+字符串的编辑距离为  （7）  。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（7）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：在草稿纸上画出 5×7（len1+1 行 × len2+1 列）的 d 表，先填边界（行/列），
+再按"相等取左上角、否则取 左/上/左上角+1 三者最小"逐格填，右下角即答案。</p>
+</blockquote>
+<h2>---</h2>
+<h1>试题 B：2022 年上半年 下午试题四（矩阵连乘）</h1>
+<blockquote>
+<p><strong>来源</strong>：2022 年上半年 软件设计师 下午试卷 试题四（共 15 分）
+<strong>题型</strong>：C 算法填空（动态规划）｜<strong>建议用时</strong>：40 分钟</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 40 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>某工程计算中要完成多个矩阵相乘（链乘）的计算任务，对矩阵相乘进行以下说明。</p>
+<p>（1）两个矩阵相乘要求第一个矩阵的列数等于第二个矩阵的行数，计算量主要由进行
+乘法运算的次数决定。假设采用标准的矩阵相乘算法，计算 A(n<em>m) * B(m</em>p)，需要
+m<em>n</em>p 次乘法运算，即时间复杂度为 O(m<em>n</em>p)。</p>
+<blockquote>
+<p>【存疑：原文矩阵下标与维数连写（"𝐴𝑛∗𝑚∗𝐵𝑛∗𝑝"），按题意应为
+"A(n<em>m) * B(m</em>p)"，即 A 为 n 行 m 列、B 为 m 行 p 列】</p>
+</blockquote>
+<p>（2）矩阵相乘满足结合律，多个矩阵相乘时不同的计算顺序会产生不同的计算量。以
+矩阵 A1 为 5<em>100、A2 为 100</em>8、A3 为 8<em>50 三个矩阵相乘为例，若按
+(A1 * A2) * A3 计算，则需要进行 5</em>100<em>8 + 5</em>8<em>50 = 6000 次乘法运算，若按
+A1 * (A2 * A3) 计算，则需要进行 100</em>8<em>50 + 5</em>100*50 = 65000 次乘法运算。</p>
+<blockquote>
+<p>【存疑：原文"矩阵𝐴15∗100，𝐴2100∗8，𝐴38∗50"，矩阵下标与维数连写，
+此处按题意与算例还原为"A1 为 5<em>100、A2 为 100</em>8、A3 为 8*50"】</p>
+</blockquote>
+<p>矩阵连乘问题可描述为：给定 n 个矩阵，对较大的 n，可能计算的顺序数量非常庞大，用
+蛮力法确定计算顺序是不实际的。经过对问题进行分析，发现矩阵连乘问题具有最优子结构，
+即若 A1 * A2 <em>…</em> An 的一个最优计算顺序从第 k 个矩阵处断开，即分为
+A1 * A2 <em>…</em> Ak 和 A(k+1) * A(k+2) <em>…</em> An 两个子问题，则该最优解应该包含
+A1 * A2 <em>…</em> Ak 的一个最优计算顺序和 A(k+1) * A(k+2) <em>…</em> An 的一个最优计算顺序。
+据此构造递归式：</p>
+<blockquote>
+<p>【存疑：原文"据此构造递归式："后接 cost 的递推公式图片，本地文本源未提取该图片。
+公式结构说明（不含答案）：cost[i][j] 表示连乘 A(i+1) <em>…</em> A(j+1) 的最优代价；
+分为<strong>对角线</strong>（i=j，单个矩阵，代价 0）与<strong>一般位置</strong>（枚举断点 k，
+cost = 左段代价 + 右段代价 + 两段相乘的乘法次数）两大块。具体表达式请依据
+下面 C 代码的三重循环与变量说明反推。】</p>
+</blockquote>
+<p>其中，cost[i][j] 表示 A(i+1) * A(i+2) <em>…</em> A(j+1) 的最优计算的代价。最终需要
+求解 cost[0][n – 1]。</p>
+<hr />
+<h3>【C 代码】</h3>
+<p>算法实现采用自底向上的计算过程。首先计算两个矩阵相乘的计算量，然后依次计算3 个矩阵、
+4 个矩阵、…、n 个矩阵相乘的最小计算量及最优计算顺序。下面是算法的C 语言实现。</p>
+<p>（1）主要变量说明</p>
+<pre><code class="language-text">n：矩阵数
+seq[]：矩阵维数序列
+cost[][]：二维数组，长度为 n*n，其中元素 cost[i][j] 表示 A(i+1) *…* A(j+1)
+          的最优计算的计算代价
+trace[][]：二维数组，长度为 n*n，其中元素 trace[i][j] 表示 A(i+1) *…* A(j+1)
+           的最优计算对应的划分位置，即 k
+</code></pre>
+<blockquote>
+<p>【存疑：原文"n：矩阵数、"句末多一个逗号；维数序列长度应为 n+1
+（n 个矩阵各有 1 个行维数、末矩阵 1 个列维数），此处按原文转录】</p>
+</blockquote>
+<p>（2）函数 cmm</p>
+<pre><code class="language-c">#define N 100
+int cost[N][N];
+int trace[N][N];
+int cmm(int n, int seq[]) {
+    int tempCost;
+    int tempTrace;
+    int i, j, k, p;
+    int temp;
+    for (i = 0; i &lt; n; i ++ ) { cost[i][i] = 0; }
+    for (p = 1; p &lt; n; p ++ ) {
+        for (i = 0; i &lt; n - p; i ++ ) {
+            (1) ;
+            tempCost = -1;
+            for (k = i;   (2)   ; k ++ ) {
+                temp =   (3)   ;
+                if (tempCost == -1 || tempCost &gt; temp) {
+                    tempCost = temp;
+                    tempTrace = k;
+                }
+            }
+            cost[i][j] = tempCost;
+            (4) ;
+        }
+    }
+    return cost[0][n - 1];
+}
+</code></pre>
+<hr />
+<h3>【问题1】（8 分）</h3>
+<p>根据以上说明和C 代码，填充C 代码中的空（1）〜（4）。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（1）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（2）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（3）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（4）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：外层 <code>p</code> 是<strong>子问题规模</strong>（矩阵个数），<code>i</code> 是起点，空 (1) 应由 i 与 p
+推出终点 j。空 (2) 是断点 k 的枚举上界（断点把 [i..j] 分成左右两段）。
+空 (3) 是"左段代价 + 右段代价 + 两段合并的乘法次数"，维数全部从 <code>seq[]</code> 取，
+注意下标偏移（k 是断点矩阵编号，左段末矩阵与右段首矩阵的维数各是哪一个）。
+空 (4) 把找到的最优断点记进 trace 数组（与 cost[i][j] 赋值对称）。</p>
+</blockquote>
+<hr />
+<h3>【问题2】（4 分）</h3>
+<p>根据以上说明和C 代码，该问题采用了  （5）  算法设计策略，时间复杂度为  （6）  。
+（用O 符号表示）</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（5）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（6）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：策略判断同试题 A（自底向上填表 + 最优子结构）；复杂度看三重循环
+（规模 p、起点 i、断点 k）每层最多跑多少次。</p>
+</blockquote>
+<hr />
+<h3>【问题3】（3 分）</h3>
+<p>考虑实例n = 4，各个矩阵的维数：A1 为15 * 5，A2 为5 * 10，A3 为10 * 20，
+A4 为20 * 25，即维数序列为15, 5, 10, 20, 25。则根据上述C 代码得到的一个最优
+计算顺序为  （7）  （用加括号方式表示计算顺序），所需要的乘法运算次数为  （8）  。</p>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（7）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（8）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：列出全部 5 种括号化方式，用说明 (1) 的公式逐种算乘法次数取最小：
+<code>A1*((A2*A3)*A4)</code>、<code>A1*(A2*(A3*A4))</code>、<code>((A1*A2)*A3)*A4</code>、
+<code>(A1*A2)*(A3*A4)</code>、<code>(A1*(A2*A3))*A4</code>（后两种与第一种同类，按对结合律展开即可）。</p>
+</blockquote>
+<h2>---</h2>
+<h1>试题 C：2021 年下半年 下午试题六（网络围棋 —— 享元模式，Java）</h1>
+<blockquote>
+<p><strong>来源</strong>：2021 年下半年 软件设计师 下午试卷 试题六（共 15 分）
+<strong>题型</strong>：Java 设计模式填空（享元 Flyweight）｜<strong>建议用时</strong>：30 分钟
+<strong>说明</strong>：试题五/六为选答题，本题以 Java 实现，可与试题 D（C++）互相印证。</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 30 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>享元（FlyWeight）模式主要用于减少创建对象的数量，以降低内存占用，提高性能。
+先要开发一个网络围棋程序，允许多个玩家联机下棋。由于只有一台服务器，为节省内存
+空间，采用享元模式实现该程序，得到如图6-1 所示的类图。</p>
+<blockquote>
+<p>【存疑：原文"先要开发"，按题意应为"现要开发"】</p>
+</blockquote>
+<hr />
+<h3>类图结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 6-1 为 PDF 图片，本地文本源未收录。以下骨架依据<strong>已完整转录的 Java 代码</strong>
+复原（角色、成员均取自代码本身，非猜测），<strong>空位一律留空</strong>。</p>
+</blockquote>
+<p><strong>模式角色 → 本题类的映射</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>享元模式角色</th>
+<th>本题对应</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象享元（Flyweight）</td>
+<td><code>Piece</code>（抽象类）</td>
+<td>定义棋子的公共状态与抽象操作</td>
+</tr>
+<tr>
+<td>具体享元（ConcreteFlyweight）</td>
+<td><code>BlackPiece</code>、<code>WhitePiece</code></td>
+<td>黑子/白子，实现抽象操作</td>
+</tr>
+<tr>
+<td>享元工厂（FlyweightFactory）</td>
+<td>（本题由 <code>PieceBoard</code> 承担获取/管理棋子的职责）</td>
+<td>创建/管理棋子对象</td>
+</tr>
+<tr>
+<td>非享元（UnsharedFlyweight）</td>
+<td><code>PiecePos</code>（棋子位置）</td>
+<td>每次落子都不同，不共享</td>
+</tr>
+<tr>
+<td>客户端（Client）</td>
+<td><code>PieceBoard</code> 的 <code>SetPiece</code></td>
+<td>落子时获取棋子并记录位置</td>
+</tr>
+</tbody>
+</table>
+<p><strong>类结构清单</strong>（成员取自代码，空位以 <code>(n)</code> 标出）：</p>
+<pre><code class="language-mermaid">classDiagram
+    class PieceColor {
+        &lt;&lt;enumeration&gt;&gt;
+        BLACK
+        WHITE
+    }
+    class PiecePos {
+        -int x
+        -int y
+        +PiecePos(int a, int b)
+        +int getX()
+        +int getY()
+    }
+    class Piece {
+        &lt;&lt;abstract&gt;&gt;
+        -PieceColor m_color
+        -PiecePos m_pos
+        +Piece(PieceColor color, PiecePos pos)
+        + (1)
+    }
+    class BlackPiece {
+        +BlackPiece(PieceColor color, PiecePos pos)
+        +void draw()
+    }
+    class WhitePiece {
+        +WhitePiece(PieceColor color, PiecePos pos)
+        +void draw()
+    }
+    class PieceBoard {
+        -static final ArrayList~(2)~ m_arrayPiece
+        -String m_blackName
+        -String m_whiteName
+        +PieceBoard(String black, String white)
+        +void SetPiece(PieceColor color, PiecePos pos)
+    }
+    BlackPiece --|&gt; Piece
+    WhitePiece --|&gt; Piece
+    Piece o-- PieceColor : m_color
+    Piece o-- PiecePos : m_pos
+</code></pre>
+<blockquote>
+<p>💡 <strong>读图提示</strong>：<code>Piece</code> 是抽象享元，两个具体子类各自实现了 <code>draw()</code>；
+<code>PiecePos</code> 是位置（外部状态），与颜色（内部状态）分离——这正是享元模式的代码特征。
+空 (1) 在抽象类 <code>Piece</code> 中、且两个子类都已实现 <code>draw()</code>，据此可推出 (1) 的声明形式。
+空 (2) 是棋盘容器元素的类型名（看后面 <code>m_arrayPiece.add(piece)</code> 时 <code>piece</code> 是什么类型）。</p>
+</blockquote>
+<hr />
+<h3>【Java 代码】</h3>
+<pre><code class="language-java">import java.util.*;
+
+enum PieceColor { BLACK, WHITE } // 棋子颜色
+
+class PiecePos { // 棋子位置
+    private int x;
+    private int y;
+    public PiecePos(int a, int b) { x = a; y = b; }
+    public int getX() { return x; }
+    public int getY() { return y; }
+}
+
+abstract class Piece { // 棋子定义
+    protected PieceColor m_color; // 颜色
+    protected PiecePos m_pos; // 位置
+    public Piece(PieceColor color, PiecePos pos) {
+        m_color = color;
+        m_pos = pos;
+    }
+    (1) ;
+}
+
+class BlackPiece extends Piece {
+    public BlackPiece(PieceColor color, PiecePos pos) {
+        super(color, pos);
+    }
+    public void draw() { System.out.println(&quot;draw a blackpiece&quot;); }
+}
+
+class WhitePiece extends Piece {
+    public WhitePiece(PieceColor color, PiecePos pos) {
+        super(color, pos);
+    }
+    public void draw() { System.out.println(&quot;white a blackpiece&quot;); }
+}
+</code></pre>
+<blockquote>
+<p>【存疑：原文 <code>WhitePiece.draw()</code> 输出 "white a blackpiece"，按题意应为
+"draw a white piece"，系原卷/源文本笔误，<strong>不影响填空</strong>（(1) 的形式由两个子类的
+<code>public void draw()</code> 签名决定）】</p>
+</blockquote>
+<pre><code class="language-java">class PieceBoard { // 棋盘上已有的棋子
+    private static final ArrayList&lt;(2)&gt; m_arrayPiece = new ArrayList
+    private String m_blackName; // 黑方名称
+    private String m_whiteName; // 白方名称
+    public PieceBoard(String black, String white) {
+        m_blackName = black;
+        m_whiteName = white;
+    }
+
+    // 一步棋，在棋盘上放一颗棋子
+    public void SetPiece(PieceColor color, PiecePos pos) {
+        (3)  piece = null;
+        if (color == PieceColor.BLACK) { // 放黑子
+            piece = new BlackPiece(color, pos); // 获取一颗黑子
+            System.out.println(m_blackName + &quot;在位置(&quot; + pos.getX() + &quot;,&quot;
+                    + pos.getY() + &quot;)&quot;);
+            (4) ;
+        } else { // 放白子
+            piece = new WhitePiece(color, pos); // 获取一颗白子
+            System.out.println(m_whiteName + &quot;在位置(&quot; + pos.getX() + &quot;,&quot;
+                    + pos.getY() + &quot;)&quot;);
+            (5) ;
+        }
+        m_arrayPiece.add(piece);
+    }
+}
+</code></pre>
+<blockquote>
+<p>【存疑：原文 <code>new ArrayList</code> 后无泛型实参（源文本截断），按 Java 语法应补上
+<code>new ArrayList&lt;…&gt;()</code>（泛型实参即空 (2) 要填的类型名），作答时 (2) 填类型名即可】</p>
+</blockquote>
+<hr />
+<h3>【作答要求】</h3>
+<blockquote>
+<p>阅读下列说明和Java 代码，将应填入  （n）  处的字句写在答题纸的对应栏内。</p>
+</blockquote>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（1）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（2）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（3）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（4）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（5）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：
+- (1)：抽象享元里声明的抽象方法，两个子类都已实现它（看子类方法签名）；
+- (2)：集合元素类型，看 <code>add(piece)</code> 时 <code>piece</code> 的声明类型（即空 (3)）；
+- (3)：局部变量类型，须能同时指向 <code>BlackPiece</code> 和 <code>WhitePiece</code>；
+- (4)(5)：落子后调用棋子的绘制方法（两个分支结构对称）。</p>
+</blockquote>
+<h2>---</h2>
+<h1>试题 D：2022 年上半年 下午试题五（状态撤销 —— 备忘录模式，C++）</h1>
+<blockquote>
+<p><strong>来源</strong>：2022 年上半年 软件设计师 下午试卷 试题五（共 15 分）
+<strong>题型</strong>：C++ 设计模式填空（备忘录 Memento）｜<strong>建议用时</strong>：30 分钟
+<strong>说明</strong>：试题五/六为选答题，本题以 C++ 实现，可与试题 C（Java）互相印证。</p>
+</blockquote>
+<h2>⏱️ 计时记录（做完后填写）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>______</td>
+</tr>
+<tr>
+<td>实际用时</td>
+<td>______ 分钟（建议 ≤ 30 分钟）</td>
+</tr>
+<tr>
+<td>自评专注度（0-10）</td>
+<td>______</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>【说明】</h3>
+<p>在软件系统中，通常都会给用户提供取消、不确定或者错误的操作，允许将系统回复到
+原先的状态。现使用备忘录（Memento）模式实现该要求，得到如图5-1 所示的类图。</p>
+<p>Memento 包含了要被恢复的状态。Originator 创建并在Memento 中存储状态。
+CareTaker 负责从Memento 中恢复状态。</p>
+<blockquote>
+<p>【存疑：原文"将系统回复到原先的状态"，按题意应为"恢复到原先的状态"】</p>
+</blockquote>
+<hr />
+<h3>类图结构化复原【存疑：图形复原】</h3>
+<blockquote>
+<p>⚠️ 原卷图 5-1 为 PDF 图片，本地文本源未收录。以下骨架依据<strong>已完整转录的 C++ 代码</strong>
+复原（角色、成员均取自代码本身，非猜测），<strong>空位一律留空</strong>。</p>
+</blockquote>
+<p><strong>模式角色 → 本题类的映射</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>备忘录模式角色</th>
+<th>本题对应</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发起人（Originator）</td>
+<td><code>Originator</code></td>
+<td>持有当前状态，能存入/取出备忘录</td>
+</tr>
+<tr>
+<td>备忘录（Memento）</td>
+<td><code>Memento</code></td>
+<td>封装发起人的内部状态</td>
+</tr>
+<tr>
+<td>管理者（Caretaker）</td>
+<td><code>CareTaker</code></td>
+<td>保存备忘录列表，按索引存取</td>
+</tr>
+</tbody>
+</table>
+<p><strong>类结构清单</strong>（成员取自代码，空位以 <code>(n)</code> 标出）：</p>
+<pre><code class="language-mermaid">classDiagram
+    class Memento {
+        -string state
+        +Memento(string state)
+        +string getState()
+    }
+    class Originator {
+        -string state
+        +void setState(string state)
+        +string getState()
+        +Memento saveStateToMemento()
+        +void getStateFromMemento(Memento Memento)
+    }
+    class CareTaker {
+        -vector~Memento~ mementoList
+        + (3)
+        + (4)
+    }
+    Originator ..&gt; Memento : 创建/读取
+    CareTaker o-- Memento : mementoList
+</code></pre>
+<blockquote>
+<p>💡 <strong>读图提示</strong>：<code>Memento</code> 封装 <code>state</code>（只能通过构造传入、getState 取出）；
+<code>Originator</code> 的 <code>saveStateToMemento()</code> 返回一个备忘录（空 (1)：怎么构造），
+<code>getStateFromMemento(...)</code> 从备忘录恢复（空 (2)：怎么取值）；
+<code>CareTaker</code> 有两个方法（空 (3)(4) 是方法声明，方法体里用到了 <code>state</code>、<code>index</code>
+和 <code>mementoList.push_back/get</code>，方法名由 <code>main</code> 中的 <code>careTaker-&gt;add(...)</code>、
+<code>careTaker-&gt;get(...)</code> 调用确定）。</p>
+</blockquote>
+<hr />
+<h3>【C++代码】</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class Memento {
+private:
+    string state;
+
+public:
+    Memento(string state) { this-&gt;state = state; }
+    string getState() { return state; }
+};
+
+class Originator {
+private:
+    string state;
+
+public:
+    void setState(string state) { this-&gt;state = state; }
+    string getState() { return state; }
+    Memento saveStateToMemento() { return   (1)  ; }
+    void getStateFromMemento(Memento Memento) { state =   (2)  ; }
+};
+
+class CareTaker {
+private:
+    vector&lt;Memento&gt; mementoList;
+public:
+    void   (3)   { mementoList.push_back(state); }
+      (4)   { return mementoList[index]; }
+};
+</code></pre>
+<blockquote>
+<p>【存疑：原文形参名与类名同名（<code>Memento Memento</code>），空 (2) 的答案指向该形参
+（即"用形参 Memento 调用 getState()"）；按原卷转录，不作改名】</p>
+</blockquote>
+<pre><code class="language-cpp">int main() {
+    Originator *originator = new Originator();
+    CareTaker *careTaker = new CareTaker();
+    originator-&gt;setState(&quot;State #1&quot;);
+    originator-&gt;setState(&quot;State #2&quot;);
+    careTaker-&gt;add(  (5)  );
+    originator-&gt;setState(&quot;State #3&quot;);
+    careTaker-&gt;add(  (6)  );
+    originator-&gt;setState(&quot;State #4&quot;);
+
+    cout &lt;&lt; &quot;Current State：&quot; + originator-&gt;getState() &lt;&lt; endl;
+    originator-&gt;getStateFromMemento(careTaker-&gt;get(0));
+    cout &lt;&lt; &quot;First saved State：&quot; + originator-&gt;getState() &lt;&lt; endl;
+    originator-&gt;getStateFromMemento(careTaker-&gt;get(1));
+    cout &lt;&lt; &quot;Second saved State：&quot; + originator-&gt;getState() &lt;&lt; endl;
+}
+</code></pre>
+<blockquote>
+<p>💡 <strong>运行逻辑提示（对照 main 理解三个角色如何协作）</strong>：
+<code>setState("State #2")</code> → <code>add(...)</code> 把当时状态存为第 0 个备忘录；
+<code>setState("State #3")</code> → <code>add(...)</code> 存为第 1 个备忘录；
+之后 <code>setState("State #4")</code>；<code>get(0)/get(1)</code> 再取回 → 输出应显示
+"State #4"→"State #2"→"State #3"。空 (5)(6) 即"发起人把当前状态打包成备忘录"
+的方法调用。</p>
+</blockquote>
+<hr />
+<h3>【作答要求】</h3>
+<blockquote>
+<p>阅读下列说明和C++代码，将应填入  （n）  处的字句写在答题纸的对应栏内。</p>
+</blockquote>
+<p><strong>答题区</strong>：</p>
+<ul>
+<li>（1）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（2）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（3）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（4）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（5）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+<li>（6）：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>__</li>
+</ul>
+<blockquote>
+<p>💡 提示：
+- (1)：构造一个 Memento 对象返回（用发起人的当前状态）；
+- (2)：从形参（备忘录）取状态赋给 this-&gt;state；
+- (3)：方法声明空。方法名由 <code>main</code> 中的 <code>careTaker-&gt;add(...)</code> 调用确定，
+  形参名/类型由方法体里的 <code>mementoList.push_back(state)</code> 确定（无返回值）；
+- (4)：方法声明空。返回类型由方法体 <code>return mementoList[index];</code> 的结果类型确定，
+  方法名由 <code>careTaker-&gt;get(0)</code> 调用确定，形参与方法体的下标变量同名；
+- (5)(6)：发起人保存状态的方法调用（两个空写法相同）。</p>
+</blockquote>
+<h2>---</h2>
+<h2>📊 做完后：自评与对答案</h2>
+<ol>
+<li>填写各题计时记录区，计算 4 题总用时：______ 分钟（目标 ≤ 150 分钟）</li>
+<li>打开 <code>patterns-algo-key.md</code>，逐题对答案，每题计算得分 /15。</li>
+<li>在下表登记，并把丢分点回填到 <code>patterns-algo-notes.md</code> 的高频丢分点清单：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>试题</th>
+<th>得分</th>
+<th>主要丢分点</th>
+<th>是否回看模板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>2021下·试题四 算法 编辑距离（DP）</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>2022上·试题四 算法 矩阵连乘（DP）</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>2021下·试题六 Java 享元模式</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>2022上·试题五 C++ 备忘录模式</td>
+<td>____ / 15</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td></td>
+<td>____ / 60</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>合格线参考</strong>：下午卷 4 题必答 + 1 题选答，每题 15 分，合格 45 分。
+试题四（算法）与试题五/六（设计模式）是<strong>选答策略的核心</strong>：
+若设计模式题能稳定拿到 <strong>10 分以上</strong>，建议选答五/六；若 DP 填空更熟，则试题四更稳。
+本专项 4 题若能稳定拿到 <strong>10 分/题以上</strong>，即视为过关。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2/patterns-algo-exercises.md">docs/practice/subject2/patterns-algo-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

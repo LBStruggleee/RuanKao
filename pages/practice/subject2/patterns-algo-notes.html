@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 29 大题专项③：设计模式识别速查表 + 算法填空答题策略 + 高频丢分点清单 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2 📁 patterns-algo-notes.md</div>
+<h1>Day 29 大题专项③：设计模式识别速查表 + 算法填空答题策略 + 高频丢分点清单</h1>
+<blockquote>
+<p><strong>适用</strong>：软考中级·软件设计师 科目二（下午卷）试题四（C 算法填空，15 分）与
+试题五/试题六（C++/Java 设计模式填空，15 分，五/六选一）
+<strong>配套</strong>：<code>patterns-algo-exercises.md</code>（4 道真题）、<code>patterns-algo-key.md</code>（逐空答案与丢分点解析）
+<strong>用法</strong>：做题前快速过一遍"识别速查表"与"DP 填空四步法"；做题后对照答案，
+把丢分点回填到本文最后一节"错题回填区"。</p>
+</blockquote>
+<hr />
+<h1>一、设计模式大题识别速查表（试题五/六）</h1>
+<blockquote>
+<p>试题五（C++）与试题六（Java）是<strong>选答题</strong>（二选一），每年考 <strong>2 个模式</strong>：
+一个在试题五、一个在试题六，通常<strong>同一年两个试题考不同模式</strong>。
+题目结构固定：【说明】描述场景 + 类图 + 完整代码挖 4~6 个空，15 分全在空上。
+<strong>识别是第一步</strong>：从【说明】的场景关键词 1 秒锁定模式，再按"角色结构 → 代码特征"
+逐空对应。下表按"场景关键词 → 模式"整理，覆盖 2020–2023 真题考过的全部模式。</p>
+</blockquote>
+<h2>1.1 场景关键词 → 模式映射（秒选表）</h2>
+<table>
+<thead>
+<tr>
+<th>题干场景关键词</th>
+<th>设计模式</th>
+<th>一句话意图</th>
+<th>近年考频</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"减少创建对象的数量""节省内存""共享"</td>
+<td><strong>享元 Flyweight</strong></td>
+<td>共享细粒度对象，降低内存占用</td>
+<td><strong>2021下（Java 围棋）</strong></td>
+</tr>
+<tr>
+<td>"撤销/取消/回退/恢复到原先状态"</td>
+<td><strong>备忘录 Memento</strong></td>
+<td>保存对象状态以便恢复</td>
+<td><strong>2022上（C++/Java 双版本）</strong></td>
+</tr>
+<tr>
+<td>"统一接口封装多个子系统""接待员代劳"</td>
+<td><strong>外观 Facade</strong></td>
+<td>为复杂子系统提供一致的高层接口</td>
+<td><strong>2022下（Java/C++ 双版本）</strong></td>
+</tr>
+<tr>
+<td>"不同格式/算法可互换""多种方式显示"</td>
+<td><strong>策略 Strategy</strong></td>
+<td>将算法封装成独立类，可相互替换</td>
+<td><strong>2023上（Java 区间打印）</strong></td>
+</tr>
+<tr>
+<td>"多对象交互由中介协调""整合不同平台接口"</td>
+<td><strong>中介者 Mediator</strong></td>
+<td>用中介对象封装一组对象的交互</td>
+<td><strong>2020下（Java 支付整合）</strong></td>
+</tr>
+<tr>
+<td>"层叠菜单 / 树形结构 / 部分-整体统一处理"</td>
+<td><strong>组合 Composite</strong></td>
+<td>统一对待单个对象与组合对象</td>
+<td><strong>2021上（Java 层叠菜单）</strong></td>
+</tr>
+<tr>
+<td>"状态变化时通知所有关注者/订阅者"</td>
+<td><strong>观察者 Observer</strong></td>
+<td>一对多依赖，状态变化自动通知</td>
+<td>2023上（试题三问题3，UML 结合）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>选答策略</strong>：看到题目里出现"共享/内存"→ 享元、"撤销/恢复"→ 备忘录、
+"统一入口"→ 外观、"多种方式/可切换"→ 策略，优先选自己最熟的那一道。
+近年<strong>享元、备忘录、外观、策略、中介者、组合</strong>是设计模式大题的<strong>六大高频模式</strong>，
+全部掌握即可覆盖 2020–2023 全部试题五/六。</p>
+</blockquote>
+<h2>1.2 高频模式：意图 + 角色结构 + 代码特征</h2>
+<h3>享元模式（Flyweight）— 2021下 Java 围棋</h3>
+<ul>
+<li><strong>意图</strong>：运用共享技术有效地支持大量细粒度对象的复用，降低内存占用。</li>
+<li><strong>核心思想</strong>：<strong>内部状态（可共享，如颜色）与外部状态（不共享，如位置）分离</strong>。</li>
+<li><strong>角色结构</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+<th>本题对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象享元 Flyweight</td>
+<td>声明共享对象的接口</td>
+<td><code>abstract class Piece</code></td>
+</tr>
+<tr>
+<td>具体享元 ConcreteFlyweight</td>
+<td>实现接口，存储内部状态</td>
+<td><code>BlackPiece</code>、<code>WhitePiece</code></td>
+</tr>
+<tr>
+<td>享元工厂 FlyweightFactory</td>
+<td>创建/管理共享对象（查缓存返回）</td>
+<td><code>PieceBoard</code> 的获取逻辑</td>
+</tr>
+<tr>
+<td>非享元 UnsharedFlyweight</td>
+<td>外部状态，不可共享</td>
+<td><code>PiecePos</code>（位置）</td>
+</tr>
+<tr>
+<td>客户端 Client</td>
+<td>组合内部/外部状态使用</td>
+<td><code>PieceBoard.SetPiece</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>代码特征（填空高频位置）</strong>：</li>
+<li>抽象享元里的<strong>抽象方法声明</strong>（与所有具体子类签名一致）；</li>
+<li>工厂/容器里装共享对象的<strong>泛型集合元素类型</strong>（共同父类）；</li>
+<li>局部变量用<strong>父类类型</strong>（多态）指向不同具体子类；</li>
+<li>通过父类引用<strong>调用共享对象的方法</strong>。</li>
+<li><strong>严格享元的工厂代码骨架（补充识记，本题未完整出现）</strong>：
+  <code>java
+  class PieceFactory {
+      private static final Map&lt;PieceColor, Piece&gt; pool = new HashMap&lt;&gt;();
+      public static Piece getPiece(PieceColor color) {
+          if (!pool.containsKey(color))
+              pool.put(color, color == BLACK ? new BlackPiece(...) : new WhitePiece(...));
+          return pool.get(color);   // 同色复用已有对象 ← 享元本质
+      }
+  }</code></li>
+</ul>
+<h3>备忘录模式（Memento）— 2022上 C++/Java 状态撤销</h3>
+<ul>
+<li><strong>意图</strong>：在不破坏封装的前提下，捕获并保存一个对象的内部状态，以便以后恢复。</li>
+<li><strong>角色结构</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+<th>2022上对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发起人 Originator</td>
+<td>持有当前状态；创建备忘录存状态、从备忘录恢复</td>
+<td><code>Originator</code></td>
+</tr>
+<tr>
+<td>备忘录 Memento</td>
+<td>封装发起人的内部状态（只能构造写入、getter 读出）</td>
+<td><code>Memento</code></td>
+</tr>
+<tr>
+<td>管理者 Caretaker</td>
+<td>保存备忘录集合，按索引存取（不修改内容）</td>
+<td><code>CareTaker</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>代码特征（填空高频位置）</strong>：</li>
+<li>发起人"存档"方法：<code>return new Memento(this-&gt;state);</code>（把状态打包成备忘录返回）；</li>
+<li>发起人"恢复"方法：<code>this-&gt;state = memento.getState();</code>（从备忘录取回）；</li>
+<li>管理者的 <code>add(Memento)</code> / <code>get(int)</code> 方法签名（由方法体与 main 调用反推）；</li>
+<li>客户端：状态变更后 <code>careTaker-&gt;add(originator-&gt;saveStateToMemento())</code>。</li>
+<li><strong>记忆口诀</strong>：<strong>发起人存进备忘录、管理者只搬运、恢复时再取回</strong>。</li>
+</ul>
+<h3>外观模式（Facade）— 2022下 Java/C++ 医院接待</h3>
+<ul>
+<li><strong>意图</strong>：为子系统中的一组接口提供一个一致的界面（统一入口），使子系统更易使用。</li>
+<li><strong>角色结构</strong>：<strong>外观类 Facade</strong>（接待员）持有一组<strong>子系统类</strong>（挂号 Registry、门诊 Doctor、
+  取药 Pharmacy）的引用，对外暴露一个简单方法，内部依次调用子系统。</li>
+<li><strong>代码特征</strong>：</li>
+<li>子系统共享同一接口（如 <code>Disposer</code> 的 <code>dispose(Patient)</code>）；</li>
+<li>外观类构造时或方法内 <code>new</code> 出各子系统并<strong>依次调用</strong>；</li>
+<li>客户端只与 Facade 交互（填空常考外观方法内的调用链与客户端的 Facade 实例化）。</li>
+</ul>
+<h3>策略模式（Strategy）— 2023上 Java 区间格式打印</h3>
+<ul>
+<li><strong>意图</strong>：定义一系列算法，把它们各自封装成可互换的策略类，使算法变化不影响客户端。</li>
+<li><strong>角色结构</strong>：<strong>策略接口</strong>（<code>PrintStrategy</code> 的 <code>doPrint</code>）+ <strong>具体策略</strong>（逗号/点号/横线三种
+  格式）+ <strong>环境类</strong>（<code>Interval</code> 持有一个策略引用，<code>printIntervals</code> 时委托给策略）。</li>
+<li><strong>代码特征</strong>：</li>
+<li>环境类方法体只有一句：<code>strategy.doPrint(this);</code>（委托）；</li>
+<li>工厂/switch 方法：<code>case COMMA: st = new PrintIntervalsComma();</code>（按类型造策略）。</li>
+</ul>
+<h3>中介者模式（Mediator）— 2020下 Java 支付整合</h3>
+<ul>
+<li><strong>意图</strong>：用一个中介对象封装一组对象的交互，使各对象不需要显式互相引用（解耦多对多）。</li>
+<li><strong>角色结构</strong>：<strong>中介者接口</strong>（<code>WebServiceMediator</code>）+ <strong>具体中介者</strong>（持有各同事对象引用，
+  在 <code>buy</code> 里按规则转发）+ <strong>同事类</strong>（<code>WebService</code> 抽象 + <code>Amazon</code>/<code>Ebay</code> 具体同事，
+  各持中介者引用，交互时 <code>mediator.buy(money, this)</code> 转交给中介者）。</li>
+<li><strong>代码特征</strong>：同事类的方法体就是一句 <code>mediator.xxx(...)</code>（把交互委托给中介者）。</li>
+</ul>
+<h3>组合模式（Composite）— 2021上 Java 层叠菜单</h3>
+<ul>
+<li><strong>意图</strong>：将对象组合成树形结构以表示"部分-整体"层次，使客户端统一对待单个对象与组合对象。</li>
+<li><strong>角色结构</strong>：<strong>抽象构件 Component</strong>（菜单项与子菜单的共同接口，含 add/remove/getElement）+
+  <strong>叶子 Leaf</strong>（<code>MenuItem</code>，方法返回 false/null）+ <strong>组合 Composite</strong>（<code>Menu</code>，内部一个
+  <code>List&lt;MenuComponent&gt;</code> 递归聚合）。</li>
+<li><strong>代码特征</strong>：组合类里有 <code>List&lt;构件类型&gt;</code> 成员；递归打印方法对子节点递归调用自身。</li>
+</ul>
+<h3>观察者模式（Observer）— 2023上 试题三问题3（UML 结合考）</h3>
+<ul>
+<li><strong>意图</strong>：定义对象间一对多依赖，当一个对象状态改变时，所有依赖它的对象自动得到通知。</li>
+<li><strong>角色结构</strong>：<strong>主题 Subject</strong>（维护观察者列表、attach/detach/notify）+ <strong>观察者 Observer</strong>
+  （update 接口）+ <strong>具体主题/具体观察者</strong>。</li>
+<li><strong>答题模板</strong>（试题三常考"选模式 + 解释原因"，3 分）：<blockquote>
+<p>观察者模式适合当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+本需求中"……"是主题状态，"……"是观察者，当……发生时自动通知所有……，故选观察者模式。</p>
+</blockquote>
+</li>
+</ul>
+<h2>1.3 设计模式填空通用三招</h2>
+<blockquote>
+<p>不管考哪个模式，填空的位置只有三类。按下列三招逐空定位：</p>
+</blockquote>
+<p><strong>第 1 招：抽象方法看子类签名</strong>
+- 抽象类/接口里的空，<strong>把所有具体子类已实现的方法签名抄一遍</strong>，取交集即答案。
+- 注意三要素：<strong>访问修饰符</strong>（不窄于子类）+ <code>abstract</code>/无方法体 + <strong>返回类型+方法名+参数表</strong>。</p>
+<p><strong>第 2 招：容器/变量类型取共同父类</strong>
+- <code>ArrayList&lt;？&gt;</code> 的元素类型、<code>？ piece = null;</code> 的局部变量类型——
+  若同一变量/集合要装多个具体子类，类型填<strong>它们的共同父类（或接口）</strong>，不填具体子类。</p>
+<p><strong>第 3 招：方法签名由"方法体 + 调用处"反推</strong>
+- 空在方法声明处时：方法体里用了 <code>state</code>、<code>index</code> 等名字 → 形参名/类型确定；
+  <code>main</code>/其他类里 <code>xxx-&gt;add(...)</code>、<code>xxx.get(0)</code> → 方法名、参数个数、返回类型确定；
+  方法体 <code>return mementoList[index];</code> → 返回类型 = 容器元素类型。
+- 调用处填空：看返回类型需要什么（<code>add(Memento)</code> 需要一个 Memento 对象 →
+  只能是 <code>originator-&gt;saveStateToMemento()</code>）。</p>
+<h2>1.4 语言细节对照（Java vs C++）</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>Java</th>
+<th>C++</th>
+<th>易错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td><code>public abstract void draw();</code>（接口方法默认 public abstract）</td>
+<td><code>virtual void draw() = 0;</code>（纯虚函数）</td>
+<td>C++ 用 <code>= 0</code>，不是 <code>abstract</code></td>
+</tr>
+<tr>
+<td>对象创建</td>
+<td><code>new X()</code> 返回引用 <code>X x = new X();</code></td>
+<td><code>X x;</code> 或 <code>X* p = new X();</code></td>
+<td>C++ 指针 vs 对象语义不同</td>
+</tr>
+<tr>
+<td>成员访问</td>
+<td>引用用 <code>.</code>：<code>x.draw()</code></td>
+<td>指针用 <code>-&gt;</code>：<code>p-&gt;draw()</code>；对象用 <code>.</code></td>
+<td><strong>指针调方法必须 <code>-&gt;</code></strong></td>
+</tr>
+<tr>
+<td>泛型集合</td>
+<td><code>ArrayList&lt;Piece&gt;</code></td>
+<td><code>vector&lt;Memento&gt;</code></td>
+<td>C++ 是 <code>vector&lt;类型&gt;</code></td>
+</tr>
+<tr>
+<td>继承</td>
+<td><code>class A extends B</code></td>
+<td><code>class A : public B</code></td>
+<td>C++ 有访问限定符</td>
+</tr>
+<tr>
+<td>实现接口</td>
+<td><code>class A implements B</code></td>
+<td><code>class A : public B</code>（纯虚基类）</td>
+<td>C++ 无 <code>implements</code> 关键字</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>选语言学</strong>：Java 语法更"直白"（abstract/new/extends），C++ 要注意
+<code>-&gt;</code>、<code>= 0</code>、<code>: public</code>。若两种语言都不排斥，<strong>建议选 Java（试题六）</strong>——
+填空更少踩语言细节的坑；若 C++ 更熟，注意指针与对象的区别。</p>
+</blockquote>
+<hr />
+<h1>二、算法填空答题策略（试题四，C 语言）</h1>
+<blockquote>
+<p>试题四固定考<strong>一个完整 C 算法的 4~8 个空</strong>，15 分。
+结构：【说明】（算法思想 + 递归式/公式）+ 变量说明 + 代码 + 问题1 填空（8 分）+
+问题2 策略/复杂度（2~4 分）+ 问题3 手算实例（3~5 分）。</p>
+</blockquote>
+<h2>2.1 填空四步法（通用）</h2>
+<p><strong>第 1 步：读【说明】，一句话写下"这个算法在算什么"</strong>
+- 例：编辑距离 = "把 str1 变成 str2 的最少操作次数"；矩阵连乘 = "n 个矩阵相乘的最少乘法次数"。
+- <strong>写下每个二维数组/变量的含义</strong>（题目在变量说明里给了，抄在草稿纸上）：
+  <code>d[i][j]</code>、<code>cost[i][j]</code>、<code>trace[i][j]</code> 分别是什么？——<strong>填空全部在操作这些下标上</strong>。</p>
+<p><strong>第 2 步：标出循环不变量（每层循环在干什么）</strong>
+- 把每层循环的"语义"写在旁边：外层 = 子问题规模、中层 = 起点、内层 = 决策（断点/字符比较）。
+- <strong>循环边界条件就是高频空位</strong>：<code>for (i = ?; i &lt; n - p; i++)</code>、<code>while (k &lt; j)</code>。</p>
+<p><strong>第 3 步：从边界/已知反推空位</strong>
+- <strong>对称法</strong>：题目已给出的一个边界/分支，对称的那个就是空（编辑距离的行边界给出、
+  列边界是空）；
+- <strong>赋值链法</strong>：空在 <code>xxx = ?</code> 的右边，看左边变量被谁用 → 反推表达式
+  （<code>cost[i][j] = tempCost</code> 已给出，紧邻的 <code>trace[i][j] = ?</code> 与之对称）；
+- <strong>公式法</strong>：【说明】给的递归式/算例，把数字代进去验算空位
+  （矩阵连乘的算例 <code>5*100*8 + 5*8*50</code> 直接对应空 (3) 的结构）。</p>
+<p><strong>第 4 步：代入实例自检</strong>
+- 用【问题3】的小数据手算一遍填空后的代码，看能否得到题目的已知结果/合理结果。
+- 检查<strong>下标越界</strong>（<code>i-1</code>、<code>k+1</code> 是否在合法范围）与<strong>类型匹配</strong>。</p>
+<h2>2.2 DP 题专属：状态转移三件套</h2>
+<p>下午卷试题四的 <strong>DP 题占绝对多数</strong>（2021下 编辑距离、2021上 三角剖分、2022上 矩阵连乘）。
+所有 DP 填空都是三件套之一：</p>
+<table>
+<thead>
+<tr>
+<th>三件套</th>
+<th>代码位置</th>
+<th>反推方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 初始化（边界）</strong></td>
+<td>算法开头的 for 循环</td>
+<td>看已给出的对称边界；"空串/单元素/长度 1"的答案恒定（0、i、j）</td>
+</tr>
+<tr>
+<td><strong>② 状态转移（主递推）</strong></td>
+<td>双重/三重循环体</td>
+<td>三种操作/决策的代价并列取 min/max，缺哪项补哪项</td>
+</tr>
+<tr>
+<td><strong>③ 结果返回</strong></td>
+<td>函数末尾 return</td>
+<td>取"规模最大"那一格（<code>d[len1][len2]</code>、<code>cost[0][n-1]</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>DP 识别特征（问题 2 策略题必背）</strong>：
+1. 用表格（一维/二维数组）<strong>记录子问题的解</strong>；
+2. 具有<strong>最优子结构</strong>（大问题最优解 = 子问题最优解的组合）；
+3. <strong>自底向上</strong>填表（从小规模循环到大规模）；
+4. 有<strong>重叠子问题</strong>（区别于分治：分治的子问题独立、不记忆）。</p>
+<p><strong>复杂度口诀</strong>：<strong>填表格子数 × 每格决策数</strong>。
+- 双重循环 + 每格 O(1) → O(n²)（编辑距离 O(mn)）；
+- 三重循环（多一层枚举断点）→ O(n³)（矩阵连乘、三角剖分）。</p>
+<h2>2.3 常考算法骨架清单（排序/查找/树/DP/贪心/图）</h2>
+<blockquote>
+<p>虽然近年试题四以 DP 为主，但大纲覆盖下列全部骨架。每类给出<strong>代码骨架 + 最常挖空位置</strong>，
+遇到同类题直接套。</p>
+</blockquote>
+<h3>动态规划（最高频）</h3>
+<ul>
+<li><strong>一维序列型</strong>（编辑距离、最长公共子序列 LCS、最长递增子序列 LIS）：
+  <code>c
+  for (i = 0; i &lt;= len1; i++) d[i][0] = i;      /* 行边界 ← 高频空 */
+  for (j = 0; j &lt;= len2; j++) d[0][j] = j;      /* 列边界 ← 高频空 */
+  for (i = 1; i &lt;= len1; i++)
+      for (j = 1; j &lt;= len2; j++)
+          if (str1[i-1] == str2[j-1])           /* 字符比较，下标 -1 ← 高频空 */
+              d[i][j] = d[i-1][j-1];
+          else
+              d[i][j] = min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+1);  /* 三操作取小 ← 高频空 */
+  return d[len1][len2];                          /* 结果 ← 高频空 */</code></li>
+<li><strong>区间型</strong>（矩阵连乘、凸多边形三角剖分）：
+  <code>c
+  for (i = 0; i &lt; n; i++) cost[i][i] = 0;        /* 对角线 */
+  for (p = 1; p &lt; n; p++)                        /* 区间长度 */
+      for (i = 0; i &lt; n - p; i++) {              /* 起点 */
+          j = i + p;                             /* 终点 ← 高频空 */
+          for (k = i; k &lt; j; k++) {              /* 断点 ← 高频空 */
+              temp = cost[i][k] + cost[k+1][j] + 合并代价;  /* ← 高频空 */
+              if (更小) { cost 更新; trace 记录; }
+          }
+          cost[i][j] = tempCost; trace[i][j] = tempTrace;   /* ← 高频空 */
+      }</code>
+  <strong>合并代价的维数口诀</strong>：<code>seq[起点] * seq[断点+1] * seq[终点+1]</code>，首尾相接。</li>
+</ul>
+<h3>排序</h3>
+<ul>
+<li><strong>希尔排序</strong>（2020下）：步长序列 <code>delta[i] = n/2, n/4, …, 1</code>；每组内<strong>直接插入排序</strong>。
+  挖空点：步长递推 <code>k /= 2</code>、步长循环条件、组内插入的 <code>data[j+dk] = t</code>。</li>
+<li><strong>堆排序</strong>（2022下）：<code>Heapify</code> 调堆 + 交换堆顶到末尾。挖空点：父子比较条件
+  <code>R[j] &gt; R[j+1]</code> 选大孩子、<code>Heapify(R, 1, i-1)</code> 的规模参数。</li>
+<li><strong>稳定性/复杂度</strong>（问题 2 常考）：希尔、堆、快排<strong>不稳定</strong>；直接插入、冒泡、归并<strong>稳定</strong>。</li>
+</ul>
+<h3>查找</h3>
+<ul>
+<li>二分查找：<code>mid = (low + high) / 2</code>；<code>low = mid + 1</code> / <code>high = mid - 1</code>（注意 +1/-1 防死循环）。</li>
+</ul>
+<h3>树的遍历</h3>
+<ul>
+<li>递归框架：<code>if (root == NULL) return; 遍历(root-&gt;left); 遍历(root-&gt;right);</code></li>
+<li>挖空点：<strong>终止条件</strong>、<strong>递归调用的子节点</strong>（如 <code>print_triangle(S[i][j]+1, j)</code>）。</li>
+</ul>
+<h3>图遍历</h3>
+<ul>
+<li>DFS/BFS：邻接表/邻接矩阵；挖空点：访问标记数组、邻接点推进 <code>p = p-&gt;nextarc</code>、
+  递归调用 <code>DFS(G, p-&gt;adjvex)</code>、计数 <code>count++</code>。（2023上 试题四考了 DFS 计连通分量，
+  但题目文本在本地源缺失，未入选本专项。）</li>
+</ul>
+<h3>贪心</h3>
+<ul>
+<li>排序 + 每步取局部最优（活动安排、部分背包）。挖空点：排序比较函数、选择条件。</li>
+</ul>
+<h2>2.4 算法题得分技巧汇总</h2>
+<table>
+<thead>
+<tr>
+<th>技巧</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先写变量含义</td>
+<td>把【说明】/变量说明里的 <code>d[i][j]</code>、<code>cost[i][j]</code> 含义抄在草稿上，所有空都围绕它</td>
+</tr>
+<tr>
+<td>找对称</td>
+<td>已给出的边界/赋值，对称的那个极可能是空</td>
+</tr>
+<tr>
+<td>代入算例</td>
+<td>【说明】的算例数字是免费的自检数据（矩阵连乘 5375 就这么验出来的）</td>
+</tr>
+<tr>
+<td>注意 ±1</td>
+<td>"前缀长度下标" vs "数组位置"、<code>k</code> vs <code>k+1</code>——第一丢分大户</td>
+</tr>
+<tr>
+<td>写全语法</td>
+<td>空要补完整语句（分号、等号、<code>-&gt;</code>/<code>.</code>），不要只写表达式片段</td>
+</tr>
+<tr>
+<td>手算保留草表</td>
+<td>问题 3 的手工模拟要画表，阅卷按结果给分，草表能复核</td>
+</tr>
+<tr>
+<td>策略题背特征</td>
+<td>"表格记录 + 最优子结构 + 自底向上" → 动态规划；复杂度数循环层数</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>三、高频丢分点清单（做完 4 题后对照回填）</h1>
+<h2>3.1 算法填空（试题四）高频丢分点</h2>
+<ol>
+<li><strong>下标 ±1</strong>：DP 中"前缀长度"与"数组字符位置"差 1（<code>str1[i-1]</code>、<code>seq[k+1]</code>）。</li>
+<li><strong>边界对称没看出来</strong>：一个边界已给出、另一个对称的是空，却去硬推。</li>
+<li><strong>区间 DP 长度-跨度换算</strong>：<code>j = i + p</code> 还是 <code>j = i + p - 1</code>，未用循环边界核对。</li>
+<li><strong>结果格子定位错</strong>：返回 <code>d[len1-1][len2-1]</code> 或 <code>d[N][N]</code>（应为 <code>d[len1][len2]</code>）。</li>
+<li><strong>三操作漏一项或漏 +1</strong>：替换操作漏 <code>+ 1</code>，或只写两项。</li>
+<li><strong>断点枚举上界错</strong>：写成 <code>k &lt;= j</code>（右段为空）。</li>
+<li><strong>复杂度漏数循环层数</strong>：区间 DP 是三重循环 → O(n³)，常误答 O(n²)。</li>
+<li><strong>策略错答成分治/贪心</strong>：看到"递归""分解"就答分治，忽略"表格记录 + 重叠子问题"。</li>
+<li><strong>手算题只算一种情况</strong>：矩阵连乘未枚举全部括号化；DP 表行列与字符串对错位。</li>
+<li><strong>空填成"半句"</strong>：缺分号、缺等号左边、<code>-&gt;</code> 与 <code>.</code> 混用（C++ 题）。</li>
+</ol>
+<h2>3.2 设计模式（试题五/六）高频丢分点</h2>
+<ol>
+<li><strong>抽象方法签名与子类不一致</strong>：漏 <code>abstract</code>、漏 <code>public</code>、加错参数。</li>
+<li><strong>容器/变量类型填具体子类</strong>：应填共同父类（<code>Piece</code>），却填 <code>BlackPiece</code> 或 <code>Object</code>。</li>
+<li><strong>方法签名反推不全</strong>：漏 <code>void</code>、返回类型错、形参名与方法体不一致。</li>
+<li><strong>形参与类名同名被绕晕</strong>：<code>Memento.getState()</code> 指形参对象，非类名。</li>
+<li><strong>指针/引用成员访问符混用</strong>：C++ 指针用 <code>.</code> 而非 <code>-&gt;</code>。</li>
+<li><strong>调用处填错方法</strong>：需要 Memento 对象却调用返回 string 的 <code>getState()</code>。</li>
+<li><strong>只填一个空</strong>：两个分支对称的空（如 <code>piece.draw()</code> 出现两次）漏填一个。</li>
+<li><strong>模式识别错误</strong>：把"状态变化通知"的观察者场景错认为中介者；把"共享对象"的
+   享元场景错认为工厂。<strong>先用 1.1 秒选表锁定模式再动笔</strong>。</li>
+</ol>
+<h2>3.3 丢分点回顾（Step 3 晚上回看模板）</h2>
+<blockquote>
+<p>晚上花 1.5h，按下列模板把白天的丢分点逐条过一遍。<strong>每条都要写出"为什么错 +
+正确思路"，不要只看答案</strong>。</p>
+</blockquote>
+<p><strong>回顾模板（对每个丢分的空填四栏）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>试题</th>
+<th>空号</th>
+<th>我的答案</th>
+<th>正确答案</th>
+<th>错误根因（选一类）</th>
+<th>正确思路（用一句话写出来）</th>
+<th>已重做</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>概念错 / 下标错 / 没看出来 / 语法错</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>A</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>同上</td>
+<td><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>___</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>回顾动作清单（按顺序执行）</strong>：</p>
+<ol>
+<li>☐ 重读两道 DP 题的【说明】与递推式，默写一遍<strong>状态转移三件套</strong>（初始化/主递推/返回）。</li>
+<li>☐ 把"下标 ±1"类错误集中重做：试题 A 空 (2)(3)、试题 B 空 (3) 各默写一遍。</li>
+<li>☐ 默写<strong>设计模式三招</strong>（抽象方法看子类签名 / 类型取共同父类 / 签名由方法体+调用处反推）。</li>
+<li>☐ 背诵 1.1 <strong>秒选表</strong>（7 个模式 + 关键词 + 意图），做到 1 秒锁定模式。</li>
+<li>☐ 背诵 2.2 <strong>DP 识别特征</strong>与<strong>复杂度口诀</strong>（格子数 × 每格决策数）。</li>
+<li>☐ 把 3.1/3.2 中自己实际犯过的错误，在下面"错题回填区"逐条登记。</li>
+</ol>
+<hr />
+<h1>四、错题回填区（做完 4 道真题后填写）</h1>
+<table>
+<thead>
+<tr>
+<th>试题</th>
+<th>问题/空</th>
+<th>我的答案</th>
+<th>正确答案</th>
+<th>丢分原因</th>
+<th>对应模板章节</th>
+<th>已回看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 编辑距离</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>A</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B 矩阵连乘</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C 享元 Java</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D 备忘录 C++</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>回看承诺</strong>：每个丢分点至少回看一次对应模板章节（第一章模式条目 / 第二章算法骨架），
+并在第二天错题回顾时<strong>重做该空</strong>（不是重看答案，是遮住答案默写）。</p>
+<hr />
+<h1>五、考前最后冲刺（Day 29 晚 / Day 30 早上）</h1>
+<ul>
+<li><strong>必背 7 张表</strong>：1.1 秒选表、1.2 角色结构（6 模式）、1.4 语言对照、
+  2.2 DP 三件套、2.3 算法骨架清单、2.4 得分技巧、3.1/3.2 丢分点清单。</li>
+<li><strong>必做 4 题</strong>：本专项 A/B/C/D 各<strong>遮住答案重做一遍空</strong>，重点重做自己丢分的空。</li>
+<li><strong>选答决策</strong>：设计模式题（五/六）若稳定 ≥10 分 → 选答五/六；DP 填空更熟 → 试题四更稳。
+  两者都练过，考场上<strong>先扫一眼试题五/六的模式关键词</strong>（1.1 表），3 秒决定选哪道。</li>
+</ul>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2/patterns-algo-notes.md">docs/practice/subject2/patterns-algo-notes.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

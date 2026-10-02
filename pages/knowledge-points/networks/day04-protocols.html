@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 4（9/24）计算机网络①：分层模型与协议归属 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 networks 📁 day04-protocols.md</div>
+<h1>Day 4（9/24）计算机网络①：分层模型与协议归属</h1>
+<blockquote>
+<p>本笔记是 Day 4 的核心输入材料，对应软考「计算机网络」中的<strong>网络体系结构</strong>部分。
+<strong>高频命题点</strong>：OSI 七层 vs TCP/IP 四层对照（<strong>必背</strong>）、各层协议的层级归属判断（<strong>出现频率最高的题型</strong>）、封装/解封装过程、常见端口号。
+<strong>本笔记不涉及 IP 地址与子网划分</strong>——那是 Day 5（TCP/IP 与子网划分）的内容；TCP 三次握手/拥塞控制也在 Day 5。本笔记只解决一个问题：<strong>谁在哪一层，数据怎么一层层传过去</strong>。</p>
+</blockquote>
+<hr />
+<h2>一、为什么要分层</h2>
+<p>先理解"分层"到底在解决什么问题，否则七层模型只能死记硬背。</p>
+<p><strong>问题</strong>：网络通信极其复杂——网线上的电信号怎么变成网页？中间要经过不同厂家设备、不同物理介质、跨多个网络。如果写成一个"大程序"处理所有事情，任何一处改动都要重写整个系统。</p>
+<p><strong>分层的解法</strong>：把复杂功能拆成若干层，<strong>每层只管一件事</strong>，向上提供接口，向下使用下层服务。</p>
+<ul>
+<li><strong>各层之间是接口关系</strong>：上层调用下层，下层为上层服务；上层不关心下层怎么实现。</li>
+<li><strong>同层之间是"虚通信"</strong>：发送方第 N 层和接收方第 N 层好像直接对话（实际数据要一层层向下、上物理链路、再一层层向上），这叫<strong>对等层通信</strong>，它们遵守的规则就是<strong>协议</strong>。</li>
+<li><strong>好处</strong>：各层独立设计、灵活替换（以太网换成 Wi-Fi 不影响 HTTP）、易于实现和维护。</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：分层后，<strong>每一层都有自己的头部（首部）</strong>。数据从上往下走，每过一层就被加一个头，这叫<strong>封装</strong>。接收方逐层去掉头部，叫<strong>解封装</strong>。第六节有完整图解。</p>
+</blockquote>
+<hr />
+<h2>二、OSI 七层模型（逐层精讲）</h2>
+<p>OSI（Open Systems Interconnection，开放式系统互联）参考模型由 ISO 提出，共 <strong>7 层</strong>。<strong>记忆顺序从下到上编号 1→7</strong>：物理 1、链路 2、网络 3、传输 4、会话 5、表示 6、应用 7。</p>
+<pre><code>┌───────────────────────────────┐  ← 第 7 层（最高层，离用户最近）
+│  7. 应用层 Application         │    HTTP / FTP / SMTP / DNS …
+├───────────────────────────────┤
+│  6. 表示层 Presentation        │    编码 / 加密 / 压缩
+├───────────────────────────────┤
+│  5. 会话层 Session             │    会话的建立、维持、终止
+├───────────────────────────────┤
+│  4. 传输层 Transport           │    TCP / UDP   ← 端到端（进程到进程）
+├───────────────────────────────┤
+│  3. 网络层 Network             │    IP / ICMP / ARP  ← 主机到主机（点对点）
+├───────────────────────────────┤
+│  2. 数据链路层 Data Link       │    Ethernet / PPP   ← 相邻节点（帧）
+├───────────────────────────────┤
+│  1. 物理层 Physical            │    比特流（电信号/光信号）  ← 最底层
+└───────────────────────────────┘
+        数据从应用层一层层向下 → 物理链路传输 → 对端一层层向上
+</code></pre>
+<h3>2.1 第 1 层：物理层（Physical）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td>在物理介质上<strong>透明地传输比特流</strong>。规定接口的机械、电气、功能、规程特性（如引脚定义、电压范围）。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td><strong>比特（Bit）</strong></td>
+</tr>
+<tr>
+<td><strong>典型协议/标准</strong></td>
+<td>RS-232、RJ-45 接口标准、100BASE-T、光纤标准（如 1000BASE-SX）</td>
+</tr>
+<tr>
+<td><strong>典型设备</strong></td>
+<td>中继器（Repeater）、集线器（Hub）</td>
+</tr>
+<tr>
+<td><strong>一句话</strong></td>
+<td>只管"0 和 1 怎么变成电信号发出去"，不关心这些比特的含义。</td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 第 2 层：数据链路层（Data Link）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td>把比特组装成<strong>帧</strong>，在<strong>相邻两个节点</strong>（主机↔交换机、路由器↔路由器）之间可靠传输；用 <strong>MAC 地址</strong>寻址；差错检测（FCS/CRC）；介质访问控制（谁能在共享链路上发数据）。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td><strong>帧（Frame）</strong></td>
+</tr>
+<tr>
+<td><strong>典型协议</strong></td>
+<td>以太网（IEEE 802.3）、Wi-Fi（IEEE 802.11）、PPP（点对点协议）、HDLC、CSMA/CD</td>
+</tr>
+<tr>
+<td><strong>典型设备</strong></td>
+<td>网桥（Bridge）、（二层）交换机（Switch）</td>
+</tr>
+<tr>
+<td><strong>寻址</strong></td>
+<td><strong>MAC 地址（硬件地址，6 字节，如 08:00:27:71:9c:a2）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：链路层只在<strong>相邻节点</strong>间一跳一跳传（点到点/hop-by-hop），而网络层负责<strong>端到端</strong>跨多个网络把包送到目的地。交换机看 MAC 地址转发，不认识 IP。</p>
+</blockquote>
+<h3>2.3 第 3 层：网络层（Network）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td><strong>路由选择</strong>（为分组选一条到目的网络的路径）和<strong>转发</strong>；用 <strong>IP 地址</strong>实现<strong>跨越多个网络的端到端</strong>通信；拥塞控制；网络互联。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td><strong>分组 / 包 / IP 数据报（Packet / Datagram）</strong></td>
+</tr>
+<tr>
+<td><strong>典型协议</strong></td>
+<td><strong>IP</strong>（IPv4/IPv6）、<strong>ICMP</strong>、<strong>IGMP</strong>、<strong>ARP</strong>、路由协议 RIP / OSPF / BGP、NAT</td>
+</tr>
+<tr>
+<td><strong>典型设备</strong></td>
+<td>路由器（Router）、三层交换机</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 高频易错（几乎每年必考其一）</strong>：
+- <strong>ARP（地址解析协议）属于网络层</strong>，不是数据链路层！它为 IP 服务，把 <strong>IP 地址解析为 MAC 地址</strong>（"已知 IP，求 MAC"）。ARP 报文<strong>不封装在 IP 数据报里</strong>（它直接封装在以太网帧里），这正是有人误把它归到链路层的原因；但按 TCP/IP 体系结构，ARP 与 IP 同属网际层。<strong>软考按"网络层/网际层"作答。</strong>
+- <strong>ICMP 属于网络层</strong>，不是应用层！ping、traceroute 是<strong>应用层的程序</strong>，但它们<strong>使用网络层的 ICMP 协议</strong>——"程序在应用层，协议在网络层"要分清。</p>
+</blockquote>
+<h3>2.4 第 4 层：传输层（Transport）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td>向上提供<strong>端到端（进程到进程）</strong>的通信服务；用<strong>端口号</strong>区分同一主机上的不同应用；流量控制、差错控制、拥塞控制（TCP）；分段与重组。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td><strong>报文段（Segment，TCP）/ 用户数据报（Datagram，UDP）</strong></td>
+</tr>
+<tr>
+<td><strong>典型协议</strong></td>
+<td><strong>TCP</strong>（面向连接、可靠）、<strong>UDP</strong>（无连接、不可靠）、SCTP</td>
+</tr>
+<tr>
+<td><strong>关键概念</strong></td>
+<td><strong>端口号（0–65535）</strong>，放在 TCP/UDP 首部</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：<strong>端口号是传输层的概念</strong>，只在 TCP/UDP 首部里；IP 首部里<strong>没有端口号</strong>（只有 IP 地址）。"HTTP 用 80 端口"严格说是"HTTP 默认使用传输层 TCP 的 80 端口"。</p>
+<p><strong>TCP vs UDP 一句话</strong>：TCP 像打电话（先拨号建立连接、确认对方听清了、可靠但慢），UDP 像寄明信片（不建连接、不管对方收没收到、快但不保证可靠，适合视频/语音/广播）。详细机制（三次握手、滑动窗口、拥塞控制）见 Day 5。</p>
+</blockquote>
+<h3>2.5 第 5 层：会话层（Session）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td>建立、管理、终止<strong>会话</strong>（两个应用之间的"对话"）；提供<strong>同步点</strong>（长传输出错时可以从同步点重传，而不是从头来）。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td>报文（数据组织单位，无独立标准协议）</td>
+</tr>
+<tr>
+<td><strong>典型协议</strong></td>
+<td>OSI 概念层，TCP/IP 中<strong>没有对应层</strong>，其功能并入应用层</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>考试注意</strong>：会话层没有"明星协议"，常考的是"OSI 的会话层负责什么"这类职责题——答"会话的建立、维持与终止/同步"。</p>
+</blockquote>
+<h3>2.6 第 6 层：表示层（Presentation）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td><strong>数据表示形式的转换</strong>：编码转换（ASCII↔Unicode 等）、<strong>数据加密与解密</strong>、<strong>数据压缩与解压</strong>。解决"两端表示数据的方式不同"的问题。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td>报文</td>
+</tr>
+<tr>
+<td><strong>典型协议/标准</strong></td>
+<td>OSI 概念层；JPEG、GIF 等图像编码、ASCII、加密标准（如 TLS/SSL 常被归为表示层功能）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：题目问"<strong>加密、压缩、编码转换</strong>属于 OSI 哪一层"——答<strong>表示层</strong>。这是表示层的标志性功能，几乎必考。</p>
+</blockquote>
+<h3>2.7 第 7 层：应用层（Application）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>职责</strong></td>
+<td>直接为<strong>用户的应用进程</strong>提供网络服务；定义应用层报文的格式与交互规则。</td>
+</tr>
+<tr>
+<td><strong>数据单元</strong></td>
+<td><strong>报文（Message）</strong></td>
+</tr>
+<tr>
+<td><strong>典型协议</strong></td>
+<td><strong>HTTP/HTTPS、FTP、SMTP、POP3、IMAP、DNS、Telnet、SSH、TFTP、SNMP、DHCP</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：应用层是<strong>离用户最近</strong>的层，但<strong>不是"用户"本身</strong>——它服务的是进程（如浏览器进程）。DNS 同时是应用层协议（它有自己的报文格式、用 TCP/UDP 53 端口通信）。</p>
+</blockquote>
+<hr />
+<h2>三、TCP/IP 四层模型</h2>
+<p>OSI 是"理论上"的参考模型，<strong>TCP/IP 才是互联网实际使用的协议体系</strong>。它把 7 层压缩为 <strong>4 层</strong>：</p>
+<pre><code>┌───────────────────────────────────────┐
+│  应用层 Application                    │  HTTP HTTPS FTP SMTP POP3 IMAP
+│                                       │  DNS Telnet SSH TFTP SNMP DHCP
+├───────────────────────────────────────┤   （合并了 OSI 的应用+表示+会话三层）
+│  传输层 Transport                      │  TCP / UDP
+├───────────────────────────────────────┤
+│  网际层 Internet（网络层）              │  IP ICMP IGMP ARP NAT
+│                                       │  RIP OSPF BGP
+├───────────────────────────────────────┤
+│  网络接口层 Network Interface          │  Ethernet Wi-Fi PPP ARP 的工作载体
+│  （= OSI 的数据链路层 + 物理层）         │  （有些教材称&quot;链路层/网络访问层&quot;）
+└───────────────────────────────────────┘
+</code></pre>
+<p><strong>TCP/IP 各层要点</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>职责</th>
+<th>关键协议</th>
+<th>寻址方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>应用层</strong></td>
+<td>应用报文格式与交互；包含 OSI 的表示、会话功能</td>
+<td>HTTP、DNS、SMTP 等</td>
+<td>域名/URL</td>
+</tr>
+<tr>
+<td><strong>传输层</strong></td>
+<td>进程到进程通信，端口区分应用</td>
+<td>TCP、UDP</td>
+<td><strong>端口号</strong></td>
+</tr>
+<tr>
+<td><strong>网际层</strong></td>
+<td>主机到主机跨网络通信、路由转发</td>
+<td>IP、ICMP、ARP</td>
+<td><strong>IP 地址</strong></td>
+</tr>
+<tr>
+<td><strong>网络接口层</strong></td>
+<td>相邻节点帧传输、比特流发送</td>
+<td>Ethernet、Wi-Fi、PPP</td>
+<td><strong>MAC 地址</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点（寻址链）</strong>：IP 地址（网络层）→ MAC 地址（链路层）→ 端口号（传输层）。跨网络找主机用 <strong>IP</strong>，同一链路上找网卡用 <strong>MAC</strong>，找到主机后区分进程用<strong>端口</strong>。ARP 就是把 IP 翻译成 MAC 的"翻译官"。</p>
+</blockquote>
+<hr />
+<h2>四、OSI 七层 vs TCP/IP 四层对照表（必背）</h2>
+<p>这是<strong>考试原表</strong>，必须能默写：</p>
+<table>
+<thead>
+<tr>
+<th>OSI 七层</th>
+<th>TCP/IP 四层</th>
+<th>对应说明</th>
+<th>该层典型协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层（7）</td>
+<td>应用层</td>
+<td>TCP/IP 把三层合一</td>
+<td>HTTP、FTP、SMTP、DNS、Telnet</td>
+</tr>
+<tr>
+<td>表示层（6）</td>
+<td>↑ 并入应用层</td>
+<td>编码/加密/压缩</td>
+<td>—（概念层）</td>
+</tr>
+<tr>
+<td>会话层（5）</td>
+<td>↑ 并入应用层</td>
+<td>会话管理</td>
+<td>—（概念层）</td>
+</tr>
+<tr>
+<td>传输层（4）</td>
+<td>传输层</td>
+<td>一一对应</td>
+<td>TCP、UDP</td>
+</tr>
+<tr>
+<td>网络层（3）</td>
+<td>网际层</td>
+<td>一一对应</td>
+<td>IP、ICMP、ARP</td>
+</tr>
+<tr>
+<td>数据链路层（2）</td>
+<td>网络接口层</td>
+<td>两层合一</td>
+<td>Ethernet、PPP</td>
+</tr>
+<tr>
+<td>物理层（1）</td>
+<td>↑ 并入网络接口层</td>
+<td>比特流传输</td>
+<td>RS-232 等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>另一种常考对照视角（含数据单元与设备）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>OSI 层</th>
+<th>数据单元（PDU）</th>
+<th>典型设备</th>
+<th>典型协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层</td>
+<td>报文（Message）</td>
+<td>—（应用程序）</td>
+<td>HTTP、FTP、SMTP、DNS</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>报文</td>
+<td>—</td>
+<td>加密、压缩、编码</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>报文</td>
+<td>—</td>
+<td>会话管理</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>报文段/数据报（Segment/Datagram）</td>
+<td>（传输层网关）</td>
+<td>TCP、UDP</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>分组/包（Packet/IP 数据报）</td>
+<td><strong>路由器</strong></td>
+<td>IP、ICMP、ARP</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td><strong>帧（Frame）</strong></td>
+<td><strong>网桥、交换机</strong></td>
+<td>Ethernet、PPP</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td><strong>比特（Bit）</strong></td>
+<td><strong>中继器、集线器</strong></td>
+<td>电气标准</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：很多教材还用<strong>五层混合模型</strong>（应用/传输/网络/数据链路/物理）——它只是"教学用"的折中（把 TCP/IP 四层的网络接口层重新拆成两层）。题目若问"五层模型"，按此作答即可；<strong>但题目明确问 TCP/IP 时，答案就是四层</strong>。</p>
+</blockquote>
+<hr />
+<h2>五、封装与解封装全过程（必考，ASCII 图解）</h2>
+<p><strong>封装（发送方，自上而下）</strong>：数据每经过一层，就被加上该层的<strong>头部</strong>（链路层还加<strong>尾部</strong>）。像套娃一样，一层层套上去。</p>
+<p><strong>解封装（接收方，自下而上）</strong>：逐层读取并去掉头部，把数据交给上层。</p>
+<p>以"浏览器访问网页"（HTTP over TCP over IP over Ethernet）为例：</p>
+<pre><code>【发送方：封装过程】
+
+ 应用层：  浏览器生成 HTTP 请求报文
+                ┌──────────────────────────────────┐
+                │          HTTP 报文（数据）          │          ← 应用层 PDU：报文
+                └──────────────────────────────────┘
+                                  ↓ 加 TCP 首部
+ 传输层：        ┌──────┬───────────────────────────┐
+                │ TCP  │     HTTP 报文（数据）        │          ← 传输层 PDU：TCP 报文段
+                │ 首部 │  (源端口 1234 / 目的端口 80)  │             （UDP 则叫用户数据报）
+                └──────┴───────────────────────────┘
+                                  ↓ 加 IP 首部
+ 网络层：  ┌────┬──────┬───────────────────────────┐
+          │ IP │ TCP  │     HTTP 报文（数据）        │          ← 网络层 PDU：IP 数据报/分组
+          │首部│ 首部 │ (源 IP 192.168.1.5 → 目的 IP) │
+          └────┴──────┴───────────────────────────┘
+                                  ↓ 加帧头和帧尾
+ 链路层：┌──────┬────┬──────┬─────────────┬──────┐
+        │帧头（源│ IP │ TCP  │ HTTP 报文    │ 帧尾 │      ← 链路层 PDU：帧
+        │MAC→目的│首部│ 首部 │             │ FCS │         （FCS = 帧检验序列，CRC 差错检测）
+        │MAC）  │    │     │             │      │
+        └──────┴────┴──────┴─────────────┴──────┘
+                                  ↓ 转成信号
+ 物理层：     0101011010011110... （比特流）          ← 物理层 PDU：比特
+                                  ↓
+                      ══════ 网线 / 光纤 / 无线 ══════
+
+
+【接收方：解封装过程】（顺序完全相反，逐层去头）
+
+ 物理层：  收到比特流 0101011010... → 交给链路层
+ 链路层：  按 MAC 地址判断是给自己的帧 → 检查 FCS 无错 → 去掉帧头/帧尾 → 取出 IP 数据报 → 交给网络层
+ 网络层：  检查目的 IP 是本机 → 去掉 IP 首部 → 取出 TCP 报文段 → 交给传输层
+ 传输层：  按目的端口号 80 找到 Web 服务进程 → 去掉 TCP 首部 → 取出 HTTP 报文 → 交给应用层
+ 应用层：  Web 服务进程解析 HTTP 请求，返回网页
+</code></pre>
+<p><strong>关键结论（背死）</strong>：</p>
+<ol>
+<li><strong>封装 = 发送方逐层"加头"</strong>；链路层<strong>既加头又加尾</strong>（FCS 校验码）。</li>
+<li><strong>解封装 = 接收方逐层"去头"</strong>，顺序与封装相反。</li>
+<li>每一层的<strong>头部只给自己的对等层看</strong>：发送方 TCP 加的序号、端口，只有接收方 TCP 会读取和处理；IP 首部只有两端的 IP 层处理——这就是<strong>对等层虚通信</strong>。</li>
+<li><strong>链路层有尾部（FCS）</strong>，其他层只有头部。这是唯一加尾部的层。</li>
+<li>路由器转发分组时：物理层→链路层→<strong>网络层</strong>（读 IP、查路由表、重新选下一跳）→链路层（重新封装成新帧）→物理层。<strong>路由器只工作到网络层，不读 TCP/HTTP 头</strong>；而交换机只工作到链路层（读 MAC）。</li>
+</ol>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：数据在<strong>发送侧</strong>从应用层向物理层流动（逐层封装），在<strong>接收侧</strong>从物理层向应用层流动（逐层解封装）。数据"流动方向"在两侧相反，但<strong>对等层之间是水平虚通信</strong>。</p>
+</blockquote>
+<hr />
+<h2>六、各层协议归属总表（层级判断题专用）</h2>
+<h3>6.1 应用层协议（用户看得见的服务）</h3>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>全称</th>
+<th>作用</th>
+<th>端口</th>
+<th>传输层协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTP</strong></td>
+<td>超文本传输协议</td>
+<td>网页传输</td>
+<td>80</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>HTTPS</strong></td>
+<td>安全的 HTTP</td>
+<td>HTTP + <strong>TLS/SSL 加密</strong></td>
+<td>443</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>FTP</strong></td>
+<td>文件传输协议</td>
+<td>文件上传/下载</td>
+<td><strong>控制 21 / 数据 20</strong></td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>SMTP</strong></td>
+<td>简单邮件传输协议</td>
+<td><strong>发送</strong>邮件</td>
+<td>25</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>POP3</strong></td>
+<td>邮局协议第 3 版</td>
+<td><strong>接收</strong>邮件（下载后服务器删除）</td>
+<td>110</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>IMAP</strong></td>
+<td>互联网邮件访问协议</td>
+<td><strong>接收</strong>邮件（服务器端同步管理）</td>
+<td>143</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>DNS</strong></td>
+<td>域名系统</td>
+<td>域名 → IP 解析</td>
+<td><strong>53</strong></td>
+<td><strong>TCP + UDP</strong></td>
+</tr>
+<tr>
+<td><strong>Telnet</strong></td>
+<td>远程登录协议</td>
+<td>明文远程登录</td>
+<td>23</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>SSH</strong></td>
+<td>安全外壳协议</td>
+<td>加密远程登录</td>
+<td>22</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>TFTP</strong></td>
+<td>简单文件传输协议</td>
+<td>小文件传输（无连接）</td>
+<td>69</td>
+<td><strong>UDP</strong></td>
+</tr>
+<tr>
+<td><strong>SNMP</strong></td>
+<td>简单网络管理协议</td>
+<td>网络设备管理</td>
+<td><strong>161</strong>（trap 162）</td>
+<td><strong>UDP</strong></td>
+</tr>
+<tr>
+<td><strong>DHCP</strong></td>
+<td>动态主机配置协议</td>
+<td>自动分配 IP</td>
+<td><strong>67（服务器）/ 68（客户端）</strong></td>
+<td><strong>UDP</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>6.2 传输层协议（只有"两个半"）</h3>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>特点</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TCP</strong></td>
+<td>面向连接、可靠、字节流、全双工</td>
+<td>HTTP、FTP、SMTP、Telnet、SSH</td>
+</tr>
+<tr>
+<td><strong>UDP</strong></td>
+<td>无连接、不可靠、报文、开销小、快</td>
+<td>DNS（查询）、TFTP、SNMP、DHCP、视频/语音</td>
+</tr>
+<tr>
+<td>SCTP</td>
+<td>面向连接、支持多宿主（了解即可）</td>
+<td>电话信令等</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 网际层（网络层）协议</h3>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>全称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IP</strong></td>
+<td>网际协议</td>
+<td>定义 IP 数据报格式、寻址与路由（IPv4/IPv6）</td>
+</tr>
+<tr>
+<td><strong>ICMP</strong></td>
+<td>互联网控制报文协议</td>
+<td>差错报告与网络控制；<strong>ping / traceroute</strong> 用它</td>
+</tr>
+<tr>
+<td><strong>IGMP</strong></td>
+<td>互联网组管理协议</td>
+<td>组播组成员管理</td>
+</tr>
+<tr>
+<td><strong>ARP</strong></td>
+<td>地址解析协议</td>
+<td><strong>IP 地址 → MAC 地址</strong>（请求广播、应答单播）</td>
+</tr>
+<tr>
+<td><strong>NAT</strong></td>
+<td>网络地址转换</td>
+<td>内网 IP ↔ 公网 IP 转换，缓解地址不足</td>
+</tr>
+<tr>
+<td><strong>RIP / OSPF / BGP</strong></td>
+<td>路由协议</td>
+<td>路由表的建立与更新（RIP 距离向量、OSPF 链路状态、BGP 自治域间）</td>
+</tr>
+</tbody>
+</table>
+<h3>6.4 网络接口层（链路层 + 物理层）</h3>
+<table>
+<thead>
+<tr>
+<th>协议/标准</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ethernet（IEEE 802.3）</strong></td>
+<td>局域网最主流链路层协议（MAC 帧、CSMA/CD）</td>
+</tr>
+<tr>
+<td><strong>Wi-Fi（IEEE 802.11）</strong></td>
+<td>无线局域网（CSMA/CA）</td>
+</tr>
+<tr>
+<td><strong>PPP</strong></td>
+<td>点对点链路（拨号、专线，可支持认证）</td>
+</tr>
+<tr>
+<td><strong>HDLC</strong></td>
+<td>面向比特的链路层协议</td>
+</tr>
+<tr>
+<td><strong>ARP 的工作载体</strong></td>
+<td>ARP 报文直接封装在以太网帧中传输</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 终极易错点汇总（层级判断题的四个陷阱）</strong>：
+1. <strong>ARP → 网络层/网际层</strong>（为 IP 服务，IP→MAC；虽封装在以太网帧中，但不属于链路层）。
+2. <strong>ICMP → 网络层</strong>（不是应用层；ping 是应用层程序，但协议是 ICMP）。
+3. <strong>DNS 用 TCP 也用 UDP</strong>（一般查询走 UDP 53；区域传送/大响应走 TCP 53）。
+4. <strong>加密/压缩/编码转换 → OSI 表示层</strong>；HTTPS 的 TLS/SSL 常被归为实现表示层功能。</p>
+</blockquote>
+<hr />
+<h2>七、常见端口号表（必背）</h2>
+<p>端口号范围 <strong>0–65535</strong>（16 位，放在 TCP/UDP 首部）：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>熟知端口（well-known）</strong></td>
+<td><strong>0–1023</strong></td>
+<td>分配给服务器端的标准服务（HTTP 80 等）</td>
+</tr>
+<tr>
+<td><strong>注册端口</strong></td>
+<td>1024–49151</td>
+<td>注册给特定应用（如 MySQL 3306）</td>
+</tr>
+<tr>
+<td><strong>动态/临时端口</strong></td>
+<td>49152–65535</td>
+<td>客户端临时使用，由系统随机分配</td>
+</tr>
+</tbody>
+</table>
+<p><strong>必背端口表</strong>（软考高频）：</p>
+<table>
+<thead>
+<tr>
+<th>端口</th>
+<th>协议</th>
+<th>端口</th>
+<th>协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>20</strong></td>
+<td>FTP 数据</td>
+<td><strong>80</strong></td>
+<td><strong>HTTP</strong></td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td>FTP 控制</td>
+<td><strong>443</strong></td>
+<td><strong>HTTPS</strong></td>
+</tr>
+<tr>
+<td><strong>22</strong></td>
+<td>SSH</td>
+<td><strong>110</strong></td>
+<td>POP3</td>
+</tr>
+<tr>
+<td><strong>23</strong></td>
+<td>Telnet</td>
+<td><strong>143</strong></td>
+<td>IMAP</td>
+</tr>
+<tr>
+<td><strong>25</strong></td>
+<td>SMTP</td>
+<td><strong>161/162</strong></td>
+<td>SNMP（161 查询 / 162 trap 告警）</td>
+</tr>
+<tr>
+<td><strong>53</strong></td>
+<td>DNS（TCP+UDP）</td>
+<td><strong>3389</strong></td>
+<td>RDP（远程桌面）</td>
+</tr>
+<tr>
+<td><strong>67/68</strong></td>
+<td>DHCP（67 服务器 / 68 客户端）</td>
+<td><strong>3306</strong></td>
+<td>MySQL</td>
+</tr>
+<tr>
+<td><strong>69</strong></td>
+<td>TFTP</td>
+<td><strong>8080</strong></td>
+<td>HTTP 备用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分组记忆法</strong>：
+- <strong>20 串端口</strong>：FTP(20/21)、SSH(22)、Telnet(23)、SMTP(25)——"文件、安全登录、明文登录、邮件"。
+- <strong>50–60</strong>：DNS(53)、DHCP(67/68)、TFTP(69)。
+- <strong>80</strong>：HTTP(80)；<strong>4 开头</strong>：HTTPS(443)。
+- <strong>110–160</strong>：POP3(110)、IMAP(143)、SNMP(161)。
+- <strong>记住发送 vs 接收邮件</strong>：SMTP <strong>25 发</strong>，POP3 <strong>110 收</strong>（IMAP 143 也是收）。
+- <strong>FTP 两条连接</strong>：21 控制（传命令）、20 数据（传文件）。</p>
+<hr />
+<h2>八、记忆口诀</h2>
+<h3>8.1 OSI 七层顺序（从下到上 1→7）</h3>
+<blockquote>
+<p><strong>「物 链 网 传 会 表 应」</strong>
+谐音：<strong>物联网传会表应</strong>（"物联网传（递）会（议）表（格）应（答）"）</p>
+</blockquote>
+<p>展开：<strong>物</strong>理层 → <strong>链</strong>路层 → <strong>网</strong>络层 → <strong>传</strong>输层 → <strong>会</strong>话层 → <strong>表</strong>示层 → <strong>应</strong>用层</p>
+<p>英文版（从上到下）：<strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing
+（<strong>A</strong>pplication, <strong>P</strong>resentation, <strong>S</strong>ession, <strong>T</strong>ransport, <strong>N</strong>etwork, <strong>D</strong>ata-link, <strong>P</strong>hysical）</p>
+<h3>8.2 各层协议归属（一句话版）</h3>
+<blockquote>
+<p><strong>应用层全是"服务"</strong>：网页（HTTP/S）、文件（FTP/TFTP）、邮件（SMTP/POP3/IMAP）、域名（DNS）、登录（Telnet/SSH）、管理（SNMP）、配 IP（DHCP）。
+<strong>传输层只记两个</strong>：TCP 可靠、UDP 快。
+<strong>网际层记四个</strong>：IP 寻路、ICMP 报错、<strong>ARP 找 MAC</strong>、路由协议（RIP/OSPF/BGP）。
+<strong>接口层全是"硬件相关"</strong>：以太网、Wi-Fi、PPP。</p>
+</blockquote>
+<h3>8.3 寻址三件套</h3>
+<blockquote>
+<p><strong>IP 找主机（网络层）、MAC 找网卡（链路层）、端口找进程（传输层）</strong>；
+跨网用 IP，同链路用 MAC，进机用端口，<strong>IP 变 MAC 找 ARP</strong>。</p>
+</blockquote>
+<h3>8.4 封装方向</h3>
+<blockquote>
+<p><strong>发送方：从上往下层层"穿衣服"（加头）；接收方：从下往上层层"脱衣服"（去头）；链路层还多穿一双"袜子"（帧尾 FCS）。</strong></p>
+</blockquote>
+<hr />
+<h2>九、快速自测（遮住答案速答）</h2>
+<ol>
+<li>OSI 七层从下到上依次是？ → <strong>物理、数据链路、网络、传输、会话、表示、应用</strong>。</li>
+<li>ARP 属于哪层？ → <strong>网络层（网际层）</strong>，把 <strong>IP 解析为 MAC</strong>。</li>
+<li>ICMP 属于哪层？ → <strong>网络层</strong>；ping 用 ICMP。</li>
+<li>端口号放在哪个协议的首部？ → <strong>TCP/UDP 首部（传输层）</strong>，IP 首部没有端口。</li>
+<li>数据链路层的数据单元是？ → <strong>帧</strong>；网络层是 <strong>分组/IP 数据报</strong>；传输层是 <strong>报文段/数据报</strong>；物理层是 <strong>比特</strong>。</li>
+<li>交换机工作在哪层？路由器呢？ → 交换机<strong>数据链路层</strong>（看 MAC）；路由器<strong>网络层</strong>（看 IP）。</li>
+<li>加密、压缩、编码转换是 OSI 哪层功能？ → <strong>表示层</strong>。</li>
+<li>封装时唯一加尾部的层是？ → <strong>数据链路层（FCS）</strong>。</li>
+<li>DNS 使用传输层的什么协议？ → <strong>TCP 和 UDP 都用（53 端口）</strong>。</li>
+<li>SMTP 与 POP3 的端口分别是？ → <strong>25（发）/ 110（收）</strong>；IMAP 是 <strong>143</strong>。</li>
+<li>TCP/IP 四层是哪四层？ → <strong>应用层、传输层、网际层、网络接口层</strong>。</li>
+<li>DHCP 端口？ → <strong>服务器 67、客户端 68，都用 UDP</strong>。</li>
+</ol>
+<hr />
+<h2>十、本节在考试中的位置</h2>
+<ul>
+<li><strong>科目一（综合知识，75 道选择题）</strong>中，计算机网络约占 <strong>10%</strong>（约 7–8 题）。网络体系结构、协议归属、端口号是其中<strong>最稳定的得分点</strong>——题型固定、答案唯一，背熟就是白捡的分。</li>
+<li><strong>层级判断题的典型问法</strong>（务必见题即答）：</li>
+<li>"下列协议中，工作在传输层的是（ ）" / "属于网络层协议的是（ ）"</li>
+<li>"在 OSI 参考模型中，实现加密功能的是（ ）层"</li>
+<li>"ARP 协议完成的功能是（ ）" / "ICMP 协议用于（ ）"</li>
+<li>"下列设备中，工作在数据链路层的是（ ）"</li>
+<li><strong>与后续天数的衔接</strong>：Day 5 学 TCP/UDP 深入机制（三次握手、流量与拥塞控制）+ IP 地址与子网划分（<strong>必考计算</strong>）；Day 6 学网络安全与网络阶段框架图。本笔记的分层框架是后两天的"地图"，务必先夯实。</li>
+</ul>
+<blockquote>
+<p><strong>学习建议</strong>：先通读一遍本笔记，重点标记 ⚠️ 易错点；然后做 <code>day04-exercises.md</code>（20 题，其中 12 题是层级判断/协议归属）；错题按 <code>reflection.md</code> 的错题四要素登记。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/networks/day04-protocols.md">docs/knowledge-points/networks/day04-protocols.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

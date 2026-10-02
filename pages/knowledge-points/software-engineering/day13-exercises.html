@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 13（10/3）软件工程② 练习题：设计原则 / 耦合内聚 / 测试方法 / 项目管理（20 选择 + 3 计算） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day13-exercises.md</div>
+<h1>Day 13（10/3）软件工程② 练习题：设计原则 / 耦合内聚 / 测试方法 / 项目管理（20 选择 + 3 计算）</h1>
+<blockquote>
+<p>说明：本题是 Day 13 的章节题，对应笔记 <code>day13-test.md</code>。
+题目分布：<strong>设计原则 3 题（1–3）</strong>、<strong>耦合与内聚 5 题（4–8）</strong>、<strong>黑盒测试 3 题（9–11）</strong>、<strong>白盒测试与 McCabe 5 题（12–16）</strong>、<strong>软件维护 2 题（17–18）</strong>、<strong>项目管理 2 题（19–20）</strong>，另加 <strong>3 道独立路径 / 逻辑覆盖计算题（21–23）</strong>。
+<strong>完整答案与解析在文件末尾</strong>。建议独立闭卷完成（选择题约 30 分钟，计算题约 25 分钟）再对答案。
+<strong>做题纪律</strong>：
+- <strong>第 4–7 题（耦合 / 内聚）</strong>是本日必考内容，两级的<strong>七级顺序必须能默写</strong>；场景题错了就回 <code>day13-test.md</code> §2.2、§3.2 把两张分级表整表重背。
+- <strong>第 13–16 题 + 计算第 21–23 题（覆盖标准 + 圈复杂度）</strong>是软考软件工程的<strong>最高频计算考点</strong>，分值占比高。做计算题时<strong>必须自己先画控制流图、自己数边和节点</strong>，再与解析对照——只看答案是学不会的。
+- 计算题第 21–23 题的<strong>所有数字均已用两种方法交叉验算</strong>（<code>V(G)=E−N+2</code> 与 <code>V(G)=判定节点数+1</code>，独立路径数用矩阵秩验证），可放心对答案。</p>
+</blockquote>
+<hr />
+<h2>附：Day 13 笔记「一页纸结论」速答</h2>
+<ol>
+<li><strong>设计七大原则</strong>：<strong>单一职责（SRP）、开闭（OCP）、里氏替换（LSP）、依赖倒置（DIP）、接口隔离（ISP）、迪米特法则（LoD）、组合/聚合复用（CARP）</strong>。</li>
+<li><strong>SRP = 一个类只有一个引起它变化的原因</strong>；<strong>OCP = 对扩展开放、对修改关闭</strong>；<strong>LSP = 子类必须能替换父类，行为不变</strong>。</li>
+<li><strong>DIP = 高层不依赖低层，两者都依赖抽象；抽象不依赖细节，细节依赖抽象</strong>（面向接口编程）。</li>
+<li><strong>耦合七级（低→高）</strong>：<strong>非直接、数据、标记、控制、外部、公共、内容</strong>。口诀：<strong>"非数标控外公内"</strong>。</li>
+<li><strong>内聚七级（低→高）</strong>：<strong>偶然、逻辑、时间、过程、通信、顺序、功能</strong>。口诀：<strong>"偶逻时过通顺功"</strong>（偶然逻辑时间过程通信顺序功能）。</li>
+<li><strong>数据耦合传简单参数；标记耦合传整个数据结构（记录）；控制耦合传"决定对方走哪段逻辑"的标志</strong>。</li>
+<li><strong>过程内聚 = 按固定顺序执行；顺序内聚 = 前一元素的输出是后一元素的输入（有数据链）；功能内聚 = 只为完成一个功能</strong>（最强）。</li>
+<li><strong>设计目标：高内聚、低耦合</strong>——两者是度量<strong>模块独立性</strong>的两个标准。</li>
+<li><strong>黑盒依据 = 需求规格说明书（功能/行为）</strong>；<strong>白盒依据 = 程序内部结构与执行逻辑（源代码）</strong>。</li>
+<li><strong>测试四阶段</strong>：<strong>单元（编码后、开发者做）→ 集成（概设/详设后）→ 系统（SRS 后）→ 验收（用户参与）</strong>。</li>
+<li><strong>黑盒三方法</strong>：<strong>等价类划分、边界值分析、因果图</strong>（输入间有组合/约束关系时用因果图）。</li>
+<li><strong>覆盖强度（弱→强）</strong>：<strong>语句 &lt; 判定 &lt; 条件 &lt; 判定-条件 &lt; 条件组合 &lt; 路径</strong>。</li>
+<li><strong>条件覆盖不保证判定覆盖</strong>（反例：a=1,b=0 与 a=0,b=1 把 C1/C2 的真假都覆盖了，但 D1=假恒成立，真分支从未执行）。</li>
+<li><strong>McCabe 圈复杂度 V(G) = E − N + 2 = 判定节点数 + 1</strong>（三种算法等价）。</li>
+<li><strong>V(G) 的意义 = 独立路径数 = 基本路径测试所需的最少测试用例数</strong>；V(G) 越大越复杂，<strong>建议 V(G) ≤ 10</strong>。</li>
+<li><strong>基本路径测试四步</strong>：①画 CFG ②算 V(G) ③列出 V(G) 条独立路径 ④每条路径设计一个用例。</li>
+<li><strong>维护四类型</strong>：<strong>改正性（改错，~20%）、适应性（适应环境变化，~25%）、完善性（加功能/改进，~50% 最大）、预防性（提高可维护性）</strong>。</li>
+<li><strong>维护判别两步法</strong>：先问"系统错了吗"→改正性；再问"是环境变了还是用户想要更多"→<strong>环境变了=适应性，用户要更多/更好=完善性</strong>。</li>
+<li><strong>甘特图</strong>直观显示任务起止时间与进度，<strong>但难以反映任务间依赖关系与关键路径</strong>。</li>
+<li><strong>关键路径 = 从源点到汇点路径长度最长的路径</strong>，其长度 = <strong>项目最短工期</strong>；关键路径上的任务延期会导致整个项目延期。</li>
+</ol>
+<hr />
+<h2>第一部分：面向对象设计原则（1–3）</h2>
+<p><strong>1.</strong> 单一职责原则（SRP）的核心含义是（ ）。</p>
+<ul>
+<li>A. 一个类应该只有一个引起它变化的原因</li>
+<li>B. 一个类只能包含一个公有方法</li>
+<li>C. 一个类只能被一个其他类引用</li>
+<li>D. 一个类只能有一个直接父类</li>
+</ul>
+<p><strong>2.</strong> 关于里氏替换原则（LSP），下列描述正确的是（ ）。</p>
+<ul>
+<li>A. 在程序中，把所有使用基类对象的地方替换为其子类对象，程序的行为不会发生改变</li>
+<li>B. 子类只要方法名与父类相同，就可以任意改写其行为，不必考虑父类的约定</li>
+<li>C. 子类继承父类之后，不能再新增任何父类没有的方法</li>
+<li>D. 父类中声明的抽象方法，子类可以根据需要自由选择是否实现</li>
+</ul>
+<p><strong>3.</strong> 某支付系统的 <code>PaymentProcessor</code> 类内部用一长串 <code>if-else</code> 判断支付类型，每新增一种支付方式（如数字人民币），程序员都必须<strong>打开该类、修改其源代码</strong>（新增一个 <code>else if</code> 分支）。这一设计主要违反了（ ）。</p>
+<ul>
+<li>A. 单一职责原则（SRP）</li>
+<li>B. 里氏替换原则（LSP）</li>
+<li>C. 开闭原则（OCP）</li>
+<li>D. 依赖倒置原则（DIP）</li>
+</ul>
+<hr />
+<h2>第二部分：耦合与内聚分级（4–8）</h2>
+<p><strong>4.</strong> 软件模块间的耦合程度从<strong>低到高</strong>排列，正确的是（ ）。</p>
+<ul>
+<li>A. 数据耦合、标记耦合、控制耦合、外部耦合、公共耦合、内容耦合、非直接耦合</li>
+<li>B. 非直接耦合、数据耦合、控制耦合、标记耦合、公共耦合、外部耦合、内容耦合</li>
+<li>C. 非直接耦合、标记耦合、数据耦合、控制耦合、外部耦合、公共耦合、内容耦合</li>
+<li>D. 非直接耦合、数据耦合、标记耦合、控制耦合、外部耦合、公共耦合、内容耦合</li>
+</ul>
+<p><strong>5.</strong> 模块的内聚程度从<strong>低到高</strong>排列，正确的是（ ）。</p>
+<ul>
+<li>A. 偶然内聚、逻辑内聚、时间内聚、通信内聚、过程内聚、顺序内聚、功能内聚</li>
+<li>B. 偶然内聚、逻辑内聚、过程内聚、时间内聚、通信内聚、顺序内聚、功能内聚</li>
+<li>C. 逻辑内聚、偶然内聚、时间内聚、过程内聚、通信内聚、顺序内聚、功能内聚</li>
+<li>D. 偶然内聚、逻辑内聚、时间内聚、过程内聚、通信内聚、顺序内聚、功能内聚</li>
+</ul>
+<p><strong>6.</strong> 模块 A 调用模块 B 完成报表生成，调用时传入一个 <code>controlFlag</code> 参数；模块 B 根据该参数的取值，决定内部执行哪一段处理逻辑。模块 A 与 B 之间的耦合类型是（ ）。</p>
+<ul>
+<li>A. 数据耦合</li>
+<li>B. 标记耦合</li>
+<li>C. 控制耦合</li>
+<li>D. 公共耦合</li>
+</ul>
+<p><strong>7.</strong> 某模块内部依次执行「读入数据 → 校验数据 → 计算结果」三个处理元素，<strong>校验的输出就是计算的输入</strong>，元素之间形成一条数据链，且必须按此顺序执行。该模块的内聚类型是（ ）。</p>
+<ul>
+<li>A. 过程内聚</li>
+<li>B. 通信内聚</li>
+<li>C. 顺序内聚</li>
+<li>D. 功能内聚</li>
+</ul>
+<p><strong>8.</strong> 关于模块独立性，下列说法正确的是（ ）。</p>
+<ul>
+<li>A. 内聚度和耦合度是度量模块独立性的两个标准，软件设计应追求高内聚、低耦合</li>
+<li>B. 模块之间的耦合度越高，模块独立性越强</li>
+<li>C. 内聚度越低的模块，越容易被复用</li>
+<li>D. 模块独立性只与内聚度有关，与耦合度无关</li>
+</ul>
+<hr />
+<h2>第三部分：黑盒测试（9–11）</h2>
+<p><strong>9.</strong> 黑盒测试（功能测试）设计与选择测试用例的主要依据是（ ）。</p>
+<ul>
+<li>A. 需求规格说明书（功能与行为规格）</li>
+<li>B. 程序的源代码</li>
+<li>C. 程序的内部数据结构</li>
+<li>D. 硬件配置清单</li>
+</ul>
+<p><strong>10.</strong> 某程序输入为学生百分制成绩（整数，有效范围为闭区间 [0, 100]）。采用等价类划分法，其<strong>无效等价类</strong>的个数是（ ）。</p>
+<ul>
+<li>A. 1 个</li>
+<li>B. 3 个</li>
+<li>C. 2 个</li>
+<li>D. 4 个</li>
+</ul>
+<p><strong>11.</strong> 对上题的成绩输入采用<strong>边界值分析法</strong>，下列哪组测试输入选取最完整（取边界值及其邻近的越界值）？（ ）</p>
+<ul>
+<li>A. 0、100</li>
+<li>B. −1、0、1、99、100、101</li>
+<li>C. 0、50、100</li>
+<li>D. 0、1、2、98、99、100</li>
+</ul>
+<hr />
+<h2>第四部分：白盒测试、逻辑覆盖与 McCabe（12–16）</h2>
+<p><strong>12.</strong> 白盒测试（结构测试）设计与选择测试用例的主要依据是（ ）。</p>
+<ul>
+<li>A. 程序的内部结构与执行逻辑（控制流）</li>
+<li>B. 需求规格说明书</li>
+<li>C. 用户操作手册</li>
+<li>D. 程序注释的数量</li>
+</ul>
+<p><strong>13.</strong> 软考标准的逻辑覆盖强度顺序（从弱到强）正确的是（ ）。</p>
+<ul>
+<li>A. 语句覆盖 &lt; 条件覆盖 &lt; 判定覆盖 &lt; 判定-条件覆盖 &lt; 条件组合覆盖 &lt; 路径覆盖</li>
+<li>B. 判定覆盖 &lt; 语句覆盖 &lt; 条件覆盖 &lt; 条件组合覆盖 &lt; 判定-条件覆盖 &lt; 路径覆盖</li>
+<li>C. 语句覆盖 &lt; 判定覆盖 &lt; 判定-条件覆盖 &lt; 条件覆盖 &lt; 条件组合覆盖 &lt; 路径覆盖</li>
+<li>D. 语句覆盖 &lt; 判定覆盖 &lt; 条件覆盖 &lt; 判定-条件覆盖 &lt; 条件组合覆盖 &lt; 路径覆盖</li>
+</ul>
+<p><strong>14.</strong> "每个判定中<strong>所有条件的各种取值组合</strong>都至少被执行一次"，这是哪种覆盖标准的要求？（ ）</p>
+<ul>
+<li>A. 语句覆盖</li>
+<li>B. 判定覆盖</li>
+<li>C. 条件组合覆盖</li>
+<li>D. 路径覆盖</li>
+</ul>
+<p><strong>15.</strong> 某程序的控制流图共有 <strong>12 条边、9 个节点</strong>，则其 McCabe 圈复杂度 V(G) 等于（ ）。</p>
+<ul>
+<li>A. 3</li>
+<li>B. 21</li>
+<li>C. 5</li>
+<li>D. 6</li>
+</ul>
+<p><strong>16.</strong> 若某程序的 McCabe 圈复杂度 V(G) = 5，以下说法正确的是（ ）。</p>
+<ul>
+<li>A. 该程序最多只能包含 5 条可执行语句</li>
+<li>B. 该程序恰好含有 5 个判定节点</li>
+<li>C. 该程序最多只有 5 条可能的执行路径</li>
+<li>D. 该程序有 5 条独立路径，基本路径测试至少需要 5 个测试用例</li>
+</ul>
+<hr />
+<h2>第五部分：软件维护（17–18）</h2>
+<p><strong>17.</strong> 在软件维护的四种类型中，<strong>工作量占比最大</strong>（通常约占全部维护工作量的一半以上）的是（ ）。</p>
+<ul>
+<li>A. 改正性维护</li>
+<li>B. 适应性维护</li>
+<li>C. 预防性维护</li>
+<li>D. 完善性维护</li>
+</ul>
+<p><strong>18.</strong> 某人事系统已上线运行两年。近日用户提出，希望系统能把月度考勤统计结果<strong>导出为 PDF 文件</strong>。开发人员为此新增了导出模块。这属于（ ）。</p>
+<ul>
+<li>A. 改正性维护</li>
+<li>B. 完善性维护</li>
+<li>C. 适应性维护</li>
+<li>D. 预防性维护</li>
+</ul>
+<hr />
+<h2>第六部分：项目管理（19–20）</h2>
+<p><strong>19.</strong> 关于甘特图（Gantt 图），下列说法正确的是（ ）。</p>
+<ul>
+<li>A. 它能清晰地表达任务之间的逻辑依赖关系，并自动计算关键路径</li>
+<li>B. 它能直观地表示各项任务的开始时间、持续时间与进度，但难以反映任务间的依赖关系和关键路径</li>
+<li>C. 它主要用于描述系统内部的数据流向</li>
+<li>D. 它只能用于敏捷开发过程，不适用于瀑布模型</li>
+</ul>
+<p><strong>20.</strong> 在 PERT / CPM 网络图中，"关键路径"是指（ ）。</p>
+<ul>
+<li>A. 消耗资源最多的路径</li>
+<li>B. 经过的节点数量最多的路径</li>
+<li>C. 从源点到汇点耗时最短的路径</li>
+<li>D. 从源点到汇点路径长度最长的路径，其长度决定项目的最短工期</li>
+</ul>
+<hr />
+<h2>第七部分：独立路径与逻辑覆盖计算题（21–23）</h2>
+<blockquote>
+<p>做题要求（按这个格式写，考试时也这么答）：
+① 画出控制流图（标清节点编号与边）
+② 计算 V(G)（<strong>用两种方法</strong>：<code>E−N+2</code> 与 <code>判定节点数+1</code>，结果必须一致）
+③ 列出全部可能路径，指出哪些是<strong>独立路径</strong>（独立路径数 = V(G)）
+④ 为每条独立路径设计一个测试输入，并<strong>验算</strong>程序的执行结果</p>
+</blockquote>
+<hr />
+<h3>第 21 题（两个串联判定，V(G) = 3）</h3>
+<pre><code class="language-c">int bonus(int a, int b) {
+    if (a &gt; 0 &amp;&amp; b &gt; 0) {     // 判定 D1：条件 C1=(a&gt;0), C2=(b&gt;0)
+        a = a + 2;            // 语句 S1
+    }
+    if (a &gt; 5) {              // 判定 D2：条件 C3=(a&gt;5)  —— 注意 a 可能已被 S1 修改
+        a = a * 3;            // 语句 S2
+    }
+    return a;
+}
+</code></pre>
+<p><strong>（1）</strong> 画出控制流图，计算 V(G)；
+<strong>（2）</strong> 列出全部可能路径与独立路径；
+<strong>（3）</strong> 为每条独立路径给出一个测试输入，并验算返回值；
+<strong>（4）</strong> 若要达到<strong>判定覆盖</strong>，最少需要几个用例？达到<strong>语句覆盖</strong>呢？</p>
+<hr />
+<h3>第 22 题（三个判定 + 提前返回，V(G) = 4）</h3>
+<pre><code class="language-c">int fee(int w, int v) {
+    if (w &lt;= 0 || v &lt;= 0) {                 // 判定 D1：C1=(w&lt;=0), C2=(v&lt;=0)
+        return -1;                          // 非法输入
+    }
+    int f;
+    if (w &lt;= 5 &amp;&amp; v &lt;= 5) {                 // 判定 D2：C3=(w&lt;=5), C4=(v&lt;=5)
+        f = 10;                             // 小件：一口价
+    } else {
+        f = 10 + (w - 5) * 3;               // 超重部分每单位 3 元
+    }
+    if (f &gt; 50) {                           // 判定 D3：C5=(f&gt;50)
+        f = f + 20;                         // 大宗运费加价
+    }
+    return f;
+}
+</code></pre>
+<p><strong>（1）</strong> 画出控制流图，计算 V(G)；
+<strong>（2）</strong> 列出全部可能路径与独立路径，并指出<strong>哪条结构上存在、但实际不可行</strong>；
+<strong>（3）</strong> 为每条独立路径给出一个测试输入，并验算返回值。</p>
+<hr />
+<h3>第 23 题（含循环的回边处理，V(G) = 3）</h3>
+<pre><code class="language-c">int sum(int n, int k) {
+    int i = 1, s = 0;
+    while (i &lt;= n) {      // 判定 D1（循环条件）
+        s = s + i;        // 语句 S1
+        i = i + 1;        // 语句 S2
+    }
+    if (k &gt; 0) {          // 判定 D2
+        s = s * k;        // 语句 S3
+    }
+    return s;
+}
+</code></pre>
+<p><strong>（1）</strong> 画出控制流图（<strong>注意 ③→② 的回边</strong>），计算 V(G)；
+<strong>（2）</strong> 列出独立路径（提示：循环体执行 0 次 / 至少 1 次，是构造独立路径的关键）；
+<strong>（3）</strong> 为每条独立路径给出一个测试输入并验算；
+<strong>（4）</strong> 用输入 <code>(n=3, k=2)</code> 执行程序，说明它走的是哪条（非独立）组合路径，返回值是多少。</p>
+<hr />
+<h2>答案与解析</h2>
+<blockquote>
+<p><strong>答案速查</strong>：1.A　2.A　3.C　4.D　5.D　6.C　7.C　8.A　9.A　10.C　11.B　12.A　13.D　14.C　15.C　16.D　17.D　18.B　19.B　20.D</p>
+</blockquote>
+<hr />
+<p><strong>1. 答案：A</strong>
+- <strong>解析</strong>：单一职责原则（SRP）的定义是：<strong>一个类应该只有一个引起它变化的原因</strong>——即一个类只承担一类职责。职责越多，引起它变化的"触发点"就越多，类就越脆弱。
+- <strong>B 干扰项</strong>：把"职责"等同于"方法数量"。SRP 限制的是<strong>职责维度</strong>，一个承担单一职责的类完全可以有多个方法（如 <code>Order</code> 类有 <code>addItem</code>、<code>removeItem</code>、<code>getTotal</code>，都服务于"订单"这一职责）。
+- <strong>C 干扰项</strong>：类被多少个其他类引用属于<strong>耦合</strong>问题，与 SRP 无关。<strong>D 干扰项</strong>：一个类只有一个直接父类是 Java/C# 的<strong>单继承</strong>语言机制，不是设计原则。
+- <strong>知识点</strong>：<code>day13-test.md</code> §1.1、§1.2。</p>
+<p><strong>2. 答案：A</strong>
+- <strong>解析</strong>：里氏替换原则（LSP）：<strong>所有引用基类的地方，必须能透明地使用其子类对象，且程序行为不变</strong>。子类可以扩展功能，但<strong>不能改变父类已有的行为约定</strong>（不能加强前置条件、不能削弱后置条件）。
+- <strong>B 干扰项（最易选错）</strong>：子类重写父类方法时<strong>必须遵守父类的契约</strong>，"任意改写"恰恰是违反 LSP 的典型（如经典的"正方形不是长方形"反例）。
+- <strong>C 干扰项</strong>：子类当然可以新增方法，LSP 从未禁止扩展。<strong>D 干扰项</strong>：父类的抽象方法，子类<strong>必须</strong>实现（否则子类仍是抽象类，无法实例化）。
+- <strong>知识点</strong>：<code>day13-test.md</code> §1.1、§1.3。</p>
+<p><strong>3. 答案：C</strong>
+- <strong>解析</strong>：开闭原则（OCP）：<strong>对扩展开放，对修改关闭</strong>——增加新功能时应该通过<strong>新增类/扩展</strong>来实现，而不是修改已有代码。"每加一种支付方式就要改 <code>PaymentProcessor</code> 源代码"，正是"对修改不关闭"的教科书式违反。正确做法：定义 <code>Payment</code> 接口，每种支付方式是一个实现类，通过<strong>多态/策略模式</strong>扩展。
+- <strong>A 干扰项</strong>：SRP 强调"一个类只有一个变化原因"；本题的核心矛盾不是"职责过多"，而是"加新类型被迫改旧代码"。<strong>B 干扰项</strong>：LSP 讨论的是子类替换父类的行为一致性。<strong>D 干扰项</strong>：DIP 强调依赖抽象而非具体；本题虽然也能用 DIP 改善，但题干描述的直接症状是 OCP 违背。
+- <strong>知识点</strong>：<code>day13-test.md</code> §1.2、§1.3（三组易混辨析）。</p>
+<p><strong>4. 答案：D</strong>
+- <strong>解析</strong>：耦合七级（从低到高）：<strong>非直接耦合 → 数据耦合 → 标记耦合 → 控制耦合 → 外部耦合 → 公共耦合 → 内容耦合</strong>。口诀：<strong>"非数标控外公内"</strong>。耦合越低，模块独立性越强。
+- <strong>A 干扰项</strong>：把"非直接耦合"错放到最高级——非直接耦合是<strong>最低</strong>级（两模块无直接关系，仅通过主程序间接联系）。
+- <strong>B 干扰项</strong>：把"数据/标记"和"外部/公共"的顺序都颠倒了。数据耦合只传<strong>简单参数</strong>，标记耦合传<strong>完整数据结构</strong>，所以数据耦合低于标记耦合。
+- <strong>C 干扰项</strong>："标记"在"数据"之前错位。
+- <strong>知识点</strong>：<code>day13-test.md</code> §2.2、§2.3。</p>
+<p><strong>5. 答案：D</strong>
+- <strong>解析</strong>：内聚七级（从低到高）：<strong>偶然内聚 → 逻辑内聚 → 时间内聚 → 过程内聚 → 通信内聚 → 顺序内聚 → 功能内聚</strong>。口诀：<strong>"偶逻时过通顺功"</strong>。功能内聚最强（模块内所有元素共同完成<strong>一个</strong>功能）。
+- <strong>A 干扰项</strong>：把"过程内聚"和"通信内聚"互换——过程内聚只要求<strong>按顺序执行</strong>，通信内聚要求元素<strong>使用同一输入或产生同一输出</strong>，通信内聚高于过程内聚。
+- <strong>B 干扰项</strong>：把"时间"和"过程"颠倒——时间内聚是"同一时间段内执行"（如初始化模块），不要求顺序，低于过程内聚。
+- <strong>C 干扰项</strong>：偶然内聚（元素间无任何联系，最弱）必须排在最前。
+- <strong>知识点</strong>：<code>day13-test.md</code> §3.2、§3.3。</p>
+<p><strong>6. 答案：C</strong>
+- <strong>解析</strong>：<strong>控制耦合</strong>的定义是：一个模块传递给另一个模块的<strong>控制信息</strong>（如开关标志、控制参数），<strong>决定接收模块执行哪一段逻辑</strong>。本题 <code>controlFlag</code> 决定 B 内部走哪段处理，正是控制耦合。
+- <strong>A 干扰项（最易选错）</strong>：数据耦合传递的是<strong>数据参数</strong>（如传一个订单号、一个金额），接收方用它<strong>计算</strong>而不是用它<strong>选择执行哪段代码</strong>。区分关键：<strong>传进去的值是"被处理的数据"还是"指挥对方怎么做的信号"</strong>。
+- <strong>B 干扰项</strong>：标记耦合传递的是<strong>完整的数据结构/记录</strong>（如整个 <code>Student</code> 对象），但接收方只是<strong>读取其中的字段</strong>，不用它来决定走哪段逻辑。
+- <strong>D 干扰项</strong>：公共耦合是多个模块<strong>共同访问同一个全局数据区</strong>，本题是 A、B 之间的<strong>参数传递</strong>，不是共享全局区。
+- <strong>知识点</strong>：<code>day13-test.md</code> §2.2、§2.4（易错点辨析）。</p>
+<p><strong>7. 答案：C</strong>
+- <strong>解析</strong>：<strong>顺序内聚</strong>：模块内各处理元素<strong>按顺序执行，且前一元素的输出是后一元素的输入</strong>，形成数据链。本题"校验的输出就是计算的输入"，数据从"读入"流向"校验"再流向"计算"，是典型的顺序内聚。
+- <strong>A 干扰项（最易选错）</strong>：过程内聚只要求元素<strong>按特定顺序执行</strong>（流程上的先后），<strong>不要求</strong>前一步的输出是后一步的输入。若题干只说"必须按顺序执行"而没有数据链，才是过程内聚。<strong>判别关键词：有数据链→顺序，无数据链→过程。</strong>
+- <strong>B 干扰项</strong>：通信内聚的判据是"各元素<strong>使用同一输入数据</strong>或<strong>产生同一输出</strong>"，强调的是<strong>共享数据</strong>而非<strong>流水线式的数据链</strong>。
+- <strong>D 干扰项</strong>：功能内聚要求模块内<strong>所有元素只为完成一个功能</strong>而存在；本题三个元素是三个不同动作（读、校验、算），不是同一功能的不可分部分。
+- <strong>知识点</strong>：<code>day13-test.md</code> §3.2、§3.4。</p>
+<p><strong>8. 答案：A</strong>
+- <strong>解析</strong>：<strong>内聚性和耦合性是度量模块独立性的两个标准</strong>。内聚关注<strong>模块内部</strong>各元素结合的紧密程度，耦合关注<strong>模块之间</strong>的依赖程度。设计目标是<strong>高内聚、低耦合</strong>——此时模块独立性强，易开发、易测试、易维护、易复用。
+- <strong>B 干扰项</strong>：耦合度<strong>越低</strong>，独立性才越强。<strong>C 干扰项</strong>：低内聚的模块职责混杂，恰恰<strong>难以复用</strong>。<strong>D 干扰项</strong>：独立性与内聚、耦合<strong>都</strong>有关。
+- <strong>知识点</strong>：<code>day13-test.md</code> §3.5。</p>
+<p><strong>9. 答案：A</strong>
+- <strong>解析</strong>：黑盒测试把程序看作"黑盒子"，<strong>依据需求规格说明书（功能与行为规格）</strong>设计用例，<strong>不涉及</strong>程序的内部结构与代码。它关注"系统<strong>应该</strong>做什么"。
+- <strong>B、C 干扰项</strong>：源代码和内部数据结构是<strong>白盒测试</strong>的依据。<strong>D 干扰项</strong>：硬件配置与测试用例设计无关。
+- <strong>知识点</strong>：<code>day13-test.md</code> §4.1、§5。</p>
+<p><strong>10. 答案：C</strong>
+- <strong>解析</strong>：有效输入是闭区间 [0, 100]，故有效等价类 <strong>1 个</strong>：<code>0 ≤ x ≤ 100</code>。无效等价类按<strong>超出范围的方向</strong>划分：<code>x &lt; 0</code> 与 <code>x &gt; 100</code>，共 <strong>2 个</strong>。
+- <strong>A 干扰项</strong>：只算了一个方向。<strong>B 干扰项</strong>：把端点 0 和 100 误当作独立的无效等价类——边界值属于<strong>有效</strong>等价类。<strong>D 干扰项</strong>：多算了。
+- <strong>补充</strong>：即使题目改为"实数"，无效等价类<strong>仍是 2 个</strong>（<code>x&lt;0</code>、<code>x&gt;100</code>）；整数/实数只影响有效等价类的表述，不影响无效类个数。
+- <strong>知识点</strong>：<code>day13-test.md</code> §5.1。</p>
+<p><strong>11. 答案：B</strong>
+- <strong>解析</strong>：边界值分析法选取<strong>等价类的边界值及其邻近值（含越界值）</strong>。边界是 0 和 100；邻近的<strong>界内值</strong>是 1 和 99；邻近的<strong>越界值</strong>是 −1 和 101。完整集合：<strong>{−1, 0, 1, 99, 100, 101}</strong>，共 6 个输入。
+- <strong>A 干扰项</strong>：只取了边界本身，遗漏了邻近值——边界错误的<strong>典型表现</strong>恰在"刚好越界"的那一步。<strong>C 干扰项</strong>：50 是区间中点，与边界无关。<strong>D 干扰项</strong>：缺少越界值 −1、101（2、98 也不是标准的"紧邻边界"取值）。
+- <strong>知识点</strong>：<code>day13-test.md</code> §5.2。</p>
+<p><strong>12. 答案：A</strong>
+- <strong>解析</strong>：白盒测试把程序看作"透明的白盒子"，依据<strong>程序的内部结构与执行逻辑（控制流、判定、路径）</strong>设计用例，关注"程序<strong>实际</strong>做了什么"，用于发现代码内部的逻辑错误。
+- <strong>B 干扰项（最易选错）</strong>：需求规格说明书是<strong>黑盒</strong>测试的依据。<strong>C 干扰项</strong>：用户操作手册既不是黑盒也不是白盒的依据。<strong>D 干扰项</strong>：注释数量与测试设计无关。
+- <strong>知识点</strong>：<code>day13-test.md</code> §4.1、§6。</p>
+<p><strong>13. 答案：D</strong>
+- <strong>解析</strong>：软考标准的逻辑覆盖强度递进（<strong>必背</strong>）：<strong>语句覆盖 &lt; 判定覆盖 &lt; 条件覆盖 &lt; 判定-条件覆盖 &lt; 条件组合覆盖 &lt; 路径覆盖</strong>。最强的是<strong>路径覆盖</strong>（穷尽所有执行路径），最弱的是<strong>语句覆盖</strong>。
+- <strong>A 干扰项</strong>：把"条件"提到"判定"之前——判定由条件组成，连判定都没覆盖全，谈不上条件覆盖；标准顺序是<strong>判定在前、条件在后</strong>。
+- <strong>B 干扰项</strong>：判定覆盖<strong>强于</strong>语句覆盖（满足判定覆盖必满足语句覆盖），不可能排在前面。<strong>C 干扰项</strong>：判定-条件覆盖是判定+条件的<strong>合取</strong>，必须排在<strong>两者之后</strong>。
+- <strong>知识点</strong>：<code>day13-test.md</code> §6.1。</p>
+<p><strong>14. 答案：C</strong>
+- <strong>解析</strong>：<strong>条件组合覆盖</strong>（多重条件覆盖）要求：每个判定中<strong>所有条件的各种取值组合</strong>都至少被执行一次。例如 <code>if(a&gt;0 &amp;&amp; b&gt;0)</code> 有 2 个条件，取值组合共 (T,T)、(T,F)、(F,T)、(F,F) <strong>4 种</strong>，需设计用例全部覆盖。
+- <strong>A 干扰项 = 语句覆盖</strong>（每条语句执行一次）。<strong>B 干扰项 = 判定覆盖</strong>（每个判定的真/假分支各执行一次）。<strong>D 干扰项 = 路径覆盖</strong>（所有可能路径各执行一次）。
+- <strong>知识点</strong>：<code>day13-test.md</code> §6.1、§6.3（5）。</p>
+<p><strong>15. 答案：C</strong>
+- <strong>解析</strong>：McCabe 圈复杂度 <strong>V(G) = E − N + 2 = 12 − 9 + 2 = 5</strong>。
+- <strong>A 干扰项（最易选错）</strong>：<code>E − N = 3</code>，<strong>漏掉了 "+2"</strong>。公式必须连常数项一起记牢。
+- <strong>B 干扰项</strong>：<code>E + N = 21</code>，把减号记成了加号。<strong>D 干扰项</strong>：直接把边数 6 或其他数字误当作复杂度。
+- <strong>交叉验算</strong>：若程序结构化，V(G) 也应等于 <strong>判定节点数 + 1</strong>，即本题判定节点应有 <strong>4 个</strong>（两种算法结果必须一致，否则就是数错了）。
+- <strong>知识点</strong>：<code>day13-test.md</code> §7.1。</p>
+<p><strong>16. 答案：D</strong>
+- <strong>解析</strong>：V(G) 的含义是<strong>程序中独立路径的条数</strong>，也就是<strong>基本路径测试所需的最少测试用例数</strong>。V(G)=5 意味着需要 5 个用例才能达到基本路径覆盖。
+- <strong>A 干扰项</strong>：V(G) 与<strong>语句条数无关</strong>——一个含循环的 5 行小程序，V(G) 可以远大于 5。<strong>B 干扰项</strong>：V(G) = 判定节点数 + 1，故 V(G)=5 对应 <strong>4 个</strong>判定节点，不是 5 个。
+- <strong>C 干扰项（最易选错）</strong>：V(G) <strong>精确等于</strong>独立路径数（既不是"最多"也不是"下界"）；而<strong>全部可能路径数</strong>往往远大于 V(G)（尤其含循环时，路径数甚至可能无穷）。这正是"基本路径测试"只需 V(G) 个用例、而非"穷举所有路径"的原因。
+- <strong>知识点</strong>：<code>day13-test.md</code> §7.2、§7.3。</p>
+<p><strong>17. 答案：D</strong>
+- <strong>解析</strong>：四类维护的经验占比：<strong>完善性维护约 50%（占半数以上，最大）</strong>、适应性维护约 25%、改正性维护约 20%、预防性维护最少。用户"想要更多功能、更好体验"的诉求是<strong>完善性维护</strong>的主要来源。
+- <strong>A 干扰项</strong>：改正性维护是改交付后发现的<strong>错误</strong>，占比约 20%。<strong>B 干扰项</strong>：适应性维护是为适应<strong>运行环境变化</strong>（OS 升级、硬件更换），约 25%。<strong>C 干扰项</strong>：预防性维护是为<strong>提高可维护性/可靠性</strong>而主动改造，占比很小。
+- <strong>知识点</strong>：<code>day13-test.md</code> §8。</p>
+<p><strong>18. 答案：B</strong>
+- <strong>解析</strong>：<strong>判别两步法</strong>（<code>day13-test.md</code> §8）：① 系统错了吗？——本题系统没出错，排除改正性。② 是"环境变了"还是"用户想要更多"？——导出 PDF 是<strong>用户提出的新功能诉求</strong>，系统原本并无此需求，属于<strong>完善性维护</strong>。
+- <strong>A 干扰项</strong>：系统没有错误（不是改 bug）。<strong>C 干扰项（最易选错）</strong>：适应性维护针对<strong>环境变化</strong>（如操作系统升级导致不兼容），本题环境未变。<strong>D 干扰项</strong>：预防性维护是<strong>主动</strong>提高可维护性的改造，不是为了增加功能。
+- <strong>知识点</strong>：<code>day13-test.md</code> §8。</p>
+<p><strong>19. 答案：B</strong>
+- <strong>解析</strong>：甘特图用<strong>横条</strong>在时间轴上直观表示各项任务的<strong>开始时间、持续时间和进度</strong>，是进度管理最常用的工具。但其局限是：<strong>难以清晰表达任务之间的逻辑依赖关系，也无法直接确定关键路径</strong>。
+- <strong>A 干扰项（最易选错）</strong>：恰好相反——表达依赖关系和关键路径是 <strong>PERT/CPM 网络</strong>图的强项，不是甘特图的。<strong>C 干扰项</strong>：描述数据流是 <strong>DFD（数据流图）</strong>。<strong>D 干扰项</strong>：甘特图与开发模型无关，瀑布、敏捷都能用。
+- <strong>知识点</strong>：<code>day13-test.md</code> §9.2。</p>
+<p><strong>20. 答案：D</strong>
+- <strong>解析</strong>：关键路径是<strong>从源点到汇点路径长度最长</strong>的路径，其长度即为<strong>项目最短工期</strong>。关键路径上的任务都是<strong>关键任务</strong>，任一关键任务延期都会导致整个项目延期（总时差为零）。
+- <strong>A、B 干扰项</strong>：关键路径与资源消耗、节点数量<strong>无关</strong>，只由<strong>路径长度（工期之和）</strong>决定。<strong>C 干扰项（最易选错）</strong>：恰好相反——关键路径是<strong>最长</strong>的，不是最短的；"最短"的是那些可以延迟而不影响总工期的<strong>非关键</strong>路径。
+- <strong>知识点</strong>：<code>day13-test.md</code> §9.2。</p>
+<hr />
+<h2>计算题详解</h2>
+<blockquote>
+<p>所有数字均用两种方法交叉验算：<code>V(G) = E − N + 2</code> 与 <code>V(G) = 判定节点数 + 1</code>；独立路径数用<strong>路径向量的矩阵秩</strong>独立验证。</p>
+</blockquote>
+<h3>第 21 题详解</h3>
+<p><strong>（1）控制流图与 V(G)</strong></p>
+<pre><code class="language-text">        ┌─────────────────────────────┐
+        │  ①  a&gt;0 &amp;&amp; b&gt;0 ?   (D1)     │
+        └────────┬────────────┬───────┘
+            真  │            │  假
+                ▼            │
+        ┌──────────────┐     │
+        │  ②  a = a+2  │     │   (S1)
+        └──────┬───────┘     │
+               │             │
+               └──────┬──────┘
+                      ▼
+        ┌─────────────────────────────┐
+        │  ③  a &gt; 5 ?         (D2)    │
+        └────────┬────────────┬───────┘
+            真  │            │  假
+                ▼            │
+        ┌──────────────┐     │
+        │  ④  a = a*3  │     │   (S2)
+        └──────┬───────┘     │
+               │             │
+               └──────┬──────┘
+                      ▼
+        ┌──────────────┐
+        │  ⑤  return a │
+        └──────────────┘
+</code></pre>
+<ul>
+<li><strong>节点 N = 5</strong>（①②③④⑤），<strong>边 E = 6</strong>（①→②、①→③、②→③、③→④、③→⑤、④→⑤）</li>
+<li><strong>方法一</strong>：<code>V(G) = E − N + 2 = 6 − 5 + 2 = 3</code></li>
+<li><strong>方法二</strong>：判定节点有 <strong>D1、D2 共 2 个</strong>，<code>V(G) = 判定节点数 + 1 = 2 + 1 = 3</code> ✓ 两种方法一致</li>
+</ul>
+<p><strong>（2）全部路径与独立路径</strong></p>
+<p>全部可能路径 <strong>4 条</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>节点序列</th>
+<th>条件组合 (D1, D2)</th>
+<th>测试输入 (a, b)</th>
+<th>执行过程与返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>①→③→⑤</td>
+<td>(假, 假)</td>
+<td>(0, 0)</td>
+<td>D1 假 → a 不变；D2：0&gt;5 假 → <strong>返回 0</strong></td>
+</tr>
+<tr>
+<td>P2</td>
+<td>①→③→④→⑤</td>
+<td>(假, 真)</td>
+<td>(6, 0)</td>
+<td>D1 假(b=0) → a=6；D2：6&gt;5 真 → a=6×3=18 → <strong>返回 18</strong></td>
+</tr>
+<tr>
+<td>P3</td>
+<td>①→②→③→⑤</td>
+<td>(真, 假)</td>
+<td>(2, 1)</td>
+<td>D1 真 → a=2+2=4；D2：4&gt;5 假 → <strong>返回 4</strong></td>
+</tr>
+<tr>
+<td>P4</td>
+<td>①→②→③→④→⑤</td>
+<td>(真, 真)</td>
+<td>(4, 1)</td>
+<td>D1 真 → a=4+2=6；D2：6&gt;5 真 → a=6×3=18 → <strong>返回 18</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>逐条验算</strong>（用输入实际代入函数）：</p>
+<ul>
+<li><code>(0,0)</code>：<code>0&gt;0 &amp;&amp; 0&gt;0</code> = 假 → a 保持 0；<code>0&gt;5</code> = 假 → <strong>返回 0</strong> ✓</li>
+<li><code>(6,0)</code>：<code>6&gt;0 &amp;&amp; 0&gt;0</code> = 假（b=0）→ a 保持 6；<code>6&gt;5</code> = 真 → a = 18 → <strong>返回 18</strong> ✓</li>
+<li><code>(2,1)</code>：<code>2&gt;0 &amp;&amp; 1&gt;0</code> = 真 → a = 4；<code>4&gt;5</code> = 假 → <strong>返回 4</strong> ✓</li>
+<li><code>(4,1)</code>：<code>4&gt;0 &amp;&amp; 1&gt;0</code> = 真 → a = 6；<code>6&gt;5</code> = 真 → a = 18 → <strong>返回 18</strong> ✓</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：P2 与 P4 的返回值都是 18，但<strong>走的是不同的路径</strong>（P2 未执行 S1，P4 执行了 S1）。这正是"黑盒等价、白盒不等价"的典型例子——<strong>只看输出无法区分这两类输入</strong>。</p>
+</blockquote>
+<p><strong>独立路径</strong>：V(G) = 3，故<strong>独立路径只有 3 条</strong>（4 条路径中有 1 条可由其余线性组合得到）。</p>
+<p>取 P1、P2、P3 为独立路径集（基），则：</p>
+<ul>
+<li><strong>P4 = P2 + P3 − P1</strong>（边向量线性组合可验证）</li>
+</ul>
+<p>即第 4 条路径在"独立"意义上是<strong>冗余</strong>的。这也解释了：<strong>为什么"基本路径测试"只要 V(G) 个用例，而不是全部路径个用例。</strong></p>
+<p><strong>（4）判定覆盖与语句覆盖</strong></p>
+<ul>
+<li><strong>语句覆盖</strong>：要让 S1、S2 都执行一次 → 需要 D1 真（执行 S1）<strong>且</strong> D2 真（执行 S2）→ <strong>1 个用例</strong>即可，如 <code>(4, 1)</code>。</li>
+<li><strong>判定覆盖</strong>：D1 要取真和假、D2 也要取真和假 → <strong>2 个用例</strong>，如 <code>(4, 1)</code>（D1 真、D2 真）与 <code>(0, 0)</code>（D1 假、D2 假）。</li>
+</ul>
+<blockquote>
+<p><strong>小结</strong>：本题 E=6、N=5、V(G)=3、全部路径 4 条、独立路径 3 条、语句覆盖最少 1 个用例、判定覆盖最少 2 个用例。</p>
+</blockquote>
+<hr />
+<h3>第 22 题详解</h3>
+<p><strong>（1）控制流图与 V(G)</strong></p>
+<pre><code class="language-text">    ┌───────────────────────────────┐
+    │ ①  w&lt;=0 || v&lt;=0 ?      (D1)   │
+    └───────┬───────────────┬───────┘
+          真     │               │    假
+                ▼               │
+    ┌──────────────┐            │
+    │ ② return -1  │            │
+    └──────┬───────┘            │
+           │                    │
+           │                    ▼
+           │              ┌───────────────────────────────────────┐
+           │              │ ③  w&lt;=5 &amp;&amp; v&lt;=5 ?              (D2)   │
+           │              └───────┬───────────────┬───────────────┘
+           │                  真   │               │  假
+           │                      ▼               ▼
+           │              ┌──────────────┐  ┌────────────────────┐
+           │              │ ④  f = 10    │  │ ⑤  f = 10+(w-5)*3  │
+           │              └──────┬───────┘  └───────────┬────────┘
+           │                     │                      │
+           │                     └──────────┴──────────┘
+           │                                ▼
+           │              ┌───────────────────────────────┐
+           │              │ ⑥  f &gt; 50 ?            (D3)   │
+           │              └───────┬───────────────┬───────┘
+           │                  真   │               │  假
+           │                      ▼               │
+           │              ┌──────────────┐        │
+           │              │ ⑦  f = f+20  │        │
+           │              └──────┬───────┘        │
+           │                     │                │
+           └─────────────────────┴                │
+                                 ▼                ▼
+                            ┌────────────────────────────────┐
+                            │ ⑧  return f                    │
+                            └────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>节点 N = 8</strong>（①–⑧），<strong>边 E = 10</strong>（①→②、①→③、②→⑧、③→④、③→⑤、④→⑥、⑤→⑥、⑥→⑦、⑥→⑧、⑦→⑧）</li>
+<li><strong>方法一</strong>：<code>V(G) = E − N + 2 = 10 − 8 + 2 = 4</code></li>
+<li><strong>方法二</strong>：判定节点 <strong>D1、D2、D3 共 3 个</strong>，<code>V(G) = 3 + 1 = 4</code> ✓ 两种方法一致</li>
+</ul>
+<p><strong>（2）全部路径、独立路径与不可行路径</strong></p>
+<p>全部可能路径 <strong>5 条</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>节点序列</th>
+<th>判定取值 (D1,D2,D3)</th>
+<th>可行？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>①→②→⑧</td>
+<td>(真, —, —)</td>
+<td>✅ 可行</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>①→③→④→⑥→⑧</td>
+<td>(假, 真, 假)</td>
+<td>✅ 可行</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>①→③→⑤→⑥→⑧</td>
+<td>(假, 假, 假)</td>
+<td>✅ 可行</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>①→③→⑤→⑥→⑦→⑧</td>
+<td>(假, 假, 真)</td>
+<td>✅ 可行</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>①→③→④→⑥→⑦→⑧</td>
+<td>(假, 真, 真)</td>
+<td>❌ <strong>不可行</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>不可行路径 P5 的证明</strong>：走 ④ 意味着 D2 为真（<code>w&lt;=5 &amp;&amp; v&lt;=5</code>），则 <code>f = 10</code>；而 D3 的条件是 <code>f &gt; 50</code>，<code>10 &gt; 50</code> <strong>恒为假</strong>——所以"经过 ④ 又经过 ⑦"这条路径<strong>在逻辑上不可能被任何输入触发</strong>。</p>
+<p><strong>考点提示</strong>：V(G) 度量的是<strong>结构性</strong>的独立路径数，它<strong>不区分可行与不可行</strong>。考试中若问"基本路径测试需要几个用例"，答案仍是 <strong>V(G) = 4</strong>（选可行的 4 条），而不是 5。</p>
+</blockquote>
+<p><strong>独立路径</strong>：V(G) = 4，取 <strong>B1、B2、B3、B4</strong> 为独立路径集（矩阵秩验证为 4）。第 5 条满足线性关系 <strong>P5 = B2 + B4 − B3</strong>（边向量组合可验证），故 P5 是冗余的。</p>
+<p><strong>（3）为每条独立路径设计测试输入并验算</strong></p>
+<table>
+<thead>
+<tr>
+<th>独立路径</th>
+<th>测试输入 (w, v)</th>
+<th>执行过程</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1：①→②→⑧</td>
+<td>(0, 0)</td>
+<td>D1：<code>0&lt;=0</code> 真 → 提前返回</td>
+<td><strong>−1</strong></td>
+</tr>
+<tr>
+<td>B2：①→③→④→⑥→⑧</td>
+<td>(1, 1)</td>
+<td>D1 假；D2：<code>1&lt;=5 &amp;&amp; 1&lt;=5</code> 真 → f=10；D3：<code>10&gt;50</code> 假 → 返回 f</td>
+<td><strong>10</strong></td>
+</tr>
+<tr>
+<td>B3：①→③→⑤→⑥→⑧</td>
+<td>(10, 1)</td>
+<td>D1 假；D2：<code>10&lt;=5</code> 假 → f=10+(10−5)×3=25；D3：<code>25&gt;50</code> 假 → 返回 f</td>
+<td><strong>25</strong></td>
+</tr>
+<tr>
+<td>B4：①→③→⑤→⑥→⑦→⑧</td>
+<td>(30, 1)</td>
+<td>D1 假；D2 假 → f=10+(30−5)×3=85；D3：<code>85&gt;50</code> 真 → f=85+20</td>
+<td><strong>105</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>逐条验算</strong>：</p>
+<ul>
+<li><code>(0,0)</code>：<code>0&lt;=0 || 0&lt;=0</code> = 真 → <strong>返回 −1</strong> ✓</li>
+<li><code>(1,1)</code>：D1 假；<code>1&lt;=5 &amp;&amp; 1&lt;=5</code> = 真 → f = 10；<code>10&gt;50</code> = 假 → <strong>返回 10</strong> ✓</li>
+<li><code>(10,1)</code>：D1 假；<code>10&lt;=5</code> = 假 → f = 10 + 5×3 = 25；<code>25&gt;50</code> = 假 → <strong>返回 25</strong> ✓</li>
+<li><code>(30,1)</code>：D1 假；<code>30&lt;=5</code> = 假 → f = 10 + 25×3 = 85；<code>85&gt;50</code> = 真 → f = 105 → <strong>返回 105</strong> ✓</li>
+</ul>
+<blockquote>
+<p><strong>小结</strong>：本题 E=10、N=8、V(G)=4、结构路径 5 条（其中 1 条不可行）、独立路径 4 条。</p>
+</blockquote>
+<hr />
+<h3>第 23 题详解</h3>
+<p><strong>（1）控制流图（注意回边 ③→②）与 V(G)</strong></p>
+<pre><code class="language-text">                             ┌────────────────────────┐
+                             │ ①  i = 1, s = 0        │
+                             └────────────┬───────────┘
+                                          │
+                                          ▼
+                             ┌────────────────────────┐
+           └────────────────▶│ ②  i &lt;= n ?     (D1)   │
+           │                 └───────┬─────────────┬──┘
+           │         真               │           假 │
+           │                         ▼             ▼
+           │     ┌───────────────────────┐       ┌───────────────────────┐
+           │     │ ③   s = s+i; i = i+1  │       │ ④   k &gt; 0 ?   (D2)    │
+           │     └─────────┬─────────────┘       └───────┬─────────┬─────┘
+           ┌───────────────└                             │         │
+                                                         │         │
+                                                         ▼         │
+                                                 ┌─────────────┐   │
+                                                 │ ⑤  s = s*k  │   │   ← ④ 为假时自右侧绕行至 ⑥
+                                                 └──────┬──────┘   │
+                                                        │          │
+                                                        ▼          ▼
+                                                 ┌───────────────────┐
+                                                 │ ⑥  return s       │
+                                                 └───────────────────┘
+</code></pre>
+<ul>
+<li><strong>节点 N = 6</strong>（①–⑥），<strong>边 E = 7</strong>（①→②、②→③、②→④、③→②【回边】、④→⑤、④→⑥、⑤→⑥）</li>
+<li><strong>方法一</strong>：<code>V(G) = E − N + 2 = 7 − 6 + 2 = 3</code></li>
+<li><strong>方法二</strong>：判定节点 <strong>D1（while）、D2（if）共 2 个</strong>，<code>V(G) = 2 + 1 = 3</code> ✓ 两种方法一致</li>
+</ul>
+<blockquote>
+<p><strong>回边处理要点</strong>：含循环时，"全部可能路径"是<strong>无穷多条</strong>（循环可执行任意次）。McCabe 的基本路径测试正是为此设计：<strong>每条独立路径中，循环体最多被"展开"一次</strong>——即只区分"循环执行 0 次"与"循环执行至少 1 次"，再加上其他判定的分支组合。</p>
+</blockquote>
+<p><strong>（2）独立路径（3 条）</strong></p>
+<table>
+<thead>
+<tr>
+<th>独立路径</th>
+<th>节点序列</th>
+<th>语义</th>
+<th>测试输入 (n, k)</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>①→②→④→⑥</td>
+<td>循环 0 次，且 k≤0</td>
+<td>(0, 0)</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>B2</td>
+<td>①→②→③→②→④→⑥</td>
+<td>循环执行 1 次，k≤0</td>
+<td>(1, 0)</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>B3</td>
+<td>①→②→④→⑤→⑥</td>
+<td>循环 0 次，且 k&gt;0</td>
+<td>(0, 3)</td>
+<td><strong>0</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>（3）逐条验算</strong></p>
+<ul>
+<li><code>(0, 0)</code>：i=1，<code>1&lt;=0</code> 假 → 循环 0 次，s=0；<code>0&gt;0</code> 假 → <strong>返回 0</strong> ✓</li>
+<li><code>(1, 0)</code>：i=1，<code>1&lt;=1</code> 真 → s=0+1=1，i=2；<code>2&lt;=1</code> 假 → 退出；<code>0&gt;0</code> 假 → <strong>返回 1</strong> ✓</li>
+<li><code>(0, 3)</code>：i=1，<code>1&lt;=0</code> 假 → 循环 0 次，s=0；<code>3&gt;0</code> 真 → s=0×3=0 → <strong>返回 0</strong> ✓</li>
+</ul>
+<p><strong>（4）组合路径 <code>(n=3, k=2)</code></strong></p>
+<p>执行过程：i=1→<code>1&lt;=3</code> 真→s=1,i=2；i=2→<code>2&lt;=3</code> 真→s=1+2=3,i=3；i=3→<code>3&lt;=3</code> 真→s=3+3=6,i=4；i=4→<code>4&lt;=3</code> 假→退出；此时 s=6；<code>k=2&gt;0</code> 真 → s=6×2=12 → <strong>返回 12</strong>。</p>
+<p>所走路径：<strong>①→②→③→②→③→②→③→②→④→⑤→⑥</strong>（循环体 ③ 被执行了 <strong>3 次</strong>，最后经过 ⑤）。</p>
+<blockquote>
+<p><strong>它为什么不是独立路径</strong>：这条路径在"路径向量空间"中等于 <strong>B2 + B3 − B1</strong>（循环每多执行一次，就多叠加一次"③→②"这个环）。独立路径只取每个环的<strong>一次代表</strong>，所以 V(G)=3 已经足够覆盖所有"环"与分支的组合。这也再次说明：<strong>V(G) = 独立路径数 = 基本路径测试的最少用例数</strong>。</p>
+<p><strong>小结</strong>：本题 E=7、N=6、V(G)=3、独立路径 3 条（回边 ③→② 贡献 1 个环、D2 贡献 1 个分支，加上主干共 3）。</p>
+</blockquote>
+<hr />
+<h2>做完后的自检（不用打分，只看是否过关）</h2>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>过关标准</th>
+<th>未过关怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>耦合 / 内聚七级顺序</strong>（第 4、5 题）</td>
+<td>能<strong>默写</strong>两级各七级，并说出每级的关键判别词</td>
+<td>回 <code>day13-test.md</code> §2.2、§3.2，把两张分级表<strong>整表抄一遍</strong>，并背口诀"非数标控外公内 / 偶逻时过通顺功"</td>
+</tr>
+<tr>
+<td><strong>耦合 / 内聚场景判别</strong>（第 6、7 题）</td>
+<td>能区分"数据 vs 标记 vs 控制"和"过程 vs 顺序 vs 通信"</td>
+<td>回 §2.4、§3.4 的易错点辨析，重做第 6、7 题直到能<strong>说出判别关键词</strong>（有数据链→顺序；决定对方走哪段逻辑→控制）</td>
+</tr>
+<tr>
+<td><strong>覆盖强度顺序</strong>（第 13 题）</td>
+<td>能一字不差背出六级顺序</td>
+<td>回 §6.1，把六个标准的定义表重背，并记住"语句&lt;判定&lt;条件&lt;判定-条件&lt;条件组合&lt;路径"</td>
+</tr>
+<tr>
+<td><strong>条件覆盖的陷阱</strong>（第 14 题相关）</td>
+<td>能举出"条件覆盖但不满足判定覆盖"的反例</td>
+<td>回 §6.3（3）的⚠️反例（a=1,b=0 与 a=0,b=1），自己代入算一遍</td>
+</tr>
+<tr>
+<td><strong>V(G) 计算与含义</strong>（第 15、16 题）</td>
+<td>30 秒内算出 E−N+2，并知道 V(G)=独立路径数=最少用例数</td>
+<td>回 §7.1、§7.2，把三种算法（E−N+2 / 判定数+1 / 区域数）都默写一遍</td>
+</tr>
+<tr>
+<td><strong>计算题 21–23</strong></td>
+<td>能<strong>独立</strong>画出三张 CFG，两种方法算出 V(G)（3/4/3），并列出独立路径</td>
+<td>遮住解析重做。卡在哪一步就回 <code>day13-test.md</code> §7.3（基本路径四步法）和 §7.4（含循环的回边处理）</td>
+</tr>
+<tr>
+<td><strong>维护四类型</strong>（第 17、18 题）</td>
+<td>能用"两步法"在 10 秒内判别类型</td>
+<td>回 §8，记住"用户要更多/更好→完善性；环境变了→适应性；系统错了→改正性"</td>
+</tr>
+<tr>
+<td><strong>甘特图与关键路径</strong>（第 19、20 题）</td>
+<td>能说出甘特图的局限、关键路径的定义</td>
+<td>回 §9.2，把甘特图与 PERT/CPM 的对比表重读一遍</td>
+</tr>
+</tbody>
+</table>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day13-exercises.md">docs/knowledge-points/software-engineering/day13-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

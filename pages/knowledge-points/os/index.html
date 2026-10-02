@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>操作系统 - 知识点精讲 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 os 📁 index.md</div>
+<h1>操作系统 - 知识点精讲</h1>
+<h2>一、进程管理</h2>
+<h3>1.1 进程与线程</h3>
+<h4>进程</h4>
+<ul>
+<li><strong>定义</strong>：程序在数据集上的一次执行过程</li>
+<li><strong>三个基本状态</strong>：就绪、执行、阻塞</li>
+<li><strong>五状态模型</strong>：新建→就绪→执行→阻塞→终止</li>
+<li><strong>进程控制块（PCB）</strong>：进程存在的唯一标志</li>
+</ul>
+<h4>线程</h4>
+<ul>
+<li><strong>定义</strong>：进程内的执行单元</li>
+<li><strong>与进程的区别</strong>：</li>
+<li>线程共享进程资源，进程独立资源</li>
+<li>线程切换快，进程切换慢</li>
+<li>线程间通信简单，进程间通信复杂</li>
+</ul>
+<h4>进程状态转换</h4>
+<pre><code>新建 → 就绪 → 执行 → 阻塞 → 就绪
+                    ↓
+                   终止
+</code></pre>
+<h3>1.2 进程调度算法</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>特点</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FCFS</td>
+<td>先来先服务</td>
+<td>简单，但平均等待时间长</td>
+</tr>
+<tr>
+<td>SJF</td>
+<td>最短作业优先</td>
+<td>平均等待时间短，但可能饥饿</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>按优先级调度</td>
+<td>可能饥饿，需老化</td>
+</tr>
+<tr>
+<td>时间片轮转</td>
+<td>每个进程等时间片</td>
+<td>公平，但时间片大小影响性能</td>
+</tr>
+<tr>
+<td>多级反馈队列</td>
+<td>综合多种算法</td>
+<td>最常用，复杂</td>
+</tr>
+</tbody>
+</table>
+<h3>1.3 PV操作与信号量</h3>
+<h4>基本概念</h4>
+<ul>
+<li><strong>信号量S</strong>：整型变量</li>
+<li><strong>P操作（wait）</strong>：S = S - 1；若S &lt; 0则阻塞</li>
+<li><strong>V操作（signal）</strong>：S = S + 1；若S ≤ 0则唤醒</li>
+</ul>
+<h4>经典问题</h4>
+<p><strong>生产者-消费者问题</strong></p>
+<pre><code>// 互斥信号量
+mutex = 1
+// 资源信号量
+empty = n  // 缓冲区空位数
+full = 0   // 缓冲区产品数
+
+// 生产者
+P(empty); P(mutex); 生产; V(mutex); V(full)
+// 消费者
+P(full); P(mutex); 消费; V(mutex); V(empty)
+</code></pre>
+<p><strong>读者-写者问题</strong></p>
+<pre><code>// 读者优先
+rw_mutex = 1  // 写互斥
+mutex = 1     // 读计数互斥
+count = 0
+
+// 读者
+P(mutex); count++; if(count==1) P(rw_mutex); V(mutex); 读; P(mutex); count--; if(count==0) V(rw_mutex); V(mutex)
+// 写者
+P(rw_mutex); 写; V(rw_mutex)
+</code></pre>
+<p><strong>哲学家进餐问题</strong>
+- 5个哲学家，5根筷子
+- 解决方法：限制同时进餐人数、资源有序分配</p>
+<h3>1.4 死锁</h3>
+<h4>四个必要条件</h4>
+<ol>
+<li><strong>互斥</strong>：资源一次只被一个进程使用</li>
+<li><strong>占有且等待</strong>：持有资源的同时等待新资源</li>
+<li><strong>不可剥夺</strong>：已分配资源不能被强行收回</li>
+<li><strong>循环等待</strong>：存在进程-资源循环等待链</li>
+</ol>
+<h4>处理方法</h4>
+<ul>
+<li><strong>预防</strong>：破坏四个条件之一</li>
+<li><strong>避免</strong>：银行家算法</li>
+<li><strong>检测与恢复</strong>：资源分配图</li>
+</ul>
+<h2>二、内存管理</h2>
+<h3>2.1 连续内存分配</h3>
+<ul>
+<li><strong>首次适应</strong>：从低地址开始找第一个足够大的空闲区</li>
+<li><strong>最佳适应</strong>：找最小的足够大的空闲区</li>
+<li><strong>最坏适应</strong>：找最大的空闲区</li>
+</ul>
+<h3>2.2 分页存储</h3>
+<ul>
+<li><strong>页面大小</strong>：固定（通常4KB）</li>
+<li><strong>页表</strong>：逻辑页号→物理块号映射</li>
+<li><strong>地址转换</strong>：逻辑地址 = 页号 + 页内偏移</li>
+<li>页号 = 逻辑地址 / 页面大小</li>
+<li>页内偏移 = 逻辑地址 % 页面大小</li>
+</ul>
+<h3>2.3 分段存储</h3>
+<ul>
+<li><strong>段</strong>：逻辑模块（代码段、数据段、堆栈段）</li>
+<li><strong>段表</strong>：段号→基址+长度</li>
+<li><strong>逻辑地址</strong> = 段号 + 段内偏移</li>
+</ul>
+<h3>2.4 虚拟内存</h3>
+<ul>
+<li><strong>原理</strong>：局部性原理（时间局部性+空间局部性）</li>
+<li><strong>页面置换算法</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>描述</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FIFO</td>
+<td>先进先出</td>
+<td>简单，可能Belady异常</td>
+</tr>
+<tr>
+<td>LRU</td>
+<td>最近最少使用</td>
+<td>性能好，实现复杂</td>
+</tr>
+<tr>
+<td>OPT</td>
+<td>最佳置换</td>
+<td>理论最优，不可实现</td>
+</tr>
+<tr>
+<td>Clock</td>
+<td>循环置换</td>
+<td>LRU近似，实现简单</td>
+</tr>
+</tbody>
+</table>
+<h3>2.5 缺页中断</h3>
+<ul>
+<li>访问的页面不在内存中</li>
+<li>触发中断 → 调入页面 → 重新执行</li>
+<li>缺页率 = 缺页次数 / 总访问次数</li>
+</ul>
+<h2>三、磁盘调度</h2>
+<h3>3.1 磁盘调度算法</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>描述</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FCFS</td>
+<td>按请求顺序</td>
+<td>公平，可能长寻道</td>
+</tr>
+<tr>
+<td>SSTF</td>
+<td>最近磁道优先</td>
+<td>平均寻道短，可能饥饿</td>
+</tr>
+<tr>
+<td>SCAN</td>
+<td>电梯算法</td>
+<td>双向扫描，公平</td>
+</tr>
+<tr>
+<td>C-SCAN</td>
+<td>单向扫描</td>
+<td>减少延迟变化</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2 磁盘结构</h3>
+<ul>
+<li>盘面、磁道、扇区</li>
+<li>寻道时间 + 旋转延迟 + 传输时间</li>
+</ul>
+<h2>四、文件系统</h2>
+<h3>4.1 文件组织方式</h3>
+<ul>
+<li><strong>顺序文件</strong>：连续存储</li>
+<li><strong>链接文件</strong>：离散存储，通过指针链接</li>
+<li><strong>索引文件</strong>：索引表记录所有块地址</li>
+<li><strong>索引顺序文件</strong>：索引 + 顺序</li>
+</ul>
+<h3>4.2 目录结构</h3>
+<ul>
+<li>单级目录</li>
+<li>两级目录</li>
+<li>多级目录（树形）</li>
+</ul>
+<h2>五、I/O管理</h2>
+<h3>5.1 I/O控制方式</h3>
+<ol>
+<li><strong>程序I/O</strong>：CPU轮询</li>
+<li><strong>中断I/O</strong>：中断通知</li>
+<li><strong>DMA</strong>：直接内存访问</li>
+<li><strong>通道</strong>：独立I/O处理器</li>
+</ol>
+<h2>六、核心公式速记</h2>
+<table>
+<thead>
+<tr>
+<th>公式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均等待时间</td>
+<td>= 各进程等待时间之和 / 进程数</td>
+</tr>
+<tr>
+<td>页表项大小</td>
+<td>= 物理块号位数 + 标志位</td>
+</tr>
+<tr>
+<td>地址转换</td>
+<td>页号 = 地址 / 页大小，偏移 = 地址 % 页大小</td>
+</tr>
+<tr>
+<td>缺页中断率</td>
+<td>= 缺页次数 / 总访问次数</td>
+</tr>
+</tbody>
+</table>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/os/index.md">docs/knowledge-points/os/index.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

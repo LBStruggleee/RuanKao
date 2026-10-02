@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 20（10/10）设计模式入门：科目二试题五/六前置学习 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day20-design-patterns.md</div>
+<h1>Day 20（10/10）设计模式入门：科目二试题五/六前置学习</h1>
+<blockquote>
+<p><strong>阶段定位</strong>：Phase 2 第 6 天，第二个<strong>错题回归日</strong>。上午做错题重做（见 <code>docs/practice/review-round2.md</code>），本笔记是 <strong>Step 2（下午 2.5h）</strong> 的科目二下午大题前置入门。</p>
+<p><strong>为什么现在学设计模式</strong>：设计模式在软考里是<strong>双料考点</strong>——科目一上午年年出 2–3 道选择（2021 下半年考了 44–46 题中介者三连、47 题策略，2022 上半年考了 67–68 题观察者/单例），科目二下午<strong>试题五（C++）/试题六（Java）二选一、15 分</strong>，几乎每年必考一道设计模式代码填空。上午重做的卷 3 第 44–46 题就是典型考法。</p>
+<p><strong>本日覆盖</strong>：23 种 GoF 模式的<strong>三大分类</strong>总览 → 15 个常考模式的<strong>意图 + 角色结构 + C++/Java 代码骨架 + 大题填空点</strong> → 场景关键词识别表 → 答题三步法。</p>
+<p><strong>本笔记定位（与 Day 29 的分工）</strong>：本文是<strong>入门教学</strong>，目标是"教会你认出模式、说清角色结构、写出代码骨架"；Day 29 的 <code>patterns-algo-notes.md</code> 是<strong>冲刺速查</strong>（真题映射 + 丢分点），考前再过一遍即可。<strong>先本文、后速查。</strong></p>
+<p><strong>配套</strong>：<code>docs/practice/review-round2.md</code>（错题重做卷②，含卷 3 第 44–46 题中介者三连）、<code>day17-uml.md</code>（类图六关系，本文反复用到）。</p>
+</blockquote>
+<hr />
+<h2>一、考法说明（先知道分在哪、怎么考）</h2>
+<h3>1.1 科目二的卷面结构</h3>
+<p>软考中级·软件设计师<strong>科目二《软件设计》</strong>（下午，150 分钟）：</p>
+<ul>
+<li>共 <strong>6 道大题</strong>（试题一 ~ 试题六），<strong>每题 15 分</strong>，满分 75 分，合格 45 分。</li>
+<li><strong>试题一 ~ 试题四为必答</strong>：试题一（结构化开发，<strong>数据流图 DFD</strong>）、试题二（数据库分析与设计，<strong>E-R 图 + 关系模式</strong>）、试题三（面向对象分析与设计，<strong>UML</strong>）、试题四（数据结构与算法，<strong>C 语言</strong>）。</li>
+<li><strong>试题五（C++）与试题六（Java）二选一</strong>：均结合<strong>设计模式</strong>给类图做代码填空。</li>
+</ul>
+<blockquote>
+<p><strong>本笔记针对试题五/六</strong>：15 分，全部在填空上。<strong>选答策略</strong>：若两种语言都不排斥，<strong>建议选 Java（试题六）</strong>——<code>abstract</code>/<code>new</code>/<code>extends</code>/<code>implements</code> 语法更直白；C++ 要注意 <code>-&gt;</code>、<code>= 0</code>、<code>: public</code> 等语言细节（见 §六语言对照表）。</p>
+</blockquote>
+<h3>1.2 试题五/六的题目结构（固定三件套）</h3>
+<table>
+<thead>
+<tr>
+<th>组成</th>
+<th>内容</th>
+<th>你要做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>【说明】</strong></td>
+<td>用文字描述一个业务场景（如"某购物中心收银系统要支持打折、返利、满减等不同促销活动"）</td>
+<td><strong>读场景关键词 → 判模式</strong>（第一步，见 §二）</td>
+</tr>
+<tr>
+<td><strong>类图</strong></td>
+<td>给出该模式的类结构（抽象类、接口、具体类、关系线）</td>
+<td><strong>对照类图找角色对应</strong>（第二步，见 §四）</td>
+</tr>
+<tr>
+<td><strong>代码骨架</strong></td>
+<td>C++ 或 Java 代码，挖掉 <strong>4~6 个空</strong></td>
+<td><strong>依多态与继承关系填代码空</strong>（第三步，见 §四）</td>
+</tr>
+</tbody>
+</table>
+<h3>1.3 填空只考三类位置（记住这三类，逐空定位）</h3>
+<ol>
+<li><strong>模式角色名/类名</strong>：如"图中的 <code>____</code> 类充当抽象产品角色"——直接从类图里抄。</li>
+<li><strong>方法签名</strong>：抽象方法声明、接口方法、工厂/管理者方法（<code>add</code>/<code>get</code>/<code>create</code> 等）——<strong>由"子类已实现的签名 + 调用处"反推</strong>。</li>
+<li><strong>多态调用语句</strong>：用父类/接口类型的变量调用方法、<code>return new ConcreteX()</code>、委托语句（如 <code>strategy.doPrint(this)</code>）。</li>
+</ol>
+<blockquote>
+<p><strong>每空分值 2~4 分，4~6 个空 = 15 分</strong>。模式识别错 = 全盘皆输，所以<strong>第一步"判模式"是性价比最高的技能</strong>。</p>
+</blockquote>
+<hr />
+<h2>二、识别方法（场景关键词 → 模式）</h2>
+<h3>2.1 三大分类先建立全景</h3>
+<p>GoF 23 种设计模式按<strong>关注点</strong>分三类（<strong>必背</strong>，上午选择常考分类归属）：</p>
+<pre><code>设计模式（23 种）
+├── 创建型（5 种）——关注&quot;对象怎么被创建&quot;
+│     工厂方法 Factory Method ★    抽象工厂 Abstract Factory ★
+│     单例 Singleton ★             建造者 Builder ★
+│     原型 Prototype
+├── 结构型（7 种）——关注&quot;类/对象怎么组合&quot;
+│     适配器 Adapter ★    装饰 Decorator ★    外观 Facade ★
+│     组合 Composite ★    享元 Flyweight ★
+│     桥接 Bridge         代理 Proxy
+└── 行为型（11 种）——关注&quot;对象间怎么协作、职责怎么分&quot;
+      观察者 Observer ★    状态 State ★    策略 Strategy ★
+      命令 Command ★       备忘录 Memento ★    职责链 CoR ★
+      中介者 Mediator ★（上午高频）    模板方法 Template Method
+      迭代器 Iterator      访问者 Visitor      解释器 Interpreter
+</code></pre>
+<blockquote>
+<p>★ = 软件设计师<strong>常考的 15 个</strong>（本笔记精讲范围）。记忆口诀：
+<strong>创建型"工抽单建原"</strong>（工厂方法、抽象工厂、单例、建造者、原型）；
+<strong>结构型"适装外组享桥代"</strong>（适配器、装饰、外观、组合、享元、桥接、代理）；
+<strong>行为型"观状策命备职中模迭访解"</strong>（观察者、状态、策略、命令、备忘录、职责链、中介者、模板方法、迭代器、访问者、解释器）。</p>
+</blockquote>
+<h3>2.2 场景关键词 → 模式映射表（上午选择 + 下午大题通用）</h3>
+<blockquote>
+<p><strong>用法</strong>：先读【说明】或题干，找<strong>场景关键词</strong>，下表 1 秒锁定模式；再看选项/类图验证。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>场景描述</th>
+<th>关键词</th>
+<th>对应模式</th>
+<th>意图一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不同时期推出打折、返利、满减等不同促销活动；多种格式化方式可切换</td>
+<td>"可互换""多种方式""可切换""算法变体"</td>
+<td><strong>策略 Strategy</strong></td>
+<td>把算法封装成独立类，使它们可以互相替换</td>
+</tr>
+<tr>
+<td>一个对象状态改变时，通知所有关注它的监听者/订阅者</td>
+<td>"通知""订阅""监听""状态变化时自动更新"</td>
+<td><strong>观察者 Observer</strong></td>
+<td>定义一对多依赖，一方变化时多方自动收到通知</td>
+</tr>
+<tr>
+<td>保证一个类只有一个实例，提供全局访问点</td>
+<td>"只能有一个""唯一实例""全局"</td>
+<td><strong>单例 Singleton</strong></td>
+<td>保证一个类只有一个实例</td>
+</tr>
+<tr>
+<td>不修改原有类的前提下，动态地给它增加新职责/新行为</td>
+<td>"动态增加""装饰""透明包装""比子类更灵活"</td>
+<td><strong>装饰 Decorator</strong></td>
+<td>动态地给对象增加职责，避免子类膨胀</td>
+</tr>
+<tr>
+<td>已有类的接口不符合要求，要转换成客户端期望的接口</td>
+<td>"转换接口""兼容""适配""已有类复用"</td>
+<td><strong>适配器 Adapter</strong></td>
+<td>把一个接口转换成客户端期望的另一个接口</td>
+</tr>
+<tr>
+<td>用一个中介对象封装多个对象的交互，使它们不直接互相引用</td>
+<td>"封装一系列对象交互""中介""协调""解耦多对多"</td>
+<td><strong>中介者 Mediator</strong></td>
+<td>用中介封装一组对象的交互，松耦合</td>
+</tr>
+<tr>
+<td>把对象组合成树形结构，统一对待单个对象与组合对象</td>
+<td>"树形结构""层叠菜单""部分-整体""目录与文件"</td>
+<td><strong>组合 Composite</strong></td>
+<td>统一处理个体与组合体（部分-整体层次）</td>
+</tr>
+<tr>
+<td>撤销/取消/回退到原先状态；文档回复到历史版本</td>
+<td>"撤销""恢复""回退""历史版本""存档"</td>
+<td><strong>备忘录 Memento</strong></td>
+<td>保存对象状态，以便以后恢复</td>
+</tr>
+<tr>
+<td>大量细粒度对象占用内存，通过共享相同部分来节省内存</td>
+<td>"共享""节省内存""大量相同对象""内部状态"</td>
+<td><strong>享元 Flyweight</strong></td>
+<td>共享细粒度对象，降低内存占用</td>
+</tr>
+<tr>
+<td>为复杂子系统提供一个统一的高层入口</td>
+<td>"统一接口""统一入口""一站式""接待员代劳"</td>
+<td><strong>外观 Facade</strong></td>
+<td>为子系统组提供一致界面，简化调用</td>
+</tr>
+<tr>
+<td>对象的行为随其内部状态改变而改变，想消除大量条件分支</td>
+<td>"随状态改变行为""状态驱动""消除 if-else 分支"</td>
+<td><strong>状态 State</strong></td>
+<td>状态变则行为变，用状态对象替代条件分支</td>
+</tr>
+<tr>
+<td>把请求封装成对象，支持排队、记录日志、撤销重做</td>
+<td>"封装请求""排队执行""日志""撤销重做"</td>
+<td><strong>命令 Command</strong></td>
+<td>把请求封装为对象，请求可排队/记录/撤销</td>
+</tr>
+<tr>
+<td>请求沿一条链传递，直到某个处理者处理它</td>
+<td>"层层审批""职责链""传递请求""逐级处理"</td>
+<td><strong>职责链 CoR</strong></td>
+<td>请求沿链传递，直到被处理，发送者与接收者解耦</td>
+</tr>
+<tr>
+<td>定义创建对象的接口，让子类决定实例化哪个类</td>
+<td>"由子类决定""创建接口""延迟实例化"</td>
+<td><strong>工厂方法 Factory Method</strong></td>
+<td>子类决定创建哪个具体产品</td>
+</tr>
+<tr>
+<td>创建一族相关或相互依赖的产品，不指定具体类</td>
+<td>"产品族""一系列相关产品""不同平台/主题"</td>
+<td><strong>抽象工厂 Abstract Factory</strong></td>
+<td>创建一族相关产品，产品族整体替换</td>
+</tr>
+<tr>
+<td>分步骤构建一个复杂对象，同样的构建过程产生不同表示</td>
+<td>"分步骤""复杂对象构建""相同过程不同结果"</td>
+<td><strong>建造者 Builder</strong></td>
+<td>把复杂对象的构建与表示分离</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>上午选择验证法</strong>：锁定模式后，把选项里<strong>其它三个模式的意图</strong>也想一遍——上午选项常把"状态/策略/中介者"混在一起（如 2021 下 44–46 题），能说出"意图一句话"就不会选错。</p>
+</blockquote>
+<hr />
+<h2>三、常考模式精讲（15 个 + 中介者）</h2>
+<blockquote>
+<p><strong>每个模式四件套</strong>：意图 → 角色结构（ASCII 类图 + 角色表）→ 代码骨架（Java + C++ 各一版简例）→ 大题常考填空点。
+<strong>代码骨架背不下来没关系，要背的是"角色结构"与"填空点"</strong>——大题的空都在结构的关键位置上。</p>
+</blockquote>
+<hr />
+<h3>3.1 工厂方法（Factory Method）｜创建型</h3>
+<ul>
+<li><strong>意图</strong>：定义一个创建对象的接口，让<strong>子类决定</strong>实例化哪一个类，使对象的创建与使用分离。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» Product                    Creator
+  + use() : void                         + factoryMethod() : Product      ← 抽象工厂方法
+        △                                      △
+        │ 实现（虚线三角）                        │ 泛化（实线三角）
+        │                                      │
+  ConcreteProduct                    ConcreteCreator
+  + use() : void                        + factoryMethod() : Product
+                                        { return new ConcreteProduct(); }  ← 填空高发区
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象产品 Product</td>
+<td>声明产品的公共接口</td>
+</tr>
+<tr>
+<td>具体产品 ConcreteProduct</td>
+<td>实现接口，是被创建的对象</td>
+</tr>
+<tr>
+<td>抽象工厂 Creator</td>
+<td>声明工厂方法，返回抽象产品类型</td>
+</tr>
+<tr>
+<td>具体工厂 ConcreteCreator</td>
+<td>实现工厂方法，<code>new</code> 出具体产品</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface Product { void use(); }
+class ConcreteProduct implements Product {
+    public void use() { System.out.println(&quot;使用具体产品&quot;); }
+}
+abstract class Creator {
+    abstract Product factoryMethod();   // ← 抽象方法，填空点
+}
+class ConcreteCreator extends Creator {
+    Product factoryMethod() { return new ConcreteProduct(); }   // ← 填空点
+}
+// 客户端
+Creator c = new ConcreteCreator();
+Product p = c.factoryMethod();   // 用父类类型接收（多态）
+p.use();
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Product { public: virtual void use() = 0; virtual ~Product() {} };
+class ConcreteProduct : public Product {
+public: void use() override { }
+};
+class Creator {
+public:
+    virtual Product* factoryMethod() = 0;   // 纯虚函数 = 抽象方法
+    virtual ~Creator() {}
+};
+class ConcreteCreator : public Creator {
+public:
+    Product* factoryMethod() override { return new ConcreteProduct(); }   // ← 指针返回
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 抽象工厂方法的声明：<strong>返回类型 = 抽象产品</strong>、无方法体（Java 加 <code>abstract</code>，C++ 加 <code>= 0</code>）；
+2. 具体工厂方法体：<code>return new ConcreteProduct();</code>；
+3. 客户端：<code>Product p = creator.factoryMethod();</code>（变量类型是<strong>抽象产品</strong>，不是具体产品）。</p>
+<hr />
+<h3>3.2 抽象工厂（Abstract Factory）｜创建型</h3>
+<ul>
+<li><strong>意图</strong>：提供一个创建<strong>一系列相关或相互依赖对象</strong>（产品族）的接口，而无需指定它们具体的类。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» AbstractFactory                «interface» AbstractProductA      «interface» AbstractProductB
+  + createProductA() : AbstractProductA      + opA()                           + opB()
+  + createProductB() : AbstractProductB            △                                △
+        △                                         │                                │
+        │ 泛化                                     │…实现…                          │…实现…
+  ConcreteFactory1                        ConcreteProductA1            ConcreteProductB1
+  + createProductA() { return new ConcreteProductA1(); }
+  + createProductB() { return new ConcreteProductB1(); }
+</code></pre>
+<blockquote>
+<p><strong>与工厂方法的核心区别</strong>：工厂方法<strong>一个</strong>工厂方法创建<strong>一种</strong>产品；抽象工厂<strong>多个</strong>工厂方法创建<strong>一族</strong>（多个）产品。题目出现"产品族""不同主题/平台""一系列相关"就是抽象工厂。</p>
+</blockquote>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface AbstractProductA { void opA(); }
+interface AbstractProductB { void opB(); }
+interface AbstractFactory {
+    AbstractProductA createProductA();   // ← 填空点：返回类型是抽象产品
+    AbstractProductB createProductB();
+}
+class ConcreteFactory1 implements AbstractFactory {
+    public AbstractProductA createProductA() { return new ConcreteProductA1(); }
+    public AbstractProductB createProductB() { return new ConcreteProductB1(); }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class AbstractProductA { public: virtual void opA() = 0; virtual ~AbstractProductA() {} };
+class AbstractProductB { public: virtual void opB() = 0; virtual ~AbstractProductB() {} };
+class AbstractFactory {
+public:
+    virtual AbstractProductA* createProductA() = 0;
+    virtual AbstractProductB* createProductB() = 0;
+    virtual ~AbstractFactory() {}
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 抽象工厂接口里的<strong>每个创建方法的返回类型</strong> = 对应的抽象产品接口；
+2. 具体工厂方法体 <code>return new ConcreteProductX1();</code>（注意与工厂族编号对应，别串号）；
+3. 抽象产品接口的方法签名（由所有具体产品的实现取交集）。</p>
+<hr />
+<h3>3.3 单例（Singleton）｜创建型</h3>
+<ul>
+<li><strong>意图</strong>：保证一个类<strong>只有一个实例</strong>，并提供一个全局访问点。</li>
+<li><strong>2022 上半年上午第 68 题考过定义</strong>："限制类的实例对象只能有一个"。</li>
+</ul>
+<p><strong>角色结构</strong>（单例没有复杂角色，只有一个类）：</p>
+<pre><code class="language-text">  ╭──────────────────────────╮
+  │      Singleton            │
+  ├──────────────────────────┤
+  │ - instance : Singleton   │  ← 静态私有唯一实例（类图下划线 = static）
+  ├──────────────────────────┤
+  │ - Singleton()             │  ← 私有构造（外部不能 new）
+  │ + getInstance() : Singleton   ← 静态全局访问点（下划线 = static）
+  ╰──────────────────────────╯
+</code></pre>
+<p><strong>Java 骨架</strong>（两种都认得）：</p>
+<pre><code class="language-java">// 懒汉式
+public class Singleton {
+    private static Singleton instance = null;      // ← 填空点：static 私有
+    private Singleton() {}                          // ← 填空点：构造私有
+    public static Singleton getInstance() {
+        if (instance == null) { instance = new Singleton(); }   // ← 填空点：判空+创建
+        return instance;
+    }
+}
+// 饿汉式（线程安全）
+public class Singleton2 {
+    private static final Singleton2 instance = new Singleton2();
+    private Singleton2() {}
+    public static Singleton2 getInstance() { return instance; }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Singleton {
+public:
+    static Singleton&amp; getInstance() {
+        static Singleton instance;    // 局部静态变量，线程安全且只初始化一次 ← 填空点
+        return instance;
+    }
+private:
+    Singleton() {}                    // 构造私有
+    Singleton(const Singleton&amp;) = delete;                // 禁拷贝构造
+    Singleton&amp; operator=(const Singleton&amp;) = delete;     // 禁赋值
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 私有构造 <code>private Singleton() {}</code>（保证外部不能 new）；
+2. 静态成员声明 <code>private static Singleton instance;</code>；
+3. <code>getInstance()</code> 内的判空与 <code>new</code>（懒汉式）/ 直接返回（饿汉式）；
+4. C++ 中返回局部静态变量的引用 <code>static Singleton instance;</code>。</p>
+<hr />
+<h3>3.4 建造者（Builder）｜创建型</h3>
+<ul>
+<li><strong>意图</strong>：将一个<strong>复杂对象的构建与它的表示分离</strong>，使同样的构建过程可以创建不同的表示。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» Builder                       Director（指挥者）
+  + buildPartA() : void                     + construct(Builder b) : Product
+  + buildPartB() : void                     {  按固定顺序调用 b.buildPartA()、b.buildPartB()… }
+  + getResult() : Product                              │ 使用（依赖，虚线箭头）
+        △                                               │
+        │ 泛化                                           ▼
+  ConcreteBuilder                        （指挥者只认识抽象 Builder）
+  - product : Product
+  + buildPartA() { product.setA(...); }
+  + getResult() { return product; }
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象建造者 Builder</td>
+<td>声明逐步构建各部件的方法 + 一个返回产品的方法</td>
+</tr>
+<tr>
+<td>具体建造者 ConcreteBuilder</td>
+<td>实现各部件的构建，持有并装配产品</td>
+</tr>
+<tr>
+<td>指挥者 Director</td>
+<td>按固定顺序调用 Builder 的方法（<strong>不关心具体 Builder 是谁</strong>）</td>
+</tr>
+<tr>
+<td>产品 Product</td>
+<td>最终被构建的复杂对象</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">class Product { private String a, b; /* setters/getters */ }
+interface Builder {
+    void buildPartA();
+    void buildPartB();
+    Product getResult();
+}
+class ConcreteBuilder implements Builder {
+    private Product product = new Product();
+    public void buildPartA() { product.setA(&quot;部件A&quot;); }
+    public void buildPartB() { product.setB(&quot;部件B&quot;); }
+    public Product getResult() { return product; }
+}
+class Director {
+    Product construct(Builder b) {          // 参数类型 = 抽象 Builder
+        b.buildPartA();                     // ← 填空点：调用顺序
+        b.buildPartB();
+        return b.getResult();               // ← 填空点
+    }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Builder {
+public:
+    virtual void buildPartA() = 0;
+    virtual void buildPartB() = 0;
+    virtual Product* getResult() = 0;
+    virtual ~Builder() {}
+};
+class Director {
+public:
+    Product* construct(Builder* b) {        // b-&gt;buildPartA(); b-&gt;buildPartB(); return b-&gt;getResult();
+    }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. <code>Director.construct()</code> 内的调用链（按顺序 <code>builder.buildPartA()</code>、<code>buildPartB()</code>…）；
+2. <code>getResult()</code> 的返回（<code>return product;</code> / <code>return builder.getResult();</code>）；
+3. Director 方法的形参类型 = <strong>抽象 Builder</strong>（不是具体建造者）。</p>
+<hr />
+<h3>3.5 适配器（Adapter）｜结构型</h3>
+<ul>
+<li><strong>意图</strong>：将一个类的接口<strong>转换</strong>成客户希望的另一个接口，使原本接口不兼容的类可以一起工作。</li>
+</ul>
+<p><strong>角色结构</strong>（对象适配器，更常用）：</p>
+<pre><code class="language-text">  «interface» Target（客户端期望的接口）              Adaptee（已有的、接口不兼容的类）
+  + request() : void                                 + specificRequest() : void
+        △                                                    ▲
+        │ 实现                                                │ 聚合/关联（Adapter 持有 Adaptee）
+        │                                                      │
+  Adapter ────────────────────────────────────────────────────┘
+  - adaptee : Adaptee
+  + request() { adaptee.specificRequest(); }   ← 填空点：委托
+</code></pre>
+<blockquote>
+<p><strong>类适配器 vs 对象适配器</strong>：<strong>类适配器</strong>用<strong>继承</strong>（<code>class Adapter : public Target, private Adaptee</code>，Java 中 <code>class Adapter extends Adaptee implements Target</code>）；<strong>对象适配器</strong>用<strong>组合</strong>（持有 Adaptee 引用）。考试两种都可能考，认"Target 的方法体里调 Adaptee 的方法"即可。</p>
+</blockquote>
+<p><strong>Java 骨架</strong>（对象适配器）：</p>
+<pre><code class="language-java">interface Target { void request(); }
+class Adaptee { void specificRequest() { /* 已有的旧实现 */ } }
+class Adapter implements Target {
+    private Adaptee adaptee;                       // ← 填空点：持有被适配者
+    public Adapter(Adaptee adaptee) { this.adaptee = adaptee; }
+    public void request() { adaptee.specificRequest(); }   // ← 填空点：委托
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>（类适配器 + 对象适配器）：</p>
+<pre><code class="language-cpp">class Target { public: virtual void request() = 0; virtual ~Target() {} };
+class Adaptee { public: void specificRequest() { } };
+// 对象适配器（组合）
+class Adapter : public Target {
+    Adaptee* adaptee;
+public:
+    Adapter(Adaptee* a) : adaptee(a) {}
+    void request() override { adaptee-&gt;specificRequest(); }   // 指针用 -&gt;
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Adapter 的成员声明 <code>private Adaptee adaptee;</code>（类型 = 被适配者）；
+2. <code>request()</code> 方法体：<code>adaptee.specificRequest();</code>（委托调用）；
+3. 构造器/Setter 里接收并保存被适配者。</p>
+<hr />
+<h3>3.6 装饰（Decorator）｜结构型</h3>
+<ul>
+<li><strong>意图</strong>：<strong>动态地</strong>给一个对象增加额外的职责，比生成子类（继承）更灵活。</li>
+</ul>
+<p><strong>角色结构</strong>（注意：<strong>抽象装饰与抽象构件是"实现 + 聚合"双重关系</strong>）：</p>
+<pre><code class="language-text">  «interface» Component
+  + operation() : void
+        △  ▲
+        │  │ Component 还被 Decorator 持有（聚合 ◆────，空心菱形在 Decorator 端）
+        │  │
+  ConcreteComponent          Decorator（抽象装饰，通常也是抽象类）
+  + operation()              - component : Component      ← 类型是抽象构件，不是具体构件
+                             + operation() { component.operation(); }   ← 先调被装饰者，再加料
+                                   △
+                                   │ 泛化
+                             ConcreteDecoratorA / ConcreteDecoratorB
+                             + operation() { super.operation();  新行为; }
+</code></pre>
+<blockquote>
+<p><strong>读图要点（衔接 day17-uml.md）</strong>：<code>Decorator ──△ Component</code> 是<strong>实现/继承</strong>，同时 <code>Decorator ◆── Component</code> 是<strong>聚合</strong>——这正是"装饰器包装一个被装饰者"的类图表达。填空若问"Decorator 与 Component 之间是什么关系"，答<strong>实现（或泛化）+ 聚合</strong>。</p>
+</blockquote>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface Component { void operation(); }
+class ConcreteComponent implements Component {
+    public void operation() { /* 核心功能 */ }
+}
+abstract class Decorator implements Component {
+    protected Component component;              // ← 填空点：类型 = 抽象构件
+    public Decorator(Component c) { this.component = c; }
+    public void operation() { component.operation(); }   // ← 填空点：委托
+}
+class ConcreteDecoratorA extends Decorator {
+    public ConcreteDecoratorA(Component c) { super(c); }
+    public void operation() {
+        super.operation();                      // 先执行被装饰者的核心功能
+        addedBehavior();                        // 再加新职责
+    }
+    private void addedBehavior() { }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Component { public: virtual void operation() = 0; virtual ~Component() {} };
+class Decorator : public Component {
+protected:
+    Component* component;
+public:
+    Decorator(Component* c) : component(c) {}
+    void operation() override { component-&gt;operation(); }   // 指针用 -&gt;
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 抽象装饰的成员 <code>protected Component component;</code>（<strong>抽象类型</strong>）；
+2. <code>operation()</code> 内 <code>component.operation();</code>（先调被装饰者，再执行新增行为——<strong>顺序填反是常见丢分点</strong>）；
+3. 具体装饰 <code>super.operation();</code> 之后的新增行为语句。</p>
+<hr />
+<h3>3.7 外观（Facade）｜结构型</h3>
+<ul>
+<li><strong>意图</strong>：为子系统中的一组接口提供一个<strong>一致的界面</strong>（统一入口），使子系统更易于使用。</li>
+<li><strong>2022 下半年大题考过</strong>（医院接待：挂号 → 门诊 → 取药）。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">                    Client（客户端只认识 Facade）
+                         │ 依赖
+                         ▼
+                   ╭──────────╮  Facade（外观/接待员）
+                   │ dispose() │  持有一组子系统引用，方法内依次调用
+                   ╰─────┬────╯
+          ┌──────────────┼──────────────┐
+          ▼              ▼              ▼
+     ╭─────────╮   ╭─────────╮   ╭─────────╮
+     │ SubSysA  │   │ SubSysB  │   │ SubSysC  │   ← 子系统之间互不感知
+     │ step1()  │   │ step2()  │   │ step3()  │
+     ╰─────────╯   ╰─────────╯   ╰─────────╯
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">class SubSystemA { void step1() { } }
+class SubSystemB { void step2() { } }
+class SubSystemC { void step3() { } }
+class Facade {
+    private SubSystemA a = new SubSystemA();    // ← 填空点：持有子系统
+    private SubSystemB b = new SubSystemB();
+    private SubSystemC c = new SubSystemC();
+    public void dispose() {                     // 统一入口
+        a.step1();                              // ← 填空点：依次调用的调用链
+        b.step2();
+        c.step3();
+    }
+}
+// 客户端：只 new Facade 并调一个方法
+Facade f = new Facade();   f.dispose();
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Facade {
+    SubSystemA* a;  SubSystemB* b;  SubSystemC* c;
+public:
+    Facade() : a(new SubSystemA()), b(new SubSystemB()), c(new SubSystemC()) {}
+    void dispose() { a-&gt;step1(); b-&gt;step2(); c-&gt;step3(); }   // ← 调用链
+    ~Facade() { delete a; delete b; delete c; }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Facade 方法体内的<strong>调用链</strong>（按业务顺序 <code>a.step1(); b.step2(); ...</code>）；
+2. Facade 持有子系统成员的声明；
+3. 客户端只与 Facade 交互（<code>new Facade()</code> + 一个方法调用）。</p>
+<hr />
+<h3>3.8 组合（Composite）｜结构型</h3>
+<ul>
+<li><strong>意图</strong>：将对象组合成<strong>树形结构</strong>以表示"部分-整体"层次，使客户端<strong>统一对待</strong>单个对象与组合对象。</li>
+<li><strong>2021 上半年大题考过</strong>（层叠菜单：菜单项 + 子菜单）。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» / abstract Component
+  + operation() : void
+  + add(Component) / remove(Component) / getChild(int)     ← 叶子与组合的公共接口
+        △                          ▲
+        │ 泛化                      │ 聚合（◆──── 递归自包含！）
+        │                            │
+  Leaf（叶子）                  Composite（组合）
+  + operation() { 具体行为 }    - children : List&lt;Component&gt;   ← 元素类型是抽象构件
+  + add() { 抛异常/空实现 }     + operation() { for(child : children) child.operation(); }  ← 递归！
+                                + add(Component c) { children.add(c); }
+</code></pre>
+<blockquote>
+<p><strong>最醒目的类图特征</strong>：Composite <strong>自己聚合自己</strong>（<code>Composite ◆── Component</code>，递归结构），这是组合模式的<strong>身份标志</strong>。读图时看到"一个类的集合元素就是它自己的父类型/接口类型"，几乎就是组合。</p>
+</blockquote>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">abstract class Component {
+    public abstract void operation();
+    public void add(Component c) { throw new UnsupportedOperationException(); }
+    public void remove(Component c) { throw new UnsupportedOperationException(); }
+}
+class Leaf extends Component {                    // 叶子：不可再 add
+    public void operation() { /* 具体行为 */ }
+}
+class Composite extends Component {
+    private List&lt;Component&gt; children = new ArrayList&lt;&gt;();   // ← 填空点：List&lt;抽象构件&gt;
+    public void add(Component c) { children.add(c); }
+    public void operation() {
+        for (Component child : children) { child.operation(); }   // ← 填空点：递归调用
+    }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Component {
+public:
+    virtual void operation() = 0;
+    virtual void add(Component*) { }     // 叶子默认空实现
+    virtual ~Component() {}
+};
+class Composite : public Component {
+    std::vector&lt;Component*&gt; children;    // ← vector&lt;抽象构件*&gt;
+public:
+    void add(Component* c) { children.push_back(c); }
+    void operation() override {
+        for (auto* child : children) { child-&gt;operation(); }   // 递归
+    }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Composite 的集合成员 <code>List&lt;Component&gt;</code>（<strong>元素类型 = 抽象构件</strong>，不是 Composite 自己）；
+2. <code>operation()</code> 内的<strong>递归</strong>调用 <code>child.operation();</code>；
+3. 抽象构件里的 <code>add/remove</code> 方法签名（叶子的实现为空/抛异常）。</p>
+<hr />
+<h3>3.9 享元（Flyweight）｜结构型</h3>
+<ul>
+<li><strong>意图</strong>：运用<strong>共享</strong>技术有效地支持大量细粒度对象的复用，降低内存占用。</li>
+<li><strong>2021 下半年大题考过</strong>（Java 围棋：黑白棋子共享）。</li>
+<li><strong>核心思想</strong>：<strong>内部状态（可共享，如棋子颜色）与外部状态（不共享，如落子位置）分离</strong>。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» Flyweight
+  + operation(UnsharedFlyweight extState) : void     ← 外部状态作参数传入
+        △
+        │
+  ConcreteFlyweight                      FlyweightFactory（享元工厂）
+  - intrinsicState（内部状态，共享）      - pool : Map&lt;Key, Flyweight&gt;   ← 缓存池
+  + operation(extState)                   + getFlyweight(Key) : Flyweight
+                                               { 若池中没有则 new 并放入；有则直接返回 }
+                                                     ▲
+  UnsharedFlyweight（外部状态，不共享）          │ 客户端：把外部状态作为参数传给共享对象
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface Flyweight { void operation(String extState); }
+class ConcreteFlyweight implements Flyweight {
+    private String intrinsicState;                    // 内部状态（共享）
+    public ConcreteFlyweight(String s) { this.intrinsicState = s; }
+    public void operation(String extState) { /* 用 内部+外部 状态 */ }
+}
+class FlyweightFactory {
+    private static final Map&lt;String, Flyweight&gt; pool = new HashMap&lt;&gt;();
+    public static Flyweight getFlyweight(String key) {
+        if (!pool.containsKey(key))
+            pool.put(key, new ConcreteFlyweight(key));     // ← 填空点：没有则造并放入
+        return pool.get(key);                              // ← 填空点：有则复用
+    }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Flyweight { public: virtual void operation(std::string extState) = 0; virtual ~Flyweight() {} };
+class FlyweightFactory {
+    std::map&lt;std::string, Flyweight*&gt; pool;
+public:
+    Flyweight* getFlyweight(const std::string&amp; key) {
+        if (pool.find(key) == pool.end())
+            pool[key] = new ConcreteFlyweight(key);   // 造并放入池
+        return pool[key];                              // 复用
+    }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 工厂的缓存池声明 <code>Map&lt;Key, Flyweight&gt;</code>（<strong>值类型 = 抽象享元</strong>）；
+2. 工厂方法内的<strong>判空 + put + get</strong> 三步；
+3. 局部变量用<strong>抽象享元类型</strong>接收（多态）；
+4. <code>operation()</code> 的形参 = <strong>外部状态</strong>（外部状态一定作参数传入，不作成员）。</p>
+<hr />
+<h3>3.10 观察者（Observer）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：定义对象间<strong>一对多</strong>的依赖关系：当一个对象（主题）的状态发生变化时，所有依赖它的对象（观察者）都得到通知并自动更新。</li>
+<li><strong>2022 上半年上午第 67 题考过定义</strong>；2023 上半年试题三问题 3 结合 UML 考。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» Observer                       Subject（抽象主题）
+  + update() : void                          - observers : List&lt;Observer&gt;   ← 观察者集合
+        △                                    + attach(Observer) / detach(Observer)
+        │                                    + notify() { for(o : observers) o.update(); }  ← 遍历通知
+        │                                            ▲
+  ConcreteObserver                            ConcreteSubject
+  - observerState                             - subjectState（主题状态）
+  + update() { 拉取主题状态并更新自己 }        + setState() { 状态改变后调 notify(); }
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface Observer { void update(); }
+abstract class Subject {
+    protected List&lt;Observer&gt; observers = new ArrayList&lt;&gt;();   // ← 填空点：List&lt;Observer&gt;
+    public void attach(Observer o) { observers.add(o); }
+    public void detach(Observer o) { observers.remove(o); }
+    public void notifyObservers() {                            // 注意：Java 中不能定义 notify()（Object 的 final 方法）
+        for (Observer o : observers) { o.update(); }          // ← 填空点：遍历调用 update
+    }
+}
+class ConcreteSubject extends Subject {
+    private int state;
+    public void setState(int s) { this.state = s; notifyObservers(); } // ← 填空点：状态改变后通知
+}
+class ConcreteObserver implements Observer {
+    public void update() { /* 拉取主题状态、更新自己 */ }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Observer { public: virtual void update() = 0; virtual ~Observer() {} };
+class Subject {
+protected:
+    std::vector&lt;Observer*&gt; observers;
+public:
+    void attach(Observer* o) { observers.push_back(o); }
+    void notifyObservers() { for (auto* o : observers) o-&gt;update(); }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Subject 的成员 <code>List&lt;Observer&gt; observers</code>（元素类型 = <strong>抽象观察者</strong>）；
+2. <code>notifyObservers()</code> 内遍历 <code>o.update();</code>；
+3. 具体主题 <code>setState()</code> 末尾调 <code>notifyObservers();</code>（<strong>漏掉这步是常见丢分点</strong>）；
+4. <code>attach/detach</code> 的签名（由调用处反推）。</p>
+<p><strong>试题三答题模板</strong>（选模式 + 解释，3 分）：</p>
+<blockquote>
+<p>观察者模式适用于当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。本需求中"……（如：库存数据）"是主题，"……（如：各展示界面）"是观察者，当……发生时自动通知所有……，故选观察者模式。</p>
+</blockquote>
+<hr />
+<h3>3.11 状态（State）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：允许一个对象在其<strong>内部状态改变时改变它的行为</strong>，对象看起来似乎修改了它的类（用状态对象替代庞大的条件分支）。</li>
+<li><strong>2021 下半年上午 44/46 题选项涉及</strong>其适用场景："一个对象的行为决定于其状态且必须在运行时刻根据状态改变行为"。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  Context（环境类，持有当前状态）
+  - state : State          ← 类型是抽象状态
+  + request() { state.handle(this); }     ← 把行为委托给状态对象
+  + setState(State)
+        │ 聚合/关联（Context 持有 State）
+        ▼
+  «interface» / abstract State
+  + handle(Context) : void
+        △
+        │
+  ConcreteStateA                      ConcreteStateB
+  + handle(Context c)                 + handle(Context c)
+    { 处理A; c.setState(new ConcreteStateB()); }   ← 处理完可切换状态
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface State { void handle(Context ctx); }
+class Context {
+    private State state;                       // ← 填空点：类型 = 抽象状态
+    public void setState(State s) { this.state = s; }
+    public void request() { state.handle(this); }   // ← 填空点：委托
+}
+class ConcreteStateA implements State {
+    public void handle(Context ctx) {
+        /* 状态A下的行为 */
+        ctx.setState(new ConcreteStateB());    // ← 填空点：切换到下一状态
+    }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class State { public: virtual void handle(Context* ctx) = 0; virtual ~State() {} };
+class Context {
+    State* state;
+public:
+    void setState(State* s) { state = s; }
+    void request() { state-&gt;handle(this); }    // 委托给状态对象
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Context 的成员类型 = <strong>抽象状态</strong>；
+2. <code>request()</code> 方法体 <code>state.handle(this);</code>（一句委托，常带 <code>this</code> 参数）；
+3. 具体状态的 <code>handle()</code> 内切换状态 <code>ctx.setState(new ConcreteStateB());</code>。</p>
+<blockquote>
+<p><strong>状态 vs 策略</strong>（极易混）：<strong>策略</strong>是客户端<strong>主动选</strong>一个算法，策略之间<strong>互不知道</strong>；<strong>状态</strong>是状态对象<strong>自己</strong>在 handle 完后<strong>自动切换</strong>到下一状态，状态之间互相感知（<code>ctx.setState(...)</code>）。题目出现"状态流转/生命周期/自动切换"是状态；出现"可互换/多种算法/客户端选择"是策略。</p>
+</blockquote>
+<hr />
+<h3>3.12 策略（Strategy）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：定义一系列算法，把它们各自封装成<strong>可互换</strong>的策略类，使算法的变化<strong>独立于</strong>使用算法的客户端。</li>
+<li><strong>2021 下半年上午第 47 题考过</strong>（打折/返利/满减促销）；2023 上半年大题考过（Java 区间格式打印）。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  Context（环境类）
+  - strategy : Strategy       ← 类型是策略接口
+  + setStrategy(Strategy)
+  + contextMethod() { strategy.doSomething(this); }   ← 一句委托
+        │ 聚合
+        ▼
+  «interface» Strategy
+  + doSomething(Context) : void
+        △
+        ├── ConcreteStrategyA ──┬── ConcreteStrategyB ──┬── ConcreteStrategyC
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">interface Strategy { void doSomething(Context ctx); }
+class ConcreteStrategyA implements Strategy {
+    public void doSomething(Context ctx) { /* 算法A */ }
+}
+class Context {
+    private Strategy strategy;                  // ← 填空点：类型 = 策略接口
+    public void setStrategy(Strategy s) { this.strategy = s; }
+    public void contextMethod() {
+        strategy.doSomething(this);             // ← 填空点：委托（常带 this）
+    }
+}
+// 客户端
+Context ctx = new Context();
+ctx.setStrategy(new ConcreteStrategyA());      // ← 填空点：按类型造具体策略
+ctx.contextMethod();
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Strategy { public: virtual void doSomething(Context* ctx) = 0; virtual ~Strategy() {} };
+class Context {
+    Strategy* strategy;
+public:
+    void setStrategy(Strategy* s) { strategy = s; }
+    void contextMethod() { strategy-&gt;doSomething(this); }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Context 的成员类型 = <strong>策略接口</strong>；
+2. <code>contextMethod()</code> 方法体<strong>只有一句</strong> <code>strategy.doSomething(this);</code>；
+3. 客户端/工厂方法里按类型造策略 <code>new ConcreteStrategyX();</code>（常出现在 <code>switch</code> 语句的各分支）。</p>
+<hr />
+<h3>3.13 命令（Command）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：将一个<strong>请求封装为一个对象</strong>，从而可用不同的请求对客户进行参数化、对请求排队或记录日志、支持<strong>撤销（undo）</strong>。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  Invoker（调用者）  ──持有──▶  «interface» Command           Receiver（接收者，真正干活的人）
+  + invoke()                      + execute() : void          + action() : void
+  + undo()                        + undo() : void                  ▲
+                                       △                          │ 聚合（具体命令持有接收者）
+                                       │                          │
+                                 ConcreteCommand ─────────────────┘
+                                 - receiver : Receiver
+                                 + execute() { receiver.action(); }   ← 委托给接收者
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">class Receiver { void action() { /* 真正的业务 */ } }
+interface Command { void execute(); }
+class ConcreteCommand implements Command {
+    private Receiver receiver;                 // ← 填空点：持有接收者
+    public ConcreteCommand(Receiver r) { this.receiver = r; }
+    public void execute() { receiver.action(); }   // ← 填空点：委托
+}
+class Invoker {
+    private Command command;                   // ← 填空点：类型 = 抽象命令
+    public void setCommand(Command c) { this.command = c; }
+    public void invoke() { command.execute(); }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Command { public: virtual void execute() = 0; virtual ~Command() {} };
+class ConcreteCommand : public Command {
+    Receiver* receiver;
+public:
+    ConcreteCommand(Receiver* r) : receiver(r) {}
+    void execute() override { receiver-&gt;action(); }   // 指针用 -&gt;
+};
+class Invoker {
+    Command* command;
+public:
+    void invoke() { command-&gt;execute(); }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 具体命令的成员 <code>private Receiver receiver;</code>（类型 = 接收者）；
+2. <code>execute()</code> 方法体 <code>receiver.action();</code>（委托）；
+3. Invoker 的成员类型 = <strong>抽象命令</strong>；
+4. <code>undo()</code> 方法体（反向操作或配合备忘录）。</p>
+<hr />
+<h3>3.14 备忘录（Memento）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：在不破坏封装性的前提下，<strong>捕获并保存</strong>一个对象的内部状态，以便以后<strong>恢复</strong>。</li>
+<li><strong>2022 上半年大题考过 C++/Java 双版本</strong>（状态撤销）。</li>
+<li><strong>记忆口诀</strong>：<strong>发起人存进备忘录、管理者只搬运、恢复时再取回</strong>。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  Originator（发起人）                     Memento（备忘录，封装状态）
+  - state : State                         - state : State
+  + saveStateToMemento() : Memento        + Memento(State)   ← 构造时写入（只写一次）
+    { return new Memento(this.state); }   + getState() : State   ← 只能读
+  + getStateFromMemento(Memento m)
+    { this.state = m.getState(); }
+        │                                        ▲
+        └────────────────────────────────────────┘ 发起人创建/读取备忘录
+
+  Caretaker（管理者，只搬运不改内容）
+  - list : List&lt;Memento&gt;
+  + add(Memento) / + get(int) : Memento
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">class Memento {
+    private String state;
+    public Memento(String state) { this.state = state; }    // 构造写入
+    public String getState() { return state; }              // 只读
+}
+class Originator {
+    private String state;
+    public void setState(String s) { this.state = s; }
+    public Memento saveStateToMemento() {
+        return new Memento(this.state);                     // ← 填空点：打包成备忘录返回
+    }
+    public void getStateFromMemento(Memento m) {
+        this.state = m.getState();                          // ← 填空点：从备忘录取回
+    }
+}
+class CareTaker {
+    private List&lt;Memento&gt; list = new ArrayList&lt;&gt;();
+    public void add(Memento m) { list.add(m); }             // ← 填空点：签名由调用处反推
+    public Memento get(int index) { return list.get(index); }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Memento {
+    std::string state;
+public:
+    Memento(std::string s) : state(s) {}
+    std::string getState() { return state; }
+};
+class Originator {
+    std::string state;
+public:
+    Memento* saveStateToMemento() { return new Memento(this-&gt;state); }
+    void getStateFromMemento(Memento* m) { this-&gt;state = m-&gt;getState(); }
+};
+class CareTaker {
+    std::vector&lt;Memento*&gt; mementoList;
+public:
+    void add(Memento* m) { mementoList.push_back(m); }
+    Memento* get(int index) { return mementoList[index]; }   // 返回类型 = 容器元素类型
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 发起人的"存档"方法 <code>return new Memento(this.state);</code>；
+2. 发起人的"恢复"方法 <code>this.state = memento.getState();</code>；
+3. 管理者的 <code>add(Memento)</code> / <code>get(int)</code> 方法签名（<strong>由方法体 + main 调用处反推</strong>：<code>return mementoList[index];</code> ⇒ 返回类型是 <code>Memento</code>）；
+4. 客户端调用链 <code>careTaker.add(originator.saveStateToMemento());</code>。</p>
+<hr />
+<h3>3.15 职责链（Chain of Responsibility）｜行为型</h3>
+<ul>
+<li><strong>意图</strong>：使多个对象都有机会处理请求，从而<strong>避免请求发送者与接收者的耦合</strong>；请求沿链传递，直到有一个对象处理它。</li>
+</ul>
+<p><strong>角色结构</strong>（注意 Handler <strong>自引用</strong>——这是本模式的身份标志）：</p>
+<pre><code class="language-text">  «interface» / abstract Handler
+  - successor : Handler      ← 后继处理者（类型是自己！自关联）
+  + setSuccessor(Handler)
+  + handleRequest(Request)   { if (能处理) 处理之; else if (successor != null) successor.handleRequest(req); }
+        △
+        ├── ConcreteHandlerA ──┬── ConcreteHandlerB ──┬── ConcreteHandlerC
+        （链：A → B → C，请求从 A 开始沿 successor 传递）
+</code></pre>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">abstract class Handler {
+    protected Handler successor;              // ← 填空点：类型是自己（自关联）
+    public void setSuccessor(Handler s) { this.successor = s; }
+    public abstract void handleRequest(String req);
+}
+class ConcreteHandlerA extends Handler {
+    public void handleRequest(String req) {
+        if (req.equals(&quot;A 能处理&quot;)) { /* 处理 */ }
+        else if (successor != null) { successor.handleRequest(req); }   // ← 填空点：转发给后继
+    }
+}
+// 客户端组装链
+Handler a = new ConcreteHandlerA();
+Handler b = new ConcreteHandlerB();
+a.setSuccessor(b);                           // ← 填空点：串链
+a.handleRequest(&quot;某请求&quot;);
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Handler {
+protected:
+    Handler* successor;
+public:
+    void setSuccessor(Handler* s) { successor = s; }
+    virtual void handleRequest(const std::string&amp; req) = 0;
+    virtual ~Handler() {}
+};
+class ConcreteHandlerA : public Handler {
+public:
+    void handleRequest(const std::string&amp; req) override {
+        if (req == &quot;A 能处理&quot;) { /* 处理 */ }
+        else if (successor != nullptr) { successor-&gt;handleRequest(req); }
+    }
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. Handler 的成员 <code>protected Handler successor;</code>（<strong>自引用类型</strong>）；
+2. <code>handleRequest()</code> 内的<strong>双分支</strong>：能处理则处理，否则 <code>successor.handleRequest(req);</code>；
+3. <code>setSuccessor</code> 的签名与赋值；
+4. 客户端组装链的 <code>a.setSuccessor(b);</code>。</p>
+<hr />
+<h3>3.16 中介者（Mediator）｜行为型｜<strong>上午高频，必学</strong></h3>
+<ul>
+<li><strong>意图</strong>：用一个<strong>中介对象</strong>封装一组对象的交互，使各对象不需要显式地互相引用（解耦多对多），而且可以独立地改变它们之间的交互。</li>
+<li><strong>2021 下半年上午第 44–46 题三连考</strong>（正是今天上午重做题 20）；<strong>2020 下半年大题考过</strong>（Java 支付整合）。</li>
+</ul>
+<p><strong>角色结构</strong>：</p>
+<pre><code class="language-text">  «interface» Mediator                       Colleague（抽象同事，持有中介者）
+  + relay(Colleague, msg)                    - mediator : Mediator
+        △                                    + send(msg) { mediator.relay(this, msg); }   ← 不直接找对方，找中介
+        │                                          ▲
+  ConcreteMediator                            ConcreteColleagueA / ConcreteColleagueB
+  - colleagueA, colleagueB : Colleague        （彼此不直接引用）
+  + relay(Colleague sender, msg)
+    { if (sender == A) B.receive(msg); else A.receive(msg); }
+</code></pre>
+<blockquote>
+<p><strong>判别标志</strong>：题目说"用一个对象<strong>封装一系列对象交互</strong>、使对象间<strong>不直接互相引用</strong>、<strong>耦合松散</strong>"——必是中介者。类图特征：多个同事类<strong>互不相连</strong>，全都只连到中介者（<strong>星型结构</strong>）。</p>
+</blockquote>
+<p><strong>Java 骨架</strong>：</p>
+<pre><code class="language-java">abstract class Colleague {
+    protected Mediator mediator;              // ← 填空点：同事持有中介者
+    public Colleague(Mediator m) { this.mediator = m; }
+    public abstract void receive(String msg);
+    public void send(String msg) { mediator.relay(this, msg); }   // ← 填空点：委托给中介
+}
+interface Mediator { void relay(Colleague sender, String msg); }
+class ConcreteMediator implements Mediator {
+    private Colleague a, b;
+    public void setA(Colleague a) { this.a = a; }
+    public void setB(Colleague b) { this.b = b; }
+    public void relay(Colleague sender, String msg) {
+        if (sender == a) { b.receive(msg); } else { a.receive(msg); }   // ← 填空点：转发规则
+    }
+}
+</code></pre>
+<p><strong>C++ 骨架</strong>：</p>
+<pre><code class="language-cpp">class Colleague {
+protected:
+    Mediator* mediator;
+public:
+    Colleague(Mediator* m) : mediator(m) {}
+    virtual void receive(const std::string&amp; msg) = 0;
+    void send(const std::string&amp; msg) { mediator-&gt;relay(this, msg); }   // 找中介
+    virtual ~Colleague() {}
+};
+</code></pre>
+<p><strong>大题常考填空点</strong>：
+1. 同事类的成员 <code>protected Mediator mediator;</code>（类型 = 中介者接口）；
+2. 同事类的 <code>send()</code> 方法体 <code>mediator.relay(this, msg);</code>（<strong>一句委托</strong>）；
+3. 具体中介者的 <code>relay()</code> 内的转发规则（按业务把消息转给目标同事）；
+4. 中介者持有各同事成员的声明。</p>
+<p><strong>上午三连考的固定答法</strong>（2021 下 44–46）：
+- （44）模式识别 → <strong>中介者（Mediator）</strong>；
+- （45）分类 → <strong>行为型对象</strong>（行为型关注对象间职责分配与通信；创建型关注创建、结构型关注组合）；
+- （46）适用场景 → "<strong>一组对象以定义良好但复杂的方式进行通信，产生的相互依赖关系结构混乱且难以理解</strong>"。</p>
+<hr />
+<h2>四、大题答题三步法（试题五/六通用）</h2>
+<blockquote>
+<p><strong>口诀</strong>：<strong>一判模式、二对角色、三填代码。</strong></p>
+</blockquote>
+<h3>第 1 步：读【说明】定位场景关键词，判模式（1 分钟内）</h3>
+<ul>
+<li>圈出【说明】里的<strong>动词和场景词</strong>：出现"共享/节省内存"→ 享元；"撤销/恢复"→ 备忘录；"统一入口"→ 外观；"多种方式/可切换"→ 策略；"不直接交互/中介协调"→ 中介者；"树形/部分-整体"→ 组合；"转换接口"→ 适配器；"动态增加职责"→ 装饰；"唯一实例"→ 单例；"状态改变通知"→ 观察者（详见 §2.2 表）。</li>
+<li><strong>判错模式全盘皆输</strong>，所以这一步宁慢勿快：把判出的模式的<strong>意图一句话</strong>默念一遍，与【说明】主旨核对是否吻合。</li>
+</ul>
+<h3>第 2 步：对照类图找角色对应（谁是 Subject、谁是 ConcreteStrategy…）</h3>
+<ul>
+<li>拿判出的模式的<strong>角色表</strong>（§三各小节）去套类图：</li>
+<li>谁是<strong>接口/抽象类</strong>（类名斜体、标 <code>«interface»</code>）→ 对应抽象角色（Product / Strategy / Subject / Component…）；</li>
+<li>谁被<strong>菱形连接</strong>（◆/◆◆）→ 是被持有/被包含的一方（被装饰者、被适配者、子构件）；</li>
+<li>谁被<strong>多个类共同指向</strong>（星型中心）→ 是中介者/主题/工厂；</li>
+<li>谁<strong>自引用</strong>（集合元素是自己的父类型 / 成员类型是自己）→ 组合（List<Component>）或职责链（Handler successor）。</li>
+<li><strong>在草稿纸上写下"类图类名 → 模式角色名"的对照清单</strong>，后面填空直接按清单对应。</li>
+</ul>
+<h3>第 3 步：依多态与继承关系填代码空（逐空三类）</h3>
+<table>
+<thead>
+<tr>
+<th>空的位置</th>
+<th>填法</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>抽象方法/接口方法声明</strong></td>
+<td>把所有<strong>具体子类已实现</strong>的方法签名抄一遍取交集；注意三要素：<strong>修饰符</strong>（不窄于子类）+ <code>abstract</code>（C++ 是 <code>= 0</code>）+ <strong>返回类型+方法名+参数表</strong></td>
+<td><code>abstract Product factoryMethod();</code></td>
+</tr>
+<tr>
+<td><strong>容器/变量类型</strong></td>
+<td>同一变量/集合要装多个具体子类 → 填<strong>它们的共同父类或接口</strong>，不填具体子类</td>
+<td><code>List&lt;Component&gt; children;</code>（不是 <code>List&lt;Composite&gt;</code>）</td>
+</tr>
+<tr>
+<td><strong>方法签名（空在声明处）</strong></td>
+<td>由<strong>方法体 + 调用处</strong>反推：方法体里用了 <code>state</code>、<code>index</code> ⇒ 形参名/类型确定；<code>main</code> 里 <code>xxx-&gt;add(...)</code> ⇒ 方法名、参数个数确定；方法体 <code>return list[index];</code> ⇒ 返回类型 = 容器元素类型</td>
+<td><code>Memento* get(int index)</code></td>
+</tr>
+<tr>
+<td><strong>方法体语句（空在方法内）</strong></td>
+<td>找该角色的<strong>职责模板</strong>：工厂造对象 <code>return new ConcreteX();</code>；委托类一句 <code>target.method();</code>；递归/遍历 <code>child.operation();</code>；切换状态/策略 <code>ctx.setState(new X());</code></td>
+<td><code>strategy.doSomething(this);</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>填完自检 3 条</strong>：
+1. <strong>语法完整</strong>：分号、等号、<code>-&gt;</code>（C++ 指针）/ <code>.</code>（Java 引用）不能少或混；
+2. <strong>类型自洽</strong>：每个空填入后，编译能过（返回类型与接收变量匹配、参数个数匹配）；
+3. <strong>多态正确</strong>：父类引用调子类方法时，方法必须是<strong>父类/接口中声明过</strong>的（否则编译不过）。</p>
+<hr />
+<h2>五、与 day17-uml.md 的类图知识衔接</h2>
+<p>模式类图<strong>全部由 day17 学过的六种关系构成</strong>（依赖 &lt; 关联 &lt; 聚合 &lt; 组合 &lt; 泛化 ≈ 实现）。读模式类图时按下表"翻译"：</p>
+<table>
+<thead>
+<tr>
+<th>UML 关系</th>
+<th>在模式类图中的含义</th>
+<th>典型模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>泛化</strong>（实线空心三角，指向父类）</td>
+<td>具体角色继承抽象角色：具体产品↔抽象产品、具体工厂↔抽象工厂、具体状态↔抽象状态</td>
+<td>工厂方法、抽象工厂、状态、策略、装饰、组合</td>
+</tr>
+<tr>
+<td><strong>实现</strong>（虚线空心三角，指向接口）</td>
+<td>类实现接口：适配器实现 Target、同事/具体主题实现接口</td>
+<td>适配器、观察者、策略、命令、中介者</td>
+</tr>
+<tr>
+<td><strong>聚合</strong>（空心菱形在整体端）</td>
+<td>"持有对方引用、但对方可独立存在"：<strong>装饰持有被装饰者</strong>、<strong>适配器持有被适配者</strong>、<strong>环境类持有策略/状态</strong>、<strong>主题持有观察者集合</strong>、<strong>外观持有子系统</strong>、<strong>上下文持有中介者</strong></td>
+<td>装饰、适配器、策略、状态、观察者、外观、中介者、命令</td>
+</tr>
+<tr>
+<td><strong>组合</strong>（实心菱形在整体端）</td>
+<td>"整体创建并管理部分、同生共死"：外观在构造时 new 子系统、享元工厂创建并缓存享元</td>
+<td>外观、享元工厂</td>
+</tr>
+<tr>
+<td><strong>关联</strong>（实线箭头）</td>
+<td>长期持有但地位平等：同事之间<strong>不直接关联</strong>（中介者模式的关键特征）、Director 使用 Builder</td>
+<td>中介者、建造者</td>
+</tr>
+<tr>
+<td><strong>依赖</strong>（虚线开放箭头）</td>
+<td>临时使用：客户端临时使用工厂/外观；享元的外部状态作<strong>方法参数</strong>传入</td>
+<td>享元、工厂方法的客户端</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>读图三句真言</strong>（衔接 day17 §2.2）：
+1. <strong>菱形永远在"整体/持有者"一端</strong>——模式类图里看到菱形，先问"谁持有谁"（装饰器持有被装饰者 = 装饰；组合持有子构件 = 组合模式）；
+2. <strong>三角永远指向"更抽象"的一端</strong>——泛化指向父类、实现指向接口，填空若问"X 与 Y 是什么关系"，看符号方向即可作答；
+3. <strong>自聚合/自关联是强信号</strong>——一个类的集合元素类型或成员类型是<strong>它自己的父类型</strong>，几乎必然是<strong>组合模式</strong>（List<Component>）或<strong>职责链模式</strong>（Handler successor）。</p>
+</blockquote>
+<p><strong>多重性在模式类图中的读法</strong>（衔接 day17 §2.5）：
+- <code>Subject 1 ──── * Observer</code>：一个主题对应<strong>多个</strong>观察者（一对多）；
+- <code>FlyweightFactory 1 ──── * Flyweight</code>：一个工厂缓存<strong>多个</strong>享元；
+- <code>Composite 1 ──── * Component</code>：一个组合节点包含<strong>多个</strong>子构件（递归树）；
+- <code>Mediator 1 ──── * Colleague</code>：一个中介协调<strong>多个</strong>同事。</p>
+<hr />
+<h2>六、Java vs C++ 语言细节对照（选答前看一眼）</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>Java</th>
+<th>C++</th>
+<th>易错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td><code>public abstract void draw();</code></td>
+<td><code>virtual void draw() = 0;</code>（纯虚函数）</td>
+<td>C++ 用 <code>= 0</code>，<strong>没有</strong> <code>abstract</code> 关键字</td>
+</tr>
+<tr>
+<td>抽象类</td>
+<td><code>abstract class X { }</code></td>
+<td>含纯虚函数的类即为抽象类</td>
+<td>C++ 的抽象类可以有构造函数</td>
+</tr>
+<tr>
+<td>对象创建</td>
+<td><code>X x = new X();</code>（返回引用）</td>
+<td><code>X x;</code>（栈对象）或 <code>X* p = new X();</code>（堆指针）</td>
+<td>C++ <strong>指针 vs 对象</strong>语义不同</td>
+</tr>
+<tr>
+<td>成员访问</td>
+<td>引用用 <code>.</code>：<code>x.draw()</code></td>
+<td>指针用 <code>-&gt;</code>：<code>p-&gt;draw()</code>；对象用 <code>.</code></td>
+<td><strong>指针调方法必须 <code>-&gt;</code></strong>，最常见丢分点</td>
+</tr>
+<tr>
+<td>泛型集合</td>
+<td><code>ArrayList&lt;Piece&gt;</code> / <code>List&lt;Piece&gt;</code></td>
+<td><code>vector&lt;Memento&gt;</code> / <code>list&lt;Memento&gt;</code></td>
+<td>C++ 是 <code>vector&lt;类型&gt;</code>，无菱形语法</td>
+</tr>
+<tr>
+<td>继承</td>
+<td><code>class A extends B</code></td>
+<td><code>class A : public B</code></td>
+<td>C++ 有访问限定符 <code>public/private</code></td>
+</tr>
+<tr>
+<td>实现接口</td>
+<td><code>class A implements I</code></td>
+<td><code>class A : public I</code>（I 是纯虚基类）</td>
+<td>C++ <strong>无</strong> <code>implements</code> 关键字</td>
+</tr>
+<tr>
+<td>静态成员</td>
+<td><code>static</code>（类图下划线）</td>
+<td><code>static</code>（类图下划线）</td>
+<td>单例模式必考</td>
+</tr>
+<tr>
+<td>内存管理</td>
+<td>自动 GC</td>
+<td><code>new</code> 的对象要 <code>delete</code>，或用局部静态/智能指针</td>
+<td>C++ 析构函数 <code>virtual ~X() {}</code> 防泄漏</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>选答决策</strong>：Java 语法更"直白"（<code>abstract</code>/<code>new</code>/<code>extends</code>/<code>implements</code> 一一对应），<strong>建议选试题六（Java）</strong>，填空更少踩语言细节的坑；若 C++ 更熟，务必盯紧 <code>-&gt;</code> 与 <code>.</code>、<code>= 0</code>、<code>: public</code>。</p>
+</blockquote>
+<hr />
+<h2>七、一页纸速记（考前扫这一页）</h2>
+<ol>
+<li><strong>三大分类</strong>：创建型（工抽单建原）管"怎么创建"、结构型（适装外组享桥代）管"怎么组合"、行为型（观状策命备职中模迭访解）管"怎么协作"。</li>
+<li><strong>试题五/六</strong> = C++/Java <strong>二选一</strong>，15 分全在 4~6 个填空上；题目结构 = 【说明】+ 类图 + 代码骨架。</li>
+<li><strong>填空只考三类</strong>：模式角色名、方法签名、多态调用语句。</li>
+<li><strong>识别关键词</strong>：共享→享元、撤销→备忘录、统一入口→外观、可切换算法→策略、中介协调→中介者、树形→组合、转接口→适配器、动态加职责→装饰、唯一实例→单例、状态变通知→观察者、随状态变行为→状态、封装请求→命令、逐级传递→职责链。</li>
+<li><strong>答题三步法</strong>：一判模式（关键词表）、二对角色（角色表套类图）、三填代码（三类空 + 三条自检）。</li>
+<li><strong>填空三招</strong>：抽象方法看子类签名取交集、容器/变量类型取共同父类、方法签名由方法体+调用处反推。</li>
+<li><strong>结构强信号</strong>：<strong>自聚合/自引用</strong> → 组合或职责链；<strong>星型中心</strong> → 中介者或主题；<strong>装饰 = 实现 + 聚合双关系</strong>；<strong>工厂必有 <code>return new ConcreteX();</code></strong>。</li>
+<li><strong>易混辨析</strong>：策略（客户端主动选、互不感知）vs 状态（自动切换、状态间互相感知）；工厂方法（一厂一产品）vs 抽象工厂（一厂一族产品）；适配器（转换接口）vs 装饰（增强职责）vs 外观（简化入口）。</li>
+<li><strong>UML 翻译</strong>：菱形在持有者端、三角指向更抽象端；聚合 = 持有引用（策略/状态/观察者/装饰/适配器/中介者）、组合 = 创建并管理（外观/享元工厂）。</li>
+<li><strong>语言细节</strong>：C++ 纯虚 <code>= 0</code>、指针用 <code>-&gt;</code>、继承 <code>: public</code>、集合 <code>vector&lt;T&gt;</code>；Java <code>abstract</code>/<code>extends</code>/<code>implements</code>。建议选 Java（试题六）。</li>
+<li><strong>必背角色结构</strong>（大题最高频 6 个）：享元（工厂+池+内外状态分离）、备忘录（发起人存/取、管理者只搬运）、外观（调用链）、策略（一句委托）、中介者（同事找中介）、组合（List&lt;构件&gt; + 递归）。</li>
+</ol>
+<hr />
+<h2>八、本日学习路线（配合 study plan）</h2>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>内容</th>
+<th>用时</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step 1</td>
+<td>重做 Day 18–19 错题：<code>docs/practice/review-round2.md</code>（20 题组，含卷 3 第 44–46 题中介者三连）</td>
+<td>2h</td>
+<td>重做正确率填入统计表</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td><strong>本笔记</strong>（设计模式三大分类 + 15 个模式精讲 + 识别表 + 三步法）</td>
+<td>2.5h</td>
+<td>§七速记能口头复述；15 个模式的"意图一句话"能脱口而出</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>打卡：<code>tracker.md</code> Day 20 行（重做正确率）+ <code>reflection.md</code> Day 20 节（仍错题四要素）</td>
+<td>1.5h</td>
+<td>重做正确率 + 设计模式自评</td>
+</tr>
+</tbody>
+</table>
+<p><strong>本日自评清单（Step 3 打卡前对照）</strong>：
+- ☐ 能说出三大分类各自关注什么，并能把 15 个常考模式归入正确分类；
+- ☐ 看到 15 个关键词能 1 秒说出对应模式与意图；
+- ☐ 能画出 6 个高频模式（享元/备忘录/外观/策略/中介者/组合）的角色结构草图；
+- ☐ 能写出每个模式 Java 与 C++ 至少一版的代码骨架；
+- ☐ 能复述答题三步法与填空三招；
+- ☐ 卷 3 第 44–46 题重做正确（否则回看 §3.16）。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day20-design-patterns.md">docs/knowledge-points/software-engineering/day20-design-patterns.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

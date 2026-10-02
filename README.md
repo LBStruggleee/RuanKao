@@ -11,6 +11,8 @@
 | 板块 | 内容 | 直达 |
 |------|------|------|
 | 🎓 交互课程（28 课） | 数据结构 9 课 · OS 6 课 · 网络 3 课 · 数据库 2 课 · 组成 2 课 · 软工 3 课 · 设计模式 · 法规保底 · 算法大题套路 | [课程总目录](https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html) |
+| 📖 知识点文档（89 篇全文） | docs/ 原资料 Markdown 的全文 HTML 版——大纲、科目精讲、计划、真题解析、策略，与原文件逐字一致 | [文档目录](https://lbstruggleee.github.io/RuanKao/pages/index.html) |
+| 🔍 全站搜索 | 按关键词检索全部文档（纯前端，无需服务端） | [搜索](https://lbstruggleee.github.io/RuanKao/search.html) |
 | 📓 错题本 | 每次作答自动记录，按题判定「待重做 / 已攻克」，支持只练错题、导出 Markdown/JSON | [错题本](https://lbstruggleee.github.io/RuanKao/reference/mistake-notebook.html) |
 | 📚 知识点精讲 | OS / 网络 / 数据库 / 组成 / 软工 / 数据结构 全部笔记（Markdown 在线渲染 + 全站搜索） | 站内侧边栏「📚 知识点精讲」 |
 | ✍️ 刷题与真题 | 2018–2023 上午卷 10 套（逐题解析、多源勘误）+ 下午卷大题专项 + 全真模拟 | 站内侧边栏「✍️ 刷题与真题」 |
@@ -21,8 +23,10 @@
 ## 📋 仓库结构
 
 ```
-├── index.html                  # Docsify 站点入口（GitHub Pages）
-├── _sidebar.md                 # 站点侧边栏导航
+├── index.html                  # 静态首页（GitHub Pages）
+├── search.html                 # 全站文档搜索（前端检索 search-index.json）
+├── pages/                      # docs/ 原资料的全文 HTML 镜像（脚本生成，scripts/build_site.py）
+├── scripts/build_site.py       # md → HTML 文档集生成脚本
 ├── lessons/                    # 交互课程（28 课，HTML，可独立打开）
 ├── reference/                  # 课程总目录 · 错题本 · 速查卡
 ├── assets/                     # 课程组件库（测验/模拟器/训练器/作答存储）

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 9（9/29）数据库系统③：数据库阶段知识框架图（阶段收尾 · Phase 4 冲刺复习材料） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 databases 📁 day09-summary.md</div>
+<h1>Day 9（9/29）数据库系统③：数据库阶段知识框架图（阶段收尾 · Phase 4 冲刺复习材料）</h1>
+<blockquote>
+<p><strong>使用说明</strong>：这是数据库两天（Day 7 关系模型与 SQL → Day 8 范式与 E-R 图）的<strong>总览复习图</strong>，也是<strong>第一阶段（OS / 网络 / 数据库）的最后一张收尾图</strong>。
+冲刺阶段先看这张图回忆全部框架，卡住的地方再回 <code>day07-sql.md</code> / <code>day08-er.md</code> 对应章节。
+<strong>数据库两天与 OS、网络不同：它同时是科目一的稳定得分点（选择 5–7 分）和科目二的大题重镇（15 分）</strong>——今天先把框架立起来，下午用阶段 1 测验卷（<code>stage1-quiz.md</code>）检验三科整体掌握度。</p>
+</blockquote>
+<hr />
+<h2>§一、数据库在软考中的定位（分值与考法）</h2>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>题型</th>
+<th>数据库相关内容</th>
+<th>分值估计</th>
+<th>难度</th>
+<th>应对策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>科目一（计算机与软件工程知识）</strong></td>
+<td>75 道选择题（合格 45 分）</td>
+<td>关系代数语义、SQL 语法与执行顺序、范式级别判断、E-R 概念、事务/索引基础</td>
+<td><strong>约 5–7 分</strong>（每年稳定出现）</td>
+<td>中等偏易</td>
+<td><strong>"算"出来而非"背"出来</strong>：结果推导题打草稿逐行算，范式题按 5 步流程走</td>
+</tr>
+<tr>
+<td><strong>科目二（软件设计）</strong></td>
+<td>大题（75 分）</td>
+<td><strong>几乎每年一道数据库大题</strong>：E-R 图补全 / 关系模式设计 / SQL 填空与改写（约 5 空 × 15 分）</td>
+<td><strong>约 15 分（占大题 20%）</strong></td>
+<td>中等</td>
+<td><strong>格式固定、套路清晰</strong>：E-R 三要素 + 转换规则表 + SQL 20 条结论，是<strong>短期内最稳定的大题得分点</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话定位</strong>：数据库是<strong>弱项科目里最值得投入</strong>的一科——概念不多（两天笔记 + 两张框架图），但<strong>每一分都固定出现在同一个位置</strong>：选择题考"SQL 语义 + 范式判断"，大题考"E-R 转关系模式 + 写 SQL"。</p>
+<blockquote>
+<p><strong>与 OS / 网络的对比</strong>（阶段收尾必看）：
+- <strong>OS</strong> 重计算（地址转换 / 寻道 / PV），计算题一错全错；
+- <strong>网络</strong>重记忆（分层 / 端口 / 算法参数 / 攻防配对），背熟即得分；
+- <strong>数据库</strong>重<strong>推导</strong>：SQL 结果题要逐行算、范式题要按流程推、E-R 题要按规则转。<strong>三种能力不能混用</strong>——今天做阶段测验时，按科目切换"算 / 背 / 推"三种节奏。</p>
+</blockquote>
+<hr />
+<h2>§二、数据库阶段总框架（ASCII 思维导图）</h2>
+<pre><code class="language-text">                        ┌─────────────────────────────────────────────────┐
+                        │              数 据 库 系 统 （DB）                │
+                        │        「数据结构 + 数据操作 + 完整性约束」        │
+                        └─────────────────────────────────────────────────┘
+          ┌───────────────────────────────┬───────────────────────────────────┐
+          ▼                               ▼                                   ▼
+   【A】关系模型与 SQL                【B】规范化与数据库设计              （C）运行基础
+   （Day 7 · day07-sql.md）            （Day 8 · day08-er.md）           （补充了解）
+          │                               │                                   │
+   ┌──────┼──────┬──────────┐     ┌────────┼────────┬──────────┐         ·事务 ACID
+   │      │      │          │     │        │        │          │         ·并发控制
+ 关系模型  关系代数  SQL 语言  │   函数依赖  候选码   范式判断   E-R 模型   ·封锁协议
+ ·三要素   ·σ选行   ·执行顺序 │   ·完全/部分  ·L/N/R   ·1NF→BCNF  ·三要素    ·索引/B+树
+ ·术语对照 ·π选列   ·聚合NULL │   ·传递依赖  ·闭包    ·5步流程   ·1:1/1:N/M:N
+ ·三类完整 │ ⋈连表  ·JOIN四种 │   ·Armstrong          ·投影分解   ·转换规则
+ ·码家族   │ ÷全部  ·子查询   │     公理               法          （大题核心）
+           │ ×积   ·集合运算  │     │        │        │          │
+           │       ·DDL/DML/DCL│     └────────┴────────┴──────────┘
+           ▼                  ▼                   ▼                 ▼
+    【科目一选择 2–3 分】  【科目一大题 15 分】          【科目二大题第一问】
+    语义判断 / 结果题      SQL 填空 / 改写            E-R 图 → 关系模式
+                          （读得懂、写得出）        （标主键外键 + 联系属性）
+</code></pre>
+<p><strong>框架的三条主线（背死）</strong>：
+1. <strong>静态结构线</strong>：关系模型三要素 → 码家族 → 三类完整性 → 1NF（原子性）。
+2. <strong>动态操作线</strong>：关系代数（σ/π/⋈/×/÷）↔ SQL（WHERE/SELECT/JOIN/FROM/NOT EXISTS），<strong>一一对应</strong>。
+3. <strong>设计质量线</strong>：函数依赖 → 候选码 → 范式（1NF→2NF→3NF→BCNF）→ 规范化分解；E-R 模型 → 关系模式（1:1/1:N/M:N 三条转换规则）。</p>
+<blockquote>
+<p><strong>第 2、3 条线的交汇点就是科目二大题</strong>：先画 E-R（第 3 条线），再转成关系模式（第 3 条线），最后在上面写 SQL（第 2 条线）。<strong>三步一气呵成</strong>，每一步都有固定规则可循。</p>
+</blockquote>
+<hr />
+<h2>§三、两大板块核心考点速查</h2>
+<table>
+<thead>
+<tr>
+<th>板块</th>
+<th>必考概念</th>
+<th>必考计算/推导</th>
+<th>笔记位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 关系模型与关系代数</strong></td>
+<td>三要素、术语对照（目=列数 / 基数=行数）、码家族、三类完整性</td>
+<td>σ/π 运算顺序与结果行数列数、笛卡尔积行数、等值 vs 自然连接列数、<strong>除运算"全部"语义</strong></td>
+<td><code>day07-sql.md</code> §一、§二</td>
+</tr>
+<tr>
+<td><strong>② SQL 语言</strong></td>
+<td><strong>逻辑执行顺序 7 步</strong>、WHERE vs HAVING、四种 JOIN、子查询相关/不相关、EXISTS、集合运算、DDL/DML/DCL</td>
+<td><strong>结果推导题</strong>：分组统计 + NULL 的三种态度、多表连接 + 条件过滤、左外连接找"无匹配"</td>
+<td><code>day07-sql.md</code> §三、§四、§五</td>
+</tr>
+<tr>
+<td><strong>③ 函数依赖与候选码</strong></td>
+<td>完全/部分/传递依赖（含"Y→X 时不是传递依赖"反陷阱）、平凡依赖</td>
+<td><strong>属性分类法（L/N/R/LR）+ 闭包求候选码</strong>（多候选码必须求全）</td>
+<td><code>day08-er.md</code> §一、§二</td>
+</tr>
+<tr>
+<td><strong>④ 范式判断与分解</strong></td>
+<td>1NF/2NF/3NF/BCNF 定义、3NF 等价判据、<strong>范式判断流程图 5 步</strong>、三条考场快解</td>
+<td><strong>范式级别判断</strong>（含 3NF 非 BCNF 反例 R(A,B,C) F={AB→C,C→B}）、投影分解法</td>
+<td><code>day08-er.md</code> §三</td>
+</tr>
+<tr>
+<td><strong>⑤ E-R 模型与转换</strong></td>
+<td>三要素与图形符号（矩形/椭圆/菱形）、1:1/1:N/M:N、<strong>联系可有属性</strong></td>
+<td><strong>E-R 转关系模式规则表</strong>：M:N 独立建表、1:N 外键在 N 端、联系属性不能丢</td>
+<td><code>day08-er.md</code> §四、§五</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>§四、数据库阶段必背结论清单（20 条）</h2>
+<p><strong>关系模型与关系代数（Day 7 §一、§二）</strong>
+1. 关系模型三要素 = <strong>关系数据结构 + 关系操作集合 + 关系完整性约束</strong>。
+2. <strong>关系=表、元组=行、属性=列、码=键、目=列数、基数=行数</strong>。
+3. 三类完整性 = <strong>实体（主码非空且唯一）+ 参照（外码空或存在）+ 用户定义（CHECK/NOT NULL/UNIQUE）</strong>。
+4. 关系代数五种基本运算 = <strong>σ 选择、π 投影、∪ 并、− 差、× 笛卡尔积</strong>；σ↔WHERE、π↔SELECT（<strong>π 天然去重，SQL 要 DISTINCT</strong>）、⋈↔JOIN、<strong>÷↔"全部"（NOT EXISTS 双重否定）</strong>。
+5. <strong>等值连接保留两个连接列，自然连接合并为一列</strong>；<strong>笛卡尔积行数 = 左表行数 × 右表行数</strong>。</p>
+<p><strong>SQL（Day 7 §三）</strong>
+6. SQL 执行顺序 = <strong>FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</strong>。
+7. <strong>WHERE 过滤行（分组前，禁聚合、禁用 SELECT 别名）；HAVING 过滤组（分组后，可用聚合）</strong>。
+8. <strong>COUNT(*) 数行含 NULL；COUNT(列) 数非空值；SUM/AVG/MAX/MIN 全部忽略 NULL</strong>（AVG 分母 = COUNT(列)）。
+9. 判空一律 <strong><code>IS NULL</code></strong>，<code>= NULL</code> 恒为 <strong>UNKNOWN</strong>（三值逻辑）。
+10. <strong>内连接只留两边匹配的行；左外保留左表全部、右表补 NULL；右外对称；全外全保留</strong>。
+11. <strong>左外连接 + <code>WHERE 右表列 IS NULL</code> = 找"在左表但不在右表"的行</strong>；外连接中 <strong>ON 是连接条件（保留行）、WHERE 是过滤条件（删除行）</strong>，不可互换。
+12. <strong>EXISTS 只看有无行返回</strong>（<code>SELECT *</code> 与 <code>SELECT 1</code> 等价）；<strong>NOT IN 遇 NULL 可能恒假，"不存在"优先 NOT EXISTS</strong>。
+13. DDL = <strong>CREATE/DROP/ALTER</strong>；DML = <strong>SELECT/INSERT/UPDATE/DELETE</strong>；DCL = <strong>GRANT/REVOKE/COMMIT/ROLLBACK</strong>（<strong>软考按三分法</strong>）。</p>
+<p><strong>范式（Day 8 §一、§二、§三）</strong>
+14. <strong>完全/部分依赖看"真子集能否决定 Y"；传递依赖三要素 = X→Y 非平凡、Y↛X、Y→Z</strong>（<strong>Y→X 成立时不是传递依赖</strong>）。
+15. <strong>候选码求法 = 属性分类（L/N/R/LR）+ 闭包</strong>：<strong>L 类、N 类必在候选码中；R 类一定不是</strong>；闭包 X⁺=U ⟺ X 是超码，超码 + 最小性 = 候选码。
+16. <strong>1NF=原子；2NF=无非主属性部分依赖；3NF=无非主属性传递依赖；BCNF=每个非平凡依赖左部都含候选码</strong>；包含关系 <strong>1NF ⊇ 2NF ⊇ 3NF ⊇ BCNF</strong>。
+17. <strong>三条考场快解</strong>：单属性码无部分依赖；全主属性直接 3NF；F 中左部皆码直接 BCNF。<strong>3NF 不蕴含 BCNF</strong>（反例：R(A,B,C)，F={AB→C, C→B}，候选码 AB 与 AC，全主属性 → 3NF；C→B 左部不含码 → 非 BCNF）。
+18. <strong>分解动作</strong>：部分依赖 W→Y ⇒ 拆出 <strong>(W,Y)</strong>；传递依赖 X→Y→Z ⇒ 拆出 <strong>(Y,Z)</strong>；<strong>分解到 3NF 无损 + 保持依赖都能保证，BCNF 保证无损但不一定保持依赖</strong>。</p>
+<p><strong>E-R 与数据库设计（Day 8 §四、§五）</strong>
+19. <strong>E-R 三要素 = 实体（矩形）+ 属性（椭圆）+ 联系（菱形）</strong>，主键属性带下划线；<strong>联系本身可以有属性</strong>（成绩、借期、参加日期）。
+20. <strong>转换规则</strong>：<strong>1:1</strong> 任一方主键作外键并入另一方（加 UNIQUE）；<strong>1:N</strong> 1 端主键作外键并入 <strong>N 端</strong>（口诀"多的一方记着少的一方"）；<strong>M:N 必须新建关系</strong>，主键 = 两端主键组合，联系属性并入新关系；<strong>实体多值属性必须独立成关系</strong>。</p>
+<blockquote>
+<p><strong>规范化的目的</strong>（Day 8 §3.6）：消除不必要的数据冗余，解决<strong>插入异常、删除异常、更新异常</strong>——<strong>不是</strong>为了提高查询速度（常考反义选项）。</p>
+</blockquote>
+<hr />
+<h2>§五、数据库阶段题型一览（看到题型就知道用什么方法）</h2>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>核心方法</th>
+<th>出处</th>
+<th>在阶段 1 测验中的对应题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL 结果推导（分组/连接/NULL）</td>
+<td>抄表数据 → 逐行过滤 → 分组统计，<strong>AVG 分母不算 NULL 行</strong></td>
+<td>day07 §四 例 1–5</td>
+<td>测验第 33、35 题</td>
+</tr>
+<tr>
+<td>关系代数结果/等价转换</td>
+<td><strong>先 σ 后 π</strong>、⋈ 先列"每行匹配了谁"、π 天然去重</td>
+<td>day07 §二</td>
+<td>测验第 34、38 题</td>
+</tr>
+<tr>
+<td>JOIN 行数判断</td>
+<td>内连接 = 匹配行；左外 = + 左表无匹配行；数行先找"谁没有匹配"</td>
+<td>day07 §3.7</td>
+<td>测验第 35 题</td>
+</tr>
+<tr>
+<td>集合运算（并/交/差）</td>
+<td>UNION 去重 / UNION ALL 不去重 / INTERSECT 交 / EXCEPT 差</td>
+<td>day07 §3.9</td>
+<td>测验第 36 题</td>
+</tr>
+<tr>
+<td>候选码求解</td>
+<td>L/N/R/LR 分类 → (L∪N)⁺ → 试加 LR 属性 → 检查最小性</td>
+<td>day08 §2.2</td>
+<td>测验第 42 题</td>
+</tr>
+<tr>
+<td>范式级别判断</td>
+<td><strong>5 步流程图</strong>：求码 → 原子 → 部分依赖 → 传递依赖 → 左部含码</td>
+<td>day08 §3.3</td>
+<td>测验第 43、44 题</td>
+</tr>
+<tr>
+<td>规范化分解</td>
+<td>部分依赖拆 (W,Y)、传递依赖拆 (Y,Z)，外码留原关系</td>
+<td>day08 §3.4</td>
+<td>测验未直接考（回 day08-exercises 第 14、15 题）</td>
+</tr>
+<tr>
+<td>E-R 转关系模式</td>
+<td>1:N 外键加 N 端、M:N 独立建表、联系属性不丢</td>
+<td>day08 §5.2</td>
+<td>测验第 45 题</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>大题（科目二）标准三步</strong>：① 读需求 → 识别实体/属性/联系类型（1:1/1:N/M:N）；② 画 E-R 图（矩形/椭圆/菱形，联系属性挂菱形）；③ 转关系模式（实体→关系、M:N 独立成表、1:N 外键在 N 端、标主键外键），并可追加一问范式判断。<strong>每一小步都有步骤分，过程对、结论自然对。</strong></p>
+</blockquote>
+<hr />
+<h2>§六、四张"一眼错"陷阱表（考前最后过一遍）</h2>
+<p><strong>陷阱表 1：NULL 与聚合（第一大考点）</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>错误直觉</th>
+<th>正确结果（以 SC 的 C2 为例：85 / NULL / 70 / 88）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COUNT(*)</code></td>
+<td>NULL 行不算</td>
+<td><strong>4</strong>（数行，NULL 算 1 行）</td>
+</tr>
+<tr>
+<td><code>COUNT(Grade)</code></td>
+<td>4</td>
+<td><strong>3</strong>（数非空值）</td>
+</tr>
+<tr>
+<td><code>AVG(Grade)</code></td>
+<td>243÷4 = 60.75</td>
+<td><strong>243÷3 = 81.0</strong>（分母 3 不是 4）</td>
+</tr>
+<tr>
+<td><code>WHERE Grade = NULL</code></td>
+<td>等价于 IS NULL</td>
+<td><strong>UNKNOWN，一行查不出</strong></td>
+</tr>
+<tr>
+<td><code>CHECK(Grade&gt;=0 AND Grade&lt;=100)</code></td>
+<td>NULL 成绩被拒绝</td>
+<td><strong>放行</strong>（UNKNOWN 当作通过）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>陷阱表 2：JOIN 家族行数（S 7 行 / SC 14 行，1007 无选课）</strong></p>
+<table>
+<thead>
+<tr>
+<th>JOIN</th>
+<th>结果行数</th>
+<th>记忆点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内连接</td>
+<td><strong>14</strong></td>
+<td>只留两边都匹配的行，1007 直接消失</td>
+</tr>
+<tr>
+<td>左外（S LEFT JOIN SC）</td>
+<td><strong>15</strong></td>
+<td>+1007（SC 列补 NULL）</td>
+</tr>
+<tr>
+<td>右外（S RIGHT JOIN SC）</td>
+<td><strong>14</strong></td>
+<td>SC 的 14 行全部能匹配到 S</td>
+</tr>
+<tr>
+<td>全外</td>
+<td><strong>15</strong></td>
+<td>+1007</td>
+</tr>
+<tr>
+<td>笛卡尔积（FROM S, SC 无条件）</td>
+<td><strong>98</strong></td>
+<td>7 × 14，灾难</td>
+</tr>
+</tbody>
+</table>
+<p><strong>陷阱表 3：范式分界（3NF vs BCNF）</strong></p>
+<table>
+<thead>
+<tr>
+<th>关键问题</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>非主属性对码有部分依赖？</td>
+<td>有 → <strong>最高 1NF</strong>（组合码才可能出现）</td>
+</tr>
+<tr>
+<td>非主属性对码有传递依赖？</td>
+<td>有 → <strong>最高 2NF</strong>（注意 Y↛X 的验证）</td>
+</tr>
+<tr>
+<td>非平凡依赖左部都含码？</td>
+<td>否 → <strong>最高 3NF</strong>（此时必存在"X 非码、Y 是主属性"的依赖）</td>
+</tr>
+<tr>
+<td>全是主属性的关系？</td>
+<td><strong>直接 3NF</strong>，只差 BCNF 检查</td>
+</tr>
+<tr>
+<td>3NF 一定 BCNF？</td>
+<td><strong>否</strong>：R(A,B,C)，F={AB→C, C→B}，候选码 AB、AC，3NF 但非 BCNF</td>
+</tr>
+</tbody>
+</table>
+<p><strong>陷阱表 4：E-R 转换方向</strong></p>
+<table>
+<thead>
+<tr>
+<th>联系类型</th>
+<th>最常见错误</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1:N</strong></td>
+<td>外键加在 1 端 / 新建关系</td>
+<td><strong>1 端主键作外键并入 N 端</strong></td>
+</tr>
+<tr>
+<td><strong>M:N</strong></td>
+<td>把一端主键塞进另一端（无法表达多对多）</td>
+<td><strong>必须新建关系</strong>，主键 = 两端主键组合</td>
+</tr>
+<tr>
+<td>联系的属性</td>
+<td>丢掉成绩/参加日期/承担角色</td>
+<td><strong>随外键并入</strong>（M:N 并入新关系）</td>
+</tr>
+<tr>
+<td>多值属性</td>
+<td>塞进实体关系（违 1NF）</td>
+<td><strong>独立成关系</strong>，主键为组合</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>§七、数据库阶段自测（遮住答案，对 §四）</h2>
+<ol>
+<li>关系模型三要素是？三类完整性各对应什么约束？</li>
+<li>σ、π、⋈、×、÷ 分别对应 SQL 的什么？π 与 SELECT 的去重差异？</li>
+<li>SQL 的逻辑执行顺序 7 步？为什么 WHERE 里不能写聚合函数？</li>
+<li>COUNT(*)、COUNT(列)、AVG(列) 对 NULL 分别什么态度？</li>
+<li>「选修了全部课程」用关系代数怎么写？用 SQL 呢？</li>
+<li>部分依赖、传递依赖的判别条件各是什么？传递依赖为什么要求 Y↛X？</li>
+<li>用属性分类法求候选码时，L 类、N 类、R 类各得出什么结论？</li>
+<li>R(A,B,C)，F={AB→C, C→B} 的候选码、最高范式各是什么？为什么不是 BCNF？</li>
+<li>1:1、1:N、M:N 联系各自如何转换？外键加在哪？M:N 为什么必须独立建表？</li>
+<li>规范化的目的是什么？最常见的三个"异常"是哪三个？</li>
+</ol>
+<blockquote>
+<p>答案全部在 §四的 20 条结论里。<strong>能独立答出 8 题以上，再去 <code>day07-exercises.md</code> / <code>day08-exercises.md</code> 重做错题</strong>；答不出的，回对应笔记章节（章节号见 §三）。</p>
+</blockquote>
+<hr />
+<h2>§八、阶段收尾：数据库与 OS / 网络的串联</h2>
+<p>第一阶段三天科目看似独立，实则是<strong>同一种"分层"思想的三种表现</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>"分层"的表现</th>
+<th>数据库对应的层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OS</strong></td>
+<td>用户接口 → 文件系统 → 内存 → 硬件：<strong>把复杂的底层管理包成简单的抽象</strong></td>
+<td>关系模型把"怎么存"抽象成"一张二维表"，用户不必关心物理存储</td>
+</tr>
+<tr>
+<td><strong>网络</strong></td>
+<td>OSI 七层：<strong>每层只管一件事，层间靠协议接口</strong></td>
+<td>SQL 是"非过程化"语言——只说"要什么"，不说"怎么算"（关系代数是过程化的"怎么算"）</td>
+</tr>
+<tr>
+<td><strong>数据库</strong></td>
+<td>概念模型（E-R）→ 逻辑模型（关系模式）→ 物理存储：<strong>设计自顶向下逐层细化</strong></td>
+<td>E-R 图是"概念层"，关系模式是"逻辑层"，规范化是"逻辑层的质量优化"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话总结第一阶段</strong>：OS 教你<strong>资源如何被管理</strong>，网络教你<strong>机器如何互连</strong>，数据库教你<strong>数据如何被组织</strong>。后两阶段（软件工程、设计模式、专业英语）都建立在这三门之上——<strong>数据库大题尤其依赖 E-R + SQL 这条线，Phase 2 学 UML 时会再次用到"实体—联系"的建模思维</strong>。</p>
+</blockquote>
+<p><strong>阶段 1 收尾的下一步</strong>：做 <code>docs/practice/stage1-quiz.md</code>（45 道三科混合选择题，60 分钟计时），做完后按 <code>docs/practice/knowledge-checklist.md</code> 的统计表回填各科正确率，<strong>单科 &lt; 60% 的知识点全部标记"二轮重点"</strong>，这就是 Phase 2 的复习导航。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/databases/day09-summary.md">docs/knowledge-points/databases/day09-summary.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

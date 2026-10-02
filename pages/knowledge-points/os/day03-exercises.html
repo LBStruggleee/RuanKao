@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 3（9/23）操作系统③ 练习题：OS 综合章节题（25 道跨知识点选择题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 os 📁 day03-exercises.md</div>
+<h1>Day 3（9/23）操作系统③ 练习题：OS 综合章节题（25 道跨知识点选择题）</h1>
+<blockquote>
+<p>说明：本题是 <strong>OS 三天综合题</strong>——进程管理（Day 1）/内存管理（Day 2）/磁盘与文件（Day 3）<strong>混合编排</strong>，用来检验 Phase 1 阶段的 OS 整体掌握情况。
+题目分布：进程管理 5 题（1–5）、内存管理 6 题（6–11）、<strong>磁盘调度与结构 8 题（12–19，含 3 道寻道/存取时间计算题）</strong>、文件系统 6 题（20–25）。
+<strong>完整答案解析在文件末尾</strong>。建议先独立完成（约 50 分钟，计算题务必动笔），再对答案。</p>
+</blockquote>
+<hr />
+<h2>附：Day 3 笔记「快速自测」速答</h2>
+<ol>
+<li><strong>寻道时间</strong>。它是磁头机械移动的时间（占存取时间约 2/3），是唯一能由调度算法优化的部分；旋转延迟和传输时间由硬件决定。</li>
+<li>60 ÷ 7200 = 8.33 ms 转一圈，平均旋转延迟 = 半圈 = <strong>4.17 ms</strong>。</li>
+<li>53 → 65 → 67 → 37 → 14 → 98 → 122 → 124 → 183，总寻道距离 = 12+2+30+23+84+24+2+59 = <strong>236</strong>。</li>
+<li>SSTF 是<strong>贪心</strong>策略，只看眼前最近，可能为就近而折返跑。笔记 §3.2 例题中 SSTF = 236，而 LOOK = 220 更短。</li>
+<li>4096 ÷ 4 = 1024 项/索引块；二级索引 = 1024 × 1024 × 4 KB = <strong>4 GB</strong>。</li>
+<li>5242880 ÷ 4096 = 1280，块号 1280 落在<strong>二级间接</strong>区域；读取需读一级索引块 + 二级索引块 + 数据块 = <strong>3 次</strong>磁盘 I/O。</li>
+<li><strong>0 = 空闲块；−1（全 1）= 文件的最后一块</strong>。</li>
+<li><strong>索引分配</strong>（连续分配随机快但不便增长；链接分配便于增长但不能随机存取）。</li>
+</ol>
+<hr />
+<h2>第一部分：进程管理（1–5）</h2>
+<p><strong>1.</strong> 下列关于进程与线程的叙述中，正确的是（ ）。</p>
+<ul>
+<li>A. 线程是系统中资源分配的基本单位</li>
+<li>B. 引入线程后，<strong>线程是处理机调度的基本单位，进程仍是资源分配的基本单位</strong></li>
+<li>C. 同一进程中的多个线程不能并发执行</li>
+<li>D. 不同进程中的线程可以直接访问彼此的地址空间</li>
+</ul>
+<p><strong>2.</strong> 下列调度算法中，可能导致长作业长期得不到 CPU 而产生<strong>饥饿</strong>的是（ ）。</p>
+<ul>
+<li>A. 先来先服务（FCFS）</li>
+<li>B. 短作业优先（SJF）</li>
+<li>C. 时间片轮转（RR）</li>
+<li>D. 多级反馈队列调度</li>
+</ul>
+<p><strong>3.</strong> 时间片轮转（RR）调度算法中，若时间片设置得<strong>过小</strong>，主要问题是（ ）。</p>
+<ul>
+<li>A. 退化为先来先服务</li>
+<li>B. 上下文切换开销过大，系统效率下降</li>
+<li>C. 长作业饥饿</li>
+<li>D. 无法用于分时系统</li>
+</ul>
+<p><strong>4.</strong> 用 P/V 操作实现进程互斥时，互斥信号量 mutex 的初值通常设为 1，其含义是（ ）。</p>
+<ul>
+<li>A. 缓冲区的容量为 1</li>
+<li>B. 该临界资源一次只允许一个进程访问</li>
+<li>C. 已有 1 个进程在等待</li>
+<li>D. 已经使用了 1 个资源</li>
+</ul>
+<p><strong>5.</strong> 银行家算法用于实现死锁的（ ）。</p>
+<ul>
+<li>A. 预防</li>
+<li>B. 避免</li>
+<li>C. 检测</li>
+<li>D. 解除与恢复</li>
+</ul>
+<hr />
+<h2>第二部分：内存管理（6–11）</h2>
+<p><strong>6.</strong> 分页存储管理中，逻辑地址到物理地址的转换公式是（ ）。</p>
+<ul>
+<li>A. 物理地址 = 页号 × 页大小 + 页内偏移</li>
+<li>B. 物理地址 = 块号 × 页大小 + 页内偏移</li>
+<li>C. 物理地址 = 段基址 + 段内偏移</li>
+<li>D. 物理地址 = 块号 + 页内偏移</li>
+</ul>
+<p><strong>7.</strong> 某系统采用<strong>二级页表</strong>（无快表），访问一次内存数据最少需要（ ）次访存。</p>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+<p><strong>8.</strong> 在引入快表（TLB）的分页系统中，若被访问的页<strong>在快表中命中</strong>，则访问该数据需要的访存次数是（ ）。</p>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 0</li>
+</ul>
+<p><strong>9.</strong> 下列关于 Belady 异常的描述，正确的是（ ）。</p>
+<ul>
+<li>A. 只有 LRU 算法会出现 Belady 异常</li>
+<li>B. 只有 FIFO 算法会出现 Belady 异常（增加物理块数，缺页次数反而增加）</li>
+<li>C. 任何页面置换算法都可能出现 Belady 异常</li>
+<li>D. OPT 算法最容易出现 Belady 异常</li>
+</ul>
+<p><strong>10.</strong> 下列存储管理方式中，会产生<strong>内部碎片</strong>的是（ ）。</p>
+<ul>
+<li>A. 分段存储管理</li>
+<li>B. 动态分区分配</li>
+<li>C. 分页存储管理</li>
+<li>D. 链接分配的文件会产生外部碎片</li>
+</ul>
+<p><strong>11.</strong> 缺页中断（缺页异常）的性质是（ ）。</p>
+<ul>
+<li>A. 外部硬件中断，在指令执行之前产生</li>
+<li>B. 内部异常（程序性中断），在指令执行期间产生</li>
+<li>C. 访管（系统调用）中断，在指令执行之后产生</li>
+<li>D. 时钟中断，由时钟芯片定时产生</li>
+</ul>
+<hr />
+<h2>第三部分：磁盘调度与磁盘结构（12–19）</h2>
+<p><strong>12.</strong> 磁盘的物理存储单位从大到小排列，正确的是（ ）。</p>
+<ul>
+<li>A. 盘面 → 柱面 → 磁道 → 扇区</li>
+<li>B. 扇区 → 磁道 → 柱面 → 盘面</li>
+<li>C. 柱面 → 盘面 → 扇区 → 磁道</li>
+<li>D. 磁道 → 柱面 → 盘面 → 扇区</li>
+</ul>
+<p><strong>13.</strong> 磁盘读取一个数据块的平均存取时间，其组成是（ ）。</p>
+<ul>
+<li>A. 寻道时间 + 旋转延迟 + 传输时间</li>
+<li>B. 寻道时间 + 中断响应时间</li>
+<li>C. 旋转延迟 + 传输时间</li>
+<li>D. 寻道时间 + 传输时间</li>
+</ul>
+<p><strong>14.</strong> 某磁盘转速为 7200 转/分，则磁盘旋转一周的时间与平均旋转延迟分别约为（ ）。</p>
+<ul>
+<li>A. 8.3 ms；4.2 ms</li>
+<li>B. 16.7 ms；8.3 ms</li>
+<li>C. 8.3 ms；8.3 ms</li>
+<li>D. 4.2 ms；2.1 ms</li>
+</ul>
+<p><strong>15.</strong> 下列磁盘调度算法中，可能使远处请求长期得不到服务而产生<strong>饥饿</strong>的是（ ）。</p>
+<ul>
+<li>A. FCFS</li>
+<li>B. SSTF</li>
+<li>C. SCAN</li>
+<li>D. C-SCAN</li>
+</ul>
+<p><strong>16.</strong> SCAN（电梯）算法与 C-SCAN（循环扫描）算法的主要区别是（ ）。</p>
+<ul>
+<li>A. SCAN 的回程不服务请求，C-SCAN 的回程才服务请求</li>
+<li>B. C-SCAN 只在单方向上服务请求，到达端点后空跑回另一端继续同向服务，使各柱面等待时间相对均匀</li>
+<li>C. C-SCAN 是 SCAN 的别名，二者完全相同</li>
+<li>D. SCAN 只向一个方向移动、永不折返</li>
+</ul>
+<p><strong>17.（寻道计算）</strong> 某磁盘请求队列按到达顺序的柱面号为 <strong>20, 60, 80, 100, 40</strong>，磁头当前位于柱面 <strong>50</strong>。采用 <strong>FCFS</strong> 调度算法，磁头共移动（ ）个柱面。</p>
+<ul>
+<li>A. 170</li>
+<li>B. 150</li>
+<li>C. 190</li>
+<li>D. 210</li>
+</ul>
+<p><strong>18.（寻道计算）</strong> 某磁盘请求队列按到达顺序的柱面号为 <strong>10, 22, 30, 40, 60, 80, 90, 120, 150</strong>，磁头当前位于柱面 <strong>55</strong>，磁头正向柱面号<strong>减小</strong>方向移动。采用 <strong>SCAN</strong> 算法（移动到磁盘边界 0 后折返），磁头共移动（ ）个柱面。</p>
+<ul>
+<li>A. 205</li>
+<li>B. 185</li>
+<li>C. 195</li>
+<li>D. 245</li>
+</ul>
+<p><strong>19.（寻道计算）</strong> 某磁盘请求队列按到达顺序的柱面号为 <strong>60, 48, 20, 80, 100, 200</strong>，磁头当前位于柱面 <strong>55</strong>。采用 <strong>SSTF</strong> 调度算法，磁头共移动（ ）个柱面。</p>
+<ul>
+<li>A. 225</li>
+<li>B. 215</li>
+<li>C. 255</li>
+<li>D. 195</li>
+</ul>
+<hr />
+<h2>第四部分：文件系统（20–25）</h2>
+<p><strong>20.</strong> 下列关于文件逻辑结构的叙述，正确的是（ ）。</p>
+<ul>
+<li>A. 流式文件的基本组成单位是逻辑记录</li>
+<li>B. 记录式文件把文件看成一个无结构的字节序列</li>
+<li>C. 记录式文件按记录组织，便于以记录为单位存取；流式文件是无结构的字节序列</li>
+<li>D. 文件的逻辑结构必须与物理结构保持一致</li>
+</ul>
+<p><strong>21.</strong> 下列文件物理结构中，<strong>既支持随机存取、又便于文件动态增长</strong>的是（ ）。</p>
+<ul>
+<li>A. 连续分配</li>
+<li>B. 链接分配</li>
+<li>C. 索引分配</li>
+<li>D. 流式分配</li>
+</ul>
+<p><strong>22.</strong> 某文件采用<strong>连续分配</strong>方式存储，其 FCB 中记录首块号为 20、文件共占 8 个盘块。则该文件第 5 个盘块（从 0 编号）的物理块号是（ ）。</p>
+<ul>
+<li>A. 20</li>
+<li>B. 24</li>
+<li>C. 25</li>
+<li>D. 28</li>
+</ul>
+<p><strong>23.</strong> 下列关于 FAT（文件分配表）的描述，正确的是（ ）。</p>
+<ul>
+<li>A. FAT 用于存放文件的目录项和文件属性</li>
+<li>B. FAT 是显式链接结构：每个表项记录一个盘块的"下一盘块号"，特殊值表示文件末块和空闲块</li>
+<li>C. FAT 只能用于顺序存取，与链接分配无关</li>
+<li>D. FAT 中存放的是文件的关键字索引</li>
+</ul>
+<p><strong>24.（索引计算）</strong> 某文件系统，盘块大小为 <strong>4 KB</strong>，盘块号占 <strong>4 字节</strong>。若采用<strong>一级索引</strong>结构，则一级索引可管理的文件最大长度为（ ）。</p>
+<ul>
+<li>A. 4 KB</li>
+<li>B. 4 MB</li>
+<li>C. 4 GB</li>
+<li>D. 4 TB</li>
+</ul>
+<p><strong>25.（多级索引计算）</strong> 某文件系统采用<strong>二级索引</strong>结构，盘块大小 4 KB，块号占 4 B。现要读取文件中逻辑地址 <strong>8 MB</strong> 处的数据，则完成该读取共需访问磁盘块（含数据块本身）（ ）次。</p>
+<ul>
+<li>A. 2</li>
+<li>B. 3</li>
+<li>C. 4</li>
+<li>D. 5</li>
+</ul>
+<hr />
+<h1>答案解析</h1>
+<h2>第一部分：进程管理（1–5）</h2>
+<p><strong>1. B</strong> 现代操作系统中，<strong>进程是资源分配的基本单位</strong>（拥有独立的地址空间和资源），<strong>线程是处理机调度的基本单位</strong>（线程共享进程的地址空间）。A 说反了；C 错——同进程内多线程可并发执行；D 错——不同进程的地址空间相互隔离，不能直接访问。（知识点：进程 vs 线程；对应 <code>day01-process.md</code> §3.2）</p>
+<p><strong>2. B</strong> SJF 优先调度短作业，长作业可能长期得不到 CPU 而<strong>饥饿</strong>。A（FCFS）的缺点是平均等待时间长（护航效应）而非饥饿；C（RR）和 D（多级反馈队列）都能避免长期饥饿。（知识点：调度算法的缺陷；对应 <code>day01-process.md</code> §4.2）</p>
+<p><strong>3. B</strong> 时间片过小 → 进程频繁被切换，<strong>上下文切换开销</strong>占据大量 CPU 时间，系统效率下降。A 是时间片<strong>过大</strong>时的现象（退化为 FCFS）。（知识点：RR 时间片的影响；对应 <code>day01-process.md</code> §4.2）</p>
+<p><strong>4. B</strong> 互斥信号量初值 = 临界资源<strong>一次允许多少个进程访问</strong>，互斥区初值为 1 表示"一次只允许一个进程进入"。A 混淆了互斥信号量与容量为 1 的资源信号量；初值与等待进程数无关。（知识点：信号量初值；对应 <code>day01-process.md</code> §5.3）</p>
+<p><strong>5. B</strong> <strong>银行家算法属于死锁避免</strong>：在每次资源分配前动态判断系统是否处于安全状态，只进行安全的分配。死锁预防是破坏四个必要条件之一（如资源有序分配）；检测与解除是"允许死锁发生、再处理"。（知识点：死锁的处理策略；对应 <code>day01-process.md</code> §6.2）</p>
+<hr />
+<h2>第二部分：内存管理（6–11）</h2>
+<p><strong>6. B</strong> 页式物理地址 = <strong>块号 × 页大小 + 页内偏移</strong>。块号来自页表，页内偏移原样搬运。A 用页号代替块号；C 是<strong>段式</strong>公式（段基址 + 段内偏移，注意"页式乘、段式加"）；D 漏乘页大小。（知识点：页式地址转换；对应 <code>day02-memory.md</code> §3.3）</p>
+<p><strong>7. C</strong> 二级页表无快表：查外层页表 1 次 + 查内层页表 1 次 + 访问数据 1 次 = <strong>3 次</strong>。（知识点：多级页表的访存次数；对应 <code>day02-memory.md</code> §3.4 例 4）</p>
+<p><strong>8. A</strong> TLB 命中时，快表（相联存储器）的查找是硬件级操作、<strong>不算访存</strong>，只需再访问数据 <strong>1 次</strong>。（知识点：TLB 命中的访存次数；对应 <code>day02-memory.md</code> §3.5）</p>
+<p><strong>9. B</strong> <strong>Belady 异常只出现在 FIFO</strong>：增加物理块数，缺页次数反而增加。LRU、OPT、Clock 都是栈式算法，块数增加时缺页次数单调不减，不会出现 Belady。（知识点：Belady 异常；对应 <code>day02-memory.md</code> §7.3）</p>
+<p><strong>10. C</strong> 分页存储把进程分入固定大小的页框，<strong>最后一页往往装不满</strong>，产生<strong>内部碎片</strong>。A 分段是变长分配、段内完整使用，产生<strong>外部碎片</strong>；B 动态分区同样产生<strong>外部碎片</strong>；D 错——链接分配的文件是<strong>离散分配</strong>，盘块随处存放、不会把空闲区切碎，<strong>不产生外部碎片</strong>（它的问题是只能顺序存取、不能随机访问）。（知识点：内部碎片 vs 外部碎片；对应 <code>day02-memory.md</code> §2.3、<code>day03-disk.md</code> §5.1）</p>
+<p><strong>11. B</strong> 缺页中断是<strong>内部异常（程序性中断）</strong>，在<strong>指令执行期间</strong>产生（访问的页不在内存），处理完后需<strong>重新执行被中断的那条指令</strong>。它不是外部硬件中断，也不是时钟中断。（知识点：缺页中断的性质；对应 <code>day02-memory.md</code> §6.1）</p>
+<hr />
+<h2>第三部分：磁盘调度与磁盘结构（12–19）</h2>
+<p><strong>12. A</strong> 磁盘的物理单位从大到小为：<strong>盘面（多张盘片的面）→ 柱面（所有盘面上半径相同的磁道集合）→ 磁道（盘面上的同心圆）→ 扇区（磁道的弧段，最小读写单位）</strong>。（知识点：磁盘物理结构；对应 <code>day03-disk.md</code> §1）</p>
+<p><strong>13. A</strong> 平均存取时间 = <strong>寻道时间（定位柱面）+ 旋转延迟（定位扇区）+ 传输时间（读出数据）</strong>。磁盘调度算法只影响其中的寻道时间。（知识点：存取时间组成；对应 <code>day03-disk.md</code> §2.1）</p>
+<p><strong>14. A</strong> 转一圈 = 60 ÷ 7200 = 0.00833 s = <strong>8.3 ms</strong>；平均旋转延迟 = 转半圈 = 8.3 ÷ 2 = <strong>4.2 ms</strong>。（知识点：转速与旋转延迟；对应 <code>day03-disk.md</code> §2.2–2.3）</p>
+<p><strong>15. B</strong> <strong>SSTF</strong> 只选离磁头最近的请求，若新请求不断在磁头附近出现，远处请求可能长期得不到服务，产生<strong>饥饿</strong>。FCFS 严格按顺序服务不会饥饿；SCAN/C-SCAN 是"扫完全程"的电梯式调度，也不会饥饿。（知识点：SSTF 的缺点；对应 <code>day03-disk.md</code> §3.1）</p>
+<p><strong>16. B</strong> <strong>C-SCAN 只在单一方向上服务请求</strong>，到达该方向端点后<strong>空跑（不服务）回到另一端</strong>，再继续同向服务，使各柱面的等待时间相对均匀。SCAN 则在端点折返后<strong>反向继续服务</strong>。</p>
+<blockquote>
+<p><strong>排除 A</strong>：A 恰好把事实说反了——是 <strong>SCAN 的回程（反向扫描）服务请求</strong>、<strong>C-SCAN 的回程空跑不服务</strong>；A 的表述正相反，故 A 错。C 显然错误；D 错在 SCAN 到端点后<strong>会折返</strong>，不是永不折返。（知识点：SCAN 与 C-SCAN 的区别；对应 <code>day03-disk.md</code> §3.1）</p>
+</blockquote>
+<p><strong>17. A（寻道计算）</strong> FCFS 按到达顺序 20 → 60 → 80 → 100 → 40：</p>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50 → 20</td>
+<td>30</td>
+<td></td>
+</tr>
+<tr>
+<td>20 → 60</td>
+<td>40</td>
+<td></td>
+</tr>
+<tr>
+<td>60 → 80</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>80 → 100</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>100 → 40</td>
+<td>60</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>总移动距离 = 30+40+20+20+60 = <strong>170</strong>（平均 = 170 ÷ 5 = 34）。（知识点：FCFS 寻道计算；对应 <code>day03-disk.md</code> §3.2（1））</p>
+<p><strong>18. A（寻道计算）</strong> 磁头在 55 且向柱面号减小方向移动，SCAN 先服务所有小于 55 的请求（由近到远 40, 30, 22, 10），<strong>走到边界 0</strong>，再折返服务 60, 80, 90, 120, 150：</p>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>55 → 40</td>
+<td>15</td>
+<td></td>
+</tr>
+<tr>
+<td>40 → 30</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>30 → 22</td>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>22 → 10</td>
+<td>12</td>
+<td></td>
+</tr>
+<tr>
+<td>10 → 0</td>
+<td>10（空走到端点）</td>
+<td></td>
+</tr>
+<tr>
+<td>0 → 60</td>
+<td>60</td>
+<td></td>
+</tr>
+<tr>
+<td>60 → 80</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>80 → 90</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>90 → 120</td>
+<td>30</td>
+<td></td>
+</tr>
+<tr>
+<td>120 → 150</td>
+<td>30</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>总移动距离 = 15+10+8+12+10+60+20+10+30+30 = <strong>205</strong>。</p>
+<blockquote>
+<p><strong>常见错误</strong>：选 B（185）是把 SCAN 算成了 <strong>LOOK</strong>——在最小请求 10 处就折返（10 → 60 = 50 而非 10 → 0 → 60 = 70）。题干明确要求"移动到磁盘边界 0 后折返"，必须走到端点。（知识点：SCAN 寻道计算；对应 <code>day03-disk.md</code> §3.2（3））</p>
+</blockquote>
+<p><strong>19. A（寻道计算）</strong> SSTF 每步选离当前磁头最近者：</p>
+<table>
+<thead>
+<tr>
+<th>步</th>
+<th>当前</th>
+<th>最近请求</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>55</td>
+<td>60（距 5；48 距 7）</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>60</td>
+<td>48（距 12；80 距 20）</td>
+<td>12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>48</td>
+<td>20（距 28；80 距 32）</td>
+<td>28</td>
+</tr>
+<tr>
+<td>4</td>
+<td>20</td>
+<td>80（距 60；100 距 80）</td>
+<td>60</td>
+</tr>
+<tr>
+<td>5</td>
+<td>80</td>
+<td>100（距 20；200 距 120）</td>
+<td>20</td>
+</tr>
+<tr>
+<td>6</td>
+<td>100</td>
+<td>200</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>服务顺序 60 → 48 → 20 → 80 → 100 → 200，总移动距离 = 5+12+28+60+20+100 = <strong>225</strong>。</p>
+<blockquote>
+<p><strong>常见错误</strong>：选 B（215）是 LOOK（先向小柱面方向走到底再折返）的结果；选 C（255）是 SCAN（走到 0 端点）的结果。<strong>SSTF 的"就近"会让磁头先去 60、再折返到 48、20，再回到 80——这就是 SSTF 的折返跑，也说明它并非最优</strong>。（知识点：SSTF 寻道计算；对应 <code>day03-disk.md</code> §3.2（2））</p>
+</blockquote>
+<hr />
+<h2>第四部分：文件系统（20–25）</h2>
+<p><strong>20. C</strong> 流式文件 = 无结构的<strong>字节序列</strong>（基本单位是字节）；记录式文件 = 由<strong>逻辑记录</strong>组成（基本单位是记录）。逻辑结构是用户视角，与磁盘上怎么存的物理结构<strong>相互独立</strong>，D 错。（知识点：文件逻辑结构；对应 <code>day03-disk.md</code> §4）</p>
+<p><strong>21. C</strong> <strong>索引分配</strong>通过索引表直接给出任一盘块号，支持<strong>随机存取</strong>；新块只需把块号加入索引表，便于<strong>动态增长</strong>。A 连续分配随机快但增长要找新连续空间（外部碎片）；B 链接分配便于增长但必须沿指针遍历、不能随机存取。（知识点：文件物理结构对比；对应 <code>day03-disk.md</code> §5.1）</p>
+<p><strong>22. C</strong> 连续分配下，第 i 个盘块的物理块号 = <strong>首块号 + i</strong> = 20 + 5 = <strong>25</strong>。（验证：第 0 块→20，…，第 7 块→27 为末块。）（知识点：连续分配的地址计算；对应 <code>day03-disk.md</code> §5.2）</p>
+<p><strong>23. B</strong> FAT 是<strong>显式链接</strong>结构：每个表项对应一个盘块，存放该块的<strong>下一盘块号</strong>；<strong>0 表示空闲块，−1（全 1）表示文件最后一块</strong>。FAT 不存目录项也不存关键字；它本质是链接式物理结构，不是索引。（知识点：FAT；对应 <code>day03-disk.md</code> §7.3）</p>
+<p><strong>24. B（索引计算）</strong> 一个索引块可存放的块号数 = 4096 ÷ 4 = <strong>1024</strong> 个；一级索引可管理的文件长度 = 1024 × 4 KB = 4096 KB = <strong>4 MB</strong>。（引申：二级 = 4 GB，三级 = 4 TB。）（知识点：一级索引可管理文件大小；对应 <code>day03-disk.md</code> §6.1–6.2）</p>
+<p><strong>25. B（多级索引计算）</strong></p>
+<ul>
+<li>每个索引块可存块号数 = 4096 ÷ 4 = <strong>1024</strong>，二级索引可管理 1024 × 1024 = 2²⁰ 个块（远超 8 MB 所需的块数）。</li>
+<li>逻辑地址 8 MB = 8388608 B → 盘块号 = 8388608 ÷ 4096 = <strong>2048</strong>，块内偏移 = 0。</li>
+<li>二级索引中：一级索引项序号 = 2048 ÷ 1024 = <strong>2</strong>，二级索引项序号 = 2048 mod 1024 = <strong>0</strong>。</li>
+<li>读取路径：<strong>读一级索引块</strong>（1 次）→ 取第 2 项得二级索引块地址，<strong>读二级索引块</strong>（1 次）→ 取第 0 项得数据块地址，<strong>读数据块</strong>（1 次）= <strong>共 3 次</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>⚠️</strong> 索引块本身也在磁盘上，<strong>读索引块必须算一次磁盘访问</strong>。这是本题最常见的失分点。（知识点：多级索引与读块次数；对应 <code>day03-disk.md</code> §6.3–6.4）</p>
+</blockquote>
+<hr />
+<h2>做完后的自我评估</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>题号</th>
+<th>答对数</th>
+<th>目标</th>
+<th>未达标怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>进程管理</td>
+<td>1–5</td>
+<td>__ / 5</td>
+<td>≥ 4</td>
+<td>回看 <code>day01-process.md</code>，重做 day01-exercises 错题</td>
+</tr>
+<tr>
+<td>内存管理</td>
+<td>6–11</td>
+<td>__ / 6</td>
+<td>≥ 5</td>
+<td>回看 <code>day02-memory.md</code>，地址转换/置换算法重算</td>
+</tr>
+<tr>
+<td>磁盘调度</td>
+<td>12–19</td>
+<td>__ / 8</td>
+<td>≥ 6（<strong>17–19 必须全对</strong>）</td>
+<td>回看 <code>day03-disk.md</code> §2、§3，把 §3.2 六种算法重算一遍</td>
+</tr>
+<tr>
+<td>文件系统</td>
+<td>20–25</td>
+<td>__ / 6</td>
+<td>≥ 5</td>
+<td>回看 <code>day03-disk.md</code> §4–§7</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>寻道计算题（17–19）是必考计算点</strong>。如果这三道有任何一道算错，请回到 <code>day03-disk.md</code> §3.2，把例题的六种算法<strong>不看答案独立重算一遍</strong>，直到全对。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/os/day03-exercises.md">docs/knowledge-points/os/day03-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

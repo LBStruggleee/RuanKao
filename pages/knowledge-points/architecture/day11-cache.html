@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 11（10/1）计算机组成与体系结构②：存储体系、Cache 与总线 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 architecture 📁 day11-cache.md</div>
+<h1>Day 11（10/1）计算机组成与体系结构②：存储体系、Cache 与总线</h1>
+<blockquote>
+<p>本笔记是 Day 11 的核心输入材料，对应软考「计算机组成原理」的第二部分，也是<strong>组成原理阶段的收尾</strong>。
+<strong>高频命题点</strong>：Cache 三种映射方式的地址结构与字段位数（每年必考 1 道）、Cache 命中率与平均访问时间计算（<strong>计算题主力，与 Day 10 流水线计算并列为组成原理两大得分点</strong>）、总线带宽计算、局部性原理辨析。
+<strong>分值定位</strong>：组成原理在科目一（75 道选择题）中约占 <strong>8%</strong>，即 5–6 分。其中 <strong>Cache 映射与命中率计算是最稳定的得分点</strong>——会算就拿分。
+<strong>与 Day 10 的关系</strong>：Day 10 讲的是「CPU 内部」（运算器/控制器/指令/寻址/流水线），Day 11 讲的是「CPU 之外」（存储体系/Cache/总线）。两天的内容在「存储程序、程序控制」这条主线上串联：<strong>CPU 通过总线访存、Cache 藏在 CPU 与主存之间加速访存</strong>。文末「计算机组成阶段知识框架图」把两天合并成一张图，冲刺复习时只看那张图。
+<strong>使用方法</strong>：先通读建立地图，再遮住例题答案手算（§3 各映射方式例题 + §4 三道命中率例题），最后做 <code>day11-exercises.md</code> 的 20 选择 + 3 计算题。</p>
+</blockquote>
+<hr />
+<h2>一、存储体系的层次结构</h2>
+<h3>1.1 为什么需要存储器层次结构</h3>
+<p>理想的存储器应当<strong>容量像磁盘一样大、速度像寄存器一样快、成本像磁带一样低</strong>——但这三者互相矛盾。现实中的物理存储器件遵循一条铁律：</p>
+<blockquote>
+<p><strong>速度越快的存储器，容量越小、每位价格越贵。</strong></p>
+</blockquote>
+<p>因此现代计算机不依赖单一存储器，而是把<strong>多种存储器按速度从快到慢、容量从小到大、价格从贵到便宜</strong>排列成层次，让<strong>常用的内容尽量呆在靠近 CPU 的快速层</strong>，不常用的才放到慢速大容量层。这就是<strong>存储器层次结构（memory hierarchy）</strong>。</p>
+<h3>1.2 四级层次结构</h3>
+<pre><code>   ┌──────────┬──────────┬───────────┬──────────┐
+   │  寄存器   │  Cache   │   主存     │  辅存     │
+   │ (CPU内)  │(CPU核内) │ (内存条)   │(磁盘/SSD) │
+   ├──────────┼──────────┼───────────┼──────────┤
+   │  速度     │ &lt;1ns     │ 1~10ns    │ 10~100ns  │ ms 级    │  ← 越往下越慢
+   │  容量     │ &lt;1KB     │ 几十KB~MB  │ GB 级     │ TB 级    │  ← 越往下越大
+   │  每位价格 │   最贵    │    贵     │   便宜    │  最便宜   │  ← 越往下越便宜
+   │  由谁管理 │ 编译器   │  硬件     │ 操作系统  │ 操作系统  │
+   └──────────┴──────────┴───────────┴──────────┘
+        ↑                ↑                    ↑
+     CPU 直接访问     CPU 直接访问        CPU 不能直接访问（需经主存转存）
+</code></pre>
+<p><strong>层次结构的三条关键结论：</strong></p>
+<table>
+<thead>
+<tr>
+<th>结论</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>相邻层之间存在速度差</strong></td>
+<td>层次结构的意义就在于"用快层缓存慢层的常用内容"。相邻层速度差太小，层次就没价值</td>
+</tr>
+<tr>
+<td><strong>每层都是下一层的一个子集的缓存</strong></td>
+<td>Cache 的内容是主存内容的子集；主存（虚拟存储）的内容是辅存内容的子集</td>
+</tr>
+<tr>
+<td><strong>CPU 只能直接访问寄存器、Cache、主存</strong></td>
+<td><strong>辅存（磁盘/SSD）不能被 CPU 直接寻址</strong>，其中的数据必须先调入主存才能被 CPU 访问</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点（高频）</strong>：题目问"CPU 不能直接访问的存储器是"，答案是<strong>辅存（磁盘、SSD、磁带）</strong>。寄存器、Cache、主存都在 CPU 可直接寻址的范围内。注意：Cache 和主存都在 CPU 可直接访问之列，只是访问路径不同。</p>
+<p><strong>补充（一句话记忆）</strong>：<strong>Cache 用 SRAM</strong>（静态 RAM，触发器存信息，不需刷新、速度快、集成度低、成本高）；<strong>主存用 DRAM</strong>（动态 RAM，电容存信息，需定期刷新、集成度高、成本低）。「Cache 贵在快、主存贵在多」。</p>
+</blockquote>
+<h3>1.3 局部性原理（Cache 的理论依据）</h3>
+<p>层次结构之所以有效，是因为程序在执行时对存储器的访问<strong>不是均匀随机</strong>的，而是<strong>相对集中</strong>的——这就是<strong>局部性原理（principle of locality）</strong>。它分两种：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>定义</th>
+<th>典型来源</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>时间局部性</strong></td>
+<td><strong>刚被访问过的信息，很可能很快又被访问</strong></td>
+<td>循环、堆栈、热点变量、频繁调用的函数</td>
+<td><code>for(i=0;i&lt;1000;i++){ s += a[i]; }</code> 中的 <code>s</code>、<code>i</code> 在 1000 次循环中被反复访问</td>
+</tr>
+<tr>
+<td><strong>空间局部性</strong></td>
+<td><strong>一旦访问了某个单元，不久后其邻近单元也很可能被访问</strong></td>
+<td>顺序执行的指令、顺序遍历的数组</td>
+<td>访问 <code>a[0]</code> 后紧接着访问 <code>a[1]、a[2]、…</code>；取指后顺序取下一条指令</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：<strong>循环计数器体现的是时间局部性</strong>（同一个变量反复被访问）；<strong>数组顺序遍历体现的是空间局部性</strong>（相邻地址被访问）。这两者经常被放在同一题里混淆——判断依据是"<strong>是同一个地址反复出现（时间），还是相邻地址接连出现（空间）</strong>"。</p>
+</blockquote>
+<p>正因为有局部性，我们可以在 CPU 与主存之间加一个小容量的 Cache：把最近/最常用的一小部分内容搬进 Cache，CPU 访存时先查 Cache——<strong>大多数请求都能在快速层被满足</strong>。</p>
+<h3>1.4 三个层次的两个接口（把 OS 与组成串起来）</h3>
+<pre><code>   CPU ──► [Cache] ──► 主存 ──► 辅存
+            ↑                ↑
+      「Cache—主存」层    「主存—辅存」层（虚拟存储）
+       硬件管理，对程序员   OS + 硬件管理（页表/TLB）
+          完全透明          对应用程序员透明
+</code></pre>
+<ul>
+<li><strong>Cache—主存层</strong>：解决<strong>速度</strong>问题（主存太慢）。由<strong>硬件</strong>自动管理，<strong>对各类程序员都透明</strong>。</li>
+<li><strong>主存—辅存层（虚拟存储）</strong>：解决<strong>容量</strong>问题（主存太小）。由<strong>操作系统 + 硬件（MMU/TLB）</strong>管理，<strong>对应用程序员透明、对系统程序员可见</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：不要说"虚拟存储对程序员完全透明"——它只对<strong>应用程序员</strong>透明；<strong>系统程序员</strong>（写 OS 的人）必须管理页表。而 Cache 是连系统程序员都不用管的（全硬件）。</p>
+</blockquote>
+<hr />
+<h2>二、Cache 的工作原理</h2>
+<h3>2.1 Cache 的定位</h3>
+<p><strong>Cache（高速缓冲存储器）</strong>位于 CPU 与主存之间，用 SRAM 实现，速度接近 CPU。其<strong>唯一目的</strong>：缓解「CPU 快、主存慢」的速度矛盾（突破冯·诺依曼瓶颈）。</p>
+<p><strong>工作流程（读操作）</strong>：</p>
+<pre><code>   CPU 发出主存地址
+        ↓
+   ① 地址送到 Cache 控制器 → 查&quot;地址映射变换机构&quot;（目录表）
+        ↓
+   ② 命中（Cache 中有该块）→ 直接从 Cache 取数据送 CPU  ──► 结束（快）
+   ② 未命中（缺失）→ 访问主存取该块 ──┬──► 数据送 CPU
+                                    └──► 同时装入 Cache（利用空间局部性）
+</code></pre>
+<blockquote>
+<p><strong>关键</strong>：未命中时从主存取出的数据<strong>同时送给 CPU 和 Cache</strong>——这样下次再访问该块（或其邻近单元）就能命中。</p>
+</blockquote>
+<h3>2.2 Cache 的基本结构</h3>
+<p>一个 Cache 行（也叫<strong>槽/块/Line</strong>）由三部分组成：</p>
+<pre><code>   ┌────────────┬────────┬──────────────────────────────┐
+   │  有效位 V   │  标记  │           数据区              │
+   │ (1 bit)    │ (Tag)  │ (一个主存块的大小，如 64B)     │
+   └────────────┴────────┴──────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>有效位 V</strong>：该行是否装着有效数据（开机时全部为 0）。</li>
+<li><strong>标记 Tag</strong>：记录该行当前装的是<strong>主存的哪一块</strong>（主存字块标记）。</li>
+<li><strong>数据区</strong>：存放主存块的内容。</li>
+</ul>
+<p><strong>判断命中的统一逻辑（所有映射方式都一样）</strong>：</p>
+<pre><code>   ① 用主存地址的&quot;行号/组号&quot;字段定位到 Cache 的某一行或某一组；
+   ② 比较该行/组内各行的 Tag 与主存地址的 Tag 字段；
+   ③ 若 Tag 相等 **且** 有效位 V = 1 → 命中；
+      否则 → 未命中（缺失）。
+</code></pre>
+<h3>2.3 命中、缺失与命中率</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>命中（hit）</strong></td>
+<td>CPU 要访问的信息恰在 Cache 中</td>
+</tr>
+<tr>
+<td><strong>缺失（miss）</strong></td>
+<td>CPU 要访问的信息不在 Cache 中，需访问主存</td>
+</tr>
+<tr>
+<td><strong>命中率 h</strong></td>
+<td><strong>h = 命中次数 / 总访问次数 = N_c / (N_c + N_m)</strong></td>
+</tr>
+<tr>
+<td><strong>缺失率</strong></td>
+<td><strong>1 − h</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：命中率公式的分母是<strong>总访问次数</strong>（命中 + 未命中），不是"未命中次数"。看到"访问 Cache 命中 1800 次、未命中 200 次"，分母是 <strong>2000</strong>，h = 0.9。</p>
+</blockquote>
+<h3>2.4 Cache 的四个性能指标（公式必须全部记牢）</h3>
+<p>设：命中率 <strong>h</strong>，Cache 存取时间 <strong>t_c</strong>，主存存取时间 <strong>t_m</strong>，速度比 <strong>r = t_m / t_c</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>命中率 h</strong></td>
+<td><strong>h = N_c / (N_c + N_m)</strong></td>
+<td>由访存统计得到</td>
+</tr>
+<tr>
+<td><strong>平均访问时间 t_a</strong></td>
+<td><strong>t_a = h · t_c + (1 − h) · t_m</strong></td>
+<td>命中走 Cache、缺失走主存的时间加权和</td>
+</tr>
+<tr>
+<td><strong>加速比 S</strong></td>
+<td><strong>S = t_m / t_a</strong></td>
+<td>相对"完全不用 Cache（每次都访主存）"的提速倍数</td>
+</tr>
+<tr>
+<td><strong>效率 e</strong></td>
+<td><strong>e = t_c / t_a × 100% = 1 / [h + (1 − h)·r]</strong></td>
+<td>Cache 访问时间占平均访问时间的比例，<strong>恒 ≤ 100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>效率的两种写法是等价的</strong>（记住恒等式，考场可交叉验证）：</p>
+<pre><code>   t_a = h·t_c + (1−h)·t_m = t_c·[h + (1−h)·(t_m/t_c)] = t_c·[h + (1−h)·r]
+   ⇒  e = t_c / t_a = 1 / [h + (1−h)·r]        ✓
+   且  e = S / r     （加速比 ÷ 速度比 = 效率，用这个恒等式检查答案最方便）
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点 1</strong>：<strong>加速比 S 可以大于 1，效率 e 一定 ≤ 100%</strong>。两者不是一回事：S = t_m/t_a &gt; 1，e = t_c/t_a &lt; 1。
+<strong>⚠️ 易错点 2</strong>：有的题目把"<strong>缺失开销</strong>"定义为"先查 Cache 未命中 + 再访主存"（即 t_c + t_m），则 t_a = h·t_c + (1−h)(t_c + t_m)。<strong>软考默认的公式是 t_a = h·t_c + (1−h)·t_m</strong>（命中只算 Cache 时间、缺失只算主存时间）。除非题目明确说"未命中时 Cache 与主存都要访问"，否则一律用默认公式。
+<strong>⚠️ 易错点 3（语言陷阱）</strong>：题目说"<strong>主存比 Cache 慢 4 倍"</strong>，意思是 <strong>t_m = 4 · t_c</strong>（即 r = 4），不是"慢了 4 倍"（t_m = 5·t_c）。软考一律按前者理解。</p>
+</blockquote>
+<hr />
+<h2>三、Cache 的三种映射方式（本日核心）</h2>
+<h3>3.0 统一设定（本节所有例题沿用，便于对比）</h3>
+<blockquote>
+<p><strong>主存容量 16 MB = 2²⁴ B，按字节编址 → 主存地址 24 位。</strong>
+<strong>Cache 容量 64 KB = 2¹⁶ B。</strong>
+<strong>块（行）大小 64 B = 2⁶ B → 块内偏移 6 位。</strong>
+<strong>Cache 块（行）数 = 64 KB / 64 B = 1024 = 2¹⁰ 行。</strong>
+<strong>主存块数 = 16 MB / 64 B = 2¹⁸ = 262144 块。</strong></p>
+</blockquote>
+<p><strong>先记住一个不变的骨架</strong>：任何映射方式下，主存地址都由三部分拼成：</p>
+<pre><code>   ┌──────────────┬──────────────┬──────────────┐
+   │  主存字块标记  │  字块内地址   │   块内偏移    │
+   │     (Tag)    │ (行号/组号)   │  (offset)    │
+   └──────────────┴──────────────┴──────────────┘
+</code></pre>
+<ul>
+<li><strong>块内偏移</strong>：永远 = <strong>log₂(块大小)</strong> = 6 位（定位块内某个字节）。</li>
+<li><strong>字块内地址</strong>：定位 Cache 中的行或组——<strong>直接映射叫"行号"，组相联叫"组号"，全相联没有这一段</strong>。</li>
+<li><strong>主存字块标记 Tag</strong>：剩下的位数全部给 Tag。</li>
+</ul>
+<p><strong>位数守恒律（用来检查所有题目）</strong>：<strong>Tag 位数 + 字块内地址位数 + 块内偏移位数 = 主存地址总位数</strong>；且 <strong>Tag 位数 + 组号位数 = 主存块号位数</strong>（= 主存地址位数 − 块内偏移位数）。</p>
+<h3>3.1 直接映射（Direct Mapping）</h3>
+<p><strong>映射规则</strong>：主存块 <strong>j</strong> 只能放在 Cache 的 <strong>j mod C</strong> 行（C = Cache 行数）。即每个主存块在 Cache 中<strong>只有唯一一个固定位置</strong>。</p>
+<p><strong>地址结构</strong>（统一设定下）：</p>
+<pre><code>   ┌─────────────┬──────────────┬──────────────┐
+   │  Tag  8 位   │  Cache 行号   │  块内偏移 6 位 │
+   │             │    10 位      │              │
+   └─────────────┴──────────────┴──────────────┘
+   主存块号 18 位 = Tag 8 位 + 行号 10 位   （24 = 8 + 10 + 6 ✓）
+</code></pre>
+<p><strong>推导过程</strong>：</p>
+<pre><code>   块内偏移 = log₂(64B) = 6 位
+   Cache 行数 = 64KB / 64B = 1024 = 2¹⁰ → 行号 10 位
+   Tag = 24 − 10 − 6 = 8 位
+   验证：每个 Cache 行对应主存块数 = 2¹⁸ / 2¹⁰ = 2⁸ = 256 块 → Tag 需 8 位区分 ✓
+</code></pre>
+<p><strong>地址变换过程（例）</strong>：主存地址 <strong>0x3A5F2C</strong></p>
+<pre><code>   ① 求主存块号：0x3A5F2C ÷ 64 = 59772 (0xE97C)
+   ② 求行号：59772 mod 1024 = 380 (0x17C)
+   ③ 求 Tag：59772 ÷ 1024 = 58 (0x3A)
+   ④ 求偏移：0x3A5F2C mod 64 = 44 (0x2C)
+   ⑤ 查目录表第 380 行：若有效位 V=1 且 Tag=58 → 命中，取该行第 44 字节
+</code></pre>
+<p><strong>二进制直切（更直观，考场推荐）</strong>：</p>
+<pre><code>   0x3A5F2C = 0011 1010 | 01 0111 1100 | 101100
+              └─Tag=0x3A─┘└──行号=380───┘└偏移=44┘
+                    8 位        10 位       6 位
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现最简单、速度最快（只需 1 个比较器）</td>
+<td><strong>冲突率最高</strong>——映射到同一行的多个主存块互相争用，即使其他行空闲也被迫替换</td>
+</tr>
+<tr>
+<td>目录表（标记阵列）容量小</td>
+<td><strong>命中率低</strong>，Cache 空间利用率差</td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用</strong>：对速度要求极高、Cache 容量较大的场合。</p>
+<h3>3.2 全相联映射（Fully Associative Mapping）</h3>
+<p><strong>映射规则</strong>：主存块可以放在 Cache 的<strong>任意一行</strong>。</p>
+<p><strong>地址结构</strong>（统一设定下）：</p>
+<pre><code>   ┌────────────────────────────┬──────────────┐
+   │        Tag  18 位          │  块内偏移 6 位 │
+   └────────────────────────────┴──────────────┘
+   主存块号 18 位全部用作 Tag   （24 = 18 + 6 ✓，无&quot;字块内地址&quot;段）
+</code></pre>
+<p><strong>推导</strong>：没有行号/组号字段 → 主存块号 18 位全部是 Tag；偏移仍为 6 位。</p>
+<p><strong>地址变换过程</strong>：主存地址 <strong>0x3A5F2C</strong></p>
+<pre><code>   ① 主存块号 = Tag = 0x3A5F2C ÷ 64 = 59772 (0xE97C)
+   ② 偏移 = 0x3A5F2C mod 64 = 44 (0x2C)
+   ③ 把 Tag 59772 与 Cache 全部 1024 行的 Tag **并行比较**：
+      任一行 Tag 相等且 V=1 → 命中，取该行第 44 字节
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>冲突率最低</strong>（任意位置都可放）</td>
+<td>比较器最多：需要 <strong>Cache 行数个</strong>比较器（此例 1024 个），硬件开销巨大</td>
+</tr>
+<tr>
+<td>命中率高、空间利用率高</td>
+<td>查表电路复杂、速度受限</td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用</strong>：<strong>小容量 Cache</strong>（行数少，比较器开销可控）。这是"全相联只适合小容量"的根本原因。</p>
+<h3>3.3 组相联映射（Set Associative Mapping）</h3>
+<p><strong>映射规则</strong>：把 Cache 分成若干<strong>组</strong>，每组包含<strong>相同数量的若干行（路 way）</strong>。主存块 <strong>j</strong> 只能放在组 <strong>j mod G</strong>（G = 组数）中，但<strong>组内可以放在任意一路</strong>。</p>
+<p><strong>地址结构</strong>（统一设定下，以 <strong>4 路组相联</strong>为例）：</p>
+<pre><code>   ┌──────────────┬────────────┬──────────────┐
+   │  Tag  10 位   │  组号 8 位  │  块内偏移 6 位 │
+   └──────────────┴────────────┴──────────────┘
+   主存块号 18 位 = Tag 10 位 + 组号 8 位   （24 = 10 + 8 + 6 ✓）
+</code></pre>
+<p><strong>推导过程</strong>：</p>
+<pre><code>   组数 = Cache 行数 / 路数 = 1024 / 4 = 256 = 2⁸ → 组号 8 位
+   Tag = 主存块号位数 − 组号位数 = 18 − 8 = 10 位
+</code></pre>
+<p><strong>地址变换过程</strong>：主存地址 <strong>0x3A5F2C</strong></p>
+<pre><code>   ① 主存块号 = 59772 (0xE97C)
+   ② 组号 = 59772 mod 256 = 124 (0x7C)
+   ③ Tag（= 块号 ÷ 组数）= 59772 ÷ 256 = 233 (0xE9)
+   ④ 块内偏移 = 44 (0x2C)
+   ⑤ 在第 124 组的 4 路中并行比较 Tag：
+      任一路 Tag = 233 且 V=1 → 命中，取该路第 44 字节
+</code></pre>
+<p><strong>二进制直切</strong>：</p>
+<pre><code>   0x3A5F2C = 0011 1010 01 | 0111 1100 | 101100
+              └─Tag=0xE9(233)┘└组号=124─┘└偏移=44┘
+                   10 位          8 位       6 位
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冲突率与命中率介于直接与全相联之间（折中）</td>
+<td>需要 <strong>路数个</strong>比较器（4 路 → 4 个）+ 组内选择器</td>
+</tr>
+<tr>
+<td>硬件复杂度可控</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用</strong>：<strong>绝大多数现代 CPU 的 L1/L2 Cache</strong>（2/4/8/16 路最常见）。</p>
+<h3>3.4 三种映射方式对比（必背表）</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>直接映射</strong></th>
+<th><strong>全相联映射</strong></th>
+<th><strong>组相联映射</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主存块可放位置</td>
+<td><strong>唯一固定一行</strong></td>
+<td><strong>任意一行</strong></td>
+<td><strong>固定组内的任意一路</strong></td>
+</tr>
+<tr>
+<td>地址结构</td>
+<td>Tag + <strong>行号</strong> + 偏移</td>
+<td>Tag + 偏移</td>
+<td>Tag + <strong>组号</strong> + 偏移</td>
+</tr>
+<tr>
+<td>Tag 位数（统一设定）</td>
+<td><strong>8</strong></td>
+<td><strong>18</strong></td>
+<td><strong>10</strong>（4 路）/ 9（2 路）/ 11（8 路）</td>
+</tr>
+<tr>
+<td>字块内地址位数</td>
+<td>log₂(行数) = 10</td>
+<td>无</td>
+<td>log₂(组数)</td>
+</tr>
+<tr>
+<td>比较器个数</td>
+<td><strong>1</strong></td>
+<td><strong>Cache 行数个</strong>（1024）</td>
+<td><strong>路数</strong>（4 路 → 4）</td>
+</tr>
+<tr>
+<td>冲突率</td>
+<td><strong>最高</strong></td>
+<td><strong>最低</strong></td>
+<td>中等</td>
+</tr>
+<tr>
+<td>命中率</td>
+<td>最低</td>
+<td>最高</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>硬件复杂度</td>
+<td><strong>最低</strong></td>
+<td><strong>最高</strong></td>
+<td>中等</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>大容量 Cache</td>
+<td><strong>小容量</strong> Cache</td>
+<td>现代主流 L1/L2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀</strong>：<strong>「直接一对一（固定位置、一个比较器）、全相联一对多（任意位置、全行比较）、组相联分组一对多（组内任意、组数×路数个比较器）」</strong>。</p>
+</blockquote>
+<h3>3.5 统一视角：三者其实是"路数"的连续谱</h3>
+<p><strong>这是理解三种映射方式最好的一张图</strong>——它们不是三个独立的东西，而是同一个模型的三个特例：</p>
+<pre><code>   路数 way = 1 ────────────► 组数 G = 行数 C ────► 就是「直接映射」
+        │
+   路数 way = 2 / 4 / 8 ───► 组数 G = C/way ────► 就是「组相联映射」
+        │
+   路数 way = C ───────────► 组数 G = 1 ────────► 就是「全相联映射」
+</code></pre>
+<p><strong>统一映射公式</strong>：主存块 j → <strong>组号 = j mod G</strong>，组内可放在<strong>任意一路</strong>。
+- <strong>G = C</strong>（每组 1 行 = 1 路）→ 退化为<strong>直接映射</strong>。
+- <strong>G = 1</strong>（全部行为一组 = C 路）→ 退化为<strong>全相联映射</strong>。</p>
+<p><strong>位数随路数变化的规律</strong>（统一设定，24 位地址）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">路数</th>
+<th style="text-align: center;">组数</th>
+<th style="text-align: center;">组号位数</th>
+<th style="text-align: center;">Tag 位数</th>
+<th>地址结构</th>
+<th style="text-align: center;">合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1（直接）</td>
+<td style="text-align: center;">1024</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">8</td>
+<td>8 + 10 + 6</td>
+<td style="text-align: center;">24 ✓</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">512</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">9</td>
+<td>9 + 9 + 6</td>
+<td style="text-align: center;">24 ✓</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">256</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">10</td>
+<td>10 + 8 + 6</td>
+<td style="text-align: center;">24 ✓</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">128</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">11</td>
+<td>11 + 7 + 6</td>
+<td style="text-align: center;">24 ✓</td>
+</tr>
+<tr>
+<td style="text-align: center;">1024（全相联）</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">18</td>
+<td>18 + 0 + 6</td>
+<td style="text-align: center;">24 ✓</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>规律（考场秒用）</strong>：<strong>路数每翻一倍，组数减半、组号少 1 位、Tag 多 1 位</strong>。总位数守恒 = 主存地址位数。</p>
+</blockquote>
+<h3>3.6 冲突演示例题（直接映射 vs 组相联）</h3>
+<blockquote>
+<p><strong>题目</strong>：统一设定下，主存块 <strong>3</strong> 与主存块 <strong>1027</strong> 是否会在 Cache 中互相争用位置？</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>   直接映射：行号 = 块号 mod 1024
+       块 3   → 3 mod 1024 = 3      → Cache 第 3 行
+       块 1027 → 1027 mod 1024 = 3  → Cache 第 3 行   ← 同一行！冲突！
+       （即使 Cache 其他 1023 行全空着，块 1027 也会把块 3 挤出去，反之亦然）
+       两者的 Tag：块 3 的 Tag = 3÷1024 = 0；块 1027 的 Tag = 1（正是靠 Tag 区分彼此）
+
+   4 路组相联：组号 = 块号 mod 256
+       块 3   → 3 mod 256 = 3    → 第 3 组
+       块 1027 → 1027 mod 256 = 3 → 第 3 组   ← 同组，但组内有 4 路！
+       两者分别占用第 3 组的两路，可同时驻留 → 不冲突
+
+   全相联：两块可放在任意行 → 不冲突
+</code></pre>
+<p><strong>结论</strong>：<strong>交替访问相隔"恰好一个 Cache 行数"的两个主存块</strong>（如 0、1024、0、1024…）是直接映射最坏的访问模式——每次都冲突，命中率趋近 0。<strong>把直接映射改成 2 路组相联，这类冲突立刻消失</strong>。这就是组相联存在的意义。</p>
+<hr />
+<h2>四、Cache 命中率计算（3 道完整手算例题）</h2>
+<h3>例题 1：由访存统计求全部四个指标（基础题）</h3>
+<blockquote>
+<p><strong>题目</strong>：某 Cache—主存系统，Cache 存取周期 t_c = <strong>10 ns</strong>，主存存取周期 t_m = <strong>100 ns</strong>。执行一段程序共完成 <strong>2000 次访存</strong>，其中 Cache <strong>未命中 100 次</strong>。求命中率 h、平均访问时间 t_a、加速比 S、效率 e。</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>   ① 命中次数 = 2000 − 100 = 1900
+      h = 1900 / 2000 = 0.95            （95%）
+
+   ② t_a = h·t_c + (1−h)·t_m
+         = 0.95 × 10 + 0.05 × 100
+         = 9.5 + 5 = 14.5 ns
+
+   ③ S = t_m / t_a = 100 / 14.5 ≈ 6.90    （相对无 Cache 提速约 6.9 倍）
+
+   ④ e = t_c / t_a = 10 / 14.5 ≈ 0.6897 = 68.97%
+      交叉验证（用 e = 1/[h + (1−h)·r]，r = t_m/t_c = 10）：
+        e = 1 / (0.95 + 0.05 × 10) = 1 / 1.45 = 0.6897 ✓
+      再用恒等式 e = S/r = 6.897 / 10 = 0.6897 ✓
+</code></pre>
+<p><strong>答案</strong>：h = 0.95；t_a = 14.5 ns；S ≈ 6.90；e ≈ 69.0%。</p>
+<blockquote>
+<p><strong>含义</strong>：即使命中率高达 95%，效率也只有 69%——因为缺失一次要付出 10 倍的时间代价。<strong>速度比 r 越大，同样的命中率下效率越低</strong>。</p>
+</blockquote>
+<h3>例题 2：给定命中率与两个时间求效率（加速比/效率辨析）</h3>
+<blockquote>
+<p><strong>题目</strong>：已知 Cache 存取周期 t_c = <strong>20 ns</strong>，主存存取周期 t_m = <strong>80 ns</strong>，命中率 h = <strong>0.9</strong>。求平均访问时间、加速比与效率。</p>
+</blockquote>
+<p><strong>解答</strong>：</p>
+<pre><code>   ① t_a = 0.9 × 20 + 0.1 × 80 = 18 + 8 = 26 ns
+
+   ② S = t_m / t_a = 80 / 26 ≈ 3.08
+
+   ③ e = t_c / t_a = 20 / 26 ≈ 0.7692 = 76.92%
+      交叉验证：r = 80/20 = 4，e = 1/(0.9 + 0.1×4) = 1/1.3 = 0.7692 ✓
+                e = S/r = 3.077/4 = 0.7692 ✓
+</code></pre>
+<p><strong>答案</strong>：t_a = 26 ns；S ≈ 3.08；e ≈ 76.9%。</p>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：本题最常见的错误是把<strong>加速比</strong>和<strong>效率</strong>搞混——加速比是 t_m/t_a（&gt;1），效率是 t_c/t_a（≤1）。记住 <strong>「加速比往大看（相对慢主存），效率往小看（相对快 Cache）」</strong>。</p>
+</blockquote>
+<h3>例题 3：已知平均访问时间指标反求命中率（逆推题型）</h3>
+<blockquote>
+<p><strong>题目</strong>：某 Cache—主存系统，t_c = <strong>10 ns</strong>、t_m = <strong>100 ns</strong>。要求系统的平均访问时间<strong>不超过 20 ns</strong>，命中率至少要达到多少？</p>
+</blockquote>
+<p><strong>解答</strong>（把 t_a 公式反解 h）：</p>
+<pre><code>   t_a = h·t_c + (1−h)·t_m
+      = h·10 + (1−h)·100
+      = 100 − 90h                ← 关键化简：t_a 随 h 线性下降
+
+   令 100 − 90h ≤ 20
+      90h ≥ 80
+      h ≥ 80/90 = 8/9 ≈ 0.8889 = 88.89%
+
+   验算 h = 8/9：t_a = 100 − 90 × (8/9) = 100 − 80 = 20 ns ✓（恰好达标）
+</code></pre>
+<p><strong>答案</strong>：命中率至少 <strong>88.9%</strong>。</p>
+<blockquote>
+<p><strong>万能反解公式（直接背）</strong>：<strong>h = (t_m − t_a) / (t_m − t_c)</strong>。例如本题 h = (100 − 20)/(100 − 10) = 80/90 ✓。已知 t_a、t_c、t_m 求 h 时，用这个式子最快。</p>
+</blockquote>
+<h3>4.1 拓展：两级 Cache（了解，偶考）</h3>
+<p>现代 CPU 有 L1/L2 甚至 L3。设 L1 命中率 h₁、访问时间 T₁；L2 在 <strong>L1 未命中的那些请求中</strong>的命中率 h₂、访问时间 T₂；主存时间 T_m：</p>
+<pre><code>   t_a = h₁·T₁ + (1 − h₁)·[ T₂ + (1 − h₂)·T_m ]
+</code></pre>
+<p><strong>例</strong>：h₁ = 0.9、T₁ = 5 ns、h₂ = 0.8、T₂ = 20 ns、T_m = 100 ns：</p>
+<pre><code>   t_a = 0.9 × 5 + 0.1 × (20 + 0.2 × 100) = 4.5 + 0.1 × 40 = 4.5 + 4 = 8.5 ns
+</code></pre>
+<blockquote>
+<p>注意 h₂ 是<strong>在 L1 未命中者中的</strong>命中率（条件命中率），不是全系统命中率。若问"全系统最终在 L2 命中的比例"，答案是 (1−h₁)·h₂ = 0.1 × 0.8 = 0.08。</p>
+</blockquote>
+<hr />
+<h2>五、Cache 的替换策略与写策略</h2>
+<h3>5.1 替换策略（Cache 满了/冲突时淘汰谁）</h3>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>全称</th>
+<th>规则</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RAND</strong></td>
+<td>随机替换</td>
+<td>随机选一行替换</td>
+<td>实现最简单，命中率不稳定</td>
+</tr>
+<tr>
+<td><strong>FIFO</strong></td>
+<td>先进先出</td>
+<td>淘汰<strong>最先进入</strong> Cache 的块</td>
+<td>实现简单（队列），未考虑局部性，<strong>可能 Belady 异常</strong></td>
+</tr>
+<tr>
+<td><strong>LRU</strong></td>
+<td><strong>最近最少使用</strong></td>
+<td>淘汰<strong>最长时间未被访问</strong>的块</td>
+<td><strong>最常用、命中率最高</strong>（符合时间局部性），硬件需记录"最近访问时间"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点（名称辨析）</strong>：<strong>LRU = 最近最少使用（Least Recently Used）</strong>，淘汰的是"最久没用的"；<strong>LFU = 最不经常使用（Least Frequently Used）</strong>，淘汰的是"访问次数最少的"。两者都常被译混。软考 Cache 替换策略的<strong>标准答案是 LRU</strong>。</p>
+</blockquote>
+<h3>5.2 写策略（Cache 命中写操作时，主存怎么办）</h3>
+<p><strong>问题</strong>：CPU 写数据时若命中 Cache，是只写 Cache 还是同时写主存？这决定 Cache 与主存是否保持一致。</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>写命中时的操作</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>写直达（Write Through，全写法）</strong></td>
+<td><strong>同时写 Cache 和主存</strong></td>
+<td>实现简单、<strong>Cache 与主存始终一致</strong></td>
+<td>写操作慢（每次都要访主存）、带宽消耗大</td>
+</tr>
+<tr>
+<td><strong>写回（Write Back，回写法）</strong></td>
+<td><strong>只写 Cache</strong>，并把该行<strong>脏位（dirty bit）置 1</strong>；<strong>该行被替换时</strong>才写回主存</td>
+<td>写操作快（多数写只动 Cache）</td>
+<td><strong>存在 Cache 与主存不一致的窗口</strong>，需额外脏位，多处理器一致性复杂</td>
+</tr>
+</tbody>
+</table>
+<p><strong>未命中时的写策略</strong>（配合上面的命中策略使用）：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>写未命中时的操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>写分配（Write Allocate）</strong></td>
+<td>先把主存块<strong>调入 Cache</strong>，再在 Cache 中写</td>
+</tr>
+<tr>
+<td><strong>非写分配（Not Write Allocate）</strong></td>
+<td><strong>不调入 Cache</strong>，直接写主存</td>
+</tr>
+</tbody>
+</table>
+<p><strong>经典配对（必背）</strong>：</p>
+<pre><code>   写直达  +  非写分配      ← 适用于写操作不频繁 / 写后不太可能再访问同一数据的场景
+   写回    +  写分配        ← 适用于写操作频繁的场景（利用时间局部性，多次写合并为一次主存写）
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：<strong>"写回 + 非写分配"是低效组合，"写直达 + 写分配"是矛盾组合</strong>（既然每次写都同步到主存了，再调入 Cache 意义不大）。考场常考的是<strong>标准配对</strong>。</p>
+</blockquote>
+<hr />
+<h2>六、虚拟存储与 Cache 的关系</h2>
+<h3>6.1 虚拟存储回顾（衔接 Day 2 OS 内存管理）</h3>
+<p>虚拟存储（页式）把<strong>辅存当主存的扩展</strong>：程序使用<strong>虚拟地址（逻辑地址）</strong>，实际访问的是<strong>物理地址</strong>。转换靠<strong>页表</strong>，加速靠 <strong>TLB（快表）</strong>：</p>
+<pre><code>   虚拟地址 = 页号 + 页内偏移   ──查页表──►   物理地址 = 页框号 + 页内偏移
+                          （页表存&quot;页号→页框号&quot;映射，放在主存里）
+   TLB（快表，在 CPU 内）缓存页表中最常用的表项，避免每次转换都访一次主存。
+</code></pre>
+<h3>6.2 TLB / 页表 / Cache 三者协同（典型访存路径）</h3>
+<p>一次完整的<strong>取数据</strong>过程（从虚拟地址到数据）：</p>
+<pre><code>   CPU 给出虚拟地址 VA
+        │
+        ▼
+   ┌─ 查 TLB ─────────────────────────────────────┐
+   │  命中 → 得到物理地址 PA                        │
+   │  未命中 → 查页表（访存 1 次；多级页表可能多次） │
+   │           页表缺失（缺页）→ 缺页中断：         │
+   │             从磁盘把页调入主存、更新页表、重试  │
+   └───────────────────────────────────────────────┘
+        │  物理地址 PA
+        ▼
+   ┌─ 用 PA 查 Cache ──────────────────────────────┐
+   │  命中 → 直接从 Cache 取数据（最快，全程 0~1 次主存访问）│
+   │  未命中 → 访问主存取数据                        │
+   │           → 同时装入 Cache                     │
+   └───────────────────────────────────────────────┘
+        │
+        ▼
+      数据返回 CPU
+</code></pre>
+<p><strong>关键点</strong>：
+1. <strong>TLB 存的是"虚拟页号 → 物理页框号"</strong>；<strong>Cache 存的是"物理地址 → 数据"</strong>。两者是<strong>串联</strong>的：<strong>先 TLB 得到物理地址，再用物理地址查 Cache</strong>。
+2. <strong>TLB 查找是硬件级的、不算访存</strong>（这一点与 Day 2 的 OS 题一致：TLB 命中时地址转换 0 次访存）。
+3. <strong>理想情况</strong>（TLB 命中 + Cache 命中）：<strong>0 次访存</strong>就拿到数据——这就是层次结构的价值。
+4. <strong>最坏情况</strong>：缺页（磁盘 I/O）+ Cache 未命中，代价是毫秒级。</p>
+<h3>6.3 Cache 与虚拟存储对比</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>Cache—主存层</strong></th>
+<th><strong>主存—辅存层（虚拟存储）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>解决的问题</td>
+<td><strong>速度</strong>（主存太慢）</td>
+<td><strong>容量</strong>（主存太小）</td>
+</tr>
+<tr>
+<td>管理者</td>
+<td><strong>硬件</strong>（全部自动）</td>
+<td><strong>操作系统 + 硬件（MMU/TLB）</strong></td>
+</tr>
+<tr>
+<td>透明性</td>
+<td>对<strong>所有</strong>程序员透明</td>
+<td>对<strong>应用程序员</strong>透明，系统程序员可见</td>
+</tr>
+<tr>
+<td>信息单位</td>
+<td><strong>块（行，如 64B）</strong></td>
+<td><strong>页（如 4KB）</strong></td>
+</tr>
+<tr>
+<td>地址变换机构</td>
+<td>目录表（标记阵列）</td>
+<td><strong>页表 + TLB</strong></td>
+</tr>
+<tr>
+<td>缺失处理</td>
+<td>从主存调入（硬件自动）</td>
+<td><strong>缺页中断</strong>（OS 从磁盘调入）</td>
+</tr>
+<tr>
+<td>替换算法</td>
+<td>LRU/FIFO/RAND</td>
+<td>页面置换算法 OPT/FIFO/LRU/Clock（Day 2 学过）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀</strong>：<strong>「Cache 硬件管、为速度；虚存系统管、为容量；Cache 块小、虚存页大；Cache 缺失硬件补、虚存缺页中断补」</strong>。</p>
+</blockquote>
+<hr />
+<h2>七、总线</h2>
+<h3>7.1 什么是总线</h3>
+<p><strong>总线（Bus）</strong>是计算机各部件之间<strong>传送信息的公共通道</strong>。它是一组<strong>导线</strong>，每一根传送一位信息。总线的三个特点：
+- <strong>分时共享</strong>：同一时刻只能有一对部件使用总线发送数据（所以需要<strong>总线仲裁</strong>）。
+- <strong>简化结构</strong>：相比"每两个部件之间都拉一根专用线"（复杂度 O(n²)），总线把复杂度降到 O(n)。</p>
+<h3>7.2 总线的分类（按信号类型）</h3>
+<table>
+<thead>
+<tr>
+<th>总线类型</th>
+<th>传送内容</th>
+<th>方向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>数据总线 DB</strong></td>
+<td><strong>数据</strong>（含指令）</td>
+<td><strong>双向</strong></td>
+<td>宽度（位数）决定<strong>一次能传送的数据量</strong>，常与机器字长一致</td>
+</tr>
+<tr>
+<td><strong>地址总线 AB</strong></td>
+<td><strong>地址</strong>（内存/I/O 端口地址）</td>
+<td><strong>单向</strong>（CPU 输出）</td>
+<td><strong>位数决定 CPU 可直接寻址的最大物理地址空间</strong>（n 位 → 2ⁿ 个单元）</td>
+</tr>
+<tr>
+<td><strong>控制总线 CB</strong></td>
+<td><strong>控制信号</strong>（读/写、中断请求、总线请求、时钟等）</td>
+<td><strong>双向</strong></td>
+<td>CPU 发读/写命令给外设；外设发中断请求/总线请求给 CPU</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点 1（高频）</strong>：<strong>MAR 一定接地址总线（单向），MDR 一定接数据总线（双向）</strong>——这是 Day 10 的知识点，在总线这章换个角度考。
+<strong>⚠️ 易错点 2</strong>：<strong>控制总线是双向的</strong>——不要因为它叫"控制"就以为只有 CPU 单向发出控制命令；外设的中断请求、总线请求、状态信号也走控制总线。
+<strong>⚠️ 易错点 3</strong>：<strong>地址总线的位数决定的是"最大物理寻址空间"</strong>（物理地址空间），不是"实际主存容量"，也不是虚拟地址空间。</p>
+</blockquote>
+<h3>7.3 总线宽度与带宽计算（必考计算）</h3>
+<p><strong>核心公式</strong>：</p>
+<pre><code>   总线带宽 = 总线工作频率 × 总线宽度 / 8          （单位：MB/s）
+   其中&quot;总线宽度/8&quot;= 每次并行传送的字节数
+</code></pre>
+<p><strong>例题 1（基础）</strong>：某总线工作频率 <strong>100 MHz</strong>，数据总线宽度 <strong>32 位</strong>，求带宽。</p>
+<pre><code>   带宽 = 100 MHz × (32 / 8) B = 100 × 4 = 400 MB/s
+</code></pre>
+<p><strong>例题 2（对照记忆）</strong>：PCI 总线工作频率 <strong>33 MHz</strong>、宽度 <strong>64 位</strong>；另一总线 <strong>66 MHz</strong>、<strong>32 位</strong>。二者带宽相同吗？</p>
+<pre><code>   PCI 64 位：33 × 8 = 264 MB/s
+   66MHz 32 位：66 × 4 = 264 MB/s        ← 相同！
+</code></pre>
+<blockquote>
+<p><strong>结论</strong>：带宽 = 频率 × 宽度，<strong>频率高一倍且宽度减一半，带宽不变</strong>。这是"频率与宽度互相补偿"的典型。</p>
+</blockquote>
+<p><strong>例题 3（复用陷阱，高频）</strong>：某总线时钟频率 <strong>10 MHz</strong>，<strong>地址总线和数据总线复用</strong>（分时使用同一组线传送地址和数据），一个<strong>总线周期占用 2 个时钟周期</strong>，每个总线周期并行传送 <strong>4 字节</strong>数据。求总线带宽。</p>
+<pre><code>   解法 1（先算总线周期时长）：
+      总线周期 = 2 个时钟周期 = 2 / 10 MHz = 0.2 μs
+      带宽 = 4 B / 0.2 μs = 20 MB/s
+
+   解法 2（先算有效频率）：
+      有效数据传送频率 = 10 MHz / 2 = 5 MHz
+      带宽 = 5 MHz × 4 B = 20 MB/s        ✓ 两法一致
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：复用总线的带宽要<strong>先扣除"传地址占用的时间"</strong>——题目若说"一个总线周期 = 2 个时钟周期"，意味着<strong>只有一半时间在传数据</strong>，带宽比不复用时<strong>减半</strong>。</p>
+</blockquote>
+<p><strong>反求题</strong>：要求带宽 <strong>800 MB/s</strong>，总线工作频率 <strong>100 MHz</strong>，数据总线应多宽？</p>
+<pre><code>   宽度 = 800 × 8 / 100 = 64 位
+</code></pre>
+<h3>7.4 同步总线与异步总线</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>同步总线</strong></th>
+<th><strong>异步总线</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时序依据</td>
+<td><strong>统一的时钟信号</strong></td>
+<td><strong>无统一时钟</strong>，靠<strong>握手信号</strong>（请求 REQ / 应答 ACK）</td>
+</tr>
+<tr>
+<td>传送过程</td>
+<td>所有设备按同一时钟节拍工作，定长周期</td>
+<td>每次传送双方互相应答，周期可变</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>简单、速度快（无握手开销）</td>
+<td><strong>适应速度差异大的设备</strong>、总线可长</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>必须迁就最慢的设备；<strong>总线长度受限</strong>（时钟偏移）</td>
+<td>控制复杂、握手有延迟</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>速率相近的部件间（CPU—主存、L2—Cache）</td>
+<td>速率差异大的 I/O 设备</td>
+</tr>
+</tbody>
+</table>
+<p><strong>握手方式</strong>：异步总线的握手分<strong>全互锁</strong>（请求与应答互相确认，最可靠）、<strong>半互锁</strong>、<strong>不互锁</strong>三种。</p>
+<p><strong>折中方案——半同步总线</strong>：在同步时钟基础上加 <strong>WAIT / READY 等待信号</strong>，让慢速设备"申请等待"。这是现代总线最常用的方式。</p>
+<h3>7.5 总线仲裁（了解，偶考）</h3>
+<p>总线同一时刻只允许一个设备发送数据，必须有<strong>仲裁机制</strong>决定谁使用：</p>
+<table>
+<thead>
+<tr>
+<th>仲裁方式</th>
+<th>做法</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>链式查询（菊花链）</strong></td>
+<td>总线请求信号沿链串行传递，离仲裁器最近的设备优先获得</td>
+<td>硬件最简单；但<strong>优先级固定、查寻慢、对故障敏感</strong></td>
+</tr>
+<tr>
+<td><strong>计数器定时查询</strong></td>
+<td>仲裁器用计数器轮询各设备</td>
+<td>优先级可变（取决于计数器初值）</td>
+</tr>
+<tr>
+<td><strong>独立请求方式</strong></td>
+<td>每个设备有独立的请求线与仲裁器相连</td>
+<td>速度最快、优先级灵活；<strong>硬件最复杂</strong>（连线最多）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>主设备 / 从设备</strong>：<strong>主设备</strong>能发起并控制总线传送（如 CPU、DMA 控制器）；<strong>从设备</strong>只能响应（如主存、I/O 端口）。</p>
+<hr />
+<h2>八、计算机组成阶段知识框架图（Day 10 + Day 11 合并 · 冲刺一页纸）</h2>
+<blockquote>
+<p>这是<strong>组成原理阶段（Day 10–11）的收尾图</strong>，覆盖 CPU/指令/寻址/流水线（Day 10）与存储体系/Cache/总线（Day 11）。
+冲刺复习（Day 31–34）<strong>只看这张图 + §九的 20 条结论</strong>即可快速恢复全部组成原理考点。</p>
+</blockquote>
+<h3>8.1 总框架</h3>
+<pre><code>                    ┌═══════════════════════ 计算机组成原理 ─══════════════════════┐
+                    │                                                        │
+   ┌─ Day 10：CPU 内部 ────────────┐        ┌─ Day 11：CPU 外部 ────────────────┐
+   │                               │        │                                  │
+   │  ① CPU 组成                   │        │  ⑤ 存储体系（层次结构）            │
+   │     运算器(ALU/ACC/PSW)        │        │     寄存器→Cache→主存→辅存        │
+   │     控制器(PC/IR/MAR/MDR)      │        │     局部性原理(时间/空间)          │
+   │     硬布线 vs 微程序           │        │                                  │
+   │                               │        │  ⑥ Cache                          │
+   │  ② 指令格式                   │        │     原理：命中/缺失/命中率          │
+   │     操作码+地址码、扩展操作码   │        │     映射：直接/全相联/组相联        │
+   │                               │        │     指标：t_a/S/e（计算主力①）      │
+   │  ③ 寻址方式 8 种（计算主力②）  │        │     替换：LRU/FIFO/RAND            │
+   │     立即/直接/间接/寄存器/      │        │     写：写直达/写回（+写分配）      │
+   │     寄存器间接/基址/变址/相对   │        │                                  │
+   │                               │        │  ⑦ 虚拟存储与 Cache 协同            │
+   │  ④ 指令流水线（计算主力③）     │        │     TLB(虚→实) → Cache(实→数据)    │
+   │     Δt/T/S/TP/E、超标量        │        │     缺页中断 vs Cache 缺失          │
+   │                               │        │                                  │
+   │  ④′ CISC vs RISC               │        │  ⑧ 总线                            │
+   └───────────────────────────────┘        │     DB/AB/CB、带宽=频率×宽度/8      │
+                                             │     同步 vs 异步（握手）            │
+                                             └──────────────────────────────────┘
+                    │                                  │
+                    └────────── 都建立在同一条主线上 ────┘
+                        「存储程序、程序控制」：CPU 通过【总线】访存，
+                          【Cache】藏在 CPU 与主存之间加速访存。
+</code></pre>
+<h3>8.2 两大板块的四个串联点（考试爱跨板块出题）</h3>
+<table>
+<thead>
+<tr>
+<th>串联点</th>
+<th>内容</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MAR/MDR ↔ 总线</strong></td>
+<td>MAR 接<strong>地址总线（单向）</strong>、MDR 接<strong>数据总线（双向）</strong></td>
+<td>Day 10 §1.4 ↔ Day 11 §7.2</td>
+</tr>
+<tr>
+<td><strong>流水线停顿 ↔ Cache</strong></td>
+<td>流水线<strong>结构冲突</strong>的解决办法之一就是把<strong>指令 Cache 与数据 Cache 分离</strong>（哈佛结构）</td>
+<td>Day 10 §4.7 ↔ Day 11 §2.1</td>
+</tr>
+<tr>
+<td><strong>局部性原理</strong></td>
+<td>虚拟存储（页面）、Cache（块）、磁盘预读<strong>都建立在局部性原理</strong>上；页面置换 LRU 与 Cache 替换 LRU <strong>同一思想</strong></td>
+<td>Day 2 OS ↔ Day 11 §1.3/§5.1</td>
+</tr>
+<tr>
+<td><strong>虚拟地址 → 物理地址 → Cache</strong></td>
+<td>TLB 与 Cache 是串联的两级映射：<strong>TLB 管"虚→实"，Cache 管"实→数据"</strong></td>
+<td>Day 2 OS ↔ Day 11 §6.2</td>
+</tr>
+</tbody>
+</table>
+<h3>8.3 组成原理三大计算题型（占分最多）</h3>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>核心公式</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache 命中率/平均访问时间</strong></td>
+<td>t_a = h·t_c + (1−h)·t_m；S = t_m/t_a；e = t_c/t_a</td>
+<td>Day 11 §2.4、§4（3 道例题）</td>
+</tr>
+<tr>
+<td><strong>映射方式地址结构</strong></td>
+<td>Tag + 组号/行号 + 偏移；位数守恒律</td>
+<td>Day 11 §3（统一设定）</td>
+</tr>
+<tr>
+<td><strong>流水线性能</strong></td>
+<td>Δt = max；T = Σt+(n−1)Δt；S = kn/(k+n−1)；E = n/(k+n−1)</td>
+<td>Day 10 §4</td>
+</tr>
+<tr>
+<td>（附）<strong>总线带宽</strong></td>
+<td>带宽 = 频率 × 宽度/8</td>
+<td>Day 11 §7.3</td>
+</tr>
+</tbody>
+</table>
+<h3>8.4 冲刺复习使用指南</h3>
+<ol>
+<li><strong>先看 §8.1 框架图</strong>，能不看书复述每个框里的内容 → 进入下一步。</li>
+<li><strong>遮住 §九的 20 条结论右边</strong>，逐条默写；<strong>不能脱口而出的打 ☑</strong>，这些就是组成原理的持久薄弱点。</li>
+<li><strong>重算三组题</strong>（每组 15 分钟）：<code>day10-cpu.md</code> §4 的 4 道流水线例题 + <code>day11-cache.md</code> §4 的 3 道命中率例题 + §7.3 的 3 道总线带宽例题。</li>
+<li><strong>重做错题</strong>：<code>day10-exercises.md</code> 与 <code>day11-exercises.md</code> 中标为"高频陷阱"的题（day10 第 9/11/16/18 题；day11 第 5/6/7/13/14/19 题）。</li>
+</ol>
+<hr />
+<h2>九、本日必记结论（20 条，冲刺时遮住右边默写）</h2>
+<ol>
+<li>存储层次：<strong>寄存器 → Cache → 主存 → 辅存</strong>；<strong>速度递减、容量递增、每位价格递减</strong>。</li>
+<li><strong>CPU 只能直接访问寄存器、Cache、主存</strong>；<strong>辅存不能被 CPU 直接访问</strong>。</li>
+<li><strong>Cache 用 SRAM，主存用 DRAM</strong>（DRAM 需刷新）。</li>
+<li><strong>时间局部性</strong>＝同一数据近期重复使用（循环计数器）；<strong>空间局部性</strong>＝邻近地址接连访问（数组遍历、顺序取指）。</li>
+<li><strong>Cache—主存层解决速度问题、由硬件管理、对所有程序员透明</strong>；<strong>主存—辅存层（虚拟存储）解决容量问题、由 OS+硬件管理、对应用程序员透明</strong>。</li>
+<li>命中率 <strong>h = N_c/(N_c+N_m)</strong>；分母是<strong>总访存次数</strong>。</li>
+<li><strong>平均访问时间 t_a = h·t_c + (1−h)·t_m</strong>（软考默认公式，除非题目说明缺失要加算 Cache 查找时间）。</li>
+<li><strong>加速比 S = t_m/t_a（&gt;1）</strong>；<strong>效率 e = t_c/t_a ≤ 100%</strong>；<strong>e = S/r = 1/[h+(1−h)r]</strong>，其中 <strong>r = t_m/t_c</strong>。</li>
+<li>反求命中率万能式：<strong>h = (t_m − t_a)/(t_m − t_c)</strong>。</li>
+<li><strong>直接映射</strong>：主存块 j → <strong>j mod C</strong> 行（C 为 Cache 行数），地址 = <strong>Tag + 行号 + 偏移</strong>，<strong>1 个比较器，冲突率最高</strong>。</li>
+<li><strong>全相联</strong>：主存块可放<strong>任意行</strong>，地址 = <strong>Tag + 偏移</strong>（无字块内地址），<strong>行数个比较器，只适用于小容量 Cache</strong>。</li>
+<li><strong>组相联</strong>：主存块 j → <strong>j mod G 组</strong>（G 为组数），组内任意路，地址 = <strong>Tag + 组号 + 偏移</strong>，<strong>路数个比较器，现代主流</strong>。</li>
+<li><strong>统一视角</strong>：直接映射 ＝ 1 路组相联；全相联 ＝ 最大路数（1 组）组相联；<strong>路数翻倍 → 组数减半、组号 −1 位、Tag +1 位</strong>。</li>
+<li><strong>位数守恒律</strong>：Tag + 组号/行号 + 偏移 = 主存地址位数；<strong>Tag + 组号 = 主存块号位数</strong>（= 地址位数 − 偏移位数）。</li>
+<li><strong>偏移位数 = log₂(块大小)</strong>；<strong>行号位数 = log₂(Cache 行数)</strong>；<strong>组号位数 = log₂(组数) = log₂(行数/路数)</strong>。</li>
+<li>判断命中：<strong>Tag 相等 且 有效位 V = 1</strong>（缺一个都不算命中）。</li>
+<li>替换策略：<strong>LRU（最近最少使用）最常用</strong>；注意 <strong>LRU ≠ LFU</strong>（后者按访问次数）。</li>
+<li><strong>写直达</strong>同时写 Cache 与主存（保持一致但慢）；<strong>写回</strong>只写 Cache 并置脏位、替换时才写回（快但有一段不一致）。</li>
+<li>经典配对：<strong>写直达 + 非写分配</strong>；<strong>写回 + 写分配</strong>。</li>
+<li><strong>数据总线双向、地址总线单向、控制总线双向</strong>；<strong>总线带宽 = 工作频率 × 宽度/8</strong>（复用总线要扣除地址占用时间）；同步总线靠<strong>统一时钟</strong>、异步总线靠<strong>握手</strong>。</li>
+</ol>
+<hr />
+<h2>十、快速自测（遮住答案，5 分钟）</h2>
+<ol>
+<li>存储体系中速度最快的是？ → <strong>寄存器</strong></li>
+<li>CPU 不能直接访问的是？ → <strong>辅存（磁盘）</strong></li>
+<li>循环变量 i 被反复访问体现什么局部性？ → <strong>时间局部性</strong></li>
+<li>顺序数组 a[0],a[1],… 体现什么局部性？ → <strong>空间局部性</strong></li>
+<li>命中 1900 次、未命中 100 次，h = ？ → <strong>0.95</strong></li>
+<li>h=0.95、t_c=10ns、t_m=100ns，t_a = ？ → <strong>14.5 ns</strong></li>
+<li>上题的加速比 S 与效率 e 分别是？ → <strong>≈ 6.90；≈ 69.0%</strong></li>
+<li>已知 t_a ≤ 20ns、t_c=10、t_m=100，最低 h = ？ → <strong>80/90 ≈ 88.9%</strong></li>
+<li>直接映射下，Cache 行号 = 主存块号 ______ C？ → <strong>mod（取余）</strong></li>
+<li>全相联为什么只适用于小容量 Cache？ → <strong>每个 Cache 行都要一个比较器，行数多则硬件开销爆炸</strong></li>
+<li>4 路组相联需要几个比较器？ → <strong>4 个</strong></li>
+<li>Cache 由 SRAM 还是 DRAM 构成？ → <strong>SRAM</strong></li>
+<li>Cache 写策略中"置脏位、替换时才写主存"的是？ → <strong>写回（Write Back）</strong></li>
+<li>TLB 与 Cache 谁先被执行？ → <strong>先 TLB（虚→实），再用物理地址查 Cache</strong></li>
+<li>地址总线 32 位，最大物理寻址空间是？ → <strong>2³² = 4 GB</strong></li>
+<li>100MHz、32 位数据总线的带宽 = ？ → <strong>400 MB/s</strong></li>
+</ol>
+<blockquote>
+<p>全部答对 → 直接去做 <code>day11-exercises.md</code>；有卡顿 → 回到对应章节把例题重算一遍（§3 的映射例题、§4 的三道命中率例题）。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/architecture/day11-cache.md">docs/knowledge-points/architecture/day11-cache.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

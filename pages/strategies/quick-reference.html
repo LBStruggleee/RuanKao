@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高频考点速查卡 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · strategies 📁 quick-reference.md</div>
+<h1>高频考点速查卡</h1>
+<blockquote>
+<p>考前3天重点复习此卡片内容</p>
+</blockquote>
+<h2>🔴 数据结构（必考）</h2>
+<h3>链表反转</h3>
+<pre><code>prev = null, curr = head
+while curr != null:
+    next = curr.next
+    curr.next = prev
+    prev = curr
+    curr = next
+return prev
+</code></pre>
+<h3>二叉树遍历</h3>
+<ul>
+<li>前序：根左右</li>
+<li>中序：左根右</li>
+<li>后序：左右根</li>
+<li>层序：逐层</li>
+</ul>
+<h3>排序算法复杂度</h3>
+<ul>
+<li>快速排序：平均O(nlogn)，最坏O(n²)</li>
+<li>归并排序：O(nlogn)稳定</li>
+<li>堆排序：O(nlogn)不稳定</li>
+</ul>
+<h3>哈希表</h3>
+<ul>
+<li>查找O(1)平均</li>
+<li>冲突解决：链地址法、开放地址法</li>
+</ul>
+<h2>🔴 操作系统（必考）</h2>
+<h3>PV操作模板</h3>
+<pre><code>P(S): S--; if(S&lt;0) block
+V(S): S++; if(S&lt;=0) wakeup
+</code></pre>
+<h3>死锁条件</h3>
+<p>互斥 + 占有且等待 + 不可剥夺 + 循环等待</p>
+<h3>页面置换</h3>
+<ul>
+<li>LRU：最近最少使用（常用）</li>
+<li>FIFO：先进先出</li>
+<li>OPT：最佳（理论）</li>
+</ul>
+<h2>🔴 计算机网络（必考）</h2>
+<h3>TCP三次握手</h3>
+<p>SYN → SYN+ACK → ACK</p>
+<h3>子网划分</h3>
+<p>网络地址 = IP &amp; 子网掩码
+可用主机 = 2^主机位 - 2</p>
+<h3>端口号</h3>
+<p>HTTP=80, HTTPS=443, FTP=21, SSH=22, DNS=53, SMTP=25</p>
+<h2>🔴 数据库（必考）</h2>
+<h3>SQL执行顺序</h3>
+<p>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</p>
+<h3>范式判断</h3>
+<ul>
+<li>1NF：属性不可分</li>
+<li>2NF：消除部分依赖</li>
+<li>3NF：消除传递依赖</li>
+</ul>
+<h3>事务ACID</h3>
+<p>原子性、一致性、隔离性、持久性</p>
+<h2>🔴 软件工程（必考）</h2>
+<h3>耦合强度（从强到弱，七级）</h3>
+<p>内容 &gt; 公共 &gt; 外部 &gt; 控制 &gt; 标记 &gt; 数据 &gt; 非直接</p>
+<h3>内聚强度（从弱到强）</h3>
+<p>偶然 &lt; 逻辑 &lt; 时间 &lt; 过程 &lt; 通信 &lt; 顺序 &lt; 功能</p>
+<h3>测试覆盖</h3>
+<p>语句 &lt; 判断 &lt; 条件 &lt; 判定/条件 &lt; 条件组合 &lt; 路径</p>
+<h2>🔴 计算机组成</h2>
+<h3>Cache映射</h3>
+<p>直接映射：块号 = 主存块号 % Cache块数</p>
+<h3>流水线</h3>
+<p>加速比 = 串行时间 / 流水线时间</p>
+<h3>总线带宽</h3>
+<p>带宽 = 频率 × 位宽 / 8</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/strategies/quick-reference.md">docs/strategies/quick-reference.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

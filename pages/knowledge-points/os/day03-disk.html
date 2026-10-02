@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 3（9/23）操作系统③：磁盘调度与文件系统 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 os 📁 day03-disk.md</div>
+<h1>Day 3（9/23）操作系统③：磁盘调度与文件系统</h1>
+<blockquote>
+<p>本笔记是 Day 3 的核心输入材料，对应软考「操作系统」中「设备管理（磁盘）」与「文件管理」部分。
+<strong>高频命题点</strong>：磁盘调度算法的寻道时间计算（<strong>必考计算题</strong>）、磁盘平均存取时间三段式、文件物理结构（连续/链接/索引）对比、索引文件的一级/多级索引可管理文件大小计算、FAT 与文件目录。
+<strong>本笔记末尾（第十节）是 Step 2 的交付物——OS 三天整张知识框架图</strong>，覆盖进程管理（Day 1）、内存管理（Day 2）、磁盘与文件（Day 3），是 Phase 4 冲刺的独立复习材料。</p>
+</blockquote>
+<hr />
+<h2>一、磁盘的物理结构（先认识"地址"）</h2>
+<h3>1.1 结构图</h3>
+<pre><code>                  ┌─────────────────────────────┐
+                  │         盘片（platter）       │
+                  │   ┌─────────────────────┐   │
+                  │   │  磁道(track)：同心圆  │   │
+                  │   │  ┌───────────────┐  │   │
+                  │   │  │ 扇区(sector)  │  │   │  ← 磁盘读写的最小单位
+                  │   │  │ = 一个物理块   │  │   │    （通常 512B / 4KB）
+                  │   │  └───────────────┘  │   │
+                  │   └─────────────────────┘   │
+                  └─────────────────────────────┘
+   一根主轴串起多张盘片，每个盘面（正反两面）各有一个磁头：
+
+   盘面0  ──┐
+   盘面1  ──┤  所有盘面上&quot;半径相同&quot;的磁道组成一个【柱面 cylinder】
+   盘面2  ──┤     （磁头统一作径向移动，同一柱面内的磁头可同时定位）
+   盘面3  ──┘
+</code></pre>
+<h3>1.2 关键概念（必背表）</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+<th>编号方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>盘片 / 盘面</strong></td>
+<td>磁盘的物理载体，每面涂有磁性介质</td>
+<td>盘面号 = 磁头号</td>
+</tr>
+<tr>
+<td><strong>磁道（track）</strong></td>
+<td>盘面上的同心圆环</td>
+<td>从外向内编号 0,1,2,…</td>
+</tr>
+<tr>
+<td><strong>扇区（sector）</strong></td>
+<td>磁道被切成的弧段，是磁盘<strong>读写的最小单位</strong></td>
+<td>一个磁道常分为 63 个扇区</td>
+</tr>
+<tr>
+<td><strong>柱面（cylinder）</strong></td>
+<td>所有盘面上<strong>半径相同</strong>的磁道集合</td>
+<td>从外向内编号 0,1,2,…</td>
+</tr>
+</tbody>
+</table>
+<h3>1.3 磁盘物理地址（三元组）</h3>
+<p>一个数据块在磁盘上的物理地址 = <strong>（柱面号，磁头号（盘面号），扇区号）</strong>。</p>
+<pre><code>   访问一个数据块：
+     ① 磁头径向移动 → 定位【柱面】   ← 花的时间叫【寻道时间】（机械，最慢）
+     ② 选中对应【磁头/盘面】          ← 电子切换，极快
+     ③ 盘片旋转 → 定位【扇区】        ← 花的时间叫【旋转延迟】
+     ④ 边转边读出数据                ← 花的时间叫【传输时间】
+</code></pre>
+<blockquote>
+<p><strong>⚠️ 易错点 1</strong>：柱面号从<strong>外向内</strong>递增（最外圈是柱面 0）；但"向内移动"到底是朝 0 还是朝最大柱面，不同教材说法不一。<strong>做题时以题目给定的方向为准</strong>，本笔记一律用「向柱面号减小方向移动 = 朝 0 移动」的说法。</p>
+<p><strong>⚠️ 易错点 2</strong>：磁盘的<strong>物理块大小 = 扇区大小</strong>（一个扇区就是一个物理块/盘块）。文件系统中的"盘块"通常就是扇区或几个连续扇区的簇。</p>
+</blockquote>
+<hr />
+<h2>二、磁盘存取时间（三段式，必考）</h2>
+<h3>2.1 公式</h3>
+<blockquote>
+<p><strong>平均存取时间 Ta = 平均寻道时间 Ts + 平均旋转延迟 Tr + 传输时间 Tt</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>组成</th>
+<th>决定因素</th>
+<th>能否优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>寻道时间 Ts</strong></td>
+<td>磁头移动到目标柱面的机械移动时间</td>
+<td>✅ <strong>磁盘调度算法优化的就是它</strong></td>
+</tr>
+<tr>
+<td><strong>旋转延迟 Tr</strong></td>
+<td>盘片转速；平均看做转<strong>半圈</strong></td>
+<td>靠提高转速</td>
+</tr>
+<tr>
+<td><strong>传输时间 Tt</strong></td>
+<td>转速与要读的数据量</td>
+<td>靠提高转速/密度</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 核心结论</strong>：<strong>磁盘调度算法（FCFS/SSTF/SCAN…）只影响寻道时间</strong>，与旋转延迟、传输时间无关。题目让你"比较几种调度算法"，实际是比<strong>总寻道距离</strong>。</p>
+</blockquote>
+<h3>2.2 两个常用换算（背死）</h3>
+<ul>
+<li><strong>转一圈的时间</strong> = <code>60 秒 ÷ 转速（转/分）</code></li>
+<li><strong>平均旋转延迟</strong> = <strong>半圈</strong>的时间 = <code>30 ÷ 转速（转/分）</code> 秒</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>转速</th>
+<th>转一圈</th>
+<th>平均旋转延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3600 r/min</td>
+<td>16.67 ms</td>
+<td>8.33 ms</td>
+</tr>
+<tr>
+<td>5400 r/min</td>
+<td>11.11 ms</td>
+<td>5.56 ms</td>
+</tr>
+<tr>
+<td>7200 r/min</td>
+<td><strong>8.33 ms</strong></td>
+<td><strong>4.17 ms</strong></td>
+</tr>
+<tr>
+<td>10000 r/min</td>
+<td>6.00 ms</td>
+<td>3.00 ms</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 存取时间手算例题</h3>
+<blockquote>
+<p><strong>例题</strong>：某磁盘转速为 7200 转/分，平均寻道时间为 8 ms，每个磁道有 500 个扇区。求读取一个扇区的平均存取时间。</p>
+</blockquote>
+<p><strong>解：</strong></p>
+<ol>
+<li>转一圈的时间 = 60 ÷ 7200 = 0.008333 s = <strong>8.33 ms</strong>。</li>
+<li>平均旋转延迟 = 半圈 = 8.33 ÷ 2 = <strong>4.17 ms</strong>。</li>
+<li>传输一个扇区的时间 = 8.33 ms ÷ 500 = 0.0167 ms = <strong>16.7 μs</strong>。</li>
+<li>平均存取时间 Ta = 8 + 4.17 + 0.0167 ≈ <strong>12.19 ms</strong>。</li>
+</ol>
+<blockquote>
+<p><strong>验证</strong>：寻道（机械）8 ms ≈ 66%，旋转 4.17 ms ≈ 34%，传输几乎可忽略。<strong>所以减少寻道距离 = 提高磁盘性能的钥匙</strong>——这正是磁盘调度算法存在的意义。</p>
+<p><strong>⚠️ 易错点</strong>：题目若问"读取一个扇区"的传输时间，用"转一圈时间 ÷ 每道扇区数"；若问"读取一个磁道"，传输时间 = 转一圈的时间。两者千万别混。</p>
+</blockquote>
+<hr />
+<h2>三、磁盘调度算法（必考计算题！）</h2>
+<h3>3.1 六种算法对比（必背表）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>全称</th>
+<th>策略</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FCFS</strong></td>
+<td>先来先服务</td>
+<td>严格按请求<strong>到达顺序</strong>服务</td>
+<td>公平、简单、<strong>无饥饿</strong></td>
+<td>寻道距离长，可能来回"折腾"</td>
+</tr>
+<tr>
+<td><strong>SSTF</strong></td>
+<td>最短寻道时间优先</td>
+<td>每次选<strong>离当前磁头最近</strong>的请求</td>
+<td>平均寻道短</td>
+<td><strong>可能饥饿</strong>（远处请求长期得不到服务）；<strong>不是最优</strong></td>
+</tr>
+<tr>
+<td><strong>SCAN</strong></td>
+<td>电梯（扫描）算法</td>
+<td>磁头<strong>朝一个方向走到底</strong>（到磁盘边界），沿途服务，再<strong>反向</strong></td>
+<td>无饥饿，性能好</td>
+<td>中间柱面被服务两次/两端等待不均</td>
+</tr>
+<tr>
+<td><strong>C-SCAN</strong></td>
+<td>循环扫描</td>
+<td>只在<strong>单方向上服务</strong>，到端后<strong>空跑回另一端</strong>继续同向服务</td>
+<td>各柱面等待时间<strong>更均匀</strong></td>
+<td>回程空跑不算服务</td>
+</tr>
+<tr>
+<td><strong>LOOK</strong></td>
+<td>—</td>
+<td>SCAN 的改进：<strong>只走到最远请求</strong>就折返，不走到物理边界</td>
+<td>少走冤枉路</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>C-LOOK</strong></td>
+<td>—</td>
+<td>C-SCAN 的改进：只走到单方向上<strong>最远的请求</strong>就跳回</td>
+<td>少走冤枉路</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀</strong>：
+- <strong>FCFS</strong> = "排队，来一个服务一个"；
+- <strong>SSTF</strong> = "就近原则，谁近先服务谁"；
+- <strong>SCAN</strong> = "电梯，一路走到底再反向"；
+- <strong>C-SCAN</strong> = "单行道，服务完一头、空车回另一头"；
+- <strong>LOOK / C-LOOK</strong> = "SCAN/C-SCAN 的聪明版，到最远请求就回头（Look 一下有没有请求了）"。</p>
+<p><strong>⚠️ 易错点（高频）</strong>：
+1. <strong>SSTF 会"折返跑"</strong>：它只看眼前最近，可能先往右再一路往左，导致总距离并非最优。<strong>SSTF ≠ 最优算法</strong>。
+2. <strong>SCAN/C-SCAN 要走到"端"</strong>：端 = <strong>物理边界</strong>（0 或最大柱面）；<strong>LOOK/C-LOOK 只走到最远请求</strong>。这是最容易算错的一步，两者相差的距离 = <code>最远请求到端点的距离 × 2</code>（C-SCAN 只算单程）。
+3. <strong>C-SCAN 的回程不服务</strong>：从一端跳回另一端时<strong>不处理任何请求</strong>，但<strong>移动距离照算</strong>。
+4. 软考常考"平均寻道距离 = 总寻道距离 ÷ <strong>请求总数</strong>"（注意分母是请求个数，不是移动段数）。</p>
+</blockquote>
+<h3>3.2 完整手算例题（六种算法同一请求序列，必算 3 遍以上）</h3>
+<blockquote>
+<p><strong>题目</strong>：设磁盘共有 <strong>200 个柱面</strong>（编号 0–199），磁头初始位于柱面 <strong>100</strong>，磁头<strong>向柱面号减小方向（朝 0）</strong>移动。磁盘请求队列按到达顺序为：
+<strong>108, 90, 88, 60, 130, 40, 160, 20</strong></p>
+<p>分别用 FCFS、SSTF、SCAN、LOOK、C-SCAN、C-LOOK 算法给出磁头服务顺序，计算总寻道距离与平均寻道距离。</p>
+</blockquote>
+<hr />
+<h4>（1）FCFS（按到达顺序服务）</h4>
+<p>服务顺序 = 到达顺序：108 → 90 → 88 → 60 → 130 → 40 → 160 → 20</p>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 108</td>
+<td>向右</td>
+<td>8</td>
+</tr>
+<tr>
+<td>108 → 90</td>
+<td>向左</td>
+<td>18</td>
+</tr>
+<tr>
+<td>90 → 88</td>
+<td>向左</td>
+<td>2</td>
+</tr>
+<tr>
+<td>88 → 60</td>
+<td>向左</td>
+<td>28</td>
+</tr>
+<tr>
+<td>60 → 130</td>
+<td>向右</td>
+<td>70</td>
+</tr>
+<tr>
+<td>130 → 40</td>
+<td>向左</td>
+<td>90</td>
+</tr>
+<tr>
+<td>40 → 160</td>
+<td>向右</td>
+<td>120</td>
+</tr>
+<tr>
+<td>160 → 20</td>
+<td>向左</td>
+<td>140</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总寻道距离 = 8+18+2+28+70+90+120+140 = 476</strong>
+<strong>平均寻道距离 = 476 ÷ 8 = 59.5</strong></p>
+<blockquote>
+<p>看出来了吗？磁头在 20~160 之间反复横跳，这就是 FCFS 的低效。</p>
+</blockquote>
+<hr />
+<h4>（2）SSTF（最短寻道时间优先）</h4>
+<p>每步从剩余请求中挑<strong>离当前磁头最近</strong>的：</p>
+<table>
+<thead>
+<tr>
+<th>步</th>
+<th>当前</th>
+<th>剩余请求中最近者</th>
+<th>距离</th>
+<th>累计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>100</td>
+<td><strong>108</strong>（距 8；次近 90 距 10）</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>108</td>
+<td><strong>90</strong>（距 18；88 距 20）</td>
+<td>18</td>
+<td>26</td>
+</tr>
+<tr>
+<td>3</td>
+<td>90</td>
+<td><strong>88</strong>（距 2）</td>
+<td>2</td>
+<td>28</td>
+</tr>
+<tr>
+<td>4</td>
+<td>88</td>
+<td><strong>60</strong>（距 28）</td>
+<td>28</td>
+<td>56</td>
+</tr>
+<tr>
+<td>5</td>
+<td>60</td>
+<td><strong>40</strong>（距 20；20 距 40）</td>
+<td>20</td>
+<td>76</td>
+</tr>
+<tr>
+<td>6</td>
+<td>40</td>
+<td><strong>20</strong>（距 20）</td>
+<td>20</td>
+<td>96</td>
+</tr>
+<tr>
+<td>7</td>
+<td>20</td>
+<td><strong>130</strong>（距 110；160 距 140）</td>
+<td>110</td>
+<td>206</td>
+</tr>
+<tr>
+<td>8</td>
+<td>130</td>
+<td><strong>160</strong>（距 30）</td>
+<td>30</td>
+<td>236</td>
+</tr>
+</tbody>
+</table>
+<p>服务顺序：100 → 108 → 90 → 88 → 60 → 40 → 20 → 130 → 160
+<strong>总寻道距离 = 8+18+2+28+20+20+110+30 = 236</strong>
+<strong>平均寻道距离 = 236 ÷ 8 = 29.5</strong></p>
+<blockquote>
+<p><strong>注意 SSTF 的折返</strong>：磁头先向右到 108，再一路向左穿过起点到 20，最后又向右到 160。<strong>它并不是最优的</strong>——下面的 LOOK 算法比它还少走 16 个柱面。</p>
+</blockquote>
+<hr />
+<h4>（3）SCAN（电梯算法：朝一个方向走到底，再反向）</h4>
+<p>磁头朝 0 的方向走，先服务所有小于 100 的请求（从近到远：90, 88, 60, 40, 20），<strong>走到物理边界 0</strong>，再反向服务 108, 130, 160。</p>
+<pre><code>服务顺序：100 → 90 → 88 → 60 → 40 → 20 → [0] → 108 → 130 → 160
+                                        ↑ 走到端点（无请求，空走）
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 90</td>
+<td>向左</td>
+<td>10</td>
+</tr>
+<tr>
+<td>90 → 88</td>
+<td>向左</td>
+<td>2</td>
+</tr>
+<tr>
+<td>88 → 60</td>
+<td>向左</td>
+<td>28</td>
+</tr>
+<tr>
+<td>60 → 40</td>
+<td>向左</td>
+<td>20</td>
+</tr>
+<tr>
+<td>40 → 20</td>
+<td>向左</td>
+<td>20</td>
+</tr>
+<tr>
+<td>20 → 0</td>
+<td>向左（空走到端点）</td>
+<td>20</td>
+</tr>
+<tr>
+<td>0 → 108</td>
+<td>向右</td>
+<td>108</td>
+</tr>
+<tr>
+<td>108 → 130</td>
+<td>向右</td>
+<td>22</td>
+</tr>
+<tr>
+<td>130 → 160</td>
+<td>向右</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总寻道距离 = 10+2+28+20+20+20+108+22+30 = 260</strong>
+<strong>平均寻道距离 = 260 ÷ 8 = 32.5</strong></p>
+<hr />
+<h4>（4）LOOK（只走到最远请求就折返，不走到 0）</h4>
+<p>与 SCAN 唯一的区别：走到最小请求 <strong>20</strong> 就折返，<strong>不去 0</strong>。</p>
+<pre><code>服务顺序：100 → 90 → 88 → 60 → 40 → 20 → 108 → 130 → 160
+                                       ↑ 直接折返
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 90</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>90 → 88</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>88 → 60</td>
+<td>28</td>
+<td></td>
+</tr>
+<tr>
+<td>60 → 40</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>40 → 20</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>20 → 108</td>
+<td>88</td>
+<td></td>
+</tr>
+<tr>
+<td>108 → 130</td>
+<td>22</td>
+<td></td>
+</tr>
+<tr>
+<td>130 → 160</td>
+<td>30</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>总寻道距离 = 10+2+28+20+20+88+22+30 = 220</strong>
+<strong>平均寻道距离 = 220 ÷ 8 = 27.5</strong></p>
+<blockquote>
+<p><strong>对比 SCAN</strong>：260 − 220 = 40，正是 <code>20 → 0 往返 20×2 = 40</code>。<strong>LOOK 永远 ≤ SCAN</strong>。</p>
+</blockquote>
+<hr />
+<h4>（5）C-SCAN（单向服务：到端后空跑回另一端，继续同向）</h4>
+<p>磁头朝 0 走，服务 90, 88, 60, 40, 20，<strong>走到边界 0</strong>，<strong>跳到另一端 199</strong>（回程不服务），再继续<strong>朝 0 的方向</strong>服务 160, 130, 108。</p>
+<pre><code>服务顺序：100 → 90 → 88 → 60 → 40 → 20 → [0] → [199] → 160 → 130 → 108
+                          ↑ 空走到端点        ↑ 空跳回另一端（不服务）
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 90</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>90 → 88</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>88 → 60</td>
+<td>28</td>
+<td></td>
+</tr>
+<tr>
+<td>60 → 40</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>40 → 20</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>20 → 0</td>
+<td>20（空走）</td>
+<td></td>
+</tr>
+<tr>
+<td>0 → 199</td>
+<td>199（空跳，不服务）</td>
+<td></td>
+</tr>
+<tr>
+<td>199 → 160</td>
+<td>39</td>
+<td></td>
+</tr>
+<tr>
+<td>160 → 130</td>
+<td>30</td>
+<td></td>
+</tr>
+<tr>
+<td>130 → 108</td>
+<td>22</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>总寻道距离 = 10+2+28+20+20+20+199+39+30+22 = 390</strong>
+<strong>平均寻道距离 = 390 ÷ 8 = 48.75</strong></p>
+<blockquote>
+<p><strong>⚠️ 关于 C-SCAN 的"回程距离"</strong>：本题按严格 C-SCAN 定义，<code>0 → 199</code> 的跳回<strong>计入总移动距离</strong>。部分考题会把"空跑回程"视为零成本（只比较服务过程），则 C-SCAN 结果 = 390 − 199 = 191。<strong>做题时看清题目口径</strong>：题干说"磁头移动距离/寻道总距离"→ 全程计入；说"服务请求过程中的寻道距离"→ 可能不算回程。不确定时按<strong>全程计入</strong>作答，并在解答中写明口径。</p>
+</blockquote>
+<hr />
+<h4>（6）C-LOOK（只走到最远请求就跳回，继续同向）</h4>
+<p>与 C-SCAN 的区别：走到最小请求 20 就跳回<strong>最远的未服务请求 160</strong>，不去 0，也不去 199。</p>
+<pre><code>服务顺序：100 → 90 → 88 → 60 → 40 → 20 → [跳到 160] → 130 → 108
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>移动</th>
+<th>距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 90</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>90 → 88</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>88 → 60</td>
+<td>28</td>
+<td></td>
+</tr>
+<tr>
+<td>60 → 40</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>40 → 20</td>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>20 → 160</td>
+<td>140（空跳，不服务）</td>
+<td></td>
+</tr>
+<tr>
+<td>160 → 130</td>
+<td>30</td>
+<td></td>
+</tr>
+<tr>
+<td>130 → 108</td>
+<td>22</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>总寻道距离 = 10+2+28+20+20+140+30+22 = 272</strong>
+<strong>平均寻道距离 = 272 ÷ 8 = 34</strong></p>
+<hr />
+<h3>3.3 六种算法结果汇总（本例）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>服务顺序</th>
+<th>总寻道距离</th>
+<th>平均寻道距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FCFS</td>
+<td>108,90,88,60,130,40,160,20</td>
+<td><strong>476</strong></td>
+<td>59.5</td>
+</tr>
+<tr>
+<td>SSTF</td>
+<td>108,90,88,60,40,20,130,160</td>
+<td><strong>236</strong></td>
+<td>29.5</td>
+</tr>
+<tr>
+<td>SCAN</td>
+<td>90,88,60,40,20,→0→,108,130,160</td>
+<td><strong>260</strong></td>
+<td>32.5</td>
+</tr>
+<tr>
+<td><strong>LOOK</strong></td>
+<td>90,88,60,40,20,108,130,160</td>
+<td><strong>220</strong> ✅本例最优</td>
+<td>27.5</td>
+</tr>
+<tr>
+<td>C-SCAN</td>
+<td>90,88,60,40,20,→0→199→,160,130,108</td>
+<td><strong>390</strong></td>
+<td>48.75</td>
+</tr>
+<tr>
+<td>C-LOOK</td>
+<td>90,88,60,40,20,→160,130,108</td>
+<td><strong>272</strong></td>
+<td>34</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>从这张表要读出三个结论</strong>：
+1. <strong>FCFS 最差</strong>（476），任何调度算法都比它强。
+2. <strong>SSTF（236）并不是最优</strong>——本例中 LOOK（220）更短。SSTF 的"贪心"让它先去了 108，结果要折返。
+3. <strong>SCAN 与 LOOK、C-SCAN 与 C-LOOK 的差</strong>全都来自"要不要走到端点"。记住：<code>SCAN − LOOK = 端点空走距离 × 2</code>。</p>
+</blockquote>
+<hr />
+<h2>四、文件逻辑结构（用户视角）</h2>
+<p><strong>逻辑结构</strong>是文件在用户/程序员面前呈现的样子，与文件在磁盘上怎么存（物理结构）无关。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>特点</th>
+<th>典型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>流式文件（无结构文件）</strong></td>
+<td>无结构的<strong>字节序列</strong>，文件就是一串字节</td>
+<td>长度 = 字节数；想读哪读哪，但"记录"要程序自己切</td>
+<td>Unix/Linux 普通文件、文本文件</td>
+</tr>
+<tr>
+<td><strong>记录式文件（有结构文件）</strong></td>
+<td>由若干<strong>逻辑记录</strong>组成，每个记录是一个独立单位</td>
+<td>便于以记录为单位检索、修改</td>
+<td>数据库文件、学生档案</td>
+</tr>
+</tbody>
+</table>
+<h3>4.1 记录的成组与分解（易考小计算）</h3>
+<p>把若干逻辑记录<strong>打包存入一个物理块</strong>，叫<strong>成组</strong>；读出后再拆开，叫<strong>分解</strong>。</p>
+<ul>
+<li><strong>块因子 g</strong>（每块能放的记录数）= <code>物理块大小 ÷ 记录长度</code>（<strong>向下取整</strong>）</li>
+<li>成组后最后一块若没装满，产生<strong>内部碎片</strong></li>
+</ul>
+<blockquote>
+<p><strong>例题</strong>：物理块大小 512 B，逻辑记录长度 80 B。
+- 块因子 g = 512 ÷ 80 = 6.4 → <strong>6 个记录成一块</strong>（向下取整）。
+- 每块实际使用 6 × 80 = 480 B，<strong>浪费 512 − 480 = 32 B</strong>（内部碎片）。</p>
+<p><strong>⚠️ 易错点</strong>：g 一定<strong>向下取整</strong>——放 7 个记录要 560 B &gt; 512 B，放不下。</p>
+</blockquote>
+<hr />
+<h2>五、文件物理结构（磁盘视角，必考对比）</h2>
+<p><strong>物理结构</strong>是文件在磁盘上的存放方式。三种基本结构：</p>
+<h3>5.1 对比表（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>连续分配</strong></th>
+<th><strong>链接分配</strong></th>
+<th><strong>索引分配</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存放方式</td>
+<td>文件占用<strong>连续</strong>的盘块</td>
+<td>盘块<strong>任意分散</strong>，每块末尾存"下一块指针"</td>
+<td>盘块任意分散，另用一张<strong>索引表</strong>记录所有块号</td>
+</tr>
+<tr>
+<td>FCB 中存什么</td>
+<td><strong>首块号 + 文件长度</strong></td>
+<td><strong>首块号</strong>（+ 末块号）</td>
+<td><strong>指向索引块的指针</strong></td>
+</tr>
+<tr>
+<td>随机存取</td>
+<td>✅ <strong>快</strong>（直接算：第 i 块 = 首块 + i）</td>
+<td>❌ <strong>慢</strong>（必须沿指针从头遍历）</td>
+<td>✅ <strong>快</strong>（查索引表）</td>
+</tr>
+<tr>
+<td>文件动态增长</td>
+<td>❌ 不方便（要找连续空间，产生<strong>外部碎片</strong>）</td>
+<td>✅ 方便（新块挂到链尾）</td>
+<td>✅ 方便（新块号加入索引表）</td>
+</tr>
+<tr>
+<td>可靠性</td>
+<td>高</td>
+<td>低（指针一旦损坏，链全断）</td>
+<td>较高</td>
+</tr>
+<tr>
+<td>典型应用</td>
+<td>早期系统、CD-ROM</td>
+<td>FAT 文件系统</td>
+<td>ext2/3/4、UFS、NTFS</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆</strong>：
+- <strong>连续</strong> = "整租一套房"——好找但搬家难；
+- <strong>链接</strong> = "租房链条，房东给你下一家地址"——好扩但要挨家找；
+- <strong>索引</strong> = "房东有一本通讯录（索引表）"——好找好扩，就是通讯录本身要占地方。</p>
+<p><strong>⚠️ 高频易错点</strong>：
+- <strong>连续分配</strong>产生<strong>外部碎片</strong>（与动态分区一样）；<strong>链接/索引分配</strong>无外部碎片，但索引表本身占空间。
+- <strong>链接分配</strong>的随机存取是<strong>不能</strong>的（必须顺序沿指针走）——这是选择题最爱的陷阱。
+- <strong>索引分配</strong>的索引表放在<strong>一个物理块（索引块）</strong>里，FCB 只存指向它的指针。</p>
+</blockquote>
+<h3>5.2 连续分配的地址计算</h3>
+<blockquote>
+<p><strong>例题</strong>：文件 F 采用连续分配，其 FCB 记录首块号 = 20，文件共占 8 个盘块。求文件第 5 个盘块（从 0 编号）的物理块号。</p>
+</blockquote>
+<p><strong>解</strong>：物理块号 = 首块号 + i = 20 + 5 = <strong>25</strong>。</p>
+<blockquote>
+<p><strong>验证</strong>：第 0 块→20，第 1 块→21，…，第 5 块→25，第 7 块→27（末块）。✅</p>
+</blockquote>
+<h3>5.3 链接分配的两种实现</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>指针存放位置</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>隐式链接</strong></td>
+<td>指针存放在<strong>每个数据块的末尾</strong></td>
+<td>实现简单；但读第 i 块必须从头读 i 块（慢）</td>
+</tr>
+<tr>
+<td><strong>显式链接</strong></td>
+<td>指针集中存放在一张 <strong>FAT 表</strong>中（见第七节）</td>
+<td>整张表常驻内存，查链接快得多；<strong>FAT 就是显式链接</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>六、索引文件（含多级索引与地址计算，必考）</h2>
+<h3>6.1 一级索引</h3>
+<p>FCB 中存一个指向<strong>索引块</strong>的指针；索引块内是一张<strong>数据块号表</strong>：</p>
+<pre><code>   FCB ──▶ [ 索引块 ]  ┌────┬────┬────┬────┬…┬────┐
+                       │块号│块号│块号│块号│…│块号│  → 各自指向一个数据块
+                       └────┴────┴────┴────┴─┴────┘
+   访问第 i 块：读索引块 → 取第 i 项 → 得数据块号 → 读数据块
+</code></pre>
+<ul>
+<li>一个索引块能存多少个块号？ = <code>索引块大小 ÷ 块号所占字节数</code></li>
+<li><strong>一级索引可管理的文件最大长度</strong> = <code>块号数 × 盘块大小</code></li>
+</ul>
+<blockquote>
+<p><strong>例题（必算）</strong>：某文件系统盘块大小为 <strong>4 KB</strong>，盘块号占 <strong>4 字节</strong>。求：
+（1）一个索引块可存放多少个盘块号？
+（2）一级索引可管理的文件最大长度？</p>
+</blockquote>
+<p><strong>解</strong>：
+（1）4096 ÷ 4 = <strong>1024 个盘块号</strong>。
+（2）1024 × 4 KB = 4096 KB = <strong>4 MB</strong>。</p>
+<h3>6.2 多级索引</h3>
+<p>当文件超过一级索引的容量时，让索引块指向<strong>下一级索引块</strong>：</p>
+<pre><code>   FCB ──▶ [一级索引块] ──▶ [二级索引块] ──▶ [数据块]
+                     └──▶ [二级索引块] ──▶ [数据块]
+</code></pre>
+<p><strong>容量公式（以上述参数：4 KB 块、4 B 块号、1024 项/索引块）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>级数</th>
+<th>可管理的块数</th>
+<th>可管理的文件最大长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一级索引</td>
+<td>1024</td>
+<td>1024 × 4 KB = <strong>4 MB</strong></td>
+</tr>
+<tr>
+<td>二级索引</td>
+<td>1024 × 1024 = 2²⁰</td>
+<td>2²⁰ × 4 KB = <strong>4 GB</strong></td>
+</tr>
+<tr>
+<td>三级索引</td>
+<td>1024³ = 2³⁰</td>
+<td>2³⁰ × 4 KB = <strong>4 TB</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆规律</strong>：每多一级，容量乘 1024（即 ×2¹⁰）。<strong>一级 4MB、二级 4GB、三级 4TB</strong>，一级跳一千倍。</p>
+</blockquote>
+<h3>6.3 混合多级索引（Linux ext2 风格，常考"读第 i 块要几次磁盘 I/O"）</h3>
+<p>一个 inode 中直接放若干<strong>直接块指针</strong>，再放一级、二级、三级间接指针：</p>
+<pre><code>   inode（FCB）
+     ├── 10 个直接块指针      → 直接指向数据块        （1 次磁盘 I/O 读到数据）
+     ├── 1 个一级间接指针     → 指向一个索引块        （2 次磁盘 I/O）
+     ├── 1 个二级间接指针     → 指向&quot;指向索引块的索引块&quot; （3 次磁盘 I/O）
+     └── 1 个三级间接指针                              （4 次磁盘 I/O）
+</code></pre>
+<p><strong>区域划分</strong>（4 KB 块、4 B 块号）：</p>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>覆盖的块号</th>
+<th>覆盖的文件偏移</th>
+<th>读数据需要的磁盘 I/O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接（10 个）</td>
+<td>0 ~ 9</td>
+<td>0 ~ 40 KB</td>
+<td>1 次</td>
+</tr>
+<tr>
+<td>一级间接</td>
+<td>10 ~ 1033</td>
+<td>40 KB ~ 4 MB + 40 KB</td>
+<td>2 次</td>
+</tr>
+<tr>
+<td>二级间接</td>
+<td>1034 ~ 1049609</td>
+<td>≈ 4 MB ~ 4 GB</td>
+<td>3 次</td>
+</tr>
+<tr>
+<td>三级间接</td>
+<td>1049610 ~ 更大</td>
+<td>≈ 4 GB ~ 4 TB</td>
+<td>4 次</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：题目问"读取某块数据需要访问几次磁盘"——<strong>索引块也要算一次磁盘读</strong>！一级间接 = 索引块 1 次 + 数据块 1 次 = <strong>2 次</strong>。</p>
+</blockquote>
+<h3>6.4 混合索引地址计算例题（必算）</h3>
+<blockquote>
+<p><strong>例题</strong>：文件系统盘块大小 4 KB，块号 4 B，inode 含 <strong>10 个直接块 + 1 个一级间接 + 1 个二级间接 + 1 个三级间接</strong>。现要访问文件的逻辑地址 <strong>5 MB</strong>（即 5242880 B）处。
+（1）该地址位于哪个盘块？块内偏移是多少？
+（2）该块落在哪种索引区域？
+（3）访问该数据块共需几次磁盘 I/O？</p>
+</blockquote>
+<p><strong>解</strong>：</p>
+<p>（1）盘块号 = 5242880 ÷ 4096 = <strong>1280</strong>；块内偏移 = 5242880 mod 4096 = <strong>0</strong>。</p>
+<p>（2）判断区域：
+- 直接块覆盖块号 0~9 → 1280 不在其中；
+- 一级间接覆盖块号 10 ~ 10+1024−1 = <strong>10~1033</strong> → 1280 不在其中；
+- 二级间接覆盖块号 1034 起 → <strong>1280 落在二级间接区域</strong>。</p>
+<p>二级间接区域内的序号 = 1280 − 10 − 1024 = <strong>246</strong>（即二级间接区域的第 246 个块，从 0 编）。
+- 第一级索引项序号 = 246 ÷ 1024 = <strong>0</strong>（即二级间接指针指向的那张表里的第 0 项）；
+- 第二级索引项序号 = 246 mod 1024 = <strong>246</strong>。</p>
+<p>（3）访问路径：</p>
+<pre><code>   读【二级间接指针指向的一级索引块】(1 次)
+      → 取第 0 项，得到【二级索引块】地址，读它 (1 次)
+         → 取第 246 项，得到【数据块】地址，读它 (1 次)
+</code></pre>
+<p>共 <strong>3 次磁盘 I/O</strong>。</p>
+<blockquote>
+<p><strong>验证</strong>：5 MB = 5 × 2²⁰ = 5242880 B；5242880 = 1280 × 4096 + 0 ✓。1280 落在 1034 之后 ✓。246 = 0 × 1024 + 246 ✓。</p>
+</blockquote>
+<hr />
+<h2>七、文件目录与 FAT</h2>
+<h3>7.1 文件控制块（FCB）与目录</h3>
+<ul>
+<li><strong>文件控制块（FCB）</strong>：操作系统用来描述和管理文件的数据结构，是<strong>文件存在的标志</strong>。</li>
+<li><strong>FCB 的内容</strong>：文件名 + 文件物理地址（首块号/索引指针）+ 文件类型 + 大小 + 创建时间 + 权限 + 属性等。</li>
+<li><strong>目录</strong>：目录由<strong>目录项</strong>组成，每个目录项就是一个 FCB（或指向 inode 的指针）。<strong>目录本身也是一种文件</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>目录结构</th>
+<th>特点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>单级目录</strong></td>
+<td>全系统一张表，文件不能重名</td>
+<td>重名冲突、检索慢</td>
+</tr>
+<tr>
+<td><strong>二级目录</strong></td>
+<td>主目录 + 各用户文件目录</td>
+<td>解决重名，但不便分类</td>
+</tr>
+<tr>
+<td><strong>多级（树形）目录</strong></td>
+<td>层次结构，路径唯一</td>
+<td>路径解析要多次读盘</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ FCB vs inode（高频）</strong>：
+- <strong>FCB</strong> 把文件名和属性、物理地址<strong>都放在一起</strong>；
+- <strong>inode（索引节点）</strong> 把文件名<strong>分离</strong>出去放在目录项里，inode 只存属性 + 物理地址（不含文件名）。同一个 inode 可以有<strong>多个文件名（硬链接）</strong>。</p>
+</blockquote>
+<h3>7.2 硬链接与软链接（符号链接）</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>做法</th>
+<th>删除原文件后</th>
+<th>能否跨文件系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>硬链接</strong></td>
+<td>多个目录项指向<strong>同一个 inode</strong>（inode 引用计数 +1）</td>
+<td><strong>仍可访问</strong>（计数 &gt; 0，文件还在）</td>
+<td>❌ 不能（inode 是文件系统内部的）</td>
+</tr>
+<tr>
+<td><strong>软链接（符号链接）</strong></td>
+<td>一个文件，其<strong>内容是目标文件的路径字符串</strong></td>
+<td><strong>失效</strong>（路径悬空，成"野链接"）</td>
+<td>✅ 可以</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆</strong>：硬链接 = "同一套房挂两个门牌"（房子还在，门牌就能用）；软链接 = "一张写着地址的纸条"（房子拆了，纸条就是废纸）。</p>
+</blockquote>
+<h3>7.3 FAT（文件分配表）</h3>
+<p><strong>FAT = 显式链接的文件物理结构</strong>：把所有盘块的"下一块指针"集中存放在一张表里，这张表就是 FAT。</p>
+<pre><code>   FAT 表（常驻内存或开机读入内存）：
+   ┌──────┬────────────┐
+   │ 盘块号│ 下一盘块号  │
+   ├──────┼────────────┤
+   │  0   │   ...      │
+   │  1   │   5        │  ← 块 1 之后是块 5
+   │  5   │   9        │
+   │  9   │  -1        │  ← -1（全 1）= 文件最后一块
+   │  3   │   0        │  ← 0 = 空闲块
+   └──────┴────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>要点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>表项数</strong> = 盘块总数</td>
+<td>每个盘块对应一项</td>
+</tr>
+<tr>
+<td><strong>特殊值</strong></td>
+<td><strong>0</strong> = 空闲块；<strong>−1（0xFFFF…）</strong> = 文件的最后一块</td>
+</tr>
+<tr>
+<td><strong>表项位数</strong></td>
+<td>由盘块总数决定：FAT12（12 位，4096 块）、FAT16（16 位）、FAT32（32 位）</td>
+</tr>
+<tr>
+<td><strong>优点</strong></td>
+<td>指针在内存的 FAT 里，查链接<strong>不必读数据块</strong>，比隐式链接快得多</td>
+</tr>
+<tr>
+<td><strong>本质</strong></td>
+<td>链接式物理结构（显式），<strong>不支持真正的随机存取</strong>，但比隐式链接好很多</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 易错点</strong>：FAT 的表项内容是<strong>下一个盘块号</strong>，不是文件名、不是索引。FAT 与"索引分配"是<strong>两种不同</strong>的物理结构：FAT 是<strong>链接式</strong>（显式），索引分配是<strong>索引式</strong>。</p>
+</blockquote>
+<hr />
+<h2>八、本章必背速记清单</h2>
+<ol>
+<li>磁盘物理地址 = <strong>（柱面号，磁头号，扇区号）</strong>；扇区是磁盘读写的<strong>最小单位</strong>；柱面 = 所有盘面上半径相同的磁道集合。</li>
+<li><strong>平均存取时间 = 平均寻道时间 + 平均旋转延迟 + 传输时间</strong>；磁盘调度算法<strong>只影响寻道时间</strong>。</li>
+<li><strong>转一圈 = 60 ÷ 转速</strong>；<strong>平均旋转延迟 = 半圈</strong>。</li>
+<li>磁盘调度：<strong>FCFS</strong> 公平但慢；<strong>SSTF</strong> 就近但会饥饿且非最优；<strong>SCAN</strong> 走到底再反向；<strong>C-SCAN</strong> 单向服务、空跑回程；<strong>LOOK/C-LOOK</strong> 是只走到最远请求的改进版。</li>
+<li><strong>SCAN − LOOK = 端点空走距离 × 2</strong>；C-SCAN 的回程<strong>不服务但计入距离</strong>（看清题目口径）。</li>
+<li>平均寻道距离 = 总寻道距离 ÷ <strong>请求个数</strong>。</li>
+<li>文件逻辑结构：<strong>流式（字节流）/记录式（记录集合）</strong>；块因子 g = 块大小 ÷ 记录长度，<strong>向下取整</strong>。</li>
+<li>文件物理结构：<strong>连续</strong>（随机存取快、不便增长、外部碎片）；<strong>链接</strong>（便于增长、不能随机存取）；<strong>索引</strong>（随机存取 + 动态增长，索引表占空间）。</li>
+<li>连续分配：第 i 块的物理块号 = <strong>首块号 + i</strong>。</li>
+<li>索引块可存块号数 = <strong>块大小 ÷ 块号字节数</strong>；4 KB 块 + 4 B 块号 = <strong>1024 项</strong>。</li>
+<li><strong>一级索引 4 MB、二级 4 GB、三级 4 TB</strong>（4 KB 块、4 B 块号）。</li>
+<li>混合索引读数据所需磁盘 I/O：直接块 <strong>1 次</strong>、一级 <strong>2 次</strong>、二级 <strong>3 次</strong>、三级 <strong>4 次</strong>（索引块也要算）。</li>
+<li><strong>FAT</strong>：显式链接结构，表项存"下一块号"，<strong>0 = 空闲，−1 = 文件末块</strong>。</li>
+<li><strong>FCB</strong> 含文件名+属性+地址；<strong>inode</strong> 不含文件名；<strong>硬链接</strong>共享 inode（删原文件仍可用，不跨文件系统），<strong>软链接</strong>存路径（删原文件则失效，可跨文件系统）。</li>
+</ol>
+<hr />
+<h2>九、快速自测（合上笔记做）</h2>
+<ol>
+<li>磁盘调度算法（FCFS/SSTF/SCAN/C-SCAN）优化的是存取时间的哪一部分？为什么？</li>
+<li>转速 7200 转/分的磁盘，平均旋转延迟是多少 ms？</li>
+<li>请求序列 98, 183, 37, 122, 14, 124, 65, 67，磁头在 53，SSTF 服务顺序是什么？</li>
+<li>为什么说 SSTF 不是最优的磁盘调度算法？</li>
+<li>盘块 4 KB、块号 4 B，二级索引可管理的文件最大长度是多少？</li>
+<li>逻辑地址 5 MB（块 4 KB）落在 ext2 混合索引的哪个区域？读它需要几次磁盘 I/O？</li>
+<li>FAT 表项中的 "0" 和 "-1" 分别表示什么？</li>
+<li>哪种文件物理结构既支持随机存取又便于文件动态增长？</li>
+</ol>
+<p>（答案见 <code>day03-exercises.md</code> 开头「自测速答」。）</p>
+<hr />
+<h2>十、OS 三天整张知识框架图（Step 2 交付物 · Phase 4 冲刺复习材料）</h2>
+<blockquote>
+<p><strong>使用说明</strong>：这是操作系统三天（进程管理 → 内存管理 → 磁盘与文件）的<strong>总览复习图</strong>。冲刺阶段先看这张图回忆全部框架，卡住的地方再回到 <code>day01-process.md</code> / <code>day02-memory.md</code> / <code>day03-disk.md</code> 对应章节。<strong>三大模块在软考中合计约占选择题 8–12 分 + 科目二 1 道大题（PV 操作）。</strong></p>
+</blockquote>
+<h3>10.1 总框架（ASCII 思维导图）</h3>
+<pre><code>                            ┌─────────────────────────────────────────────┐
+                            │            操 作 系 统 （OS）                 │
+                            └─────────────────────────────────────────────┘
+                  ┌──────────────────┬──────────────────┬──────────────────┐
+                  ▼                  ▼                  ▼                  ▼
+          【1】进程管理        【2】内存管理      【3】设备/磁盘管理   【4】文件管理
+        （Day 1 · day01）   （Day 2 · day02）   （Day 3 上 · day03） （Day 3 下 · day03）
+                  │                  │                  │                  │
+   ┌──────────────┼──────────────┐   │                  │                  │
+   │              │              │   │                  │                  │
+ 进程概念      进程调度      同步与互斥    │                  │                  │
+ ·PCB(唯一标志) ·FCFS/SJF     ·信号量 P/V   │                  │                  │
+ ·五状态        ·RR/多级反馈  ·生产者-消费者│                  │                  │
+ ·进程 vs 线程  ·周转/等待时间·读者-写者    │                  │                  │
+ ·调度=线程     ·SJF平均等待最短·死锁四条件 │                  │                  │
+ ·资源=进程     ·长作业饥饿    ·银行家算法   │                  │                  │
+                              │                  │                  │
+                  ┌───────────┴──────────┐       │                  │
+                  │                      │       │                  │
+            连续分配                分页/分段      │                  │
+            ·首次/最佳/最坏适应      ·页表/段表      │                  │
+            ·内部 vs 外部碎片        ·地址转换       │                  │
+                                    ·页号P/偏移W     │                  │
+                                    ·物理=b×S+W     │                  │
+                                    ·多级页表/TLB    │                  │
+                                    ·虚拟内存/缺页   │                  │
+                                    ·置换算法        │                  │
+                                    （OPT/FIFO/LRU/Clock）              │
+                                                  │                  │
+                              ┌───────────────────┴────┐             │
+                              │                        │             │
+                        磁盘物理结构              磁盘调度算法        │
+                        ·盘面/柱面/磁道/扇区       ★寻道时间计算(必考)│
+                        ·地址(柱面,磁头,扇区)      ·FCFS/SSTF         │
+                        ·Ta=寻道+旋转+传输          ·SCAN/C-SCAN       │
+                        ·转速→旋转延迟              ·LOOK/C-LOOK       │
+                                                   （只优化寻道时间）  │
+                                                                     │
+                        ┌────────────────────────────────────────────┘
+                        │
+              ┌─────────┴─────────┬──────────────┬─────────────┐
+              │                   │              │             │
+        文件逻辑结构        文件物理结构      索引文件        目录与 FAT
+        ·流式(字节流)       ·连续(首块+长度)  ★一级索引      ·FCB/inode
+        ·记录式(记录)       ·随机存取快       ·1024项/块      ·文件名在目录项
+        ·成组分解g=块/记录  ·链接(指针)       ·4MB/4GB/4TB    ·硬链接/软链接
+                            ·索引(索引表)     ·混合索引       ·FAT: 下一块号
+                            ·随机+可增长       ·读块I/O次数     ·0=空闲,-1=末块
+</code></pre>
+<h3>10.2 三大模块核心考点速查</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>必考概念</th>
+<th>必考计算</th>
+<th>笔记位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 进程管理</strong></td>
+<td>PCB、五状态转换、进程 vs 线程、调度算法、PV 操作、死锁四条件</td>
+<td>SJF 平均周转时间、PV 操作大题</td>
+<td><code>day01-process.md</code> §1–§6</td>
+</tr>
+<tr>
+<td><strong>② 内存管理</strong></td>
+<td>页表、TLB、虚拟内存三特征、缺页中断、置换算法、Belady 异常</td>
+<td><strong>页式地址转换</strong>、多级页表访存次数、EAT、置换算法缺页次数</td>
+<td><code>day02-memory.md</code> §3–§7</td>
+</tr>
+<tr>
+<td><strong>③ 磁盘与文件</strong></td>
+<td>柱面/磁道/扇区、存取时间三段、调度算法、文件逻辑/物理结构、索引、FAT、FCB/inode</td>
+<td><strong>寻道时间计算</strong>、存取时间计算、索引可管理文件大小、混合索引读块次数</td>
+<td><code>day03-disk.md</code> §1–§7</td>
+</tr>
+</tbody>
+</table>
+<h3>10.3 OS 三天必背结论清单（20 条）</h3>
+<p><strong>进程管理（Day 1）</strong>
+1. PCB 是进程<strong>存在的唯一标志</strong>；<strong>资源分配单位 = 进程，CPU 调度单位 = 线程</strong>。
+2. <strong>阻塞不能直接 → 执行</strong>，必须「阻塞 → 就绪 → 执行」；P 操作失败 → <strong>阻塞</strong>，时间片用完 → <strong>就绪</strong>。
+3. 线程共享代码/数据/堆/文件，<strong>独享栈与寄存器</strong>。
+4. <strong>SJF 平均等待时间最短</strong>但长作业<strong>饥饿</strong>；RR 时间片过大 → 退化为 FCFS，过小 → 切换开销大。
+5. P 减 V 加；生产者-消费者：<code>mutex=1, empty=n, full=0</code>，<strong>资源量 P 在互斥量 P 之前</strong>（否则死锁）。
+6. 死锁四必要条件：<strong>互斥、占有且等待、不可剥夺、循环等待</strong>；银行家算法属于<strong>死锁避免</strong>。</p>
+<p><strong>内存管理（Day 2）</strong>
+7. 页式：<code>P = LA ÷ S</code>，<code>W = LA mod S</code>，<strong>物理地址 = 块号 × 页大小 + W</strong>；段式：<strong>物理地址 = 段基址 + W</strong>（<strong>页式乘、段式加</strong>）。
+8. 页大小是 2 的幂 → 二进制切位：低 log₂页大小 位 = 偏移，高位 = 页号。
+9. <strong>访存次数</strong>：一级页表 2 次；二级 3 次；三级 4 次；<strong>TLB 命中只 1 次</strong>。
+10. TLB = <strong>相联存储器</strong>实现的高速页表项缓存；EAT = h×(t1+t2) + (1−h)×(t1+2t2)。
+11. 虚拟内存三特征：<strong>多次性、对换性、虚拟性</strong>；基础是<strong>局部性原理</strong>；缺页中断是<strong>内部中断、指令执行期间</strong>产生。
+12. 置换算法：OPT 看未来（不可实现）、FIFO 看进入（<strong>唯一会 Belady</strong>）、LRU 看过去、Clock = LRU 近似。</p>
+<p><strong>磁盘与文件（Day 3）</strong>
+13. 磁盘物理地址 = <strong>(柱面号, 磁头号, 扇区号)</strong>；扇区 = 最小读写单位；<strong>调度算法只优化寻道时间</strong>。
+14. <strong>Ta = 寻道 + 旋转 + 传输</strong>；转一圈 = 60 ÷ 转速；<strong>平均旋转延迟 = 半圈</strong>。
+15. <strong>SSTF 会饥饿、且非最优</strong>；<strong>SCAN 走到端、LOOK 走到最远请求</strong>；<strong>C-SCAN 回程不服务</strong>。
+16. 文件物理结构：<strong>连续 = 随机快 + 外部碎片</strong>；<strong>链接 = 好增长 + 不能随机</strong>；<strong>索引 = 随机 + 好增长</strong>。
+17. 索引块项数 = 块大小 ÷ 块号字节；<strong>一级 4MB / 二级 4GB / 三级 4TB</strong>（4 KB 块 + 4 B 块号）。
+18. 混合索引读数据 I/O 次数：直接 1 次、一级 2 次、二级 3 次、三级 4 次（<strong>索引块也算一次</strong>）。
+19. <strong>FAT = 显式链接</strong>，表项存下一块号，<strong>0 = 空闲、−1 = 末块</strong>。
+20. <strong>inode 不含文件名</strong>；硬链接共享 inode（删原文件仍可用、不跨文件系统），软链接存路径（删原文件则失效）。</p>
+<h3>10.4 OS 三天计算题类型一览（看到题型就知道用哪个公式）</h3>
+<table>
+<thead>
+<tr>
+<th>题型</th>
+<th>核心公式/方法</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SJF 平均周转时间</td>
+<td>画甘特图列时间轴，周转 = 完成 − 到达</td>
+<td>day01 §4.4</td>
+</tr>
+<tr>
+<td>PV 操作大题</td>
+<td>资源量 P 在互斥量 P 前、成对 P/V</td>
+<td>day01 §5.6</td>
+</tr>
+<tr>
+<td>页式地址转换</td>
+<td>P = LA÷S，W = LA mod S，PA = b×S+W</td>
+<td>day02 §3.4</td>
+</tr>
+<tr>
+<td>二级页表切位</td>
+<td>高位=外层页号、中位=内层页号、低位=偏移</td>
+<td>day02 §3.4 例 5</td>
+</tr>
+<tr>
+<td>TLB 有效访问时间</td>
+<td>EAT = h×(t1+t2) + (1−h)×(t1+2t2)</td>
+<td>day02 §3.5</td>
+</tr>
+<tr>
+<td>置换算法缺页次数</td>
+<td>逐格填表（OPT 看未来、FIFO 看队、LRU 看栈）</td>
+<td>day02 §7.2</td>
+</tr>
+<tr>
+<td><strong>磁盘寻道时间</strong></td>
+<td><strong>列每段移动距离，逐段相加 ÷ 请求数</strong></td>
+<td>day03 §3.2</td>
+</tr>
+<tr>
+<td><strong>磁盘存取时间</strong></td>
+<td><strong>Ta = 寻道 + 半圈旋转 + 传输</strong></td>
+<td>day03 §2.3</td>
+</tr>
+<tr>
+<td><strong>索引文件大小</strong></td>
+<td><strong>项数 = 块÷指针；容量 = 项数 × 块</strong></td>
+<td>day03 §6</td>
+</tr>
+<tr>
+<td>记录成组</td>
+<td>g = 块大小 ÷ 记录长度（向下取整）</td>
+<td>day03 §4.1</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>三天复习建议</strong>：Phase 4 冲刺时，先花 20 分钟把 10.3 的 20 条结论<strong>遮住右边默写</strong>；再花 30 分钟把 10.4 的十种题型<strong>各重做一道</strong>（day01/day02/day03 的 exercises 里都有对应题）。计算题默写不出公式的，立刻回看对应章节。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/os/day03-disk.md">docs/knowledge-points/os/day03-disk.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 23（10/13）软件工程⑤：DFD 大题入门 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day23-dfd-intro.md</div>
+<h1>Day 23（10/13）软件工程⑤：DFD 大题入门</h1>
+<blockquote>
+<p><strong>阶段定位</strong>：Phase 2 错题回归③ 的下午配套。软考中级·软件设计师 <strong>科目二（下午卷）试题一固定考数据流图（DFD），15 分</strong>——这是整份试卷里<strong>最稳的拿分点</strong>：题型固定、判分有套路、会画三层图就能拿 12 分以上。</p>
+<p><strong>本日定位</strong>：这是一份<strong>入门导览</strong>，不是答题模板。目标是：今天下午花 <strong>1 小时</strong>，从"看见 DFD 题就发懵"到"知道先看什么、先画什么、错在哪"。</p>
+<p><strong>⚠️ 与已有文件分工（不要重复学）</strong>：
+- 概念与定义（DFD 四要素、分层与平衡规则、图书馆借阅系统完整示例）→ <strong>Phase 1 的 <code>day12-process.md</code> §4</strong>，本文<strong>不重复</strong>，只在需要时指回去；
+- 答题模板与考场技巧（试题一四步法、外部实体识别法、存储定位法）→ <strong>Day 27 的 <code>subject2/dfd-uml-notes.md</code></strong>，本文<strong>不重复</strong>，只告诉你<strong>什么时候去翻它</strong>；
+- 本文讲<strong>入门视角</strong>：三层图怎么从一张白纸长出来、读图顺序、平衡规则的图示化、常见错误的判别练习。</p>
+<p><strong>说明</strong>：本文所有 ASCII 图按「CJK 字符 = 2 个显示列、等宽字体」排版，与 <code>day12-process.md</code> 一致；若发现错位，请检查编辑器是否使用了等宽中文字体。</p>
+</blockquote>
+<hr />
+<h2>一、先记住一句话</h2>
+<blockquote>
+<p><strong>DFD 只画"数据从哪来、到哪去、被谁加工"，不画控制逻辑。</strong></p>
+</blockquote>
+<p>这一句话区分了 DFD 和程序流程图，也是下午试题一里<strong>无数陷阱的源头</strong>：
+- DFD 里<strong>没有判断框、没有循环、没有时序</strong>——只有带箭头的数据流；
+- 每条数据流必须<strong>有名字</strong>，名字是<strong>名词短语</strong>（"订单""分析结果"），<strong>不是动词</strong>（"下单""分析"）；
+- 每个数据流箭头<strong>只有一端连加工</strong>（另一端连外部实体或数据存储），不能凭空起飞。</p>
+<hr />
+<h2>二、DFD 的三层结构（一个例子贯穿）</h2>
+<p>为了把三层图讲清楚，本文用一个<strong>网上购书系统</strong>作为例子（和 <code>day12-process.md</code> §4.4 的图书馆借阅系统<strong>不同</strong>，方便你两份对照练习）。</p>
+<p><strong>需求描述</strong>（模仿试题一【说明】的写法，3 项功能）：</p>
+<ol>
+<li><strong>订单处理</strong>：<strong>读者</strong>提交<strong>订单</strong>，系统核对图书库存与订单记录后<strong>生成发货单</strong>返回给读者。</li>
+<li><strong>图书采购</strong>：<strong>出版社</strong>提供<strong>新书目录</strong>，系统据此生成<strong>采购单</strong>发回出版社，并将入库新书登记到图书信息表。</li>
+</ol>
+<p><strong>识别出的要素</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>外部实体</th>
+<th>数据存储</th>
+<th>加工</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1 读者</td>
+<td>D1 图书信息表</td>
+<td>1 订单处理</td>
+</tr>
+<tr>
+<td>E2 出版社</td>
+<td>D2 订单表</td>
+<td>2 图书采购</td>
+</tr>
+</tbody>
+</table>
+<h3>2.1 顶层 DFD（关联图 / Context Diagram）</h3>
+<p><strong>规则</strong>：整个系统看作<strong>一个加工</strong>（编号常为 0 或不编号），<strong>只画外部实体与系统之间的数据流</strong>，<strong>不画数据存储</strong>（存储是系统内部的，顶层看不见）。</p>
+<pre><code class="language-text">                 订单
+┌──────────┐─────────────►┌──────────────────────┐
+│          │              │                      │
+│  E1 读者 │              │                      │
+│          │◄─────────────│  网上购书系统（0）     │
+└──────────┘   发货单      │                      │
+                            └──────┬──────────┬────┘
+                          新书目录 ▲          │ 采购单
+                                   │          │
+                            ┌──────┴──────────┴─┐
+                            │    E2 出版社      │
+                            └───────────────────┘
+</code></pre>
+<blockquote>
+<p><strong>顶层图的作用</strong>：圈定<strong>系统边界</strong>——谁在系统外面（实体）、系统跟谁交换什么数据。顶层图里出现的实体集合，在 0 层图里必须<strong>一个不多一个不少</strong>（实体守恒）。</p>
+</blockquote>
+<h3>2.2 0 层 DFD</h3>
+<p><strong>规则</strong>：把顶层的那一个加工<strong>分解</strong>成系统的主要加工（本题 2 个），并<strong>画出数据存储</strong>。</p>
+<pre><code class="language-text">      订单                                     发货单
+┌──────────┐      ┌──────────────┐                    ┌──────────┐
+│          │─────►│              │───────────────────►│          │
+│  E1 读者 │      │ 1 订单处理    │                    │  E1 读者 │
+│          │◄─────│              │                    │          │
+└──────────┘ 发货单 └───┬────┬────┘                    └──────────┘
+                        │    │
+                 写入订单│    │ 查询库存
+                        ▼    ▼
+                  ╔══════════════════╗
+                  ║ D1 图书信息表     ║
+                  ╚════════╤═════════╝
+                           │ 更新库存
+                           ▼
+                  ╔══════════════════╗◄──── 读取订单
+                  ║ D2 订单表         ║
+                  ╚══════════════════╝
+</code></pre>
+<p>下半部分是采购链：</p>
+<pre><code class="language-text">   新书目录          ┌──────────────┐  采购单       ┌──────────────┐
+┌──────────┐───────►│              │──────────────►│              │
+│ E2 出版社 │       │ 2 图书采购    │               │ E2 出版社    │
+└──────────┘       └──────┬───────┘               └──────────────┘
+                          │ 入库新书
+                          ▼
+                  ╔══════════════════╗
+                  ║ D1 图书信息表     ║
+                  ╚══════════════════╝
+</code></pre>
+<p><strong>0 层数据流清单</strong>（画图时建议先列这样一张表，再照表连线——这是考场上的核心动作）：</p>
+<table>
+<thead>
+<tr>
+<th>数据流</th>
+<th>起点</th>
+<th>终点</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>订单</td>
+<td>E1 读者</td>
+<td>加工 1</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>发货单</td>
+<td>加工 1</td>
+<td>E1 读者</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>新书目录</td>
+<td>E2 出版社</td>
+<td>加工 2</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>采购单</td>
+<td>加工 2</td>
+<td>E2 出版社</td>
+<td>外部流</td>
+</tr>
+<tr>
+<td>查询库存</td>
+<td>D1</td>
+<td>加工 1</td>
+<td>内部流（读）</td>
+</tr>
+<tr>
+<td>更新库存</td>
+<td>加工 1</td>
+<td>D1</td>
+<td>内部流（写）</td>
+</tr>
+<tr>
+<td>写入订单</td>
+<td>加工 1</td>
+<td>D2</td>
+<td>内部流（写）</td>
+</tr>
+<tr>
+<td>读取订单</td>
+<td>D2</td>
+<td>加工 1</td>
+<td>内部流（读）</td>
+</tr>
+<tr>
+<td>入库新书</td>
+<td>加工 2</td>
+<td>D1</td>
+<td>内部流（写）</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 1 层 DFD（分解某个加工）</h3>
+<p><strong>规则</strong>：把 0 层的<strong>一个</strong>加工再拆细。这里拆"1 订单处理"：</p>
+<pre><code class="language-text">    订单                       发货单
+┌────────┐    ┌────────────┐                ┌────────────┐
+│        │───►│            │                │            │
+│E1 读者 │    │1.1 接收订单 │                │ E1 读者    │
+│        │    └─────┬──────┘                │            │
+└────────┘          │                       └─────▲──────┘
+                    │ 写入订单                     │ 发货单
+                    ▼                             │
+              ╔══════════════╗                    │
+              ║ D2 订单表     ║── 读取订单 ──┐     │
+              ╚══════════════╝              ▼     │
+                                 ┌──────────────┐ │
+                                 │1.2 核对库存   │ │
+                                 └──────┬───────┘ │
+                                        │ 查询库存 │
+                              ╔════════════════╗  │
+                              ║ D1 图书信息表   ║  │
+                              ╚════════╤═══════╝  │
+                                       │ 更新库存  │
+                                       ▼          │
+                              ┌──────────────┐     │
+                              │1.3 生成发货单 │─────┘
+                              └──────────────┘
+</code></pre>
+<p><strong>加工编号规则</strong>（必背）：逐层<strong>用小数点串联</strong>——父加工 1 拆成 1.1、1.2、1.3；1.2 再拆就是 1.2.1、1.2.2……。看到编号就能追溯到父加工，阅卷老师也按编号给分。</p>
+<p><strong>再往下什么时候停？</strong> 当每个加工都简单到能写出<strong>一两句"小说明"</strong>（加工逻辑）时，就不用再拆了。软考试题一一般只考到 0 层和 1 层，<strong>很少要求画 2 层</strong>。</p>
+<hr />
+<h2>三、读图顺序：E → D → P → 流</h2>
+<p>下午试题一总是<strong>先给图、再问填空</strong>。读图按下面四圈扫，顺序不能乱：</p>
+<h3>第 1 圈：圈外部实体 E（方框）</h3>
+<ul>
+<li>找<strong>人、设备、外部系统</strong>：题目【说明】里动作的<strong>发出者</strong>和<strong>接收者</strong>；</li>
+<li><strong>排除</strong>：系统自己（"网上购书系统"）、被处理的数据（"图书""订单"是数据流名字，不是实体）、系统内部生成的结果；</li>
+<li><strong>检查</strong>：顶层图和 0 层图的实体集合必须<strong>完全一致</strong>。</li>
+</ul>
+<h3>第 2 圈：圈数据存储 D（双横线）</h3>
+<ul>
+<li>扫【说明】里的动词：<strong>存储 / 保存 / 记录 / 维护 / 写入 / 读取 / 登记</strong>——被这些动词作用的名词就是存储；</li>
+<li>命名 = 被存储的名词 + "表 / 信息表 / 文件 / 记录"（后缀灵活，<strong>核心词必须来自【说明】原词</strong>）；</li>
+<li><strong>注意合并</strong>：若【说明】写"对图书信息和 信息和库存信息进行维护"，可能是<strong>一个</strong>"图书信息表"，别拆成两个。</li>
+</ul>
+<h3>第 3 圈：圈加工 P（圆角矩形 / 圆形）</h3>
+<ul>
+<li>【说明】的<strong>每一项功能</strong>就是一个加工，功能有 N 项，0 层一般就有 N 个加工；</li>
+<li>加工命名用<strong>动宾短语</strong>（"订单处理""图书采购"），<strong>不用名词</strong>（"订单"）也<strong>不用动词</strong>（"处理"）。</li>
+</ul>
+<h3>第 4 圈：顺数据流（带箭头的线）</h3>
+<ul>
+<li>从实体出发，沿箭头走一遍：<strong>实体 → 加工 → 存储 → 加工 → 实体</strong>；</li>
+<li>每条流问三个问题：<strong>叫什么名字？从哪来？到哪去？</strong>——答案三要素缺一不可（这是试题一问题 3 的给分点）；</li>
+<li>读到存储时注意<strong>方向</strong>：<strong>读 = 存储 → 加工</strong>，<strong>写 = 加工 → 存储</strong>（<code>day12-process.md</code> 的高频陷阱）。</li>
+</ul>
+<blockquote>
+<p><strong>口诀</strong>：<strong>"先圈实体再找库，功能对齐画加工，顺着箭头数流名，读写方向别搞反。"</strong></p>
+</blockquote>
+<hr />
+<h2>四、画图顺序（和读图同一个顺序）</h2>
+<p>自己画图（试题一问题 4 的"加工分解"会要求画）时，<strong>也是 E → D → P → 流</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>动作</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 定实体</td>
+<td>列出所有 E，画在图纸<strong>边缘</strong></td>
+<td>顶层图的全部方框</td>
+</tr>
+<tr>
+<td>② 定存储</td>
+<td>列出所有 D，画在图<strong>中部</strong></td>
+<td>双横线框 D1、D2…</td>
+</tr>
+<tr>
+<td>③ 定加工</td>
+<td>对照【说明】功能项，画在实体与存储<strong>之间</strong></td>
+<td>圆角矩形 1、2…</td>
+</tr>
+<tr>
+<td>④ 连数据流</td>
+<td>按需求逐句连箭头，<strong>每个箭头当场命名</strong></td>
+<td>全部数据流</td>
+</tr>
+<tr>
+<td>⑤ 编号与命名</td>
+<td>加工编号（1、1.1…）、检查名字是名词短语</td>
+<td>可提交的图</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>为什么是这个顺序</strong>：实体和存储是<strong>名词</strong>，从【说明】里最容易捞出来，先确定它们就等于先定好了图的"骨架"；加工是<strong>动词</strong>，等骨架立起来再填，不会画到一半发现没地方放存储。</p>
+</blockquote>
+<hr />
+<h2>五、平衡规则图示化（核心考点）</h2>
+<p><code>day12-process.md</code> §4.3 给了平衡规则的定义，这里把三条规则画成<strong>可以直接照着检查的图</strong>。</p>
+<h3>5.1 守恒规则（每个加工要守恒）</h3>
+<pre><code class="language-text">   ✅ 正确：有输入、有输出
+   ┌──────────────┐
+   │  加工 P       │
+   └──────────────┘
+   ▲              │
+   │输入          │输出
+   ────────────────
+</code></pre>
+<pre><code class="language-text">   ❌ 错误 1：黑洞——有输入无输出
+        输入
+         │
+         ▼
+   ┌──────────────┐
+   │  加工 P       │  （数据进去了，没出来）
+   └──────────────┘
+
+   ❌ 错误 2：奇迹——有输出无输入
+   ┌──────────────┐
+   │  加工 P       │
+   └──────────────┘
+                  │输出
+                  ▼
+   （数据凭空产生）
+
+   ❌ 错误 3：输入不足以产生输出
+        输入A
+         │
+         ▼
+   ┌──────────────┐
+   │  加工 P       │──► 输出 = f(A, B)  （B 从哪来？没画）
+   └──────────────┘
+</code></pre>
+<h3>5.2 父子图平衡（上层 ↔ 下层）</h3>
+<p><strong>父图</strong>（0 层）里加工 1 的进出：</p>
+<pre><code class="language-text">   订单 ──► ┌──────────────┐ ──► 发货单
+            │ 1 订单处理    │
+            └──────────────┘
+             ▲            │
+          查询库存      写入订单 / 更新库存
+          读取订单（进出 D1、D2 的流）
+</code></pre>
+<p><strong>子图</strong>（1 层）里 1.1～1.3 合起来，进出必须与父图<strong>逐一对应</strong>：</p>
+<pre><code class="language-text">   订单 ──► ┌─ 1.1 ─┐                ┌─ 1.3 ─┐ ──► 发货单
+            └───────┘                └───────┘
+                │  D2 订单表  D1 图书信息表  ▲
+                └───► 1.2 ◄─────────────────┘
+</code></pre>
+<blockquote>
+<p><strong>检查动作</strong>：把子图里<strong>所有与外部实体、数据存储相连的流</strong>列成两列（输入列 / 输出列），再和父图中被分解加工的流列成两列，<strong>逐条划掉</strong>。划不完或有剩余 = 不平衡。</p>
+<p><strong>注意</strong>：名称可以<strong>合并或分解</strong>（父图一条"读者请求"在子图可以是"借书请求 + 还书请求"），但<strong>数据的总量和方向不能变</strong>。</p>
+</blockquote>
+<h3>5.3 无悬空流</h3>
+<pre><code class="language-text">   ✅ 每条流至少一端连加工：
+   E ──► P      P ──► E      D ──► P      P ──► D      P ──► P（加工之间）
+
+   ❌ 实体 ↔ 实体直接相连：
+   E1 ──────────────► E2    （中间没有加工，数据不经处理就到另一端？）
+
+   ❌ 存储 ↔ 存储直接相连：
+   D1 ──────────────► D2    （数据自己从一张表跳到另一张表？）
+
+   ❌ 流的一端悬空：
+   ? ──► P                     P ──► ?
+</code></pre>
+<h3>5.4 一句话总结三条规则</h3>
+<blockquote>
+<p><strong>每个加工要守恒（有进有出够用），父子图要守恒（进出不多不少），每条流要落地（一端必须连加工）。</strong></p>
+</blockquote>
+<hr />
+<h2>六、常见错误类型 + 判别练习</h2>
+<h3>6.1 六种典型错误（对号入座）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>错误</th>
+<th>一眼判别法</th>
+<th>在试题一里的考法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>黑洞</strong></td>
+<td>加工只有进、没有出</td>
+<td>问题 3 补数据流时，某个加工下面"光秃秃"</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>奇迹</strong></td>
+<td>加工只有出、没有进</td>
+<td>同上，反过来</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>输入不足以产生输出</strong></td>
+<td>输出里用到了某个数据，但没有任何流把它送进来</td>
+<td>最难的一种，要逐项对输出做"来源追溯"</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>父子图不平衡</strong></td>
+<td>子图的进出流和父图对不上（多了或少了）</td>
+<td>问题 3/4 常考："图 1-2 比图 1-1 少了哪条流？"</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>悬空流 / 实体直连</strong></td>
+<td>一条流两端都没有加工</td>
+<td>问题 3 的错误选项常长这样</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>混入控制流</strong></td>
+<td>出现条件、循环、时序（"若成功则…""循环执行"）</td>
+<td>改错题里把流程图当 DFD 画</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>官方答案原文（逐字记忆，问题 4 直接默写）</strong>：分解时需要注意的错误是——
+<strong>1、加工有输入但是没有输出；2、加工有输出但是没有输入；3、加工的输入不足以产生输出。</strong>
+这三句几乎每份真题的分解题都按此给分（见 <code>dfd-uml-notes.md</code> 第 3 步）。</p>
+</blockquote>
+<h3>6.2 判别练习（先自己做，再翻 day27 笔记核对）</h3>
+<blockquote>
+<p>下列四个小题!<strong>缩微版</strong>的试题一场景。<strong>先自己判别错在哪、属于上表哪一类</strong>，再看括号里的提示去 <code>dfd-uml-notes.md</code> / <code>dfd-uml-exercises.md</code> 对应处核对。<strong>本文不直接给答案</strong>——判别能力是被"卡住一下"练出来的。</p>
+</blockquote>
+<p><strong>练习 1</strong>：某系统的【说明】写"业务员将检测申请单录入系统，系统生成检测任务单"。0 层图里画了 <code>业务员 ──► 检测任务单</code>。这条流有什么问题？</p>
+<p><strong>练习 2</strong>：子图（1 层）中加工 1.1～1.4 分别接收"读者请求"，父图（0 层）中加工 1 只有一条进流"借书请求"。父图与子图平衡吗？</p>
+<p><strong>练习 3</strong>：0 层图里某加工的输入是"历史监测信息"，输出来源需要它，但图上"历史监测信息"只在两个加工 P2 → P3 之间流转。这里最可能缺了什么？（提示：带"历史/批量/记录/已存"字样的输入只能来自<strong>数据存储</strong>）</p>
+<p><strong>练习 4</strong>：有人把"订单处理"加工画成：<code>订单 ──► [库存够吗？] ──► 发货单</code>，中间是菱形判断框。这违反了 DFD 的哪条根本规则？</p>
+<blockquote>
+<p><strong>核对位置</strong>：练习 1/3/4 → <code>dfd-uml-notes.md</code>「第 3 步 数据流平衡检查」；练习 2 → 本文 §5.2 与 <code>day12-process.md</code> §4.3。</p>
+</blockquote>
+<hr />
+<h2>七、入门学习路径（Step 2 的 1 小时）</h2>
+<p>今天下午只有 1 小时预算，<strong>不要试图一次学完所有技巧</strong>。按下面三步走：</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>动作</th>
+<th>目标（做到什么算达标）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>30 min</strong></td>
+<td>通读本文 §一～§六</td>
+<td>能默写出：三层图各自画什么、E→D→P→流 的读图顺序、三条平衡规则、六种常见错误的名字</td>
+</tr>
+<tr>
+<td><strong>15 min</strong></td>
+<td>回看 <code>subject2/dfd-uml-notes.md</code> 的 <strong>DFD 答题模板（第 1～4 步）</strong></td>
+<td>知道<strong>考场四步法</strong>分别对应试题一的哪个问题（实体→问题 1、存储→问题 2、补流→问题 3、加工逻辑→问题 4）</td>
+</tr>
+<tr>
+<td><strong>15 min</strong></td>
+<td>预读 Step 3 的题目：<code>subject2/dfd-uml-exercises.md</code> <strong>试题 B（2021 下 智慧农业平台）</strong> 的【说明】与图形结构复原</td>
+<td>只读题、<strong>不做</strong>：把【说明】里 5 项功能画成 5 个加工、标出你认为的外部实体与存储</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>⚠️ 时间到了就停</strong>。入门阶段的敌人是"钻进去出不来"——今天的目标是<strong>建立框架</strong>，不是刷题量。模板里的细节（比如"实体守恒检查""三要素写全"）进 Phase 3 做题时自然会反复用到。</p>
+</blockquote>
+<hr />
+<h2>八、衔接 Phase 1：<code>day12-process.md</code> §4</h2>
+<p>本文与 Phase 1 的 <code>day12-process.md</code> §4 是<strong>两种视角</strong>，配合着用：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>day12-process.md</code> §4</th>
+<th>本文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>讲什么</strong></td>
+<td>概念定义：SA 三大工具、DFD 四要素、分层与平衡规则、图书馆借阅系统完整示例</td>
+<td>入门视角：三层图怎么长出来、读图顺序、平衡规则图示化、常见错误判别</td>
+</tr>
+<tr>
+<td><strong>什么时候看</strong></td>
+<td>概念不清、问"什么是平衡规则"时回去查</td>
+<td>第一次上手、问"拿到题先干什么"时看本文</td>
+</tr>
+<tr>
+<td><strong>例子</strong></td>
+<td>图书馆借阅系统（读者 / 管理员 / 借阅记录）</td>
+<td>网上购书系统（读者 / 出版社 / 订单表）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建议的复习顺序</strong>：如果今天读本文觉得某处概念陌生（比如"父子图平衡"的定义），<strong>先回 <code>day12-process.md</code> §4.2–4.3</strong> 看定义和那个图书馆借阅的例子，再回本文看图示化。两个例子是同一套规则的不同数据，对照看最容易懂。</p>
+<hr />
+<h2>九、Step 3 实战指引（做哪两题、怎么做）</h2>
+<p>Step 3（今天的下一段 / 明天）开始<strong>动手做题</strong>。选题已经定好，在 <code>subject2/dfd-uml-exercises.md</code> 里：</p>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>题目</th>
+<th>分值</th>
+<th>建议用时</th>
+<th>对答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>先做</strong></td>
+<td><strong>试题 B：2021 年下半年 下午试题一（智慧农业平台，DFD）</strong></td>
+<td>15 分</td>
+<td>40 分钟</td>
+<td><code>subject2/dfd-uml-key.md</code></td>
+</tr>
+<tr>
+<td><strong>后做</strong></td>
+<td><strong>试题 D：2023 年上半年 下午试题三（数字图书馆，UML）</strong></td>
+<td>15 分</td>
+<td>40 分钟</td>
+<td><code>subject2/dfd-uml-key.md</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>做试题 B（DFD）的具体要求</strong>：</p>
+<ol>
+<li><strong>先计时后做</strong>——但<strong>入门阶段不卡死时间</strong>：超时了就继续做完，把"超了多少分钟"记到计时记录表里，这是 Phase 3 提速的基线；</li>
+<li>严格按 <code>dfd-uml-notes.md</code> 的<strong>四步法</strong>顺序作答，每一步对应的分值是分开判的，<strong>不要跳步</strong>；</li>
+<li>问题 3（补数据流）<strong>必须写"数据流名称 + 起点 + 终点"三要素</strong>，只写名字不给分；</li>
+<li>做完先<strong>自己</strong>用本文 §5 的三条平衡规则检查一遍图，再对 <code>dfd-uml-key.md</code>；</li>
+<li>对完答案把丢分点回填到 <code>dfd-uml-notes.md</code> 最后一节"错题回填区"，并登记到 <code>reflection.md</code> Day 23 节。</li>
+</ol>
+<p><strong>做试题 D（UML）的定位</strong>：DFD 和 UML 是科目二的两道大题（试题一 + 试题三）。今天主攻 DFD，试题 D 作为<strong>热身</strong>——体会"结构化分析（DFD）与面向对象分析（UML）描述同一个系统的不同视角"即可，UML 的答题模板在 <code>dfd-uml-notes.md</code> 第二部分。</p>
+<blockquote>
+<p><strong>做完这两题后</strong>：如果试题 B 拿到 <strong>12 分以上</strong>，说明 DFD 已入门，Phase 3 直接按计划推进；<strong>低于 10 分</strong>，回 <code>day12-process.md</code> §4.4 把图书馆借阅系统的示例完整重画一遍，再把本文 §5 的平衡规则重新默写一次。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day23-dfd-intro.md">docs/knowledge-points/software-engineering/day23-dfd-intro.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

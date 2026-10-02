@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 32（10/22）考前冲刺复习①—— 框架图回顾 + 记忆性内容背诵 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 day32-sprint.md</div>
+<h1>Day 32（10/22）考前冲刺复习①—— 框架图回顾 + 记忆性内容背诵</h1>
+<blockquote>
+<p>📅 <strong>今天</strong>：2026-10-22（周四），距考试 <strong>2 天</strong>　｜　<strong>考试</strong>：2026-10-24（周六）
+🎯 <strong>考试时间</strong>：科目一 9:00–11:30（75 选择，合格 45）／科目二 14:00–16:30（5 道大题，合格 45）</p>
+<p><strong>今天只做四件事</strong>：回顾框架图 → 背诵记忆性内容 → 回看高频考点清单 → 默写大题模板。</p>
+<p>🚫 <strong>Phase 4 原则（贴在桌前）</strong>：<strong>巩固记忆、调整状态；不做新题、不学新知识。</strong>
+遇到想不起来的点，<strong>标出来、往下走</strong>，不要就地展开重学——卡住的地方统一记到 §五打卡区，晚上统一回看。</p>
+</blockquote>
+<hr />
+<h2>一、日程总览表</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>时长</th>
+<th>步骤</th>
+<th>目标（做到什么算过关）</th>
+<th>对应文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上午 8:30–11:30</td>
+<td><strong>3 h</strong></td>
+<td><strong>Step 1</strong> 框架图回顾</td>
+<td>六科目各 15–30 分钟，把每科知识在脑子里"拉成一条线"；每科结束做 3 分钟自测，卡住点登记</td>
+<td><code>docs/knowledge-points/</code> 下六科 <code>index.md</code> + 各 <code>dayXX-*.md</code>（详见 §二）</td>
+</tr>
+<tr>
+<td>下午 14:00–16:00</td>
+<td><strong>2 h</strong></td>
+<td><strong>Step 2</strong> 记忆性内容背诵</td>
+<td>遮住答案列，把 §三的速记卡<strong>逐张口述到能脱口而出</strong>（本文核心价值）</td>
+<td>本文 §三（10 张速记卡）</td>
+</tr>
+<tr>
+<td>下午 16:15–16:45</td>
+<td><strong>0.5 h</strong></td>
+<td><strong>Step 3</strong> 高频考点清单回看</td>
+<td>把三份策略文件当<strong>检查表</strong>过一遍，查漏补缺</td>
+<td><code>docs/strategies/high-frequency-topics.md</code> + <code>exam-tips.md</code> + <code>quick-reference.md</code>（详见 §四）</td>
+</tr>
+<tr>
+<td>晚上 19:00–20:30</td>
+<td><strong>1.5 h</strong></td>
+<td><strong>Step 4</strong> 大题模板默写验收 + 打卡</td>
+<td><strong>不看原文</strong>默写 <code>subject2-notes.md</code> 的五张口诀表；默写不全的补抄，并填写 §五打卡区</td>
+<td><code>docs/practice/subject2-notes.md</code> §一~§五 + 本文 §四验收单</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⏰ <strong>节奏建议</strong>：每个时间块之间休息 10–15 分钟；上午/下午各安排 1 次较长休息。全天学习约 7 小时，<strong>不要超时</strong>——明天（Day 33）强度会刻意压低，今晚要留足睡眠。</p>
+</blockquote>
+<hr />
+<h2>二、Step 1：框架图回顾指引（上午 3h）</h2>
+<p><strong>统一动作</strong>（每科都按这三步）：
+1. <strong>先看 <code>index.md</code></strong> 的全科大框架（一级/二级标题 + 大表），把整科"拉成一条线"；
+2. <strong>再翻指定 <code>dayXX-*.md</code> 的那张框架图/对比表</strong>，重点核对结构是否记得全（下面每科列了"重点核对"）；
+3. <strong>合上文件做 3 分钟自测</strong>——自己口述框架，<strong>卡住的地方立刻记到 §五打卡区</strong>，晚上重点看。</p>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>时长</th>
+<th>先看</th>
+<th>重点核对哪些框架结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>操作系统</strong></td>
+<td>25 min</td>
+<td><code>os/index.md</code></td>
+<td>① 进程<strong>五状态转换图</strong>（<code>day01-process.md §2.2</code>）——尤其"阻塞→就绪"不能直接到执行、就绪不能直接到阻塞；② <strong>PV 操作</strong>（P: <code>S−1, S&lt;0 则阻塞</code>；V: <code>S+1, S≤0 则唤醒</code>）与死锁四条件；③ <strong>页面置换对比表</strong>（<code>day02-memory.md</code>：FIFO 先进先出可能 Belady / LRU 最近最少使用性能好 / OPT 理论最优不可实现 / Clock 为 LRU 近似）；④ 分页地址转换（页号 = 地址÷页大小，偏移 = 地址%页大小）；⑤ 磁盘调度四算法（<code>day03-disk.md</code>：FCFS / SSTF / SCAN / C-SCAN）与文件组织四方式</td>
+</tr>
+<tr>
+<td><strong>计算机网络</strong></td>
+<td>30 min</td>
+<td><code>networks/index.md</code></td>
+<td>① <strong>五层封装/解封装图</strong>（<code>day04-protocols.md §五</code>：报文→报文段→IP 数据报→帧→比特；链路层<strong>唯一加尾</strong> FCS）；② <strong>OSI 七层 vs TCP/IP 四层对照表</strong>（§四）；③ <strong>协议归属总表 + 四个陷阱</strong>（§六：ARP→网际层、ICMP→网络层、DNS 用 TCP 也用 UDP、加密/压缩/编码→表示层）；④ 端口号表（§七）；⑤ TCP 三次握手/四次挥手时序图与拥塞控制四算法（<code>day05-tcp.md</code>：超时 cwnd=1、3 个重复 ACK 减半）；⑥ <strong>子网划分 5 步法</strong>与前缀对照（/30→2、/29→6、/28→14、/27→30、/26→62、/25→126、/24→254）；⑦ 加密体系"五层楼"（<code>day06-security.md §16</code>）</td>
+</tr>
+<tr>
+<td><strong>数据库</strong></td>
+<td>25 min</td>
+<td><code>databases/index.md</code></td>
+<td>① <strong>范式判断流程图</strong>（<code>day08-er.md §3.3</code>：求全部候选码→原子性→查部分依赖→查传递依赖→查左部是否皆含码）；② 属性分类法求候选码（L/N/R/LR + 闭包，<code>§2.1–2.2</code>）；③ <strong>E-R 转换规则表</strong>（<code>§5.2</code>：1:1 / 1:n / M:N）；④ 联系类型判定口诀（两端都唯一→1:1…）；⑤ SQL 四类考法与执行顺序（<code>day07-sql.md</code>：FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY）；⑥ 数据库阶段框架图（<code>day09-summary.md</code>）</td>
+</tr>
+<tr>
+<td><strong>计算机组成</strong></td>
+<td>25 min</td>
+<td><code>architecture/index.md</code></td>
+<td>① <strong>Cache 三映射地址结构图</strong>（<code>day11-cache.md §3</code>：直接 = Tag+<strong>行号</strong>+偏移 / 全相联 = Tag+偏移 / 组相联 = Tag+<strong>组号</strong>+偏移）与三映射对比表（§3.4）；② <strong>位数守恒律</strong>（Tag+组号/行号+偏移 = 主存地址位数；路数翻倍→组号 −1 位、Tag +1 位）；③ Cache 四性能指标公式（§2.4）；④ <strong>流水线公式</strong>（<code>day10-cpu.md §4</code>：Δt = max、T = Σt+(n−1)Δt、S、TP、E）；⑤ 寄存器辨析（PC/IR/MAR/MDR，§1.4）；⑥ 总线带宽 = 频率×宽度/8（<code>day11-cache.md §7.3</code>）</td>
+</tr>
+<tr>
+<td><strong>软件工程</strong></td>
+<td>30 min</td>
+<td><code>software-engineering/index.md</code></td>
+<td>① <strong>六大过程模型对比表</strong>（<code>day12-process.md §2.7</code>，含识别词）；② V 模型四对对应（需求↔验收、概设↔系统、详设↔集成、编码↔单元）；③ 敏捷四价值观 + Scrum 3-3-5（§2.6）；④ <strong>耦合七级 / 内聚七级</strong>（<code>day13-test.md §2–3</code>：无直数标控外公内 / 偶逻时过通顺功）；⑤ 白盒覆盖六级 + V(G) 三算法（§六–七）；⑥ 维护四类型与占比（§八）；⑦ 类间六关系（<code>day17-uml.md</code>）；⑧ 场景关键词→模式映射表（<code>day20-design-patterns.md §2.2</code>）；⑨ DFD 四要素与平衡规则（<code>day23-dfd-intro.md</code>）</td>
+</tr>
+<tr>
+<td><strong>数据结构</strong></td>
+<td>15 min</td>
+<td><code>data-structures/index.md</code></td>
+<td>① <strong>二叉树遍历对比表</strong>（前序根左右 / 中序左根右 / 后序左右根 / 层序逐层）；② <strong>排序算法对比表</strong>（最好/平均/最坏/空间/稳定性——稳定：冒泡、插入、归并；不稳定：选择、快排、堆）；③ 二叉树性质（第 i 层最多 2^(i−1)、深度 k 最多 2^k−1、叶子 = 度 2 节点 + 1）；④ 哈夫曼树（每次选两个最小权值合并，WPL 最小）；⑤ 图：DFS 用栈 / BFS 用队列、Prim 稠密 / Kruskal 稀疏、Dijkstra 单源 / Floyd 全对；⑥ 查找：折半 O(log₂n)、哈希冲突链地址法与开放地址法</td>
+</tr>
+</tbody>
+</table>
+<p><strong>每科 3 分钟自测（口述，不看文件）</strong></p>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>自测三问（答得出就过关）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS</td>
+<td>① 画出五状态图并说出每条转换的触发条件；② 页面置换四算法各自一句话特点；③ 死锁四个必要条件</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>① 默背封装顺序（哪一层加尾？）；② ARP / ICMP 各属哪层、各有什么陷阱？③ 子网划分 5 步法 + /28 有几个可用主机</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>① 范式判断五步流程；② 1:1 / 1:n / M:N 转换规则与外键加在哪；③ 部分依赖与传递依赖的判别条件</td>
+</tr>
+<tr>
+<td>组成</td>
+<td>① 默写三种映射的地址结构（Tag/组号/行号/偏移怎么拼）；② t_a、S、e 三个公式；③ 流水线 T 与 TP 的公式</td>
+</tr>
+<tr>
+<td>软工</td>
+<td>① 六大过程模型各一个特征词；② 耦合七级、内聚七级口诀；③ 白盒覆盖强度从弱到强六句话</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>① 四种遍历的顺序；② 排序对比表（哪些稳定、快排最坏是什么）；③ 哈夫曼树怎么构造</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>✅ <strong>每科自测完，把卡住的知识点写进 §五打卡区第一张表</strong>（只写名字，不展开学），晚上 18:00 后统一回看一眼。</p>
+</blockquote>
+<hr />
+<h2>三、Step 2：记忆性内容速记卡（下午 2h · 本文核心）</h2>
+<blockquote>
+<p><strong>用法（重要）</strong>：每张卡都是"左列问题 / 右列答案"的结构。<strong>用手或纸遮住答案列，逐条口述</strong>；答不出或卡顿的，在题号画 ○，晚上补背。
+所有数字与口诀均已与 Phase 1 笔记逐条核对（出处见每卡末尾），<strong>与笔记不一致的以笔记为准</strong>。</p>
+</blockquote>
+<h3>卡①协议层级归属表（含 ARP/ICMP/IGMP 陷阱）</h3>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>所属层</th>
+<th>一句话 / 端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP / HTTPS</td>
+<td>应用层</td>
+<td>80 / 443（HTTPS = HTTP + TLS）</td>
+</tr>
+<tr>
+<td>FTP</td>
+<td>应用层</td>
+<td><strong>控制 21 / 数据 20</strong>（两条连接，TCP）</td>
+</tr>
+<tr>
+<td>SMTP / POP3 / IMAP</td>
+<td>应用层</td>
+<td>25 <strong>发</strong> / 110 <strong>收</strong> / 143 收（均 TCP）</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>应用层</td>
+<td><strong>53，TCP + UDP 都用</strong>（查询走 UDP，区域传送走 TCP）</td>
+</tr>
+<tr>
+<td>Telnet / SSH</td>
+<td>应用层</td>
+<td>23 明文登录 / 22 加密登录（SSH 是<strong>应用层</strong>，别因名字带 Shell 归错）</td>
+</tr>
+<tr>
+<td>TFTP / SNMP / DHCP</td>
+<td>应用层</td>
+<td>69（UDP）/ <strong>161 查询、162 trap</strong>（UDP）/ <strong>67 服务器、68 客户端</strong>（UDP）</td>
+</tr>
+<tr>
+<td><strong>TCP / UDP / SCTP</strong></td>
+<td><strong>传输层</strong></td>
+<td>TCP 面向连接可靠；UDP 无连接快（实时音视频优先）</td>
+</tr>
+<tr>
+<td><strong>IP</strong></td>
+<td>网际层（网络层）</td>
+<td>寻址与路由，PDU = 分组/IP 数据报</td>
+</tr>
+<tr>
+<td><strong>ICMP</strong></td>
+<td><strong>网际层</strong></td>
+<td>差错报告与控制；<strong>ping / traceroute 是应用层程序但用 ICMP</strong></td>
+</tr>
+<tr>
+<td><strong>IGMP</strong></td>
+<td><strong>网际层</strong></td>
+<td>组播组成员管理</td>
+</tr>
+<tr>
+<td><strong>ARP</strong></td>
+<td><strong>网际层</strong></td>
+<td><strong>IP → MAC</strong>；报文不经 IP 封装，但软考<strong>按网际层</strong>作答（不是链路层！）</td>
+</tr>
+<tr>
+<td>NAT / RIP / OSPF / BGP</td>
+<td>网际层</td>
+<td>地址转换 / 路由协议（RIP 距离向量、OSPF 链路状态、BGP 自治域间）</td>
+</tr>
+<tr>
+<td>Ethernet / Wi-Fi / PPP / HDLC</td>
+<td>网络接口层</td>
+<td>802.3 / 802.11 / 点对点 / 面向比特</td>
+</tr>
+<tr>
+<td><strong>IPSec</strong></td>
+<td><strong>网络层</strong></td>
+<td>AH(51) <strong>只认证不加密</strong>；ESP(50) 加密 + 认证；传输模式 vs 隧道模式</td>
+</tr>
+<tr>
+<td><strong>TLS / SSL</strong></td>
+<td><strong>传输层之上</strong>（OSI 表示层位置）</td>
+<td>HTTPS = HTTP over TLS，端口 443</td>
+</tr>
+<tr>
+<td><strong>SSH / PGP / SET / S-MIME</strong></td>
+<td>应用层</td>
+<td>22 / 邮件加密 / 电子交易 / 安全邮件</td>
+</tr>
+<tr>
+<td><strong>WPA2 / WPA3 / L2TP / PPTP</strong></td>
+<td><strong>数据链路层</strong></td>
+<td>无线加密；L2TP/PPTP 是二层隧道，<strong>本身不加密</strong>（常配 IPSec）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>四个层级陷阱（年年必考其一）</strong>：① <strong>ARP → 网际层</strong>（不是链路层）；② <strong>ICMP → 网络层</strong>（不是应用层，ping 是应用层程序）；③ <strong>加密 / 压缩 / 编码转换 → OSI 表示层</strong>；④ <strong>DNS 同时用 TCP 和 UDP</strong>。
+<em>（出处：<code>day04-protocols.md §六</code>、<code>day06-security.md §九</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列，逐协议口述层级与端口；四个陷阱逐条复述。全对 → 卡①过关。</p>
+</blockquote>
+<h3>卡②端口号表（必背，选择/大题都可能考）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">端口</th>
+<th>协议</th>
+<th style="text-align: center;">端口</th>
+<th>协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>20</strong></td>
+<td>FTP 数据</td>
+<td style="text-align: center;"><strong>80</strong></td>
+<td><strong>HTTP</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>21</strong></td>
+<td>FTP 控制</td>
+<td style="text-align: center;"><strong>443</strong></td>
+<td><strong>HTTPS</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>22</strong></td>
+<td>SSH</td>
+<td style="text-align: center;"><strong>110</strong></td>
+<td>POP3（收）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>23</strong></td>
+<td>Telnet</td>
+<td style="text-align: center;"><strong>143</strong></td>
+<td>IMAP（收）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>25</strong></td>
+<td>SMTP（发）</td>
+<td style="text-align: center;"><strong>161 / 162</strong></td>
+<td>SNMP（161 查询 / 162 trap）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>53</strong></td>
+<td>DNS（TCP+UDP）</td>
+<td style="text-align: center;"><strong>3389</strong></td>
+<td>RDP（远程桌面）</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>67 / 68</strong></td>
+<td>DHCP（服务器 / 客户端，UDP）</td>
+<td style="text-align: center;"><strong>3306</strong></td>
+<td>MySQL</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>69</strong></td>
+<td>TFTP（UDP）</td>
+<td style="text-align: center;"><strong>8080</strong></td>
+<td>HTTP 备用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分组记忆法</strong>：<strong>"20 串端口"</strong>——FTP(20/21)、SSH(22)、Telnet(23)、SMTP(25)；<strong>"50–60 段"</strong>——DNS(53)、DHCP(67/68)、TFTP(69)；<strong>"80 与 4 开头"</strong>——HTTP(80)、HTTPS(443)；<strong>"110–160"</strong>——POP3(110)、IMAP(143)、SNMP(161)。熟知端口范围 <strong>0–1023</strong>；端口号在 <strong>TCP/UDP 首部</strong>（IP 首部没有端口）。
+<em>（出处：<code>day04-protocols.md §七</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列两栏，从 20 到 3389 顺着默背；单独问"FTP 几条连接、分别多少端口""DHCP 服务器和客户端端口各是多少"要能秒答。</p>
+</blockquote>
+<h3>卡③加密算法参数（数字必须精确）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>有效密钥长度</th>
+<th>分组长度</th>
+<th>轮数</th>
+<th>结构 / 特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DES</strong></td>
+<td><strong>56 位</strong>（输入 64 位，其中 8 位是奇偶校验）</td>
+<td><strong>64 位</strong></td>
+<td>16 轮</td>
+<td>Feistel 网络；<strong>已被破解</strong>，不再用于新系统</td>
+</tr>
+<tr>
+<td><strong>3DES</strong></td>
+<td><strong>112 位</strong>（2 密钥）或 <strong>168 位</strong>（3 密钥，3×56）</td>
+<td><strong>64 位</strong></td>
+<td>48 轮（3×16）</td>
+<td>EDE（加密-解密-加密）；DES→AES 的过渡，安全但慢</td>
+</tr>
+<tr>
+<td><strong>AES</strong></td>
+<td><strong>128 / 192 / 256 位</strong></td>
+<td><strong>128 位（固定！与密钥长度无关）</strong></td>
+<td><strong>10 / 12 / 14 轮</strong></td>
+<td>SP 网络（<strong>不是</strong> Feistel）；当前国际主流</td>
+</tr>
+<tr>
+<td><strong>SM4</strong></td>
+<td>128 位</td>
+<td>128 位</td>
+<td>32 轮</td>
+<td>SP 网络；<strong>国密</strong>（WAPI 无线安全）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>摘要算法（输出长度必背）</strong>：<strong>MD5 = 128 位</strong>（已破解，仍用于文件完整性校验）／<strong>SHA-1 = 160 位</strong>（已不安全）／<strong>SHA-256 = 256 位</strong>（当前主流）／SHA-512 = 512 位／SM3 = 256 位（国密）。</p>
+<p><strong>非对称三巨头</strong>：<strong>RSA</strong> 1024/2048/4096 位，数学基础 = <strong>大整数因子分解困难</strong>，慢、只加密小数据或签名；<strong>ECC</strong> 160–256 位，椭圆曲线离散对数，<strong>短密钥同等安全</strong>（256 位 ECC ≈ 3072 位 RSA）；<strong>DSA 只能签名不能加密</strong>；<strong>Diffie-Hellman 只能交换密钥不能加密</strong>。</p>
+<p><strong>两个规模数字</strong>：对称加密 n 人两两通信需 <strong>n(n−1)/2</strong> 个密钥；非对称只需 <strong>2n</strong> 个（每人一对）。</p>
+<p><strong>四条高频易错</strong>：① <strong>AES 分组固定 128 位</strong>，不随密钥变（"AES 分组可以是 192/256"是错的）；② <strong>3DES 密钥是 112 或 168 位</strong>，不是 3×64=192；③ <strong>数字签名不提供机密性</strong>（报文仍是明文）；④ HTTPS <strong>握手用非对称、通信用对称</strong>。
+<em>（出处：<code>day06-security.md §2.1、§3.2、§6.2、§十</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列，逐算法口述"密钥/分组/轮数"；单独问"MD5 摘要长度""AES-192 几轮""3DES 三密钥多长"要能秒答。</p>
+</blockquote>
+<h3>卡④范式定义一句话版（大题 + 选择通用）</h3>
+<table>
+<thead>
+<tr>
+<th>范式</th>
+<th>一句话定义</th>
+<th>破坏它的是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1NF</strong></td>
+<td>每个属性都是<strong>原子的</strong>，不允许"表中有表"</td>
+<td>属性非原子（存了集合/子表）</td>
+</tr>
+<tr>
+<td><strong>2NF</strong></td>
+<td>消除<strong>非主属性对候选码的部分依赖</strong>（单属性码自动满足）</td>
+<td>存在真子集 W，使 W → 非主属性</td>
+</tr>
+<tr>
+<td><strong>3NF</strong></td>
+<td>消除<strong>非主属性对候选码的传递依赖</strong></td>
+<td>存在 X→Y→Z 且 Y↛X 的链条</td>
+</tr>
+<tr>
+<td><strong>BCNF</strong></td>
+<td>每个<strong>非平凡函数依赖的左部都包含候选码</strong>（"决定者必须是码"）</td>
+<td>存在左部不含码的依赖</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条配套结论</strong>：① 包含关系 <strong>1NF ⊇ 2NF ⊇ 3NF ⊇ BCNF</strong>；② <strong>3NF 不蕴含 BCNF</strong>（经典反例：R(A,B,C)，F={AB→C, C→B}，候选码 AB 与 AC，全主属性，是 3NF 但 C→B 左部不含码，不是 BCNF）；③ <strong>分解动作</strong>：部分依赖 W→Y ⇒ 拆出 <strong>(W, Y)</strong>；传递依赖 X→Y→Z ⇒ 拆出 <strong>(Y, Z)</strong>；分解到 3NF 能同时<strong>无损连接 + 保持依赖</strong>，分解到 BCNF 保无损但不一定保持依赖。</p>
+<p><strong>考场三条快解</strong>：候选码是<strong>单属性</strong> → 不可能有部分依赖；<strong>没有非主属性</strong>（全主属性）→ 直接是 3NF，只剩 BCNF 要查；F 中每个依赖左部都是候选码 → 直接是 BCNF。
+<em>（出处：<code>day08-er.md §3.1、§3.3、§3.5</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住中间列，看着 1NF/2NF/3NF/BCNF 口述定义；再口述"3NF 为什么不蕴含 BCNF"的那个反例。</p>
+</blockquote>
+<h3>卡⑤设计模式意图一句话（15 个常考模式 + 中介者）</h3>
+<blockquote>
+<p>分类速记：<strong>创建型"工抽单建原"</strong>（工厂方法、抽象工厂、单例、建造者、原型）／<strong>结构型"适装外组享桥代"</strong>／<strong>行为型"观状策命备职中模迭访解"</strong>。★ = 常考 15 个。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>分类</th>
+<th>场景关键词（看到就选它）</th>
+<th>意图一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>工厂方法</strong></td>
+<td>创建型</td>
+<td>"由子类决定""创建接口"</td>
+<td>定义创建对象的接口，<strong>让子类决定</strong>实例化哪一个类（创建与使用分离）</td>
+</tr>
+<tr>
+<td><strong>抽象工厂</strong></td>
+<td>创建型</td>
+<td>"产品族""一系列相关产品""不同平台/主题"</td>
+<td>创建<strong>一族相关或相互依赖</strong>的产品，不指定具体类（产品族整体替换）</td>
+</tr>
+<tr>
+<td><strong>单例</strong></td>
+<td>创建型</td>
+<td>"只能有一个""唯一实例""全局"</td>
+<td>保证一个类<strong>只有一个实例</strong>，提供全局访问点</td>
+</tr>
+<tr>
+<td><strong>建造者</strong></td>
+<td>创建型</td>
+<td>"分步骤""复杂对象构建""相同过程不同结果"</td>
+<td>将<strong>复杂对象的构建与它的表示分离</strong>，同样的构建过程可创建不同表示</td>
+</tr>
+<tr>
+<td><strong>适配器</strong></td>
+<td>结构型</td>
+<td>"转换接口""兼容""已有类复用"</td>
+<td>把一个接口<strong>转换</strong>成客户希望的另一个接口，使不兼容的类能一起工作</td>
+</tr>
+<tr>
+<td><strong>装饰</strong></td>
+<td>结构型</td>
+<td>"动态增加""透明包装""比子类更灵活"</td>
+<td><strong>动态地</strong>给对象增加额外职责，避免子类膨胀</td>
+</tr>
+<tr>
+<td><strong>外观</strong></td>
+<td>结构型</td>
+<td>"统一接口""统一入口""一站式"</td>
+<td>为子系统中的一组接口提供一个<strong>一致的界面</strong>，简化调用</td>
+</tr>
+<tr>
+<td><strong>组合</strong></td>
+<td>结构型</td>
+<td>"树形结构""层叠菜单""部分-整体"</td>
+<td>把对象组合成<strong>树形结构</strong>，统一对待单个对象与组合对象</td>
+</tr>
+<tr>
+<td><strong>享元</strong></td>
+<td>结构型</td>
+<td>"共享""节省内存""大量相同对象"</td>
+<td>运用<strong>共享</strong>技术支持大量细粒度对象复用，降低内存占用（内部状态共享、外部状态作参数）</td>
+</tr>
+<tr>
+<td><strong>观察者</strong></td>
+<td>行为型</td>
+<td>"通知""订阅""状态变化时自动更新"</td>
+<td>定义<strong>一对多</strong>依赖，一方状态变化时所有依赖它的对象<strong>自动收到通知</strong></td>
+</tr>
+<tr>
+<td><strong>状态</strong></td>
+<td>行为型</td>
+<td>"随状态改变行为""消除 if-else 分支"</td>
+<td>允许对象在<strong>内部状态改变时改变行为</strong>，用状态对象替代庞大的条件分支</td>
+</tr>
+<tr>
+<td><strong>策略</strong></td>
+<td>行为型</td>
+<td>"可互换""多种方式""算法变体"</td>
+<td>把一系列算法各自<strong>封装成可互换</strong>的策略类，使算法变化独立于客户端</td>
+</tr>
+<tr>
+<td><strong>命令</strong></td>
+<td>行为型</td>
+<td>"封装请求""排队执行""撤销重做"</td>
+<td>把<strong>请求封装为对象</strong>，使请求可排队、记录日志、支持撤销</td>
+</tr>
+<tr>
+<td><strong>备忘录</strong></td>
+<td>行为型</td>
+<td>"撤销""恢复""历史版本""存档"</td>
+<td>在不破坏封装性的前提下<strong>捕获并保存</strong>对象内部状态，以便以后<strong>恢复</strong></td>
+</tr>
+<tr>
+<td><strong>职责链</strong></td>
+<td>行为型</td>
+<td>"层层审批""逐级处理""传递请求"</td>
+<td>使多个对象都有机会处理请求，请求<strong>沿链传递直到被处理</strong>，发送者与接收者解耦</td>
+</tr>
+<tr>
+<td><strong>中介者</strong>（上午高频）</td>
+<td>行为型</td>
+<td>"封装一系列对象交互""中介协调""解耦多对多"</td>
+<td>用一个<strong>中介对象封装一组对象的交互</strong>，使各对象不需要显式地互相引用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>两对易混辨析</strong>：<strong>策略 vs 状态</strong>——策略是客户端<strong>主动选</strong>算法、策略间互不感知；状态是状态对象在 handle 完后<strong>自动切换</strong>到下一状态。<strong>观察者 vs 中介者</strong>——观察者是"一方变，多方被通知"（一对多）；中介者是"多对象互不直接引用、全找中介中转"（星型结构）。
+<em>（出处：<code>day20-design-patterns.md §2.1、§2.2</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住最后一列，只看"场景关键词"口述模式名 + 意图一句话；再遮住关键词列，由模式名反推关键词。</p>
+</blockquote>
+<h3>卡⑥维护四类型与占比（场景题必考）</h3>
+<table>
+<thead>
+<tr>
+<th>维护类型</th>
+<th>目的</th>
+<th>触发场景（题干长这样）</th>
+<th style="text-align: center;">占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>完善性维护</strong></td>
+<td>增加新功能、改进性能、提升体验</td>
+<td>"用户要求增加一个统计报表""加快查询速度"</td>
+<td style="text-align: center;"><strong>~50%（最大头）</strong></td>
+</tr>
+<tr>
+<td><strong>适应性维护</strong></td>
+<td>适应<strong>外部环境变化</strong>（不改功能）</td>
+<td>"操作系统/数据库升级后系统不能运行""税率政策调整"</td>
+<td style="text-align: center;">~25%</td>
+</tr>
+<tr>
+<td><strong>改正性维护</strong>（纠错性）</td>
+<td>改正<strong>交付后发现的错误</strong></td>
+<td>"系统计算结果偶发出错"（交付时就有 bug）</td>
+<td style="text-align: center;">~20%</td>
+</tr>
+<tr>
+<td><strong>预防性维护</strong></td>
+<td>主动改进以提高<strong>可维护性</strong>、防患未然</td>
+<td>"重构老旧代码、补充文档以降低未来风险"</td>
+<td style="text-align: center;">~5%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>判别两步法</strong>：系统本身有错 → 改正性；环境变了 → 适应性；用户想要更多 → 完善性；为未来买保险 → 预防性。
+<strong>两条最高频陷阱</strong>：① "增加报表功能" → <strong>完善性</strong>（不是适应性）；② "升级 OS 后不能运行" → <strong>适应性</strong>（不是改正性，交付时本就是好的）。
+<strong>一条附结论</strong>：维护是软件生命周期中<strong>时间最长、花费最大</strong>的阶段。
+<em>（出处：<code>day12-process.md §1.4</code>、<code>day13-test.md §八</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住"占比"列默背四个数字（50/25/20/5）；遮住类型列，由场景反推维护类型。</p>
+</blockquote>
+<h3>卡⑦六大过程模型特征词（选择必出一道对比题）</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>特征词（识别词）</th>
+<th>驱动方式</th>
+<th>提出者 / 年代</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>瀑布</strong></td>
+<td>线性顺序、<strong>文档驱动</strong>、阶段评审</td>
+<td>文档 / 里程碑</td>
+<td>Royce, 1970</td>
+</tr>
+<tr>
+<td><strong>V 模型</strong></td>
+<td>开发与<strong>测试一一对应</strong></td>
+<td>测试 / 质量</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>增量</strong></td>
+<td><strong>分批构造、逐批交付</strong>可运行构件</td>
+<td>交付 / 优先级</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>原型</strong></td>
+<td><strong>快速构造 + 用户反馈</strong>澄清需求</td>
+<td>需求 / 反馈</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>螺旋</strong></td>
+<td><strong>迭代 + 风险分析</strong>、四象限循环</td>
+<td><strong>风险</strong></td>
+<td><strong>Boehm, 1988</strong></td>
+</tr>
+<tr>
+<td><strong>敏捷 Scrum</strong></td>
+<td><strong>小步快跑、拥抱变化</strong>、迭代增量</td>
+<td>变化 / 价值</td>
+<td>2001 敏捷宣言</td>
+</tr>
+</tbody>
+</table>
+<p><strong>必须一并背熟的四组配套</strong>：
+1. <strong>V 模型四对对应</strong>：需求↔<strong>验收</strong>、概设↔<strong>系统</strong>、详设↔<strong>集成</strong>、编码↔<strong>单元</strong>（易错：概设对应<strong>系统</strong>测试，不是集成测试）。
+2. <strong>螺旋四象限顺序</strong>：制定计划 → <strong>风险分析</strong> → 实施工程 → 客户评估。
+3. <strong>Scrum 3-3-5</strong>：3 角色（产品负责人 / Scrum 教练 / 开发团队）、3 工件（产品待办列表 / 迭代待办列表 / 产品增量）、5 事件（<strong>Sprint 迭代周期 2–4 周</strong>、计划会议、<strong>每日站会 15 分钟</strong>、评审会议、回顾会议）。
+4. <strong>敏捷四价值观</strong>：个体互动 &gt; 流程工具；可工作软件 &gt; 详尽文档；客户合作 &gt; 合同谈判；响应变化 &gt; 遵循计划（右项仍有价值，只是优先级更低）。</p>
+<p><strong>一句话辨析</strong>：<strong>"增量交产品，原型定需求"</strong>；<strong>螺旋 = 风险驱动</strong>（不是原型驱动）。
+<em>（出处：<code>day12-process.md §2.1–2.8</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右两列，由模型名口述特征词与驱动；单独默写 V 模型四对对应与 Scrum 3-3-5。</p>
+</blockquote>
+<h3>卡⑧必背公式（计算题主力，逐条默写）</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache 命中率</strong></td>
+<td><strong>h = N_c / (N_c + N_m)</strong>（分母是<strong>总访存次数</strong>）</td>
+</tr>
+<tr>
+<td><strong>Cache 平均访问时间</strong></td>
+<td><strong>t_a = h·t_c + (1 − h)·t_m</strong>（软考默认公式）</td>
+</tr>
+<tr>
+<td><strong>Cache 加速比 / 效率</strong></td>
+<td><strong>S = t_m / t_a（&gt;1）</strong>；<strong>e = t_c / t_a ≤ 100%</strong>；记 <strong>e = S / r</strong> 交叉验证，r = t_m / t_c</td>
+</tr>
+<tr>
+<td><strong>Cache 反求命中率</strong></td>
+<td><strong>h = (t_m − t_a) / (t_m − t_c)</strong></td>
+</tr>
+<tr>
+<td><strong>流水线周期</strong></td>
+<td><strong>Δt = max(t₁, …, t_k)</strong>（最长段决定节拍）</td>
+</tr>
+<tr>
+<td><strong>流水线总时间</strong></td>
+<td><strong>T = Σt + (n − 1)·Δt</strong>（等长段简化为 <strong>T = (k + n − 1)·Δt</strong>）</td>
+</tr>
+<tr>
+<td><strong>流水线加速比 / 吞吐率 / 效率</strong></td>
+<td><strong>S = n·Σt / [Σt + (n−1)·Δt]</strong>（等长段 <strong>S = kn/(k+n−1)</strong>）；<strong>TP = n / T</strong>；<strong>TP_max = 1/Δt</strong>；等长段 <strong>E = n/(k+n−1)</strong></td>
+</tr>
+<tr>
+<td><strong>子网划分 5 步</strong></td>
+<td>网络地址 = <strong>IP AND 掩码</strong>；广播地址 = 网络地址 + 块大小 − 1；<strong>可用主机 = 2^h − 2</strong>（h = 32 − 前缀 n）；子网数 = 2^b（b = 借用位数）；块大小 = 256 − 掩码值所在段</td>
+</tr>
+<tr>
+<td><strong>前缀对照</strong></td>
+<td>/30→2、/29→6、/28→14、/27→30、/26→62、/25→126、/24→254</td>
+</tr>
+<tr>
+<td><strong>路由聚合（CIDR）</strong></td>
+<td>合并 <strong>2^k 个连续网络，前缀减 k</strong>（4 个 /24 → /22）</td>
+</tr>
+<tr>
+<td><strong>关键路径（AOE 网）</strong></td>
+<td><strong>ve(源点) = 0，ve(v) = max{ve(u) + w(u,v)}</strong>（顺着取最大）；<strong>vl(汇点) = ve(汇点)，vl(v) = min{vl(w) − w(v,w)}</strong>（逆着取最小）；关键路径 = <strong>最长路径</strong>，其长度 = <strong>最短完成时间</strong>；关键活动满足 <strong>ve = vl</strong>（缓冲为 0）</td>
+</tr>
+<tr>
+<td><strong>McCabe 圈复杂度</strong></td>
+<td><strong>V(G) = E − N + 2 = P + 1 = 区域数 + 1</strong>（注意常数是 <strong>+2</strong>）；V(G) = 独立路径数 = 基本路径测试最少用例数；McCabe 建议 <strong>V(G) ≤ 10</strong></td>
+</tr>
+<tr>
+<td><strong>总线带宽</strong></td>
+<td><strong>带宽 = 工作频率 × 总线宽度 / 8</strong>（MB/s；复用总线要扣除地址占用时间）</td>
+</tr>
+<tr>
+<td><strong>风险暴露</strong></td>
+<td><strong>RE = P × L</strong>（概率 × 损失）</td>
+</tr>
+<tr>
+<td><strong>缺页率</strong></td>
+<td>缺页率 = 缺页次数 / 总访问次数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>两条公式类易错</strong>：① 不等长段流水线用 <strong>T = Σt + (n−1)Δt</strong>（不是 k·Δt + (n−1)Δt）；② 加速比 S 可以 &gt;1、效率 e 一定 ≤100%——"加速比往大看（相对慢主存），效率往小看（相对快 Cache）"。
+<em>（出处：<code>day11-cache.md §2.4</code>、<code>day10-cpu.md §4</code>、<code>day05-tcp.md §八</code>、<code>day13-test.md §7.1、§9.2</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列，在白纸上把 Cache 四式、流水线五式、子网划分五步、ve/vl 递推、V(G) 三式<strong>全部默写一遍</strong>（今天必须写一遍，光看不算会）。</p>
+</blockquote>
+<h3>卡⑨白盒覆盖标准六级（排序与定义都要背）</h3>
+<table>
+<thead>
+<tr>
+<th>强度顺序（弱→强）</th>
+<th>标准</th>
+<th>一句话定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td><strong>语句覆盖</strong></td>
+<td>每条<strong>语句</strong>至少执行一次（最弱）</td>
+</tr>
+<tr>
+<td>②</td>
+<td><strong>判定覆盖</strong>（分支覆盖）</td>
+<td>每个判定的<strong>每个分支（真/假）</strong>至少执行一次</td>
+</tr>
+<tr>
+<td>③</td>
+<td><strong>条件覆盖</strong></td>
+<td>每个基本<strong>条件</strong>的真/假至少执行一次</td>
+</tr>
+<tr>
+<td>④</td>
+<td><strong>判定-条件覆盖</strong></td>
+<td>既满足判定覆盖又满足条件覆盖</td>
+</tr>
+<tr>
+<td>⑤</td>
+<td><strong>条件组合覆盖</strong></td>
+<td>每个判定内<strong>所有条件的各种取值组合</strong>至少执行一次</td>
+</tr>
+<tr>
+<td>⑥</td>
+<td><strong>路径覆盖</strong></td>
+<td>程序中<strong>所有可能执行路径</strong>至少执行一次（最强）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条反直觉结论（常考）</strong>：① <strong>条件覆盖不保证判定覆盖</strong>（两者互不包含，所以才需要"判定-条件覆盖"）；② <strong>条件组合覆盖可能漏路径</strong>；③ <strong>路径覆盖也可能漏条件组合</strong>——末两级严格来说"不可比"，但<strong>选择题一律按上面 ①&lt;②&lt;③&lt;④&lt;⑤&lt;⑥ 作答</strong>（这是官方表述）。</p>
+<p><strong>配套两条</strong>：<strong>判定覆盖 ⊇ 语句覆盖</strong>（反之不成立）；基本路径测试四步 = 画 CFG → 算 V(G) → 找 V(G) 条独立路径 → 每条路径设计一个用例（<strong>独立路径数 ≠ 全部路径数</strong>）。</p>
+<p><strong>黑盒三方法</strong>：等价类划分（<strong>有效可合并、无效必须逐个单独测</strong>）、边界值分析（取 <strong>min−1, min, min+1, max−1, max, max+1</strong> 六个点，不是只取 min/max）、因果图（最终转判定表）。
+<em>（出处：<code>day13-test.md §5、§6、§7</code>）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列，把六级排序与定义逐条口述；再答"条件组合覆盖一定覆盖所有路径吗？"</p>
+</blockquote>
+<h3>卡⑩附加卡：耦合七级 / 内聚七级 / 测试阶段依据</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>耦合七级（低→高，越好越低）</strong></td>
+<td>无直接耦合 &lt; 数据耦合 &lt; 标记耦合 &lt; 控制耦合 &lt; 外部耦合 &lt; 公共耦合 &lt; 内容耦合。口诀：<strong>"无直数标控外公内"</strong></td>
+</tr>
+<tr>
+<td><strong>内聚七级（低→高，越好越高）</strong></td>
+<td>偶然 &lt; 逻辑 &lt; 时间 &lt; 过程 &lt; 通信 &lt; 顺序 &lt; 功能。口诀：<strong>"偶逻时过通顺功"</strong></td>
+</tr>
+<tr>
+<td><strong>过程 vs 顺序内聚</strong></td>
+<td>前者输出<strong>不是</strong>后者输入 → 过程内聚；<strong>是</strong>输入 → 顺序内聚（最高频易错）</td>
+</tr>
+<tr>
+<td><strong>标记 vs 数据耦合</strong></td>
+<td>传整个数据结构（对方只用一部分）→ 标记；传简单值 → 数据</td>
+</tr>
+<tr>
+<td><strong>外部 vs 公共耦合</strong></td>
+<td>共享<strong>程序之外</strong>的约定（同一文件/设备）→ 外部；共享<strong>程序之内</strong>的公共数据区（全局变量）→ 公共</td>
+</tr>
+<tr>
+<td><strong>四个测试阶段的依据文档</strong></td>
+<td>单元测试 ← <strong>详细设计</strong>；集成测试 ← <strong>概要设计</strong>；系统测试 ← <strong>需求规格说明书 SRS</strong>；验收测试 ← 用户需求/合同</td>
+</tr>
+<tr>
+<td><strong>集成测试两策略</strong></td>
+<td><strong>自顶向下打桩</strong>（Stub 模拟下层）；<strong>自底向上写驱动</strong>（Driver 模拟上层）。口诀："顶→桩、底→驱动"</td>
+</tr>
+<tr>
+<td><strong>面向对象设计七原则</strong></td>
+<td><strong>单开里接依</strong>（SRP/OCP/LSP/ISP/DIP，即 SOLID）+ <strong>迪米特法则</strong>（最少知识）+ <strong>合成复用</strong>（组合优于继承）；<strong>开闭是核心目标</strong>，其余是实现手段</td>
+</tr>
+</tbody>
+</table>
+<p><em>（出处：<code>day13-test.md §1–4</code>；注：<code>quick-reference.md</code> 里耦合只列了常用 5 级，本文用 <code>day13-test.md</code> 的完整 Myers 七级为准。）</em></p>
+<blockquote>
+<p>🙋 <strong>自测方式</strong>：遮住右列，正背/倒背耦合七级与内聚七级口诀；口述四个测试阶段各依据哪份文档。</p>
+</blockquote>
+<hr />
+<h2>四、Step 3：高频考点清单回看法（下午 0.5h）</h2>
+<p>三份策略文件<strong>当检查表用，不当学习材料用</strong>——每条快速自问"我会吗"，不会的标出来回本文速记卡或对应 <code>dayXX</code> 笔记，<strong>不就地展开学</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>时长</th>
+<th>各看什么</th>
+<th>怎么用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>docs/strategies/high-frequency-topics.md</code></strong>（优先）</td>
+<td>20 min</td>
+<td>按七大板块的「必考 1~5」逐条过：数据结构（10–12 题）／OS（6–8）／网络（6–8）／数据库（5–6）／软工（6–8）／设计模式（3–4）／组成（5–6）＋ 保底拿分项（5–6）</td>
+<td>每条问自己"这个考点我能说出答案吗？"——<strong>能脱口而出的划掉</strong>；卡住的在题号画 ○，回本文 §三对应速记卡补背；速记卡没有的，翻该条知识点出处对应的 <code>dayXX</code> 笔记（晚上再看，现在不展开）</td>
+</tr>
+<tr>
+<td><strong><code>docs/strategies/exam-tips.md</code></strong></td>
+<td>10 min</td>
+<td>只看三节：<strong>「一、选择题答题策略」</strong>（150 分钟 75 题、每题约 2 分钟、排除法、绝对化/相对化选项陷阱）＋<strong>「二、大题答题策略」</strong>（写满步骤、先易后难、格式清晰、绝不空题）＋<strong>「三、时间管理」</strong>（考试当天时间表与答题顺序）</td>
+<td>临场技巧今晚过一遍留个印象即可，<strong>明天 Day 33 还会再过一遍</strong>。⚠️ 注意：本文「二、大题策略」写的"总时间 90 分钟、4 道大题"与实际卷面不符（实际为 <strong>150 分钟、5 道大题，试题五/六二选一</strong>），时间分配**一律以 <code>subject2-notes.md §〇</code> 为准（每题上限 25 分钟）</td>
+</tr>
+<tr>
+<td><strong><code>docs/strategies/quick-reference.md</code></strong></td>
+<td>10 min</td>
+<td>全文（链表反转、遍历、PV 模板、死锁条件、TCP 握手、端口号、SQL 顺序、范式、ACID、耦合内聚、覆盖标准、Cache 映射、流水线、总线带宽）</td>
+<td>当<strong>默写提纲</strong>用：看到每个小标题<strong>先默想内容，再扫一眼正文核对</strong>。本文 §三的速记卡是它的"可背诵扩写版"——两者重叠的部分（端口号、覆盖标准、Cache、流水线）<strong>以本文为准</strong>（本文已与 Phase 1 笔记逐条核对过数字）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>这一步的产出</strong>：一份"今天还不会的高频考点"清单，写进 §五打卡区第二张表的"待回看"列，晚上 18:00 后集中过一遍。</p>
+</blockquote>
+<hr />
+<h2>五、Step 4：大题模板默写验收单（晚上 1.5h）</h2>
+<blockquote>
+<p><strong>做法（严格）</strong>：<strong>关掉 / 合上 <code>subject2-notes.md</code></strong>，在白纸上把下面五张口诀表<strong>逐张默写</strong>；默写不全的，翻原文<strong>补抄 3 遍</strong>，并在下表登记。
+五张表是科目二（75 分）的"保命骨架"——默得出，下午卷的四类题型就拿到了步骤分。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>口诀表</th>
+<th>出处</th>
+<th>不看原文要默写出什么</th>
+<th>默写结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>DFD 四步法 + 数据流平衡三规则</strong></td>
+<td><code>subject2-notes.md §一</code></td>
+<td>① 四步法：找<strong>外部实体</strong>（人/设备/外部系统，排除"数据"与"系统自己"）→ 找<strong>数据存储</strong>（存储/保存/记录/维护/写入/读取等动词，被存储的名词即存储名）→ <strong>补数据流</strong>（套三规则）→ <strong>加工逻辑</strong>（结构化语言三层结构 / 切动词短语）；② 平衡三规则：<strong>守恒</strong>（每个加工有输入且有输出，且输入足以产生输出）、<strong>父子图平衡</strong>（子图输入/输出集合 = 父图对应加工的输入/输出集合）、<strong>无悬空流</strong>（每条流一端必连加工；禁实体↔实体、存储↔存储直连）；③ 分解三错误（逐字背）：<strong>① 加工有输入但没有输出；② 有输出但没有输入；③ 输入不足以产生输出</strong></td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>E-R 判定口诀 + 转换规则</strong></td>
+<td><code>subject2-notes.md §二</code></td>
+<td>① 判定口诀：<strong>两端都唯一 → 1:1；一端唯一一端不唯一 → 1:n；两端都不唯一 → m:n</strong>（"唯一" = 该端对象在这个联系中只出现一次）；② 转换规则：<strong>1:1</strong> 把任一端主键放另一端（加 UNIQUE）；<strong>1:n 把 1 端主键放进 n 端</strong>（最高频）；<strong>m:n 必须转成独立关系，主键 = 两端主键的组合</strong>；③ 关系模式填空两类缺项都要填：需求属性清单里缺的属性 + 1:n 联系的 1 端主键（作外键）；④ ⚠️ "经理/主管"<strong>不是独立实体</strong>，是职员的岗位；⑤ 规范化题套话：<strong>数据冗余、修改异常、插入异常、删除异常</strong> → 分解为 模式1 + 模式2</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>类间六关系 + 用例三关系</strong></td>
+<td><code>subject2-notes.md §三</code></td>
+<td>① 六关系（符号 + 代码特征）：<strong>泛化</strong>（空心三角实线，<code>extends</code>，is-a）／<strong>实现</strong>（空心三角虚线，<code>implements</code>）／<strong>关联</strong>（实线，成员变量持有引用，has-a）／<strong>聚合</strong>（<strong>空心菱形</strong>，部分可独立存在，整体与部分可分离）／<strong>组合</strong>（<strong>实心菱形</strong>，部分随整体创建/销毁，同生共死）／<strong>依赖</strong>（虚线箭头，局部变量/方法参数，临时使用）；② 用例三关系：<code>&lt;&lt;include&gt;&gt;</code> 基用例→被包含用例（<strong>必然发生</strong>）；<code>&lt;&lt;extend&gt;&gt;</code> 扩展用例→基用例（<strong>条件触发</strong>）；泛化 子→父（特殊化）——<strong>include 与 extend 方向相反</strong>；③ 属性提取：父类属性跟"系统中存储了每个 XX 的……"，子类属性跟"对于 XX，还需记录……"，关联类属性描述<strong>关系本身</strong></td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>DP 状态转移三件套</strong>（试题四算法填空）</td>
+<td><code>subject2-notes.md §四</code></td>
+<td>① <strong>定义状态</strong>：<code>D[i][j]</code> / <code>m[i][j]</code> 的含义；② <strong>写状态转移方程</strong>：由左/上/左上推出（序列型，如编辑距离），或按区间长度枚举断点 k（区间型，<code>m[i][j] = min(m[i][k] + m[k+1][j] + 代价)</code>，如矩阵连乘）；③ <strong>定边界与遍历序</strong>：<code>D[0][j]</code>、<code>D[i][0]</code> 初值，外层枚举什么、内层枚举什么；④ 配套的算法填空四步法：读【说明】理清目标 → 读代码标循环不变量 → 从边界条件反推空位 → 代入小例子（n=3）验证</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>模式速选表</strong>（试题三问题 3 + 试题五/六）</td>
+<td><code>subject2-notes.md §三、§五</code></td>
+<td>八条速选（题干特征词 → 模式）：状态变化通知关注者 → <strong>观察者</strong>；多种格式/算法可互换 → <strong>策略</strong>；统一接口封装多子系统 → <strong>外观</strong>；减少对象数量省内存 → <strong>享元</strong>；撤销/恢复原状态 → <strong>备忘录</strong>；层叠菜单/树形/部分-整体 → <strong>组合</strong>；多对象交互由中介协调 → <strong>中介者</strong>；动态增加职责 → <strong>装饰</strong>；外加<strong>大题三步法</strong>："一判模式、二对角色、三填代码"与<strong>填空三招</strong>（方法签名空抄【说明】原动词 / 子类方法体委托被聚合对象 / 客户端面向抽象类型声明）</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收标准</strong>：五张表全部"全对" → 科目二模板分稳了，今晚早睡；任何一张卡壳 → 补抄 3 遍后再默一遍，<strong>不留到明天</strong>（明天 Day 33 只轻度过一遍，不安排默写）。</p>
+<hr />
+<h2>六、打卡区（留空，今晚填写）</h2>
+<h3>6.1 框架图自测卡住的知识点（Step 1 产出）</h3>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>卡住的知识点（只写名字，不展开）</th>
+<th>晚上 18:00 后回看方式</th>
+<th>已回看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>☐ 速记卡 ☐ dayXX 笔记 ☐ 明天再说</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h3>6.2 速记卡自测结果（Step 2 产出）</h3>
+<table>
+<thead>
+<tr>
+<th>卡片</th>
+<th>应会条数</th>
+<th>答出条数</th>
+<th>熟练度（涂 ●）</th>
+<th>晚上补背</th>
+<th>已掌握</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 协议层级归属</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>② 端口号表</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>③ 加密算法参数</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>④ 范式定义</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑤ 设计模式意图</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑥ 维护四类型</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑦ 六过程模型</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑧ 必背公式</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑨ 白盒覆盖六级</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>⑩ 耦合 / 内聚 / 测试依据</td>
+<td>____</td>
+<td>____</td>
+<td>☐☐☐</td>
+<td>☐</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 高频考点回看 + 默写验收结果（Step 3、4 产出）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step 3 标出的"还不会"高频考点（数量）</td>
+<td>____ 个；已写进 6.1 / 6.2 的画 ○ 项</td>
+</tr>
+<tr>
+<td>DFD 四步法 + 三规则默写</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td>E-R 判定口诀 + 转换规则默写</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td>类间六关系 + 用例三关系默写</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td>DP 状态转移三件套默写</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+<tr>
+<td>模式速选表默写</td>
+<td>☐ 全对 ☐ 补抄 ___ 遍</td>
+</tr>
+</tbody>
+</table>
+<h3>6.4 今日状态</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学习总时长（应 ≈ 7h，不超时）</td>
+<td>____ h</td>
+</tr>
+<tr>
+<td>有没有做新题 / 学新知识？（不应该有）</td>
+<td>☐ 没有 ☐ 有（写下来：<strong><em>_</em></strong>_____）</td>
+</tr>
+<tr>
+<td>心情 / 精力（1–10 分）</td>
+<td>____ 分</td>
+</tr>
+<tr>
+<td>今晚计划入睡时间（建议 22:30 前）</td>
+<td><strong><em>_ : </em></strong>_</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>写在最后</strong>：今天是"把已经会的东西理顺"，不是"把不会的补完"。<strong>卡住的地方标出来就算完成任务</strong>，不要焦虑——明天 Day 33（<code>day33-pre-exam.md</code>）还会用轻度方式把速记卡与模板再过一遍。今晚睡好比多背一条公式重要。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/day32-sprint.md">docs/practice/day32-sprint.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

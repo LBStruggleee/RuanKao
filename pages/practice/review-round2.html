@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>错题回归日 ②：真题卷 3 / 卷 4 错题重做清单 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 review-round2.md</div>
+<h1>错题回归日 ②：真题卷 3 / 卷 4 错题重做清单</h1>
+<blockquote>
+<p><strong>适用日</strong>：Day 20（10/10）。本清单是 <strong>Step 1</strong> 的执行文件：把 Day 18–19（真题卷 3 = 2021 下半年、真题卷 4 = 2022 上半年）<strong>最值得重做的题</strong>集中起来，<strong>闭卷重做一遍</strong>并记录正确率。</p>
+<p><strong>选题原则（为什么是这些题）</strong>：
+1. <strong>计算题优先</strong>：计算题错了 = <strong>解题过程坏了</strong>（不是记忆缺口），重做是唯一修复手段；
+2. <strong>分歧/勘误题组（5 组）</strong>：卷 3 的第 23、58、61 题（key 已据<strong>官方题解 / 希赛 / 公开版本</strong>勘误为 <strong>B</strong>）与卷 4 的第 24、40 题（key 已<strong>独立重算</strong>裁决为 <strong>C</strong>、<strong>A</strong>）——题库间答案不一，重做时<strong>自己推一遍</strong>再对 key 的推导，把结论钉死；
+3. <strong>【存疑：图形复原】题</strong>：原图缺失、靠文字复原做的题，最容易"看错图"或"代错数"，必须对照原卷 PDF 重做一遍；
+4. <strong>解析里标注了"常见陷阱/否定式审题"的题</strong>：这类题换个壳子还会再考；
+5. <strong>衔接 Step 2</strong>：卷 3 第 44–46 题（中介者模式三连）与今天下午的《设计模式入门》笔记（<code>day20-design-patterns.md</code>）直接对应，重做时留意"场景关键词 → 模式"的判别路径。</p>
+<p><strong>⚠️ 卷 4 来源分级（影响信任度）</strong>：卷 4 第 1–34 题为<strong>原卷真题</strong>（可靠）；第 35–75 题为<strong>网络回忆/整理版</strong>（题号顺序未经原卷印证）。本清单<strong>优先选原卷题</strong>；选入的回忆版题均在题号旁标注【回忆版】，重做时心中有数。</p>
+<p><strong>执行纪律</strong>：
+- <strong>闭卷</strong>，不翻 key、不翻笔记；计算题<strong>必须打草稿写过程</strong>，不允许口算。
+- 每题填 <code>重做结果（对/错）</code> 与 <code>用时</code>；<strong>仍错的题</strong>今晚必须回到 <code>reflection.md</code> Day 20 节按"错题四要素"登记。
+- 重做顺序建议按下表分组进行：先计算题（脑子最清醒时做），再分歧题（自己推一遍），最后图形/概念题。</p>
+<p><strong>配套文件</strong>：题目与选项<strong>逐字转引自</strong> <code>2021H2-morning-questions.md</code> / <code>2022H1-morning-questions.md</code>（<strong>本文不含任何答案</strong>）；答案与解析见对应 <code>-key.md</code>，每题后标注了对应题号。</p>
+</blockquote>
+<hr />
+<h2>一、重做清单（20 组）</h2>
+<h3>1.1 计算题组（12 组，错了 = 过程坏了，优先重做）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（重做时要盯的点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>卷 3 · 6</strong></td>
+<td>浮点数分段求值</td>
+<td>阶符 1 位要<strong>并入阶码</strong>合成 5 位补码再求值；尾数<strong>允许非规格化</strong>（最高位不是隐含的 1）。易错：丢掉阶符只取 4 位阶码、或把尾数按规格化当作 1−2⁻¹⁰</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>卷 3 · 18–19</strong></td>
+<td>关键路径与松弛时间</td>
+<td>关键路径 = <strong>最长</strong>路径；松弛时间 = Vl(终点) − Ve(起点) − 活动时长。易错：只数出一条关键路径、把 Ve/Vl 的极值取错（Ve 取<strong>大</strong>、Vl 取<strong>小</strong>）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>卷 3 · 24–26</strong></td>
+<td>前驱图与 PV 操作</td>
+<td><strong>三空连环</strong>：每条前驱边对应一对 P/V，信号量初值均为 0；<strong>前趋数 = P 操作数，后继数 = V 操作数</strong>。易错：题号与空位错位、P/V 写反</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>卷 3 · 27–28</strong></td>
+<td>磁盘旋转调度</td>
+<td>10ms/周、10 块/周 → 每块读 1ms；处理 1ms 读 + 2ms 处理期间磁头<strong>转过 3 块</strong>。易错：把"顺序处理"当成连续读取、优化排列时没让"处理完上一个时下一个正好到磁头下"</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>卷 3 · 34–35</strong></td>
+<td>语句覆盖与 McCabe</td>
+<td>覆盖全部可执行语句（含 while 循环体）<strong>只需 1 个</strong>用例；V(G) = <strong>判定节点数 + 1</strong>。易错：按语句数或判定数猜用例数、把循环条件只算一个判定</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>卷 3 · 52–53</strong></td>
+<td>候选码与蕴含判定</td>
+<td>属性闭包<strong>逐个求</strong>：A1⁺ = U ⇒ A1 是唯一候选码；"结论错误"的那条 = 找<strong>推不出</strong>的依赖。易错：把"能推出"的当错、或忽略传递依赖 A1→A2→A4</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>卷 3 · 57</strong></td>
+<td>共享栈判满</td>
+<td>两栈相向增长，栈满时两指针<strong>相邻</strong>且 top[1] 在 top[2] 的<strong>下一位置</strong>。易错：把判空条件当判满、或忘记两栈顶指针的相对方向</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>卷 3 · 59</strong></td>
+<td>二叉树高度区间</td>
+<td>高度<strong>最小</strong> = 完全二叉树 ⌊log₂n⌋+1；<strong>最大</strong> = 单支链状 = n。易错：把最小值算成 ⌊log₂n⌋（漏 +1）、区间端点开闭搞错</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>卷 3 · 64–65</strong></td>
+<td>Huffman 编码与译码</td>
+<td>构造时<strong>先合频率最小的两个</strong>（本题频率最高者会单独挂到根附近）；译码从左到右<strong>逐位匹配</strong>直到落叶子。易错：合并顺序错、译码时一位对一字符</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>卷 4 · 28</strong>（原卷题）</td>
+<td>树的度求叶子数</td>
+<td>n₀ = 3n₄ + 2n₃ + n₂ + 1（由"分支数 = 结点数 − 1"推导）。易错：把 n₀ 的公式背错、或直接用 n₄+n₃+n₂+n₁ 减来减去</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>卷 4 · 36</strong>【回忆版】</td>
+<td>段页式地址位数换算</td>
+<td>位数 → 2 的幂：10 位 = 1024（段数/页数上限），12 位 = 4K（页大小）。易错：把"最大允许"当成"每个段都是"、2 的幂算错</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>卷 4 · 37–38</strong>【回忆版】</td>
+<td>位示图两连算</td>
+<td>第 k 号块由第 ⌊k/32⌋ 个字描述；总字数 = 块数 ÷ 32（块数 = 容量 ÷ 块大小）。易错：块号从 0 还是 1 起算、容量单位换算（GB→MB 乘 1024）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>计算题组的自检标准</strong>：不是"选出正确选项"就完事，<strong>必须能在草稿纸上写出每一步中间量</strong>（关键路径的 Ve/Vl 表、Huffman 树、属性闭包、位示图除法）。写不出过程 = 没修复。</p>
+</blockquote>
+<hr />
+<h3>1.2 分歧/勘误题组（5 组，自己推一遍再对 key）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（分歧点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td><strong>卷 3 · 23</strong></td>
+<td>进程状态转换</td>
+<td><strong>勘误题，结论见 key 第 23 题（官方题解）</strong>：P1 释放扫描仪后<strong>仍持有打印机且未运行完毕</strong>；单处理机 + FCFS 非抢占，等待扫描仪的 P4 只能到<strong>就绪</strong>不能直接到运行。易错：认为"释放资源 ⇒ 进等待"或"让出 CPU ⇒ 变就绪"</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>卷 3 · 58</strong></td>
+<td>循环队列的优点</td>
+<td><strong>勘误题，结论见 key 第 58 题（希赛解析）</strong>：循环队列把空间首尾相接成环，入队尾指针、出队头指针均取模回绕。易错：A"同端点操作"描述的是<strong>栈</strong>（队列必然一端入一端出）；C、D 都不可能（队空队满仍需区分）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>卷 3 · 61</strong></td>
+<td>拓扑排序的性质</td>
+<td><strong>勘误题，结论见 key 第 61 题</strong>：Vi 排在 Vj 之前是<strong>必要条件</strong>，不能推出"存在 Vi→Vj 的弧或路径"（两者可互不可达）。易错：把"不存在反向弧"理解成"存在正向路径"；本地 PDF 选项 B 文字印刷存疑（见 questions 附注）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>16</td>
+<td><strong>卷 4 · 24–25</strong>（原卷题）</td>
+<td>自然连接列数与代数等价</td>
+<td><strong>分歧题，结论见 key 第 24–25 题（本人重算 + 第三来源）</strong>：自然连接在公共属性 A、D 上<strong>等值并合并同名属性</strong>。易错：把"两个公共属性"当成"只留 2 列"；第 25 题要把 R.B&gt;S.F 落到 R×S 的<strong>第 2 列与第 8 列</strong>（数值比较，不是字符串比较）</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>17</td>
+<td><strong>卷 4 · 39–40</strong>【回忆版】</td>
+<td>贪心策略 + 背包两种最优值</td>
+<td><strong>分歧题，结论见 key 第 39–40 题（本人重算）</strong>：0/1 背包要<strong>枚举组合</strong>找最优；部分背包用贪心<strong>可切割</strong>。易错：把部分背包的贪心思路套到 0/1 上（漏选最优组合）、或只算"单位价值前三个"就停</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>分歧题处理纪律</strong>：这 5 组的答案在 key 文件里已<strong>钉死</strong>（附推导与来源），重做时<strong>先自己推、再对 key</strong>；若你的推导与 key 一致，考前<strong>不再变动</strong>，当作结论记住；若不一致，今晚在 <code>reflection.md</code> 把分歧点写清楚再定。</p>
+</blockquote>
+<hr />
+<h3>1.3 图形/概念陷阱组（3 组，【存疑：图形复原】+ 否定式审题）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>卷·题号</th>
+<th>知识点</th>
+<th>为什么易错（重做时要盯的点）</th>
+<th>重做结果</th>
+<th>用时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18</td>
+<td><strong>卷 3 · 20</strong></td>
+<td>表达式二叉树（图形题）</td>
+<td>【存疑：图形复原】按<strong>中序</strong>遍历（左—根—右）读出并按运算符优先级补括号。易错：漏括号、把 <code>/</code> 与 <code>−</code> 的操作数范围错配、或把 <code>−</code> 的两个操作数颠倒</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>19</td>
+<td><strong>卷 3 · 22</strong></td>
+<td>NFA 识别的字符串（图形题）</td>
+<td>【存疑：图形复原】S0 上有 0/1 自环可匹配<strong>任意前缀</strong>，要到终态必须依次走 S0—1→S1—0→S2—1→S3。易错：把自环的作用忽略掉、或分不清"开头匹配"还是"结尾匹配"</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+<tr>
+<td>20</td>
+<td><strong>卷 3 · 44–46</strong></td>
+<td>设计模式识别 + 分类 + 适用场景（图形题，衔接 Step 2）</td>
+<td>【存疑：图形复原】类图特征：User 与 Group 之间<strong>无直接关联</strong>，二者均与 UserGroupMapper 关联，Client 只与 UserGroupMapper 关联（<strong>星型结构</strong>）。易错：把"封装对象交互"的场景错认为状态/策略/解释器；第 45 空分类要区分创建型/结构型/行为型 × 类/对象</td>
+<td>______（对/错）</td>
+<td>____min</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>补做项（可选，时间够再加）</strong>：卷 3 第 34–35 题做过后可加做卷 3 第 31 题（可移植性子特性，易测试性属可维护性）、卷 3 第 36 题（可维护性评价指标不含<strong>一致性</strong>）、卷 3 第 41–43 题（UML 状态图三连，与 Day 17 笔记对照）、卷 3 第 62–63 题（归并分治 + 主定理 case 2）、卷 4 第 26 题（散列表线性探测<strong>聚集</strong>问题）、卷 4 第 42–43 题（基本有序下插入 O(n)/快排 O(n²)）、卷 4 第 65–66 题（Prim 贪心策略 + MST 权值计算）。这些都是"换个数字/场景还会再考"的概念陷阱。</p>
+</blockquote>
+<hr />
+<h2>二、题目正文（逐字转引，不含答案）</h2>
+<blockquote>
+<p>以下题目<strong>逐字转自</strong> <code>2021H2-morning-questions.md</code> / <code>2022H1-morning-questions.md</code>，仅做排版统一，不改原文用字。<strong>闭卷重做时只看本节</strong>，做完再翻 key 文件对答案。</p>
+</blockquote>
+<h3>题 1（卷 3 · 第 6 题）— 答案见 <code>2021H2-morning-key.md</code> 第 6 题</h3>
+<p><strong>6.</strong> 某中机器【存疑：原文如此，应为"某种机器"】的浮点数表示格式如下（允许非规格化表示）。若阶码以补码表示，尾数以原码表示，则 1 0001 0 0000000001 表示的浮点数是 （6） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原格式（自左至右）：<strong>阶符 1 位｜阶码 4 位（补码）｜数符 1 位｜尾数 10 位（原码）</strong>。题给二进制串 "1 0001 0 0000000001" 按此格式分段后共有 16 位。请自行分段并求值。</p>
+</blockquote>
+<p>（6）　A. 2⁻¹⁶ × 2⁻¹⁰　　B. 2⁻¹⁵ × 2⁻¹⁰</p>
+<p>C. 2⁻¹⁶ × (1 − 2⁻¹⁰)　D. 2⁻¹⁵ × (1 − 2⁻¹⁰)</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 2（卷 3 · 第 18–19 题）— 答案见 <code>2021H2-morning-key.md</code> 第 18–19 题</h3>
+<p><strong>18-19.</strong> 下图是一个软件项目的活动图，其中顶点表示项目里程碑，连接顶点的边表示活动，边上的权重表示完成该活动所需要的时间（天），则活动 （18） 不在关键路径上。活动 BI 和 EG 的松弛时间分别是 （19） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原 AOE 网结构：顶点 <strong>A～L</strong>（A 为开始事件、L 为结束事件），各活动及所需时间（天）如下：</p>
+<table>
+<thead>
+<tr>
+<th>活动</th>
+<th>时长</th>
+<th>活动</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A→B</td>
+<td>3</td>
+<td>G→H</td>
+<td>3</td>
+</tr>
+<tr>
+<td>A→C</td>
+<td>5</td>
+<td>G→J</td>
+<td>2</td>
+</tr>
+<tr>
+<td>A→E</td>
+<td>4</td>
+<td>H→K</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B→D</td>
+<td>5</td>
+<td>I→J</td>
+<td>2</td>
+</tr>
+<tr>
+<td>B→I</td>
+<td>6</td>
+<td>J→K</td>
+<td>2</td>
+</tr>
+<tr>
+<td>C→F</td>
+<td>3</td>
+<td>J→L</td>
+<td>8</td>
+</tr>
+<tr>
+<td>D→I</td>
+<td>2</td>
+<td>K→L</td>
+<td>6</td>
+</tr>
+<tr>
+<td>E→G</td>
+<td>3</td>
+<td>F→H</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>关键路径与各活动松弛时间请自行计算。</p>
+</blockquote>
+<p>（18）　A. BD　　B. BI　　C. GH　　D. KL</p>
+<p>（19）　A. 0 和 1　　B. 1 和 0　　C. 0 和 2　　D. 2 和 0</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 3（卷 3 · 第 24–26 题）— 答案见 <code>2021H2-morning-key.md</code> 第 24–26 题</h3>
+<p><strong>24-26.</strong> 进程 P1、P2、P3、P4、P5 和 P6 的前趋图如下所示。用 PV 操作控制这 6 个进程之间同步与互斥的程序如下，程序中的空①和空②处应分别为 （24） ，空③和空④应分别为 （25） ，空⑤和空⑥应分别为 （26） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原前趋图结构：<strong>P1→P2、P2→P3、P2→P4、P3→P5、P4→P6、P5→P6</strong>。PV 程序（信号量 S1～S6 初值均为 0）中各进程的语句骨架为：</p>
+<p><code>P1: P1执行; V(S1)
+P2: ①;   P2执行; ②
+P3: P(S2); P3执行; ③
+P4: ④;   P4执行; V(S5)
+P5: P(S4); P5执行; ⑤
+P6: ⑥;   P(S6); P6执行</code></p>
+<p>各空应填的 P/V 操作请依据前趋图自行推导。</p>
+</blockquote>
+<p>（24）　A. V（S1）和 P（S2）P（S3）　　B. V（S1）和 V（S2）V（S3）</p>
+<p>C. P（S1）和 P（S2）V（S3）　　D. P（S1）和 V（S2）V（S3）</p>
+<p>（25）　A. V（S3）和 P（S3）　　B. V（S4）和 P（S3）</p>
+<p>C. P（S3）和 P（S4）　　D. V（S4）和 P（S4）</p>
+<p>（26）　A. V（S6）和 P（S5）　　B. V（S5）和 P（S6）</p>
+<p>C. P（S5）和 V（S6）　　D. P（S5）和 V（S5）</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 4（卷 3 · 第 27–28 题）— 答案见 <code>2021H2-morning-key.md</code> 第 27–28 题</h3>
+<p><strong>27-28.</strong> 在磁盘上存储数据的排列方式会影响服务的总时间。假设每个磁道被划分成 10 个物理块，每个物理块存放 1 个逻辑记录。逻辑记录 R1，R2，…，R10 存放在同一个磁道上，记录的排列顺序如下表所示。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原该表（<strong>仅列原始排布，处理时间请自行计算</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th>物理块</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逻辑记录</td>
+<td>R1</td>
+<td>R2</td>
+<td>R3</td>
+<td>R4</td>
+<td>R5</td>
+<td>R6</td>
+<td>R7</td>
+<td>R8</td>
+<td>R9</td>
+<td>R10</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>假定磁盘的旋转速度为 10ms/周，磁头当前在 R1 的开始处。若系统顺序处理这些记录，使用但缓冲区【存疑：原文如此，应为"单缓冲区"】，每个记录处理时间为 2ms，则处理这 10 个记录的最长时间为 （27） ；若对存储数据的排列顺序进行优化，处理 10 个记录的最少时间为 （28） 。</p>
+<p>（27）　A. 30ms　　B. 60ms　　C. 94ms　　D. 102ms</p>
+<p>（28）　A. 30ms　　B. 60ms　　C. 102ms　　D. 94ms</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 5（卷 3 · 第 34–35 题）— 答案见 <code>2021H2-morning-key.md</code> 第 34–35 题</h3>
+<p><strong>34-35.</strong> 如下所示代码（用缩进表示程序块），要实现语句覆盖，至少需要 （34） 个测试用例。采用 McCabe 度量法计算该代码对应的程序流图的环路复杂性为 （35） 。</p>
+<blockquote>
+<p>【存疑：图形复原】代码结构如下（<strong>覆盖数与环路复杂性请自行分析</strong>）：</p>
+<p><code>输入 A[n]
+for i = 2 to n
+    key = A[i]
+    j = i - 1
+    while j &gt; 0 and A[j] &gt; key
+        A[j+1] = A[j]
+        j = j - 1
+    A[j+1] = key</code></p>
+</blockquote>
+<p>（34）　A. 1　　B. 2　　C. 3　　D. 4</p>
+<p>（35）　A. 1　　B. 2　　C. 3　　D. 4</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 6（卷 3 · 第 52–53 题）— 答案见 <code>2021H2-morning-key.md</code> 第 52–53 题</h3>
+<p><strong>52-53.</strong> 设关系模式 R（U, F），U={A1, A2, A3, A4}，函数依赖集 F={A1→A2, A1→A3, A2→A4}，关系 R 的候选码是 （52） 。下列结论错误的是 （53） 。</p>
+<p>（52）　A. A1　　B. A2　　C. A1A2　　D. A1A3</p>
+<p>（53）　A. A1→A2A3 为 F 所蕴含　　B. A1→A4 为 F 所蕴含</p>
+<p>C. A1A2→A4 为 F 所蕴含　　D. A2→A3 为 F 所蕴含</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 7（卷 3 · 第 57 题）— 答案见 <code>2021H2-morning-key.md</code> 第 57 题</h3>
+<p><strong>57.</strong> 若栈采用顺序存储方式，现有两个栈共享空间 V[1..n]，top[i] 代表 i（i=1，2）个栈的栈顶（两个栈都空时 top[1]=1、top[2]=n），栈 1 的底在 V[1]，栈 2 的底在 V[n]，则栈满（即 n 个元素暂存在这两个栈）的条件是 （57） 。</p>
+<p>（57）　A. top[1]=top[2]　　B. top[1]+top[2]==1</p>
+<p>C. top[1]+top[2]==n　　D. top[1]−top[2]==1</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 8（卷 3 · 第 59 题）— 答案见 <code>2021H2-morning-key.md</code> 第 59 题</h3>
+<p><strong>59.</strong> 二叉树的高度是指其层数，空二叉树的高度为 0，仅有根结点的二叉树高度为 1。若某二叉树中共有 1024 个结点，则该二叉树的高度是整数区间 （59） 中的任一值。</p>
+<p>（59）　A. （10，1024）　　B. [10，1024]　　C. （11，1024）　　D. [11，1024]</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 9（卷 3 · 第 64–65 题）— 答案见 <code>2021H2-morning-key.md</code> 第 64–65 题</h3>
+<p><strong>64-65.</strong> 已知一个文件中出现的各字符及其对应的频率如下表所示。采用 Huffman 编码，则该文件中字符 a 和 c 的码长分别为 （64） 。若采用 Huffman，则字符序列"110001001101"的编码应为 （65） 。</p>
+<blockquote>
+<p>【存疑：本地 PDF 缺此表的清晰数据，据同题经典版本复原】各字符频率为：</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>a</th>
+<th>b</th>
+<th>c</th>
+<th>d</th>
+<th>e</th>
+<th>f</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>频率</td>
+<td>45</td>
+<td>13</td>
+<td>12</td>
+<td>16</td>
+<td>9</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>各字符的具体编码请自行构造 Huffman 树后得出。</p>
+</blockquote>
+<p>（64）　A. 1 和 3　　B. 1 和 4　　C. 3 和 3　　D. 3 和 4</p>
+<p>（65）　A. face　　B. bace　　C. acde　　D. fade</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 10（卷 4 · 第 28 题，<strong>原卷题</strong>）— 答案见 <code>2022H1-morning-key.md</code> 第 28 题</h3>
+<p><strong>28.</strong> 已知树 T 的度为 4，且度为 4 的结点数为 7 个、度为 3 的结点数为 5 个、度为 2 的结点数为 8 个、度为 1 的结点数为 10 个，那么树 T 的叶子结点个数为 （28） 。（注：树中结点个数称为结点的度【存疑：原文如此，应为"树中结点的分支数称为结点的度"】，结点的度中的最大值称为树的度。）</p>
+<p>（28）　A. 30　　B. 35　　C. 40　　D. 49</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 11（卷 4 · 第 36 题，<strong>回忆版</strong>）— 答案见 <code>2022H1-morning-key.md</code> 第 36 题</h3>
+<p><strong>36.</strong>【存疑：题目来源为网络回忆版，非原卷原文】假设段页式存储管理系统中的地址结构如下图所示，则系统 （36） 。</p>
+<blockquote>
+<p>【存疑：图形复原】整理版地址结构图：<strong>32 位地址自高位至低位依次为：段号（第 31～22 位，共 10 位）、页号（第 21～12 位，共 10 位）、页内地址（第 11～0 位，共 12 位）</strong>。</p>
+</blockquote>
+<p>（36）　A. 最多可有 2048 个段，每个段的大小均为 2048 个页，页的大小为 2K</p>
+<p>B. 最多可有 2048 个段，每个段最大允许有 2048 个页，页的大小为 2K</p>
+<p>C. 最多可有 1024 个段，每个段的大小均为 1024 个页，页的大小为 4K</p>
+<p>D. 最多可有 1024 个段，每个段最大允许有 1024 个页，页的大小为 4K</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 12（卷 4 · 第 37–38 题，<strong>回忆版</strong>）— 答案见 <code>2022H1-morning-key.md</code> 第 37–38 题</h3>
+<p><strong>37-38.</strong>【存疑：题目来源为网络回忆版，非原卷原文】某文件管理系统采用位示图（bitmap）记录磁盘的使用情况。如果系统的字长为 32 位，磁盘物理块的大小为 4MB，物理块依次编号为：0、1、2、…，位示图字依次编号为：0、1、2、…，那么：16385 号物理块的使用情况在位示图中的第 （37） 个字中描述；如果磁盘的容量为 1000GB，那么位示图需要 （38） 个字来表示。</p>
+<p>（37）　A. 128　　B. 256　　C. 512　　D. 1024</p>
+<p>（38）　A. 1200　　B. 3200　　C. 6400　　D. 8000</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 13（卷 3 · 第 23 题，<strong>勘误题</strong>）— 答案见 <code>2021H2-morning-key.md</code> 第 23 题</h3>
+<p><strong>23.</strong> 在单处理机计算机系统中有 1 台打印机、1 台扫描仪，系统采用先来先服务调度算法。假设系统中有进程 P1、P2、P3、P4，其中 P1 为运行状态，P2 为就绪状态，P3 等待打印机，P4 等待扫描仪。此时，若 P1 释放了扫描仪，则进程 P1、P2、P3、P4 的状态分别为 （23） 。</p>
+<p>（23）　A. 等待、运行、等待、就绪</p>
+<p>B. 运行、就绪、等待、就绪</p>
+<p>C. 就绪、就绪、等待、运行</p>
+<p>D. 就绪、运行、等待、就绪</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 14（卷 3 · 第 58 题，<strong>勘误题</strong>）— 答案见 <code>2021H2-morning-key.md</code> 第 58 题</h3>
+<p><strong>58.</strong> 采用循环队列的优点是 （58） 。</p>
+<p>（58）　A. 入队和出队可以在队列的同端点进行操作</p>
+<p>B. 入队和出队操作都不需要移动队列中的其他元素</p>
+<p>C. 避免出现队列满的情况</p>
+<p>D. 避免出现队列空的情况</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 15（卷 3 · 第 61 题，<strong>勘误题</strong>）— 答案见 <code>2021H2-morning-key.md</code> 第 61 题</h3>
+<p><strong>61.</strong> 对有向图 G 进行拓扑排序得到的拓扑序列中，顶点 Vi 在顶点 Vj 之前，则说明 G 中 （61） 。</p>
+<p>（61）　A. 一定存在有向弧<Vi,Vj></p>
+<p>B. 一定不存在有向弧<Vi,Vj>【存疑：本地 PDF 如此；信管网等公开版本作"一定不存在有向弧<Vj,Vi>"，详见 key】</p>
+<p>C. 必定存在从 Vi 到 Vj 的路径</p>
+<p>D. 必定存在从 Vj 到 Vi 的路径</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 16（卷 4 · 第 24–25 题，<strong>原卷题</strong>，分歧题）— 答案见 <code>2022H1-morning-key.md</code> 第 24–25 题</h3>
+<p><strong>24-25.</strong> 给定关系 R（A, B, C, D）和关系 S（A, D, E, F），若对这两个关系进行自然连接运算 R⋈S 后的属性列有 （24） 个；关系代数表达式 σ(R.B &gt; S.F)(R⋈S) 与 （25） 等价。</p>
+<p>（24）　A. 4　　B. 5　　C. 6　　D. 7</p>
+<p>（25）　A. σ(2&gt;8)(R × S)</p>
+<p>B. π(1, 2, 3, 4, 7, 8)(σ(1=5 ∧ 2&gt;8 ∧ 4=6)(R × S))</p>
+<p>C. σ('2' &gt; '8')(R × S)</p>
+<p>D. π(1, 2, 3, 4, 7, 8)(σ(1=5 ∧ '2' &gt; '8' ∧ 4=6)(R × S))</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 17（卷 4 · 第 39–40 题，<strong>回忆版</strong>，分歧题）— 答案见 <code>2022H1-morning-key.md</code> 第 39–40 题</h3>
+<p><strong>39-40.</strong>【存疑：题目来源为网络回忆版，非原卷原文】考虑下述背包问题的实例。有 5 件物品，背包容量为 100，每件物品的价值和重量如下表所示，并已经按照物品的单位重量价值从大到小排好序，根据物品单位重量价值大优先的策略装入背包中，则采用了 （39） 设计策略。考虑 0/1 背包问题（每件物品或者全部放入或者全部不装入背包）和部分背包问题（物品可以部分装入背包），求解该实例，得到的最大价值分别为 （40） 。</p>
+<table>
+<thead>
+<tr>
+<th>物品编号</th>
+<th>价值</th>
+<th>重量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>50</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>200</td>
+<td>25</td>
+</tr>
+<tr>
+<td>3</td>
+<td>180</td>
+<td>30</td>
+</tr>
+<tr>
+<td>4</td>
+<td>225</td>
+<td>45</td>
+</tr>
+<tr>
+<td>5</td>
+<td>200</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+<p>（39）　A. 分治　　B. 贪心　　C. 动态规划　　D. 回溯</p>
+<p>（40）　A. 605 和 630　　B. 605 和 605　　C. 430 和 630　　D. 630 和 430</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 18（卷 3 · 第 20 题，图形题）— 答案见 <code>2021H2-morning-key.md</code> 第 20 题</h3>
+<p><strong>20.</strong> 下图所示的二叉树表示的算数表达式【存疑：原文如此，应为"算术表达式"】是 （20） （其中的 *、/、− 表示乘、除、减运算）。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原二叉树结构（<strong>仅列结构，表达式请自行前序/中序读出</strong>）：
+- 根结点为运算符 <strong>*</strong>，其左孩子为叶子 <strong>a</strong>，右孩子为运算符 <strong>−</strong>
+- <strong>−</strong> 的左孩子为运算符 <strong>/</strong>，右孩子为叶子 <strong>d</strong>
+- <strong>/</strong> 的左孩子为叶子 <strong>b</strong>，右孩子为叶子 <strong>c</strong></p>
+</blockquote>
+<p>（20）　A. a*b/c−d　　B. a*b/(c−d)　　C. a*(b/c−d)　　D. a*(b−c/d)</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 19（卷 3 · 第 22 题，图形题）— 答案见 <code>2021H2-morning-key.md</code> 第 22 题</h3>
+<p><strong>22.</strong> 下图所示为一个非确定的有限自动机（NFA），S0 为初态，S3 为终态。该 NFA 识别的字符串为 （22） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原 NFA 结构（<strong>仅列状态与转换，识别的字符串请自行推导</strong>）：
+- 状态：<strong>S0</strong>（初态）、S1、S2、<strong>S3</strong>（终态，双圈）
+- S0 上有两条自环弧，分别标记 <strong>0</strong> 与 <strong>1</strong>
+- S0 → S1 标记 <strong>1</strong>；S1 → S2 标记 <strong>0</strong>；S2 → S3 标记 <strong>1</strong></p>
+</blockquote>
+<p>（22）　A. 不能包含连续的字符"0"　　B. 不能包含连续的字符"1"</p>
+<p>C. 必须以"101"开头　　D. 必须以"101"结尾</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<hr />
+<h3>题 20（卷 3 · 第 44–46 题，图形题，<strong>衔接 Step 2 设计模式</strong>）— 答案见 <code>2021H2-morning-key.md</code> 第 44–46 题</h3>
+<p><strong>44-46.</strong> 在某系统中，不同组（Group）访问数据的权限不同，每个用户（User）可以是一个或多个组中的成员，每个组包含零个或多个用户。现要求在用户和组之间设计映射，将用户和组之间的关系由映射进行维修【存疑：原文如此，应为"进行维护"】，得到如下所示的类图。该设计采用 （44） 模式，用一个对象来封装一系列的对象交互；使用户对象和组对象不需要显式的相互引用，从而使其耦合松散，而且可以独立地改变它们之间地交互【存疑：原文如此，应为"之间的交互"】。该模式属于 （45） ，该模式适用 （46） 。</p>
+<blockquote>
+<p>【存疑：图形复原】据原图复原类图结构：类 <strong>Client</strong>（上）与 <strong>User</strong>（左下）、<strong>UserGroupMapper</strong>（中下，原卷图上类名中 "Mapper" 部分字迹模糊）、<strong>Group</strong>（右下）之间存在关联线；User 与 Group 之间<strong>无直接关联</strong>，二者均与 UserGroupMapper 关联，Client 与 UserGroupMapper 关联。</p>
+</blockquote>
+<p>（44）　A. 状态（State）　　B. 策略（Strategy）</p>
+<p>C. 解释器（Interpreter）　　D. 中介者（Mediator）</p>
+<p>（45）　A. 创建型类　　B. 创建型对象　　C. 行为型对象　　D. 行为型类</p>
+<p>（46）　A. 需要使用一个算法地不同变体【存疑：原文如此，应为"算法的不同变体"】</p>
+<p>B. 有一个语言需要解释执行，并且可将句子表示为一个抽象语法树</p>
+<p>C. 一个对象地行为决定于其状态且必须在运行时刻根据状态改变行为【存疑：原文如此，应为"一个对象的行为…"】</p>
+<p>D. 一组对象以定义良好但是复杂的方式进行通信，产生的相互依赖关系结构混乱且难以理解。</p>
+<p><strong>重做结果</strong>：<strong><em>_</em>_（对/错）　<strong>用时</strong>：</strong>____ min</p>
+<blockquote>
+<p><strong>做完本题后</strong>：翻 <code>day20-design-patterns.md</code> §2.2「识别方法」与 §3.16「中介者」精讲，核对"场景关键词 → 模式"的判别路径是否与你想的一致。这是今天上午与下午内容的<strong>直接衔接点</strong>。</p>
+</blockquote>
+<hr />
+<h2>三、重做正确率统计表（做完后填写）</h2>
+<blockquote>
+<p><strong>算法</strong>：正确率 = 对题组数 ÷ 实际重做题组数（没做完的题组<strong>不计入分母</strong>，但要写明原因）。连环题组（如 24–26 三空）<strong>整组算一个题组</strong>，但<strong>三空全对才算对</strong>。
+<strong>判定规则</strong>：重做正确率 ≥ 80% ⇒ 该知识点"已修复"；60%–80% ⇒ 隔 3 天再重做一次；&lt; 60% ⇒ 回 Phase 1 笔记<strong>整章重看</strong>，不能只背答案。</p>
+</blockquote>
+<h3>3.1 分组统计</h3>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>题组数</th>
+<th>重做对题组数</th>
+<th>实际重做题组数</th>
+<th>正确率</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 计算题组（题 1–12）</td>
+<td>12</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td>② 分歧/勘误题组（题 13–17）</td>
+<td>5</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td>③ 图形/概念陷阱组（题 18–20）</td>
+<td>3</td>
+<td>____</td>
+<td>____</td>
+<td>____%</td>
+<td>□ 已修复（≥80%）□ 待重做（60–80%）□ 回笔记（&lt;60%）</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>20</strong></td>
+<td>____</td>
+<td>____</td>
+<td><strong>____%</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>重做总用时</strong>：<strong><em>_</em>_ 分钟（上午 2h 预算，超时说明计算题过程还不够熟）｜<strong>自评专注度（0-10）</strong>：</strong>____</p>
+<h3>3.2 按知识点回填（填进 knowledge-checklist.md 二轮重点清单的"我的正确率"列）</h3>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>知识点</th>
+<th>涉及题号</th>
+<th>重做正确率</th>
+<th>是否仍错（&gt;1 题组错就打 ☑）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机基础</td>
+<td>浮点数分段求值</td>
+<td>卷3·6</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>前驱图与 PV 操作</td>
+<td>卷3·24–26</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>磁盘旋转调度</td>
+<td>卷3·27–28</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>段页式地址位数换算</td>
+<td>卷4·36（回忆版）</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>位示图两连算</td>
+<td>卷4·37–38（回忆版）</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>进程状态转换</td>
+<td>卷3·23</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>关键路径与松弛时间</td>
+<td>卷3·18–19</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>白盒覆盖与 McCabe</td>
+<td>卷3·34–35</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>设计模式（中介者）识别与分类</td>
+<td>卷3·44–46</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>候选码与蕴含判定</td>
+<td>卷3·52–53</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>自然连接列数与代数等价</td>
+<td>卷4·24–25</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>共享栈判满</td>
+<td>卷3·57</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>二叉树高度区间</td>
+<td>卷3·59</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>树的度求叶子数</td>
+<td>卷4·28</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>Huffman 编码与译码</td>
+<td>卷3·64–65</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>贪心 + 0/1 与部分背包</td>
+<td>卷4·39–40（回忆版）</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>表达式二叉树（中序读出）</td>
+<td>卷3·20</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>NFA 识别的字符串</td>
+<td>卷3·22</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>循环队列的优点</td>
+<td>卷3·58</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>拓扑排序的性质</td>
+<td>卷3·61</td>
+<td>____%</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h3>3.3 汇总打卡（誊抄到 tracker.md Day 20 行）</h3>
+<pre><code class="language-text">错题重做正确率（Day 18–19 共 20 题组）：______ / ______ = ______%
+其中：计算题组 ______% ｜ 分歧/勘误题组 ______% ｜ 图形/概念组 ______%
+重做总用时：______ 分钟  ｜  仍错题组数：______ 组
+仍错知识点（打 ☑ 的项）：________________________________
+</code></pre>
+<hr />
+<h2>四、重做后的固定动作</h2>
+<ol>
+<li><strong>仍错的题组</strong>：按"错题四要素"（题目 → 错因 → 正确思路 → 知识点）登记到 <code>docs/practice/reflection.md</code> 的 <strong>Day 20 节</strong>；计算题必须把<strong>每一步中间量</strong>写出来（Ve/Vl 表、Huffman 树、属性闭包、位示图除法），不允许只写结论。</li>
+<li><strong>把 3.2 表的正确率回填</strong>到 <code>knowledge-checklist.md</code> 的「二轮重点清单 · 我的正确率」列；<strong>&lt; 60% 的项升级为 ⭐ 必刷</strong>。</li>
+<li><strong>把 3.3 的汇总填到</strong> <code>tracker.md</code> Day 20 行的「正确率」列（格式建议：<code>重做 __%</code>）。</li>
+<li><strong>分歧题归档</strong>：卷 3 的 3 处勘误（第 23、58、61 题）与卷 4 的 2 处裁决（第 24、40 题）推导过程已在 key 文件中钉死，考前<strong>不再变动</strong>，当作结论记住即可。</li>
+<li><strong>Phase 2 节奏检查</strong>：若重做正确率 &lt; 60%，说明 Day 18–19 的错题没有真正消化，Day 21 起每天先抽 30 分钟重做本清单里仍错的题组，再做新卷。</li>
+<li><strong>衔接 Step 2</strong>：题 20（中介者三连）若仍错，下午学 <code>day20-design-patterns.md</code> §二「识别方法」时，把本题的四个选项场景（策略/解释器/状态/中介者）当成第一批练手案例。</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/review-round2.md">docs/practice/review-round2.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

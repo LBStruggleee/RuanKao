@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 7（9/27）数据库① 练习题：关系代数与 SQL（共 20 题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 databases 📁 day07-exercises.md</div>
+<h1>Day 7（9/27）数据库① 练习题：关系代数与 SQL（共 20 题）</h1>
+<blockquote>
+<p>说明：本题是 Day 7 的章节题，也是<strong>数据库阶段的第一套题</strong>。题目分布：<strong>SQL 查询结果题 7 道（1–6、8）</strong>、<strong>关系代数结果题 1 道（7）</strong>、<strong>关系代数与 SQL 概念题 12 道（9–20）</strong>。
+<strong>完整答案与解析在文件末尾</strong>。建议独立完成（约 40 分钟）再对答案。
+<strong>做题纪律</strong>：第 1–8 题必须<strong>打草稿逐行推导</strong>——在草稿纸上把表数据抄下来，一行一行地过滤/连接/分组。这类题"看解析都懂、自己一算就错"，跳过草稿几乎必然失分。</p>
+</blockquote>
+<hr />
+<h2>附：本文全部题目使用的三张表（与 <code>day07-sql.md</code> 完全相同）</h2>
+<p><strong>S（学生表）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Sdept</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+<td>计算机系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李华</td>
+<td>计算机系</td>
+<td>20</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王芳</td>
+<td>数学系</td>
+<td>18</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>赵磊</td>
+<td>数学系</td>
+<td>21</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>钱娜</td>
+<td>信息系</td>
+<td>23</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>孙强</td>
+<td>信息系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>计算机系</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>C（课程表）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>Cname</th>
+<th>Cpno</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>数据库</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据结构</td>
+<td>NULL</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>操作系统</td>
+<td>NULL</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>编译原理</td>
+<td>2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SC（选课表，共 14 行）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Cno</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>1</td>
+<td>92</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>2</td>
+<td>85</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>3</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>1</td>
+<td>75</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>2</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>3</td>
+<td>90</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>2</td>
+<td>70</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>1</td>
+<td>95</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>3</td>
+<td>78</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>2</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>3</td>
+<td>55</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条关键事实（记住它们，前 8 题都快一倍）</strong>
+- <strong>1001 张明</strong>选了全部 4 门课；<strong>1007 周敏</strong>一门课都没选。
+- <strong>1002 李华</strong>的 C2（数据结构）成绩为 <strong>NULL</strong>——选了课，但没考试。
+- 4 学分的课有 C1 数据库、C2 数据结构、C4 编译原理；3 学分的课只有 C3 操作系统。</p>
+<hr />
+<h2>第一部分：结果推导题（1–8，必须打草稿逐行推导）</h2>
+<p><strong>1.</strong> 执行以下查询，返回的结果是（ ）。</p>
+<pre><code class="language-sql">SELECT Sdept, COUNT(*) AS 人数, AVG(Age) AS 平均年龄
+FROM S
+GROUP BY Sdept
+HAVING AVG(Age) &gt;= 20
+ORDER BY 平均年龄 DESC;
+</code></pre>
+<ul>
+<li>A. 信息系 / 2 / 21.0；计算机系 / 3 / 20.33</li>
+<li>B. 计算机系 / 3 / 20.33；信息系 / 2 / 21.0</li>
+<li>C. 信息系 / 2 / 21.0；计算机系 / 3 / 20.33；数学系 / 2 / 19.5</li>
+<li>D. 计算机系 / 3 / 20.33；数学系 / 2 / 19.5</li>
+</ul>
+<p><strong>2.</strong> 执行以下查询，返回的结果是（ ）。</p>
+<pre><code class="language-sql">SELECT Sname, Cname, Grade
+FROM S JOIN SC ON S.Sno = SC.Sno
+     JOIN C ON SC.Cno = C.Cno
+WHERE Sdept = '信息系'
+ORDER BY Grade DESC;
+</code></pre>
+<ul>
+<li>A. 钱娜 / 数据库 / 95；孙强 / 数据结构 / 88；钱娜 / 操作系统 / 78；孙强 / 操作系统 / 55</li>
+<li>B. 钱娜 / 数据库 / 95；孙强 / 数据结构 / 88；孙强 / 操作系统 / 55；钱娜 / 操作系统 / 78</li>
+<li>C. 钱娜 / 数据库 / 95；钱娜 / 操作系统 / 78；孙强 / 数据结构 / 88；孙强 / 操作系统 / 55</li>
+<li>D. 孙强 / 数据结构 / 88；钱娜 / 数据库 / 95；孙强 / 操作系统 / 55；钱娜 / 操作系统 / 78</li>
+</ul>
+<p><strong>3.</strong> 执行以下查询，返回的行是（ ）。</p>
+<pre><code class="language-sql">SELECT S.Sno, Sname, Cno
+FROM S JOIN SC ON S.Sno = SC.Sno
+WHERE Grade &lt; 60 OR Grade IS NULL;
+</code></pre>
+<ul>
+<li>A. 1006 / 孙强 / 3</li>
+<li>B. 1002 / 李华 / 2</li>
+<li>C. 1002 / 李华 / 2；1006 / 孙强 / 3</li>
+<li>D. 1002 / 李华 / 2；1006 / 孙强 / 3；1007 / 周敏 / NULL</li>
+</ul>
+<p><strong>4.</strong> 执行以下查询，返回的学生是（ ）。</p>
+<pre><code class="language-sql">SELECT Sname
+FROM S
+WHERE Sno NOT IN (SELECT Sno FROM SC WHERE Cno = '3');
+</code></pre>
+<ul>
+<li>A. 张明、王芳、钱娜、孙强</li>
+<li>B. 李华、赵磊、周敏</li>
+<li>C. 李华、赵磊</li>
+<li>D. 全体 7 名学生</li>
+</ul>
+<p><strong>5.</strong> 执行以下查询，返回的结果是（ ）。</p>
+<pre><code class="language-sql">SELECT COUNT(*) AS 人数, COUNT(Grade) AS 有成绩人数, AVG(Grade) AS 平均分
+FROM SC
+WHERE Cno = '2';
+</code></pre>
+<ul>
+<li>A. 4 / 3 / 81.0</li>
+<li>B. 4 / 4 / 60.75</li>
+<li>C. 3 / 3 / 81.0</li>
+<li>D. 4 / 3 / 60.75</li>
+</ul>
+<p><strong>6.</strong> 执行以下查询，返回的学号是（ ）。（顺序无关）</p>
+<pre><code class="language-sql">SELECT Sno FROM SC WHERE Cno = '1'
+INTERSECT
+SELECT Sno FROM SC WHERE Cno = '2';
+</code></pre>
+<ul>
+<li>A. 1001</li>
+<li>B. 1001、1002</li>
+<li>C. 1001、1002、1003、1004、1005、1006</li>
+<li>D. 1003、1005</li>
+</ul>
+<p><strong>7.</strong> 关系代数表达式 π_{Sname, Age}(σ_{Age≥20}(S)) 的结果是（ ）。（元组顺序无关）</p>
+<ul>
+<li>A. 李华 / 20；赵磊 / 21；钱娜 / 23；周敏 / 22</li>
+<li>B. 张明 / 19；王芳 / 18；孙强 / 19</li>
+<li>C. 李华 / 20；赵磊 / 21；钱娜 / 23；周敏 / 22；孙强 / 19</li>
+<li>D. 全部 7 名学生</li>
+</ul>
+<p><strong>8.</strong> 执行以下查询，返回的结果是（ ）。</p>
+<pre><code class="language-sql">SELECT Sname, SUM(Grade) AS 总分
+FROM S JOIN SC ON S.Sno = SC.Sno
+     JOIN C ON SC.Cno = C.Cno
+WHERE Credit = 4
+GROUP BY S.Sno, Sname
+HAVING SUM(Grade) &gt;= 250;
+</code></pre>
+<ul>
+<li>A. 张明 / 256</li>
+<li>B. 张明 / 256；李华 / 75</li>
+<li>C. 无任何行返回</li>
+<li>D. 张明 / 344</li>
+</ul>
+<hr />
+<h2>第二部分：关系代数与 SQL 概念（9–20）</h2>
+<p><strong>9.</strong> 下列关于 SQL 语句<strong>逻辑执行顺序</strong>，正确的是（ ）。</p>
+<ul>
+<li>A. SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY</li>
+<li>B. FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</li>
+<li>C. FROM → SELECT → WHERE → GROUP BY → HAVING → ORDER BY</li>
+<li>D. WHERE → FROM → GROUP BY → SELECT → HAVING → ORDER BY</li>
+</ul>
+<p><strong>10.</strong> 关于 WHERE 子句与 HAVING 子句，下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 两者完全等价，可以互换使用</li>
+<li>B. WHERE 子句中可以使用聚合函数（如 <code>AVG(Grade)</code>），HAVING 子句中不能</li>
+<li>C. WHERE 在 GROUP BY 之前执行、用于过滤行；HAVING 在 GROUP BY 之后执行、用于过滤组，且可使用聚合函数</li>
+<li>D. HAVING 只能引用 SELECT 列表中定义的列别名，不能写聚合函数</li>
+</ul>
+<p><strong>11.</strong> 下列 SQL 语句中，属于<strong>数据定义语言（DDL）</strong>的是（ ）。</p>
+<ul>
+<li>A. <code>SELECT</code></li>
+<li>B. <code>INSERT</code></li>
+<li>C. <code>CREATE TABLE</code></li>
+<li>D. <code>COMMIT</code></li>
+</ul>
+<p><strong>12.</strong> 关系模型的<strong>三要素</strong>是（ ）。</p>
+<ul>
+<li>A. 关系、元组、属性</li>
+<li>B. 关系数据结构、关系操作集合、关系完整性约束</li>
+<li>C. 候选码、主码、外码</li>
+<li>D. 选择、投影、连接、除</li>
+</ul>
+<p><strong>13.</strong> 在关系模型中，下列术语与其实际含义的对应<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 关系——一列</li>
+<li>B. 属性——一行</li>
+<li>C. 元组——一行</li>
+<li>D. 基数——列数</li>
+</ul>
+<p><strong>14.</strong> 关于<strong>等值连接</strong>与<strong>自然连接</strong>，下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 自然连接不需要任何连接条件，等值连接才需要</li>
+<li>B. 自然连接在所有同名属性上做等值连接，并去掉重复的连接属性列；等值连接保留所有列</li>
+<li>C. 自然连接的连接条件只能是主码</li>
+<li>D. 等值连接会自动去掉重复的列</li>
+</ul>
+<p><strong>15.</strong> 关系 R 有 5 个元组、关系 S 有 8 个元组，则 R × S 的元组个数是（ ）。</p>
+<ul>
+<li>A. 5</li>
+<li>B. 8</li>
+<li>C. 13</li>
+<li>D. 40</li>
+</ul>
+<p><strong>16.</strong> 下列子查询中，属于<strong>相关子查询</strong>的是（ ）。</p>
+<ul>
+<li>A. <code>SELECT Sname FROM S WHERE Sno IN (SELECT Sno FROM SC WHERE Cno='1')</code></li>
+<li>B. <code>SELECT Sname FROM S WHERE EXISTS (SELECT * FROM SC WHERE SC.Sno=S.Sno AND SC.Cno='1')</code></li>
+<li>C. <code>SELECT Sname FROM (SELECT * FROM S WHERE Age&gt;=20) T</code></li>
+<li>D. <code>SELECT Sname FROM S WHERE Age &gt; (SELECT AVG(Age) FROM S)</code></li>
+</ul>
+<p><strong>17.</strong> 关于 <code>EXISTS (SELECT * FROM SC WHERE …)</code>，下列说法<strong>正确</strong>的是（ ）。</p>
+<ul>
+<li>A. 它会返回 SC 表中满足条件的所有行</li>
+<li>B. 它返回子查询结果第一行的第一列的值</li>
+<li>C. 它只判断子查询是否有行返回，为真当且仅当子查询至少返回一行</li>
+<li>D. 它与 <code>IN</code> 完全等价，可以无条件互换</li>
+</ul>
+<p><strong>18.</strong> 下列 SQL 语句中，<strong>无论如何都查不出任何数据</strong>（结果恒为空）的是（ ）。</p>
+<ul>
+<li>A. <code>SELECT * FROM SC WHERE Grade IS NULL</code></li>
+<li>B. <code>SELECT * FROM SC WHERE Grade = NULL</code></li>
+<li>C. <code>SELECT * FROM SC WHERE Grade &lt; 60 OR Grade IS NULL</code></li>
+<li>D. <code>SELECT * FROM SC WHERE Grade IS NOT NULL</code></li>
+</ul>
+<p><strong>19.</strong> 已知 S 有 7 名学生、SC 有 14 条选课记录，其中 1007 周敏没有任何选课记录。执行以下查询，返回的行数是（ ）。</p>
+<pre><code class="language-sql">SELECT COUNT(*) FROM S LEFT JOIN SC ON S.Sno = SC.Sno;
+</code></pre>
+<ul>
+<li>A. 7</li>
+<li>B. 14</li>
+<li>C. 15</li>
+<li>D. 98</li>
+</ul>
+<p><strong>20.</strong> 与 SQL 语句 <code>SELECT S.Sno, Sname FROM S JOIN SC ON S.Sno=SC.Sno WHERE SC.Cno='1' AND SC.Grade&gt;=80</code> <strong>等价</strong>的关系代数表达式是（ ）。</p>
+<ul>
+<li>A. π_{Sno, Sname}(σ_{Cno='1' ∧ Grade≥80}(S ⋈ SC))</li>
+<li>B. σ_{Cno='1' ∧ Grade≥80}(π_{Sno, Sname}(S ⋈ SC))</li>
+<li>C. π_{Sno, Sname}(σ_{Cno='1' ∧ Grade≥80}(S) ⋈ SC)</li>
+<li>D. σ_{Cno='1' ∧ Grade≥80}(S ⋈ SC)</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<h3>第一部分：结果推导题</h3>
+<p><strong>1. A</strong> 先按系分组，算各组人数与平均年龄，再用 HAVING 过滤、排序：</p>
+<pre><code>计算机系：1001(19)、1002(20)、1007(22) → 3 人，平均 = 61/3 = 20.33
+数学系：  1003(18)、1004(21)           → 2 人，平均 = 39/2 = 19.5
+信息系：  1005(23)、1006(19)           → 2 人，平均 = 42/2 = 21.0
+HAVING AVG(Age) &gt;= 20 → 淘汰数学系（19.5）
+ORDER BY 平均年龄 DESC → 信息系(21.0) 在前，计算机系(20.33) 在后
+</code></pre>
+<p><strong>结果</strong>：信息系/2/21.0；计算机系/3/20.33。B 选项排序方向反了；C 选项数学系平均 19.5 不满足 HAVING，不该出现；D 选项既漏了信息系、又留下了数学系。
+（知识点：GROUP BY + HAVING + ORDER BY；对应 <code>day07-sql.md</code> §3.6）</p>
+<p><strong>2. A</strong> 先连接三表，再只留信息系学生：</p>
+<pre><code>信息系学生：1005 钱娜、1006 孙强
+钱娜的选课：C1 数据库 95、C3 操作系统 78
+孙强的选课：C2 数据结构 88、C3 操作系统 55
+ORDER BY Grade DESC → 95、88、78、55
+</code></pre>
+<p><strong>结果</strong>：钱娜/数据库/95；孙强/数据结构/88；钱娜/操作系统/78；孙强/操作系统/55。B 选项把 78 和 55 的顺序排反了（DESC 下 78 必须在 55 前）；C 选项完全没排序；D 选项前两行顺序就错了。
+（知识点：三表内连接 + 排序；对应 <code>day07-sql.md</code> §2.4、§3.7）</p>
+<p><strong>3. C</strong> 内连接只保留有选课记录的学生，再筛选"成绩&lt;60 <strong>或</strong> 成绩为 NULL"：</p>
+<pre><code>SC 全部 14 行中：
+  Grade &lt; 60 的：1006/C3/55（孙强，操作系统）→ 1 行
+  Grade IS NULL 的：1002/C2/NULL（李华，数据结构）→ 1 行
+  注意：NULL &lt; 60 的结果是 UNKNOWN，所以&quot;OR Grade IS NULL&quot;这个条件不可省
+</code></pre>
+<p><strong>结果</strong>：1002/李华/2；1006/孙强/3。A、B 各漏一行；<strong>D 是最大陷阱</strong>——1007 周敏确实没选课，但她在 SC 中<strong>一行都没有</strong>，内连接根本不会产生她的行，也就不会出现"1007/周敏/NULL"这一行。要查 1007 必须用<strong>左外连接</strong>（见 <code>day07-sql.md</code> 例 3）。
+（知识点：NULL 的三值逻辑 + 内连接语义；对应 <code>day07-sql.md</code> §五陷阱 1、§3.7）</p>
+<p><strong>4. B</strong> 先算子查询（选了 C3 操作系统的人），再取补集：</p>
+<pre><code>子查询：Cno='3' 的 Sno → 1001、1003、1005、1006（4 人）
+NOT IN → S 中不在该集合的学生：1002 李华、1004 赵磊、1007 周敏（3 人）
+</code></pre>
+<p><strong>结果</strong>：李华、赵磊、周敏。A 恰好是补集（选了 C3 的人）；C 漏了周敏——<strong>周敏没选任何课，当然也没选 C3，属于"没选 C3"的人</strong>；D 明显错误。等价写法：<code>NOT EXISTS (SELECT * FROM SC WHERE SC.Sno=S.Sno AND SC.Cno='3')</code>。
+（知识点：NOT IN 子查询；对应 <code>day07-sql.md</code> §3.8）</p>
+<p><strong>5. A</strong> C2（数据结构）共有 4 条选课记录，其中李华的成绩是 NULL：</p>
+<pre><code>COUNT(*)       → 数行 = 4（NULL 行也数）
+COUNT(Grade)   → 数非空成绩 = 3（李华的 NULL 不数）
+AVG(Grade)     → (85 + 70 + 88) / 3 = 243/3 = 81.0（分母是 3，不是 4）
+</code></pre>
+<p><strong>结果</strong>：4 / 3 / 81.0。B 选项 COUNT(Grade) 把 NULL 算进去了；C 选项 COUNT(<em>) 少算了 NULL 行；</em><em>D 是最容易错的</em><em>——把 AVG 的分母当成 4：243/4 = 60.75。</em><em>COUNT(</em>) 数行、COUNT(列) 数非空值、AVG 的分母只算非空值**，这三者必须分清。
+（知识点：聚合函数对 NULL 的三种态度；对应 <code>day07-sql.md</code> §3.5、§五陷阱 2）</p>
+<p><strong>6. B</strong> 交集 = 同时出现在两个集合中的学号：</p>
+<pre><code>选了 C1 的：1001、1002、1003、1005（4 人）
+选了 C2 的：1001、1002、1004、1006（4 人）
+INTERSECT → 同时选了两门：1001、1002（2 人）
+</code></pre>
+<p><strong>结果</strong>：1001、1002。注意 <strong>1002 李华的 C2 成绩虽是 NULL，但"选了这门课"这一事实成立</strong>（SC 中有该行，子查询的条件是 Cno='2'，与 Grade 无关），所以她算"选了 C2"。C 选项是 <code>UNION</code> 的结果（6 人）；D 选项是 <code>EXCEPT</code>（选了 C1 没选 C2）的结果——本题把集合运算的三个关键字放在同一组数据里考，务必区分。
+（知识点：集合运算 INTERSECT；对应 <code>day07-sql.md</code> §3.9）</p>
+<p><strong>7. A</strong> 先选择（横向筛行）再投影（纵向选列）：</p>
+<pre><code>σ_{Age≥20}(S)：李华(20)、赵磊(21)、钱娜(23)、周敏(22) → 4 行
+π_{Sname,Age}：保留姓名、年龄两列
+</code></pre>
+<p><strong>结果</strong>：李华/20；赵磊/21；钱娜/23；周敏/22。B 是补集（年龄&lt;20 的：张明 19、王芳 18、孙强 19）；<strong>C 混入了孙强 19</strong>（19 &lt; 20，不该出现）；D 说明选择条件没生效。<strong>运算顺序：先 σ 后 π</strong>——若先投影掉了 Age 列，就没法再做 Age≥20 的选择了。
+（知识点：选择 σ 与投影 π；对应 <code>day07-sql.md</code> §2.1、§2.2）</p>
+<p><strong>8. A</strong> 先连接、再按学分过滤、然后分组求和、最后筛组：</p>
+<pre><code>WHERE Credit = 4 → 只留 C1 数据库、C2 数据结构、C4 编译原理（C3 操作系统 3 学分被淘汰）
+按学生分组求 SUM(Grade)：
+  张明：C1 92 + C2 85 + C4 79 = 256
+  李华：C1 75 + C2(NULL) = 75（SUM 忽略 NULL）
+  王芳：C1 80 + C4 79 = 159
+  赵磊：C2 70
+  钱娜：C1 95
+  孙强：C2 88
+HAVING SUM(Grade) &gt;= 250 → 只剩张明
+</code></pre>
+<p><strong>结果</strong>：张明 / 256。<strong>D 是本题的主陷阱</strong>：344 是张明<strong>全部 4 门课</strong>的总分（92+85+88+79），但 <code>WHERE Credit=4</code> 已经把 C3 操作系统（88 分）排除在外，所以是 256。B 选项的李华只有 75 分，远不到 250。
+（知识点：多表连接 + GROUP BY + HAVING + SUM 忽略 NULL；对应 <code>day07-sql.md</code> §3.5、§3.6、§3.7）</p>
+<h3>第二部分：关系代数与 SQL 概念</h3>
+<p><strong>9. B</strong> SQL 的逻辑执行顺序是 <strong>FROM → WHERE → GROUP BY → HAVING → SELECT →（DISTINCT）→ ORDER BY</strong>：先确定数据来源（FROM），再过滤行（WHERE），然后分组（GROUP BY）、过滤组（HAVING），之后才选列（SELECT）、去重（DISTINCT），最后排序（ORDER BY）。A 把 SELECT 放最前、C 让 SELECT 抢在 WHERE 前、D 整体乱序——顺序错会导致"WHERE 里能不能用聚合/别名"这类判断全错。
+（知识点：SQL 执行顺序；对应 <code>day07-sql.md</code> §3.4）</p>
+<p><strong>10. C</strong> WHERE 在 GROUP BY <strong>之前</strong>执行，作用是<strong>过滤行</strong>，<strong>不能使用聚合函数</strong>（此时还没分组，无从聚合）；HAVING 在 GROUP BY <strong>之后</strong>执行，作用是<strong>过滤组</strong>，<strong>可以使用聚合函数</strong>。A 错在"等价"——两者过滤对象不同（行 vs 组）；B 把两者的聚合函数权限说反了；D 错——HAVING 的标准用法正是写聚合函数，而列别名在标准 SQL 中并不能保证可用。
+（知识点：WHERE vs HAVING；对应 <code>day07-sql.md</code> §3.6 对照表）</p>
+<p><strong>11. C</strong> <strong>DDL = CREATE / DROP / ALTER</strong>。<code>SELECT</code>、<code>INSERT</code> 属于 DML（数据操纵语言）；<code>COMMIT</code> 属于 DCL（数据控制语言，与 GRANT/REVOKE 一类）。<strong>"CREATE/DROP/ALTER 一定是 DDL"是最稳的判据</strong>。
+（知识点：SQL 语言分类；对应 <code>day07-sql.md</code> §3.1）</p>
+<p><strong>12. B</strong> 关系模型三要素 = <strong>关系数据结构 + 关系操作集合 + 关系完整性约束</strong>。A（关系/元组/属性）是关系数据结构里的<strong>术语</strong>；C（候选码/主码/外码）是<strong>码</strong>的分类；D（选择/投影/连接/除）是<strong>关系代数运算</strong>——三者都只是三要素中某一个要素的组成部分。
+（知识点：关系模型三要素；对应 <code>day07-sql.md</code> §一）</p>
+<p><strong>13. C</strong> <strong>元组（Tuple）= 一行</strong>。A 错（关系 = 一张<strong>表</strong>，不是一列）；B 错（属性 = 一<strong>列</strong>）；D 错（<strong>基数 = 行数，目 = 列数</strong>，两者正好相反，这是高频陷阱）。完整对照：<strong>关系=表、元组=行、属性=列、域=取值范围、目=列数、基数=行数</strong>。
+（知识点：关系模型术语；对应 <code>day07-sql.md</code> §1.1）</p>
+<p><strong>14. B</strong> <strong>自然连接</strong>自动在<strong>所有同名属性</strong>上做等值连接，并<strong>把重复的连接属性列合并成一列</strong>；<strong>等值连接</strong>是 θ 为 <code>=</code> 的连接，<strong>保留两个表的全部列（含两个同名的连接列）</strong>。A 错（自然连接的连接条件就是"同名属性相等"，并非不需要条件）；C 错（自然连接不限于主码，只要同名即可）；D 错（去重复列的是自然连接，不是等值连接）。
+（知识点：等值连接 vs 自然连接；对应 <code>day07-sql.md</code> §2.4）</p>
+<p><strong>15. D</strong> 笛卡尔积 R × S 的元组数 = <strong>|R| × |S| = 5 × 8 = 40</strong>。C（13）是相加；A、B 分别是两个关系的行数。<strong>写 <code>FROM R, S</code> 忘了连接条件 = 笛卡尔积</strong>，是"查询返回多少行"类题目的标准考法。
+（知识点：笛卡尔积；对应 <code>day07-sql.md</code> §2.3）</p>
+<p><strong>16. B</strong> <strong>相关子查询</strong>的标志是：子查询<strong>引用了外层查询的列</strong>（这里是 <code>SC.Sno = S.Sno</code>），外层每处理一行就执行一次内层。A、C、D 的子查询都能<strong>独立执行一次</strong>（与外层某一行无关），属于不相关子查询：A 的子查询先算出"选了 C1 的学号集合"，C 的派生表先算出"年龄≥20 的学生"，D 的子查询只算一个全校平均年龄。
+（知识点：相关子查询 vs 不相关子查询；对应 <code>day07-sql.md</code> §3.8）</p>
+<p><strong>17. C</strong> <strong>EXISTS 只判断子查询"是否有行返回"</strong>：有行 → TRUE，无行 → FALSE，<strong>完全不关心子查询查的是什么列</strong>（<code>SELECT *</code>、<code>SELECT 1</code>、<code>SELECT 'x'</code> 等价）。A 错（EXISTS 不返回那些行，那些行是子查询内部的中间结果）；B 描述的是<strong>标量子查询</strong>的语义；D 错——EXISTS 判断"存在性"，IN 判断"是否属于某集合"，虽然常能互相改写，但<strong>语义并不相同</strong>（尤其 NOT EXISTS 不受 NULL 影响，NOT IN 受 NULL 影响）。
+（知识点：EXISTS 的语义；对应 <code>day07-sql.md</code> §3.8、§五陷阱 9、12）</p>
+<p><strong>18. B</strong> <code>Grade = NULL</code> 的比较结果是 <strong>UNKNOWN</strong>（三值逻辑），而 WHERE 只保留<strong>TRUE</strong> 的行，所以<strong>结果恒为空</strong>。判空必须用 <code>IS NULL</code>（选项 A、C、D 的写法都能查出数据：A 查 1002 的 C2 那一行、C 查两行、D 查其余 13 行）。
+（知识点：NULL 的三值逻辑；对应 <code>day07-sql.md</code> §五陷阱 1）</p>
+<p><strong>19. C</strong> <strong>左外连接保留左表（S）的全部 7 名学生</strong>：其中 6 名有选课记录，连接后产生 <strong>14 行</strong>；1007 周敏无匹配行，<strong>保留一行、SC 各列补 NULL</strong> → 共 <strong>14 + 1 = 15</strong> 行。A（7）误以为只保留左表行数；B（14）是<strong>内连接</strong>的结果；D（98）是<strong>笛卡尔积</strong>（7 × 14）的结果。
+（知识点：左外连接的行数；对应 <code>day07-sql.md</code> §3.7）</p>
+<p><strong>20. A</strong> SQL 的结构对应关系代数的运算顺序：<strong>JOIN ↔ ⋈、WHERE ↔ σ、SELECT 列 ↔ π</strong>，且<strong>必须先连接、再选择、最后投影</strong>：
+- <strong>A 正确</strong>：S ⋈ SC → σ_{Cno='1' ∧ Grade≥80} → π_{Sno,Sname}，顺序完全对应。
+- B 错在<strong>先投影后选择</strong>——π_{Sno,Sname} 之后关系里已经<strong>没有 Cno 和 Grade 列</strong>，后面的 σ 条件无从判断。
+- C 错在<strong>选择只作用在 S 上</strong>——S 中根本没有 Cno、Grade 属性，σ 条件写错了地方。
+- D 错在<strong>缺少投影</strong>——σ_{…}(S ⋈ SC) 返回 S 与 SC 的<strong>全部列</strong>，而 SQL 只选了 Sno、Sname 两列。
+（知识点：SQL 与关系代数的相互转换；对应 <code>day07-sql.md</code> §2.6 对照表、§2.4 例 6）</p>
+<hr />
+<h2>做完后的自我评估</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>题号</th>
+<th>答对数</th>
+<th>目标</th>
+<th>未达标怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>分组统计 / 聚合与 NULL</strong></td>
+<td>1、5、8</td>
+<td>__ / 3</td>
+<td><strong>全对</strong></td>
+<td><strong>最高频考点</strong>。回看 <code>day07-sql.md</code> §3.5、§3.6 和例 1、例 5。<strong>三个数字必须分清</strong>：COUNT(*) 数行含 NULL、COUNT(列) 数非空值、AVG 分母只算非空值。</td>
+</tr>
+<tr>
+<td><strong>多表连接</strong></td>
+<td>2、8、19、20</td>
+<td>__ / 4</td>
+<td><strong>≥ 3</strong></td>
+<td>回看 <code>day07-sql.md</code> §3.7 四种 JOIN 行数对比表，<strong>自己画一遍</strong>内/左/右/全外的结果差异；§2.4 例 6 的分步运算重做一遍。</td>
+</tr>
+<tr>
+<td><strong>NULL 与子查询</strong></td>
+<td>3、4、16、17、18</td>
+<td>__ / 5</td>
+<td><strong>≥ 4</strong></td>
+<td>回看 <code>day07-sql.md</code> §五陷阱表第 1、9、12 条。<strong><code>IS NULL</code> 而非 <code>= NULL</code>；NOT EXISTS 优于 NOT IN</strong>——这两条是得分保证。</td>
+</tr>
+<tr>
+<td><strong>集合运算</strong></td>
+<td>6</td>
+<td>__ / 1</td>
+<td><strong>全对</strong></td>
+<td>回看 <code>day07-sql.md</code> §3.9：UNION 去重 / UNION ALL 不去重 / INTERSECT 交 / EXCEPT 差。</td>
+</tr>
+<tr>
+<td><strong>关系代数基础</strong></td>
+<td>7、12、13、14、15</td>
+<td>__ / 5</td>
+<td><strong>≥ 4</strong></td>
+<td>回看 <code>day07-sql.md</code> §一、§二。<strong>σ 选行、π 选列、⋈ 连表、× 笛卡尔积、÷ 全部</strong>；<strong>目=列数、基数=行数</strong>。</td>
+</tr>
+<tr>
+<td><strong>SQL 语法与分类</strong></td>
+<td>9、10、11</td>
+<td>__ / 3</td>
+<td><strong>全对</strong></td>
+<td>回看 <code>day07-sql.md</code> §3.1、§3.4。<strong>执行顺序必须能默写</strong>（FROM→WHERE→GROUP BY→HAVING→SELECT→DISTINCT→ORDER BY），它直接决定了 WHERE/HAVING 能写什么。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>数据库阶段第一天提醒</strong>：第 1–8 题如果有任何一道错，<strong>必须按解析把推导过程在草稿纸上重算一遍</strong>，而不是只看懂结论——结果推导题的错因几乎都是"跳步"。数据库是你的<strong>弱项科目</strong>，但 SQL 的好处是<strong>规则固定、套路可练</strong>：今天把 NULL、JOIN、GROUP BY 三大陷阱练成肌肉记忆，科目二大题的 SQL 部分就能稳稳拿到分。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/databases/day07-exercises.md">docs/knowledge-points/databases/day07-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

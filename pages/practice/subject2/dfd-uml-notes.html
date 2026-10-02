@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 27 大题专项①：DFD 答题模板 + UML 答题模板 + 高频考点清单 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 subject2 📁 dfd-uml-notes.md</div>
+<h1>Day 27 大题专项①：DFD 答题模板 + UML 答题模板 + 高频考点清单</h1>
+<blockquote>
+<p><strong>适用</strong>：软考中级·软件设计师 科目二（下午卷）试题一（DFD，15 分）与试题三（UML，15 分）
+<strong>配套</strong>：<code>dfd-uml-exercises.md</code>（4 道真题）、<code>dfd-uml-key.md</code>（逐问答案与丢分点解析）
+<strong>用法</strong>：做题前快速过一遍模板；做题后对照答案，把丢分点回填到本文最后一节"错题回填区"。</p>
+</blockquote>
+<hr />
+<h1>一、DFD 答题模板（试题一，15 分）</h1>
+<blockquote>
+<p>试题一固定考数据流图，题目结构高度套路化：
+【说明】列 4–6 项功能 → 给上下文图（图1-1）+ 0 层图（图1-2）→
+问题1 填外部实体（3–5 分）→ 问题2 填数据存储（3–5 分）→
+问题3 补缺失数据流（4–5 分）→ 问题4 加工逻辑描述/加工分解（2–3 分）。
+按下列 <strong>四步</strong> 顺序作答，每步对应一个问题，稳拿 12 分以上。</p>
+</blockquote>
+<h2>第 1 步：外部实体识别法（对应问题1）</h2>
+<p><strong>核心口诀：找"人"、找"设备"、找"外部系统"；排除"数据"、排除"系统自己"。</strong></p>
+<ul>
+<li><strong>什么是外部实体</strong>：向系统提供输入、或接收系统输出的、系统<strong>之外</strong>的人、设备、外部系统。
+  在上下文图中画成方框，在 0 层图中沿图形边缘出现。</li>
+<li><strong>三条识别线索</strong>：</li>
+<li>【说明】功能句中的<strong>动作发出者</strong>（"管理员对……设置"→ 管理员）；</li>
+<li>【说明】中的<strong>被动接收方</strong>（"向检测设备发送控制指令"→ 检测设备）；</li>
+<li>【说明】中的<strong>外部角色名词</strong>（"传感器上传……"→ 传感器）。</li>
+<li><strong>必须排除</strong>：</li>
+<li>系统处理的数据内容（产品、图像、农作物、订单……）——这些是数据流名称，不是实体；</li>
+<li>系统自身（"智能检测系统""智慧农业平台"本身）；</li>
+<li>系统内部生成的信息（检测结果、分析结果——这些进数据存储）。</li>
+<li><strong>答题规范</strong>：题目要求"使用说明中的词语/语句"，<strong>必须照抄【说明】原词</strong>
+  （"检测业务员"不能写成"业务员"；"农业专家"不能写成"专家"）。</li>
+<li><strong>检查</strong>：上下文图与 0 层图的实体集合必须<strong>完全一致</strong>（实体守恒）。</li>
+</ul>
+<h2>第 2 步：数据存储定位法（对应问题2）</h2>
+<p><strong>核心口诀：找"存储、保存、记录、维护、设置、写入、读取"等动词，被存储的名词即存储名。</strong></p>
+<ul>
+<li><strong>什么是数据存储</strong>：系统内部保存的数据，0 层图中画成双横线（或圆柱）<code>D1、D2…</code>。</li>
+<li><strong>定位法</strong>：</li>
+<li>逐句扫【说明】，每出现一个"存储/保存/记录/维护"动作，就对应一个存储；</li>
+<li>被存储的名词 + "表/信息表/文件/记录"后缀即存储名；</li>
+<li>存储个数 = 【说明】中不同存储对象的个数（数"存储"出现的次数可快速核对）。</li>
+<li><strong>注意"合并存储"</strong>：功能 (1) 若写"对检测标准和监控规则等基础信息设置"，
+  则"检测标准""监控规则"合并为一个存储"基础信息表"，不要拆成两个。</li>
+<li><strong>命名规范</strong>：后缀灵活（表/信息表/文件/记录均可给分），<strong>核心词必须来自【说明】</strong>。</li>
+</ul>
+<h2>第 3 步：数据流平衡检查（对应问题3，最高频丢分点）</h2>
+<p><strong>三条平衡规则</strong>（逐条套用）：</p>
+<h3>规则 1：守恒规则（加工平衡）</h3>
+<p>每个加工必须同时满足：
+- <strong>有输入、有输出</strong>——有输入无输出（"黑洞"）、有输出无输入（"奇迹"）都是错误；
+- <strong>输入足以产生输出</strong>——输入数据必须能支撑输出数据（"输入不足以产生输出"）。</p>
+<p><strong>作答动作</strong>：把 0 层图中每个加工的已有输入/输出列成清单，逐一与【说明】的功能描述对照，
+缺哪条输入/输出，就回【说明】找原词补上。</p>
+<h3>规则 2：父子图平衡</h3>
+<p>上下文图 ↔ 0 层图之间、父加工 ↔ 子加工（0 层↔1 层）之间：
+- 子图的输入数据流集合 = 父图中对应加工的输入数据流集合；
+- 子图的输出数据流集合 = 父图中对应加工的输出数据流集合；
+- 名称可以合并或分解，但<strong>数据必须守恒</strong>（不能多、不能少）。</p>
+<h3>规则 3：无悬空流</h3>
+<ul>
+<li>每条数据流必须<strong>一端连加工</strong>（另一端连外部实体或数据存储）；</li>
+<li><strong>禁止</strong>：外部实体 ↔ 外部实体直接相连、数据存储 ↔ 数据存储直接相连。</li>
+</ul>
+<h3>三类常见错误（背诵点，原题原文表述）</h3>
+<blockquote>
+<p>1、<strong>加工有输入但是没有输出</strong>
+2、<strong>加工有输出但是没有输入</strong>
+3、<strong>加工的输入不足以产生输出</strong></p>
+</blockquote>
+<p>这三句是 2021 下半年试题一问题 4 的官方答案原文，几乎每份真题的分解题都按此给分，
+务必<strong>逐字记忆</strong>，遇到"分解时需要注意哪些错误"直接默写。</p>
+<h3>补数据流的实战要点</h3>
+<ul>
+<li><strong>区分实时流与存储读取</strong>（核心难点）：带"<strong>历史 / 批量 / 记录 / 已存</strong>"字样的输入，
+  只能来自<strong>数据存储</strong>（<code>D→P</code>），不能从采集加工直接来（<code>P→P</code>）。
+  例：智慧农业平台"历史监测信息"必须是 <code>D2→P3</code>，不能是 <code>P2→P3</code>。</li>
+<li><strong>同名数据流可流向多个加工</strong>：同一份数据被多个加工读取时，<strong>每条都要单独画</strong>。
+  例："监控处理规则"分别流向 <code>P3</code>（监测分析）和 <code>P4</code>（判定），画了一条不等于画了两条。</li>
+<li><strong>数据流名称用名词短语</strong>（"监控规则""分析结果"），<strong>不用动词</strong>（"监控""分析"）。</li>
+<li><strong>答案三要素写全</strong>：数据流名称 + 起点 + 终点，缺一不可；编号用图中的 <code>E/D/P</code> 编号。</li>
+</ul>
+<h2>第 4 步：加工逻辑描述 / 加工分解（对应问题4）</h2>
+<h3>结构化语言（描述加工逻辑）</h3>
+<p><strong>三层结构，照【说明】逐句翻译</strong>：</p>
+<pre><code class="language-text">顺序结构：   接收到 XX / 对 XX 进行 YY
+选择结构：   IF 条件 THEN 动作1 ELSE 动作2 ENDIF
+循环结构：   WHILE 条件 DO 动作 ENDDO      （或 DO ... WHILE ...）
+</code></pre>
+<ul>
+<li><strong>得分点</strong>：① 有接收输入语句；② 有主处理动作；③ 有 IF 条件分支；
+  ④ 说明处理结果的组成（输出包含什么）。</li>
+<li><strong>易错点</strong>：写成自然语言段落（无结构化关键字不得分）；漏掉结果组成。</li>
+</ul>
+<h3>加工分解（子加工切分）</h3>
+<ul>
+<li><strong>切分法</strong>：把【说明】中该功能段的<strong>动词短语序列</strong>切成子加工，每个子加工一个动词核心。
+  例："对实时监测信息进行监测分析，将分析结果进行可视化并进行存储、远程控制，
+  对历史监测信息进行综合统计和预测，将预测信息进行可视化和存储"
+  → 4 个子加工：① 监测分析实时监测信息；② 分析结果可视化、存储、远程控制；
+  ③ 综合统计和预测历史监测信息；④ 预测信息可视化、存储。</li>
+<li><strong>检查</strong>：分解后子加工的输入集合 = 父加工输入集合，输出集合 = 父加工输出集合（父子图平衡）。</li>
+</ul>
+<h2>DFD 得分技巧汇总</h2>
+<table>
+<thead>
+<tr>
+<th>技巧</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>照抄原词</td>
+<td>问题 1/2/3 的名称一律用【说明】原词，不要自创</td>
+</tr>
+<tr>
+<td>后缀灵活</td>
+<td>存储名后缀"表/信息表/文件/记录"均给分，核心词对即可</td>
+</tr>
+<tr>
+<td>先列清单</td>
+<td>问题 3 先把每个加工的已有输入/输出列清单，再找缺腿的</td>
+</tr>
+<tr>
+<td>实体守恒</td>
+<td>上下文图与 0 层图实体必须一致</td>
+</tr>
+<tr>
+<td>三要素全</td>
+<td>补数据流必须写"名称 + 起点 + 终点"</td>
+</tr>
+<tr>
+<td>结构化关键字</td>
+<td>问题 4 必须有 IF/THEN/ENDIF 等关键字</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>二、UML 答题模板（试题三，15 分）</h1>
+<blockquote>
+<p>试题三固定考 UML：一般给【说明】+ 用例图（图3-1）+ 类图（图3-2）。
+问题 1 填参与者/用例/关系（6–8 分）→ 问题 2 填类名或属性（4–6 分）→
+问题 3 填关系/属性解释/设计模式（2–4 分）。</p>
+</blockquote>
+<h2>类图填空三招（核心方法）</h2>
+<h3>第 1 招：名词找类</h3>
+<ul>
+<li>【说明】中<strong>带英文括号注</strong>的核心名词几乎都是类名（"房产（Property）""学术资源（Resoure）"）；</li>
+<li>"<strong>X 包括 A、B、C</strong>"或"<strong>X 分为 A 和 B 两类</strong>"句式 → 一个泛化层级：
+  X 是父类，A/B/C 是子类（图中表现为多条 <code>--|&gt;</code> 空心三角箭头指向 X）；</li>
+<li>图中<strong>已给名的类</strong>（如"镜像数据库、会议集、期刊"）是定位线索，不填，用于判断泛化结构。</li>
+</ul>
+<h3>第 2 招：动词找方法</h3>
+<ul>
+<li>【说明】中的<strong>动词短语</strong> = 类的方法：
+  "浏览、检索、下载"（数字图书馆）→ 资源类或用户类的方法；
+  "添加、修改、删除、排序、打印"（地址簿）→ 管理类的方法。</li>
+<li>方法名用【说明】原动词或其英文括号注（"按照资源的题名检索（SearchByTitle）"→ <code>SearchByTitle</code>）。</li>
+</ul>
+<h3>第 3 招：关键词判关系</h3>
+<table>
+<thead>
+<tr>
+<th>【说明】中的关键词</th>
+<th>UML 关系</th>
+<th>符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"分为……两类 / 包括 A、B、C"</td>
+<td>泛化（继承）</td>
+<td>空心三角实线箭头，子类→父类</td>
+</tr>
+<tr>
+<td>"由……组成 / 包含"（可分离）</td>
+<td>聚合</td>
+<td>空心菱形，整体→部分</td>
+</tr>
+<tr>
+<td>"由……组成 / 包含"（生命周期相同）</td>
+<td>组合</td>
+<td>实心菱形，整体→部分</td>
+</tr>
+<tr>
+<td>"记录……关系 / 关联类阐述两者关系"</td>
+<td>关联（可带关联类）</td>
+<td>实线，可有多重性</td>
+</tr>
+<tr>
+<td>"调用 / 使用 / 依赖"（临时）</td>
+<td>依赖</td>
+<td>虚线箭头</td>
+</tr>
+<tr>
+<td>"实现接口"</td>
+<td>实现</td>
+<td>空心三角虚线箭头</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关联类属性判定</strong>：关联类的属性 = 描述<strong>两者关系本身</strong>的属性，<strong>不是</strong>任一类的自身属性。
+例：房产—经纪的关联类 <code>AgentList</code>，属性是"经纪负责该房产的起始/终止时间"，
+而不是经纪的姓名/住址（那些是 Agent 类的属性）。</p>
+<h2>类间六关系：符号与代码级判别</h2>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>UML 符号</th>
+<th>代码级特征</th>
+<th>记忆口诀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>泛化 Generalization</td>
+<td>空心三角 <strong>实线</strong> 箭头，子→父</td>
+<td><code>class 子类 extends 父类</code></td>
+<td>"is-a"，继承</td>
+</tr>
+<tr>
+<td>实现 Realization</td>
+<td>空心三角 <strong>虚线</strong> 箭头</td>
+<td><code>class X implements 接口</code></td>
+<td>"实现接口"</td>
+</tr>
+<tr>
+<td>关联 Association</td>
+<td>实线（可有箭头/多重性）</td>
+<td>成员变量持有对方引用</td>
+<td>"has-a"，长期持有</td>
+</tr>
+<tr>
+<td>聚合 Aggregation</td>
+<td><strong>空心菱形</strong>，整体→部分</td>
+<td>部分可独立存在（外部传入/集合）</td>
+<td>"整体与部分可分离"</td>
+</tr>
+<tr>
+<td>组合 Composition</td>
+<td><strong>实心菱形</strong>，整体→部分</td>
+<td>部分随整体创建/销毁（构造里 new）</td>
+<td>"整体与部分同生共死"</td>
+</tr>
+<tr>
+<td>依赖 Dependency</td>
+<td>虚线箭头</td>
+<td>局部变量 / 方法参数使用</td>
+<td>"临时使用"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>聚合 vs 组合的快速判别</strong>：看部分能否脱离整体单独存在——
+能单独存在（班级与学生）→ 聚合；不能单独存在（汽车与发动机，汽车报废发动机也报废）→ 组合。</p>
+<h2>用例图三关系</h2>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>符号与方向</th>
+<th>内涵</th>
+<th>判别口诀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>包含 <code>&lt;&lt;include&gt;&gt;</code></td>
+<td>虚线箭头，<strong>基用例 → 被包含用例</strong></td>
+<td>多个用例的<strong>共同行为</strong>被抽取成独立用例；执行基用例<strong>必然</strong>执行它</td>
+<td>"必然发生、公共抽取"</td>
+</tr>
+<tr>
+<td>扩展 <code>&lt;&lt;extend&gt;&gt;</code></td>
+<td>虚线箭头，<strong>扩展用例 → 基用例</strong></td>
+<td>异常行为/可选分支抽象成扩展用例；<strong>特定条件下才</strong>执行</td>
+<td>"条件触发、可选异常"</td>
+</tr>
+<tr>
+<td>泛化 generalize</td>
+<td>空心三角实线，子用例→父用例</td>
+<td>子用例是父用例的特化（参与者之间也可泛化）</td>
+<td>"特殊化"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>常考场景对照</strong>：
+- "修改房产信息"必然触发"审批授权" → <strong>include</strong>；
+- "删除房产信息"只在"公司确定不再销售"时发生，扩展"归档" → <strong>extend</strong>；
+- 按题名检索/按作者检索/按来源检索 都是"检索资源"的特化 → <strong>泛化</strong>。</p>
+<h2>属性提取：父类共性 vs 子类特性</h2>
+<ul>
+<li><strong>父类属性</strong> = 【说明】中"<strong>系统中存储了每个 XX 的……</strong>"后面的共有属性；</li>
+<li><strong>子类属性</strong> = 【说明】中"<strong>对于 XX，还需记录……</strong>"后面的特有属性；</li>
+<li><strong>不要</strong>把子类属性填进父类（"会议名称"不能进父类"学术资源"）；</li>
+<li><strong>不要</strong>在子类里重复填父类已有的属性。</li>
+</ul>
+<h2>顺序图 / 状态图 / 活动图读图要点（备考点）</h2>
+<p>虽然试题三以用例图+类图为主，但上午卷与部分大题会涉及其他图：</p>
+<ul>
+<li><strong>顺序图（Sequence Diagram）</strong>：</li>
+<li>横轴 = 对象（生命线 Lifeline），竖轴 = 时间（自上而下）；</li>
+<li>对象生命线上的<strong>竖直长矩形</strong> = 激活期（执行期）；</li>
+<li><strong>实心三角箭头</strong> = 同步消息，<strong>开放箭头</strong> = 异步消息，<strong>虚线箭头</strong> = 返回；</li>
+<li>自调用 = 自指的弧形箭头。</li>
+<li><strong>状态图（State Diagram）</strong>：</li>
+<li>圆角矩形 = 状态；实心圆点 = 初始状态；牛眼（圆中套圆） = 终止状态；</li>
+<li>箭头 = 状态迁移，标签格式 <code>事件[条件]/动作</code>。</li>
+<li><strong>活动图（Activity Diagram）</strong>：</li>
+<li>圆角矩形 = 活动；菱形 = 判断（guard 条件）/ 合并；</li>
+<li>粗实线 = 并发分叉（fork）/ 汇合（join）；泳道（swimlane）= 责任划分；</li>
+<li>实心圆点 = 起点，牛眼 = 终点。</li>
+</ul>
+<h2>UML 得分技巧汇总</h2>
+<table>
+<thead>
+<tr>
+<th>技巧</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优先用英文原名</td>
+<td>类名用【说明】括号注里的英文（如 Property）；中文通常也给分</td>
+</tr>
+<tr>
+<td>先定父类再定子类</td>
+<td>看到 <code>--|&gt;</code> 结构先定位"X 包括 A、B"句式</td>
+</tr>
+<tr>
+<td>关联类只填关系属性</td>
+<td>不是任何一方的自身属性</td>
+</tr>
+<tr>
+<td>include/extend 看必然性</td>
+<td>必然发生 = include；条件可选 = extend</td>
+</tr>
+<tr>
+<td>设计模式答机制</td>
+<td>不只写模式名，必须答"该模式如何满足需求"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>三、设计模式题速查（试题三问题3 常考）</h1>
+<blockquote>
+<p>试题三最后一问常给一个"新需求"，问"增加哪种设计模式 + 解释原因"。
+记住下列<strong>题干特征词 → 模式</strong>映射，秒选：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>题干特征词</th>
+<th>设计模式</th>
+<th>一句话解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"状态变化时通知所有关注者"</td>
+<td><strong>观察者</strong>（Observer）</td>
+<td>一对多依赖，状态变化自动通知全部依赖者</td>
+</tr>
+<tr>
+<td>"多种格式/算法可互换"</td>
+<td><strong>策略</strong>（Strategy）</td>
+<td>将算法封装成独立类，可相互替换</td>
+</tr>
+<tr>
+<td>"统一接口封装多个子系统"</td>
+<td><strong>外观</strong>（Facade）</td>
+<td>为复杂子系统提供一致的高层接口</td>
+</tr>
+<tr>
+<td>"减少创建对象的数量、节省内存"</td>
+<td><strong>享元</strong>（Flyweight）</td>
+<td>共享细粒度对象，降低内存占用</td>
+</tr>
+<tr>
+<td>"撤销/恢复到原先状态"</td>
+<td><strong>备忘录</strong>（Memento）</td>
+<td>保存对象状态以便恢复</td>
+</tr>
+<tr>
+<td>"层叠菜单 / 树形结构 / 部分-整体"</td>
+<td><strong>组合</strong>（Composite）</td>
+<td>统一对待单个对象与组合对象</td>
+</tr>
+<tr>
+<td>"多对象交互由中介协调"</td>
+<td><strong>中介者</strong>（Mediator）</td>
+<td>用中介对象封装一组对象的交互</td>
+</tr>
+<tr>
+<td>"动态地给对象增加职责"</td>
+<td><strong>装饰</strong>（Decorator）</td>
+<td>包装对象以扩展功能（比继承更灵活）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解释题万能模板</strong>（以观察者为例，照抄结构换词）：</p>
+<blockquote>
+<p><strong>XX 模式</strong>适合……（该模式的标准定义）。本需求中"……"对应模式的……角色，
+"……"对应……角色，当……发生时……，故选择 XX 模式。</p>
+</blockquote>
+<hr />
+<h1>四、高频考点清单（试题一 + 试题三）</h1>
+<h2>试题一（DFD）高频考点</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现频率</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>外部实体识别（问题1）</td>
+<td><strong>每年必考</strong></td>
+<td>4 分，用【说明】原词</td>
+</tr>
+<tr>
+<td>数据存储识别（问题2）</td>
+<td><strong>每年必考</strong></td>
+<td>3–4 分，后缀灵活</td>
+</tr>
+<tr>
+<td>补缺失数据流（问题3）</td>
+<td><strong>每年必考</strong></td>
+<td>4–5 分，平衡规则</td>
+</tr>
+<tr>
+<td>加工逻辑描述（结构化语言）</td>
+<td>约 50%</td>
+<td>2–3 分，必须有关键字</td>
+</tr>
+<tr>
+<td>加工分解 + 三错误</td>
+<td>约 50%</td>
+<td>2–3 分，三错误逐字背</td>
+</tr>
+<tr>
+<td>数据流组成（如"XX = a + b + c"）</td>
+<td>偶考</td>
+<td>2023 上半年考过</td>
+</tr>
+<tr>
+<td>上下文图 ↔ 0 层图实体守恒</td>
+<td>隐含考点</td>
+<td>检查时必核对</td>
+</tr>
+</tbody>
+</table>
+<h2>试题三（UML）高频考点</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现频率</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类图类名（泛化层级）</td>
+<td><strong>每年必考</strong></td>
+<td>5–8 分，"X 包括 A、B、C"句式</td>
+</tr>
+<tr>
+<td>类的关键属性</td>
+<td>高频</td>
+<td>4–5 分，父类共性 vs 子类特性</td>
+</tr>
+<tr>
+<td>用例的参与者 / 用例名</td>
+<td>高频</td>
+<td>5–7 分，从【说明】动作提取</td>
+</tr>
+<tr>
+<td>include / extend 关系</td>
+<td>高频</td>
+<td>判别口诀：必然 vs 条件</td>
+</tr>
+<tr>
+<td>关联类属性</td>
+<td>中频</td>
+<td>只填关系属性</td>
+</tr>
+<tr>
+<td>设计模式结合（观察者/策略等）</td>
+<td>高频</td>
+<td>2–3 分，答机制不答名</td>
+</tr>
+<tr>
+<td>顺序图 / 状态图 / 活动图读图</td>
+<td>偶考于上午</td>
+<td>读图要点见上文</td>
+</tr>
+</tbody>
+</table>
+<h2>交叉高频丢分点（做完 4 题后回填对照）</h2>
+<ol>
+<li>加工"有输出无输入"时漏补输入流（数据流平衡）</li>
+<li>"历史/批量"输入误走加工→加工，应是存储→加工</li>
+<li>同名数据流被多个加工读取时只画一条</li>
+<li>关联类属性误填为类的自身属性</li>
+<li>父类属性与子类属性互相串填</li>
+<li>include/extend 混淆（必然 vs 条件）</li>
+<li>结构化语言写成自然语言段落（无关键字）</li>
+<li>分解三错误背不全</li>
+</ol>
+<hr />
+<h1>五、错题回填区（做完 4 道真题后填写）</h1>
+<table>
+<thead>
+<tr>
+<th>试题</th>
+<th>问题</th>
+<th>我的答案</th>
+<th>正确答案</th>
+<th>丢分原因</th>
+<th>对应模板章节</th>
+<th>已回看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>A</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>B</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>C</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>D</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>__</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>回看承诺</strong>：每个丢分点至少回看一次对应模板章节，并在第二天错题回顾时重做该问。</p>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/subject2/dfd-uml-notes.md">docs/practice/subject2/dfd-uml-notes.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

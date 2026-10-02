@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 12（10/2）软件工程① 练习题：过程模型 / 需求分析 / 结构化分析（共 20 选择） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 software-engineering 📁 day12-exercises.md</div>
+<h1>Day 12（10/2）软件工程① 练习题：过程模型 / 需求分析 / 结构化分析（共 20 选择）</h1>
+<blockquote>
+<p>说明：本题是 Day 12 的章节题，也是<strong>软件工程阶段（Phase 2）的第一套题</strong>。
+题目分布：<strong>过程模型对比 11 题（1–11）</strong>、<strong>软件生命周期与维护 3 题（12–14）</strong>、<strong>需求分析 3 题（15–17）</strong>、<strong>结构化分析 DFD/DD 3 题（18–20）</strong>。
+<strong>完整答案与解析在文件末尾</strong>。建议独立闭卷完成（约 35 分钟）再对答案。
+<strong>做题纪律</strong>：
+- <strong>第 1–11 题（过程模型）</strong>是本日必考内容。做完后<strong>必须能对每个模型说出一句"识别词"</strong>
+  （瀑布=文档驱动、V=开发测试对应、增量=分批交付、原型=澄清需求、螺旋=风险驱动、敏捷=拥抱变化），
+  只靠"排除法"蒙对的题，回 <code>day12-process.md</code> §2.7 把对比表整表重背。
+- <strong>第 20 题（DFD 综合）</strong>是科目二下午大题的预演，错了要回 <code>day12-process.md</code> §4.4 把示例图重读一遍。</p>
+</blockquote>
+<hr />
+<h2>附：Day 12 笔记「一页纸结论」速答</h2>
+<ol>
+<li>生命周期三时期：<strong>定义、开发、运行维护</strong>；<strong>维护</strong>阶段时间最长、花费最大。</li>
+<li>可行性研究四类：<strong>经济（钱）、技术（技）、法律（法）、操作（人）</strong>。</li>
+<li><strong>瀑布 = 文档驱动</strong>；<strong>V = 开发测试对应</strong>；<strong>增量 = 分批交付</strong>；<strong>原型 = 澄清需求</strong>；<strong>螺旋 = 风险驱动</strong>；<strong>敏捷 = 拥抱变化</strong>。</li>
+<li><strong>螺旋 = Boehm 1988</strong>；四象限顺序：<strong>制定计划 → 风险分析 → 实施工程 → 客户评估</strong>。</li>
+<li>V 模型对应：<strong>需求↔验收、概设↔系统、详设↔集成、编码↔单元</strong>。</li>
+<li>敏捷四价值观：<strong>个体互动 / 可工作软件 / 客户合作 / 响应变化</strong>（高于右项，但不否定右项）。</li>
+<li>Scrum：<strong>3 角色 / 3 工件 / 5 事件</strong>；Sprint <strong>2–4 周</strong>；每日站会 <strong>15 分钟</strong>。</li>
+<li>需求三分类：<strong>功能 / 非功能（性能在此）/ 设计约束</strong>。</li>
+<li>SRS 七性质：<strong>正确、无歧义、完整、一致、可验证、可修改、可追踪</strong>。</li>
+<li><strong>DFD 四要素 = 外部实体（矩形）+ 加工（圆角矩形）+ 数据流（箭头）+ 数据存储（双横线）</strong>。</li>
+<li><strong>DFD 只有数据流、没有控制流</strong>；每个数据流必须命名。</li>
+<li><strong>父子图平衡</strong>：子图外部流与父加工数据流<strong>数量、方向、名称一致</strong>。</li>
+<li>DD 符号：<strong><code>= 定义、+ 与、| 或、{ } 重复、( ) 可选</code></strong>。</li>
+<li>小说明三工具：<strong>结构化语言、判定表、判定树</strong>；判定表四部分：<strong>条件桩、条件项、动作桩、动作项</strong>。</li>
+<li>增量 vs 原型：<strong>"增量交产品，原型定需求"</strong>。</li>
+</ol>
+<hr />
+<h2>第一部分：过程模型对比（1–11）</h2>
+<p>**1. 螺旋模型最本质、最核心的特征是（ ）。</p>
+<ul>
+<li>A. 以文档驱动各阶段顺序执行</li>
+<li>B. <strong>以风险分析驱动每一次迭代</strong></li>
+<li>C. 以可快速运行的原型驱动开发</li>
+<li>D. 以数据流驱动系统分解</li>
+</ul>
+<p><strong>2. 在 V 模型中，与</strong>概要设计（总体设计）**阶段相对应的测试阶段是（ ）。</p>
+<ul>
+<li>A. 单元测试</li>
+<li>B. 集成测试</li>
+<li>C. 系统测试</li>
+<li>D. 验收测试</li>
+</ul>
+<p><strong>3. 以下关于</strong>瀑布模型**的描述，错误的是（ ）。</p>
+<ul>
+<li>A. 各阶段按固定顺序执行，每个阶段结束有里程碑评审</li>
+<li>B. 以文档驱动，每阶段都有明确的文档交付物</li>
+<li>C. 能够快速响应用户需求的变化</li>
+<li>D. 用户往往到很晚才能见到可运行的产品</li>
+</ul>
+<p>**4. 增量模型与原型模型的主要区别在于（ ）。</p>
+<ul>
+<li>A. 增量模型会构造原型，原型模型不会</li>
+<li>B. 增量模型每个增量交付的是<strong>可运行产品的一部分</strong>，而原型模型构造原型主要是为了<strong>明确和验证需求</strong></li>
+<li>C. 原型模型分批交付产品，增量模型不分批</li>
+<li>D. 增量模型只适用于小型系统，原型模型只适用于大型系统</li>
+</ul>
+<p>**5. 螺旋模型的提出者是（ ）。</p>
+<ul>
+<li>A. W. W. Royce</li>
+<li>B. Barry Boehm</li>
+<li>C. Tom DeMarco</li>
+<li>D. Ivar Jacobson</li>
+</ul>
+<p>**6. 敏捷软件开发宣言认为「可工作的软件」应当（ ）。</p>
+<ul>
+<li>A. 高于个体和互动</li>
+<li>B. 高于详尽的文档</li>
+<li>C. 高于客户合作</li>
+<li>D. 高于响应变化</li>
+</ul>
+<p><strong>7. 在 Scrum 框架中，</strong>Scrum Master** 的核心职责是（ ）。</p>
+<ul>
+<li>A. 负责管理产品待办列表（Product Backlog）的优先级</li>
+<li>B. 服务开发团队、消除障碍、推进和维护 Scrum 流程</li>
+<li>C. 负责编写产品代码并做代码评审</li>
+<li>D. 代表客户逐项验收每个增量</li>
+</ul>
+<p><strong>8. 软件开发团队面对一个</strong>需求不明确、用户界面占主导、规模较小**的档案查询系统，最合适的过程模型是（ ）。</p>
+<ul>
+<li>A. 瀑布模型</li>
+<li>B. V 模型</li>
+<li>C. 原型模型</li>
+<li>D. 增量模型</li>
+</ul>
+<p><strong>9. 关于</strong>原型模型**的两种变种，下列说法正确的是（ ）。</p>
+<ul>
+<li>A. 演化型原型构造完成后就丢弃，不作为最终产品</li>
+<li>B. 抛弃型原型会逐步迭代演化为最终交付系统</li>
+<li>C. 演化型原型的原型会被保留并逐步迭代为最终交付系统，而抛弃型原型用完即弃</li>
+<li>D. 两种原型在最终处理上没有任何区别</li>
+</ul>
+<p>**10. 螺旋模型的每一圈（每一次迭代）都会重复执行四个活动，其正确顺序是（ ）。</p>
+<ul>
+<li>A. 风险分析 → 制定计划 → 实施工程 → 客户评估</li>
+<li>B. 制定计划 → 风险分析 → 实施工程 → 客户评估</li>
+<li>C. 制定计划 → 实施工程 → 风险分析 → 客户评估</li>
+<li>D. 客户评估 → 制定计划 → 实施工程 → 风险分析</li>
+</ul>
+<p><strong>11. 某医疗设备控制软件</strong>需求明确、安全性要求极高**，希望测试活动能与开发活动紧密对应、尽早设计测试用例。最合适的过程模型是（ ）。</p>
+<ul>
+<li>A. 瀑布模型</li>
+<li>B. V 模型</li>
+<li>C. 螺旋模型</li>
+<li>D. 敏捷 Scrum</li>
+</ul>
+<hr />
+<h2>第二部分：软件生命周期与维护（12–14）</h2>
+<p><strong>12. 在软件生命周期的各个阶段中，</strong>时间最长、花费最大**的是（ ）。</p>
+<ul>
+<li>A. 需求分析</li>
+<li>B. 编码</li>
+<li>C. 测试</li>
+<li>D. 运行与维护</li>
+</ul>
+<p>**13. 系统交付运行后，用户提出"希望增加一个按部门统计借阅量的报表功能"。这属于（ ）。</p>
+<ul>
+<li>A. 改正性维护</li>
+<li>B. 适应性维护</li>
+<li>C. 完善性维护</li>
+<li>D. 预防性维护</li>
+</ul>
+<p><strong>14. 可行性研究中用于评估"投入产出比、投资回收期"的</strong>成本-效益分析**，属于下列哪类可行性？（ ）</p>
+<ul>
+<li>A. 经济可行性</li>
+<li>B. 技术可行性</li>
+<li>C. 法律可行性</li>
+<li>D. 操作可行性</li>
+</ul>
+<hr />
+<h2>第三部分：需求分析（15–17）</h2>
+<p>**15. 需求说明书中写道："图书查询的响应时间不得超过 2 秒，高峰期支持 500 个并发用户。"这条需求属于（ ）。</p>
+<ul>
+<li>A. 功能需求</li>
+<li>B. 非功能需求</li>
+<li>C. 设计约束</li>
+<li>D. 业务需求</li>
+</ul>
+<p>**16. IEEE 830 定义的软件需求规约（SRS）性质中，"每一条需求都只能有一种解释"对应的是（ ）。</p>
+<ul>
+<li>A. 正确性</li>
+<li>B. 无歧义性</li>
+<li>C. 完整性</li>
+<li>D. 可验证性</li>
+</ul>
+<p><strong>17. 下列方法中，</strong>不属于**软件需求获取常用方法的是（ ）。</p>
+<ul>
+<li>A. 访谈与现场观察</li>
+<li>B. 问卷调查</li>
+<li>C. 代码审查</li>
+<li>D. 原型法</li>
+</ul>
+<hr />
+<h2>第四部分：结构化分析与 DFD（18–20）</h2>
+<p><strong>18. 在数据流图（DFD）中，</strong>数据存储**的标准图形符号是（ ）。</p>
+<ul>
+<li>A. 矩形</li>
+<li>B. 圆角矩形</li>
+<li>C. 双横线（开口矩形）</li>
+<li>D. 菱形</li>
+</ul>
+<p><strong>19. 关于数据流图（DFD），下列说法</strong>错误**的是（ ）。</p>
+<ul>
+<li>A. DFD 中的每一条数据流都必须命名</li>
+<li>B. DFD 由外部实体、加工、数据流、数据存储四类要素组成</li>
+<li>C. DFD 可以用来表示条件判断与循环等控制逻辑</li>
+<li>D. 父图与子图的数据流应当保持平衡</li>
+</ul>
+<p>**20. 下图是某图书馆借阅系统的 0 层数据流图局部。其中"2 还书处理"加工从 D2 借阅记录表读取数据、并把更新后的图书状态写回 D1 图书信息表。关于该图，说法正确的是（ ）。</p>
+<pre><code class="language-text">                ╔════════════════╗
+                ║ D1 图书信息表  ║◄───────────
+                ╚════════════════╝
+                                     ┌────────────┐
+                                     │            │◄───────┌──────┐
+                                     │ 2 还书处理 │        │ 读者 │
+                                     └────────────┘───────►└──────┘
+</code></pre>
+<ul>
+<li>A. 该图中外部的读者只与"2 还书处理"交互，因此系统不满足父子图平衡规则</li>
+<li>B. "2 还书处理"对 D1 只读不写、对 D2 只写不读，图中的箭头方向画错了</li>
+<li>C. 该图符合 DFD 规范：读者与加工之间通过"还书请求/逾期催还"交互；"2 还书处理"对 D2 读取借阅记录、对 D1 写回更新后的图书状态，箭头方向均正确</li>
+<li>D. DFD 中不允许出现两个数据存储同时与同一个加工连接</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<blockquote>
+<p><strong>答案速查</strong>：1.B　2.C　3.C　4.B　5.B　6.B　7.B　8.C　9.C　10.B　11.B　12.D　13.C　14.A　15.B　16.B　17.C　18.C　19.C　20.C</p>
+</blockquote>
+<hr />
+<p><strong>1. 答案：B</strong>
+- <strong>解析</strong>：螺旋模型 = <strong>Boehm 1988</strong>，最本质特征是<strong>风险驱动</strong>——每一圈都做风险分析、用（常常是原型的）手段化解风险。
+- <strong>A 干扰项</strong>：文档驱动是<strong>瀑布模型</strong>。<strong>C 干扰项</strong>：螺旋会用到原型，但原型是"风险分析"象限中的<strong>手段</strong>，不是驱动目的——这正是螺旋与原型最容易混的地方。<strong>D 干扰项</strong>：数据流驱动是<strong>结构化分析（SA）方法</strong>，不是过程模型。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.5、§2.7 对比表。</p>
+<p><strong>2. 答案：C</strong>
+- <strong>解析</strong>：V 模型的四对对应关系：<strong>需求分析↔验收测试、概要设计↔系统测试、详细设计↔集成测试、编码↔单元测试</strong>。
+- <strong>B 干扰项</strong>：集成测试对应<strong>详细设计</strong>——把"概设/详设"与"系统/集成"配对颠倒是最常见的错误。<strong>A 干扰项</strong>：单元测试对应编码。<strong>D 干扰项</strong>：验收测试对应需求分析。
+- <strong>记忆链</strong>：越靠左的开发文档对应越靠右的测试阶段；详细设计比概要设计更"细"，所以对应更底层的集成测试。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.2、§2.8 辨析③。</p>
+<p><strong>3. 答案：C</strong>
+- <strong>解析</strong>：瀑布模型要求<strong>需求明确且稳定</strong>，恰恰<strong>不能</strong>快速响应需求变化——这是它最大的缺点（风险后移、错误积累到后期）。
+- <strong>A、B、D</strong> 都是瀑布模型的正确描述：线性顺序+阶段评审、文档驱动、用户很晚才见到可运行产品。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.1。</p>
+<p><strong>4. 答案：B</strong>
+- <strong>解析</strong>：增量模型交付的每个增量都是<strong>可运行产品的一部分</strong>，最终累积成完整系统（产物保留）；原型模型构造原型主要是为了<strong>澄清/验证需求</strong>（抛弃型用完即弃）。一句话：<strong>"增量交产品，原型定需求"</strong>。
+- <strong>A 干扰项</strong>：反了——原型模型才构造原型。<strong>C 干扰项</strong>：也反了——分批交付的是<strong>增量模型</strong>。<strong>D 干扰项</strong>：增量模型常用于需要<strong>快速交付核心功能</strong>的项目（并不限于小型），原型模型也常用于<strong>小型/界面驱动</strong>系统，两者都不是按"项目规模大小"划分的。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.3、§2.4、§2.8 辨析②。</p>
+<p><strong>5. 答案：B</strong>
+- <strong>解析</strong>：螺旋模型由 <strong>Barry Boehm</strong> 于 <strong>1988</strong> 年在《A Spiral Model of Software Development and Enhancement》（IEEE Computer）中提出。
+- <strong>A 干扰项</strong>：W. W. Royce 于 <strong>1970</strong> 年提出<strong>瀑布模型</strong>。<strong>C 干扰项</strong>：Tom DeMarco 于 1978 年系统化<strong>结构化分析（SA）</strong>方法。<strong>D 干扰项</strong>：Ivar Jacobson 是<strong>用例/OOSE/RUP</strong> 的代表人物（Day 14 会再见到）。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.5、§2.7。</p>
+<p><strong>6. 答案：B</strong>
+- <strong>解析</strong>：敏捷四价值观之一是"<strong>可工作的软件 高于 详尽的文档</strong>"。注意四条价值观的左项各不相同，不能串接：<strong>个体互动 &gt; 流程工具</strong>；<strong>可工作软件 &gt; 详尽文档</strong>；<strong>客户合作 &gt; 合同谈判</strong>；<strong>响应变化 &gt; 遵循计划</strong>。
+- <strong>A/C/D 干扰项</strong>：把某条价值观的左项硬配到另一条的右项上，是典型的"张冠李戴"型干扰。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.6。</p>
+<p><strong>7. 答案：B</strong>
+- <strong>解析</strong>：Scrum Master 是<strong>服务型领导</strong>：服务团队、消除障碍、推进并维护 Scrum 流程。
+- <strong>A 干扰项</strong>：管理 Product Backlog 优先级是<strong>产品负责人（Product Owner）</strong>的职责。<strong>C 干扰项</strong>：写代码是<strong>开发团队</strong>的职责。<strong>D 干扰项</strong>：Scrum 中没有"代表客户逐项验收"这一角色；验收体现在 <strong>Sprint 评审会议</strong>上。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.6（Scrum 3-3-5）。</p>
+<p><strong>8. 答案：C</strong>
+- <strong>解析</strong>：需求不明确 + 界面占主导 + 小型 → <strong>原型模型</strong>（快速构造原型、用户试用反馈、迭代明确需求）。
+- <strong>A/B 干扰项</strong>：瀑布与 V 模型都要求<strong>需求明确</strong>，与题干"需求不明确"矛盾。<strong>D 干扰项</strong>：增量模型适合"需求可分优先级、需快速交付核心功能"，但其前提是需求大体明确、只是分批实现；本题的核心痛点是"需求说不清"，原型模型才是对症的。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.4、§2.7。</p>
+<p><strong>9. 答案：C</strong>
+- <strong>解析</strong>：<strong>演化型原型</strong>（演进型）的原型会被保留并逐步迭代，最终<strong>演化为交付系统</strong>；<strong>抛弃型原型</strong>（探索型/实验型）仅用于明确需求，<strong>用完即弃</strong>，正式系统重新开发。
+- <strong>A 干扰项</strong>：描述的是抛弃型。<strong>B 干扰项</strong>：把两种变种的处置方式颠倒。<strong>D 干扰项</strong>：两者的关键区别恰恰就是对原型的最终处置。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.4 变种表。</p>
+<p><strong>10. 答案：B</strong>
+- <strong>解析</strong>：螺旋每圈的四个活动顺序为：<strong>制定计划（目标/替代方案/约束）→ 风险分析（评估替代、识别并化解风险）→ 实施工程（开发与验证）→ 客户评估（评价成果、规划下一圈）</strong>。
+- <strong>A 干扰项</strong>：把"风险分析"提到"制定计划"之前——风险分析必须先有"计划"中确定的目标和备选方案才能评估。<strong>C 干扰项</strong>：风险分析在实施之前进行（否则就不叫"风险驱动"了）。<strong>D 干扰项</strong>：客户评估是<strong>每圈的收尾</strong>，不是起点。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.5 四象限。</p>
+<p><strong>11. 答案：B</strong>
+- <strong>解析</strong>：需求明确 + 安全性极高 + 要求测试与开发紧密对应 → <strong>V 模型</strong>（开发与测试一一对应，测试用例可在完成开发文档后立即设计）。
+- <strong>A 干扰项</strong>：瀑布模型同样适合需求明确的项目，但它<strong>不强调</strong>测试与开发的逐级对应关系；题干明确要求"测试活动能与开发活动紧密对应、尽早设计测试用例"，这正是 V 模型的核心特征。<strong>C 干扰项</strong>：螺旋适合<strong>大型、复杂、高风险</strong>项目，且代价是高昂的风险分析成本——本题项目需求明确，并非高风险的大型探索性项目。<strong>D 干扰项</strong>：敏捷适合需求<strong>变化频繁</strong>的场景，与题干"需求明确、安全要求极高"的稳定语境相反。
+- <strong>知识点</strong>：<code>day12-process.md</code> §2.2、§2.7。</p>
+<p><strong>12. 答案：D</strong>
+- <strong>解析</strong>：<strong>运行与维护</strong>阶段占软件生命周期的大部分时间与成本（经验上占总成本的 60%–80%）。这也是为什么"可维护性"是软件质量的重要属性。
+- <strong>A/B/C 干扰项</strong>：需求分析、编码、测试都属于<strong>开发期</strong>，时间远短于维护期。
+- <strong>知识点</strong>：<code>day12-process.md</code> §1.1、§1.2。</p>
+<p><strong>13. 答案：C</strong>
+- <strong>解析</strong>：维护四类型：改正性（改错）、适应性（适应环境变化）、<strong>完善性（增加新功能、改进性能与体验，占比最大）</strong>、预防性（提高可维护性）。<strong>增加新报表 = 增加新功能 = 完善性维护</strong>。
+- <strong>B 干扰项（最易选错）</strong>：适应性维护针对的是<strong>环境变化</strong>（OS 升级、硬件更换、业务规则被外部改变），而不是用户新提出的功能诉求。判别标准：<strong>"用户想要更多/更好"→ 完善性；"环境变了导致系统不适应"→ 适应性</strong>。
+- <strong>A 干扰项</strong>：改正性维护是<strong>改交付后发现的错误</strong>，本题系统本身没有错。<strong>D 干扰项</strong>：预防性维护是<strong>主动提高可维护性</strong>的改造，不是为了加功能。
+- <strong>知识点</strong>：<code>day12-process.md</code> §1.4。</p>
+<p><strong>14. 答案：A</strong>
+- <strong>解析</strong>：可行性研究分四类：<strong>经济（钱）、技术（技）、法律（法）、操作（人）</strong>。成本-效益分析（投资回收期、净现值、投入产出比）评估"值不值得做"，属于<strong>经济可行性</strong>。
+- <strong>B 干扰项</strong>：技术可行性评估"做得了吗"（技术方案、资源、风险）。<strong>C 干扰项</strong>：法律可行性评估知识产权、合同、合规。<strong>D 干扰项</strong>：操作可行性评估用户用不用得起来、业务流程跑不跑得通。
+- <strong>知识点</strong>：<code>day12-process.md</code> §1.3。</p>
+<p><strong>15. 答案：B</strong>
+- <strong>解析</strong>：响应时间、并发数、可用性、可靠性、安全性等都属于<strong>非功能需求</strong>（质量属性）。
+- <strong>A 干扰项（最易选错）</strong>：功能需求描述"系统提供什么功能/服务"（如"用户可以查询图书"），而性能指标不是功能本身。<strong>C 干扰项</strong>：设计约束是"必须遵守的限制"（如必须用某种语言/平台）。<strong>D 干扰项</strong>：业务需求是组织层面的目标（如"提高借阅量 20%"），不是系统性能指标。
+- <strong>知识点</strong>：<code>day12-process.md</code> §3.2。</p>
+<p><strong>16. 答案：B</strong>
+- <strong>解析</strong>：SRS 七性质：正确、<strong>无歧义</strong>、完整、一致、可验证、可修改、可追踪。"每条需求只有一种解释"= <strong>无歧义性</strong>（不能出现"大概""可能""较快"这类含糊表述）。
+- <strong>A 干扰项</strong>：正确性指需求<strong>准确描述</strong>系统应具有的行为。<strong>C 干扰项</strong>：完整性指<strong>覆盖所有</strong>需要的需求、没有遗漏。<strong>D 干扰项</strong>：可验证性指每条需求都能<strong>通过测试或检查确认</strong>。
+- <strong>知识点</strong>：<code>day12-process.md</code> §3.4。</p>
+<p><strong>17. 答案：C</strong>
+- <strong>解析</strong>：需求获取常用方法：访谈、现场观察、问卷调查、会议（JAD）、原型法、用例分析。<strong>代码审查</strong>属于<strong>软件测试/质量保证</strong>阶段的静态测试方法，此时还没有代码，不可能是需求获取方法。
+- <strong>A/B/D</strong>：访谈、问卷、原型法都是标准的需求获取方法。
+- <strong>知识点</strong>：<code>day12-process.md</code> §3.3。</p>
+<p><strong>18. 答案：C</strong>
+- <strong>解析</strong>：DFD 四要素的符号：<strong>外部实体=矩形</strong>、<strong>加工=圆角矩形（或圆形）</strong>、<strong>数据流=带箭头的线</strong>、<strong>数据存储=双横线（开口矩形）</strong>。
+- <strong>A 干扰项</strong>：矩形是<strong>外部实体</strong>。<strong>B 干扰项</strong>：圆角矩形是<strong>加工</strong>。<strong>D 干扰项</strong>：菱形在 DFD 中<strong>不是</strong>标准符号（菱形常见于流程图中的判断框或 E-R 图中的联系）。
+- <strong>知识点</strong>：<code>day12-process.md</code> §4.2。</p>
+<p><strong>19. 答案：C</strong>
+- <strong>解析</strong>：DFD <strong>只有数据流、没有控制流</strong>——它<strong>不表示</strong>条件判断、循环、时序等控制逻辑，这是 DFD 与程序流程图的根本区别，也是<strong>高频考点</strong>。判断与循环应放在<strong>加工逻辑（小说明）</strong>中用结构化语言/判定表/判定树描述。
+- <strong>A/B/D</strong> 都是 DFD 的正确规范：数据流必须命名；四类要素；父子图平衡（子图外部流与父加工数据流在数量、方向上一致）。
+- <strong>知识点</strong>：<code>day12-process.md</code> §4.2、§4.3。</p>
+<p><strong>20. 答案：C</strong>
+- <strong>解析</strong>：图中"2 还书处理"接收读者的<strong>还书请求</strong>、向读者输出<strong>逾期催还</strong>；从 <strong>D2 借阅记录表</strong>读取借阅记录（箭头由 D2 指向加工），并把更新后的图书状态写回 <strong>D1 图书信息表</strong>（箭头由加工指向 D1）。箭头方向与"读/写"语义一致，符合 DFD 规范。
+- <strong>A 干扰项</strong>：父子图平衡考察的是<strong>被分解的那个加工</strong>在父图与子图之间的数据流是否一致，而不是"系统外部实体只出现一次"。本图是 0 层图的局部，读者与其他加工（借书处理、新书入库）的交互在完整 0 层图中另有表示，不能仅凭局部图断定"不平衡"。
+- <strong>B 干扰项</strong>：本题设定明确说明"从 D2 读取、向 D1 写回"，与图中箭头方向一致，并非画错。<strong>注意</strong>：箭头方向表示数据流向——<strong>由存储指向加工=读取，由加工指向存储=写入</strong>。
+- <strong>D 干扰项</strong>：DFD 中一个加工可以同时连接多个数据存储（读若干个、写若干个），这是极其常见的结构。
+- <strong>知识点</strong>：<code>day12-process.md</code> §4.3（分层与平衡）、§4.4（完整示例及数据流清单）。</p>
+<hr />
+<h2>做完后的自检（不用打分，只看是否过关）</h2>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>过关标准</th>
+<th>未过关怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>过程模型识别词</strong>（第 1–11 题）</td>
+<td>能对 6 个模型各说一句识别词，不卡顿</td>
+<td>回 <code>day12-process.md</code> §2.7 把对比表<strong>整表抄一遍</strong></td>
+</tr>
+<tr>
+<td><strong>V 模型四对对应</strong>（第 2 题）</td>
+<td>4 对全部说对</td>
+<td>回 §2.2 的对应表 + §2.8 辨析③，默写三遍</td>
+</tr>
+<tr>
+<td><strong>增量 vs 原型</strong>（第 4、9 题）</td>
+<td>能说出"增量交产品，原型定需求"</td>
+<td>回 §2.3、§2.4，把两个模型的优缺点对照读一遍</td>
+</tr>
+<tr>
+<td><strong>维护四类型</strong>（第 13 题）</td>
+<td>能区分"完善性 vs 适应性"</td>
+<td>回 §1.4，重点记住：<strong>用户要更多/更好→完善性；环境变了→适应性</strong></td>
+</tr>
+<tr>
+<td><strong>DFD 四要素与平衡</strong>（第 18–20 题）</td>
+<td>能默画四要素符号、说出平衡规则</td>
+<td>回 §4.2、§4.4，遮住答案把图书馆示例的<strong>数据流清单</strong>重填一遍</td>
+</tr>
+</tbody>
+</table>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/software-engineering/day12-exercises.md">docs/knowledge-points/software-engineering/day12-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

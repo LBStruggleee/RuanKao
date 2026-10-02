@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据结构与算法 - 知识点精讲 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 data-structures 📁 index.md</div>
+<h1>数据结构与算法 - 知识点精讲</h1>
+<h2>一、线性表</h2>
+<h3>1.1 顺序表（数组）</h3>
+<ul>
+<li><strong>存储</strong>：连续内存空间</li>
+<li><strong>插入</strong>：平均移动 n/2 个元素，时间复杂度 O(n)</li>
+<li><strong>删除</strong>：平均移动 n/2 个元素，时间复杂度 O(n)</li>
+<li><strong>查找</strong>：顺序查找 O(n)，折半查找 O(log₂n)（要求有序）</li>
+</ul>
+<h3>1.2 链表</h3>
+<ul>
+<li><strong>单向链表</strong>：每个节点含数据和指向下一节点的指针</li>
+<li><strong>双向链表</strong>：每个节点含前驱和后继指针</li>
+<li><strong>循环链表</strong>：尾节点指向头节点</li>
+</ul>
+<h4>常见操作</h4>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>单链表时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查找</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>插入（已知位置）</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>删除（已知位置）</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>插入（头插法）</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<h4>链表经典操作</h4>
+<ul>
+<li><strong>反转链表</strong>：三指针法（prev, curr, next）</li>
+<li><strong>找中间节点</strong>：快慢指针</li>
+<li><strong>判断环</strong>：快慢指针</li>
+<li><strong>合并有序链表</strong>：归并思想</li>
+</ul>
+<h3>1.3 栈（Stack）</h3>
+<ul>
+<li><strong>特性</strong>：后进先出（LIFO）</li>
+<li><strong>应用</strong>：括号匹配、表达式求值、递归调用</li>
+<li><strong>顺序栈和链栈</strong></li>
+</ul>
+<h3>1.4 队列（Queue）</h3>
+<ul>
+<li><strong>特性</strong>：先进先出（FIFO）</li>
+<li><strong>循环队列</strong>：解决顺序队列的假溢出</li>
+<li><strong>双端队列</strong>：两端都可进出</li>
+</ul>
+<h2>二、树</h2>
+<h3>2.1 二叉树基础</h3>
+<ul>
+<li><strong>性质</strong>：</li>
+<li>第i层最多 2^(i-1) 个节点</li>
+<li>深度为k的二叉树最多 2^k - 1 个节点</li>
+<li>叶子节点数 = 度为2的节点数 + 1</li>
+</ul>
+<h3>2.2 二叉树遍历</h3>
+<table>
+<thead>
+<tr>
+<th>遍历方式</th>
+<th>顺序</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前序遍历</td>
+<td>根→左→右</td>
+<td>复制树、表达式</td>
+</tr>
+<tr>
+<td>中序遍历</td>
+<td>左→根→右</td>
+<td>BST排序结果</td>
+</tr>
+<tr>
+<td>后序遍历</td>
+<td>左→右→根</td>
+<td>删除树、计算大小</td>
+</tr>
+<tr>
+<td>层序遍历</td>
+<td>逐层从左到右</td>
+<td>BFS</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 二叉搜索树（BST）</h3>
+<ul>
+<li>左子树所有节点 &lt; 根节点</li>
+<li>右子树所有节点 &gt; 根节点</li>
+<li>中序遍历得到有序序列</li>
+<li>查找、插入、删除平均 O(log₂n)</li>
+</ul>
+<h3>2.4 平衡二叉树（AVL）</h3>
+<ul>
+<li>左右子树高度差不超过1</li>
+<li>插入/删除后可能需要旋转</li>
+<li>旋转类型：LL、RR、LR、RL</li>
+</ul>
+<h3>2.5 哈夫曼树</h3>
+<ul>
+<li><strong>带权路径长度（WPL）</strong>最小</li>
+<li><strong>构造方法</strong>：每次选两个最小权值节点合并</li>
+<li><strong>应用</strong>：数据压缩、编码</li>
+<li><strong>编码规则</strong>：左0右1（或左1右0）</li>
+</ul>
+<h2>三、图</h2>
+<h3>3.1 基本概念</h3>
+<ul>
+<li><strong>有向图 vs 无向图</strong></li>
+<li><strong>度</strong>：无向图-相连边数；有向图-入度+出度</li>
+<li><strong>连通图</strong>：无向图中任意两点可达</li>
+<li><strong>强连通图</strong>：有向图中任意两点互相可达</li>
+</ul>
+<h3>3.2 存储结构</h3>
+<ul>
+<li><strong>邻接矩阵</strong>：V×V矩阵，适合稠密图</li>
+<li><strong>邻接表</strong>：每个节点的邻居链表，适合稀疏图</li>
+</ul>
+<h3>3.3 遍历算法</h3>
+<ul>
+<li><strong>DFS（深度优先）</strong>：栈实现/递归</li>
+<li><strong>BFS（广度优先）</strong>：队列实现</li>
+</ul>
+<h3>3.4 最小生成树</h3>
+<ul>
+<li><strong>Prim算法</strong>：从一点开始，每次选最小边（适合稠密图）</li>
+<li><strong>Kruskal算法</strong>：从小到大选边，不形成环（适合稀疏图）</li>
+</ul>
+<h3>3.5 最短路径</h3>
+<ul>
+<li><strong>Dijkstra算法</strong>：单源最短路径（无负权边）</li>
+<li><strong>Floyd算法</strong>：所有顶点对最短路径</li>
+</ul>
+<h2>四、排序算法</h2>
+<h3>4.1 排序算法对比表</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>最好</th>
+<th>平均</th>
+<th>最坏</th>
+<th>空间</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>不稳定</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(n²)</td>
+<td>O(logn)</td>
+<td>不稳定</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(n)</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(1)</td>
+<td>不稳定</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 重点算法</h3>
+<ul>
+<li><strong>快速排序</strong>：分治思想，选基准值，分区递归</li>
+<li><strong>归并排序</strong>：分治思想，分裂后合并</li>
+<li><strong>堆排序</strong>：大顶堆/小顶堆</li>
+</ul>
+<h2>五、查找算法</h2>
+<h3>5.1 顺序查找</h3>
+<ul>
+<li>适用：无序表</li>
+<li>时间复杂度：O(n)</li>
+</ul>
+<h3>5.2 折半查找</h3>
+<ul>
+<li>适用：有序顺序表</li>
+<li>时间复杂度：O(log₂n)</li>
+<li>判定树深度 = ⌈log₂(n+1)⌉</li>
+</ul>
+<h3>5.3 哈希查找</h3>
+<ul>
+<li><strong>哈希函数构造</strong>：除留余数法、平方取中法</li>
+<li><strong>冲突解决</strong>：开放地址法（线性探测/二次探测）、链地址法</li>
+<li><strong>平均查找长度</strong>：取决于装填因子</li>
+</ul>
+<h2>六、算法分析</h2>
+<h3>时间复杂度计算</h3>
+<ul>
+<li>顺序结构：取最大</li>
+<li>循环结构：看循环次数</li>
+<li>嵌套循环：内外层相乘</li>
+<li>递归：递归方程（主定理）</li>
+</ul>
+<h3>常见时间复杂度排序</h3>
+<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!)</p>
+<hr />
+<h1>补漏精讲（Day 14）</h1>
+<blockquote>
+<p><strong>定位</strong>：本文一至六节是"骨架级"复习，下面七至十节是 <strong>Day 14 补漏</strong>——针对 Day 1 验证套题（<code>day01-diagnostic.md</code>）暴露的四个具体薄弱子考点做<strong>考试级深挖</strong>。数据结构是强项科目，补漏的目标不是"懂概念"，而是<strong>把易错点变成肌肉记忆</strong>：重建二叉树、手工跑 Dijkstra/Kruskal/拓扑排序/关键路径、秒判排序稳定性、手算哈希 ASL。</p>
+</blockquote>
+<h2>七、树与二叉树遍历（补漏）</h2>
+<h3>7.1 四种遍历的递归定义与实现</h3>
+<table>
+<thead>
+<tr>
+<th>遍历</th>
+<th>顺序</th>
+<th>递归式</th>
+<th>非递归实现</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先序（Pre）</td>
+<td>根 → 左 → 右</td>
+<td>访根;Pre(L);Pre(R)</td>
+<td>栈（访问后先压右再压左）</td>
+<td>复制树、序列化、表达式前缀</td>
+</tr>
+<tr>
+<td>中序（In）</td>
+<td>左 → 根 → 右</td>
+<td>In(L);访根;In(R)</td>
+<td>栈（一路左压栈）</td>
+<td><strong>BST 排序结果</strong>、表达式中缀</td>
+</tr>
+<tr>
+<td>后序（Post）</td>
+<td>左 → 右 → 根</td>
+<td>Post(L);Post(R);访根</td>
+<td>栈（双栈法或记录上次访问）</td>
+<td>释放树、计算高度/大小、表达式后缀</td>
+</tr>
+<tr>
+<td>层序（Level）</td>
+<td>逐层、从左到右</td>
+<td>——</td>
+<td><strong>队列</strong>（出队即访问，左右孩子入队）</td>
+<td>BFS、求树宽、按层打印</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>四种遍历的时间复杂度均为 <strong>O(n)</strong>（每个节点访问一次），空间复杂度 O(h)（递归栈深度 = 树高，最坏 O(n)）。</li>
+<li>⚠️ <strong>非递归后序遍历最难</strong>：栈中弹出节点时，若它有右孩子且右孩子<strong>还没被访问</strong>，必须把当前节点重新压回并转向右子树——直接弹出会变成"根右左"的中序镜像。</li>
+</ul>
+<h3>7.2 由遍历序列重建二叉树（核心考点）</h3>
+<p><strong>唯一性结论（必背）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>已知序列</th>
+<th>能否唯一确定二叉树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先序 + 中序</td>
+<td>✅ 能</td>
+</tr>
+<tr>
+<td>后序 + 中序</td>
+<td>✅ 能</td>
+</tr>
+<tr>
+<td>层序 + 中序</td>
+<td>✅ 能</td>
+</tr>
+<tr>
+<td><strong>先序 + 后序</strong></td>
+<td>❌ <strong>不能</strong>（除非每个非叶子节点都有两个孩子，即"真二叉树"）</td>
+</tr>
+<tr>
+<td>单一序列</td>
+<td>❌ 不能——除非<strong>附带空节点标记</strong>（此时任意一种遍历都能唯一重建，见下）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>补充：若把空子树也当作"节点"输出（如先序 <code>A B D ∅ ∅ E ∅ ∅ C ∅ F ∅ ∅</code>），则<strong>单一序列</strong>就能唯一重建二叉树——这就是"序列化/反序列化"的原理。考试中若无空节点标记，则必须靠两种序列（且含中序）。</p>
+<p>⚠️ <strong>易错点 1</strong>：重建二叉树<strong>必须要有中序</strong>——中序提供"左右子树分界"，先/后/层序只提供"根是谁"。题目问"下列哪两组序列不能唯一确定二叉树"，答案永远是<strong>不含中序的那一组</strong>。
+⚠️ <strong>易错点 2</strong>：先序 + 后序不能唯一确定的反例——两个节点的树 <code>A(B, ∅)</code> 和 <code>A(∅, B)</code> 的先序都是 <code>AB</code>、后序都是 <code>BA</code>，但是两棵不同的树。</p>
+</blockquote>
+<p><strong>重建算法模板（先序 + 中序）：</strong>
+1. 先序序列的<strong>第一个元素</strong>是根；
+2. 在中序序列中定位根，根<strong>左边</strong>的子序列 = 左子树中序，<strong>右边</strong> = 右子树中序；
+3. 用左子树的长度 <code>L</code>，从先序序列中截出左子树先序（根之后的 <code>L</code> 个）、其余为右子树先序；
+4. 对左右子树递归。</p>
+<p>后序 + 中序同理：后序序列的<strong>最后一个元素</strong>是根。</p>
+<p><strong>完整例题：</strong> 已知先序 <code>A B D E C F</code>，中序 <code>D B E A C F</code>，画出二叉树并写出后序与层序。</p>
+<pre><code>第 1 轮：先序首元 A = 根；中序中 A 左边 [D B E] = 左子树(3 个)，右边 [C F] = 右子树(2 个)
+        先序截取：左子树先序 = B D E，右子树先序 = C F
+第 2 轮（左）：先序首元 B = 根；中序 D B E 中 B 左边 [D] = 左，右边 [E] = 右
+        → B 的左孩子 = D，右孩子 = E
+第 3 轮（右）：先序首元 C = 根；中序 C F 中 C 左边 [] = 空，右边 [F] = 右
+        → C 的左孩子 = 空，右孩子 = F
+
+结果：
+        A
+       / \
+      B   C
+     / \   \
+    D   E   F
+</code></pre>
+<ul>
+<li><strong>后序</strong>：D → E → B → F → C → A（即 <code>D E B F C A</code>）</li>
+<li><strong>层序</strong>：A → B → C → D → E → F（即 <code>A B C D E F</code>）</li>
+<li><strong>验证技巧</strong>：重建后立刻用"中序的左根右"扫一遍核对：D B E A C F ✓。</li>
+</ul>
+<p><strong>派生考法（高频）：</strong> 不画树，直接由先序 + 中序<strong>口算后序</strong>。诀窍：先序从左往右依次是"根、左子树的根、右子树的根……"，配合中序的分界不断切分即可。上面这道题的后序 <code>D E B F C A</code> 必须能在 30 秒内写出。</p>
+<h3>7.3 遍历与表达式树</h3>
+<table>
+<thead>
+<tr>
+<th>遍历</th>
+<th>对应表达式</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先序</td>
+<td><strong>前缀</strong>表达式（波兰式）</td>
+<td>运算符在操作数前</td>
+</tr>
+<tr>
+<td>中序</td>
+<td><strong>中缀</strong>表达式</td>
+<td>⚠️ 中序<strong>不保证括号正确</strong>，需人为补括号才能还原运算优先级</td>
+</tr>
+<tr>
+<td>后序</td>
+<td><strong>后缀</strong>表达式（逆波兰式）</td>
+<td>计算机求值最常用，用<strong>栈</strong>：遇到操作数压栈、遇到运算符弹两个计算</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>中序遍历 BST 得到升序序列</strong>——这是"二叉搜索树 ⟺ 中序有序"的判据，也是"判断一棵树是否为 BST"的标准做法（比"只比较左右孩子"更可靠，因为要保证<strong>整棵子树</strong>满足大小关系）。</li>
+</ul>
+<h3>7.4 线索二叉树（易漏点）</h3>
+<ul>
+<li>n 个节点的二叉树有 <strong>2n 个指针域</strong>，其中 <strong>n−1 个指向孩子</strong>，故有 <strong>n+1 个空指针域</strong>。</li>
+<li>线索化：把空指针域改成指向前驱/后继（中序线索最常用）。ltag/rtag = 0 表示指向孩子，= 1 表示指向线索。</li>
+<li>⚠️ <strong>中序线索化后，找某节点中序后继</strong>：若其右指针是线索，直接跟过去；否则<strong>去右子树的最左下角节点</strong>。</li>
+</ul>
+<hr />
+<h2>八、图算法（补漏）</h2>
+<h3>8.1 图的遍历 DFS / BFS</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>DFS（深度优先）</th>
+<th>BFS（广度优先）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据结构</td>
+<td><strong>栈</strong>（或递归）</td>
+<td><strong>队列</strong></td>
+</tr>
+<tr>
+<td>邻接矩阵时间</td>
+<td>O(V²)</td>
+<td>O(V²)</td>
+</tr>
+<tr>
+<td>邻接表时间</td>
+<td><strong>O(V+E)</strong></td>
+<td><strong>O(V+E)</strong></td>
+</tr>
+<tr>
+<td>空间</td>
+<td>O(V)（递归深度）</td>
+<td>O(V)（队列）</td>
+</tr>
+<tr>
+<td>生成树</td>
+<td>DFS 生成树（细长）</td>
+<td>BFS 生成树（矮宽）</td>
+</tr>
+<tr>
+<td>典型应用</td>
+<td>连通分量、拓扑排序、环检测、求割点</td>
+<td><strong>无权图最短路径（边数最少）</strong>、层次遍历</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>⚠️ <strong>BFS 求出的就是无权图的最短路径</strong>（按层扩展，先到者路径最短）。带权图必须用 Dijkstra/Floyd。</li>
+<li>⚠️ 遍历序列<strong>取决于存储结构</strong>：同一个图，邻接矩阵的遍历序列由顶点编号顺序决定，邻接表由边表链入顺序决定。所以"写出 DFS 序列"的题目必须给定存储结构。</li>
+</ul>
+<h3>8.2 最短路径</h3>
+<p><strong>Dijkstra（单源最短路径，贪心）：</strong></p>
+<pre><code>1. 初始化：源点 s 的 dist[s] = 0，其余 dist = ∞；集合 S = {s}
+2. 从未确定集合 V−S 中选 dist 最小的顶点 u，加入 S
+3. 对 u 的每条出边 (u,v,w)：若 dist[u]+w &lt; dist[v]，则更新 dist[v]（&quot;松弛&quot;）
+4. 重复 2-3，直到所有顶点入 S
+</code></pre>
+<ul>
+<li>时间复杂度：<strong>O(V²)</strong>（数组实现）；<strong>O((V+E)log V)</strong>（优先队列/堆）。</li>
+<li>⚠️ <strong>不能处理负权边</strong>：算法的贪心正确性依赖"已入 S 的顶点 dist 不会再被减小"，负权边可能违反这个假设。要处理负权必须用 <strong>Bellman-Ford（O(VE)）</strong>。</li>
+<li>Dijkstra 也可以<strong>输出最短路径本身</strong>：每次松弛时记录 <code>path[v] = u</code>，最后从终点沿 path 回溯到源点。</li>
+</ul>
+<p><strong>Dijkstra 手算例题：</strong></p>
+<pre><code>源点 V1，边（无向）：
+V1-V2: 10   V1-V5: 100   V2-V3: 50   V3-V5: 10   V4-V5: 60   V3-V4: 20   V2-V5: 30
+
+轮次  选点      更新过程                                   各点 dist
+ 1    V1(0)    松弛 V2→10, V5→100                         V2:10  V3:∞  V4:∞  V5:100
+ 2    V2(10)   松弛 V3→10+50=60, V5→min(100, 10+30=40)=40  V3:60  V4:∞  V5:40
+ 3    V5(40)   松弛 V4→40+60=100, V3→min(60, 40+10=50)=50  V3:50  V4:100
+ 4    V3(50)   松弛 V4→min(100, 50+20=70)=70               V4:70
+ 5    V4(70)   无更新
+
+结果：V1→V2=10, V1→V5=40(V1→V2→V5), V1→V3=50(V1→V2→V5→V3), V1→V4=70(V1→V2→V5→V3→V4)
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>最典型错误</strong>：第 2 轮就把 V5 定成 100（认为源点直接连的边最短），忘记后续中转可能更短——这正是 Dijkstra 每轮只锁定<strong>一个</strong>最小顶点的原因。</p>
+</blockquote>
+<p><strong>Floyd（全源最短路径，动态规划）：</strong></p>
+<ul>
+<li>状态：<code>d[k][i][j]</code> = 只允许经过顶点 {1..k} 时，i 到 j 的最短路径长度。</li>
+<li>转移：<code>d[k][i][j] = min(d[k−1][i][j], d[k−1][i][k] + d[k−1][k][j])</code>。</li>
+<li>三重循环 <strong>O(V³)</strong>，空间可优化到 O(V²)（滚动掉第一维，原地更新）。</li>
+<li>⚠️ Floyd <strong>可以处理负权边，但不能有负权回路</strong>（有负回路时最短路径无下界）。</li>
+<li>⚠️ <strong>Floyd 的 k 循环必须在最外层</strong>——写成 <code>for(i) for(j) for(k)</code> 是错的，那样不是动态规划的正确递推顺序。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>源</th>
+<th>时间</th>
+<th>负权边</th>
+<th>负权回路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dijkstra</td>
+<td>单源</td>
+<td>O(V²)</td>
+<td>❌ 不支持</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Bellman-Ford</td>
+<td>单源</td>
+<td>O(VE)</td>
+<td>✅ 支持</td>
+<td>可检测并报告</td>
+</tr>
+<tr>
+<td>Floyd</td>
+<td>全源</td>
+<td>O(V³)</td>
+<td>✅ 支持</td>
+<td>❌ 不允许</td>
+</tr>
+</tbody>
+</table>
+<h3>8.3 最小生成树（MST）</h3>
+<ul>
+<li><strong>生成树</strong>：连通图的极小连通子图，n 个顶点 + <strong>n−1 条边</strong>。</li>
+<li>MST 的权值之和最小。⚠️ <strong>MST 不唯一</strong>——只有当图中<strong>所有边权互不相同时 MST 才唯一</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prim</th>
+<th>Kruskal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>策略</td>
+<td>从某顶点出发，每次选<strong>连接已选集合与未选集合</strong>的最小权边</td>
+<td>把所有边按权值<strong>从小到大排序</strong>，依次选不构成环的边</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>顶点集合 + lowcost 数组</td>
+<td><strong>并查集</strong>（判连通/成环）</td>
+</tr>
+<tr>
+<td>时间</td>
+<td><strong>O(V²)</strong>（邻接矩阵，适合稠密图）</td>
+<td><strong>O(E log E)</strong>（排序主导，适合稀疏图）</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>稠密图</td>
+<td>稀疏图</td>
+</tr>
+<tr>
+<td>结果</td>
+<td>从任意起点开始，<strong>MST 权值相同</strong></td>
+<td>与起点无关</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prim 手算例题：</strong> 顶点 {A,B,C,D}，无向边：AB=4, AC=3, BC=1, BD=2, CD=5</p>
+<pre><code>从 A 出发，已选 S={A}，候选边（S→V−S 取最小）：
+ 轮1: 候选 AB=4, AC=3        → 选 AC=3，S={A,C}
+ 轮2: 候选 AB=4, CB=1, CD=5  → 选 CB=1，S={A,C,B}
+ 轮3: 候选 BD=2, CD=5        → 选 BD=2，S={A,C,B,D}
+MST = {AC, CB, BD}，权值 = 3+1+2 = 6
+</code></pre>
+<p><strong>Kruskal 手算例题（同一图）：</strong></p>
+<pre><code>边排序：BC=1 &lt; BD=2 &lt; AC=3 &lt; AB=4 &lt; CD=5
+ BC=1: B,C 不连通 → 加入（并查集合并 B,C）
+ BD=2: B,D 不连通 → 加入（合并 B,D，现 B,C,D 同集合）
+ AC=3: A,C 不连通 → 加入（A 并入，全部连通）
+ AB=4: A,B 已连通 → 跳过（会成环）
+ CD=5: C,D 已连通 → 跳过（会成环）
+MST = {BC, BD, AC}，权值 = 1+2+3 = 6   ← 与 Prim 结果一致 ✓
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>并查集判环的写法</strong>：对每条边 (u,v)，若 <code>find(u) == find(v)</code> 则加入会成环，跳过；否则 <code>union(u,v)</code>。这一步的时间复杂度近乎 O(1)（路径压缩后）。</p>
+</blockquote>
+<h3>8.4 拓扑排序（AOV 网）</h3>
+<ul>
+<li><strong>AOV 网</strong>：顶点表示<strong>活动</strong>，边表示<strong>先后次序</strong>（<i,j> 表示 i 必须先于 j）。<strong>仅适用于 DAG（有向无环图）</strong>。</li>
+<li><strong>Kahn 算法（队列法）</strong>：① 找入度为 0 的顶点入队；② 出队并输出，把它所有出边删除（相邻顶点入度 −1，新的入度 0 者入队）；③ 重复至队空。若输出顶点数 &lt; V，则<strong>有环</strong>。</li>
+<li>时间复杂度 <strong>O(V+E)</strong>。</li>
+<li>⚠️ <strong>拓扑排序不唯一</strong>（同时多个入度为 0 的顶点，输出顺序任意）。所以"下列哪个不是该图的拓扑序列"是这类题的常见考法——逐项模拟即可。</li>
+<li>⚠️ <strong>反向应用</strong>：判断有向图是否有环 ⟺ 拓扑排序能否输出全部顶点。</li>
+</ul>
+<p><strong>拓扑排序例题：</strong> 课程依赖 C1→C3、C2→C3、C3→C4、C2→C4</p>
+<pre><code>入度：C1=0, C2=0, C3=2, C4=2
+初始队列：[C1, C2]
+输出 C1 → C3 入度 1；输出 C2 → C3 入度 0(入队)、C4 入度 1
+输出 C3 → C4 入度 0(入队)；输出 C4
+合法序列：C1,C2,C3,C4 或 C2,C1,C3,C4（不唯一）
+</code></pre>
+<h3>8.5 关键路径（AOE 网）—— 高频计算题</h3>
+<ul>
+<li><strong>AOE 网</strong>：顶点表示<strong>事件</strong>（状态），<strong>边表示活动（工程/任务）</strong>，边权 = 活动耗时。源点（入度为 0）= 开工，汇点（出度为 0）= 竣工。</li>
+<li><strong>关键路径</strong> = 从源点到汇点的<strong>最长路径</strong>，其长度 = <strong>最短工期</strong>（不是最短路径！）</li>
+</ul>
+<p><strong>四步算法：</strong>
+1. <strong>正推求 ve（事件最早发生时间）</strong>：<code>ve[j] = max{ ve[i] + w(i,j) }</code>（i 是 j 的所有前驱），源点 ve=0，<strong>顺拓扑序取最大</strong>。
+2. <strong>逆推求 vl（事件最迟发生时间）</strong>：<code>vl[i] = min{ vl[j] − w(i,j) }</code>（j 是 i 的所有后继），汇点 vl = ve，<strong>逆拓扑序取最小</strong>。
+3. <strong>求活动的最早/最迟开始时间</strong>：活动 <i,j> 的 <code>e = ve[i]</code>，<code>l = vl[j] − w(i,j)</code>。
+4. <strong>关键活动</strong> = <code>l − e = 0</code> 的活动；关键活动组成的路径就是关键路径。</p>
+<p><strong>完整例题：</strong> AOE 网 V1(源) → V2(2), V1→V3(3), V2→V4(4), V3→V4(1), V4→V5(5)</p>
+<pre><code>第 1 步 ve（正推取最大）：
+ ve(V1)=0
+ ve(V2)=0+2=2
+ ve(V3)=0+3=3
+ ve(V4)=max(ve(V2)+4, ve(V3)+1)=max(6, 4)=6
+ ve(V5)=6+5=11                    ← 最短工期 = 11
+
+第 2 步 vl（逆推取最小，自汇点 vl=ve）：
+ vl(V5)=11
+ vl(V4)=11−5=6
+ vl(V3)=vl(V4)−1=5
+ vl(V2)=vl(V4)−4=2
+ vl(V1)=min(vl(V2)−2, vl(V3)−3)=min(0, 2)=0
+
+第 3 步 活动 e / l：
+ 活动        e(=ve[尾])  l(=vl[头]−w)   l−e
+ V1→V2(2)      0          2−2=0         0    ← 关键
+ V1→V3(3)      0          5−3=2         2
+ V2→V4(4)      2          6−4=2         0    ← 关键
+ V3→V4(1)      3          6−1=5         2
+ V4→V5(5)      6          11−5=6        0    ← 关键
+
+关键路径：V1 → V2 → V4 → V5，总长 2+4+5 = 11
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>易错点 1</strong>：关键路径<strong>可能不止一条</strong>——只有缩短<strong>所有</strong>关键路径共有的关键活动<strong>才能缩短工期</strong>。
+⚠️ <strong>易错点 2</strong>：<code>ve 取 max</code>、<code>vl 取 min</code>——方向记反是最常见的丢分点。口诀：<strong>"最早看最长（max），最迟看最短（min）"</strong>。
+⚠️ <strong>易错点 3</strong>：AOV 用拓扑排序、AOE 用关键路径——两者考"顶点 vs 边谁表示活动"时极易混。<strong>AOV 顶点=活动；AOE 边=活动</strong>。
+⚠️ <strong>易错点 4</strong>：关键活动的总机动时间（松弛）为 0，但<strong>非关键活动也有机动时间</strong>，l−e 就是它的时间余量。</p>
+</blockquote>
+<hr />
+<h2>九、排序稳定性与复杂度（补漏）</h2>
+<h3>9.1 稳定性定义</h3>
+<p>若排序前 <code>a_i = a_j</code>（关键字相等）且 i 在 j 之前，排序后 i 仍在 j 之前，则称该排序<strong>稳定</strong>；否则<strong>不稳定</strong>。
+- <strong>稳定性的意义</strong>：多关键字排序。例如"先按次要关键字（如年龄）排好，再按主要关键字（如部门）<strong>稳定</strong>排序"，就能保证同部门内仍按年龄有序。若主排序不稳定，前面的结果会被打乱。</p>
+<h3>9.2 完整对比表（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>最好</th>
+<th>平均</th>
+<th>最坏</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td><strong>O(n)</strong></td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td><strong>稳定</strong></td>
+<td>最好 O(n) 需"一趟无交换则提前结束"的优化</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td><strong>不稳定</strong></td>
+<td>交换跨距离，破坏相等元素次序</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td><strong>O(n)</strong></td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td><strong>稳定</strong></td>
+<td>基本有序时接近 O(n)；希尔排序是其改进</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>O(n^1.3)</td>
+<td>O(n^1.3~1.5)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td><strong>不稳定</strong></td>
+<td>分组后相同元素可能落在不同子序列</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td><strong>O(n²)</strong></td>
+<td><strong>O(logn)</strong></td>
+<td><strong>不稳定</strong></td>
+<td>最坏发生在<strong>已序/逆序</strong>（划分极度不平衡）</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td><strong>O(n)</strong></td>
+<td><strong>稳定</strong></td>
+<td>时间与输入无关；外部排序/链表排序首选</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(nlogn)</td>
+<td>O(1)</td>
+<td><strong>不稳定</strong></td>
+<td>建堆 <strong>O(n)</strong>（不是 O(nlogn)）</td>
+</tr>
+<tr>
+<td>基数排序</td>
+<td>O(d(n+r))</td>
+<td>O(d(n+r))</td>
+<td>O(d(n+r))</td>
+<td><strong>O(r+n)</strong></td>
+<td><strong>稳定</strong></td>
+<td>位分配用稳定排序；d=位数，r=基数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>稳定性速记口诀：</strong> 稳定 = <strong>"冒（泡）插（入）归（并）基（数）"</strong>；不稳定 = <strong>"快（速）选（择）希（尔）堆"</strong>。</p>
+<blockquote>
+<p>⚠️ <strong>高频陷阱</strong>："下列排序中不稳定的是（ ）"——答案必在 <strong>快/选/希/堆</strong> 中；"时间复杂度与输入初始序列无关的是（ ）"——答案必是 <strong>归并/堆/选择/基数</strong>（它们最好=平均=最坏）。注意：<strong>快速排序的空间 O(logn)</strong> 是因为递归栈深度 = 划分树高，最坏情况（已序）退化为 <strong>O(n)</strong>。</p>
+</blockquote>
+<h3>9.3 为什么稳定 / 不稳定（原理级理解）</h3>
+<ul>
+<li><strong>冒泡</strong>：只比较<strong>相邻</strong>元素，相等时不交换 → 稳定。</li>
+<li><strong>插入</strong>：新元素从已排序段<strong>从后往前</strong>比较，遇到<strong>不大于</strong>自己的就停（遇到相等就停下）→ 稳定。</li>
+<li><strong>归并</strong>：合并时左半与右半的元素比较，<strong>左半优先</strong>放回 → 稳定。</li>
+<li><strong>基数</strong>：每一位的分配与收集都借助<strong>稳定</strong>的计数排序 → 稳定。</li>
+<li><strong>选择</strong>：选最小元素时与<strong>远处</strong>元素交换。例：序列 <code>5₁, 5₂, 2</code>，选出最小值 2 与 <code>5₁</code> 交换 → <code>2, 5₂, 5₁</code>，两个 5 的次序被破坏 → 不稳定。</li>
+<li><strong>快速</strong>：划分时元素与基准交换可能<strong>跨越</strong>相等的元素 → 不稳定。</li>
+<li><strong>堆排序</strong>：堆顶与末尾元素交换是<strong>远距离</strong>交换 → 不稳定。</li>
+<li><strong>希尔</strong>：相隔 gap 的元素分组排序，相同关键字的元素可能落在<strong>不同子序列</strong>，相对次序无法保证 → 不稳定。</li>
+</ul>
+<h3>9.4 堆排序的三个高频数字</h3>
+<ul>
+<li>建堆时间 <strong>O(n)</strong>（从最后一个非叶子节点到根逐个下沉，而非逐个插入）。</li>
+<li>堆是完全二叉树：n 个节点的堆高 = <strong>⌊log₂n⌋</strong>。</li>
+<li>取最值：<strong>大顶堆</strong>的堆顶是最大值，<strong>小顶堆</strong>的堆顶是最小值。<strong>优先队列</strong>通常用堆实现。</li>
+</ul>
+<hr />
+<h2>十、哈希表与冲突处理（补漏）</h2>
+<h3>10.1 装填因子（决定查找效率的核心量）</h3>
+<ul>
+<li><strong>装填因子 α = 哈希表中记录数 n ÷ 哈希表长度 m</strong>。</li>
+<li>⚠️ <strong>哈希表的查找效率（ASL）主要取决于 α，而不取决于记录数 n</strong>——这是最核心的结论。α 越大，冲突越频繁，ASL 越高。</li>
+<li>工程上通常把 α 控制在 <strong>0.6~0.75</strong> 以下，超过就"扩容 rehash"。</li>
+</ul>
+<h3>10.2 哈希函数构造</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>除留余数法</strong></td>
+<td><code>H(key) = key mod p</code></td>
+<td>⚠️ <strong>p 应取不大于表长的最大素数</strong>（或直接取表长），取合数会增大冲突</td>
+</tr>
+<tr>
+<td>直接定址法</td>
+<td><code>H(key) = a·key + b</code></td>
+<td>无冲突，但要求关键字分布连续</td>
+</tr>
+<tr>
+<td>平方取中法</td>
+<td>取关键字平方的中间几位</td>
+<td>关键字位数大时常用</td>
+</tr>
+<tr>
+<td>折叠法</td>
+<td>分段叠加</td>
+<td>关键字位数多且分布不均</td>
+</tr>
+<tr>
+<td>数字分析法</td>
+<td>取分布均匀的几位</td>
+<td>适合已知关键字集合</td>
+</tr>
+</tbody>
+</table>
+<h3>10.3 冲突处理方法</h3>
+<p><strong>(1) 开放定址法</strong>：<code>H_i = (H(key) + d_i) mod m</code></p>
+<table>
+<thead>
+<tr>
+<th>探测序列 d_i</th>
+<th>名称</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1, 2, 3, 4, …</td>
+<td><strong>线性探测再散列</strong></td>
+<td>实现最简单；⚠️ 产生<strong>聚集（堆积）</strong>——冲突元素连成一片，形成长探测链</td>
+</tr>
+<tr>
+<td>1², −1², 2², −2², …</td>
+<td><strong>二次（平方）探测再散列</strong></td>
+<td>缓解聚集；⚠️ 只能探测到<strong>表长的一半</strong>位置（要求表长为 4k+3 型素数时可探测全表）</td>
+</tr>
+<tr>
+<td>伪随机序列</td>
+<td>伪随机探测再散列</td>
+<td>依赖 d_i 的生成，不实用</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>⚠️ <strong>开放定址法不能"物理删除"元素</strong>——删除会中断探测链，导致后续同义词查不到。只能<strong>打删除标记（墓碑/软删除）</strong>，并在适当时候重新整理表。</li>
+<li>⚠️ <strong>开放定址法装填因子必须 α &lt; 1</strong>，否则探测序列可能永远找不到空位（表满时）。</li>
+</ul>
+<p><strong>(2) 链地址法（拉链法）</strong>：所有同义词存成一条<strong>单链表</strong>，链表头指针存放在哈希数组中。
+- ✅ 无聚集现象；删除方便（真正删除链表节点）；适合记录大小不固定的场景；表长可动态扩展。
+- ⚠️ 查找时需要<strong>在链表中顺序比较</strong>，链表越长 ASL 越大。</p>
+<p><strong>(3) 再哈希法</strong>：<code>H_i = RHi(key)</code>（多个不同的哈希函数），冲突时换下一个函数。不易产生聚集，但计算开销大。</p>
+<p><strong>(4) 建立公共溢出区</strong>：冲突元素一律存入专门的溢出表（顺序查找）。</p>
+<h3>10.4 ASL 手算（必考计算题）</h3>
+<blockquote>
+<p><strong>查找长度的定义</strong>：比较关键字的次数，<strong>包含"比较后找到"的那一次</strong>。开放定址法中"遇到空位置"也算一次比较（但本次查找失败）。</p>
+</blockquote>
+<p><strong>完整例题：</strong> 哈希表长 m=7，<code>H(key) = key mod 7</code>，<strong>线性探测</strong>处理冲突，依次插入关键字 <code>12, 19, 26, 5, 8, 15</code>。求查找成功的 ASL。</p>
+<pre><code>12 mod 7 = 5 → 位置 5（空）      存 5      探测 1 次
+19 mod 7 = 5 → 冲突 → 6（空）    存 6      探测 2 次
+26 mod 7 = 5 → 冲突(5)→6(占)→0(空)  存 0   探测 3 次
+ 5 mod 7 = 5 → 冲突(5)→6(占)→0(占)→1(空) 存 1  探测 4 次
+ 8 mod 7 = 1 → 1(占)→2(空)      存 2      探测 2 次
+15 mod 7 = 1 → 1(占)→2(占)→3(空) 存 3     探测 3 次
+
+表内容（下标: 关键字）  0:26  1:5  2:8  3:15  4:_  5:12  6:19
+装填因子 α = 6/7 ≈ 0.857
+
+ASL(成功) = (1+2+3+4+2+3) / 6 = 15/6 = 2.5
+</code></pre>
+<p><strong>同一序列改用链地址法：</strong></p>
+<pre><code>位置 5 的链：12 → 19 → 26 → 5      （各需 1、2、3、4 次比较）
+位置 1 的链：8 → 15                （各需 1、2 次比较）
+
+ASL(成功) = (1+2+3+4+1+2) / 6 = 13/6 ≈ 2.17
+</code></pre>
+<blockquote>
+<p>结论：<strong>同样 α 下，链地址法的 ASL 优于线性探测</strong>（2.17 &lt; 2.5），且没有聚集问题。
+⚠️ <strong>易错点 1</strong>：算 ASL 时<strong>分母是记录数 n</strong>（成功查找）或<strong>表长 m</strong>（失败查找），两者不同，看清题目问哪个。
+⚠️ <strong>易错点 2</strong>：<code>key mod p</code> 的 p 取素数——若题目给出 <code>mod 7</code> 而表长 8，<strong>哈希地址范围仍是 0~6</strong>，别把位置 7 当合法槽位。
+⚠️ <strong>易错点 3</strong>：线性探测回绕——探测到表尾要 <code>mod m</code> 回到 0 继续。</p>
+</blockquote>
+<h3>10.5 理论 ASL 公式（随机哈希函数假设）</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>ASL（成功查找）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>链地址法</td>
+<td><strong>α + e^(−α) ≈ 1 + α/2</strong>（小 α 时）</td>
+</tr>
+<tr>
+<td>线性探测</td>
+<td><strong>(1 + 1/(1−α)) / 2</strong></td>
+</tr>
+<tr>
+<td>二次探测/再哈希</td>
+<td><strong>−(1/α)·ln(1−α)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>记住趋势即可：<strong>同一 α 下，链地址 &lt; 二次探测 &lt; 线性探测</strong>。</li>
+</ul>
+<hr />
+<h2>补漏自检清单</h2>
+<blockquote>
+<p>遮住右侧，逐条自答，答不出就回看对应小节。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>自检问题</th>
+<th>参考答案</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>哪两组遍历序列不能唯一确定二叉树？</td>
+<td>先序 + 后序</td>
+<td>§7.2</td>
+</tr>
+<tr>
+<td>后序 + 中序重建，根在序列的哪里？</td>
+<td>后序<strong>最后一个</strong>元素</td>
+<td>§7.2</td>
+</tr>
+<tr>
+<td>BFS 求最短路径的前提是什么？</td>
+<td>图<strong>无权</strong>（或权相等）</td>
+<td>§8.1</td>
+</tr>
+<tr>
+<td>Dijkstra 为什么不能用负权边？</td>
+<td>贪心已锁定顶点可能再被减小</td>
+<td>§8.2</td>
+</tr>
+<tr>
+<td>Floyd 的循环顺序能换吗？</td>
+<td>不能，k 必须在最外层</td>
+<td>§8.2</td>
+</tr>
+<tr>
+<td>MST 在什么条件下唯一？</td>
+<td>所有边权互不相同</td>
+<td>§8.3</td>
+</tr>
+<tr>
+<td>Kruskal 判环用什么数据结构？</td>
+<td>并查集</td>
+<td>§8.3</td>
+</tr>
+<tr>
+<td>拓扑排序的核心依据是入度还是出度？</td>
+<td><strong>入度</strong>为 0</td>
+<td>§8.4</td>
+</tr>
+<tr>
+<td>AOV 网中"活动"由什么表示？</td>
+<td><strong>顶点</strong>（AOE 中活动是<strong>边</strong>）</td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>关键路径长度 = 最长路径还是最短路径？</td>
+<td><strong>最长路径</strong>，其长度 = <strong>最短工期</strong></td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>ve 取 max 还是 min？vl 呢？</td>
+<td>ve 取 max，vl 取 min</td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>八大排序中不稳定的有哪四个？</td>
+<td>快、选、希、堆</td>
+<td>§9.2</td>
+</tr>
+<tr>
+<td>建堆的时间复杂度？</td>
+<td><strong>O(n)</strong></td>
+<td>§9.4</td>
+</tr>
+<tr>
+<td>哈希表 ASL 主要由什么决定？</td>
+<td>装填因子 α，而非 n</td>
+<td>§10.1</td>
+</tr>
+<tr>
+<td>开放定址法能直接删除元素吗？</td>
+<td>不能，须打删除标记</td>
+<td>§10.3</td>
+</tr>
+<tr>
+<td>线性探测与链地址法，同 α 下谁 ASL 更小？</td>
+<td>链地址法</td>
+<td>§10.4</td>
+</tr>
+</tbody>
+</table>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/data-structures/index.md">docs/knowledge-points/data-structures/index.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

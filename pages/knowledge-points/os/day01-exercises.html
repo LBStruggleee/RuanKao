@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1（9/21）操作系统① 练习题：进程管理 + 线程 + 调度 + PV 操作（共 25 题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 os 📁 day01-exercises.md</div>
+<h1>Day 1（9/21）操作系统① 练习题：进程管理 + 线程 + 调度 + PV 操作（共 25 题）</h1>
+<blockquote>
+<p>说明：第 1–20 题为「进程管理 / 线程 / 调度算法」选择题；第 21–25 题为「PV 操作」题（1 道选择题 + 4 道写出操作序列的大题）。
+完整<strong>答案解析在文件末尾</strong>。建议先独立完成（选择题约 45 分钟，PV 大题再 45 分钟），再对答案。</p>
+</blockquote>
+<hr />
+<h2>第一部分：进程管理 / 线程 / 调度（选择题 1–20）</h2>
+<p><strong>1.</strong> 下列各项中，能唯一标识一个进程的是（ ）。</p>
+<ul>
+<li>A. 程序</li>
+<li>B. 进程控制块（PCB）</li>
+<li>C. 线程</li>
+<li>D. 进程映像（代码段与数据段）</li>
+</ul>
+<p><strong>2.</strong> 在具有五状态的进程模型中，一个进程从「阻塞」态进入「执行」态的正确路径是（ ）。</p>
+<ul>
+<li>A. 阻塞 → 执行</li>
+<li>B. 阻塞 → 就绪 → 执行</li>
+<li>C. 阻塞 → 新建 → 就绪 → 执行</li>
+<li>D. 阻塞 → 终止 → 就绪 → 执行</li>
+</ul>
+<p><strong>3.</strong> 当进程执行中发生 I/O 请求，等待磁盘读写完成时，进程的状态转换是（ ）。</p>
+<ul>
+<li>A. 执行 → 就绪</li>
+<li>B. 执行 → 阻塞</li>
+<li>C. 阻塞 → 就绪</li>
+<li>D. 就绪 → 执行</li>
+</ul>
+<p><strong>4.</strong> 时间片用完，正在执行的进程将转入（ ）状态。</p>
+<ul>
+<li>A. 阻塞</li>
+<li>B. 就绪</li>
+<li>C. 终止</li>
+<li>D. 新建</li>
+</ul>
+<p><strong>5.</strong> 在某进程的调度中，进程 P 因执行 P 操作（信号量值减 1 后小于 0）而被暂停，此时 P 由执行态转入（ ）态。</p>
+<ul>
+<li>A. 就绪</li>
+<li>B. 阻塞</li>
+<li>C. 终止</li>
+<li>D. 新建</li>
+</ul>
+<p><strong>6.</strong> 下列关于进程与线程的描述中，正确的是（ ）。</p>
+<ul>
+<li>A. 进程是处理机调度的基本单位，线程是资源分配的基本单位</li>
+<li>B. 线程是处理机调度的基本单位，进程是资源分配的基本单位</li>
+<li>C. 进程与线程均可独立拥有资源，只是线程资源较少</li>
+<li>D. 一个进程中只能包含一个线程</li>
+</ul>
+<p><strong>7.</strong> 同一进程中的多个线程，以下资源中<strong>不共享</strong>的是（ ）。</p>
+<ul>
+<li>A. 全局变量（数据段）</li>
+<li>B. 代码段</li>
+<li>C. 各自的栈</li>
+<li>D. 打开的文件描述符</li>
+</ul>
+<p><strong>8.</strong> 与进程相比，线程系统开销小的根本原因是（ ）。</p>
+<ul>
+<li>A. 线程不参与调度，无需切换现场</li>
+<li>B. 线程间切换无需切换地址空间（共享同一地址空间）</li>
+<li>C. 线程没有独立的栈</li>
+<li>D. 线程不能并发执行，无需加锁</li>
+</ul>
+<p><strong>9.</strong> 进程之间进行通信，需要操作系统提供进程间通信（IPC）机制；而同一进程内线程间通信的主要方式是（ ）。</p>
+<ul>
+<li>A. 信号量</li>
+<li>B. 消息队列</li>
+<li>C. 管道</li>
+<li>D. 直接读写共享变量</li>
+</ul>
+<p><strong>10.</strong> 一个进程被撤销（终止）后，操作系统最先要做的恢复工作是（ ）。</p>
+<ul>
+<li>A. 释放进程占用的内存</li>
+<li>B. 撤销其 PCB，并回收资源</li>
+<li>C. 通知其父进程</li>
+<li>D. 唤醒等待该进程的进程</li>
+</ul>
+<p><strong>11.</strong> 采用「先来先服务（FCFS）」调度算法时，对系统性能的主要不利影响是（ ）。</p>
+<ul>
+<li>A. 平均等待时间可能很长（护航效应）</li>
+<li>B. 长作业可能饥饿</li>
+<li>C. 无法实现公平</li>
+<li>D. 上下文切换开销大</li>
+</ul>
+<p><strong>12.</strong> 以下调度算法中，<strong>平均等待时间最短</strong>的是（ ）。</p>
+<ul>
+<li>A. 先来先服务（FCFS）</li>
+<li>B. 时间片轮转（RR）</li>
+<li>C. 短作业优先（SJF）</li>
+<li>D. 优先级调度</li>
+</ul>
+<p><strong>13.</strong> 时间片轮转（RR）调度算法中，如果时间片设置得<strong>过大</strong>，则其效果趋近于（ ）。</p>
+<ul>
+<li>A. 短作业优先</li>
+<li>B. 先来先服务</li>
+<li>C. 优先级调度</li>
+<li>D. 多级反馈队列</li>
+</ul>
+<p><strong>14.</strong> 短作业优先（SJF）算法可能引起的问题是（ ）。</p>
+<ul>
+<li>A. 短作业等待时间过长</li>
+<li>B. 长作业饥饿（饿死）</li>
+<li>C. 系统吞吐量下降</li>
+<li>D. 平均周转时间最长</li>
+</ul>
+<p><strong>15.</strong> 优先级调度算法中，为避免低优先级进程长期得不到执行，通常采用的手段是（ ）。</p>
+<ul>
+<li>A. 增大时间片</li>
+<li>B. 老化（aging，随等待时间提高优先级）</li>
+<li>C. 采用 FCFS 后备队列</li>
+<li>D. 降低高优先级进程的 CPU 频率</li>
+</ul>
+<p><strong>16.</strong> 三个作业同时到达系统，运行时间分别为 24、3、3（单位时间），按短作业优先 SJF 调度，平均周转时间为（ ）。</p>
+<ul>
+<li>A. 13</li>
+<li>B. 27</li>
+<li>C. 10</li>
+<li>D. 24</li>
+</ul>
+<p><strong>17.</strong> 下列调度算法中，最适合<strong>分时系统</strong>的是（ ）。</p>
+<ul>
+<li>A. 短作业优先</li>
+<li>B. 先来先服务</li>
+<li>C. 时间片轮转</li>
+<li>D. 抢占式优先级</li>
+</ul>
+<p><strong>18.</strong> 多级反馈队列调度算法的核心思想是（ ）。</p>
+<ul>
+<li>A. 所有进程都分配相同的时间片</li>
+<li>B. 优先执行运行时间短、响应要求高的进程，随等待/执行情况动态调整队列优先级</li>
+<li>C. 只按到达顺序调度</li>
+<li>D. 只按优先级高低调度且时间片固定</li>
+</ul>
+<p><strong>19.</strong> 一个进程在临界区执行时，其他要求访问同一临界资源的进程应当（ ）。</p>
+<ul>
+<li>A. 立即被抢占执行其他代码</li>
+<li>B. 进入就绪态，等待临界区释放</li>
+<li>C. 挂起等待（阻塞）在该临界资源上</li>
+<li>D. 无条件继续执行自己的其他部分</li>
+</ul>
+<p><strong>20.</strong> 进程间的<strong>互斥</strong>与<strong>同步</strong>，本质区别在于（ ）。</p>
+<ul>
+<li>A. 互斥是进程间的竞争关系，涉及对共享资源的排他性访问；同步是协作关系，涉及执行的先后顺序</li>
+<li>B. 互斥需要信号量，同步不需要</li>
+<li>C. 互斥只能用于线程，同步只能用于进程</li>
+<li>D. 两者没有本质区别</li>
+</ul>
+<hr />
+<h2>第二部分：PV 操作</h2>
+<p><strong>21.（选择题）</strong> 用 P、V 操作实现进程同步时，信号量的初值（ ）。</p>
+<ul>
+<li>A. 只能是 1</li>
+<li>B. 只能是 0</li>
+<li>C. 可以是任意整数，但代表资源的信号量初值通常为可用资源数，同步信号量初值通常为 0</li>
+<li>D. 必须大于 0</li>
+</ul>
+<p><strong>22.（大题）生产者-消费者。</strong> 设有一缓冲区，容量为 n（可同时存放 n 个产品），一个生产者进程和一个消费者进程共享该缓冲区。生产者不断将产品放入缓冲区，消费者不断取出产品。要求：</p>
+<p>（1）写出所需要的互斥信号量和资源信号量及其初值；
+（2）分别写出生产者进程、消费者进程完整的伪代码（含 P/V 操作）；
+（3）说明为什么 <code>P(empty)</code> 必须放在 <code>P(mutex)</code> 之前。</p>
+<p><strong>23.（大题）读者-写者。</strong> 有一个共享数据区，允许多个读者进程同时读，但任何写者进程必须与该数据区的所有读者和写者互斥（写者独占访问）。用 P/V 操作实现（读者优先）：</p>
+<p>（1）写出所用信号量及其初值；
+（2）分别写出读者进程、写者进程的伪代码；
+（3）说明允许多读者同时读的机理（第一个/最后一个读者的作用）。</p>
+<p><strong>24.（大题）两人取物。</strong> 有一个能存放 1 件物品的盒子（容量为 1），一个生产者循环放入产品，一个消费者循环取走产品，每次放入/取走 1 件。问：</p>
+<p>（1）最少需要几个信号量？分别是什么、初值是多少？
+（2）写出生产者和消费者进程的伪代码。</p>
+<p><strong>25.（大题）前驱关系。</strong> 设有两个并发进程 P1、P2，要求 P1 中的语句 S1 必须<strong>先于</strong> P2 中的语句 S2 执行（即 S1 → S2 的前驱同步）。用 P/V 操作实现：</p>
+<p>（1）写出所需信号量及初值；
+（2）写出 P1 和 P2 的伪代码，标明 P/V 操作的位置。</p>
+<hr />
+<h1>答案解析</h1>
+<h2>第一部分答案（1–20）</h2>
+<p><strong>1. B</strong>
+PCB（进程控制块）是进程存在的唯一标志，操作系统通过 PCB 感知进程的存在。程序、进程映像、线程都无法唯一标识进程。（知识点：进程与 PCB）</p>
+<p><strong>2. B</strong>
+阻塞态不能直接进入执行态。等待的事件发生后，进程先由阻塞 → 就绪（重新排队），再被调度器选中后就绪 → 执行。故路径为「阻塞 → 就绪 → 执行」。（知识点：五状态模型与状态转换）</p>
+<p><strong>3. B</strong>
+进程执行中主动请求 I/O（等待外部事件），由执行态 → 阻塞态。等 I/O 完成后才是阻塞 → 就绪。（知识点：执行 → 阻塞的触发条件）</p>
+<p><strong>4. B</strong>
+时间片用完、进程被剥夺 CPU，由执行态回就绪态（它已经具备除 CPU 外的一切资源）。（知识点：执行 → 就绪的触发条件）</p>
+<p><strong>5. B</strong>
+P 操作使 S&lt;0 表示无资源可用，执行 P 操作的进程必须阻塞等待，转入阻塞态。（知识点：P 操作的语义；状态转换）</p>
+<p><strong>6. B</strong>
+现代操作系统中，线程是处理机（CPU）调度的基本单位，进程是资源分配的基本单位。A 正好说反。（知识点：进程 vs 线程）</p>
+<p><strong>7. C</strong>
+同一进程内的线程共享代码段、数据段、打开的文件等，但<strong>各自拥有独立的栈和寄存器上下文</strong>。（知识点：线程共享与独享资源）</p>
+<p><strong>8. B</strong>
+线程切换不涉及地址空间（页表）切换，只需切换寄存器、栈等少量上下文，因此开销远小于进程切换。（知识点：线程轻量的原因）</p>
+<p><strong>9. D</strong>
+同一进程内的线程共享地址空间，可直接读写共享变量通信；跨进程才需要管道、消息队列、信号量等 IPC 机制。（知识点：进程与线程通信方式）</p>
+<p><strong>10. B</strong>
+进程撤销的第一步是撤销其 PCB，回收分配的资源（内存、I/O、文件等）。PCB 一旦撤销，进程在系统中即不存在。（知识点：进程终止与 PCB 回收）</p>
+<p><strong>11. A</strong>
+FCFS 中，若一个长作业排在前，后面短作业都要等它完成，造成"护航效应"，平均等待时间长。B（长作业饥饿）是 SJF/优先级的问题。（知识点：FCFS 缺点）</p>
+<p><strong>12. C</strong>
+SJF 使平均等待时间最短（可用拉格朗日/交换论证证明）。FCFS、RR 平均等待一般更长。（知识点：调度算法特点）</p>
+<p><strong>13. B</strong>
+RR 时间片很大时，每个进程一次就能运行完，退化为 FCFS。（知识点：RR 时间片大小的影响）</p>
+<p><strong>14. B</strong>
+SJF 一直优先短作业，长作业可能长期得不到 CPU，产生饥饿。可通过老化等手段缓解。（知识点：SJF 饥饿问题）</p>
+<p><strong>15. B</strong>
+"老化（aging）"即随着进程等待时间增长逐步提高其优先级，防止低优先级进程饿死。（知识点：优先级调度的饥饿与老化）</p>
+<p><strong>16. A</strong>
+运行时间排序 3、3、24。SJF 顺序为 P2(3)→P3(3)→P1(24)。
+周转时间：P2=3−0=3，P3=6−0=6，P1=30−0=30；平均 = (3+6+30)/3 = 13。（详见笔记 4.4 节手算）</p>
+<p><strong>17. C</strong>
+分时系统的核心要求是交互响应快、各用户公平获得 CPU，时间片轮转刚好满足。（知识点：RR 应用场景）</p>
+<p><strong>18. B</strong>
+多级反馈队列为不同优先级队列设置不同时间片，进程随执行/等待动态升降队列，兼顾短作业响应与长作业吞吐。（知识点：多级反馈队列思想）</p>
+<p><strong>19. C</strong>
+访问临界资源采用互斥，其他想访问同一资源的进程应挂起等待（阻塞），直到占用者释放（V 操作唤醒）。注意：这里说的是"等待临界资源"的进程，应阻塞而不是就绪。（知识点：临界区互斥语义）</p>
+<p><strong>20. A</strong>
+互斥解决"多个进程对共享资源排他性访问"的竞争问题；同步解决"协作进程间执行先后顺序"的问题。B/C/D 均错误。（知识点：互斥与同步的区别）</p>
+<h2>第二部分答案（21–25）</h2>
+<p><strong>21. C</strong>
+信号量初值含义各异：互斥信号量初值通常为 1（表示临界资源可用一份）；资源信号量初值为资源数量 n；用于前驱/事件同步的信号量初值为 0。故"任意整数、视用途而定"最准确。（知识点：信号量初值）</p>
+<p><strong>22. 生产者-消费者（标准答案）</strong></p>
+<p>（1）三个信号量：</p>
+<pre><code>semaphore mutex = 1;   // 互斥信号量：保护缓冲区
+semaphore empty = n;   // 资源信号量：空槽数，初值 = 缓冲区容量 n
+semaphore full  = 0;   // 资源信号量：产品数，初值 = 0
+</code></pre>
+<p>（2）伪代码：</p>
+<pre><code>// 生产者
+while(1){
+    生产一个产品;
+    P(empty);      // 申请空槽
+    P(mutex);      // 进入缓冲区
+    放入缓冲区;
+    V(mutex);      // 离开缓冲区
+    V(full);       // 产品数 +1，唤醒消费者
+}
+
+// 消费者
+while(1){
+    P(full);       // 申请产品
+    P(mutex);      // 进入缓冲区
+    取出产品;
+    V(mutex);      // 离开缓冲区
+    V(empty);      // 空槽 +1，唤醒生产者
+    消费产品;
+}
+</code></pre>
+<p>（3）若先 <code>P(mutex)</code> 再 <code>P(empty)</code>：当缓冲区满（empty=0）时，生产者先拿到 mutex 进入临界区后才发现无空槽而阻塞，且<strong>不放回 mutex</strong>；消费者想取产品需要先 <code>P(mutex)</code>，但 mutex 被生产者占着，消费者也无法进入 → 生产者等消费者释放空槽、消费者等生产者释放 mutex，形成<strong>死锁</strong>。故必须先 P 资源信号量、再 P 互斥信号量。</p>
+<p><strong>23. 读者-写者（读者优先，标准答案）</strong></p>
+<p>（1）信号量：</p>
+<pre><code>semaphore rw_mutex = 1;  // 读写共享数据的互斥锁（写者用它保证独占）
+semaphore mutex    = 1;  // 保护 readcount 的互斥信号量
+int readcount = 0;       // 当前读者计数
+</code></pre>
+<p>（2）伪代码：</p>
+<pre><code>// 读者
+void reader(){
+    P(mutex);
+        readcount++;
+        if(readcount == 1) P(rw_mutex);  // 第一个读者锁资源，挡写者
+    V(mutex);
+    ...读数据...
+    P(mutex);
+        readcount--;
+        if(readcount == 0) V(rw_mutex);  // 最后一个读者解锁，放行写者
+    V(mutex);
+}
+
+// 写者
+void writer(){
+    P(rw_mutex);   // 写者独占
+    ...写数据...
+    V(rw_mutex);
+}
+</code></pre>
+<p>（3）机理：只有<strong>第一个进入的读者</strong>会执行 <code>P(rw_mutex)</code> 锁住资源，后续读者只需 <code>readcount++</code> 后直接读，不经过 rw_mutex，因此可以<strong>并发读</strong>；只有<strong>最后一个离开的读者</strong>才 <code>V(rw_mutex)</code> 释放资源，此时写者才能进入。<code>mutex</code> 仅用来保证对 <code>readcount</code> 的修改是原子互斥的。</p>
+<p><strong>24. 两人取物（盒容量 1）</strong></p>
+<p>（1）只需 2 个信号量即可（因为盒容量为 1，缓冲区本身天然互斥，无需额外 mutex）：</p>
+<pre><code>semaphore empty = 1;  // 盒子空槽数（初始为空）
+semaphore full  = 0;  // 盒子中产品数
+</code></pre>
+<p>（2）伪代码：</p>
+<pre><code>// 生产者
+while(1){
+    生产产品;
+    P(empty);   // 盒子空才放（empty=0 表示已满，阻塞）
+    放入盒子;
+    V(full);    // 产品 +1
+}
+
+// 消费者
+while(1){
+    P(full);    // 有产品才取（full=0 表示空，阻塞）
+    取出产品;
+    V(empty);   // 空槽 +1
+    消费产品;
+}
+</code></pre>
+<blockquote>
+<p>说明：因为盒子只能放 1 件，"放"和"取"本身就互斥（empty/full 一个为 1 时另一个必为 0），所以不需要额外的 mutex。这是容量为 1 的特殊情形，体现"资源信号量初值 = 资源数"的思想。</p>
+</blockquote>
+<p><strong>25. 前驱关系 S1 → S2</strong></p>
+<p>（1）一个同步信号量，初值为 0：</p>
+<pre><code>semaphore s = 0;  // 表示&quot;事件 S1 是否已发生&quot;
+</code></pre>
+<p>（2）伪代码：</p>
+<pre><code>// P1
+S1;
+V(s);   // 发出&quot;我已完成 S1&quot;的信号
+
+// P2
+P(s);   // 等待 S1 完成（s&lt;0 则阻塞）
+S2;
+</code></pre>
+<blockquote>
+<p>机理：若 P2 先执行到 <code>P(s)</code>，s 由 0 减到 −1 &lt; 0，P2 阻塞；P1 执行完 S1 后 <code>V(s)</code> 使 s 回到 0 并唤醒 P2 继续执行 S2。反之若 P1 先执行 <code>V(s)</code>，s 变为 1，P2 的 <code>P(s)</code> 把 s 减回 0 直接通过。两种情况都保证了 S1 在 S2 之前完成。
+这是<strong>PV 操作实现"前驱/先后顺序"同步的最小范例</strong>，各种复杂同步大题都是由"资源信号量 + 前驱信号量"组合而来。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/os/day01-exercises.md">docs/knowledge-points/os/day01-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

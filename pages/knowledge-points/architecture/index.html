@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>计算机组成与体系结构 - 知识点精讲 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 architecture 📁 index.md</div>
+<h1>计算机组成与体系结构 - 知识点精讲</h1>
+<h2>一、计算机基本结构</h2>
+<h3>1.1 冯·诺依曼结构</h3>
+<ul>
+<li><strong>五大部件</strong>：运算器、控制器、存储器、输入设备、输出设备</li>
+<li><strong>核心思想</strong>：存储程序，程序控制</li>
+<li><strong>指令和数据</strong>：统一存储（二进制表示）</li>
+</ul>
+<h3>1.2 现代计算机结构</h3>
+<ul>
+<li><strong>CPU</strong> = 运算器 + 控制器</li>
+<li><strong>存储器</strong> = Cache + 主存 + 辅存</li>
+<li><strong>总线</strong> = 数据总线 + 地址总线 + 控制总线</li>
+</ul>
+<h2>二、CPU</h2>
+<h3>2.1 CPU组成</h3>
+<ul>
+<li><strong>ALU（算术逻辑单元）</strong>：执行算术和逻辑运算</li>
+<li><strong>CU（控制单元）</strong>：指令译码和控制信号生成</li>
+<li><strong>寄存器</strong>：</li>
+<li>程序计数器（PC）：下一条指令地址</li>
+<li>指令寄存器（IR）：当前指令</li>
+<li>累加器（ACC）：运算结果</li>
+<li>状态寄存器（PSW）：标志位</li>
+<li>地址寄存器（MAR）：地址</li>
+<li>数据寄存器（MDR）：数据</li>
+</ul>
+<h3>2.2 指令系统</h3>
+<ul>
+<li><strong>指令格式</strong>：操作码 + 地址码</li>
+<li><strong>寻址方式</strong>：</li>
+<li>立即寻址：操作数在指令中</li>
+<li>直接寻址：操作数地址在指令中</li>
+<li>间接寻址：地址的地址</li>
+<li>寄存器寻址：操作数在寄存器中</li>
+<li>寄存器间接寻址：地址在寄存器中</li>
+</ul>
+<h2>三、存储系统</h2>
+<h3>3.1 存储层次</h3>
+<pre><code>寄存器 → Cache → 主存 → 辅存
+ 速度快    较快     一般     慢
+ 容量小    小       较大     大
+</code></pre>
+<h3>3.2 Cache</h3>
+<ul>
+<li><strong>作用</strong>：缓解CPU与主存速度差异</li>
+<li><strong>映射方式</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>映射方式</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接映射</td>
+<td>固定对应，简单</td>
+<td>通用</td>
+</tr>
+<tr>
+<td>全相联映射</td>
+<td>任意映射，灵活</td>
+<td>小容量Cache</td>
+</tr>
+<tr>
+<td>组相联映射</td>
+<td>分组内灵活</td>
+<td>折中方案</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>替换算法</strong>：LRU、LFU、随机</li>
+<li><strong>写策略</strong>：写直达、写回</li>
+</ul>
+<h3>3.3 主存</h3>
+<ul>
+<li><strong>RAM</strong>：随机存取（SRAM/DRAM）</li>
+<li><strong>ROM</strong>：只读存储器</li>
+<li><strong>DRAM刷新</strong>：集中刷新/分散刷新/异步刷新</li>
+</ul>
+<h2>四、指令流水线</h2>
+<h3>4.1 流水线原理</h3>
+<ul>
+<li>将指令执行分为多个阶段</li>
+<li>不同指令的不同阶段重叠执行</li>
+</ul>
+<h3>4.2 流水线阶段</h3>
+<pre><code>取指令 → 译码 → 执行 → 访存 → 写回
+</code></pre>
+<h3>4.3 流水线性能</h3>
+<ul>
+<li><strong>加速比</strong> = 不流水线时间 / 流水线时间</li>
+<li><strong>吞吐率</strong> = 单位时间完成指令数</li>
+<li><strong>最大吞吐率</strong> = 1 / 流水线周期</li>
+</ul>
+<h3>4.4 流水线冲突</h3>
+<ul>
+<li><strong>结构冲突</strong>：硬件资源冲突</li>
+<li><strong>数据冲突</strong>：数据依赖</li>
+<li><strong>控制冲突</strong>：分支指令</li>
+</ul>
+<h2>五、总线</h2>
+<h3>5.1 总线类型</h3>
+<ul>
+<li><strong>数据总线</strong>：传输数据（双向）</li>
+<li><strong>地址总线</strong>：传输地址（单向）</li>
+<li><strong>控制总线</strong>：传输控制信号（双向）</li>
+</ul>
+<h3>5.2 总线带宽</h3>
+<pre><code>总线带宽 = 总线频率 × 总线宽度 / 8
+</code></pre>
+<h2>六、I/O系统</h2>
+<h3>6.1 I/O控制方式</h3>
+<ol>
+<li><strong>程序I/O</strong>：CPU不断查询</li>
+<li><strong>中断I/O</strong>：I/O完成通知CPU</li>
+<li><strong>DMA</strong>：直接内存访问</li>
+<li><strong>通道</strong>：专用I/O处理器</li>
+</ol>
+<h3>6.2 中断系统</h3>
+<ul>
+<li><strong>中断类型</strong>：硬件中断、软件中断</li>
+<li><strong>中断向量</strong>：中断号→中断处理程序入口</li>
+<li><strong>中断优先级</strong>：可屏蔽/不可屏蔽</li>
+</ul>
+<h2>七、计算题公式</h2>
+<h3>7.1 存储器相关</h3>
+<pre><code>主存地址位数 = log₂(主存容量/字节)
+Cache块大小 = 块内字节数
+Cache块数 = Cache容量 / 块大小
+主存块号 = 地址 / 块大小
+</code></pre>
+<h3>7.2 Cache地址计算</h3>
+<pre><code>直接映射：
+  Cache块号 = 主存块号 % Cache块数
+  地址 = Tag + Cache块号 + 块内偏移
+
+全相联/组相联：
+  地址 = Tag + 组号 + 块内偏移
+</code></pre>
+<h3>7.3 流水线计算</h3>
+<pre><code>执行n条指令时间 = 流水线周期 + (n-1) × 流水线周期
+加速比 = 串行时间 / 流水线时间
+</code></pre>
+<h3>7.4 总线带宽</h3>
+<pre><code>总线带宽 = 总线工作频率 × 总线位宽 / 8 (字节/秒)
+</code></pre>
+<h2>八、常见考点</h2>
+<ol>
+<li><strong>指令寻址方式</strong>：判断不同寻址方式的操作数位置</li>
+<li><strong>Cache映射计算</strong>：给定地址求Cache块号/Tag</li>
+<li><strong>流水线性能</strong>：加速比、吞吐率计算</li>
+<li><strong>总线带宽</strong>：数据传输率计算</li>
+<li><strong>中断处理</strong>：中断向量、中断优先级</li>
+<li><strong>补码运算</strong>：加减法运算、溢出判断</li>
+</ol>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/architecture/index.md">docs/knowledge-points/architecture/index.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

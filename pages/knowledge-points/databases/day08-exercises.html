@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 8（9/28）数据库② 练习题：范式判断与 E-R 图（共 20 题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 databases 📁 day08-exercises.md</div>
+<h1>Day 8（9/28）数据库② 练习题：范式判断与 E-R 图（共 20 题）</h1>
+<blockquote>
+<p>说明：本题是 Day 8 的章节题，也是<strong>数据库大题的考前核心训练</strong>。题目分布：<strong>范式判断选择题 15 道（1–15，含函数依赖判定、候选码求解、范式级别判断、规范化分解）</strong>、<strong>E-R 图大题 1 道（16）</strong>、<strong>E-R / 范式综合选择题 4 道（17–20）</strong>。
+<strong>完整答案与解析在文件末尾</strong>。建议独立完成（约 60 分钟）再对答案。
+<strong>做题纪律（本套题最重要的一条）</strong>：第 1–15 题严禁"看一眼就选"。<strong>必须在草稿纸上写出三步</strong>：
+① 属性分类（L/N/R/LR）+ 闭包 → <strong>候选码</strong>；
+② 划分<strong>主属性 / 非主属性</strong>；
+③ 按流程图逐级判断（部分依赖 → 传递依赖 → BCNF）。
+这三步就是科目二大题的阅卷步骤分——<strong>过程对、结论自然对；跳步、结论必错</strong>。</p>
+</blockquote>
+<hr />
+<h2>第一部分：范式判断选择题（1–15）</h2>
+<p><strong>1.</strong> 关系模式 R(Sno, Cno, Sname, Grade)，F={(Sno,Cno)→Grade, Sno→Sname}。其中 Sname 对候选码 (Sno, Cno) 的依赖类型是（ ）。</p>
+<ul>
+<li>A. 完全函数依赖</li>
+<li>B. 部分函数依赖</li>
+<li>C. 传递函数依赖</li>
+<li>D. 平凡函数依赖</li>
+</ul>
+<p><strong>2.</strong> 关系模式 R(Sno, Sdept, Mname)（Sno 学号、Sdept 所在系、Mname 系主任），F={Sno→Sdept, Sdept→Mname}。Mname 对 Sno 的依赖类型是（ ）。</p>
+<ul>
+<li>A. 完全函数依赖</li>
+<li>B. 部分函数依赖</li>
+<li>C. 传递函数依赖</li>
+<li>D. 平凡函数依赖</li>
+</ul>
+<p><strong>3.</strong> 关系模式 R(Sno, Sname, Sdept)，F={Sno→Sname, <strong>Sname→Sno</strong>, Sname→Sdept}（姓名唯一，可反查学号）。关于 Sdept 对 Sno 的依赖，下列说法正确的是（ ）。</p>
+<ul>
+<li>A. 是传递依赖，因为存在 Sno→Sname→Sdept 的链条</li>
+<li>B. 不是传递依赖，因为 Sname→Sno 成立，Sname 不满足"Y↛X"这一条件</li>
+<li>C. 是部分依赖，因为 Sno 只是候选码的一部分</li>
+<li>D. 是平凡依赖，因为 Sdept ⊆ {Sno}</li>
+</ul>
+<p><strong>4.</strong> 关系模式 R(A,B,C,D)，F={A→B, B→C, C→D}。R 的候选码是（ ）。</p>
+<ul>
+<li>A. A</li>
+<li>B. AB</li>
+<li>C. ABC</li>
+<li>D. D</li>
+</ul>
+<p><strong>5.</strong> 关系模式 R(A,B,C,D,E)，F={AB→C, C→D, D→E}。R 的候选码是（ ）。</p>
+<ul>
+<li>A. A</li>
+<li>B. AB</li>
+<li>C. ABC</li>
+<li>D. ABCD</li>
+</ul>
+<p><strong>6.</strong> 关系模式 R(A,B,C)，F={AB→C, AC→B, BC→A}。R 的候选码及主属性是（ ）。</p>
+<ul>
+<li>A. 候选码 AB；主属性 A、B</li>
+<li>B. 候选码 AB、AC；主属性 A、B、C</li>
+<li>C. 候选码 AB、AC、BC；主属性 A、B、C</li>
+<li>D. 候选码 ABC；主属性 A、B、C</li>
+</ul>
+<p><strong>7.</strong> 关系模式 SC(Sno, Cno, Grade)，F={(Sno,Cno)→Grade}。SC 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>8.</strong> 关系模式 R(A,B,C)，F={AB→C, AC→B, BC→A}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 2NF</li>
+<li>B. 3NF</li>
+<li>C. BCNF</li>
+<li>D. 不满足 1NF</li>
+</ul>
+<p><strong>9.</strong> 关系模式 R(Sno, Cno, Sname, Grade)（姓名不唯一），F={(Sno,Cno)→Grade, Sno→Sname}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>10.</strong> 关系模式 R(Sno, Sdept, Sloc)（学生、系、宿舍楼），F={Sno→Sdept, Sdept→Sloc}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>11.</strong> 关系模式 R(Sno, Cno, Tno, Tname)（每门课由一位教师讲授），F={(Sno,Cno)→Tno, Tno→Tname}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>12.</strong> 关系模式 R(A,B,C)，F={AB→C, C→B}。下列关于 R 的说法，正确的是（ ）。</p>
+<ul>
+<li>A. 候选码只有 AB，最高满足 3NF</li>
+<li>B. 候选码为 AB 和 AC，最高满足 3NF，但不满足 BCNF</li>
+<li>C. 候选码为 AB 和 AC，最高满足 BCNF</li>
+<li>D. 候选码为 A，最高满足 2NF</li>
+</ul>
+<p><strong>13.</strong> 关系模式 R(A,B,C,D)，F={AB→CD, C→D}。R 最高满足（ ）。</p>
+<ul>
+<li>A. 1NF</li>
+<li>B. 2NF</li>
+<li>C. 3NF</li>
+<li>D. BCNF</li>
+</ul>
+<p><strong>14.</strong> 关系模式 R(Sno, Sdept, Sloc)，F={Sno→Sdept, Sdept→Sloc}。将其分解为 SD(Sno, Sdept) 和 DL(Sdept, Sloc)。分解后两个关系模式各自最高满足（ ）。</p>
+<ul>
+<li>A. 都是 1NF</li>
+<li>B. 都是 2NF</li>
+<li>C. 都是 3NF，但不满足 BCNF</li>
+<li>D. 都是 BCNF</li>
+</ul>
+<p><strong>15.</strong> 关系模式 R(Sno, Cno, Tno, Tname)，F={(Sno,Cno)→Tno, Tno→Tname}。将其规范化到 3NF，下列分解正确的是（ ）。</p>
+<ul>
+<li>A. SCT(Sno, Cno, Tno, Tname) 和 T(Tno, Tname)</li>
+<li>B. SC(Sno, Cno, Tno) 和 T(Tno, Tname)</li>
+<li>C. SCT(Sno, Cno, Tname) 和 T(Tno, Tname)</li>
+<li>D. S(Sno, Cno) 和 T(Tno, Tname)</li>
+</ul>
+<hr />
+<h2>第二部分：E-R 图大题（16，科目二大题题型）</h2>
+<p><strong>16.</strong> 某公司拟开发一个<strong>项目管理系统</strong>，需求描述如下：</p>
+<ol>
+<li>公司设有若干<strong>部门</strong>。每个部门有：部门号、部门名称、办公电话。一个部门有多个员工，一个员工只属于一个部门。</li>
+<li><strong>员工</strong>有：工号、姓名、性别、出生日期。</li>
+<li>公司有若干<strong>项目</strong>。每个项目有：项目号、项目名称、预算。一个项目只由一个部门负责，一个部门可以负责多个项目。</li>
+<li>一个员工可以参加多个项目，一个项目由多个员工参加。员工参加项目时要记录<strong>参加日期</strong>和<strong>承担角色</strong>。</li>
+</ol>
+<p>请回答下列问题：</p>
+<p>（1）识别该系统中的<strong>实体</strong>及其属性、<strong>联系</strong>及其类型（1:1 / 1:N / M:N），并说明各联系的连接对象；</p>
+<p>（2）画出该系统的 <strong>E-R 图</strong>；</p>
+<p>（3）将 E-R 图<strong>转换为关系模式</strong>，指出每个关系模式的<strong>主键</strong>和<strong>外键</strong>；</p>
+<p>（4）转换得到的"参加"关系模式是否满足 3NF？请说明理由（要求写出候选码与判断依据）。</p>
+<hr />
+<h2>第三部分：E-R / 范式综合选择题（17–20）</h2>
+<p><strong>17.</strong> 在 E-R 模型中，实体、属性、联系分别使用的图形符号是（ ）。</p>
+<ul>
+<li>A. 矩形、椭圆、菱形</li>
+<li>B. 菱形、矩形、椭圆</li>
+<li>C. 椭圆、菱形、矩形</li>
+<li>D. 矩形、菱形、椭圆</li>
+</ul>
+<p><strong>18.</strong> 将 E-R 模型中的一个 <strong>M:N 联系</strong>转换为关系模式时，正确的做法是（ ）。</p>
+<ul>
+<li>A. 把一端实体的主码作为外码加入另一端实体对应的关系</li>
+<li>B. 新建一个关系，其属性包含两端实体的主码以及联系本身的属性，主码为两端主码的组合</li>
+<li>C. 新建一个关系，主码从两端实体的主码中任选一个</li>
+<li>D. 该联系不需要转换，信息已在实体关系中</li>
+</ul>
+<p><strong>19.</strong> 某企业的 E-R 模型中有实体"部门"和"员工"：一个部门有多个员工，一个员工只属于一个部门。将其转换为关系模式时，正确的是（ ）。</p>
+<ul>
+<li>A. 在"部门"关系中加入员工号</li>
+<li>B. 在"员工"关系中加入部门号，作为外码引用"部门"关系的主码</li>
+<li>C. 新建一个"所属"关系，主码为（部门号，员工号）</li>
+<li>D. 将两个实体合并为一个关系</li>
+</ul>
+<p><strong>20.</strong> 关系数据库规范化的主要目标是（ ）。</p>
+<ul>
+<li>A. 消除不必要的数据冗余，解决插入异常、删除异常和更新（修改）异常</li>
+<li>B. 减少关系模式的数量，简化数据库结构</li>
+<li>C. 提高查询速度，减少连接运算</li>
+<li>D. 保证数据库的安全性，防止非法访问</li>
+</ul>
+<hr />
+<h2>答案与解析</h2>
+<h3>第一部分：范式判断选择题</h3>
+<p><strong>1. 答案：B</strong></p>
+<p>候选码为 (Sno, Cno)（L 类属性 Sno、Cno 的闭包 = 全部属性）。Sno 是候选码的<strong>真子集</strong>，且 Sno→Sname 成立 → Sname 对候选码是<strong>部分函数依赖</strong>。</p>
+<blockquote>
+<p>不选 A：完全依赖要求"任何真子集都决定不了"，而 {Sno} 能决定 Sname。
+不选 C：不存在 Sno→Y→Sname（Y↛Sno）的中间链。
+不选 D：平凡依赖要求 Sname ⊆ (Sno, Cno)，显然不成立。</p>
+</blockquote>
+<p><strong>2. 答案：C</strong></p>
+<p>Sno→Sdept（非平凡，Sdept ⊄ {Sno}），Sdept↛Sno（一个系有多个学生），Sdept→Mname（Mname ⊄ {Sdept}）→ 三个条件全部满足 → <strong>传递函数依赖</strong>。</p>
+<blockquote>
+<p>不选 B：候选码 Sno 是单属性，单属性码不可能产生部分依赖。
+不选 A：完全依赖说的是"对候选码及其子集"的关系，这里问的是依赖的<strong>类型</strong>，链条 Sno→Sdept→Mname 表明是传递的。</p>
+</blockquote>
+<p><strong>3. 答案：B</strong></p>
+<p>传递依赖的定义要求 <strong>Y↛X</strong>。本题 F 中 <strong>Sname→Sno 成立</strong>（Y 能决定 X），所以 Sno→Sname→Sdept 不构成传递依赖，Sdept <strong>直接依赖于</strong> Sno。</p>
+<blockquote>
+<p>这是传递依赖最经典的"反陷阱"：<strong>链条存在 ≠ 传递依赖</strong>，必须再验证 Y↛X。
+不选 C：候选码 Sno 是单属性，不存在"候选码的一部分"。</p>
+</blockquote>
+<p><strong>4. 答案：A</strong></p>
+<p>属性分类：L={A}（只在 A→B 左部）；R={D}（只在 C→D 右部）；LR={B, C}（B 在 A→B 右、B→C 左；C 在 B→C 右、C→D 左）。
+{A}⁺ = {A} → A→B → {A,B} → B→C → {A,B,C} → C→D → {A,B,C,D} = U。
+→ <strong>候选码 = A</strong>（唯一）。主属性 {A}，非主属性 {B,C,D}。</p>
+<blockquote>
+<p>不选 B、C：A 单独就能决定全部属性，AB、ABC 是<strong>超码</strong>但不是<strong>候选码</strong>（不满足最小性）。</p>
+</blockquote>
+<p><strong>5. 答案：B</strong></p>
+<p>属性分类：L={A, B}；R={E}；LR={C, D}。
+{A,B}⁺ = {A,B} → AB→C → {A,B,C} → C→D → {A,B,C,D} → D→E = U。
+→ <strong>候选码 = AB</strong>（唯一）。</p>
+<blockquote>
+<p>验证最小性：{A}⁺={A}≠U，{B}⁺={B}≠U。
+不选 C、D：它们是超码，不是候选码。</p>
+</blockquote>
+<p><strong>6. 答案：C</strong></p>
+<p>三个属性都既在左部又在右部 → 全是 LR 类，无 L/R/N 类属性。
+单属性闭包：{A}⁺={A}、{B}⁺={B}、{C}⁺={C}，均 ≠ U。
+两属性闭包：{A,B}⁺ → AB→C = U ✅；{A,C}⁺ → AC→B = U ✅；{B,C}⁺ → BC→A = U ✅。
+→ <strong>候选码 = AB、AC、BC（共 3 个）</strong>。每个属性都出现在某个候选码中 → <strong>A、B、C 全是主属性，无非主属性</strong>。</p>
+<blockquote>
+<p>不选 D：ABC 是超码（AB 已能决定 C），不满足最小性，不是候选码。</p>
+</blockquote>
+<p><strong>7. 答案：D</strong></p>
+<p>候选码 (Sno, Cno)；主属性 Sno、Cno；非主属性 Grade。
+Grade 完全依赖于候选码（Sno 或 Cno 单独都决定不了 Grade）→ 满足 2NF；不存在 候选码→Y→Grade 的传递链（Grade 不出现在任何依赖的左部，无法充当中间属性 Y）→ 满足 3NF；F 中唯一非平凡依赖 (Sno,Cno)→Grade 的左部就是候选码 → <strong>满足 BCNF</strong>。</p>
+<p><strong>8. 答案：C</strong></p>
+<p>由第 6 题已求出：候选码 AB、AC、BC；<strong>A、B、C 全是主属性，没有非主属性</strong>。
+- 部分依赖检查：无非主属性 → 自动通过 → 满足 2NF。
+- 传递依赖检查：无非主属性 → 自动通过 → 满足 3NF。
+- BCNF 检查：F 中每个非平凡依赖的左部 AB、AC、BC <strong>都是候选码</strong> → 满足 BCNF。</p>
+<p>→ <strong>最高满足 BCNF</strong>。</p>
+<p><strong>9. 答案：A</strong></p>
+<p>候选码 (Sno, Cno)（Sno、Cno 都是 L 类）。主属性 Sno、Cno；非主属性 Sname、Grade。
+Sno 是候选码的<strong>真子集</strong>，且 Sno→Sname → <strong>非主属性 Sname 部分依赖于候选码</strong> → 不满足 2NF。
+→ <strong>最高满足 1NF</strong>。</p>
+<blockquote>
+<p>修复方法：把 (Sno, Sname) 拆成一个新关系（若还有 Sdept 等其它 Sno 决定的属性，一起带走），原关系保留 Sno 作外码。</p>
+</blockquote>
+<p><strong>10. 答案：B</strong></p>
+<p>候选码 Sno（L 类，{Sno}⁺=U）。主属性 {Sno}；非主属性 Sdept、Sloc。
+- 部分依赖：候选码是<strong>单属性</strong> → 不可能有部分依赖 → 满足 2NF 的这一半。
+- 传递依赖：Sno→Sdept→Sloc，Sdept↛Sno（一个系有多个学生）→ <strong>Sloc 传递依赖于 Sno</strong> → 不满足 3NF。</p>
+<p>→ <strong>最高满足 2NF</strong>。</p>
+<blockquote>
+<p>修复方法：把 (Sdept, Sloc) 拆成一个新关系，原关系删去 Sloc、保留 Sdept 作外码。</p>
+</blockquote>
+<p><strong>11. 答案：B</strong></p>
+<p>候选码 (Sno, Cno)（Sno、Cno 都是 L 类）。主属性 Sno、Cno；非主属性 Tno、Tname。
+- 部分依赖（候选码是组合码，必须逐个真子集检查）：候选码 (Sno,Cno) 的真子集只有 ∅、{Sno}、{Cno}。{Sno}⁺={Sno}（F 中唯一的依赖左部 (Sno,Cno) 不被 {Sno} 包含，闭包无法增长），{Cno}⁺={Cno}——<strong>两个真子集都决定不了 Tno、Tname</strong> → 无部分依赖 → 满足 2NF。
+- 传递依赖：(Sno,Cno)→Tno→Tname，Tno↛(Sno,Cno)（一位教师教多个学生的选课记录）→ <strong>Tname 传递依赖于候选码</strong> → 不满足 3NF。</p>
+<p>→ <strong>最高满足 2NF</strong>。</p>
+<blockquote>
+<p>注意与第 9 题的区别：本题 Tname 是<strong>完全依赖</strong>于组合码 (Sno,Cno) 的（因为必须知道"哪个学生选的哪门课"才能确定 Tname），但它是<strong>传递</strong>依赖于候选码——<strong>完全依赖与传递依赖可以并存</strong>，2NF 只管"部分/完全"，3NF 才管"是否传递"。</p>
+</blockquote>
+<p><strong>12. 答案：B</strong></p>
+<p>属性分类：L={A}；LR={B, C}（<strong>C 也在 C→B 的左部出现，故为 LR 类</strong>，不是 R 类）；R=∅。
+{A}⁺={A}≠U；{A,B}⁺ → AB→C = U ✅ → <strong>AB 是候选码</strong>。
+再检查其它可能：{A,C}⁺ → C→B = {A,B,C} = U ✅ → <strong>AC 也是候选码</strong>。
+→ 候选码 = <strong>AB、AC</strong>。<strong>A、B、C 全是主属性</strong>（B 在 AC 中、C 在 AB 中），<strong>无非主属性</strong>。
+- 无非主属性 → 满足 2NF、满足 3NF。
+- BCNF 检查：<strong>C→B 的左部 C 不是超码</strong>（{C}⁺={B,C}，不含 A），且 BCNF 不接受"右部是主属性"的豁免 → <strong>不满足 BCNF</strong>。</p>
+<p>→ <strong>最高满足 3NF，不满足 BCNF</strong>。（这是 3NF ⊂ BCNF 的标准反例。）</p>
+<blockquote>
+<p>不选 A：C 在候选码 AC 中，所以 C 也是主属性——候选码不止一个。
+不选 C：C→B 的左部不含候选码，破坏 BCNF。</p>
+</blockquote>
+<p><strong>13. 答案：B</strong></p>
+<p>属性分类：L={A, B}（只在 AB→CD 左部）；R={D}（在 AB→CD、C→D 右部）；LR={C}（AB→CD 右、C→D 左）。
+{A,B}⁺ = {A,B} → AB→CD = {A,B,C,D} = U → <strong>候选码 = AB</strong>（唯一）。
+主属性 {A, B}；非主属性 {C, D}。
+- 部分依赖检查（候选码是组合码，必查）：AB 的真子集 ∅、{A}、{B} 的闭包都只含自身，都不能决定 C 或 D → <strong>无部分依赖 → 满足 2NF</strong>。
+- 传递依赖检查：AB→C（非平凡，C⊄AB），C↛AB（{C}⁺={C,D}，不含 A、B），C→D（D⊄C）→ AB→C→D 构成<strong>非主属性 D 对候选码的传递依赖</strong> → <strong>不满足 3NF</strong>。</p>
+<p>→ <strong>最高满足 2NF</strong>。</p>
+<blockquote>
+<p>分解到 3NF：把 (C, D) 拆成一个新关系 CD(C, D)（F={C→D}，候选码 C，达 BCNF）；原关系删去 D、保留 C 作外码，变为 R₁(A, B, C)（F={AB→C}，候选码 AB，达 BCNF）。</p>
+</blockquote>
+<p><strong>14. 答案：D</strong></p>
+<ul>
+<li><strong>SD(Sno, Sdept)</strong>：F₁={Sno→Sdept}，候选码 Sno（单属性）。非主属性 Sdept 完全依赖（单属性码无部分依赖）、无传递依赖（不存在 Sdept→X→Sdept 的链条）→ 满足 3NF；唯一非平凡依赖的左部 Sno 是候选码 → <strong>BCNF</strong>。</li>
+<li><strong>DL(Sdept, Sloc)</strong>：F₂={Sdept→Sloc}，候选码 Sdept → 同理 → <strong>BCNF</strong>。</li>
+</ul>
+<p>→ <strong>两个关系模式都达到 BCNF</strong>，且该分解<strong>无损连接</strong>（在 Sdept 上连接可还原原关系）并<strong>保持依赖</strong>（Sno→Sdept、Sdept→Sloc 分别落在两个子关系中）。</p>
+<blockquote>
+<p>不选 C：BCNF 的检查不因"非主属性直接依赖"而止步于 3NF——BCNF 看的是"左部是否含码"，本题两个依赖的左部都是各自候选码。</p>
+</blockquote>
+<p><strong>15. 答案：B</strong></p>
+<p>R 的候选码为 (Sno, Cno)（Sno、Cno 都是 L 类），非主属性 Tno、Tname，其中 Tname 传递依赖于候选码（见第 11 题解析）。
+规范化到 3NF 需消除传递依赖 (Sno,Cno)→Tno→Tname：把 <strong>(Tno, Tname)</strong> 拆成一个新关系 T，原关系保留 Tno → 得到 <strong>SC(Sno, Cno, Tno)</strong> 和 <strong>T(Tno, Tname)</strong>。</p>
+<ul>
+<li><strong>SC(Sno, Cno, Tno)</strong>：F={(Sno,Cno)→Tno}，候选码 (Sno,Cno)，Tno 完全依赖、无传递 → 满足 3NF；左部含码 → 实际已达 <strong>BCNF</strong>。</li>
+<li><strong>T(Tno, Tname)</strong>：F={Tno→Tname}，候选码 Tno → <strong>BCNF</strong>。</li>
+<li>该分解<strong>无损连接</strong>：每个 (Sno,Cno) 只有唯一 Tno，Tno 又唯一决定 Tname，自然连接可还原全部信息。</li>
+<li>该分解<strong>保持依赖</strong>：(Sno,Cno)→Tno 在 SC 中可检查，Tno→Tname 在 T 中可检查。</li>
+</ul>
+<blockquote>
+<p>不选 A：SCT 中仍存在 Tno→Tname 的传递依赖，<strong>没有达到 3NF</strong>，分解无效。
+不选 C：第一关系丢了 Tno，(Sno,Cno)→Tno 这条依赖无处安放，且无法从 T 中恢复"某学生某门课的教师"。
+不选 D：完全丢失了"学生选课与教师"的对应关系。</p>
+</blockquote>
+<h3>第二部分：E-R 图大题</h3>
+<p><strong>16. 参考答案</strong></p>
+<p><strong>（1）实体、属性与联系识别</strong></p>
+<table>
+<thead>
+<tr>
+<th>实体</th>
+<th>属性</th>
+<th>主键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>部门</td>
+<td>部门号、部门名称、办公电话</td>
+<td>部门号</td>
+</tr>
+<tr>
+<td>员工</td>
+<td>工号、姓名、性别、出生日期</td>
+<td>工号</td>
+</tr>
+<tr>
+<td>项目</td>
+<td>项目号、项目名称、预算</td>
+<td>项目号</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>联系</th>
+<th>连接的实体</th>
+<th>类型</th>
+<th>联系属性</th>
+<th>识别依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>属于</td>
+<td>员工 — 部门</td>
+<td><strong>N:1</strong></td>
+<td>—</td>
+<td>一个员工只属于一个部门，一个部门有多个员工</td>
+</tr>
+<tr>
+<td>负责</td>
+<td>部门 — 项目</td>
+<td><strong>1:N</strong></td>
+<td>—</td>
+<td>一个项目只由一个部门负责，一个部门可负责多个项目</td>
+</tr>
+<tr>
+<td>参加</td>
+<td>员工 — 项目</td>
+<td><strong>M:N</strong></td>
+<td>参加日期、承担角色</td>
+<td>一个员工可参加多个项目，一个项目由多个员工参加</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>关键判据</strong>：联系属性"参加日期、承担角色"只在"某员工参加某项目"时才有意义，因此必须挂在<strong>联系</strong>上，不能放到员工或项目实体里。</p>
+</blockquote>
+<p><strong>（2）E-R 图</strong></p>
+<pre><code class="language-text">                              ┌──────────────────────┐
+                              │         部门         │
+                              │──────────────────────│
+                              │     部门号 (主键)    │
+                              │       部门名称       │
+                              │       办公电话       │
+                              └───────────┬──────────┘
+                                    1 ↙        ↘ 1
+                          ◇─属于─◇        ◇─负责─◇
+                      N ↙                              ↘ N
+   ┌──────────┬───────────┐  M       ┌────────┐       N  ┌──────────┬───────────┐
+   │         员工         │──────────◇ 参加   ◇──────────│         项目         │
+   │──────────────────────│──────────└────────┘──────────│──────────────────────│
+   │      工号 (主键)     │                              │     项目号 (主键)    │
+   │      姓名 / 性别     │                              │       项目名称       │
+   │       出生日期       │                              │         预算         │
+   └──────────────────────┘                              └──────────────────────┘
+</code></pre>
+<blockquote>
+<p>说明：为排版清晰，本图把属性列在实体框内；标准 E-R 图中属性画成椭圆挂在实体上，主键属性带下划线，联系画成菱形、用无向边连接并在边上标注 1 / N / M。</p>
+</blockquote>
+<p><strong>（3）转换为关系模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>关系模式</th>
+<th>属性</th>
+<th>主键</th>
+<th>外键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>部门</strong></td>
+<td>（部门号，部门名称，办公电话）</td>
+<td><strong>部门号</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>员工</strong></td>
+<td>（工号，姓名，性别，出生日期，<strong>部门号</strong>）</td>
+<td><strong>工号</strong></td>
+<td><strong>部门号</strong>（→ 部门）</td>
+</tr>
+<tr>
+<td><strong>项目</strong></td>
+<td>（项目号，项目名称，预算，<strong>负责部门号</strong>）</td>
+<td><strong>项目号</strong></td>
+<td><strong>负责部门号</strong>（→ 部门）</td>
+</tr>
+<tr>
+<td><strong>参加</strong></td>
+<td>（<strong>工号</strong>，<strong>项目号</strong>，参加日期，承担角色）</td>
+<td><strong>（工号，项目号）</strong></td>
+<td><strong>工号</strong>（→ 员工）；<strong>项目号</strong>（→ 项目）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>转换依据</strong>：
+- <strong>实体 → 关系</strong>：部门、员工、项目各成一个关系，实体主键即关系主键。
+- <strong>1:N 联系"属于"</strong>：把 1 端（部门）的主键作为外码并入 N 端（员工）→ 员工.部门号。
+- <strong>1:N 联系"负责"</strong>：把 1 端（部门）的主键作为外码并入 N 端（项目）→ 项目.负责部门号。
+- <strong>M:N 联系"参加"</strong>：<strong>必须独立成一个关系</strong>，其主键为两端实体主键的组合（工号，项目号），联系属性（参加日期、承担角色）并入该关系。</p>
+<p><strong>自检</strong>（对照 §5.3 清单）：四个实体关系齐全 ✅；唯一的 M:N 联系独立成表 ✅；两个 1:N 联系外键都加在 N 端 ✅；联系属性未丢失 ✅；外键均指向已存在的主码 ✅。</p>
+<p><strong>（4）"参加"关系模式的范式判断</strong></p>
+<p>"参加"关系模式为 <strong>参加（工号，项目号，参加日期，承担角色）</strong>，其函数依赖集为 F={（工号，项目号）→ 参加日期，（工号，项目号）→ 承担角色}（一个员工参加一个项目只对应一条记录）。</p>
+<ul>
+<li><strong>候选码</strong>：（工号，项目号）。工号、项目号都只在左部出现 → L 类，闭包 = 全部属性 → 候选码为（工号，项目号）。</li>
+<li><strong>主属性</strong>：工号、项目号；<strong>非主属性</strong>：参加日期、承担角色。</li>
+<li><strong>2NF</strong>：非主属性完全依赖于候选码（单独工号或单独项目号都决定不了参加日期/承担角色）→ 满足。</li>
+<li><strong>3NF</strong>：不存在非主属性对候选码的传递依赖（没有"参加日期 → 承担角色"这类链）→ 满足。</li>
+<li>结论：<strong>参加 关系模式满足 3NF</strong>（进一步，其两个非平凡依赖的左部都是候选码，因此也满足 BCNF）。</li>
+</ul>
+<blockquote>
+<p>这也说明：<strong>M:N 联系独立成关系后，其结构天然就是"组合主键 + 联系属性"，通常直接达到 3NF/BCNF</strong>——这是 E-R 转换与范式判断在大题中的自然交汇点。</p>
+</blockquote>
+<h3>第三部分：E-R / 范式综合选择题</h3>
+<p><strong>17. 答案：A</strong></p>
+<p>E-R 模型三要素与图形符号：<strong>实体=矩形、属性=椭圆、联系=菱形</strong>；实体与属性、实体与联系之间用无向边连接；主键属性带下划线。</p>
+<p><strong>18. 答案：B</strong></p>
+<p>M:N 联系<strong>必须新建一个关系</strong>：属性 = 两端实体主码 + 联系自身的属性，<strong>主码 = 两端实体主码的组合</strong>。</p>
+<blockquote>
+<p>不选 A：那是 <strong>1:N</strong> 的做法（把 1 端主码并入 N 端）。M:N 若这样做，一行只能存一个对方实体，无法表达"多对多"。
+不选 C：主码必须是<strong>组合</strong>，不能任选其一，否则无法唯一标识一行。</p>
+</blockquote>
+<p><strong>19. 答案：B</strong></p>
+<p>一个员工只属于一个部门 → 部门:员工 = <strong>1:N</strong> → 把 <strong>1 端（部门）的主码"部门号"作为外码加入 N 端（员工）</strong>。</p>
+<blockquote>
+<p>口诀：<strong>"多的一方记着少的一方"</strong>。不选 C：新建关系是 <strong>M:N</strong> 的做法。</p>
+</blockquote>
+<p><strong>20. 答案：A</strong></p>
+<p>规范化的本质是<strong>消除不必要的数据冗余</strong>，从而解决<strong>插入异常、删除异常、更新（修改）异常</strong>。</p>
+<blockquote>
+<p>不选 C：规范化通常<strong>增加</strong>关系数量，查询时需要更多连接，<strong>不直接提高查询速度</strong>（为查询性能考虑时甚至会有意做反规范化）。
+不选 D：安全性由用户认证、权限控制（GRANT/REVOKE）等机制保证，与范式无关。</p>
+</blockquote>
+<hr />
+<h2>做完后的自我评估</h2>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>对应题号</th>
+<th>我错了几道</th>
+<th>目标</th>
+<th>没达标怎么办</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全/部分/传递依赖判别</td>
+<td>1、2、3</td>
+<td>___</td>
+<td>3/3</td>
+<td>回 <code>day08-er.md §1.3–1.4</code>，把三条件各抄一遍</td>
+</tr>
+<tr>
+<td>候选码求解（分类+闭包）</td>
+<td>4、5、6</td>
+<td>___</td>
+<td>3/3</td>
+<td>回 <code>day08-er.md §2.2</code>，把 4 步法默写一遍再重算这 3 题</td>
+</tr>
+<tr>
+<td>范式级别判断</td>
+<td>7、8、9、10、11、12、13</td>
+<td>___</td>
+<td>6/7</td>
+<td>回 <code>day08-er.md §3.3</code>，<strong>照着流程图重走一遍</strong>每道题</td>
+</tr>
+<tr>
+<td>规范化分解</td>
+<td>14、15</td>
+<td>___</td>
+<td>2/2</td>
+<td>回 <code>day08-er.md §3.4</code>，把两句话分解规则背熟</td>
+</tr>
+<tr>
+<td>E-R 三要素与图形符号</td>
+<td>17</td>
+<td>___</td>
+<td>1/1</td>
+<td>回 <code>day08-er.md §4.1</code></td>
+</tr>
+<tr>
+<td>联系转换规则（1:1/1:N/M:N）</td>
+<td>18、19</td>
+<td>___</td>
+<td>2/2</td>
+<td>回 <code>day08-er.md §5.2</code> 转换规则表，<strong>把三行抄一遍</strong></td>
+</tr>
+<tr>
+<td>E-R 图综合（大题）</td>
+<td>16</td>
+<td>___</td>
+<td>各问都拿到步骤分</td>
+<td>回 <code>day08-er.md §4.3–4.4</code> 两个完整示例，<strong>手画一遍再对答案</strong></td>
+</tr>
+<tr>
+<td>规范化目标</td>
+<td>20</td>
+<td>___</td>
+<td>1/1</td>
+<td>回 <code>day08-er.md §3.6</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>总体目标</strong>：20 题正确 <strong>≥ 16</strong>（80%）。其中<strong>第 4、5、6、12、13、16 题是"会则必对"的题</strong>——它们完全是流程题，只要草稿纸上有候选码推导，就不可能错。
+<strong>错题登记</strong>：打开 <code>docs/practice/reflection.md</code> 的 Day 8 部分，按「错题四要素」逐条登记。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/databases/day08-exercises.md">docs/knowledge-points/databases/day08-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

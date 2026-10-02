@@ -1,0 +1,4214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>每日反思与记录 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../index.html">🏠 网站首页</a>
+  <a href="../index.html">📖 文档目录</a>
+  <a href="../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · practice 📁 reflection.md</div>
+<h1>每日反思与记录</h1>
+<blockquote>
+<p>每天学习结束后花5分钟填写
+<strong>错题四要素模板</strong>（后续所有天沿用此格式）：<code>题目 → 错因 → 正确思路 → 知识点</code></p>
+</blockquote>
+<h2>Day 1（9/21）反思：OS进程管理 + PV操作 + 数据结构验证</h2>
+<h3>今日学习内容</h3>
+<pre><code>- 进程五状态模型、进程 vs 线程、进程调度算法（FCFS/SJF/优先级/RR/多级反馈队列）
+- 信号量与 PV 操作、生产者-消费者 / 读者-写者 经典模型
+- 数据结构强项验证套题（30 题，计时 40 分钟）
+</code></pre>
+<h3>数据结构验证判定（Step 2 分支）</h3>
+<pre><code>正确率 = ______ / 30 = ______%
+
+□ 正确率 ≥ 80%（≥ 24 题）→ 数据结构跳过系统学习，仅 Day 14 补漏
+□ 正确率 &lt; 80%（&lt; 24 题）→ 除 Day 14 外，每天晚上抽 30 分钟补薄弱点
+  （薄弱点按诊断套题中的错题定位，参考 day01-process.md 附录「数据结构补漏参考」）
+
+判定结果：______（待人类报告正确率后填写）
+</code></pre>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>每道错题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 记一条，格式如下（复制此模板新增）：</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<blockquote>
+<p>注：做题后把 <code>docs/knowledge-points/os/day01-exercises.md</code>（25 题）和
+<code>docs/knowledge-points/data-structures/day01-diagnostic.md</code>（30 题）做错的题在此逐条登记。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>
+</code></pre>
+<hr />
+<h2>Day 2（9/22）反思：OS 内存管理（分页 / 分段 / 段页式 / 虚拟内存 / 置换算法 / 缺页 / TLB）</h2>
+<h3>今日学习内容</h3>
+<pre><code>- 页式存储：页表、地址转换（页号/页内偏移拆分、物理地址合成）、快表 TLB 与有效访问时间
+- 段式存储与段页式存储、三种碎片（内/外部）对比
+- 虚拟内存（局部性原理、三特征）、缺页中断与缺页率
+- 页面置换算法 OPT/FIFO/LRU/Clock 手工演算、Belady 异常
+- 20 道内存管理选择题 + 3 道地址转换计算题（docs/knowledge-points/os/day02-exercises.md）
+</code></pre>
+<h3>Step 3：回顾昨天进程管理错题（隔日重复）——先做这一步，再做今天的错题</h3>
+<blockquote>
+<p>遗忘曲线在 24 小时后最陡，<strong>昨晚的错题今晚必须遮住答案重做一遍</strong>（只看题目、不看解析）。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/os/day01-exercises.md</code>，把昨天<strong>做错的题</strong>逐题遮住答案重算；昨天做对的可跳过。
+2. 无论昨天对错，都建议把下面 5 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 1 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看 <code>day01-process.md</code> 对应章节（章节号已标在下面）。</p>
+<p><strong>Day 1 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>第 2 题（阻塞态如何到执行态）</td>
+<td>很多人以为"等待的事件一发生就能直接上 CPU"，忘了<strong>阻塞态必须先回就绪态排队</strong>；「阻塞→执行」是非法转换，正确路径是「阻塞→就绪→执行」。（对应笔记 §2.3）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>第 5 题（P 操作使 S&lt;0 后进程的状态）</td>
+<td>把"因信号量而等待"误当成"时间片用完"，错选<strong>就绪</strong>；P 操作失败属于"执行→<strong>阻塞</strong>"，时间片用完才是"执行→就绪"。（对应笔记 §2.3、§5.2）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>第 7 题（同一进程内线程<strong>不共享</strong>的资源）</td>
+<td>直觉认为"同进程内什么都共享"，漏掉<strong>各自的栈和寄存器上下文是独享的</strong>，共享的只有代码/数据/堆/文件。（对应笔记 §3.3）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>第 16 题（SJF 平均周转时间计算）</td>
+<td>不画甘特图、直接口算，容易排错短作业顺序或算错完成时间；<strong>必须列时间轴逐格算</strong>，SJF 顺序是 P2→P3→P1，平均周转 = (3+6+30)/3 = 13。（对应笔记 §4.4）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>第 22(3) 题（为什么 P(empty) 必须在 P(mutex) 之前）</td>
+<td>只背"P 在前 V 在后"，却分不清<strong>资源信号量与互斥信号量的先后</strong>；顺序颠倒会死锁（生产者占着 mutex 等空槽、消费者等 mutex），理由必须能说清。（对应笔记 §5.4）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>昨天错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day02-exercises.md</code> 的 20 道选择题 + 3 道计算题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒</strong>：第 21–23 题是地址转换/置换算法计算题，错了一定要<strong>重算一遍过程</strong>而不是只看结论；计算题错因往往出在「页号/偏移拆分」和「置换表逐格填写」上。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 22 题二级页表平均访存次数」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>地址转换手算：______（目标 ≥8，这是必考计算点，务必练到全对）
+置换算法演算：______（目标 ≥7，FIFO/LRU/OPT/Clock 各能独立算对一遍）
+概念选择题：______（目标 ≥7）
+</code></pre>
+<hr />
+<h2>Day 3（9/23）反思：OS 磁盘调度与文件系统 + OS 阶段收尾</h2>
+<h3>今日学习内容</h3>
+<pre><code>- 磁盘物理结构（盘面/柱面/磁道/扇区）、存取时间三段式（寻道+旋转+传输）、7200转存取时间计算
+- 磁盘调度算法 FCFS/SSTF/SCAN/C-SCAN/LOOK/C-LOOK（同一请求序列六法完整手算对比）
+- 文件逻辑结构（流式/记录式、成组与分解）、文件物理结构（连续/链接/索引）对比
+- 索引文件（一级/多级索引可管理大小、混合索引地址计算与读块次数）、文件目录与 FCB/inode、FAT、硬链接/软链接
+- OS 三天整张知识框架图（day03-disk.md 第十节，Phase 4 冲刺复习材料）
+- OS 综合章节题 25 道（docs/knowledge-points/os/day03-exercises.md，含 3 道寻道计算题）
+</code></pre>
+<h3>Step 4-1：OS 三天错题总回顾（隔日重复）——先做这一步，再做今天的综合题</h3>
+<blockquote>
+<p>今天是 OS 阶段的最后一天，综合题（day03-exercises.md）里<strong>混进了 Day 1 进程管理和 Day 2 内存管理的题</strong>。如果前两天的错题还没消化，今天做题会"把同样的坑再踩一遍"。
+<strong>务必先完成下面两步，再开始做今天的 25 道综合题。</strong></p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/os/day01-exercises.md</code> 和 <code>day02-exercises.md</code>，把 Day 1、Day 2 <strong>做错的题</strong>逐题遮住答案重算（只看题目、不看解析）；做对的可跳过。
+2. 无论前两天对错，都建议把下面 6 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 1-2 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看对应笔记章节（章节号已标在下面）。
+4. 重做结果填在下方横线处；<strong>仍错的知识点</strong>在本文末尾「仍错知识点标记区」打 ☑，Phase 4 冲刺时优先复习。</p>
+<p><strong>Day 1-2 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day01-exercises.md 第 16 题（SJF 平均周转时间）</td>
+<td>不画甘特图直接口算，容易排错短作业顺序或算错完成时间。<strong>必须列时间轴逐格算</strong>：SJF 顺序 P2(3)→P3(3)→P1(24)，周转 = 3、6、30，平均 = (3+6+30)/3 = 13。（day01-process.md §4.4）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day01-exercises.md 第 22(3) 题（P(empty) 必须在 P(mutex) 之前）</td>
+<td>只背"P 在前 V 在后"，分不清<strong>资源信号量与互斥信号量的先后</strong>；颠倒会死锁（生产者占着 mutex 等空槽、消费者等 mutex），理由必须能说清。（day01-process.md §5.4）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day02-exercises.md 第 3、4 题（页式"乘页大小" vs 段式"加段基址"）</td>
+<td>这是最容易混的一对公式：<strong>页式物理地址 = 块号 × 页大小 + 偏移；段式物理地址 = 段基址 + 偏移</strong>。两题放一起对比着重做。（day02-memory.md §3.3、§4.2）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day02-exercises.md 第 22 题（多级页表访存次数 + TLB）</td>
+<td>"几次访存"题的典型陷阱：二级页表无快表 = <strong>3 次</strong>；<strong>TLB 命中只 1 次</strong>（快表查找是硬件级、不算访存）；带命中率的平均访存 = 0.9×1 + 0.1×3 = 1.2 次。（day02-memory.md §3.4 例 4）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day02-exercises.md 第 23(3) 题（FIFO vs LRU 缺页次数演算）</td>
+<td>这题该序列下 <strong>FIFO 缺页 9 次、LRU 缺页 10 次</strong>——LRU 并非处处优于 FIFO。<strong>必须逐格填表</strong>，不能背"谁一定比谁少"的结论。（day02-memory.md §7.2）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>day01-exercises.md 第 2、5 题（阻塞态如何到执行态 / P 操作后进什么态）</td>
+<td>「阻塞→执行」是非法转换，必须走「阻塞→就绪→执行」；P 操作失败 = <strong>执行→阻塞</strong>，时间片用完 = <strong>执行→就绪</strong>。两个都是状态转换，放在一起记就不会再混。（day01-process.md §2.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 1-2 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 前两天错题总数」）。仍有错误的已在下面登记，并在文末标记区打了 ☑。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day03-exercises.md</code> 的 25 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒</strong>：第 17–19 题是寻道计算题（<strong>必考计算点</strong>），错了一定要<strong>把每段移动距离列成表重算</strong>，而不是只看结论；这类题的错因几乎都是「SCAN/LOOK 有没有走到端点」「SSTF 的服务顺序排错」。第 24–25 题是索引计算，注意<strong>读索引块也要算一次磁盘访问</strong>。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 18 题 SCAN 寻道总距离」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区（Step 4 交付物）</h3>
+<blockquote>
+<p>做完上面所有题（含重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你 OS 阶段的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到对应 exercises 里重做同类题。</p>
+</blockquote>
+<p><strong>进程管理（day01-process.md）</strong>
+- ☐ 五状态模型与状态转换（§2）
+- ☐ 进程 vs 线程（共享/独享资源、基本单位）（§3）
+- ☐ 调度算法特性与周转时间计算（§4）
+- ☐ PV 操作 / 生产者-消费者 / 读者-写者（§5）
+- ☐ 死锁四条件、银行家算法（§6）</p>
+<p><strong>内存管理（day02-memory.md）</strong>
+- ☐ 页式地址转换（乘页大小、二进制切位）（§3）
+- ☐ 多级页表与访存次数、TLB 与 EAT（§3.4–3.5）
+- ☐ 段式/段页式（加段基址、段表→页表）（§4）
+- ☐ 虚拟内存、缺页中断（§5–6）
+- ☐ 页面置换算法手工演算、Belady 异常（§7）</p>
+<p><strong>磁盘与文件（day03-disk.md）</strong>
+- ☐ 磁盘物理结构（柱面/磁道/扇区）、存取时间三段式（§1–2）
+- ☐ 磁盘调度算法寻道计算（FCFS/SSTF/SCAN/C-SCAN/LOOK）（§3）
+- ☐ 文件逻辑结构与成组分解（§4）
+- ☐ 文件物理结构（连续/链接/索引）对比（§5）
+- ☐ 索引文件（一级/多级/混合索引、读块次数）（§6）
+- ☐ 文件目录、FCB/inode、FAT、硬链接/软链接（§7）</p>
+<blockquote>
+<p>填写示例：<code>☑ 磁盘调度算法寻道计算（§3）——SCAN 忘了走到端点</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>寻道时间手算：______（目标 ≥8，必考计算点，六种算法都要能独立算对）
+索引文件计算：______（目标 ≥7，可管理文件大小 + 读块次数）
+文件系统概念：______（目标 ≥7，三种物理结构 + FAT + 目录）
+OS 三天整体框架：______（目标 ≥7，能默写 day03-disk.md §10.3 的 20 条结论）
+</code></pre>
+<hr />
+<h2>Day 4（9/24）反思：计算机网络① 分层模型与协议归属（网络阶段第一天）</h2>
+<h3>今日学习内容</h3>
+<pre><code>- OSI 七层模型逐层职责（物理/链路/网络/传输/会话/表示/应用）与代表协议、数据单元、设备
+- TCP/IP 四层模型（应用/传输/网际/网络接口）与 OSI 七层的对照表（必背）
+- 封装与解封装全过程（发送方自上而下逐层加头、链路层加 FCS 尾；接收方反向去头）
+- 各层协议归属总表：HTTP/HTTPS/FTP/SMTP/POP3/IMAP/DNS/Telnet/SSH/TFTP/SNMP/DHCP/TCP/UDP/IP/ICMP/ARP
+- 常见端口号表（20/21/22/23/25/53/67/68/69/80/110/143/161/443/3389）
+- 20 道网络选择题，其中 12 道层级判断/协议归属专项（docs/knowledge-points/networks/day04-exercises.md）
+</code></pre>
+<h3>Step 3-1：重做 Day 3（OS 综合）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>昨天是 OS 阶段收尾，<code>day03-exercises.md</code> 的 25 道题里混着进程管理、内存管理、磁盘调度的内容。<strong>网络是今天的重头，但 OS 的错题不能隔夜不管</strong>——遗忘曲线在 24 小时后最陡，昨晚做错的题今晚必须遮住答案重做一遍。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/os/day03-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 3 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 3 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看 <code>day03-disk.md</code> 对应章节（章节号已标在下面）。
+4. 同时检查：Day 3 反思文末「仍错知识点标记区」里<strong>已经打 ☑ 的项</strong>，今晚是否还是想不通——如果是，在 Phase 4 冲刺复习（Day 31-34）时要优先回看。</p>
+<p><strong>Day 3 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day03-exercises.md 第 17–19 题（寻道计算）</td>
+<td><strong>必考计算点</strong>。不把每段移动距离列成表就口算，几乎必错：SSTF 会折返跑、SCAN 要走到端点、LOOK 不走端点。<strong>必须逐格填表</strong>，算完再核对总距离。（day03-disk.md §3.2）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day03-exercises.md 第 25 题（多级索引读块次数）</td>
+<td><strong>读索引块也要算一次磁盘访问</strong>：二级索引读数据块 = 一级索引块 + 二级索引块 + 数据块 = <strong>3 次</strong>。这类题最常见的错因就是只算数据块、漏掉索引块。（day03-disk.md §6.3–6.4）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day03-exercises.md 第 23 题（FAT 表项含义）</td>
+<td><strong>0 = 空闲块，−1 = 文件最后一块</strong>；FAT 是"显式链接"结构，存的是下一盘块号，不是关键字、不是目录项。（day03-disk.md §7.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 3 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day04-exercises.md</code> 的 20 道选择题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒</strong>：第 1–12 题是<strong>层级判断/协议归属题</strong>（高频中的高频），错了一定要回到 <code>day04-protocols.md</code> §六把协议归属总表整体重背，而不是只看单题解析。尤其注意三个"经典陷阱"：
+- <strong>第 3 题（ARP）</strong>：ARP 属于<strong>网际层/网络层</strong>（IP→MAC），不属于数据链路层——虽然 ARP 报文不用 IP 封装。
+- <strong>第 4 题（ICMP）</strong>：ICMP 属于<strong>网络层</strong>；ping 是应用层程序，但用的是 ICMP 协议。
+- <strong>第 11 题（端口号）</strong>：端口号在 <strong>TCP/UDP 首部</strong>（传输层），<strong>IP 首部没有端口号</strong>。
+- 端口题（13–16）错了解决办法单一：回 <code>day04-protocols.md</code> §七 必背端口表，用分组记忆法重记。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 3 题 ARP 属于哪层」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>- Day 5 预告：TCP/UDP 深入（三次握手/四次挥手/流量与拥塞控制）+ IP 地址与子网划分（必考计算）。
+  如果今天 OSI/TCP-IP 对照表还没背熟，明早先花 15 分钟默写一遍对照表再开始 Day 5。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>OSI 七层与 TCP/IP 四层对照：______（目标 ≥9，必须能默写，这是网络科目的地基）
+协议层级归属判断：______（目标 ≥9，ARP/ICMP/端口号位置三个陷阱必须清楚）
+封装/解封装过程：______（目标 ≥8，能默画五层封装图）
+端口号记忆：______（目标 ≥8，必背 15 个端口）
+网络科目整体信心：______（弱项科目，第一天不强求高分，但要看到进步）
+</code></pre>
+<hr />
+<h2>Day 5（9/25）反思：计算机网络② TCP 连接管理 + 子网划分（网络阶段重点日）</h2>
+<h3>今日学习内容</h3>
+<pre><code>- TCP 报文段首部（序号/确认号/窗口/6 个控制位 SYN/ACK/FIN/PSH/RST/URG）
+- TCP 三次握手全过程（时序图 + 状态变迁：CLOSED→SYN-SENT→ESTABLISHED / LISTEN→SYN-RCVD→ESTABLISHED）
+- TCP 四次挥手全过程（时序图 + 状态变迁：FIN-WAIT-1/2→TIME-WAIT(2MSL) / CLOSE-WAIT→LAST-ACK）
+- 为什么握手三次、挥手四次；TIME-WAIT 等 2MSL 的原因；半关闭
+- TCP 与 UDP 对比（连接/可靠/首部 20B vs 8B/流量与拥塞控制/点对点 vs 广播）
+- 流量控制（滑动窗口、接收方通告 rwnd、零窗口探测）与拥塞控制四算法
+  （慢开始指数/拥塞避免线性/快重传 3 个重复 ACK/快恢复，含 cwnd 演算例题）
+- IP 地址与子网掩码：A/B/C 类、私有地址、前缀↔掩码↔主机数对照表
+- 【重点】子网划分计算模板「5 步法」+ 5 道完整例题（网络地址/广播地址/可用主机/子网数/同子网判断）
+- CIDR、超网（路由聚合）、VLSM（按需划分子网）、默认网关与 ARP 的关系
+- 20 道选择题，其中 8 道子网划分计算题（docs/knowledge-points/networks/day05-exercises.md）
+</code></pre>
+<h3>Step 4-1：重做 Day 4（分层模型/协议归属）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>昨天学的是<strong>分层模型与协议归属</strong>，属于"背熟就得分"的题型；今天是<strong>计算 + 机制理解</strong>。但<strong>网络的客观知识高度串联</strong>：今天讲 ARP 与默认网关的关系、TCP/UDP 的层级，都建立在昨天的分层框架上。<strong>遗忘曲线在 24 小时后最陡，昨晚做错的题今晚必须遮住答案重做一遍。</strong></p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/networks/day04-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 4 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 4 中最容易"看懂了解析、换个问法又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看 <code>day04-protocols.md</code> 对应章节（章节号已标在下面）。
+4. 同时检查：Day 4 反思文末若有已打 ☑ 的项，今晚是否还是想不通——若是，Phase 4 冲刺复习（Day 31-34）时要优先回看。</p>
+<p><strong>Day 4 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day04-exercises.md 第 3 题（ARP 属于哪层）</td>
+<td><strong>ARP 报文不用 IP 封装</strong>（直接装在以太网帧里），所以总有人误以为它属于数据链路层；但<strong>软考按"网际层/网络层"作答</strong>——它为 IP 服务，把 <strong>IP 解析为 MAC</strong>。换个问法（"ARP 完成的功能是""ARP 封装在哪"）也要能答对。（day04-protocols.md §2.3、§6.3）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day04-exercises.md 第 11 题（端口号在哪个首部）</td>
+<td>端口号在 <strong>TCP/UDP 首部（传输层）</strong>，<strong>IP 首部里没有端口号</strong>。常见变体："IP 数据报首部包含以下字段，错误的是（端口号）"——坑点完全一样。（day04-protocols.md §2.4、§七）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day04-exercises.md 第 17 题（封装顺序）</td>
+<td>必须能<strong>默写</strong>：应用层报文 → 加 TCP 头成报文段 → 加 IP 头成 IP 数据报 → 加帧头帧尾成帧 → 比特流。选项常把 TCP/IP 的顺序颠倒、或把解封装顺序混进来。（day04-protocols.md §五 ASCII 图）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day04-exercises.md 第 14 题（SMTP/POP3 端口）</td>
+<td><strong>SMTP 25 发、POP3 110 收、IMAP 143</strong>——"发"和"收"最容易记反。题目只要换"下列哪个是接收邮件协议"就值得重做一遍。（day04-protocols.md §七）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 4 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day05-exercises.md</code> 的 20 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒</strong>：第 1–8 题是<strong>子网划分计算题（必考计算点）</strong>，错了一定要<strong>用 5 步法把每一步重算一遍</strong>，而不是只看解析的结论。计算题四大典型错因，对照自查：
+- <strong>块大小算错</strong>：块大小 = 256 − 掩码值（如 /26 的 192 → 块大小 64，不是 128！）
+- <strong>忘记 −2</strong>：可用主机数 = 2^h − 2，网络地址与广播地址不可用（/28 是 14 不是 16）
+- <strong>广播地址取错</strong>：广播 = 网络地址 + 块大小 − 1（不是"把最后一段改成 255"）
+- <strong>同子网判断凭感觉</strong>：必须<strong>算出网络地址再比较</strong>，不能只看前三个字节</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 1 题 192.168.1.130/26 求网络地址」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把 5 步法逐步写出来）：
+  - 第 1 步（掩码/前缀）：
+  - 第 2 步（网络地址 = IP AND 掩码）：
+  - 第 3 步（广播地址）：
+  - 第 4 步（可用主机数 = 2^h − 2）：
+  - 第 5 步（子网数，若问）：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>- Day 6 预告：网络安全（加密/认证/防火墙/入侵检测）+ 网络阶段框架图（网络阶段收尾）。
+- 若今天子网计算 1–8 题正确率 &lt; 7/8：明早先花 20 分钟把 day05-tcp.md §八 的 5 道例题
+  遮住答案重算一遍再开始 Day 6——这是整个网络部分最值钱、最稳定的得分点，不能欠账。
+- 若三次握手/四次挥手的状态变迁还默写不出来：今晚手画一遍时序图（不看笔记）。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>子网划分手算（5 步法）：______（目标 ≥9，必考计算点，块大小/网络地址/广播地址/2^h−2 必须全对）
+TCP 三次握手/四次挥手状态变迁：______（目标 ≥8，能默画时序图 + 说出为什么）
+拥塞控制四算法与 cwnd 演算：______（目标 ≥8，超时 vs 重复 ACK 的处理必须分清）
+TCP/UDP 对比与首部：______（目标 ≥8，20B vs 8B、可靠 vs 快捷）
+CIDR/超网/VLSM 概念：______（目标 ≥7，聚合 2^k 个网络前缀减 k）
+网络科目整体信心：______（弱项科目第二天，重点看计算题是否已变成稳定得分点）
+</code></pre>
+<hr />
+<h2>Day 6（9/26）反思：计算机网络③ 网络安全 + 网络阶段收尾（网络阶段最后一天）</h2>
+<h3>今日学习内容</h3>
+<pre><code>- 信息安全总览：CIA 三要素、ISO 7498-2 五大安全服务（认/控/保/完/否）
+- 对称加密（DES 56位/64分组、3DES 168位、AES 分组固定128位/密钥128-192-256/轮数10-12-14、SM4）
+- 非对称加密（RSA 大整数因子分解、ECC 椭圆曲线短密钥、DSA 只能签名、SM2）
+- 对称 vs 非对称对比（密钥数 n(n−1)/2 vs 2n、速度、能否签名）
+- 数字信封（接收方公钥加密对称会话密钥）、混合加密完整流程
+- 报文摘要（MD5 128 / SHA-1 160 / SHA-256 256 / SM3；HMAC 带密钥能防伪造）
+- 数字签名（发送方私钥加密摘要：身份认证+抗否认+完整性，但不提供机密性）
+- PKI/CA 与 X.509 数字证书（CA 用自己私钥签名；验签/有效期/CRL吊销/域名匹配）
+- HTTPS 与 TLS 握手全过程（握手用非对称、通信用对称；端口 443；TLS 1.3 简介）
+- 常见攻击与防御配对（SQL注入/XSS/CSRF/DDoS/中间人/重放/钓鱼/ARP欺骗）
+- 防火墙三类技术（包过滤/应用级网关/状态检测）与局限、DMZ
+- 入侵检测 IDS（旁路只告警）vs 入侵防御 IPS（串联会阻断）；误用检测 vs 异常检测
+- VPN 与 IPSec（网络层；AH 只认证不加密、ESP 加密+认证；传输模式 vs 隧道模式）
+- 无线安全 WEP/WPA/WPA2/WPA3 简表
+- 网络阶段整张知识框架图（day06-security.md §16，Phase 4 冲刺一页纸）
+- 25 道题：信息安全 15 道 + 网络综合 10 道（docs/knowledge-points/networks/day06-exercises.md）
+</code></pre>
+<h3>Step 4-1：网络三天错题总回顾——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>今天是<strong>网络阶段的最后一天</strong>。网络三天的知识是<strong>一条链</strong>：Day 4 的分层是骨架，Day 5 的 TCP/子网是机制与计算，Day 6 的安全是上层应用。<code>day06-exercises.md</code> 后 10 道<strong>网络综合题</strong>里<strong>混进了 Day 4 的层级/端口和 Day 5 的子网计算</strong>——如果前两天的错题还没消化，今天会"把同样的坑再踩一遍"。
+<strong>遗忘曲线在 24 小时后最陡，前两天的错题今晚必须遮住答案重做一遍。</strong></p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/networks/day04-exercises.md</code> 和 <code>day05-exercises.md</code>，把 Day 4、Day 5 <strong>做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论前两天对错，都建议把下面 6 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 4–5 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看对应笔记章节（章节号已标在下面）。
+4. 重做结果填在下方横线处；<strong>仍错的知识点</strong>在本文末尾「仍错知识点标记区」打 ☑，Phase 4 冲刺复习（Day 31–34）时优先回看。
+5. <strong>最后用 <code>day06-security.md</code> §16 的网络阶段框架图做一次自检</strong>：能独立复述 §16.5 的 20 条结论，网络阶段才算过关。</p>
+<p><strong>Day 4–5 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day05-exercises.md 第 1、3 题（求网络地址 / 求广播地址）</td>
+<td><strong>必考计算点</strong>。不写掩码和块大小就口算几乎必错：/26 的块大小是 <strong>64</strong>（不是 128）；广播地址 = <strong>网络地址 + 块大小 − 1</strong>，不是"把最后一段改成 255"（/20 的 172.16.55.200 广播是 172.16.<strong>63</strong>.255，不是 172.16.55.255）。<strong>必须走 5 步法，逐段写出来</strong>。（day05-tcp.md §八 模板第 2、3 步）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day05-exercises.md 第 5 题（同子网判断）</td>
+<td>"<strong>前三个字节相同就是同一子网</strong>"是最典型的直觉陷阱——/26 把第四段切成 4 个子网（0/64/128/192），100 和 200 分别落在 .64 和 .192 两个不同子网。<strong>判断同子网必须各自算出网络地址再比较</strong>，不能凭眼睛看。（day05-tcp.md §八 例题 5）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day05-exercises.md 第 17 题（超时 vs 重复 ACK 的 cwnd）</td>
+<td><strong>"超时回 1，重复 ACK 减半"</strong>——这对反义词年年有人混。cwnd=24 <strong>超时</strong>：ssthresh=12、<strong>cwnd=1</strong>；若是 <strong>3 个重复 ACK</strong>：ssthresh=12、<strong>cwnd=12</strong>（不回 1）。重做时<strong>先判断丢包判据，再选公式</strong>。（day05-tcp.md §6.2、§6.3）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day04-exercises.md 第 3 题（ARP 属于哪层）</td>
+<td><strong>ARP 报文不用 IP 封装</strong>（直接装在以太网帧里），所以总有人误以为它属于数据链路层；但<strong>软考按"网际层/网络层"作答</strong>——它为 IP 服务，把 <strong>IP 解析为 MAC</strong>。换个问法（"ARP 完成的功能是""ARP 封装在哪"）也要答对。（day04-protocols.md §2.3、§6.3）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day04-exercises.md 第 11 题（端口号在哪个首部）</td>
+<td>端口号在 <strong>TCP/UDP 首部（传输层）</strong>，<strong>IP 首部里没有端口号</strong>。常见变体："IP 数据报首部包含以下字段，错误的是（端口号）"——坑点完全一样。（day04-protocols.md §2.4、§七）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>day05-exercises.md 第 20 题（跨网段时 ARP 求谁的 MAC）</td>
+<td>跨网段时以太网帧的目的 MAC 是<strong>默认网关（路由器本网段接口）的 MAC</strong>，<strong>不是</strong>目的主机的 MAC——目的主机在另一条链路上，本网段的 ARP 广播根本到不了它。而 IP 头里的目的 IP <strong>始终是最终目的主机不变</strong>。这题把 Day 4 的 ARP 和 Day 5 的默认网关串在一起考。（day05-tcp.md §9.4）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 4–5 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 前两天错题总数」）。仍有错误的已在下面登记，并在文末标记区打了 ☑。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day06-exercises.md</code> 的 25 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒</strong>：
+- <strong>第 1–6 题（加密体制）</strong>错了解决办法单一：回 <code>day06-security.md</code> §四 把<strong>对称 vs 非对称对比表</strong>抄一遍。两组数字必背：<strong>DES 有效密钥 56 位/分组 64 位、3DES 168 位、AES 分组固定 128 位</strong>。
+- <strong>第 7–10 题（摘要/签名/证书）</strong>的错因几乎都是两条：① 摘要长度记混（MD5 128 / SHA-1 160 / SHA-256 256）；② 误以为<strong>数字签名能提供机密性</strong>（不能！签名只管认证/抗否认/完整性）。
+- <strong>第 19–21 题是计算题</strong>（子网划分/CIDR 聚合/拥塞控制），错了一定要<strong>把每一步重算一遍</strong>，不要只看结论。
+- <strong>第 25 题（HTTPS 全流程）</strong>若错，说明网络三天的知识还是散的——立刻去 <code>day06-security.md</code> §16 把框架图整体过一遍。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 2 题 AES 分组长度」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区（Step 4 交付物）</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 4–5 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>网络阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31–34）时<strong>优先</strong>回看对应笔记，并到对应 exercises 里重做同类题。</p>
+</blockquote>
+<p><strong>分层模型与协议归属（day04-protocols.md）</strong>
+- ☐ OSI 七层与 TCP/IP 四层对照、封装/解封装过程（§二、§四、§五）
+- ☐ ARP / ICMP 的层级归属与作用（§2.3、§6.3）
+- ☐ 端口号所在首部与必背端口表（§2.4、§七）
+- ☐ 各层设备与数据单元（PDU）对应（§四）</p>
+<p><strong>TCP 与子网划分（day05-tcp.md）</strong>
+- ☐ 三次握手/四次挥手及状态变迁、TIME-WAIT 等 2MSL 的原因（§二、§三）
+- ☐ 拥塞控制四算法与 cwnd 演算（超时 vs 重复 ACK）（§6）
+- ☐ 子网划分 5 步法：网络地址/广播地址/可用主机数（§八）
+- ☐ CIDR 路由聚合 / 超网 / VLSM（§九）
+- ☐ 默认网关与 ARP 的关系（跨网段求网关 MAC）（§9.4）</p>
+<p><strong>信息安全（day06-security.md）</strong>
+- ☐ 对称/非对称加密算法参数（DES/3DES/AES/RSA/ECC）（§2、§3）
+- ☐ 数字信封与混合加密流程（§5、§7.2）
+- ☐ 报文摘要长度与性质、HMAC（§6）
+- ☐ 数字签名的作用与"不提供机密性"（§7）
+- ☐ PKI/CA 与数字证书验证四步骤（§8）
+- ☐ HTTPS/TLS 握手过程（握手非对称、通信对称）（§十）
+- ☐ 攻击与防御配对（SQL 注入/XSS/CSRF/重放/DDoS）（§11）
+- ☐ 防火墙三类技术、IDS 与 IPS 区别（§12、§13）
+- ☐ VPN 与 IPSec（AH/ESP、传输/隧道模式）（§14）</p>
+<blockquote>
+<p>填写示例：<code>☑ 子网划分 5 步法（§八）——广播地址老是忘掉"主机位全 1"，直接把最后一段改 255</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code>
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code>
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code>- 网络阶段已收尾。若今天 day06-exercises.md 第 19–21 题（计算题）有任何一道错：
+  今晚或明早必须回 day05-tcp.md §八，遮住答案把 5 道例题重算一遍——
+  子网计算是整个网络部分最稳定、最值钱的得分点，不能欠账进下一阶段。
+- 若 §16 框架图还默写不出来：今晚手画一遍三大板块结构（不看笔记），再核对。
+- 若今天信息安全概念题（1–18）错误较多：把 day06-security.md 的六张对比表
+  （§2.1 算法参数 / §四 对称vs非对称 / §6.2 摘要长度 / §12.1 防火墙三类 /
+   §13.3 IDS vs IPS / §11 攻防配对）连续背三天，短期即可显著改善。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code>加密体制（对称/非对称/数字信封）：______（目标 ≥7，算法参数与两条用法路线必须分清）
+摘要与数字签名 / PKI 证书：______（目标 ≥7，三个摘要长度 + &quot;签名不保密&quot;必须秒答）
+HTTPS 握手过程：______（目标 ≥7，&quot;握手非对称、通信对称&quot;是核心结论）
+攻击与防御配对：______（目标 ≥8，背熟配对表，这是安全题最稳的得分点）
+防火墙 / IDS / IPS / VPN：______（目标 ≥7，三组对比能口述）
+网络阶段整体框架（Day 4–6）：______（目标 ≥7，能默写 day06-security.md §16.5 的 20 条结论）
+网络科目整体信心：______（弱项科目三天结束，重点看计算题是否已变成稳定得分点）
+</code></pre>
+<hr />
+<h2>Day 7（9/27）反思：数据库① 关系模型与 SQL（数据库阶段第一天）</h2>
+<h3>今日学习内容</h3>
+<pre><code>- 关系模型三要素（关系数据结构 / 关系操作集合 / 关系完整性约束）与术语对照表（关系=表、元组=行、属性=列、目=列数、基数=行数）
+- 码家族（候选码 / 主码 / 全码 / 外码 / 主属性）；三类完整性（实体 / 参照 / 用户定义）
+- 关系代数五种基本运算（选择 σ、投影 π、并 ∪、差 −、笛卡尔积 ×）与附加运算（交 ∩、连接 ⋈、除 ÷）
+  每个运算的形式化定义 + 例题；除运算 ÷ 与 SQL 中 NOT EXISTS 双重否定的对应
+- SQL 完整语法：SELECT/FROM/WHERE/GROUP BY/HAVING/ORDER BY + 逻辑执行顺序 7 步
+- 聚合函数（COUNT/SUM/AVG/MAX/MIN）与 NULL 的三种态度；WHERE vs HAVING 对照表
+- 四种 JOIN（内 / 左外 / 右外 / 全外）结果差异与行数；自连接；连接条件 vs 过滤条件
+- 子查询（WHERE / FROM / HAVING / 标量子查询；相关 vs 不相关；EXISTS / IN / NOT IN 的 NULL 陷阱）
+- 集合运算（UNION / UNION ALL / INTERSECT / EXCEPT）
+- DDL / DML / DCL 分类与数据更新（INSERT / UPDATE / DELETE / TRUNCATE / DROP）
+- 4 道完整 SQL 例题（给表数据、给查询、逐行推导结果）+ 14 条陷阱表 + 20 条必记结论
+- 20 道选择题，其中 7 道 SQL 查询结果题 + 1 道关系代数结果题（docs/knowledge-points/databases/day07-exercises.md）
+</code></pre>
+<h3>Step 3-1：重做 Day 6（网络安全）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>昨天是<strong>网络阶段的最后一天</strong>，今天进入<strong>数据库阶段</strong>。科目虽然切换了，但<strong>遗忘曲线在 24 小时后最陡</strong>——昨晚做错的题今晚必须遮住答案重做一遍，否则网络三天的错题就白整理了。
+数据库阶段与网络阶段不同：<strong>SQL 是"算"出来的，不是"背"出来的</strong>。今天做题时如果发现自己总在结果题上跳步，说明昨天的概念题"背解析"的习惯还在延续——<strong>必须改成打草稿逐行推导</strong>。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/networks/day06-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 5 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 6 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看 <code>day06-security.md</code> 对应章节（章节号已标在下面）。
+4. <strong>检查 Day 6 反思文末「仍错知识点」标记区里已打 ☑ 的项</strong>，今晚是否还想不通——若是，Phase 4 冲刺（Day 31–34）优先回看。</p>
+<p><strong>Day 6 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day06-exercises.md 第 19 题（/22 网络地址与广播地址）</td>
+<td><strong>必考计算点</strong>。/22 的块大小是 <strong>4</strong>（第三段），网络地址 = 172.16.<strong>100</strong>.0、广播 = 172.16.<strong>103</strong>.255——<strong>不是</strong>把最后一段改成 255。不写掩码和块大小就口算几乎必错，<strong>必须走 5 步法</strong>。（方法见 day05-tcp.md §八；本题解析见 day06-exercises.md 答案第 19 题）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day06-exercises.md 第 21 题（cwnd 演算）</td>
+<td><strong>"超时回 1，重复 ACK 减半"</strong>。cwnd=12 收到 <strong>3 个重复 ACK</strong> → ssthresh=6、<strong>cwnd=6</strong>（减半不回 1）；若是<strong>超时</strong> → ssthresh=6、<strong>cwnd=1</strong>。重做时<strong>先判断丢包判据，再选公式</strong>。（day05-tcp.md §6.2、§6.3）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day06-exercises.md 第 9 题（数字签名的作用）</td>
+<td><strong>最高频概念错点</strong>：数字签名 = 发送方私钥加密摘要，保证<strong>身份认证 / 抗否认 / 完整性</strong>，但<strong>不提供机密性</strong>（签名是"盖章"，报文仍是明文）。题目换个问法（"签名能保证什么""不能保证什么"）也要答对。（day06-security.md §7）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day06-exercises.md 第 3 题（DES 参数）</td>
+<td><strong>"56 和 64"</strong> 是最容易记反的一对：<strong>有效密钥 56 位</strong>（64 位输入里 8 位是奇偶校验位）、<strong>分组 64 位</strong>。AES 的对照记法：<strong>分组固定 128 位</strong>、密钥 128/192/256。（day06-security.md §2.1）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day06-exercises.md 第 22 题（AH vs ESP）</td>
+<td><strong>AH 只认证不加密（不保证机密性），ESP 既加密又认证</strong>；两者都可用于传输模式和隧道模式。题目常把"需要机密性时用谁"反着问。（day06-security.md §14.2）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 6 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day07-exercises.md</code> 的 20 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（数据库阶段的做题纪律与网络阶段不同）</strong>：
+- <strong>第 1–8 题是结果推导题</strong>（其中 7 道 SQL 查询结果题 + 1 道关系代数结果题，第 7 题为关系代数），错了一律<strong>在草稿纸上把推导过程重算一遍</strong>：分组统计题列出"每组有哪些成绩 → COUNT(<em>) / COUNT(列) / SUM / AVG 分母分别是几"；连接题先写出"每个学生有哪些选课行"再逐行过滤；关系代数题按 σ/π/⋈ 的顺序逐层算。</em><em>只看解析的结论等于白做</em><em>——结果题的错因 90% 是跳步。
+- </em><em>第 5、8 题与 NULL 有关</em><em>：C2（数据结构）有 4 条记录但李华的成绩是 NULL。<code>COUNT(*)=4</code>、<code>COUNT(Grade)=3</code>、<code>AVG=243/3=81.0</code>（分母 3 不是 4）。这三个数字是</em><em>第一大考点</em><em>，必须能脱口而出。
+- </em><em>第 3、19 题与连接类型有关</em><em>：第 3 题的 D 选项（1007/周敏/NULL）是</em><em>最大陷阱</em><em>——周敏在 SC 中一行都没有，</em><em>内连接</em><em>根本不产生她的行；要查"没选课的学生"必须用</em><em>左外连接 + IS NULL</em><em>。第 19 题同理：左外连接的行数 = 14 + 1 = </em><em>15</em><em>。
+- </em><em>第 8、20 题是"顺序题"</em><em>：第 8 题的 344 是张明</em><em>全部 4 门课</em><em>的总分，但 <code>WHERE Credit=4</code> 已排除 C3（88 分），正确是 256；第 20 题必须</em><em>先连接、再选择、最后投影</em><em>——投影之后就没法再按 Grade 选择了。
+- </em><em>概念题（9–14）</em><em>错了解决办法单一：回 <code>day07-sql.md</code> §六 把 20 条必记结论</em><em>整体抄一遍</em><em>，尤其</em><em>执行顺序</em><em>和</em><em>术语对照</em>*（目=列数、基数=行数）。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 5 题 C2 的 COUNT/AVG」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把推导过程写出来）：
+  - C2 的记录有哪几条：
+  - COUNT(<em>) =
+  - COUNT(Grade) =
+  - AVG(Grade) = （写清分子与分母）：
+- </em><em>知识点</em>*：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 6 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>数据库阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31–34）时<strong>优先</strong>回看对应笔记，并到 <code>day07-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>关系模型与关系代数（day07-sql.md §一、§二）</strong>
+- ☐ 关系模型三要素、术语对照（目=列数 / 基数=行数）（§一、§1.1）
+- ☐ 三类完整性与 NULL 通过 CHECK 的原因（§1.3）
+- ☐ 选择 σ / 投影 π / 运算顺序（先 σ 后 π）（§2.1–2.2）
+- ☐ 等值连接 vs 自然连接、笛卡尔积行数（§2.3–2.4）
+- ☐ 除运算 ÷ 的语义与 NOT EXISTS 双重否定（§2.5）</p>
+<p><strong>SQL 语法（day07-sql.md §三、§四）</strong>
+- ☐ 逻辑执行顺序 7 步（§3.4）
+- ☐ 聚合函数与 NULL 的三种态度（COUNT(*) / COUNT(列) / AVG 分母）（§3.5）
+- ☐ WHERE vs HAVING（§3.6）
+- ☐ 四种 JOIN 的结果差异与行数（§3.7）
+- ☐ 连接条件 ON vs 过滤条件 WHERE（外连接退化）（§3.6、§3.7）
+- ☐ 相关子查询 / EXISTS / NOT IN 的 NULL 陷阱（§3.8）
+- ☐ 集合运算 UNION / UNION ALL / INTERSECT / EXCEPT（§3.9）
+- ☐ DDL / DML / DCL 分类（§3.1）</p>
+<blockquote>
+<p>填写示例：<code>☑ 聚合函数与 NULL 的三种态度（§3.5）——AVG 的分母老是把 NULL 行算进去</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- Day 8 预告：数据库②——范式判断（1NF/2NF/3NF/BCNF 判断流程）+ E-R 图与 E-R 转关系模式（大题核心）。
+  范式判断完全建立在今天的&quot;码 / 主属性 / 函数依赖&quot;概念上——如果今天「关系模型三要素」和「码家族」还说不清楚，
+  今晚先回 day07-sql.md §1.1 把码家族（候选码/主码/全码/外码/主属性/非主属性）的 6 条定义背一遍再开始 Day 8。
+- 若今天第 1–8 题（SQL 结果题）错误超过 2 道：明早先花 20 分钟把 day07-sql.md §四 的 4 道例题
+  遮住答案重算一遍——SQL 结果题是&quot;会算就有分&quot;的题型，是数据库阶段最稳定的得分点。
+- 若今天 NULL 相关题（第 3、5、8、18 题）有任何一道错：回 day07-sql.md §五 陷阱表第 1、2 条，
+  把 `IS NULL ≠ = NULL`、`COUNT(*) ≠ COUNT(列) ≠ AVG 分母` 两组结论各抄一遍。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">关系模型三要素与术语：______（目标 ≥7，目=列数 / 基数=行数必须分清）
+关系代数五种运算：______（目标 ≥7，σ/π/⋈/×/÷ 的定义与例题能复述）
+SQL 执行顺序：______（目标 ≥9，必须能默写，它决定 WHERE/HAVING 能写什么）
+SQL 结果题手算推导：______（目标 ≥8，必考能力——分组/连接/NULL 三类必须算对）
+JOIN 四种类型区分：______（目标 ≥7，能说出每种保留哪些行、补 NULL 给谁）
+NULL 与聚合的处理：______（目标 ≥8，COUNT(*) / COUNT(列) / AVG 分母 三者必须秒答）
+数据库科目整体信心：______（弱项科目第一天，重点看 SQL 结果题是否已变成稳定得分点）
+</code></pre>
+<hr />
+<h2>Day 8（9/28）反思：数据库② 范式与 E-R 图（大题核心日）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 函数依赖：平凡/非平凡、完全/部分依赖、传递依赖（含&quot;Y→X 时不是传递依赖&quot;的反陷阱）
+- Armstrong 公理（自反/增广/传递）与导出规则（合并/分解/伪传递）、属性闭包算法
+- 候选码判定 4 步法：属性分类（L/N/R/LR）+ 闭包试凑；3 道例题（链式唯一码、多候选码、含 N 类属性）
+- 1NF/2NF/3NF/BCNF 定义、3NF 等价判据、范式判断流程图（5 步）+ 三条考场快解
+- 投影分解法（部分依赖拆 (W,Y)、传递依赖拆 (Y,Z)）、无损连接与保持依赖
+- 4 道完整范式判断例题：R(Sno,Cno,Sname,Grade,Sdept)→1NF、R(Sno,Sdept,Sloc,Mname)→2NF、
+  R(A,B,C) F={AB→C,C→B}→3NF 非 BCNF、SC→BCNF
+- E-R 模型三要素（实体矩形/属性椭圆/联系菱形）、联系类型 1:1/1:N/M:N、联系可有属性
+- E-R 转关系模式规则表 + 转换后自检清单 7 条
+- 2 个完整 E-R 图示例：图书借阅系统（M:N + 1:N）、教务系统（1:1 + 1:N + M:N×2）
+- 20 道题：范式判断选择 15 道（1–15）+ E-R 大题 1 道（16）+ E-R/范式选择 4 道（17–20）
+  （docs/knowledge-points/databases/day08-exercises.md）
+</code></pre>
+<h3>Step 3-1：重做 Day 7（SQL / 关系代数）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>今天是<strong>数据库阶段的第二天</strong>，也是<strong>大题核心日</strong>。范式判断与 E-R 转换看似是"新内容"，实则完全建立在昨天的基础上：
+<strong>求候选码要会"码/主属性/非主属性"（Day 7 §1.1）</strong>，<strong>M:N 联系独立成关系后的主键就是 SC 表那样的组合码（Day 7 §1.1）</strong>。
+<strong>遗忘曲线在 24 小时后最陡，昨晚做错的题今晚必须遮住答案重做一遍。</strong>
+同时提醒：<strong>今天的范式题和昨天的结果题是同一种能力</strong>——"在草稿纸上一步一步推"。昨天跳步的人，今天求候选码一样会跳步。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/databases/day07-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 4 道<strong>高混淆度题</strong>遮答案重做一遍——它们是 Day 7 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看 <code>day07-sql.md</code> 对应章节（章节号已标在下面）。
+4. <strong>检查 Day 7 反思文末「仍错知识点」标记区里已打 ☑ 的项</strong>，今晚是否还想不通——若是，Phase 4 冲刺（Day 31-34）优先回看。</p>
+<p><strong>Day 7 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day07-exercises.md 第 5、8 题（COUNT/AVG 与 NULL）</td>
+<td><strong>第一大考点</strong>：C2 有 4 条记录但李华成绩为 NULL。<code>COUNT(*)=4</code>、<code>COUNT(Grade)=3</code>、<code>AVG=243/3=81.0</code>（<strong>分母 3 不是 4</strong>）。三个数字必须脱口而出；换个表换个列，同样的坑再踩一次。（day07-sql.md §3.5、§四例 5）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day07-exercises.md 第 7 题（关系代数结果题）</td>
+<td>关系代数题的错因几乎都是<strong>运算顺序</strong>：<strong>先 σ 后 π</strong>、连接先写清"每个学生有哪些选课行"再过滤。注意 π 天然去重，而 SQL 的 SELECT 不去重。（day07-sql.md §2.1–2.2）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day07-exercises.md 第 3、19 题（JOIN 类型）</td>
+<td>第 3 题的 1007/周敏/NULL 是<strong>最大陷阱</strong>——她一行选课都没有，<strong>内连接</strong>根本不产生她的行；要查"没选课的学生"必须用<strong>左外连接 + IS NULL</strong>。第 19 题同理：左外连接行数 = 14 + 1 = <strong>15</strong>。（day07-sql.md §3.7）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day07-exercises.md 第 8、20 题（执行顺序）</td>
+<td><strong>先连接、再选择、最后投影</strong>——投影之后就没法再按 Grade 选择了。WHERE 里不能写聚合函数、不能用 SELECT 别名，都因为执行顺序。（day07-sql.md §3.4）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 7 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day08-exercises.md</code> 的 20 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（今天的错因高度集中，对照自查）</strong>：
+- <strong>第 4、5、6 题（候选码）</strong>错了，说明<strong>属性分类法还没形成肌肉记忆</strong>。回 <code>day08-er.md §2.2</code> 把 4 步法默写一遍，再重做这三题——<strong>草稿纸上必须有 L/N/R/LR 分类表和闭包展开过程</strong>。N 类属性（F 中从未出现）必在候选码中，是最常漏的。
+- <strong>第 9、10、11、13 题（范式级别）</strong>错了，九成是<strong>跳步</strong>：没写候选码、没标主属性/非主属性，直接"看一眼"猜级别。<strong>必须按 <code>day08-er.md §3.3</code> 的流程图走 5 步</strong>。注意第 11 题：Tname <strong>完全依赖</strong>于组合码但同时<strong>传递依赖</strong>于候选码——两种依赖可以并存，2NF 管"部分/完全"、3NF 才管"是否传递"。
+- <strong>第 12 题（3NF 非 BCNF）</strong>错了，说明候选码没求全：R(A,B,C) F={AB→C,C→B} 有 <strong>AB 和 AC 两个候选码</strong>，三个属性<strong>全是主属性</strong>→ 直接 3NF；但 <strong>C→B 左部不含码 → 不是 BCNF</strong>。这是 3NF ⊂ BCNF 的标准反例，必须能独立重推一遍。
+- <strong>第 16 题（E-R 大题）</strong>丢分，先看丢在哪一问：是<strong>联系类型判错</strong>（1:N 方向反了）？<strong>M:N 没有独立成表</strong>？还是<strong>外键加错端</strong>（1:N 应加在 N 端）？<strong>联系的属性（参加日期/承担角色）丢了</strong>也是常见扣分点。对照答案逐问核对，不要只看总分。
+- <strong>第 18、19 题（转换规则）</strong>错了：回 <code>day08-er.md §5.2</code> 把转换规则表<strong>三行整体抄一遍</strong>，口诀"<strong>多的一方记着少的一方</strong>"。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 6 题候选码与主属性」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把候选码推导过程写出来）：
+  - 属性分类（L / N / R / LR）：
+  - L∪N 的闭包 = <strong><em>_</em>_，是否等于 U：
+  - 试加入的属性及其闭包：
+  - 候选码 = </strong><strong><em>_；主属性 = </em></strong><strong><em>；非主属性 = </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 12 题 3NF 与 BCNF」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（按 5 步流程写）：
+  - 候选码 / 主属性 / 非主属性：
+  - ① 是否满足 1NF（原子性）：
+  - ② 是否存在非主属性的部分依赖：
+  - ③ 是否存在非主属性的传递依赖（注意 Y↛X 的验证）：
+  - ④ 每个非平凡依赖的左部是否都含候选码：
+  - 结论：最高 ______NF
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「第 16 题 E-R 大题」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+  - 实体与主键：
+  - 联系及其类型（1:1 / 1:N / M:N）：
+  - 转换后的关系模式（标出主键与外键）：
+  - 自检（M:N 是否独立成表 / 外键是否在 N 端 / 联系属性是否保留）：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 7 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>数据库阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到 <code>day08-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>函数依赖（day08-er.md §一）</strong>
+- ☐ 平凡 / 非平凡依赖的判别（平凡依赖不影响范式）（§1.2）
+- ☐ 完全依赖 vs 部分依赖的判别（§1.3）
+- ☐ 传递依赖的判别，尤其"Y→X 成立时不是传递依赖"（§1.4）
+- ☐ Armstrong 公理与属性闭包算法（§1.5）</p>
+<p><strong>候选码与范式（day08-er.md §二、§三）</strong>
+- ☐ 属性分类法（L 类/N 类必在码中、R 类一定不是）（§2.1）
+- ☐ 多候选码的求解与主属性划分（§2.2–2.3）
+- ☐ 1NF/2NF/3NF/BCNF 定义与 5 步判断流程图（§3.1、§3.3）
+- ☐ 3NF 与 BCNF 的分界（"Y 是主属性"的豁免）（§3.2、§3.5 例 11）
+- ☐ 投影分解法与"BCNF 分解不一定保持依赖"（§3.4、§3.5 例 11）</p>
+<p><strong>E-R 模型与转换（day08-er.md §四、§五）</strong>
+- ☐ E-R 三要素与三种图形符号（矩形/椭圆/菱形）（§4.1）
+- ☐ 联系类型 1:1 / 1:N / M:N 的判别与方向（§4.2）
+- ☐ 联系自身的属性应挂在联系上（§4.1、§4.3）
+- ☐ 1:1 / 1:N / M:N 转换规则与外键方向（§5.2）
+- ☐ 多值属性必须独立成关系（§5.1）</p>
+<blockquote>
+<p>填写示例：<code>☑ 多候选码的求解（§2.2）——只求出一个候选码就停了，忘了把 LR 属性换掉再试一次</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- Day 9 预告：数据库③（数据库设计与事务/并发控制等收尾内容，视计划安排）。
+- 范式判断完全建立在&quot;候选码 → 主属性/非主属性&quot;上：如果今天第 4、5、6、12、13 题有任何一道错，
+  今晚或明早必须回 day08-er.md §2.2，遮住答案把 3 道候选码例题（例 6/7/8）重算一遍——
+  这是科目二大题的第一步，错一步后面全错。
+- 如果第 16 题（E-R 大题）没能拿满：今晚手画一遍 day08-er.md §4.3、§4.4 的两个完整 E-R 图
+  （不看答案），再各转一遍关系模式、标出主键外键。
+- 如果今天整体正确率 &lt; 80%（&lt; 16/20）：不要急着进 Day 9，明早先用 30 分钟把
+  「范式判断流程图（§3.3）」和「E-R 转换规则表（§5.2）」各默写一遍——这两张图就是大题的步骤分。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">候选码求解（分类+闭包）：______（目标 ≥9，大题第一步，必须又快又准）
+完全/部分/传递依赖判别：______（目标 ≥8，尤其&quot;Y→X 时不是传递依赖&quot;这一反陷阱）
+范式级别判断（5 步流程）：______（目标 ≥8，大题核心，禁止跳步）
+3NF vs BCNF 的分界：______（目标 ≥7，能独立重推 R(A,B,C) F={AB→C,C→B} 的例子）
+规范化分解（投影分解法）：______（目标 ≥7，知道拆哪两个属性、外码留在哪）
+E-R 图绘制：______（目标 ≥8，三要素 + 三种联系类型 + 联系属性不能丢）
+E-R 转关系模式（主键/外键）：______（目标 ≥9，M:N 必须独立成表、1:N 外键加在 N 端）
+数据库科目整体信心：______（大题核心日——今天的内容直接决定科目二 15+ 分的归属）
+</code></pre>
+<hr />
+<h2>Day 9（9/29）反思：数据库③ 数据库阶段收尾 + 阶段 1 测验</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 数据库阶段知识框架图（day09-summary.md，Phase 4 冲刺一页纸）：
+  数据库在科目一/科目二的分值与考法定位 + Day 7-8 两大板块总框架（ASCII 思维导图）
+  + 核心考点速查 + 20 条必背结论 + 7 类题型一览 + 4 张&quot;一眼错&quot;陷阱表 + 阶段串联（OS/网络/数据库）
+- 阶段 1 测验（docs/practice/stage1-quiz.md）：OS + 网络 + 数据库 三科混合 45 道选择题
+  （OS 15 题 / 网络 15 题 / 数据库 15 题，计时 60 分钟，每题标注知识点与出处，含完整答案解析）
+- 测验分析：按知识点统计正确率，写入 knowledge-checklist.md（&lt; 60% 的知识点标记&quot;二轮重点&quot;，Phase 2 导航）
+- 错题总回顾：Day 7-8 高混淆度题重做 + 「仍错知识点」标记
+</code></pre>
+<h3>Step 4-1：Day 7-8 错题总回顾——先做这一步，再做阶段 1 测验</h3>
+<blockquote>
+<p>今天是<strong>数据库阶段的最后一天</strong>，也是<strong>第一阶段（OS / 网络 / 数据库）的收尾日</strong>。
+数据库两天的知识是<strong>同一条链</strong>：Day 7 的"码 / 主属性 / SQL 语义"是 Day 8"求候选码 → 判范式 → 转 E-R"的地基；而阶段 1 测验卷的后 15 题正是按这条链出题（第 41-45 题直接就是科目二大题的前三步）。
+<strong>遗忘曲线在 24 小时后最陡，Day 7-8 的错题必须先遮住答案重做一遍，再去做测验卷</strong>——否则测验卷的数据库部分会把昨天同样的坑再踩一次。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/databases/day07-exercises.md</code> 和 <code>day08-exercises.md</code>，把 <strong>Day 7、Day 8 做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论前两天对错，都建议把下面 <strong>6 道</strong>高混淆度题遮答案重做一遍——它们是 Day 7-8 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并回看对应笔记章节（章节号已标在下面）。
+4. 重做结果填在下方横线处；<strong>仍错的知识点</strong>在本文末尾「仍错知识点标记区」打 ☑，Phase 4 冲刺（Day 31-34）优先回看。
+5. <strong>最后用 <code>day09-summary.md</code> §四 的 20 条结论做一次自检</strong>：能遮住右边默写 16 条以上，数据库阶段才算过关。</p>
+<p><strong>Day 7-8 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day07-exercises.md 第 5 题（COUNT/AVG 与 NULL）</td>
+<td><strong>第一大考点</strong>。C2 有 4 条记录但李华成绩为 NULL：<code>COUNT(*)=4</code>、<code>COUNT(Grade)=3</code>、<code>AVG=243/3=81.0</code>（<strong>分母 3 不是 4</strong>，错算成 60.75 是最常见的结局）。三个数字必须脱口而出，换个表换个列同样的坑会再踩。（day07-sql.md §3.5、§四例 5）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day08-exercises.md 第 6、12 题（多候选码与 3NF/BCNF 分界）</td>
+<td><strong>Day 8 的压轴坑</strong>：<code>R(A,B,C) F={AB→C,AC→B,BC→A}</code> 有 <strong>3 个候选码</strong>（AB/AC/BC），三个属性全是主属性 → 直接 3NF；而 <code>F={AB→C,C→B}</code> 有 <strong>2 个候选码</strong>（AB、AC）→ 3NF 但<strong>非 BCNF</strong>（C→B 左部不含码）。<strong>只求出一个候选码就停</strong>是最大错误源——必须把 LR 类属性换着再试一遍。（day08-er.md §2.2–2.3、§3.5 例 11）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day07-exercises.md 第 3、19 题（JOIN 类型与行数）</td>
+<td>第 3 题的 1007/周敏/NULL 是<strong>最大陷阱</strong>——她一行选课都没有，<strong>内连接</strong>根本不产生她的行；查"没选课的学生"必须<strong>左外连接 + IS NULL</strong>。第 19 题同理：左外连接行数 = 14 + 1 = <strong>15</strong>，不是 14、更不是 7×14=98。（day07-sql.md §3.7）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day08-exercises.md 第 11 题（完全依赖与传递依赖并存）</td>
+<td>反直觉点：Tname <strong>完全依赖</strong>于组合码 (Sno,Cno)，<strong>同时又传递依赖</strong>于它——两种依赖可以并存，不是互斥的。<strong>2NF 管"部分/完全"，3NF 才管"是否传递"</strong>。此关系单属性依赖无部分依赖 → 2NF，但有传递依赖 → 最高 2NF。（day08-er.md §1.3–1.4、§3.3）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day07-exercises.md 第 8、20 题（执行顺序）</td>
+<td>第 8 题的 344 是张明<strong>全部 4 门课</strong>的总分，但 <code>WHERE Credit=4</code> 已排除 C3（88 分），正确是 <strong>256</strong>——WHERE 先过滤、后聚合，顺序反了就多算。第 20 题同理：<strong>先连接、再选择、最后投影</strong>，投影之后就没法再按 Grade 选择了。（day07-sql.md §3.4）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>day08-exercises.md 第 16 题（E-R 大题）</td>
+<td>科目二大题的直接预演。丢分几乎都在三处：① <strong>联系类型判错</strong>（1:N 方向反了）；② <strong>M:N 没有独立成表</strong>（参加关系的主键必须是"工号+项目号"组合）；③ <strong>外键加错端</strong>（1:N 的部门号应加在员工/项目端）或<strong>联系的属性丢了</strong>（参加日期、承担角色）。对照答案逐问核对，不要只看总分。（day08-er.md §4、§5.2–5.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 7-8 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 前两天错题总数」）。仍有错误的已在下面登记，并在文末标记区打了 ☑。</p>
+</blockquote>
+<h3>Step 2-3：阶段 1 测验执行与分析（今天的重头戏）</h3>
+<blockquote>
+<p>这是<strong>第一次阶段测验</strong>，覆盖 OS（Day 1-3）+ 网络（Day 4-6）+ 数据库（Day 7-8）全部内容，形式向科目一（75 选择题、合格 45 分）看齐。</p>
+</blockquote>
+<p><strong>执行纪律：</strong>
+1. <strong>计时 60 分钟</strong>，独立闭卷完成 <code>docs/practice/stage1-quiz.md</code>，<strong>先填答题卡再对答案</strong>。
+2. <strong>按科目切换节奏</strong>：OS 题计算必须打草稿（第 4、8、9、14 题）；网络题概念为主、每题 ≤ 40 秒、把时间省给计算（第 25-27 题）；数据库结果题在草稿纸上逐行推导（第 33-35 题），范式题按 5 步流程走（第 43-44 题）。
+3. <strong>评分</strong>：每题 1 分，满分 45。<strong>合格线 27/45（60%，对齐科目一 45/75）</strong>，<strong>目标 34/45（75%，对齐冲刺目标 55+/75）</strong>。
+4. <strong>分析</strong>：把各科正确率填入 <code>stage1-quiz.md</code> 文末和 <code>knowledge-checklist.md</code> 的「阶段 1 测验统计表」；
+   <strong>单科 &lt; 60%（&lt; 9/15）⇒ 该科知识点标记「二轮重点」</strong>；总分 &lt; 27/45 ⇒ Phase 2 每天额外抽 30 分钟补弱项。
+5. <strong>错题登记</strong>：按下方「错题四要素」逐条登记；计算题（OS 第 4/8/9/14、网络第 24-27、数据库第 33-35/40）错了<strong>必须把过程重算一遍</strong>，不要只看解析结论。</p>
+<p><strong>阶段 1 测验得分：</strong> <strong><em>_</em>_ / 45 = </strong><strong><em>_%　（OS </em></strong><em>/15、网络 <strong><em>_/15、数据库 </em></strong></em>/15）</p>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天<strong>阶段 1 测验</strong>做错的题、以及上面 Day 7-8 重做<strong>仍然错</strong>的题，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>按错因分类对照自查</strong>：
+- <strong>计算跳步类</strong>（OS 4/8/9/14、网络 25/26/27）：不是"公式没背"，而是"没写过程"。重算时必须把中间量写出来——页号/偏移、块大小与块起始地址、每段寻道距离。
+- <strong>概念混淆类</strong>（网络 17/18/24/28/29、数据库 31/36/39）：回对应笔记的<strong>对比表/结论清单整体重背</strong>：day04 §七 端口表、day06 §2.1 算法参数表、day07 §六 20 条、day08 §六 20 条。
+- <strong>推导/流程类</strong>（数据库 33/34/35/41-45）：这是<strong>科目二大题的能力预演</strong>。错了必须回 <code>day08-er.md</code> §2.2 候选码 4 步法 + §3.3 范式流程图 + §5.2 转换规则表，遮住答案把例题全部重推一遍。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 33 题 C2 的 COUNT/AVG」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把推导过程写出来）：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区（Step 4 交付物）</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 7-8 重做 + 阶段 1 测验）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>数据库阶段乃至整个第一阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到对应 exercises / <code>stage1-quiz.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>SQL 与关系模型（day07-sql.md）</strong>
+- ☐ 聚合与 NULL：COUNT(*) / COUNT(列) / AVG 分母（§3.5）
+- ☐ 四种 JOIN 的结果差异与行数、左外连接 + IS NULL（§3.7）
+- ☐ 执行顺序与 WHERE/HAVING 的边界（§3.4、§3.6）
+- ☐ 除运算 ÷ / NOT EXISTS 双重否定（§2.5）
+- ☐ 等值连接 vs 自然连接、笛卡尔积行数（§2.3–2.4）</p>
+<p><strong>范式与 E-R（day08-er.md）</strong>
+- ☐ 候选码求解（L/N/R/LR 分类 + 闭包，多候选码必须求全）（§2.2–2.3）
+- ☐ 传递依赖的判别与"Y→X 时不是传递依赖"（§1.4）
+- ☐ 范式判断 5 步流程（§3.3）
+- ☐ 3NF 与 BCNF 的分界（R(A,B,C) F={AB→C,C→B}）（§3.2、§3.5 例 11）
+- ☐ E-R 转关系模式（M:N 独立建表 / 1:N 外键在 N 端 / 联系属性不丢）（§5.2–5.3）</p>
+<p><strong>阶段 1 测验暴露的其他科目薄弱点（跨科，Phase 2 每日先复习）</strong>
+- ☐ OS：页式地址转换 / 多级页表访存（day02 §3）
+- ☐ OS：磁盘 SSTF 寻道计算 / 索引文件大小（day03 §3、§6）
+- ☐ OS：信号量 P/V 计算、死锁条件与银行家算法（day01 §5、§6）
+- ☐ 网络：子网划分 5 步法与 CIDR 聚合（day05 §八–§九）
+- ☐ 网络：协议层级归属与端口号（day04 §6.3、§七）
+- ☐ 网络：加密算法参数与数字签名的作用（day06 §2、§7）</p>
+<blockquote>
+<p>填写示例：<code>☑ 聚合与 NULL（§3.5）——AVG 的分母老是把 NULL 行算进去</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 第一阶段（OS / 网络 / 数据库）已收尾，Day 10 起进入 Phase 2（软件工程与设计）。
+- 若阶段 1 测验总分 &lt; 27/45：不要直接进 Phase 2——明早先用 30 分钟回看本次测验的错题，
+  再按 knowledge-checklist.md 里标 ⭐「二轮重点」的项，每天 Phase 2 任务前先抽 30 分钟补一个知识点。
+- 若数据库部分 &lt; 9/15：回 day09-summary.md §六 的四张陷阱表，把每张表对应的一道 exercises 题重做一遍；
+  数据库是唯一&quot;科目一 + 科目二都考&quot;的科目，欠账代价最高。
+- 若网络部分 &lt; 9/15：子网计算（第 25-27 题）错了必须回 day05-tcp.md §八 把 5 道例题重算一遍；
+  概念题（第 17-18、28-29 题）错了把端口表与算法参数表连续背三天。
+- 若 OS 部分 &lt; 9/15：寻道计算（第 14 题）与地址转换（第 9 题）是&quot;打草稿就能拿回的分&quot;，
+  回 day03-disk.md §3.2 与 day02-memory.md §3.4 各重算两道例题。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">数据库阶段整体框架（Day 7-8 串联）：______（目标 ≥7，能默写 day09-summary.md §四 的 20 条结论）
+SQL 结果题手算推导：______（目标 ≥8，分组/连接/NULL 三类必须算对）
+候选码与范式判断（5 步流程）：______（目标 ≥8，大题核心，禁止跳步）
+E-R 转关系模式：______（目标 ≥8，M:N 独立建表、1:N 外键在 N 端、联系属性不丢）
+阶段 1 三科综合（第一次阶段测验）：______（目标 ≥34/45；低于 27/45 说明基础不牢，Phase 2 要加补弱时间）
+</code></pre>
+<hr />
+<h2>Day 10（9/30）反思：计算机组成① CPU、指令与寻址（组成原理阶段第一天）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 计算机组成原理阶段开始（Day 10-11）。组成原理约占科目一 8%（5-6 分），几乎全在选择里。
+- CPU 组成：冯·诺依曼五大部件 → CPU = 运算器 + 控制器
+  - 运算器：ALU / ACC / 通用寄存器 / PSW(CF/ZF/SF/OF/IF)
+  - 控制器：PC / IR / MAR / MDR / 指令译码器 / 时序发生器
+  - 控制器两种实现：硬布线（快、难改、RISC）vs 微程序（慢、易改、CISC、CM 存微指令）
+  - 指令周期：取指 → 间址（仅间接寻址）→ 执行 → 中断
+- 指令格式：操作码 + 地址码；地址码位数 → 直接寻址范围 2^位数；扩展操作码设计
+- 寻址方式 8 种：立即 / 直接 / 间接 / 寄存器 / 寄存器间接 / 基址 / 变址 / 相对
+  每种给出有效地址公式 + 例题 + 特点 + 汇总表（访存次数/寻址范围决定因素/用途）
+- 指令流水线：流水线周期=最长段；T / S / TP / TP_max / E 公式；
+  4 道完整手算例题（等长、不等长瓶颈、效率、已知 S 反求 n）；
+  流水线冲突（结构/数据/控制）；超标量、超流水线、超标量超流水线
+- CISC vs RISC 对比表 + RISC 五大特点
+- 20 道选择题（docs/knowledge-points/architecture/day10-exercises.md，其中 11 道计算题）
+</code></pre>
+<h3>Step 3-1：阶段 1 测验错题重做——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>昨天是<strong>第一阶段（OS / 网络 / 数据库）的收尾 + 阶段 1 测验</strong>。今天切换到<strong>组成原理</strong>，科目虽然变了，但<strong>遗忘曲线在 24 小时后最陡</strong>——昨晚测验里做错的题今晚必须遮住答案重做一遍。
+组成原理与前三科有一个重要区别：<strong>计算题占比更高</strong>（寻址有效地址、流水线性能）。如果阶段 1 测验里的计算题（OS 第 4/8/9/14、网络第 25-27、数据库第 33-35/40）是靠"看解析看懂的"而不是"自己算对的"，今天做题会立刻暴露——<strong>计算能力不能靠背解析积累</strong>。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/practice/stage1-quiz.md</code>，把<strong>昨天测验做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 <strong>5 道</strong>高混淆度题遮答案重做一遍——它们是阶段 1 测验中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条；计算题必须把过程写出来，不要只对结论。
+4. 把各科正确率回填到 <code>knowledge-checklist.md</code> 的「阶段 1 测验统计表」，<strong>单科 &lt; 60%（&lt; 9/15）的知识点标记「二轮重点」</strong>——Phase 2 每天任务前先抽 30 分钟补一个。</p>
+<p><strong>阶段 1 测验高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>stage1-quiz.md 第 9 题（页式地址转换）</td>
+<td><strong>"乘页大小" vs "加段基址"</strong> 是最容易混的一对：<strong>页式物理地址 = 块号 × 页大小 + 偏移</strong>。不画二进制切位图直接口算，几乎必错。（day02-memory.md §3.3）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>stage1-quiz.md 第 25-27 题（子网划分）</td>
+<td><strong>必考计算点</strong>。块大小 = 256 − 掩码值；可用主机 = 2^h − 2；广播 = 网络地址 + 块大小 − 1。<strong>必须走 5 步法逐段写出来</strong>，不写过程必错。（day05-tcp.md §八）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>stage1-quiz.md 第 33-35 题（SQL 聚合与 NULL）</td>
+<td><code>COUNT(*)</code> / <code>COUNT(列)</code> / <code>AVG 分母</code> 三个数字必须脱口而出——<strong>AVG 的分母不算 NULL 行</strong>。（day07-sql.md §3.5）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>stage1-quiz.md 第 14 题（SSTF 寻道）</td>
+<td>SSTF 会<strong>折返跑</strong>，必须把每段移动距离列成表逐格算；口算排错服务顺序是主要错误源。（day03-disk.md §3.2）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>stage1-quiz.md 第 43-44 题（范式判断）</td>
+<td>没写候选码、没标主属性/非主属性就"看一眼猜级别"。<strong>必须按 5 步流程走</strong>，多候选码要换 LR 属性再试一次。（day08-er.md §3.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>阶段 1 测验错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天测验错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day10-exercises.md</code> 的 20 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（今天的错因高度集中，对照自查）</strong>：
+- <strong>第 4 题（CF vs OF）</strong>：<strong>"无符号/进位"选 CF，"带符号/溢出"选 OF</strong>——这两个标志位<strong>相互独立</strong>。题目只要换个问法（"运算结果最高位产生进位""两负数相加结果为正"）就要能重新判断对。
+- <strong>第 9 题（间接寻址空间）</strong>：<strong>间接寻址范围由存储字长决定，不是形式地址位数</strong>——这正是间接寻址存在的意义（用短地址码访问大地址空间）。这是组成原理最高频的陷阱之一。
+- <strong>第 11 题（相对寻址 EA）</strong>：<strong>A 是补码可正可负</strong>（80H = −128，不是 +128）；且公式中的 (PC) 是<strong>下一条指令</strong>的地址。错因几乎都是这两条之一。
+- <strong>第 16、17 题（不等长段流水线）</strong>：<strong>T = Σt + (n−1)·Δt，不是 k·Δt + (n−1)·Δt</strong>——第 1 条指令按各段<strong>实际时间之和</strong>走完全程。效率<strong>只能</strong>用 E = S/k = n·Σt/(k·T)，<strong>E = n/(k+n−1) 只适用于等长段</strong>。错了必须遮住答案把 Δt、Σt、T、T₀、S、E 六个量逐个重算。
+- <strong>第 18 题（已知 S 反求 n）</strong>：这是近两年的新考法。解方程后<strong>必须回代验证</strong>，并检查 S₀ &lt; k（加速比上限是段数 k，超过则无解）。
+- 概念题（1-7、20）错了解决办法单一：回 <code>day10-cpu.md</code> §1.4 寄存器表 + §1.5 两种控制器对比 + §五 CISC/RISC 对比表整体重背。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 11 题相对寻址有效地址」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把公式与代入过程写出来）：
+  - 寻址方式与公式：EA = <strong><em>_</em>_
+  - A 的补码真值：</strong><strong><em>_
+  - (PC) 取值（注意是否为"下一条指令"）：</em></strong><strong><em>
+  - EA = </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 16 题不等长段流水线时间与加速比」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把六个量逐个写出）：
+  - Δt = max(各段时间) = <strong><em>_</em>_
+  - Σt = 各段时间之和 = </strong><strong><em>_
+  - T = Σt + (n−1)·Δt = </em></strong><strong><em>
+  - T₀ = n·Σt = </em></strong><strong><em>
+  - S = T₀/T = </em></strong><strong><em>
+  - E = S/k = </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「第 9 题间接寻址空间」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含阶段 1 测验重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>组成原理阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到 <code>day10-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>CPU 组成与寄存器（day10-cpu.md §一）</strong>
+- ☐ 寄存器作用辨析（PC/IR/MAR/MDR/PSW）（§1.4）
+- ☐ 运算器 vs 控制器的部件归属（§1.2）
+- ☐ CF / ZF / SF / OF 的判别与独立性（§1.3）
+- ☐ 硬布线 vs 微程序控制器（§1.5）
+- ☐ 指令周期与间址周期的适用条件（§1.6）</p>
+<p><strong>指令格式与寻址（day10-cpu.md §二、§三）</strong>
+- ☐ 地址码位数与寻址空间的换算（§2.2）
+- ☐ 扩展操作码的逐级可用编码计算（§2.4）
+- ☐ 八种寻址方式的有效地址公式（§3.9 汇总表）
+- ☐ 间接寻址空间由存储字长决定（§3.3）
+- ☐ 相对寻址中 (PC) 是下一条指令地址、A 为补码（§3.8）
+- ☐ 基址 vs 变址的语义与管理方式差异（§3.6–3.7）</p>
+<p><strong>指令流水线（day10-cpu.md §四）</strong>
+- ☐ 流水线周期 = 最长段（§4.2）
+- ☐ 等长段 T / S / TP / E 公式（§4.3）
+- ☐ 不等长段 T = Σt + (n−1)·Δt（§4.4）
+- ☐ 效率 E = S/k 的两种算法与适用范围（§4.5）
+- ☐ 已知加速比反求指令条数（§4.6）
+- ☐ 超标量 / 超流水线的吞吐率（§4.8）</p>
+<p><strong>CISC 与 RISC（day10-cpu.md §五）</strong>
+- ☐ CISC vs RISC 对比表（§五）
+- ☐ RISC 的五大特点（§五）</p>
+<blockquote>
+<p>填写示例：<code>☑ 不等长段 T = Σt + (n−1)·Δt（§4.4）——老是先用 k·Δt 起步，第 1 条指令的全程时间算错</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- Day 11 预告：计算机组成②——存储体系（Cache 三种映射/命中率/虚拟存储）与总线，组成原理阶段收尾。
+  如果今天的流水线计算（第 14-20 题）错误超过 2 道：**不要急着进 Day 11**，
+  今晚或明早必须回 day10-cpu.md §4，遮住答案把 4 道流水线例题**逐道手算一遍**——
+  流水线计算是组成原理里&quot;会算就拿分&quot;的最稳定得分点，且 Day 11 的 Cache 命中率计算
+  用的是同一种&quot;先列已知量、再套公式&quot;的算理，今天欠账明天加倍。
+- 如果寻址计算（第 8-13 题）有错：今晚把 §3.9 的汇总表抄一遍，重点标出三种
+  &quot;范围由谁决定&quot;——直接寻址由 A 位数、间接寻址由存储字长、寄存器间接由寄存器位数。
+- 阶段 1 测验若有单科 &lt; 9/15：从明天起每天 Phase 2 任务前先抽 30 分钟，
+  按 knowledge-checklist.md 里 ⭐「二轮重点」的项补一个知识点，不要让欠账累积。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">CPU 组成与寄存器辨析：______（目标 ≥7，PC/IR/MAR/MDR 作用与总线连接必须秒答）
+寻址方式有效地址计算：______（目标 ≥8，8 种公式 + 三种&quot;范围由谁决定&quot;必须分清）
+不等长段流水线计算：______（目标 ≥9，必考计算点，Δt/Σt/T/S/TP/E 六个量必须全对）
+等长段流水线公式（S/TP/E）：______（目标 ≥8，S=kn/(k+n−1)、E=n/(k+n−1)、TP_max=1/Δt）
+超标量/超流水线吞吐率：______（目标 ≥7，m/Δt、n/Δt、m·n/Δt 三式）
+CISC vs RISC 对比：______（目标 ≥7，对比表能口述、RISC 五特点能复述）
+组成原理科目整体信心：______（弱项科目第一天，重点看流水线计算是否已变成稳定得分点）
+</code></pre>
+<hr />
+<h2>Day 11（10/1）反思：计算机组成② 存储体系 / Cache / 总线（组成原理阶段收尾）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 计算机组成原理阶段收尾（Day 10-11 第二天）。组成原理约占科目一 8%（5-6 分），几乎全在选择里。
+- 存储体系层次结构：寄存器→Cache→主存→辅存（速度/容量/每位价格对比）；
+  CPU 只能直接访问寄存器/Cache/主存，辅存不能直接访问；Cache 用 SRAM、主存用 DRAM
+- 局部性原理：时间局部性（循环计数器）vs 空间局部性（数组遍历、顺序取指）
+- Cache 工作原理：命中/缺失、目录表（有效位 V + 标记 Tag + 数据区）、命中的统一判据（Tag 相等 且 V=1）
+- 三种映射方式（统一设定：主存 16MB/24 位地址、Cache 64KB、块 64B → 偏移 6 位、1024 行、主存 2^18 块）：
+  - 直接映射：j mod C 行；Tag(8)+行号(10)+偏移(6)；1 个比较器；冲突率最高
+  - 全相联：任意行；Tag(18)+偏移(6)；行数个比较器；只适用于小容量 Cache
+  - 组相联：j mod G 组；Tag(10)+组号(8)+偏移(6)（4 路）；路数个比较器；现代主流
+  - 统一视角：直接=1 路组相联、全相联=C 路组相联；路数翻倍⇒组数减半/组号−1 位/Tag+1 位
+  - 冲突演示：主存块 3 与 1027 在直接映射下同行冲突、4 路组相联下同组可共存
+- Cache 命中率计算 3 道完整例题：h、t_a = h·t_c+(1−h)·t_m、S = t_m/t_a、e = t_c/t_a
+  （含 e = 1/[h+(1−h)r] 与 e = S/r 双重交叉验证；万能反解式 h = (t_m−t_a)/(t_m−t_c)）
+- 替换策略（RAND/FIFO/LRU，LRU≠LFU）与写策略（写直达 vs 写回；非写分配/写分配及经典配对）
+- 虚拟存储与 Cache 协同：TLB（虚→实）在前、Cache（实→数据）在后；缺页中断 vs Cache 缺失
+- 总线：DB 双向/AB 单向/CB 双向；带宽 = 工作频率 × 宽度/8（复用总线要扣除地址占用时间）；
+  同步（统一时钟）vs 异步（握手 REQ/ACK）；链式/计数器定时/独立请求三种仲裁
+- 计算机组成阶段知识框架图（day11-cache.md §八，Day 10+11 合并的冲刺一页纸）
+- 20 道选择题 + 3 道独立 Cache 计算题（docs/knowledge-points/architecture/day11-exercises.md）
+</code></pre>
+<h3>Step 4-1：重做 Day 10（CPU/指令/寻址/流水线）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>今天是<strong>组成原理阶段的最后一天</strong>。Day 10 与 Day 11 的知识是同一条链：
+<strong>Day 10 的 MAR/MDR 就是 Day 11「CPU 通过总线访存」的接口</strong>；<strong>流水线结构冲突的解法之一就是把指令 Cache 与数据 Cache 分离</strong>；而<strong>今天的 Cache 命中率计算与昨天的流水线计算用的是同一种算理</strong>——先列已知量、再套公式、最后交叉验证。
+<strong>遗忘曲线在 24 小时后最陡，昨晚做错的题今晚必须遮住答案重做一遍。</strong> 尤其：如果昨天流水线计算（第 14–20 题）是"看解析看懂的"而不是"自己算对的"，今天第 13、14 题与计算题 21、23 会立刻暴露——计算能力不能靠背解析积累。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/architecture/day10-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 <strong>5 道</strong>高混淆度题遮答案重做一遍——它们是 Day 10 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条；计算题必须把过程写出来，不要只对结论。
+4. 重做结果填在下方横线处；<strong>仍错的知识点</strong>在本文末「仍错知识点标记区」打 ☑，Phase 4 冲刺（Day 31–34）优先回看。
+5. <strong>最后用 <code>day11-cache.md</code> §八 的「计算机组成阶段知识框架图」做一次自检</strong>：能不看书复述框架图每个框里的内容、并默写 §九 的 20 条结论中的 16 条以上，组成原理阶段才算过关。</p>
+<p><strong>Day 10 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day10-exercises.md 第 16、17 题（不等长段流水线）</td>
+<td><strong>组成原理第一大计算坑</strong>。<strong>T = Σt + (n−1)·Δt，不是 k·Δt + (n−1)·Δt</strong>——第 1 条指令按各段<strong>实际时间之和</strong>走完全程。第 17 题的效率<strong>只能</strong>用 E = S/k = n·Σt/(k·T)，<strong>E = n/(k+n−1) 只适用于等长段</strong>（误用会算出 83.3% 而正确答案是 54.5%）。重做必须把 Δt、Σt、T、T₀、S、E 六个量逐个写出来。（day10-cpu.md §4.4–4.5）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day10-exercises.md 第 9 题（间接寻址空间）</td>
+<td><strong>"间接寻址范围由存储字长决定，不是形式地址位数"</strong>——这正是间接寻址存在的意义。今天的 Cache 题里"主存块号位数 = 地址位数 − 偏移位数"是同一类"位数由谁决定"的推理，错法完全一样。（day10-cpu.md §3.3）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day10-exercises.md 第 11 题（相对寻址 EA）</td>
+<td><strong>A 是补码可正可负</strong>（80H = −128，不是 +128）；且公式中的 (PC) 是<strong>下一条指令</strong>的地址。今天的 Cache 地址拆分同样要"先看字段边界、再取值"，粗心模式会复现。（day10-cpu.md §3.8）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day10-exercises.md 第 18 题（已知 S 反求 n）</td>
+<td>近两年新考法。解方程后<strong>必须回代验证</strong>，并检查 <strong>S₀ &lt; k</strong>（加速比上限是段数 k，超过则无解）。答案是 n = 21，分母漏 −1 会得到 28。（day10-cpu.md §4.6）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day10-exercises.md 第 4 题（CF vs OF）</td>
+<td><strong>"无符号/进位"选 CF，"带符号/溢出"选 OF</strong>——两个标志位<strong>相互独立</strong>。题目换个问法（"最高位产生进位""两负数相加结果为正"）就要能重新判断对。（day10-cpu.md §1.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 10 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day11-exercises.md</code> 的 20 道选择题 + 3 道计算题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（今天的错因高度集中，对照自查）</strong>：
+- <strong>第 5、6、7 题（映射地址结构）</strong>错了，说明<strong>位数推导还没形成肌肉记忆</strong>。回 <code>day11-cache.md</code> §3.0 把骨架（Tag + 字块内地址 + 块内偏移）与<strong>位数守恒律</strong>（三者之和 = 主存地址位数；Tag + 组号 = 主存块号位数）默写一遍。最大陷阱是<strong>第 6 题全相联</strong>：<strong>全相联没有"字块内地址"这一段</strong>，Tag = 24 − 6 = 18 位（误保留行号字段会算出 14 位）。
+- <strong>第 13、14 题（t_a 与效率 e）</strong>错了，九成是<strong>公式混淆</strong>：<strong>加速比 S = t_m/t_a（&gt;1），效率 e = t_c/t_a（≤100%）</strong>。记住「加速比往大看（相对慢主存），效率往小看（相对快 Cache）」。任何超过 100% 的"效率"答案必错（第 14 题的 D 选项 308% 就是加速比伪装的）。
+- <strong>计算题 21、23</strong> 错了，必须把 h、t_a、S、e 四个量<strong>逐个列式重算</strong>，并用 <strong>e = 1/[h+(1−h)r]</strong> 或 <strong>e = S/r</strong> 交叉验证——不做交叉验证的"算对"都是运气。
+- <strong>计算题 22（地址变换）</strong>错了，先检查<strong>组号 = 块号 mod 组数（不是 mod 行数）</strong>，再用<strong>重建验证</strong>（(Tag×组数+组号)×块大小+偏移 = 原地址）自查。
+- <strong>第 19 题（总线带宽）</strong>错了：<strong>忘记除以 8</strong> 会得到 3200（兆位/秒）而不是 400 MB/s。
+- <strong>第 9、10、11、18 题（概念题）</strong>错了解决办法单一：回 <code>day11-cache.md</code> §3.4 对比表 + §7.2 总线分类表整体重背。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 6 题全相联 Tag 位数」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把位数推导写出来）：
+  - 块内偏移 = log₂(块大小) = <strong><em>_</em>_
+  - 字块内地址（行号/组号）位数 = </strong><strong><em>_（全相联：无此字段）
+  - Tag = 主存地址位数 − 偏移 − 字块内地址 = </em></strong><strong><em>
+  - 位数守恒律检查：</em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 14 题效率 e」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把四个量逐个写出）：
+  - h = <strong><em>_</em>_
+  - t_a = h·t_c + (1−h)·t_m = </strong><strong><em>_
+  - S = t</em>m / t_a = </strong><strong><em>_
+  - e = t</em>c / t_a = </strong><strong><em>_（并用 e = S/r 交叉验证，r = t</em>m/t_c = </strong>____）
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「计算题 22 组相联地址变换」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把拆分与命中判断写出来）：
+  - 主存块号 = 地址 ÷ 块大小 = <strong><em>_</em>_
+  - 组号 = 块号 mod 组数 = </strong><strong><em>_；Tag = 块号 ÷ 组数 = </em></strong><strong><em>；偏移 = 地址 mod 块大小 = </em></strong><strong><em>
+  - 重建验证：(Tag×组数+组号)×块大小+偏移 = </em></strong><strong><em>
+  - 命中判断：定位到第 ___ 组，组内各路 Tag 为 </em></strong>，与本次 Tag ___ 比较 → 命中/未命中
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 10 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>组成原理阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31–34）时<strong>优先</strong>回看对应笔记，并到 <code>day10-exercises.md</code> / <code>day11-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>存储体系与 Cache 原理（day11-cache.md §一、§二）</strong>
+- ☐ 存储层次速度/容量/价格方向、CPU 不能直接访问辅存（§1.2）
+- ☐ 时间局部性 vs 空间局部性的判别（§1.3）
+- ☐ Cache—主存层 vs 主存—辅存层的"管什么/谁管/对谁透明"（§1.4）
+- ☐ 命中率公式与命中的统一判据（Tag 相等 且 V=1）（§2.2–2.3）</p>
+<p><strong>三种映射方式（day11-cache.md §三）</strong>
+- ☐ 直接映射公式 j mod C 与地址结构（§3.1）
+- ☐ 全相联无"字块内地址"字段、只适用于小容量（§3.2）
+- ☐ 组相联组数 = 行数/路数、Tag = 主存块号位数 − 组号位数（§3.3）
+- ☐ 三种映射的比较器个数（1 / 路数 / 行数）（§3.4）
+- ☐ 统一视角与"路数翻倍⇒Tag+1 位"的规律（§3.5）
+- ☐ 位数守恒律自查（§3.0）</p>
+<p><strong>Cache 性能计算（day11-cache.md §二.4、§四）</strong>
+- ☐ t_a = h·t_c + (1−h)·t_m（§2.4）
+- ☐ 加速比 S = t_m/t_a 与效率 e = t_c/t_a 的区分（§2.4）
+- ☐ 反求命中率 h = (t_m−t_a)/(t_m−t_c)（§4 例题 3）
+- ☐ 两级 Cache 平均访问时间（拓展）（§4.1）</p>
+<p><strong>替换与写策略（day11-cache.md §五）</strong>
+- ☐ LRU / FIFO / LFU 名称与规则辨析（§5.1）
+- ☐ 写直达 vs 写回的一致性与脏位（§5.2）
+- ☐ 写分配 / 非写分配 与两种写策略的经典配对（§5.2）</p>
+<p><strong>虚拟存储与总线（day11-cache.md §六、§七）</strong>
+- ☐ TLB 与 Cache 的先后顺序及各自作用（§6.2）
+- ☐ 数据/地址/控制总线的方向（§7.2）
+- ☐ 总线带宽 = 频率 × 宽度/8 与复用总线陷阱（§7.3）
+- ☐ 同步 vs 异步总线、三种总线仲裁（§7.4–7.5）</p>
+<blockquote>
+<p>填写示例：<code>☑ 加速比 S 与效率 e 的区分（§2.4）——老把 t_m/t_a 当效率，忘了效率的分母是 t_a、分子是 t_c</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 组成原理阶段已收尾（Day 10-11）。如果今天计算题（第 13、14 题 + 计算题 21–23）错误超过 2 道：
+  今晚或明早必须回 day11-cache.md §2.4 与 §四，遮住答案把 3 道命中率例题**逐道手算一遍**——
+  Cache 命中率计算与流水线计算并列为组成原理&quot;会算就拿分&quot;的最稳得分点，不能欠账进下一阶段。
+- 如果映射地址结构（第 5–7 题 + 计算题 22）有错：今晚把 §3.4 的对比表和 §3.5 的&quot;路数连续谱&quot;
+  抄一遍，重点标出三个数字（直接 Tag 8 / 全相联 Tag 18 / 4 路组相联 Tag 10+组号 8）。
+- 如果第 20 题（Day 10 流水线回顾）仍错：说明昨天的欠账还没还——回 day10-cpu.md §4
+  把 4 道流水线例题重算，不要把流水线的债留到 Phase 2。
+- 明天起进入下一阶段。若今天整体正确率 &lt; 80%（&lt; 16/20）：明早先用 20 分钟把
+  day11-cache.md §八「计算机组成阶段知识框架图」整体过一遍——这张图是组成原理全部考点的索引。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">存储体系层次结构与局部性：______（目标 ≥7，速度/容量方向与时间/空间局部性必须分清）
+三种映射方式地址结构：______（目标 ≥9，必考计算点——Tag/组号/偏移位数必须逐位推对）
+映射方式概念对比（比较器/冲突率/适用）：______（目标 ≥7，对比表能口述）
+Cache 命中率与平均访问时间：______（目标 ≥9，必考计算点——h/t_a/S/e 四个量必须全对且会交叉验证）
+反求命中率（约束条件逆推）：______（目标 ≥8，万能式 h=(t_m−t_a)/(t_m−t_c)）
+替换与写策略：______（目标 ≥7，LRU≠LFU、写直达/写回+两种分配的经典配对）
+TLB 与 Cache 协同：______（目标 ≥7，&quot;TLB 在前、Cache 在后&quot;的访存路径能默画）
+总线分类与带宽计算：______（目标 ≥8，DB/AB/CB 方向 + 带宽=频率×宽度/8 勿忘 /8）
+组成原理阶段整体框架（Day 10-11）：______（目标 ≥7，能复述 day11-cache.md §八 框架图并默写 §九 的 20 条结论）
+组成原理科目整体信心：______（弱项科目阶段收尾——重点看 Cache 命中率计算是否已变成稳定得分点）
+</code></pre>
+<hr />
+<h2>Day 12（10/2）反思：软件工程① 过程模型 / 需求分析 / 结构化分析（软件工程阶段第一天）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 软件工程阶段第一天（Phase 2 开门）。软件工程约占科目一 8-10 分（几乎全在选择），
+  并且是科目二下午大题的常客（结构化分析/DFD 或面向对象分析），是&quot;背了就拿分&quot;的性价比阶段。
+- 软件生命周期三时期：定义期、开发期、运行维护期；维护阶段时间最长、花费最大（约占总成本 60%-80%）
+- 可行性研究四类：经济可行性（钱/投入产出比）、技术可行性（技）、法律可行性（法）、操作可行性（人）
+- 软件维护四类型：改正性（改错）、适应性（适应环境变化）、完善性（加功能/改进，占比最大、半数以上）、
+  预防性（提高可维护性）
+- 六大过程模型对比（必考）：瀑布、增量、螺旋、原型、V、敏捷（Scrum）
+  - 识别词：瀑布=文档驱动；V=开发测试对应；增量=分批交付；原型=澄清需求；螺旋=风险驱动；敏捷=拥抱变化
+  - 螺旋 = Boehm 1988，四象限：制定计划 → 风险分析 → 实施工程 → 客户评估
+  - V 模型四对对应：需求↔验收、概设↔系统、详设↔集成、编码↔单元
+  - Scrum：3 角色（PO/SM/开发团队）、3 工件、5 事件；Sprint 2-4 周；每日站会 15 分钟
+- 需求分析：需求三分类（功能 / 非功能（性能在此）/ 设计约束）；需求获取方法（访谈、观察、问卷、JAD、原型、用例）；
+  SRS 七性质（正确、无歧义、完整、一致、可验证、可修改、可追踪）
+- 结构化分析（SA）三件事：数据流图（DFD）+ 数据字典（DD）+ 加工逻辑（小说明）
+- DFD 四要素：外部实体（矩形）、加工（圆角矩形）、数据流（箭头）、数据存储（双横线/开口矩形）；
+  DFD 只有数据流、没有控制流；每条数据流必须命名；父子图平衡（数量、方向、名称一致）
+- DD 符号：= 定义、+ 与、| 或、{ } 重复、( ) 可选；小说明三工具：结构化语言、判定表、判定树
+  （判定表四部分：条件桩、条件项、动作桩、动作项）
+- 完整 DFD 示例：图书馆借阅系统——0 层关联图（读者/管理员两个外部实体）+ 0 层展开图
+  （3 个加工：借书处理/还书处理/新书入库；2 个存储：D1 图书信息表/D2 借阅记录表），
+  附数据流清单表与父子图平衡校验
+- 20 道选择题（docs/knowledge-points/software-engineering/day12-exercises.md）：
+  过程模型 11 题（1-11）、生命周期与维护 3 题（12-14）、需求分析 3 题（15-17）、DFD/DD 3 题（18-20）
+</code></pre>
+<h3>Step 3-1：重做 Day 11（Cache/组成原理）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>今天<strong>跨阶段进入软件工程</strong>。知识体系彻底切换：前几天是"计算型"（地址拆分、命中率、流水线），
+今天起是"记忆辨析型"（模型特征对比、概念分类）。<strong>但组成原理的计算债不能留到 Phase 2</strong>——
+昨天是组成原理阶段收尾，如果昨天的计算题是"看解析看懂的"，今晚必须遮住答案重做一遍。
+遗忘曲线在 24 小时后最陡，<strong>昨晚做错的题今晚重做一遍，比周末集中回顾有效得多</strong>。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/architecture/day11-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 <strong>5 道</strong>高混淆度题遮答案重做一遍——它们是 Day 11 中最容易"看懂了解析、换个数又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条（计算题必须把过程写出来，不要只对结论）；
+   <strong>组成原理</strong>的仍错知识点回 Day 12 之前的 Day 11 「仍错知识点标记区」打 ☑，Phase 4 冲刺优先回看。
+4. 重做结果填在下方横线处。
+5. <strong>跨阶段自检</strong>：组成原理阶段的"算理"与软件工程阶段的"辨析"是两种能力，今晚重做时体会两者的切换——
+   后面 Day 13 的测试覆盖、Day 14 的数据结构补漏会同时用到这两种能力。</p>
+<p><strong>Day 11 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day11-exercises.md 第 6 题（全相联 Tag 位数）</td>
+<td><strong>全相联没有"字块内地址"字段</strong>——Tag = 24 − 6 = <strong>18 位</strong>。误保留行号字段会算出 14 位。位数守恒律（三段之和 = 主存地址位数）是唯一可靠的自查手段。（day11-cache.md §3.2–3.3）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day11-exercises.md 第 13、14 题（t_a 与效率 e）</td>
+<td><strong>公式混淆重灾区</strong>：<strong>加速比 S = t_m/t_a（&gt;1），效率 e = t_c/t_a（≤100%）</strong>。任何超过 100% 的"效率"答案必错（第 14 题 D 选项 308% 就是加速比伪装的）。（day11-cache.md §2.4）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day11-exercises.md 计算题 21、23（命中率全流程/反求 h）</td>
+<td>必须把 <strong>h、t_a、S、e 四个量逐个列式</strong>，并用 <strong>e = 1/[h+(1−h)r]</strong> 或 <strong>e = S/r</strong> 交叉验证——不做交叉验证的"算对"都是运气。反求用万能式 <strong>h = (t_m−t_a)/(t_m−t_c)</strong>。（day11-cache.md §四）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day11-exercises.md 计算题 22（2 路组相联地址变换）</td>
+<td><strong>组号 = 块号 mod 组数（不是 mod 行数）</strong>；再用<strong>重建验证</strong>：(Tag×组数+组号)×块大小+偏移 = 原地址。（day11-cache.md §3.3、§3.6）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day11-exercises.md 第 19 题（总线带宽）</td>
+<td><strong>忘记除以 8</strong> 会得到 3200（兆位/秒）而不是 <strong>400 MB/s</strong>。带宽 = 工作频率 × 宽度/8。（day11-cache.md §7.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 11 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day12-exercises.md</code> 的 20 道题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（今天的错因高度集中，对照自查）</strong>：
+- <strong>第 1、10 题（螺旋模型）</strong>：螺旋 = <strong>Boehm 1988 = 风险驱动</strong>。第 10 题四活动顺序是<strong>制定计划 → 风险分析 → 实施工程 → 客户评估</strong>——风险分析前必须有"计划"确定的目标与备选方案，客户评估是<strong>每圈收尾</strong>不是起点。错了回 <code>day12-process.md</code> §2.5 把四象限重背。
+- <strong>第 2、11 题（V 模型）</strong>：四对对应<strong>需求↔验收、概设↔系统、详设↔集成、编码↔单元</strong>。最常见错误是把"概设/详设"与"系统/集成"配对颠倒。记忆链：<strong>越靠左的开发文档对应越靠右的测试阶段；详设更"细"→ 对应更底层的集成测试</strong>。
+- <strong>第 4、9 题（增量 vs 原型）</strong>：一句话<strong>"增量交产品，原型定需求"</strong>。增量每个增量是<strong>可运行产品的一部分</strong>（累积成最终系统）；原型用于<strong>澄清/验证需求</strong>（抛弃型用完即弃）。两者都不是按项目规模划分的。
+- <strong>第 6 题（敏捷四价值观）</strong>：四条价值观的左项<strong>各不相同、不能串接</strong>：<strong>个体互动 &gt; 流程工具；可工作软件 &gt; 详尽文档；客户合作 &gt; 合同谈判；响应变化 &gt; 遵循计划</strong>。错法几乎都是"张冠李戴"把某条左项配到另一条右项上。
+- <strong>第 13 题（维护类型）</strong>：判别标准<strong>"用户想要更多/更好 → 完善性；环境变了导致系统不适应 → 适应性"</strong>。加新报表 = 加新功能 = <strong>完善性维护</strong>（占比最大、半数以上）。
+- <strong>第 19、20 题（DFD）</strong>：<strong>DFD 只有数据流、没有控制流</strong>——不表示条件判断与循环（那是小说明的事）。箭头方向：<strong>由存储指向加工 = 读取，由加工指向存储 = 写入</strong>。数据存储符号是<strong>双横线（开口矩形）</strong>，不是菱形。
+- <strong>概念题（3、5、7、8、12、14-18）</strong>错了解决办法单一：回 <code>day12-process.md</code> §2.7 六模型对比表 + §1.4 维护四类型 + §3.2 需求三分类整体重背——软件工程的选择题"背到就是赚到"。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 2 题 V 模型概要设计对应测试阶段」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把四对对应关系完整写出）：
+  - 需求分析 ↔ <strong><em>_</em>_
+  - 概要设计 ↔ </strong><strong><em>_
+  - 详细设计 ↔ </em></strong><strong><em>
+  - 编码 ↔ </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 13 题维护类型判断」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（先判"变化来自哪一侧"）：
+  - 题干诉求属于（用户想要更多更好 / 环境变了 / 系统本身有错 / 主动提高可维护性）：<strong><em>_</em>_
+  - 对应维护类型：</strong><strong><em>_
+  - 四类型占比最大的是：</em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「第 20 题 DFD 箭头方向与平衡」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把数据流起点/终点逐条列出）：
+  - 该数据流名称：<strong><em>_</em>_；起点：</strong><strong><em>_；终点：</em></strong><strong><em>
+  - 读存储 = 箭头由 </em></strong><strong><em> 指向 </em></strong><strong><em>；写存储 = 箭头由 </em></strong><strong><em> 指向 </em></strong><strong><em>
+  - 父子图平衡校验：子图外部流与父加工数据流在 </em></strong><strong><em>、</em></strong><strong><em>、</em></strong>___ 三方面一致
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 11 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>软件工程阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到 <code>day12-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>软件生命周期与维护（day12-process.md §一）</strong>
+- ☐ 生命周期三时期划分、维护阶段时间最长花费最大（§1.1-1.2）
+- ☐ 可行性研究四类与成本-效益分析归属经济可行性（§1.3）
+- ☐ 维护四类型判别，尤其完善性 vs 适应性（§1.4）</p>
+<p><strong>过程模型对比（day12-process.md §二）</strong>
+- ☐ 六模型识别词（瀑布文档驱动 / V 测试对应 / 增量分批交付 / 原型澄清需求 / 螺旋风险驱动 / 敏捷拥抱变化）（§2.7）
+- ☐ 螺旋 = Boehm 1988 与四象限顺序（§2.5）
+- ☐ V 模型四对对应关系（§2.2）
+- ☐ 增量 vs 原型的本质区别与两种原型变种（§2.3-2.4）
+- ☐ 敏捷四价值观与 Scrum 3-3-5、Sprint 2-4 周（§2.6）</p>
+<p><strong>需求分析（day12-process.md §三）</strong>
+- ☐ 需求三分类（功能/非功能/设计约束），性能属非功能（§3.2）
+- ☐ SRS 七性质与"只有一种解释=无歧义"（§3.4）
+- ☐ 需求获取方法清单（代码审查不属于需求获取）（§3.3）</p>
+<p><strong>结构化分析与 DFD（day12-process.md §四）</strong>
+- ☐ DFD 四要素与图形符号（存储=双横线）（§4.2）
+- ☐ DFD 无控制流、数据流必须命名（§4.2-4.3）
+- ☐ 父子图平衡规则（数量/方向/名称一致）（§4.3）
+- ☐ 读/写数据流的箭头方向（§4.4）
+- ☐ DD 符号与小说明三工具、判定表四部分（§4.5-4.6）</p>
+<blockquote>
+<p>填写示例：<code>☑ V 模型四对对应关系（§2.2）——老把概要设计对应到集成测试，记反了"越靠左的文档对应越靠右的测试"</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 软件工程阶段第一天。如果今天过程模型题（第 1-11 题）错误超过 3 道：今晚把
+  day12-process.md §2.7 的六模型对比表**整表抄一遍**，并强制自己口述每个模型的&quot;一句识别词&quot;——
+  过程模型辨析是软件工程选择题出题最密集的地方，&quot;靠排除法蒙对&quot;不算掌握。
+- 如果第 2、11 题（V 模型）仍错：把 §2.2 的对应表默写三遍，重点标出&quot;详设→集成、概设→系统&quot;。
+- 如果第 19、20 题（DFD）仍错：回 §4.4 把图书馆借阅系统的 0 层图遮住重画一遍，再对着数据流清单
+  逐条核对箭头方向——DFD 是科目二下午大题的高频考法，今天的基础直接决定大题得分。
+- 明天 Day 13 学软件工程②：面向对象设计原则、耦合/内聚分级、测试方法（黑盒/白盒）、逻辑覆盖与
+  路径测试、软件维护、项目管理（甘特图/风险分析）。**今晚先把 DFD 四要素与对比表背熟**，
+  明天的耦合/内聚分级是同类型的&quot;分级记忆&quot;任务，方法可以复用。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">软件生命周期与维护四类型：______（目标 ≥8，维护阶段占比最大、完善性维护占比最大必须记牢）
+六大过程模型识别词：______（目标 ≥9，必考——每个模型必须能一句说出特征且不混淆）
+螺旋模型（提出者/四象限/风险驱动）：______（目标 ≥9，Boehm 1988 + 四活动顺序）
+V 模型四对对应关系：______（目标 ≥9，必考——需求↔验收/概设↔系统/详设↔集成/编码↔单元）
+增量 vs 原型的区别与变种：______（目标 ≥8，&quot;增量交产品，原型定需求&quot;）
+敏捷四价值观与 Scrum 框架：______（目标 ≥8，四价值观不串接、Sprint 2-4 周）
+需求三分类与 SRS 七性质：______（目标 ≥7，性能属非功能、&quot;只有一种解释=无歧义&quot;）
+DFD 四要素与图形符号：______（目标 ≥9，必考——存储=双横线、无控制流）
+父子图平衡与数据流方向：______（目标 ≥8，下午大题——数量/方向/名称一致、读存vs写存方向）
+数据字典符号与小说明三工具：______（目标 ≥7，= + | { } ( ) 与判定表四部分）
+软件工程科目整体信心：______（新阶段第一天——重点看过程模型对比表是否已能脱稿口述）
+</code></pre>
+<hr />
+<h2>Day 13（10/3）反思：软件工程② 设计原则 / 耦合内聚 / 测试方法 / 项目管理（软件工程阶段第二天）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 软件工程阶段第二天，也是软件工程&quot;计算题&quot;最集中的一天。今天的内容在科目一选择中约占 5-8 分，
+  且逻辑覆盖与圈复杂度是软件工程里唯一&quot;必须动手算&quot;的考点，科目二下午大题也常考基本路径测试。
+- 面向对象设计七大原则（day13-test.md §一）：
+  - SRP 单一职责（一个类只有一个引起它变化的原因）
+  - OCP 开闭（对扩展开放、对修改关闭）
+  - LSP 里氏替换（子类必须能替换父类，行为不变）
+  - DIP 依赖倒置（高层/低层都依赖抽象；细节依赖抽象）
+  - ISP 接口隔离、LoD 迪米特法则（最少知识）、CARP 组合/聚合复用
+  - 三组易混辨析：SRP 职责≠方法数；LSP 替换≠重写；OCP 扩展≠修改
+- 耦合七级（低→高）：非直接、数据、标记、控制、外部、公共、内容（§二）
+  - 判别关键词：传简单参数=数据；传整个记录=标记；传&quot;决定对方走哪段逻辑&quot;的标志=控制
+- 内聚七级（低→高）：偶然、逻辑、时间、过程、通信、顺序、功能（§三）
+  - 判别关键词：只按顺序执行=过程；有数据链（前元素输出是后元素输入）=顺序；只做一个功能=功能
+- 测试四阶段：单元（编码后，开发者）→ 集成（概设/详设后）→ 系统（SRS 后）→ 验收（用户）（§四）
+- 黑盒三方法：等价类划分、边界值分析（取边界及邻近越界值）、因果图（输入间有组合/约束时）（§五）
+- 白盒逻辑覆盖六级（弱→强）：语句 &lt; 判定 &lt; 条件 &lt; 判定-条件 &lt; 条件组合 &lt; 路径（§六）
+  - 统一伪代码 f(a,b)：if(a&gt;0&amp;&amp;b&gt;0){a=a+1;} if(a&gt;5){b=b+a;} —— CFG：N=5, E=6, V(G)=3
+  - 六级最小用例数：语句 1、判定 2、条件 2、判定-条件 2、条件组合 4、路径 4
+  - ⚠️ 条件覆盖不保证判定覆盖（反例：a=1,b=0 与 a=0,b=1 把 C1/C2 真假都覆盖，但 D1 恒假，真分支从未执行）
+  - 条件组合覆盖与路径覆盖互不包含（有反例证明，不能认为条件组合最强）
+- McCabe 圈复杂度（§七）：V(G) = E − N + 2 = 判定节点数 + 1 = 区域数；建议 V(G) ≤ 10
+  - V(G) 的意义 = 独立路径数 = 基本路径测试所需的最少测试用例数
+  - 基本路径测试四步：画 CFG → 算 V(G) → 列 V(G) 条独立路径 → 每条路径设计一个用例
+  - 含循环时只区分&quot;循环 0 次 / 至少 1 次&quot;，回边贡献 1 个环
+- 软件维护四类型与判别两步法（§八，Day 12 已学分类，今天补判别技巧）
+- 项目管理（§九）：成本估算（LOC/FPA/COCOMO）、甘特图（直观但难表达依赖与关键路径）、
+  PERT/CPM 与关键路径（源点到汇点最长路径 = 最短工期）、风险暴露 RE = 概率 × 损失
+- 20 道选择题 + 3 道独立路径计算题（docs/knowledge-points/software-engineering/day13-exercises.md）：
+  设计原则 3 题（1-3）、耦合/内聚 5 题（4-8）、黑盒 3 题（9-11）、白盒与 McCabe 5 题（12-16）、
+  维护 2 题（17-18）、项目管理 2 题（19-20）；计算题 21（V=3）、22（V=4）、23（V=3，含循环）
+</code></pre>
+<h3>Step 3-1：重做 Day 12（软件工程①）错题——先做这一步，再做今天的错题整理</h3>
+<blockquote>
+<p>昨天是<strong>纯记忆辨析型</strong>（过程模型 / 需求 / DFD），今天虽然加入了<strong>计算</strong>（圈复杂度、独立路径），
+但耦合/内聚分级、维护判别仍是同类型的"分级记忆"任务——<strong>遗忘曲线在 24 小时后最陡</strong>，
+昨天背得不牢的对比表，今晚必须遮住答案重做一遍，否则明天就会和今天的耦合/内聚七级<strong>串记</strong>。
+软件工程的选择题考点高度重复，<strong>昨天做错的题今晚重做一遍，性价比远高于周末集中回顾</strong>。</p>
+</blockquote>
+<p><strong>重做指引：</strong>
+1. 打开 <code>docs/knowledge-points/software-engineering/day12-exercises.md</code>，把<strong>昨天做错的题</strong>逐题遮住答案重做（只看题目、不看解析）；做对的可跳过。
+2. 无论昨天对错，都建议把下面 <strong>5 道</strong>高混淆度题遮答案重做一遍——它们是 Day 12 中最容易"看懂了解析、换个场景又错"的题。
+3. 重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条（概念题必须把对比表里对应的一行整行默写出来，不要只对结论）；
+   <strong>Day 12 的仍错知识点</strong>回 Day 12 反思的「仍错知识点标记区」打 ☑，Phase 4 冲刺优先回看。
+4. 重做结果填在下方横线处。
+5. <strong>跨题型自检</strong>：今天起会出现"画图 + 计算"型大题（基本路径测试）。体会"辨析型选择"与"画图计算型大题"
+   在答题节奏上的区别——前者靠第一反应，后者必须把 CFG、E、N、V(G)、路径<strong>逐项写清楚</strong>，步骤分按项给。</p>
+<p><strong>Day 12 高混淆度重做题清单（按易错程度排序）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day12-exercises.md 第 2 题（V 模型对应）</td>
+<td>四对对应<strong>需求↔验收、概设↔系统、详设↔集成、编码↔单元</strong>。最常见错误是把"概设/详设"与"系统/集成"配对颠倒。记忆链：<strong>越靠左的开发文档对应越靠右的测试阶段；详设更"细"→ 更底层的集成测试</strong>。（day12-process.md §2.2）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day12-exercises.md 第 13 题（维护类型）</td>
+<td>判别标准：<strong>"用户想要更多/更好 → 完善性；环境变了导致系统不适应 → 适应性"</strong>。加新报表 = 加新功能 = <strong>完善性维护</strong>（占比最大、半数以上）。本项与今天第 17、18 题是同一考点，<strong>昨天错今天大概率还错</strong>。（day12-process.md §1.4 / day13-test.md §八）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day12-exercises.md 第 19 题（DFD 无控制流）</td>
+<td><strong>DFD 只有数据流、没有控制流</strong>——不表示条件判断与循环（那是小说明的事）。这是 DFD 与程序流程图的<strong>根本区别</strong>，也是今天画 CFG 时的对照点：<strong>CFG 专画控制流，DFD 专画数据流，两者不能混</strong>。（day12-process.md §4.2-4.3 / day13-test.md §七）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day12-exercises.md 第 20 题（DFD 箭头方向）</td>
+<td>箭头方向表示数据流向：<strong>由存储指向加工 = 读取，由加工指向存储 = 写入</strong>。符号：存储 = <strong>双横线（开口矩形）</strong>，不是菱形。（day12-process.md §4.4）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day12-exercises.md 第 10 题（螺旋四象限）</td>
+<td>螺旋 = <strong>Boehm 1988 = 风险驱动</strong>；四活动顺序：<strong>制定计划 → 风险分析 → 实施工程 → 客户评估</strong>。风险分析前必须有"计划"确定的目标与备选方案；客户评估是<strong>每圈收尾</strong>不是起点。（day12-process.md §2.5）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Day 12 错题重做结果：<strong><em>_</em>_ / </strong>____ 道正确（填「重做正确数 / 昨天错题数」）。仍有错误的已在下面登记。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天 <code>day13-exercises.md</code> 的 20 道选择题 + 3 道计算题中做错的，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>重点提醒（今天的错因高度集中，对照自查）</strong>：
+- <strong>第 4、5 题（七级排序）</strong>：这是今天<strong>必须能默写</strong>的两张表。耦合：<strong>非直接、数据、标记、控制、外部、公共、内容</strong>（"非数标控外公内"）；内聚：<strong>偶然、逻辑、时间、过程、通信、顺序、功能</strong>（"偶逻时过通顺功"）。错了就回 <code>day13-test.md</code> §2.2、§3.2 <strong>整表抄一遍</strong>。
+- <strong>第 6 题（控制耦合）</strong>：判别关键——传进去的值是<strong>"被处理的数据"（数据/标记耦合）</strong>还是<strong>"指挥对方怎么做的信号"（控制耦合）</strong>。标记耦合传的是<strong>整个数据结构/记录</strong>，数据耦合传的是<strong>简单参数</strong>。
+- <strong>第 7 题（顺序 vs 过程内聚）</strong>：<strong>有数据链（前元素输出是后元素输入）→ 顺序内聚；只按固定顺序执行而无数据链 → 过程内聚</strong>。通信内聚的判据是"使用同一输入或产生同一输出"，不是流水线。
+- <strong>第 13、14 题（覆盖标准）</strong>：强度顺序<strong>语句 &lt; 判定 &lt; 条件 &lt; 判定-条件 &lt; 条件组合 &lt; 路径</strong>（判定在条件之前）。<strong>条件组合覆盖 = 每个判定中所有条件的各种取值组合至少一次</strong>——<code>if(a&gt;0&amp;&amp;b&gt;0)</code> 有 2 个条件就要覆盖 (T,T)/(T,F)/(F,T)/(F,F) <strong>4 种</strong>组合。
+- <strong>第 15、16 题（V(G)）</strong>：<code>V(G) = E − N + 2</code>，<strong>"+2" 最容易漏</strong>（漏了得 E−N）。<code>V(G) = 判定节点数 + 1</code>（V(G)=5 ⇒ 4 个判定，不是 5 个）。<strong>V(G) = 独立路径数 = 最少用例数</strong>；全部可能路径数<strong>可以远大于</strong> V(G)（含循环时甚至无穷）。
+- <strong>第 10、11 题（等价类/边界值）</strong>：[0,100] 的有效等价类 1 个、<strong>无效等价类 2 个（x&lt;0、x&gt;100）</strong>；边界值取 <strong>{−1, 0, 1, 99, 100, 101}</strong>——"刚好越界"的 −1 和 101 最容易漏。
+- <strong>第 17、18 题（维护）</strong>：两步法——先问"系统错了吗"（改正性），再问"环境变了还是用户想要更多"（<strong>环境变了=适应性，用户要更多/更好=完善性</strong>）。占比最大的是<strong>完善性（~50%）</strong>。导出 PDF = 新功能 = 完善性。
+- <strong>第 19、20 题（项目管理）</strong>：甘特图<strong>直观但难以反映任务间依赖与关键路径</strong>（那是 PERT/CPM 的强项）；关键路径 = <strong>源点到汇点最长路径</strong>，其长度 = 项目最短工期（不是最短路径！）。
+- <strong>计算题 21–23</strong>：错了一定要<strong>重画 CFG、重数 E 和 N</strong>，不要只对答案。三题 V(G) 分别为 <strong>3、4、3</strong>，均可用 <code>E−N+2</code> 与 <code>判定数+1</code> 两法交叉验算；独立路径数用路径向量的秩验证。第 22 题的<strong>不可行路径</strong>（走 ④ 又走 ⑦：D2 真 ⇒ f=10 ⇒ f&gt;50 恒假）和第 23 题的<strong>回边</strong>（③→②）是两道题的精华。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 15 题 V(G) 计算」或「计算题 21」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题必须四步全写，不可只写结果）：
+  - 第 1 步——画 CFG，数出：节点 N = <strong><em>_</em>_，边 E = </strong><strong><em>_（把每条边逐条列一遍再数）
+  - 第 2 步——算法一：V(G) = E − N + 2 = </em></strong><strong><em> − </em></strong><strong><em> + 2 = </em></strong><strong><em>
+  - 第 3 步——算法二（交叉验算）：判定节点数 = </em></strong><strong><em>，V(G) = 判定数 + 1 = </em></strong><strong><em>（两法不一致就是数错了）
+  - 第 4 步——独立路径 </em></strong>___ 条，每条配一个输入并验算输出
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 6 题控制耦合 / 第 7 题顺序内聚」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把对应分级表的整行抄出，再写判别关键词）：
+  - 该耦合/内聚类型：<strong><em>_</em>_
+  - 分级表中的位置（低→高第几级）：</strong><strong><em>_；上一级是 </em></strong><strong><em>，下一级是 </em></strong><strong><em>
+  - 一句话判别关键词：</em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「第 13 题覆盖顺序 / 第 14 题条件组合覆盖」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把六个标准的强度顺序与定义默写一遍）：
+  - 强度顺序：<strong><em>_</em>_ &lt; </strong><strong><em>_ &lt; </em></strong><strong><em> &lt; </em></strong><strong><em> &lt; </em></strong><strong><em> &lt; </em></strong><strong><em>
+  - 本题所问标准的定义：</em></strong><strong><em>
+  - 若是条件组合覆盖，写出该判定有 </em></strong><strong><em> 个条件、共 </em></strong>___ 种取值组合
+- <strong>知识点</strong>：</p>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p>做完上面所有题（含 Day 12 重做）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。这些就是你<strong>软件工程阶段</strong>的<strong>持久薄弱点（persistent weak points）</strong>，Phase 4 冲刺复习（Day 31-34）时<strong>优先</strong>回看对应笔记，并到 <code>day13-exercises.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>面向对象设计原则（day13-test.md §一）</strong>
+- ☐ 七大原则的名称与各自一句话定义（§1.1）
+- ☐ SRP 的"职责"≠"方法数"；OCP 的"扩展≠修改"（§1.2）
+- ☐ 三组易混辨析：SRP/LSP/OCP 的场景判断（§1.3）</p>
+<p><strong>耦合分级（day13-test.md §二）</strong>
+- ☐ 七级耦合顺序默写（§2.2）
+- ☐ 数据 / 标记 / 控制耦合的场景判别（§2.4）</p>
+<p><strong>内聚分级（day13-test.md §三）</strong>
+- ☐ 七级内聚顺序默写（§3.2）
+- ☐ 过程 / 通信 / 顺序内聚的场景判别（数据链是关键）（§3.4）</p>
+<p><strong>测试分类与黑盒方法（day13-test.md §四、§五）</strong>
+- ☐ 四个测试阶段与各自依据/参与者（§4.2）
+- ☐ 等价类划分：有效/无效等价类个数（§5.1）
+- ☐ 边界值分析的取值集合（含越界值）（§5.2）
+- ☐ 因果图法的适用场景（输入间有组合/约束）（§5.3）</p>
+<p><strong>白盒逻辑覆盖（day13-test.md §六）</strong>
+- ☐ 六级覆盖标准的强度顺序（§6.1）
+- ☐ 各级标准的定义与最小用例数（§6.3）
+- ☐ 条件覆盖不保证判定覆盖（反例）（§6.3）
+- ☐ 条件组合覆盖与路径覆盖互不包含（§6.4）</p>
+<p><strong>McCabe 圈复杂度与基本路径测试（day13-test.md §七）</strong>
+- ☐ V(G) = E − N + 2（别忘了 +2）与判定节点数 + 1（§7.1）
+- ☐ V(G) = 独立路径数 = 基本路径测试最少用例数（§7.2）
+- ☐ 基本路径测试四步法的完整执行（§7.3）
+- ☐ 含循环时的回边处理与独立路径构造（§7.4）</p>
+<p><strong>软件维护（day13-test.md §八）</strong>
+- ☐ 四类型判别两步法（完善性 vs 适应性）（§八）</p>
+<p><strong>项目管理（day13-test.md §九）</strong>
+- ☐ 甘特图的作用与局限（§9.2）
+- ☐ 关键路径的定义与最短工期含义（§9.2）
+- ☐ 风险暴露 RE = 概率 × 损失（§9.3）</p>
+<blockquote>
+<p>填写示例：<code>☑ V(G) = E − N + 2（§7.1）——老把 "+2" 漏掉，算成 E−N；以后每道题都强制用"判定数+1"再验算一遍</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。冲刺阶段只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 今天出现了软件工程阶段唯一的&quot;硬计算&quot;：圈复杂度与基本路径测试。如果计算题 21-23 是&quot;看解析看懂的&quot;，
+  今晚必须**遮住解答重做一遍**——CFG 要自己画、E 和 N 要自己数、V(G) 要用两法交叉验算。
+  这类题的步骤分是按项给的（图 / E,N / V(G) / 独立路径 / 用例与验算），少写一步就少一步的分。
+- 如果第 4、5 题（七级排序）仍错：把 day13-test.md §2.2、§3.2 两张分级表**整表抄一遍**并背口诀
+  （&quot;非数标控外公内&quot; / &quot;偶逻时过通顺功&quot;）——这两张表是软件工程选择题出题最密集的地方之一。
+- 如果第 6、7 题（场景判别）仍错：回 §2.4、§3.4 的易错点辨析，把每个判别关键词写成一句话卡片。
+- 如果第 15、16 题仍错：回 §7.1、§7.2，把三种算法与&quot;V(G) 到底度量什么&quot;重读，并自编一组 E、N 练手。
+- 明天 Day 14 进入下一阶段（数据结构补漏 / 算法分析）。今晚把今天计算题 21-23 的四步流程
+  在白纸上**默走一遍**——基本路径测试是下午大题的高频考法，今天的熟练度直接决定大题得分。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">面向对象七大设计原则：______（目标 ≥7，SRP/OCP/LSP/DIP 必须能一句说出）
+耦合七级顺序与场景判别：______（目标 ≥9，必考——能默写且能区分数据/标记/控制）
+内聚七级顺序与场景判别：______（目标 ≥9，必考——顺序 vs 过程看数据链）
+黑盒三方法（等价类/边界值/因果图）：______（目标 ≥8，无效等价类个数与边界取值集合要会数）
+逻辑覆盖六级强度顺序：______（目标 ≥9，必考——语句&lt;判定&lt;条件&lt;判定-条件&lt;条件组合&lt;路径）
+各级覆盖的定义与最小用例数：______（目标 ≥8，条件组合要会数取值组合数）
+条件覆盖的陷阱（不保证判定覆盖）：______（目标 ≥8，能举出反例）
+V(G) 计算两种算法：______（目标 ≥9，必考——E−N+2 与判定数+1，别忘了 +2）
+V(G) 的含义与基本路径四步法：______（目标 ≥9，独立路径数 = 最少用例数）
+含循环的回边处理：______（目标 ≥8，区分&quot;循环 0 次 / 至少 1 次&quot;）
+维护四类型判别两步法：______（目标 ≥8，完善性 vs 适应性）
+甘特图局限与关键路径定义：______（目标 ≥8，最长路径 = 最短工期）
+软件工程科目整体信心：______（阶段第二天——重点看 CFG 与 V(G) 计算是否已能脱稿做对）
+</code></pre>
+<hr />
+<h2>Day 14（10/4）反思：数据结构补漏 + Phase 1 总收尾（缓冲日）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 数据结构补漏（docs/knowledge-points/data-structures/index.md §七–§十，针对 Day 1 验证套题暴露的四个子考点）：
+  - 树与二叉树遍历：四种遍历的递归/非递归实现、由先序+中序 / 后序+中序 / 层序+中序重建二叉树
+    （先+后序不能唯一确定）、表达式树与线索二叉树
+  - 图算法：DFS/BFS 复杂度与适用、Dijkstra（不支持负权）与 Floyd（O(V³)、k 在最外层）、
+    Prim（O(V²) 稠密）与 Kruskal（O(E log E) 稀疏，并查集判环）、拓扑排序（入度 0，Kahn）、
+    关键路径四步法（ve 取 max 正推、vl 取 min 逆推、e/l、l−e=0 为关键活动）
+  - 排序稳定性：八大排序完整对比表（不稳定 = 快选希堆）、稳定/不稳定的原理级解释、建堆 O(n)
+  - 哈希冲突处理：装填因子 α = n/m、除留余数法（p 取素数）、线性/二次探测与聚集、
+    链地址法、再哈希、公共溢出区、ASL 手算（查找长度含&quot;找到&quot;那一次比较）
+- Phase 1 错题筛查：翻阅本文 Day 1–13 各日「仍错知识点」标记区与高混淆度重做清单，
+  把&quot;在 2 天及以上被反复点名&quot;的知识点整理进 knowledge-checklist.md 的「二轮重点」清单（按 6 科目组织）
+- Phase 1 综合测验（docs/practice/phase1-comprehensive-quiz.md）：
+  六科目混合 60 道选择题（OS / 网络 / 数据库 / 组成 / 软件工程 / 数据结构 各 10 题），
+  计时 90 分钟，合格线 36/60、冲刺目标 48/60，含完整答题卡、答案解析、分科统计表与判定规则
+- 测验分析：各科正确率回填 knowledge-checklist.md 的「Phase 1 综合测验评分表」与 tracker.md Day 14 行
+</code></pre>
+<h3>Step 1：数据结构补漏自检（先做这一步，再做综合测验）</h3>
+<blockquote>
+<p>数据结构是<strong>强项科目</strong>，今天的补漏不是"重学基础"，而是把四个<strong>具体子考点</strong>练到"换数不出错"。
+遮住右侧答案，逐条自答；答不出的回 <code>data-structures/index.md</code> 对应小节把例题<strong>重算一遍</strong>。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>自检项</th>
+<th>参考答案</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先序 A B D E C F + 中序 D B E A C F → 后序？</td>
+<td><strong>D E B F C A</strong></td>
+<td>§7.2</td>
+</tr>
+<tr>
+<td>哪两组序列不能唯一确定二叉树？</td>
+<td><strong>先序 + 后序</strong></td>
+<td>§7.2</td>
+</tr>
+<tr>
+<td>后序 + 中序重建，根在序列的哪里？</td>
+<td>后序<strong>最后一个</strong>元素</td>
+<td>§7.2</td>
+</tr>
+<tr>
+<td>层序遍历用什么辅助结构？</td>
+<td><strong>队列</strong>（先/中/后序非递归用栈）</td>
+<td>§7.1</td>
+</tr>
+<tr>
+<td>BFS 求最短路径的前提？</td>
+<td>图<strong>无权</strong>（或权相等）</td>
+<td>§8.1</td>
+</tr>
+<tr>
+<td>Dijkstra 为什么不能用负权边？</td>
+<td>已锁定顶点的 dist 可能再被减小，破坏贪心正确性</td>
+<td>§8.2</td>
+</tr>
+<tr>
+<td>Floyd 的循环顺序能换吗？</td>
+<td>不能，<strong>k 必须在最外层</strong></td>
+<td>§8.2</td>
+</tr>
+<tr>
+<td>MST 在什么条件下唯一？</td>
+<td>所有边权<strong>互不相同</strong></td>
+<td>§8.3</td>
+</tr>
+<tr>
+<td>Kruskal 判环用什么？</td>
+<td><strong>并查集</strong></td>
+<td>§8.3</td>
+</tr>
+<tr>
+<td>拓扑排序每步选什么顶点？</td>
+<td><strong>入度为 0</strong> 且未输出者</td>
+<td>§8.4</td>
+</tr>
+<tr>
+<td>AOV 网中"活动"由什么表示？</td>
+<td><strong>顶点</strong>（AOE 网中活动是<strong>边</strong>）</td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>关键路径 = 最长还是最短路径？</td>
+<td><strong>最长路径</strong>，其长度 = <strong>最短工期</strong></td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>ve 取 max 还是 min？vl 呢？</td>
+<td>ve <strong>取 max</strong>（正推）、vl <strong>取 min</strong>（逆推）</td>
+<td>§8.5</td>
+</tr>
+<tr>
+<td>八大排序中不稳定的有哪几个？</td>
+<td><strong>快、选、希、堆</strong></td>
+<td>§9.2</td>
+</tr>
+<tr>
+<td>建堆的时间复杂度？</td>
+<td><strong>O(n)</strong>（不是 O(nlogn)）</td>
+<td>§9.4</td>
+</tr>
+<tr>
+<td>哈希表 ASL 主要由什么决定？</td>
+<td><strong>装填因子 α = n/m</strong>，不是记录数 n</td>
+<td>§10.1</td>
+</tr>
+<tr>
+<td>开放定址法能直接删除元素吗？</td>
+<td>不能，须<strong>打删除标记</strong>（否则中断探测链）</td>
+<td>§10.3</td>
+</tr>
+<tr>
+<td>线性探测 vs 链地址法，同 α 下谁 ASL 更小？</td>
+<td><strong>链地址法</strong></td>
+<td>§10.4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>自检结果：______ / 17 项答对。<strong>答错的项</strong>在下面「仍错知识点标记区」打 ☑，并在综合测验后重点验证对应题（第 51–60 题）。</p>
+</blockquote>
+<h3>Step 2：Phase 1 高混淆度错题重做清单（跨阶段精选 20 题）</h3>
+<blockquote>
+<p>这是<strong>今天综合测验前的热身</strong>，也是 Phase 1 十三天题海中"最容易看懂解析、换个数又错"的题目。
+入选标准：<strong>在 2 天及以上的重做清单/仍错标记区中被反复点名</strong>。遮住答案逐题重做（只看题目），<strong>计算题必须写过程</strong>。
+重做<strong>仍错</strong>的题：按下方「错题四要素」登记一条，并在文末标记区打 ☑。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>题目所在</th>
+<th>科目</th>
+<th>为什么容易再错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>day02-exercises.md 第 3、4 题 + stage1-quiz.md 第 9 题</td>
+<td>OS</td>
+<td><strong>页式"乘页大小" vs 段式"加段基址"</strong> 最易混：物理 = 块号×页大小+偏移。两题放一起对比重做（day02 §3.3、§4.2）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>day01-exercises.md 第 16 题</td>
+<td>OS</td>
+<td>SJF 平均周转：<strong>必须画甘特图列时间轴</strong>，顺序 2→4→6→8，平均 = (2+6+12+20)/4 = 10（day01 §4.4）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>day03-exercises.md 第 17–19 题 + stage1-quiz.md 第 14 题</td>
+<td>OS</td>
+<td>SSTF 会<strong>折返跑</strong>，逐段列距离；stage1 第 14 题答案 <strong>248</strong>，经典序列 53 起点答案 <strong>236</strong>（day03 §3.2）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>day01-exercises.md 第 22(3) 题</td>
+<td>OS</td>
+<td>P(empty) 必须在 P(mutex) 之前——资源信号量与互斥信号量的<strong>先后颠倒会死锁</strong>（day01 §5.4）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>day05-exercises.md 第 1、3、5 题 + day06 第 19 题 + stage1-quiz 第 25–27 题</td>
+<td>网络</td>
+<td><strong>必考计算点</strong>：块大小 = 256−掩码值（/26 是 64 不是 128）；广播 = 网络+块大小−1；同子网必须<strong>各自算网络地址再比较</strong>（day05 §八）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>day04-exercises.md 第 3 题 + day05 第 20 题</td>
+<td>网络</td>
+<td>ARP 属<strong>网络层</strong>（IP→MAC），虽不用 IP 封装；跨网段时帧的目的 MAC 是<strong>默认网关</strong>的 MAC，目的 IP 始终不变（day04 §2.3、day05 §9.4）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>day05-exercises.md 第 17 题 + day06 第 21 题</td>
+<td>网络</td>
+<td><strong>"超时回 1，重复 ACK 减半"</strong>：先判断丢包判据再选公式（day05 §6.2–6.3）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>day06-exercises.md 第 9 题</td>
+<td>网络</td>
+<td>数字签名 = 私钥加密摘要，保证<strong>认证/抗否认/完整性，不提供机密性</strong>（day06 §7）</td>
+</tr>
+<tr>
+<td>9</td>
+<td>day07-exercises.md 第 5、8 题 + stage1-quiz 第 33 题</td>
+<td>数据库</td>
+<td><strong>第一大考点</strong>：COUNT(<em>)=4、COUNT(列)=3、</em><em>AVG 分母不算 NULL 行</em>*（243/3=81.0，误算 60.75）（day07 §3.5）</td>
+</tr>
+<tr>
+<td>10</td>
+<td>day07-exercises.md 第 3、19 题</td>
+<td>数据库</td>
+<td>周敏一行选课都没有，<strong>内连接不产生她的行</strong>；查"没选课的"须<strong>左外连接 + IS NULL</strong>；左外行数 = 14+1 = 15（day07 §3.7）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>day08-exercises.md 第 6、12 题 + stage1-quiz 第 43–44 题</td>
+<td>数据库</td>
+<td><strong>多候选码要求全</strong>：R(A,B,C) F={AB→C,C→B} 有 <strong>AB、AC 两码</strong>，全主属性→3NF，但 C→B 左部不含码→非 BCNF（day08 §2.2–2.3、§3.5）</td>
+</tr>
+<tr>
+<td>12</td>
+<td>day08-exercises.md 第 16 题</td>
+<td>数据库</td>
+<td>科目二大题预演：① 联系类型判错；② <strong>M:N 没独立成表</strong>（主键须为组合码）；③ 外键加错端 / 联系属性丢了（day08 §4、§5.2–5.3）</td>
+</tr>
+<tr>
+<td>13</td>
+<td>day10-exercises.md 第 16、17 题</td>
+<td>组成</td>
+<td><strong>T = Σt+(n−1)Δt，不是 k·Δt+(n−1)Δt</strong>；效率<strong>只能</strong>用 E = S/k（E = n/(k+n−1) 只适用等长段，误用得 83.3% 而正解 54.5%）（day10 §4.4–4.5）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>day11-exercises.md 第 6、13、14 题 + 计算题 21–23</td>
+<td>组成</td>
+<td><strong>全相联无"字块内地址"字段</strong>（Tag = 24−6 = 18）；<strong>S = t_m/t_a &gt;1，e = t_c/t_a ≤100%</strong>；超 100% 的"效率"答案必错；反求 h = (t_m−t_a)/(t_m−t_c)（day11 §2.4、§3.2）</td>
+</tr>
+<tr>
+<td>15</td>
+<td>day10-exercises.md 第 11 题</td>
+<td>组成</td>
+<td>相对寻址 <strong>EA = (PC)+A</strong>：(PC) 是<strong>下一条</strong>指令地址；A 是补码（80H = −128）（day10 §3.8）</td>
+</tr>
+<tr>
+<td>16</td>
+<td>day12-exercises.md 第 2 题</td>
+<td>软件工程</td>
+<td>V 模型四对对应：<strong>需求↔验收、概设↔系统、详设↔集成、编码↔单元</strong>——概设/详设与系统/集成配对颠倒最常见（day12 §2.2）</td>
+</tr>
+<tr>
+<td>17</td>
+<td>day12-exercises.md 第 13 题 + day13 第 17、18 题</td>
+<td>软件工程</td>
+<td><strong>用户想要更多→完善性（~50%）；环境变了→适应性</strong>；加新报表/导 PDF = 完善性（day12 §1.4、day13 §八）</td>
+</tr>
+<tr>
+<td>18</td>
+<td>day13-exercises.md 计算题 21–23</td>
+<td>软件工程</td>
+<td><strong>V(G) = E−N+2（别忘了 +2）</strong>，并用"判定数+1"交叉验算；基本路径四步法：画 CFG→算 V(G)→列独立路径→每路径配一个用例（day13 §7）</td>
+</tr>
+<tr>
+<td>19</td>
+<td>day12-exercises.md 第 19、20 题</td>
+<td>软件工程</td>
+<td><strong>DFD 只有数据流没有控制流</strong>；存储 = 双横线；读 = 存储→加工、写 = 加工→存储（day12 §4.2–4.4）</td>
+</tr>
+<tr>
+<td>20</td>
+<td>day11-exercises.md 第 19 题</td>
+<td>组成</td>
+<td>总线带宽 = 频率 × 宽度 <strong>/8</strong>：忘除 8 得 3200（兆位/秒）而非 400 MB/s（day11 §7.3）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Phase 1 错题重做结果：______ / 20 道正确。仍有错误的已在下面登记，并在文末标记区打了 ☑。</p>
+</blockquote>
+<h3>Step 3：Phase 1 综合测验（今天的重头戏）</h3>
+<blockquote>
+<p>这是 <strong>Phase 1 的收尾测验</strong>，覆盖全部 6 科：OS / 网络 / 数据库 / 组成 / 软件工程 / 数据结构，形式向科目一（75 选择题、合格 45 分）看齐。</p>
+</blockquote>
+<p><strong>执行纪律：</strong>
+1. <strong>计时 90 分钟</strong>，独立闭卷完成 <code>docs/practice/phase1-comprehensive-quiz.md</code>，<strong>先填答题卡再对答案</strong>。
+2. <strong>按科目切换节奏</strong>：OS / 组成 / 数据结构题计算必须打草稿（第 3、6、9、33、35–37、39、51、60 题）；网络 / 软件工程题概念为主、每题 ≤ 40 秒；数据库题逐步推导（第 22、23、26、27 题）。
+3. <strong>评分</strong>：每题 1 分，满分 60。<strong>合格线 36/60（60%，对齐科目一 45/75）</strong>，<strong>目标 48/60（80%）</strong>。
+4. <strong>分析</strong>：各科正确率填入 <code>phase1-comprehensive-quiz.md</code> 文末统计表与 <code>knowledge-checklist.md</code> 的「Phase 1 综合测验评分表」；
+   <strong>任一科目 &lt; 60%（&lt; 6/10）⇒ 该科知识点确认列入「二轮重点」</strong>；总分 &lt; 36/60 ⇒ Phase 2 每天额外抽 30 分钟补弱项。
+5. <strong>错题登记</strong>：按下方「错题四要素」逐条登记；计算题错了<strong>必须把过程重算一遍</strong>，不要只看解析结论。</p>
+<p><strong>Phase 1 综合测验得分：</strong> <strong><em>_</em>_ / 60 = </strong><strong><em>_%
+（OS </em></strong><em>/10、网络 <strong><em>_/10、数据库 </em></strong></em>/10、组成 <strong><em>_/10、软件工程 </em></strong>_/10、数据结构 ____/10）</p>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把今天综合测验做错的题、以及上面 Step 2 重做<strong>仍然错</strong>的题，按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>按错因分类对照自查</strong>：
+- <strong>计算跳步类</strong>（OS 3/6/9、网络 16–18、数据库 22/23/26/27、组成 33/35–39、数据结构 51/60）：不是"公式没背"，而是"没写过程"。重算时必须写出中间量——周转时间轴、页号/偏移、每段寻道距离、Δt/Σt/T/S/E、Tag/组号位数、探测序列。
+- <strong>概念混淆类</strong>（网络 11–14/19/20、数据库 21/24/25、组成 31/32/34、软件工程 41–48、数据结构 53–59）：回对应笔记的<strong>对比表/结论清单整体重背</strong>：day04 §七 端口表、day06 §2.1 算法参数表、day07 §六 20 条、day08 §六 20 条、day13 §2.2/§3.2 分级表。
+- <strong>推导/流程类</strong>（数据库 26–29、组成 36、软件工程 49、数据结构 51/58）：科目二大题的能力预演。错了必须回 <code>day08-er.md</code> §2.2 + §3.3 + §5.2、<code>day13-test.md</code> §7、<code>index.md</code> §7.2/§8.5 遮住答案把例题重推一遍。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题目简述，如「第 51 题先序+中序求后序」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把重建过程写出来）：
+  - 先序首元 = 根 = <strong><em>_</em>_；中序中根左边 = </strong><strong><em>_（左子树），右边 = </em></strong><strong><em>（右子树）
+  - 左子树先序 / 中序：</em></strong><strong><em> / </em></strong><strong><em>；右子树先序 / 中序：</em></strong><strong><em> / </em></strong><strong><em>
+  - 递归重建后画树：</em></strong><strong><em>
+  - 后序 = </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题目简述，如「第 36 题组相联地址结构」或「第 9 题 SSTF 寻道」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题必须把每一步列出来）：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题目简述，如「第 26 题候选码求解」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（把分类与闭包展开写出）：
+  - 属性分类（L/N/R/LR）：<strong><em>_</em>_
+  - L∪N 的闭包 = </strong><strong><em>_，是否等于 U：</em></strong><strong><em>
+  - 试加入的属性及其闭包：</em></strong><strong><em>
+  - 候选码 = </em></strong><strong><em>；主属性 = </em></strong>___
+- <strong>知识点</strong>：</p>
+<h3>Phase 1 收尾自评</h3>
+<blockquote>
+<p><strong>Phase 1（Day 1–14）到此结束。</strong> 下面这张表是 Phase 1 的<strong>最终档案</strong>：各科目标 + 你的自评 + 是否进入二轮重点。
+Phase 2（Day 15 起刷真题）每天开始前，先看这张表里标了「⭐ 二轮重点」的科目。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>Phase 1 覆盖</th>
+<th>综合测验正确率</th>
+<th>掌握度自评（0–10）</th>
+<th>判定（≥6/10 达标 / &lt;6/10 ⭐二轮重点）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>Day 1–3</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td>计算机网络</td>
+<td>Day 4–6</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>Day 7–8</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td>计算机组成</td>
+<td>Day 10–11</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td>软件工程</td>
+<td>Day 12–13</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>Day 1 验证 / Day 14 补漏</td>
+<td>____%</td>
+<td>______</td>
+<td>□ 达标　□ ⭐ 二轮重点</td>
+</tr>
+<tr>
+<td><strong>Phase 1 总体</strong></td>
+<td>Day 1–14</td>
+<td><strong><em>_%（</em></strong>_/60）</td>
+<td>______</td>
+<td>□ 合格（≥36）　□ 冲刺目标（≥48）　□ 需补强（&lt;36）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase 1 三句话总结</strong>（回答不了就说明知识还是散的）：</p>
+<pre><code class="language-text">1. 我最稳的科目与题型是：________________________________
+2. 我最容易丢分的科目与题型是：________________________________
+3. Phase 2 我要优先补的知识点是：________________________________
+</code></pre>
+<h3>「仍错知识点」标记区（Step 4 交付物）</h3>
+<blockquote>
+<p>做完上面所有题（含 Step 2 重做 + 综合测验）后，<strong>仍然会错或仍然想不通</strong>的知识点，在前面打 ☑。
+这些就是你 <strong>Phase 1 全程的持久薄弱点（persistent weak points）</strong>：Phase 2（Day 15–26）每天先复习带 ☑ 的项；
+Phase 4 冲刺（Day 31–34）<strong>优先</strong>回看对应笔记，并到对应 exercises / <code>phase1-comprehensive-quiz.md</code> 重做同类题。</p>
+</blockquote>
+<p><strong>数据结构（Day 14 补漏，强项科目——标 ☑ 的项最不该丢分）</strong>
+- ☐ 四种遍历与非递归实现（后序最难）（index.md §7.1）
+- ☐ 由遍历序列重建二叉树（先+后不能唯一）（index.md §7.2）
+- ☐ 表达式树与三种表达式（前/中/后缀）（index.md §7.3）
+- ☐ 线索二叉树与 n+1 个空指针（index.md §7.4）
+- ☐ DFS / BFS 的复杂度与适用（BFS 求无权最短路径）（index.md §8.1）
+- ☐ Dijkstra 手算与"不支持负权"（index.md §8.2）
+- ☐ Floyd 的 k 循环在最外层、可处理负权边（index.md §8.2）
+- ☐ Prim / Kruskal 手算与适用图型、MST 唯一性（index.md §8.3）
+- ☐ 拓扑排序（入度 0、Kahn、不唯一、判环）（index.md §8.4）
+- ☐ 关键路径四步法（ve 取 max / vl 取 min、l−e=0）（index.md §8.5）
+- ☐ 排序稳定性（快选希堆不稳定）与建堆 O(n)（index.md §9）
+- ☐ 哈希冲突处理与 ASL 手算（含 α 的作用、删除标记）（index.md §10）</p>
+<p><strong>其他科目（沿用各日标记区，此处汇总——把 Phase 1 中仍错的项目按科目归档）</strong>
+- ☐ OS：页式地址转换 / 多级页表与 TLB（day02 §3）
+- ☐ OS：磁盘 SSTF 寻道计算 / 索引文件大小（day03 §3、§6）
+- ☐ OS：PV 操作与信号量、死锁条件与银行家算法（day01 §5、§6）
+- ☐ 网络：子网划分 5 步法与 CIDR 聚合（day05 §八–§九）
+- ☐ 网络：协议层级归属（ARP/ICMP）与端口号（day04 §6.3、§七）
+- ☐ 网络：加密算法参数与数字签名的作用（day06 §2、§7）
+- ☐ 网络：拥塞控制 cwnd（超时回 1 vs 重复 ACK 减半）（day05 §6）
+- ☐ 数据库：聚合与 NULL（COUNT(*)/COUNT(列)/AVG 分母）（day07 §3.5）
+- ☐ 数据库：JOIN 类型与行数、左外连接 + IS NULL（day07 §3.7）
+- ☐ 数据库：候选码求解与范式判断 5 步流程（day08 §2.2、§3.3）
+- ☐ 数据库：3NF 与 BCNF 分界、E-R 转关系模式（day08 §3.2、§5.2）
+- ☐ 组成：不等长段流水线 T = Σt+(n−1)Δt 与效率 E = S/k（day10 §4.4–4.5）
+- ☐ 组成：三种映射地址结构（全相联无行号字段）（day11 §3.2–3.3）
+- ☐ 组成：Cache 命中率 t_a / S vs e / 反求 h（day11 §2.4、§四）
+- ☐ 组成：相对寻址 EA 与"寻址范围由谁决定"（day10 §3.3、§3.8）
+- ☐ 组成：总线带宽 = 频率 × 宽度/8（day11 §7.3）
+- ☐ 软件工程：六模型识别词与 V 模型四对对应（day12 §2.2、§2.7）
+- ☐ 软件工程：维护四类型判别（完善性 vs 适应性）（day12 §1.4）
+- ☐ 软件工程：耦合/内聚七级与场景判别（day13 §2.2、§3.2）
+- ☐ 软件工程：逻辑覆盖六级顺序与 McCabe V(G) = E−N+2（day13 §6.1、§7.1）
+- ☐ 软件工程：DFD 四要素 / 无控制流 / 箭头方向（day12 §4.2–4.4）</p>
+<blockquote>
+<p>填写示例：<code>☑ 由遍历序列重建二叉树（§7.2）——先+后序总以为能唯一确定，两节点树 AB/BA 的反例没记住</code>。
+<strong>标记区使用纪律</strong>：每个 ☑ 后面写一句话说明"到底卡在哪一步"。Phase 2 / Phase 4 只看带 ☑ 的项，节省时间。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- Phase 1 已全部收尾。Day 15 起进入 **Phase 2：真题实战 + 盲区清扫（Day 15–26）**：
+  做题日 2.5h 完整一套真题选择题（计时 150 分钟内做完 75 题）+ 逐题对答案 + 错题回看笔记，与回归日交替。
+- **进 Phase 2 的前提条件（自查）**：
+  1. 综合测验总分 ≥ 36/60（60%）——低于这个数，明天先花半天回看本次测验错题再开始真题；
+  2. 各科「仍错知识点」标记区里 ☑ 的数量 ≤ 10 个——超过 10 个说明薄弱点太散，先按
+     `knowledge-checklist.md` 的「二轮重点」清单每天补一个再刷题；
+  3. 数据结构（强项科目）本次测验第 51–60 题 ≥ 8/10——这是&quot;应得分&quot;，掉分必须回
+     `data-structures/index.md` §七–§十 把例题重算一遍。
+- **二轮重点清单的使用**：Phase 2 每天真题任务前先抽 20–30 分钟，按
+  `knowledge-checklist.md` 里 ⭐ 标记的项补一个知识点（优先补本次综合测验 &lt; 6/10 的科目）。
+- **节奏提醒**：本次综合测验按 90 分钟设计（60 题），真题是 75 题 150 分钟——
+  平均每题 2 分钟，比今天略宽裕，但计算题打草稿的习惯必须从今天起固定下来。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">树遍历与序列重建二叉树：______（目标 ≥9，强项科目——先+后不能唯一、后序根在最后必须秒答）
+图算法（Dijkstra/Floyd/Prim/Kruskal/拓扑/关键路径）：______（目标 ≥8，ve 取 max、vl 取 min 不能记反）
+排序稳定性与复杂度对比：______（目标 ≥9，&quot;快选希堆&quot;不稳定 + 建堆 O(n) 必须秒答）
+哈希冲突处理与 ASL 手算：______（目标 ≥8，查找长度含&quot;找到&quot;那一次、分母 n vs m 分清）
+Phase 1 六科综合（第一次全科目测验）：______（目标 ≥48/60；低于 36/60 说明基础不牢，Phase 2 要加补弱时间）
+</code></pre>
+<hr />
+<h2>Day 15（10/5）反思：Phase 2 真题实战① —— 真题卷 1（2020 下半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 开门：做第一套真刀真枪的历年真题——2020 年下半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2020H2-morning-questions.md（只含题目，可干净计时闭卷做）
+- 对答案与逐题分析：docs/practice/papers/2020H2-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区）
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 15 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 1（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2020H2-morning-key.md</code>，不要查笔记、不要搜题。计算题（4-5、24、26、62）必须打草稿。
+3. 涂卡习惯固定下来：做完 20 题涂一次卡，避免最后集中涂错位。
+4. 遇到图形题：本文已给出文字化表格 / 标注【存疑】的 ASCII 复原图；若手边有原卷 PDF，对照原图做。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2020H2-morning-key.md</code>，<strong>逐题</strong>核对，不只是对字母——做对的题也快速读一遍解析，
+   确认自己是"真会"还是"蒙对"（尤其 17/18、47、53、62 这几道）。</li>
+<li>回填 <code>2020H2-morning-key.md</code> 的「分科正确率统计表」（7 个科目 + 总分）。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>，写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>（页式地址转换、索引文件最大长度、CPI/MIPS、快排划分），不要只看结论。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">计算机基础（1-6）        ：____ / 6  = ____%
+操作系统（23-28）        ：____ / 6  = ____%
+网络 含信息安全（7-11, 66-70）：____ / 10 = ____%
+数据库（51-56）          ：____ / 6  = ____%
+数据结构与算法（20, 57-65）：____ / 10 = ____%
+软件工程（15-19, 21, 22, 29-50）：____ / 29 = ____%
+知识产权与英语（12-14, 71-75）  ：____ / 8  = ____%
+总分                    ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权与英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>按错因分类对照自查</strong>：
+- <strong>计算跳步类</strong>（第 4-5 题 CPI/MIPS、第 24 题页式地址转换、第 26 题索引文件长度、
+  第 27 题信号量范围、第 62-63 题快排划分）：不是"公式没背"，是"没写过程"。重算时必须列出
+  中间量——页号/偏移/块号、各级索引块数、每次交换后的数组状态。
+- <strong>概念混淆类</strong>（第 7/8/10 题、第 16/31 题、第 29-30 题、第 34 题、第 39-40 题、第 65 题）：
+  回对应笔记的<strong>对比表整体重背</strong>：安全属性三要素、内聚七级、过程模型识别词、
+  可靠性/可用性/可维护性三公式、面向对象设计原则、多态四分类、渐进增长率排序。
+- <strong>模式/图形类</strong>（第 41/42/43 题 UML、第 44-47 题设计模式、第 35-36 题白盒覆盖）：
+  设计模式要把 23 个模式的<strong>意图 + 角色 + 适用场景</strong>一起记；UML 图要记"每种图展现什么"。
+- <strong>英语类</strong>（第 71-75 题）：错的不是英语，是<strong>上下文逻辑</strong>——先通读全段理清
+  "实现 → 运行 → 支持"的生命周期主线，再填空。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述，如「第 24 题页式地址转换 3C20H」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+  - 页大小 4K = 2¹² → 低 <strong><em>_ 位为页内偏移；
+  - 3C20H 的页内偏移 = </em></strong><strong><em>H，页号 = </em></strong><strong><em>；
+  - 查页面变换表：页号 </em></strong><strong><em> → 物理块号 </em></strong><strong><em>；
+  - 物理地址 = </em></strong>___H
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述，如「第 44-47 题生成器模式」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 4：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 5：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 真题卷 1 是 Phase 2 的第一张试纸：如果 &lt; 45 分，不要慌，但必须把今天的错题全部回看一遍
+  并各重算/重背一遍，明天做真题卷 2 前先补 30 分钟弱科。
+- 如果 ≥ 55 分：节奏正常，保持每天一套真题 + 错题回看的循环。
+- 真题做卷策略：上午严格计时闭卷，下午逐题分析，晚上错题回看 + 打卡——今天的三步就是这个节奏。
+- 注意题目中&quot;选错误的&quot;&quot;不包括&quot;&quot;不可能&quot;等否定式表述（本卷第 7、16、28、30、33、41、57 题），
+  圈出否定词是减少低级失分的最简单办法。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">真题时间分配（150 分钟做 75 题）：______（目标：会做的题不纠结，每题 ≤ 2 分钟，计算题打草稿）
+计算题准确率（4-5/24/26/62）：______（目标 ≥8，CPI/MIPS、页式转换、索引长度、快排划分不能错）
+设计模式与 UML（37/41-47）：______（目标 ≥7，意图+角色+适用场景一起记）
+知识产权与英语（12-14/71-75）：______（目标 ≥8，这是&quot;应得分&quot;不能丢）
+</code></pre>
+<h2>Day 16（10/6）反思：Phase 2 真题实战② —— 真题卷 2（2021 上半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第二套真题：2021 年上半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2021H1-morning-questions.md（只含题目，可干净计时闭卷做）
+- 对答案与逐题分析：docs/practice/papers/2021H1-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与卷 1 对比区）
+- ⚠️ 重要提示：本卷配套的官方答案 PDF 中没有答案（只是试卷本身的复印件），
+  key 文件中的答案为网络三源交叉核对 + 每道计算题独立重算所得，已在 key 文件开头显著披露；
+  其中 4 处与部分题库网站不一致的题目（第 3、60、63、71-75 题）已在 key 文件内逐题标注推导过程，
+  对答案时以 key 的推导为准。
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 16 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 2（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2021H1-morning-key.md</code>，不要查笔记、不要搜题。计算题（17-18 关键路径与总时差、
+   24 位示图、25 改进型 Clock、26-28 前驱图 PV、35 可维护性公式、52-53 候选码与依赖、
+   58-63 二叉树/稀疏矩阵/哈希/排序/堆/分治）必须打草稿。
+3. 涂卡习惯：做完 20 题涂一次卡。本卷第 17-18、26-28、29-30、39-40、41-43、44-47、48-49、51-56 题
+   为<strong>多空连环题</strong>，题号与空号容易错位，涂卡前先核对题号。
+4. 遇到图形题：本卷图形题特别多（17-18 AOE 网、25 页面变换表、26-28 前驱图、34 流程图、
+   41-43 状态图、44-47 命令模式类图、48 语法树、49 DFA、51 E-R 图），questions 文件已给出
+   文字化复原图并标注【存疑：图形复原】+ PDF 页码指针；若手边有原卷 PDF，对照原图做。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2021H1-morning-key.md</code>，<strong>逐题</strong>核对，不只是对字母——做对的题也快速读一遍解析，
+   确认自己是"真会"还是"蒙对"（尤其 24/25/26-28 操作系统连环、52-56 数据库连环、
+   58-63 数据结构连环、71-75 英语）。</li>
+<li>回填 <code>2021H1-morning-key.md</code> 的「分科正确率统计表」（8 个科目 + 总分），
+   并把卷 1/卷 2 的分科得分填进「与卷 1 对比区」，看弱科是否反复出现。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>，写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>（位示图字数、Clock 页面置换、前驱图 PV 操作、关键路径与总时差、
+   候选码与依赖、哈希线性探查、排序一趟定位、建堆、分治递推式），不要只看结论。</li>
+<li><strong>4 道分歧题</strong>（第 3 题总线周期、第 60 题哈希同义词、第 63 题分治时间复杂度、第 71-75 题英语）
+   网络题库答案不一，key 文件已给出推导；若你的答案与 key 不同，<strong>先读推导再质疑</strong>，
+   并把你的思路写在下方错题四要素里，复盘时一起核对。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">计算机基础（1-6）                    ：____ / 6  = ____%
+操作系统（24-28）                    ：____ / 5  = ____%
+网络 含信息安全（7-11, 66-70）        ：____ / 10 = ____%
+数据库（51-56）                      ：____ / 6  = ____%
+数据结构与算法（20, 57-65）           ：____ / 10 = ____%
+软件工程（15-19, 21-23, 29-50）       ：____ / 30 = ____%
+知识产权（12-14）                    ：____ / 3  = ____%
+计算机英语（71-75）                  ：____ / 5  = ____%
+总分                                ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>按错因分类对照自查</strong>：
+- <strong>计算跳步类</strong>（第 17-18 题关键路径/总时差、第 24 题位示图字数、第 25 题改进型 Clock、
+  第 26-28 题前驱图 PV、第 52-53 题候选码与冗余依赖、第 58 题二叉树高度、第 59 题稀疏矩阵、
+  第 60 题哈希线性探查、第 61 题排序一趟定位、第 62 题建堆、第 63 题分治递推）：
+  不是"公式没背"，是"没写过程"。重算时必须列出中间量——容量/块数/位数/字数、
+  各事件最早最迟时间、各页访问位与修改位的变化、信号量初值与 P/V 顺序、
+  属性闭包、探查地址序列、每趟交换后的数组状态、递推式展开。
+- <strong>概念混淆类</strong>（第 3 题总线周期 vs 存储周期、第 8 题攻击类型、第 15 题加工逻辑、
+  第 19 题风险、第 29-30 题螺旋模型、第 31-32 题耦合与详细设计任务、第 33 题文档、
+  第 35-36 题可维护性与维护类型、第 37-40 题面向对象、第 66-70 题网络协议与命令）：
+  回对应笔记的<strong>对比表整体重背</strong>，不要单点记。
+- <strong>模式/图形类</strong>（第 34 题白盒路径覆盖、第 41-43 题 UML 状态图、第 44-47 题命令模式、
+  第 48-50 题文法/语法树/DFA/传值传引用）：设计模式把<strong>意图 + 角色 + 适用场景</strong>一起记；
+  状态图要会读"组合状态含子状态"；DFA 与语法树要能从文法手动构造。
+- <strong>否定式审题类</strong>（第 4、12、15、19、29、30、32、33、39、43、70 题）：
+  题干"错误的是/不正确的是/不包括"先<strong>圈出否定词</strong>再读选项，这是减少低级失分的最简单办法。
+- <strong>英语类</strong>（第 71-75 题）：本卷选自 GoF《设计模式》引言原文，与第 44-47 题命令模式<strong>同源呼应</strong>——
+  先通读全段理清"模式是什么 → 为什么需要模式 → 新手与专家的差别 → 复用既有方案"的主线再填空；
+  注意部分题库网站这 5 题答案有误，以 key 中对照 GoF 原文的逐空分析为准。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述，如「第 24 题位示图字数」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+  - 磁盘容量 2048GB = 2⁴¹ B，物理块 8MB = 2²³ B → 块数 = 2⁴¹ / 2²³ = <strong><em>_</em>_ 块；
+  - 位示图每块 1 bit → 共需 </strong><strong><em>_ bit；
+  - 字长 128 位 = 2⁷ bit → 所需字数 = </em></strong><strong><em> / 2⁷ = </em></strong><strong><em> 个字；
+  - 答案 = </em></strong>___
+- <strong>知识点</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述，如「第 25 题改进型 Clock 页面置换」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+  - 分配 3 个存储块，在内存页为 0/2/4；第一轮找（访问位=0，修改位=0）的页；
+  - 三页访问位均为 1 → 全部清零后进入第二轮，淘汰修改位=0 的页 → 页号 <strong><em>_</em>_；
+  - 答案 = </strong>____
+- <strong>知识点</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述，如「第 26-28 题前驱图与 PV 操作」）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+  - 由前驱图写出同步关系（P1→P2；P2→P3、P4；P3、P4→P5；P5→P6）；
+  - 每条前驱边对应一对 P/V，信号量初值均为 0；
+  - 各进程代码块中 P/V 的顺序 = <strong><em>_</em>_；答案 = </strong>____
+- <strong>知识点</strong>：</p>
+<p><strong>错题 4：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<p><strong>错题 5：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 真题卷 2 的图形题（10 组）比卷 1 多，且第 26-28 题前驱图 PV 是&quot;三空连环&quot;——
+  一空错可能连环错。若本卷操作系统/数据结构两科丢分集中，明日做卷 3 前先补 30 分钟弱科。
+- 若 &lt; 45 分：不要慌，把今天错题全部回看并各重算/重背一遍；重点回到 Phase 1 笔记的
+  「操作系统 PV 操作」「数据结构排序/哈希」「软件工程设计模式」三章。
+- 若 ≥ 55 分：节奏正常，保持每天一套真题 + 错题回看的循环。
+- 本卷 4 道分歧题（3、60、63、71-75）单独回看一遍推导，考前这些结论不再变动。
+- 与卷 1 对比：若同一科目两卷都 &lt; 60%，说明是系统性薄弱，必须回笔记整章重看，
+  不能只靠&quot;做题记答案&quot;。
+</code></pre>
+<h3>掌握度自评（0-10）</h3>
+<pre><code class="language-text">真题时间分配（150 分钟做 75 题）：______（目标：会做的题不纠结，每题 ≤ 2 分钟，计算题打草稿）
+连环多空题准确率（17-18/26-28/29-30/39-40/41-43/44-47/51-56）：______（目标 ≥7，题号与空位对应、不错位）
+计算题准确率（24/25/52-53/58-63）：______（目标 ≥8，位示图、Clock、候选码、哈希、排序、建堆、分治不能错）
+设计模式与 UML（41-47）：______（目标 ≥7，意图+角色+适用场景一起记，命令模式各角色要背）
+知识产权与英语（12-14/71-75）：______（目标 ≥8，这是&quot;应得分&quot;不能丢）
+</code></pre>
+<hr />
+<h2>Day 17（10/7）反思：错题回归日① + UML 大题入门</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Step 1（上午 2h）：错题重做。执行文件：docs/practice/papers/review-round1.md
+  —— 从真题卷 1（2020 下半年）与卷 2（2021 上半年）中精选 22 题闭卷重做：
+    计算题组 13 题（CPI/MIPS、页式地址转换、索引文件、信号量、快排划分、关键路径与总时差、
+    位示图、改进型 Clock、前驱图 PV 三空连环、候选码与冗余依赖、栈/队列模拟、建堆、白盒路径覆盖）
+    + 分歧题组 4 题（卷 2 第 3、60、63、71-75 题）
+    + 图形/概念陷阱组 5 题（卷 1 第 17-18、35-36、41-43、48 题，卷 2 第 41-43 题）
+  —— 重做正确率填入 review-round1.md 的两张统计表
+- Step 2（上午 1h）：UML 入门。笔记：docs/knowledge-points/software-engineering/day17-uml.md
+  —— 类图（三格画法 + 可见性 + **类间六关系** + 聚合 vs 组合辨析 + 多重性）
+  —— 用例图（Actor/用例/系统边界 + **include vs extend 辨析**）+ 顺序图 + 状态图 + 活动图
+  —— 科目二下午试题三 UML 大题的考法说明与 6 步答题套路
+- Step 3（下午 2.5h）：弱项强化刷题。题库：day17-exercises.md（25 选择，含完整答案与解析）
+  —— 按 knowledge-checklist.md 的二轮重点清单选题：OS 6 / 网络 5 / 数据库 5 / 组成 4 / 软工 3 / 数据结构 2
+- Step 4（晚上 1.5h）：本节复盘 + tracker.md Day 17 行打卡
+</code></pre>
+<h3>Step 1：错题重做正确率（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：闭卷，不翻 key、不翻笔记；<strong>计算题必须打草稿写过程</strong>。
+重做时盯的不是"答案选哪个"，而是<strong>过程</strong>：页号/偏移/块号、各级索引块数、每次交换后的数组状态、
+事件最早最迟时间、属性闭包——<strong>写得出中间量，才算真会</strong>。</p>
+</blockquote>
+<p><strong>重做得分记录</strong>（从 review-round1.md §2.1 誊抄）：</p>
+<pre><code class="language-text">计算题组（13 题）        ：____ / ______ = ______%
+分歧题组（4 题）         ：____ / ______ = ______%
+图形/概念陷阱组（5 题）  ：____ / ______ = ______%
+合计（22 题）            ：____ / ______ = ______%
+重做总用时              ：______ 分钟
+</code></pre>
+<p><strong>判定（对齐 review-round1.md 的规则）</strong>：
+- □ 重做正确率 <strong>≥ 80%</strong> ⇒ Day 15–16 的错题<strong>已修复</strong>，Day 18 可按正常节奏推进（继续真题卷 3）。
+- □ <strong>60% – 80%</strong> ⇒ 部分知识点仍在摇摆，把仍错的题<strong>隔 3 天（Day 20）再重做一次</strong>。
+- □ <strong>&lt; 60%</strong> ⇒ Day 15–16 的错题<strong>没有真正消化</strong>。这不是"再背一遍"能解决的——
+  回 Phase 1 笔记把对应章节<strong>整章重看</strong>，并从 Day 18 起每天先抽 30 分钟重做本清单里仍错的题，再做新卷。</p>
+<p><strong>仍错题登记（按"错题四要素"，从 review-round1.md §1.x 中仍错的题逐条搬过来）</strong>：</p>
+<p><strong>错题 1：</strong>（题号与题目简述，如「卷 1 第 24 题页式地址转换 3C20H」）
+- <strong>错因</strong>（是"过程跳步"还是"概念混淆"？写具体）：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>这次重做比上次</strong>：□ 进步（上次错这次对）□ 仍错（"看懂解析、换个数又错"）□ 退化</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>这次重做比上次</strong>：□ 进步 □ 仍错 □ 退化</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>这次重做比上次</strong>：□ 进步 □ 仍错 □ 退化</p>
+<p><strong>错题 4：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>这次重做比上次</strong>：□ 进步 □ 仍错 □ 退化</p>
+<p><strong>错题 5：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>这次重做比上次</strong>：□ 进步 □ 仍错 □ 退化</p>
+<h3>Step 2：UML 学习自评（上午）</h3>
+<blockquote>
+<p>每项 0–10 自评。<strong>≤6 分的项</strong>今晚必须重读 day17-uml.md 对应小节，并在 Phase 4 冲刺（Day 31–34）
+前再自评一次——UML 是科目二试题三 15 分大题的核心，没有"考前再说"的余地。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>自评项</th>
+<th>自评（0-10）</th>
+<th>验证方式（能口头说出来才算会）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>类图画法</strong>：三格矩形、可见性 <code>+/-/#/~</code>、抽象类名斜体、接口标 <code>&lt;&lt;interface&gt;&gt;</code></td>
+<td>______</td>
+<td>默写一个"学生"类（2 属性 2 方法，含可见性符号）</td>
+</tr>
+<tr>
+<td><strong>类间六关系</strong>（依关聚组泛实）的<strong>符号</strong>：依赖虚线箭头 / 关联实线箭头 / 聚合<strong>空心菱形</strong> / 组合<strong>实心菱形</strong> / 泛化实线空心三角 / 实现虚线空心三角</td>
+<td>______</td>
+<td>在纸上画出六种符号并标出"菱形在整体端、三角指向更一般端"</td>
+</tr>
+<tr>
+<td><strong>六关系的代码级判别</strong>（依赖=方法参数/局部变量；关联=成员变量；聚合=外部注入；组合=内部 new；泛化=extends；实现=implements）</td>
+<td>______</td>
+<td>给一段代码，3 秒内说出两个类是什么关系</td>
+</tr>
+<tr>
+<td><strong>聚合 vs 组合</strong>（部分能否独立存在、谁负责创建、整体销毁时部分在不在）</td>
+<td>______</td>
+<td>口述"外部注入是聚合，内部创建是组合；整体没了部分还在是聚合"</td>
+</tr>
+<tr>
+<td><strong>include vs extend</strong>（必执行 vs 可选；<strong>箭头方向相反</strong>：include 基→被包含、extend 扩展→基）</td>
+<td>______</td>
+<td>口述"包含必执行，箭头朝小；扩展可选，箭头朝大"</td>
+</tr>
+<tr>
+<td><strong>顺序图四要素</strong>（生命线、消息、激活条；同步实心三角/异步开放箭头/返回虚线；顺序图只有对象没有类）</td>
+<td>______</td>
+<td>画出一个含 2 个对象、3 条消息的顺序图</td>
+</tr>
+<tr>
+<td><strong>状态图</strong>（状态圆角矩形、转换 <code>事件[条件]/动作</code>、初始●唯一、终止◉可多个；<code>when()</code> 变化事件 vs <code>after()</code> 时间事件；<strong>事件触发的是转换不是状态</strong>）</td>
+<td>______</td>
+<td>画出订单的 3 状态状态图，并说出 when/after 的区别</td>
+</tr>
+<tr>
+<td><strong>组合状态与历史状态</strong>（从组合状态出去要等内部所有子状态动作完成；历史状态 H 记住上次离开的子状态）</td>
+<td>______</td>
+<td>口述"历史状态 = 从上次离开的地方继续"</td>
+</tr>
+<tr>
+<td><strong>活动图</strong>（动作、判定/合并菱形、<strong>分叉/汇合粗横线表示并发</strong>、泳道）<strong>与流程图的区别</strong></td>
+<td>______</td>
+<td>口述"活动图 = 面向对象版、支持并发的流程图"</td>
+</tr>
+<tr>
+<td><strong>科目二卷面结构</strong>（试题一 DFD / 试题二 E-R / <strong>试题三 UML 15 分</strong> / 试题四 算法 / 试题五六 C++或Java 设计模式二选一；<strong>4 必答 + 1 选答，每题 15 分，满分 75，合格 45</strong>）</td>
+<td>______</td>
+<td>默写出 6 道大题的考查内容与合格线</td>
+</tr>
+<tr>
+<td><strong>UML 填空三招</strong>（名词找类、动词找方法/用例、关键词判关系："同生共死→组合、可独立→聚合、是一种→泛化、用一下→依赖"）</td>
+<td>______</td>
+<td>用这三招把 day17-uml.md §2.2 的示例类图重画一遍</td>
+</tr>
+</tbody>
+</table>
+<p><strong>UML 自评总分（11 项，满分 110）：______ 分</strong>
+- □ <strong>≥ 88（80%）</strong>：UML 入门达成。Day 18 起可把做题重心放回真题卷。
+- □ <strong>66 – 87</strong>：基础在但不够稳。把 ≤6 分的项今晚重读，Day 18 做卷前再扫一遍 day17-uml.md §8 速记。
+- □ <strong>&lt; 66</strong>：UML 仍是短板。<strong>这是科目二 15 分大题的根</strong>，不能拖——今晚重读全文，
+  并在明天做题时刻意用"关键词判关系"的方法做每一道 UML 上午题。</p>
+<p><strong>UML 学习的具体困难（写下来，Day 18 做题时验证是否解决）</strong>：</p>
+<pre><code class="language-text">
+</code></pre>
+<h3>Step 3：弱项强化 25 题复盘（下午）</h3>
+<blockquote>
+<p>从 <code>docs/knowledge-points/software-engineering/day17-exercises.md</code> 誊抄。</p>
+</blockquote>
+<p><strong>得分记录</strong>：</p>
+<pre><code class="language-text">弱项强化 25 题：______ / 25 = ______%
+用时：______ 分钟（建议 40 分钟闭卷，超时说明熟练度不够）
+分科：OS 6 题 ____ / 6 ｜ 网络 5 题 ____ / 5 ｜ 数据库 5 题 ____ / 5
+      组成 4 题 ____ / 4 ｜ 软工 3 题 ____ / 3 ｜ 数据结构 2 题 ____ / 2
+</code></pre>
+<p><strong>分科判定（对齐 knowledge-checklist.md 的规则：单科 &lt; 60% ⇒ 二轮重点）</strong>：
+- □ 操作系统 &lt; 60%（&lt; 4/6）⇒ 仍为二轮重点，明日先补 30 分钟再做当天任务
+- □ 计算机网络 &lt; 60%（&lt; 3/5）⇒ 仍为二轮重点
+- □ 数据库 &lt; 60%（&lt; 3/5）⇒ 仍为二轮重点
+- □ 计算机组成 &lt; 60%（&lt; 3/4）⇒ 仍为二轮重点
+- □ 软件工程 / 数据结构：&lt; 60% ⇒ 仍为二轮重点</p>
+<p><strong>25 题错题登记（错题四要素，从 day17-exercises.md 的错题中逐条搬过来）</strong>：</p>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>明日动作</strong>：□ 回 Phase 1 笔记整章重看 □ 3 天后重做该题 □ 仅背结论</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>明日动作</strong>：□ 回笔记重看 □ 3 天后重做 □ 仅背结论</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>明日动作</strong>：□ 回笔记重看 □ 3 天后重做 □ 仅背结论</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余仍错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本日是 Phase 2 第一个&quot;回头看&quot;的日子：重做正确率比&quot;新卷得分&quot;更能说明问题。
+  —— 重做正确率 ≥ 80%：说明错题已消化，继续按&quot;每天一套真题 + 错题回看&quot;的节奏推进；
+  —— 重做正确率 &lt; 60%：**不要急着做新卷**，Phase 2 的目的是补漏不是刷量，
+     明天先补 30 分钟最弱科目再做题，并把仍错题隔 3 天（Day 20）再重做一遍。
+- 25 题分科正确率若与 Phase 1 综合测验（Day 14）的弱科一致，说明薄弱点是**系统性**的，
+  必须回 Phase 1 笔记整章重看（对照 knowledge-checklist.md 二轮重点清单的&quot;我的正确率&quot;列）。
+- UML 自评 ≤6 分的项：明天做真题卷 3 时，每遇到一道 UML 上午题就**刻意用&quot;关键词判关系&quot;的方法**做一遍，
+  做完对答案时核对判别是否准确——这是为科目二试题三 15 分大题做的提前演练。
+- 今日仍错的知识点在下方「仍错知识点标记区」打 ☑，Phase 4 冲刺（Day 31–34）时优先复习。
+</code></pre>
+<h3>「仍错知识点」标记区</h3>
+<blockquote>
+<p><strong>填法</strong>：Day 17 暴露的仍错知识点（重做仍错 + 25 题仍错 + UML 自评 ≤6 分的项）在下面打 ☑。
+这些是 Phase 4 冲刺（Day 31–34）的<strong>第一优先</strong>复习内容。</p>
+</blockquote>
+<p><strong>操作系统</strong>（仍错就打 ☑）：
+- ☐ 页式地址转换（物理 = 块号×页大小 + 偏移）
+- ☐ 多级页表访存次数（TLB 命中 1 次 / 二级页表未命中 3 次）
+- ☐ 磁盘 SSTF 寻道计算（折返跑，逐段列距离）
+- ☐ 索引文件可管理大小（4KB 块：一级 4MB / 二级 4GB / 三级 4TB）
+- ☐ PV 操作信号量取值范围（−(n−m) 〜 m）
+- ☐ SJF 周转时间计算
+- ☐ 位示图 / 改进型 Clock 页面置换</p>
+<p><strong>计算机网络</strong>（仍错就打 ☑）：
+- ☐ 子网划分 5 步法（2^h − 2 ≥ 主机数 → 定网络位 → 写掩码 → 块大小 → 子网数）
+- ☐ CIDR 路由聚合（2^k 个网络 → 前缀减 k）
+- ☐ ARP / ICMP = 网络层
+- ☐ 加密算法参数（DES 56/64、3DES 168、AES 分组 128）+ 数字签名不提供机密性
+- ☐ 拥塞控制（超时回 1 vs 重复 ACK 减半）</p>
+<p><strong>数据库</strong>（仍错就打 ☑）：
+- ☐ 聚合与 NULL（COUNT(*) / COUNT(列) / AVG 分母不算 NULL）
+- ☐ JOIN 类型与行数（左外 = 匹配 + 左表无匹配）
+- ☐ 候选码求解（L/N/R/LR 分类 + 闭包，多候选码要求全）
+- ☐ 范式判断 5 步流程 / 3NF 与 BCNF 分界
+- ☐ E-R 转关系模式（M:N 独立建表 / 1:N 外键在 N 端）</p>
+<p><strong>计算机组成</strong>（仍错就打 ☑）：
+- ☐ 不等长段流水线（T = Σt + (n−1)Δt；E = n·Σt/(k·T)，等长段公式 E = n/(k+n−1) 不适用）
+- ☐ Cache 三种映射地址结构（全相联<strong>无行号字段</strong>；位数守恒律自查）
+- ☐ Cache 命中率（t_a = h·t_c+(1−h)·t_m / S = t_m/t_a / e = t_c/t_a；效率 ≤ 100%）
+- ☐ 总线带宽 = 频率 × 宽度 / 8（MB/s 一定要 ÷8）</p>
+<p><strong>软件工程 / UML</strong>（仍错或自评 ≤6 分就打 ☑）：
+- ☐ V 模型四对对应
+- ☐ 软件维护四类型判别（完善性 vs 适应性）
+- ☐ 螺旋模型四象限顺序（制定计划 → 风险分析 → 实施工程 → 客户评估）
+- ☐ UML 类间六关系（符号 + 代码级判别）
+- ☐ 聚合 vs 组合
+- ☐ include vs extend
+- ☐ 顺序图 / 状态图 / 活动图基本元素
+- ☐ 状态图概念（when 是变化事件；事件触发的是转换不是状态）</p>
+<p><strong>数据结构</strong>（仍错就打 ☑）：
+- ☐ 排序稳定性（不稳定 = 快选希堆）+ 建堆 O(n)
+- ☐ AOE 网关键路径（最长路径 = 最短工期；ve 取 max、vl 取 min）</p>
+<hr />
+<h2>Day 18（10/8）反思：Phase 2 真题实战③ —— 真题卷 3（2021 下半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第三套真题：2021 年下半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2021H2-morning-questions.md（只含题目，不含答案）
+- 对答案与逐题分析：docs/practice/papers/2021H2-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与前卷对比区）
+- ⚠️ 本卷配套的&quot;答案&quot;PDF 经核对实为试卷副本（零答案），key 取自 5 个公开来源交叉核验，
+  全部计算题独立重算；其中 10 道分歧题的裁决表见执行者报告，3 道已勘误修正（见下文 Step 2）。
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 18 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 3（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2021H2-morning-key.md</code>。计算题（地址编址、流水线、可靠度、关键路径、
+   前驱图 PV、磁盘调度、栈/队列模拟、哈夫曼、候选码等）必须打草稿写过程。
+3. 涂卡习惯：做完 20 题涂一次卡；连环题涂卡前先核对题号与空号。
+4. 图形题：questions 文件已给出结构性复原（AOE 16 边、表达式树、NFA、前趋图+PV 骨架、
+   磁盘排布表、状态图、类图、堆不等式、频率表）并标注【存疑：图形复原】。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2021H2-morning-key.md</code>，<strong>逐题</strong>核对，做对的题也快速读解析确认"真会"还是"蒙对"。</li>
+<li>回填 key 文件的「分科正确率统计表」与「与前卷对比区」（卷 1-3 得分）。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>，不要只看结论。</li>
+<li><strong>⚠️ 3 道分歧题已勘误修正</strong>（提交 <code>650cc27</code>，对答案时以修正后的 key 为准）：</li>
+<li><strong>第 23 题 = B</strong>：官方题解（CSDN）口径；部分来源曾给 D。</li>
+<li><strong>第 58 题 = B（循环队列优点：入队出队都不需要移动其他元素）</strong>："入队和出队可以在同端点进行"
+     描述的是<strong>栈</strong>，与队列 FIFO（队尾入、队头出）定义相悖；希赛题库（educity.cn/tiku/21096780.html）
+     亦明言"B 是循环队列的优点，A 是对栈的描述"。</li>
+<li><strong>第 61 题 = B</strong>：两个来源 + 逻辑推导（Vi、Vj 可互相不可达）。</li>
+<li>其余分歧题（共 10 道）裁决依据见 <code>task-18-report.md</code>。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">（按 key 文件自带的分科统计表回填，科目与题号范围以 key 为准）
+总分                                ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>本卷重点自查</strong>：
+- <strong>计算跳步类</strong>（编址 +1、流水线周期、可靠度串并联、关键路径与总时差、前驱图 PV 三空连环、
+  磁盘调度 SSTF、栈/队列指针模拟、哈夫曼 WPL、候选码闭包）：重算必须列中间量。
+- <strong>概念混淆类</strong>（Q58 循环队列 vs 栈、Q67-68 ARP 广播/单播）：回对应笔记的<strong>对比表整体重背</strong>。
+- <strong>图形类</strong>（AOE/表达式树/NFA/状态图/类图）：先读结构化复原，再自己画一遍。
+- <strong>否定式审题类</strong>：题干"不正确的是/不包括"先<strong>圈出否定词</strong>再读选项。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷 3 道分歧题已按官方/多数来源口径修正，记住 Q58 的&quot;循环队列 vs 栈&quot;辨析——这是高频陷阱。
+- 明日 Day 19 继续真题卷 4（2022 上半年上午）；⚠️ 该卷原卷本地仅存到第 34 题，
+  第 35-75 题为网络回忆版（题号顺序未经验证），做完按 70 题折算真实水平。
+- 若本卷分数明显低于卷 1-2，先回看 Phase 1 笔记的弱科章节，再继续做新卷。
+</code></pre>
+<hr />
+<h2>Day 19（10/9）反思：Phase 2 真题实战④ —— 真题卷 4（2022 上半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第四套真题：2022 年上半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2022H1-morning-questions.md（只含题目，可干净计时闭卷做）
+- 对答案与逐题分析：docs/practice/papers/2022H1-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与前卷对比区）
+- ⚠️⚠️⚠️ 本卷来源特殊，做题前必须先读 questions 文件开头的「本卷来源说明」：
+  —— 第 1-34 题：本地原卷 PDF 逐字转录，**真题原文，可靠**
+  —— 第 35-75 题：原卷 PDF 截断（仅 7 页到第 34 题，453 页合集亦然，完整卷本地不可得），
+     取自网络回忆/整理版（CSDN + 51CTO 交叉一致），**按知识点重排、题号顺序未经原卷印证**，
+     逐题标注【存疑：题目来源为网络回忆版，非原卷原文】
+  —— 第 71-75 题（英语）：系整理版误收的 **2020 年下半年**原题（与卷 1 英语题逐词相同），
+     非本卷真题；做完后这 5 分**不计入与真实考试的对照**，建议按 70 题折算真实水平
+- 打卡：tracker.md Day 19 行（正确率按 75 题填，另附 70 题折算分）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 4（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2022H1-morning-key.md</code>，不要查笔记、不要搜题。
+   计算题（第 5 系统可靠度、24 自然连接列数、28 树的度与叶子数、36-38、40 0/1 背包、66、69-70 AOE）
+   必须打草稿写过程。
+3. <strong>本卷题号顺序警示</strong>：第 35-75 题是按知识点重排的整理版，<strong>多空连环题的题号可能与原卷不同</strong>，
+   做题时按题面本身理解，不要预设"上一题的答案能用到下一题"。
+4. 遇到图形题：questions 文件已给出文字化/ASCII 结构复原并标注【存疑：图形复原】+ 来源指针；
+   第 69-70 题的 AOE 完整边集无法可靠复原，附注可信度低，若手边有其他版本原卷可对照。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%　（<strong>70 题折算</strong>：</em></strong><strong><em> / 70 = </em></strong><strong><em>%）
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2022H1-morning-key.md</code>，<strong>逐题</strong>核对，不只是对字母——做对的题也快速读一遍解析，
+   确认自己是"真会"还是"蒙对"。</li>
+<li>回填 key 文件的「分科正确率统计表」，并填写「与前卷对比区」（卷 1-4 得分）。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>，写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>，不要只看结论：</li>
+<li>第 5 题系统可靠度（串并联组合：R·(1−(1−R)²)·R 结构）</li>
+<li>第 24 题自然连接列数（R(A,B,C,D) ⋈ S(A,D,E,F)：公共属性 A、D 合并后 6 列）</li>
+<li>第 28 题树的度与叶子数（n₀ = Σ(度 i −1)·n_i + 1）</li>
+<li>第 40 题 0/1 背包（部分背包 630 ≥ 0/1 背包 605，分数背包永远不劣于 0/1）</li>
+<li><strong>2 道分歧题</strong>（key 已给出独立重算的裁决，对答案时以 key 推导为准）：</li>
+<li><strong>第 24 题 = C（6 列）</strong>：51CTO 给 4 列有误（误把"两个公共属性"理解为只保留 2 列）</li>
+<li><strong>第 40 题 = A（605）</strong>：51CTO 漏选最优组合</li>
+<li><strong>英语 5 题特殊处理</strong>：第 71-75 题是 2020 下半年原题，若卷 1 已做过，这 5 题只能算"复习"不算"新题"；
+   对答案时核对与卷 1 是否一致，<strong>不计入本卷真实水平评估</strong>。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">（按 key 文件自带的分科统计表回填，科目与题号范围以 key 为准）
+总分（75 题）                        ：____ / 75 = ____%
+70 题折算（剔除误收的 71-75 题）      ：____ / 70 = ____%   （合格 42，目标 ≥52）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____（本卷英语为误收题，仅供参考）</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>本卷特殊：标注题目来源可靠性</strong>——每条错题注明是"原卷题（1-34）"还是"回忆版题（35-75）"；
+回忆版题若题面表述与官方原卷有出入，错因可能是<strong>题面本身的问题</strong>而非你的知识漏洞，单独标记不要过度自责。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述，注明来源：原卷/回忆版）
+- <strong>错因</strong>（是"过程跳步"还是"概念混淆"？写具体）：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>来源可靠性</strong>：□ 原卷题（1-34）□ 回忆版题（35-75）</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>来源可靠性</strong>：□ 原卷题 □ 回忆版题</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：
+- <strong>来源可靠性</strong>：□ 原卷题 □ 回忆版题</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷因来源限制（仅 1-34 为原卷），**真实水平参考 70 题折算分**，不要被 75 题总分误导。
+- 第 35-75 题虽非原卷排版，但**知识点本身是真实的 2022 上半年考点**，错题同样有价值，
+  按&quot;错题四要素&quot;正常登记；只需在 Day 20 回归日重做时注意：这些题的题号在真实试卷中位置不同。
+- 若本卷分数明显低于卷 1-3，先排除&quot;回忆版题目表述不严谨&quot;的因素，再看是否是知识性漏洞：
+  —— 原卷题（1-34）失分 ⇒ 真实漏洞，优先补；
+  —— 回忆版题失分且题面存疑 ⇒ 查证知识点本身即可，不必纠缠题目。
+- 明日 Day 20 是错题回归日② + 设计模式大题入门，把本卷与卷 3 的错题一起纳入重做清单。
+</code></pre>
+<hr />
+<h2>Day 20（10/10）反思：错题回归日② + 设计模式大题入门</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 错题回归日②：重做 Day 18-19（卷 3 = 2021 下 / 卷 4 = 2022 上）错题 + Phase 2 高频错题
+  重做清单：docs/practice/review-round2.md（20 题组：计算 12 + 分歧/勘误 5 + 图形/概念陷阱 3）
+  - 分歧题组重点：卷 3 的 Q23 / Q58 / Q61（已勘误为 B）、卷 4 的 Q24 / Q40
+  - ⚠️ 卷 4（2022 上）只有 Q1-34 是原卷题，35-75 为网络回忆版；本重做卷只用原卷题并标注了来源可靠性
+- 设计模式大题入门（科目二试题五 C++ / 试题六 Java 的前置学习）
+  笔记：docs/knowledge-points/software-engineering/day20-design-patterns.md
+  - 考法说明 + 场景关键词→模式识别表（16 行）
+  - 16 个常考模式精讲：创建型 5（工厂方法/抽象工厂/单例/建造者/原型）
+    + 结构型 5（适配器/装饰/外观/组合/享元）+ 行为型 6（观察者/状态/策略/命令/备忘录/职责链）
+    每个含：意图 + ASCII 类图 + 角色表 + Java 与 C++ 代码骨架 + 大题常考填空点
+  - 大题答题三步法：读【说明】定位场景关键词判模式 → 对照类图找角色对应 → 依多态与继承关系填代码空
+- 打卡：tracker.md Day 20 行（重做正确率 + 设计模式自评）
+</code></pre>
+<h3>Step 1：重做卷 3 + 卷 4 错题（上午 2h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>闭卷重做</strong>，先不看 key；每题在题旁写答案，全部做完再统一对答案。
+2. 计时但不限死（目标 40 分钟内做完 20 题组），重点是<strong>每道题都写出推理过程</strong>，不止填字母。
+3. ⚠️ 分歧/勘误题组（卷 3 Q23/Q58/Q61、卷 4 Q24/Q40）是本轮的核心：这些题你第一次大概率做错过，
+   重做时<strong>先写出你选某个选项的依据</strong>，再与 key 的勘误依据对照——纠正的是推理方式，不只是答案。
+4. 卷 4 的题若标"原卷题"与"回忆版"，重做时优先保证原卷题（1-34）的正确率。</p>
+<p><strong>自评记录</strong>：
+<code>text
+计算题组（12 组）：____ / 12　用时 ____ 分钟
+分歧/勘误题组（5 组）：____ / 5
+图形/概念陷阱组（3 组）：____ / 3
+合计：____ / 20　重做正确率 ____%</code></p>
+</blockquote>
+<h3>Step 2：设计模式大题入门（下午 2.5h）</h3>
+<ol>
+<li><strong>先读 day20-design-patterns.md 的识别表</strong>（30 分钟）：遮住"对应模式"列，看场景描述自己判模式，
+   再对答案——目标是看到关键词条件反射出模式名。</li>
+<li><strong>精读 16 个模式</strong>（每个 5-8 分钟）：重点不是背定义，而是<strong>类图结构 + 代码骨架</strong>：</li>
+<li>大题填空考的是"这个角色对应哪个类/接口/方法"，所以<strong>角色结构表</strong>比意图更重要。</li>
+<li>Java 与 C++ 骨架对照看：同一个模式的两种语言写法差异主要在指针/引用与内存管理。</li>
+<li><strong>合上笔记自测</strong>：任选 3 个模式，默写它的角色结构（谁继承谁、谁聚合谁）。
+   <code>text
+   自测模式 1：__________　角色结构：____________________________________
+   自测模式 2：__________　角色结构：____________________________________
+   自测模式 3：__________　角色结构：____________________________________</code></li>
+<li><strong>回看 day17-uml.md 的类间六关系</strong>：模式类图里全是这六种关系，读图时先判关系类型再看角色名。</li>
+</ol>
+<h3>Step 3：丢分点回顾（晚上 1.5h）</h3>
+<ul>
+<li>重做仍错的题：逐题写错因（是"知识点没掌握"还是"题面陷阱没识别"），登记到下方错题区。</li>
+<li>计算题组若仍错，回 Phase 1 对应章节的<strong>手算例题</strong>重算一遍（不是看懂，是算对）。</li>
+<li>设计模式若默写不出角色结构，今晚把 3 个最常考的模式（工厂方法/观察者/策略）的类图各画一遍。</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<p><strong>错题 1：</strong>（题号，如「2021 下 Q58」）
+- <strong>错因</strong>（是"概念混淆"还是"勘误题被原答案带偏"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 重做正确率判定（与 round1 同规则）：≥80% ⇒ 错题已修复；60-80% ⇒ 隔 3 天（Day 23 回归日③）再做一遍；
+  &lt; 60% ⇒ 回 Phase 1 对应章节整章重看，别急着赶进度。
+- 设计模式今天只是入门，真正做大题在 Phase 3（Day 29 大题专项③ 会交付 4 道试题四/五/六真题）。
+- 明日 Day 21：真题卷 5（2022 下半年上午）。
+</code></pre>
+<hr />
+<h2>Day 21（10/11）反思：Phase 2 真题实战⑤ —— 真题卷 5（2022 下半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第五套真题：2022 年下半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2022H2-morning-questions.md（只含题目，可干净计时闭卷做）
+- 对答案与逐题分析：docs/practice/papers/2022H2-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与前卷对比区）
+- ⚠️ 本卷配套的&quot;答案&quot;PDF 经核对实为试卷副本（零答案），key 文件的参考答案取自公开来源
+  双源交叉核对，7 道计算题全部由执行者独立复算；已在 key 文件开头显著披露。
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 21 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 5（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2022H2-morning-key.md</code>，不要查笔记、不要搜题。
+   计算题（第 17、28、63、65 等，含 AOE/段页式地址/最短路径类）必须打草稿写过程。
+3. 涂卡习惯：做完 20 题涂一次卡；多空连环题涂卡前先核对题号与空号。
+4. 遇到图形题：questions 文件已给出文字化/ASCII 结构复原（AOE 活动图、前趋图 + PV 代码、
+   段页式地址结构、UML 活动图、日志类图、最短路径图）并标注【存疑：图形复原】+ 来源指针。
+   附注<strong>只含结构性原始数据，不含计算结果</strong>——关键路径、总时差、地址拆分请自行计算。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2022H2-morning-key.md</code>，<strong>逐题</strong>核对，不只是对字母——做对的题也快速读一遍解析，
+   确认自己是"真会"还是"蒙对"。</li>
+<li>回填 key 文件的「分科正确率统计表」，并填写「与前卷对比区」（卷 1-5 得分，看弱科是否反复出现）。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>，写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>（key 已给出全部 7 道计算题的独立复算：Q17=58、Q28=2100、
+   Q63=29/10 与 39/11、Q65=5 等），不要只看结论。</li>
+<li><strong>⚠️ 第 13 题（翻译权）存在教材-法条冲突</strong>：
+   —— 《计算机软件保护条例》原文（cac.gov.cn）"自然语言文字"逐字对应选项 <strong>D</strong>；
+   —— 官方教材与两大题库均给 <strong>B</strong>。
+   —— key 文件已按<strong>教材口径发布 B</strong> 并在解析中完整披露法条指向 D。
+   <strong>建议：考试按 B 答题（与官方教材一致），但要知道法条原文指向 D——这是已知的题目瑕疵，不是你的错。</strong></li>
+<li>第 29、73/74 题：少数来源有误，key 已用 ⚠️ 标注修正，对答案时以 key 为准。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">（按 key 文件自带的分科统计表回填，科目与题号范围以 key 为准）
+总分                                ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>按错因分类对照自查</strong>：
+- <strong>计算跳步类</strong>（第 17、28、63、65 等）：不是"公式没背"，是"没写过程"。重算时必须列出中间量——
+  AOE 网各事件最早/最迟时间、段页式地址的段号/页号/偏移逐位拆分、最短路径的松弛过程。
+- <strong>概念混淆类</strong>（含第 13 题翻译权）：回对应笔记的<strong>对比表整体重背</strong>，不要单点记；
+  法条类题目以官方教材口径为准（见上文第 13 题说明）。
+- <strong>模式/图形类</strong>（UML 活动图、日志类图等）：设计模式把<strong>意图 + 角色 + 适用场景</strong>一起记。
+- <strong>否定式审题类</strong>：题干"错误的是/不正确的是/不包括"先<strong>圈出否定词</strong>再读选项。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷是 8 套真题中来源最完整的一批之一（原卷完整，仅答案需网络交叉核对），
+  分数参考价值高；与卷 1-4 对比看弱科是否反复出现。
+- 第 13 题翻译权冲突是**已知题目瑕疵**：记住&quot;考试按教材口径 B&quot;，不要因此怀疑自己的判断。
+- 明日 Day 22 继续真题卷 6（2023 上半年）；Phase 2 已过半，注意做题节奏是否稳定在 ≤120 分钟。
+</code></pre>
+<hr />
+<h2>Day 22（10/12）反思：Phase 2 真题实战⑥ —— 真题卷 6（2023 上半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第六套真题：2023 年上半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2023H1-morning-questions.md（只含题目，不含答案）
+- 对答案与逐题分析：docs/practice/papers/2023H1-morning-key.md
+  （答案速查 1-75 + 逐题解析 75 条 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与前卷对比区）
+- ✅ 本卷答案来源最强：本地「2023年上半年上午试卷（参考答案）.pdf」是**真答案册**
+  （39 页，每题含「参考答案（n）X」+ 完整文字解析），与 2020-2022 的&quot;答案 PDF 实为试卷副本&quot;不同；
+  答案已逐题与该 PDF 核对一致（除下述 2 道分歧/矛盾题，均已改判并披露推导）
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 22 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 6（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>（正式考试 9:00–11:30），实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2023H1-morning-key.md</code>。计算题（海明码、流水线、位示图、沟通路径、
+   栈容量、哈夫曼编码、候选关键字、MST 权值、McCabe 复杂度、关键路径长度）必须打草稿写过程。
+3. 涂卡习惯：做完 20 题涂一次卡；连环题（17-18、22、26-28、34-35、41-42、44-45、55-56、64-65）
+   涂卡前先核对题号与空号。
+4. 图形题（7 处）：questions 文件已给出结构性复原并标注【存疑：图形复原】；
+   附注只含节点/边/权值/分支条件等<strong>原始数据</strong>，计算结果需自行推导。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2023H1-morning-key.md</code>，<strong>逐题</strong>核对，做对的题也快速读解析确认"真会"还是"蒙对"。</li>
+<li>回填 key 文件的「分科正确率统计表」与「与前卷对比区」（卷 1-6 得分）。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>：海明码位数、流水线周期、位示图、沟通路径 C(n,2)、
+   栈容量、哈夫曼编码与 WPL、候选关键字闭包、MST 权值（Kruskal/Prim）、McCabe、关键路径。</li>
+<li><strong>⚠️ 2 道需留意的题</strong>（key 已给出推导，对答案时以 key 为准）：</li>
+<li><strong>第 55 题 = B（分歧题）</strong>：本地答案 PDF 标 A「INSERT」，但其<strong>自身解题示例</strong>写的是
+     <code>GRANT INSERT ON Students TO User1 WITH GRANT OPTION</code>——INSERT 与 ON 连用，自相矛盾；
+     且标准 SQL 语法要求 <code>GRANT &lt;权限&gt; ON &lt;对象&gt; TO &lt;用户&gt;</code>，填 A 缺 ON 语法错误。
+     本题是 <strong>2011 年下半年第 51、52 题逐字重复</strong>，官方答案为 <strong>B「INSERT ON」</strong>。
+     键册按 B 并在三处显著标注；若你按答案 PDF 记 A，请自行调整。</li>
+<li><strong>第 68 题 = D（/home/httpd）</strong>：答案 PDF 标 D 但其<strong>解析自相矛盾</strong>（先说默认根目录为
+     /var/www/html 或 /var/www，又说站点主目录是 /home/httpd）。按官方教程与原题
+     （网络工程师 2018 年上半年第 31 题）取 <strong>D</strong>。补充：现代 Apache 发行版
+     （CentOS/RHEL）实际默认为 /var/www/html，/etc/httpd 是配置目录、/var/log/httpd 是日志目录。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">（按 key 文件自带的分科统计表回填，科目与题号范围以 key 为准）
+总分                                ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>本卷重点自查</strong>：
+- <strong>计算跳步类</strong>（海明码、流水线、位示图、沟通路径、栈容量、哈夫曼、候选关键字、MST、McCabe、
+  关键路径）：不是"公式没背"，是"没写过程"。重算必须列中间量——海明码分组、
+  流水线各段时序、位示图字数、组合数、WPL、属性闭包、Kruskal 选边顺序、E−N+2。
+- <strong>概念混淆类</strong>（Q68 Linux 目录、Q55 SQL 授权语法）：回对应笔记的<strong>对比表整体重背</strong>；
+  法条/语法类题目以官方教程口径为准（见上文两题说明）。
+- <strong>模式/图形类</strong>（Q41-42、Q44-45 UML 与设计模式）：设计模式把<strong>意图 + 角色 + 适用场景</strong>一起记。
+- <strong>否定式审题类</strong>：题干"不正确的是/不包括"先<strong>圈出否定词</strong>再读选项。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷答案来自本地真答案册，分数参考价值最高——若本卷明显低于卷 1-5，说明有真实知识漏洞，
+  不要归因于题目来源问题。
+- Q55/Q68 的分歧是**已知答案册瑕疵**：记住 SQL 授权必须有 ON、Apache 考试按教程取 /home/httpd，
+  不要因此怀疑自己的判断。
+- 明日 Day 23 是错题回归日③ + DFD 大题入门：重做 Phase 2 全部错题（第三轮，要求 ≥85%），
+  并首次完整做大题（UML 1 道 + DFD 1 道，不计时）。
+</code></pre>
+<hr />
+<hr />
+<h2>Day 23（10/13）反思：错题回归日③ + 数据流图（DFD）大题入门</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 错题回归日③（最后一轮）：重做 Phase 2 全部 8 套卷的错题（第三轮重复）
+  重做清单：docs/practice/review-round3.md（26 题组，覆盖全部 8 卷：卷1:2/卷2:3/卷3:3/卷4:2/卷5:4/卷6:4/卷7:4/卷8:4）
+  - 与 round1（卷 1+2）、round2（卷 3+4）零重复，主打此前从未回顾的卷 5-8
+  - 分组：计算 16 + 分歧勘误 5 + 图形概念 5
+  - 本轮门槛 ≥85%（达标 = Phase 2 错题全部修复，可放心进 Phase 3 大题）
+- DFD 大题入门（科目二试题一，15 分）
+  笔记：docs/knowledge-points/software-engineering/day23-dfd-intro.md
+  - DFD 三层结构（顶层/0 层/1 层）逐层 ASCII 图示例（网上购书系统）
+  - 读图/画图顺序：E（外部实体）→ D（数据存储）→ P（加工）→ 流
+  - 数据流平衡三规则：守恒 / 父子图平衡 / 无悬空流
+  - 6 类常见错误 + 4 道判别练习（不给答案，自己判）
+- 下午实战（不计时）：subject2/dfd-uml-exercises.md 的 2021 下智慧农业 DFD + 2023 上数字图书馆 UML
+- 打卡：tracker.md Day 23 行（重做正确率 + 大题自评）
+</code></pre>
+<h3>Step 1：第三轮错题重做（上午 2h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>闭卷、计时</strong>（目标 50 分钟内做完 26 题组），这是第三轮，正确率必须起得来。
+2. 分歧勘误组（5 组：卷 5·13「教材 B / 法条 D」、卷 6·55-56、卷 7·14/56/67）——这些题你的"第一次错"
+   多数是<strong>被错误来源带偏</strong>，重做时按 key 的裁决依据写推理，别再凭印象选。
+3. 计算组（16 组）要求<strong>写出算式</strong>，不允许只填结果——过程的分步骤才是考场的保命分。
+4. 做完对答案后，仍错的题用红笔在题旁标"第三轮仍错"，这些就是进 Phase 3 每天要重做的题。</p>
+<p><strong>自评记录</strong>：
+<code>text
+计算题组（16 组）：____ / 16　用时 ____ 分钟
+分歧勘误题组（5 组）：____ / 5
+图形概念组（5 组）：____ / 5
+合计：____ / 26　第三轮重做正确率 ____%　（门槛 ≥85%）</code></p>
+</blockquote>
+<h3>Step 2：DFD 大题入门（上午 1h）</h3>
+<p>按 <code>day23-dfd-intro.md</code> 末尾的 1h 学习路径：
+1. <strong>读笔记正文（30 分钟）</strong>：三层结构 + 读图顺序 + 平衡三规则 + 6 类错误。遇到 ASCII 图自己在草稿纸上跟着画一遍。
+2. <strong>回看 Task 27 的答题模板（15 分钟）</strong>：<code>subject2/dfd-uml-notes.md</code> 的 DFD 四步法——与本文的入门视角互补
+   （入门讲"怎么看懂图"，模板讲"怎么把空填对"）。
+3. <strong>预读下午要做的题（15 分钟）</strong>：只读【说明】和问题，<strong>先不画图也不对答案</strong>，想清楚题目在考什么。</p>
+<h3>Step 3：UML + DFD 大题实战（下午 2.5h，不计时）</h3>
+<blockquote>
+<p><strong>首次完整做大题，重在熟悉题型与流程，不在得分。</strong></p>
+<ol>
+<li>做 <code>subject2/dfd-uml-exercises.md</code> 的 <strong>2021 下试题一（智慧农业平台 DFD）</strong> 和 <strong>2023 上试题三（数字图书馆 UML）</strong>。</li>
+<li>DFD 按 E→D→P→流 的顺序：先在草稿上列外部实体清单与数据存储清单，再逐问填空。</li>
+<li>UML 先判类图还是用例图；类图按"名词找类、动词找方法、关键词判关系"三招。</li>
+<li><strong>绝不留空</strong>：不会的空写关键名词（实体名/数据流名/类名），下午卷按步骤给分。</li>
+<li>⚠️ exercises 的图形复原是结构性推断（标【存疑：图形复原】），若手边有原卷 PDF 对照原图做。</li>
+<li>做完对 <code>dfd-uml-key.md</code>，逐空核对；丢分的空在 key 旁用自己的话写一遍正确思路。</li>
+</ol>
+<p><strong>自评记录</strong>（每题 15 分）：
+<code>text
+2021 下 DFD（智慧农业平台）：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2023 上 UML（数字图书馆）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会</code></p>
+</blockquote>
+<h3>Step 4：丢分点回顾（晚上 1.5h）</h3>
+<ul>
+<li>第三轮仍错的题是<strong>真漏洞</strong>：逐题写错因 + 正确思路，带入 Phase 3 每天开头重做 2-3 道，直到做对。</li>
+<li>DFD 若丢分在"数据流不平衡"：用平衡三规则（守恒/父子图平衡/无悬空流）把错题的图重检查一遍。</li>
+<li>打卡：把第三轮重做正确率写进 tracker.md Day 23 行。</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<p><strong>错题 1：</strong>（题号，如「2022 下 Q13」）
+- <strong>错因</strong>（是"教材/法条口径没记牢"还是"计算过程错"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。
+大题错题按<strong>空</strong>登记（如「2021 下 DFD 问题 3 第 2 个空」），错因细化到空。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 第三轮重做正确率判定：≥85% ⇒ Phase 2 错题全部修复，Phase 3 专注大题；
+  &lt; 85% ⇒ 把仍错的题列入&quot;Phase 3 每日重做清单&quot;，每天开头先做 2-3 道再学新内容。
+- 明日 Day 24：真题卷 7（2019 上半年上午），答案是官方解析书 OCR，来源最可靠的一批。
+- DFD 大题今天只是入门，Phase 3 Day 27 已交付 DFD×2 + UML×2 的完整专项练习，届时计时做。
+</code></pre>
+<hr />
+<h2>Day 24（10/14）反思：Phase 2 真题实战⑦ —— 真题卷 7（2019 上半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第七套真题：2019 年上半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2019H1-morning-questions.md（只含题目，可干净计时闭卷做）
+- 对答案与逐题分析：docs/practice/papers/2019H1-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 每题知识点归属 + 分科正确率统计表 + 错题登记区 + 与前卷对比区）
+- ✅ 本卷答案来源最可靠：本地解析书《软件设计师2017至2019年试题分析与解答》第 7 章
+  （官方答案 + 官方解析，扫描页由执行者 OCR）+ 3 个网络来源交叉核对
+- 错题回看：把做错的题对应的知识点回到 Phase 1 笔记重看，并按&quot;错题四要素&quot;登记到本文
+- 打卡：tracker.md Day 24 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 7（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>，实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2019H1-morning-key.md</code>。计算题（4、17-18、25、50、52-53、57-65 等）
+   必须打草稿写过程。<strong>本卷计算量偏大</strong>，注意时间分配。
+3. 本卷连环题多：23-24（前驱图）、44-46（桥接模式类图）、52-53（候选码）、62-65（矩阵连乘动态规划），
+   涂卡前核对题号与空号。
+4. 图形题：questions 文件已给出结构性复原（活动表/目录树/代码/NFA 状态等）并标注【存疑：图形复原】；
+   若手边有解析书原卷 PDF（<code>practice_dd/软件设计师2017至2019年试题分析与解答.pdf</code>），对照原图做。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2019H1-morning-key.md</code>，<strong>逐题</strong>核对，做对的题也快速读解析确认"真会"还是"蒙对"。</li>
+<li>回填 key 文件的「分科正确率统计表」与「与前卷对比区」。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>：Q4 内存编址（记得 +1）、Q17-18 关键路径与总时差、
+   Q52-53 候选码与冗余依赖、Q57-65 数据结构连环（对称矩阵下标/二叉树/哈夫曼/矩阵连乘）。</li>
+<li><strong>⚠️ 4 道需留意的题</strong>（key 已给出推导，对答案时以 key 为准）：</li>
+<li><strong>Q14 = B（不构成侵权）</strong>：未注册商标不受保护——部分网文误给 A。</li>
+<li><strong>Q18 = D（55 天）</strong>：CSDN 误给 C（50 天）。关键路径 A1→A3→A9→A11→A12 = 8+15+15+7+10 = 55。</li>
+<li><strong>Q56 = C（可用性）</strong>：两个网文来源误给 D（分布性）；解析书定义与题干逐字对应。</li>
+<li><strong>Q67 = A（保持官方键）</strong>：<strong>疑似官方勘误</strong>——解析书答案给 A，但其自身分析步骤推出 C；B、D 可明确排除。
+     做题时按"先呈现给用户、后断开 TCP 连接"理解应选 C；考试若遇到同类题以官方口径为准。</li>
+</ol>
+<p><strong>分科正确率（从 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">（按 key 文件自带的分科统计表回填，科目与题号范围以 key 为准）
+总分                                ：____ / 75 = ____%   （合格 45，目标 ≥55）
+</code></pre>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里，明日先补 30 分钟再做题）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>本卷重点自查</strong>：
+- <strong>计算跳步类</strong>（Q4 编址 +1、Q17-18 关键路径/总时差、Q52-53 候选码、Q57 对称矩阵下标、
+  Q58-59 树与二叉树、Q62-65 矩阵连乘动态规划）：重算必须列中间量——地址区间长度、
+  各事件最早/最迟时间、属性闭包、下三角元素计数、dp 表格逐格填。
+- <strong>概念混淆类</strong>（Q14 商标法、Q25 CMM、Q31 质量模型子特性、Q36 维护类型）：
+  回对应笔记的<strong>对比表整体重背</strong>。
+- <strong>模式类</strong>（Q44-46 桥接模式）：把<strong>意图 + 角色 + 适用场景</strong>一起记。
+- <strong>否定式审题类</strong>：题干"不正确的是/不包括"先<strong>圈出否定词</strong>再读选项。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷是 8 套中答案来源最可靠的一套（官方解析书 OCR），分数参考价值高。
+- Q67 的&quot;疑似官方勘误&quot;是已知题目瑕疵，记住官方口径即可，不要因此怀疑自己的判断。
+- 62-65 矩阵连乘动态规划若失分，今晚回 day14 数据结构补漏重看 dp 部分。
+- 明日 Day 25 是最后一套上午真题，做完后做 8 套正确率趋势分析（key 文件末尾有模板）。
+</code></pre>
+<hr />
+<h2>Day 25（10/15）反思：Phase 2 真题实战⑧ —— 真题卷 8（2019 下半年上午）+ 8 套趋势分析</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 第八套（最后一套上午真题）：2019 年下半年软件设计师上午试卷（75 道选择题，150 分钟）
+  试卷：docs/practice/papers/2019H2-morning-questions.md（只含题目，不含答案）
+- 对答案与逐题分析：docs/practice/papers/2019H2-morning-key.md
+  （答案速查 1-75 + 逐题解析 + 分科统计 + 错题登记 + **8 套真题正确率趋势分析区**）
+- ✅ 答案来源：官方解析书 OCR（补齐 Q1=B）+ CSDN 交叉核对，75/75 零分歧
+- ⚠️ Q17-18（AOE 关键路径）的边权值未录入 questions 文件（OCR 不可靠，按转录约定刻意不录），
+  需对照原卷图形或解析书原图做题（`practice_dd/软件设计师2017至2019年试题分析与解答.pdf`）
+- 做完 8 套后：回填 key 文件的 8 套趋势分析区，判断是否稳定在 55+
+- 打卡：tracker.md Day 25 行（正确率、错题数）
+</code></pre>
+<h3>Step 1：计时闭卷做真题卷 8（上午）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 150 分钟</strong>，实际做题 + 涂卡争取 <strong>≤ 120 分钟</strong>，留 30 分钟检查。
+2. <strong>闭卷</strong>：不要打开 <code>2019H2-morning-key.md</code>。计算题（Q2 可靠度、Q4-5 编址与芯片数、
+   Q6 流水线、Q17-18 关键路径、Q23-25 前驱图 PV、Q28 磁盘调度、Q34-35 路径数与 McCabe、
+   Q52-53 候选码、Q54-55 关系代数→SQL、Q57 对称矩阵、Q58 遍历还原、Q59 树叶数、
+   Q60-61 邻接矩阵、Q64-65 哈夫曼编码与压缩比、Q68 IPv6 倍数）必须打草稿。
+3. <strong>Q17-18 特别提示</strong>：questions 文件只给了 AOE 图的<strong>结构（顶点与边）</strong>，未给权值。
+   做这两题请对照原卷/解析书原图读出权值再算；若暂无原图，先跳过这两题，最后用 key 的
+   完整推导（关键路径 ABFJL/ADGIJL 共 22 天、BE 时差 2 天）核对思路。
+4. 涂卡习惯：做完 20 题涂一次卡；连环题（4-5、10-11、17-18、20-21、23-25、34-35、
+   42-43、44-47、48-49、52-53、54-55、60-61、64-65、66-67、71-75）涂卡前核对题号与空号。</p>
+<p><strong>得分记录</strong>：<strong><em>_</em>_ / 75 = </strong><strong><em>_%（若 Q17-18 跳过，按 73 题折算：</em></strong><strong><em> / 73）
+用时：</em></strong><strong><em> 分钟　｜　涂卡 + 检查：</em></strong>___ 分钟</p>
+</blockquote>
+<h3>Step 2：对答案 + 逐题分析 + 分科正确率（下午）</h3>
+<ol>
+<li>打开 <code>2019H2-morning-key.md</code>，<strong>逐题</strong>核对，做对的题也快速读解析确认。</li>
+<li>回填 key 文件的「分科正确率统计表」。</li>
+<li><strong>单科正确率 &lt; 60% 的科目</strong>写入下方「Phase 2 弱科登记」并加入 <code>knowledge-checklist.md</code> 二轮重点。</li>
+<li>计算题错了<strong>必须重算过程</strong>，不要只看结论。</li>
+<li><strong>本卷零分歧题</strong>（官方解析书 + CSDN 完全一致），若你的答案与 key 不同，先读 key 推导再质疑。</li>
+</ol>
+<h3>Step 3：8 套真题正确率趋势分析（下午，本日专属）</h3>
+<blockquote>
+<p>这是 Phase 2 的<strong>收尾动作</strong>：把 8 套卷的得分填入 key 文件末尾的「8 套真题正确率趋势分析区」，
+然后回答下面三个问题。<strong>这一步比再做一套卷更重要</strong>——它决定 Phase 3/4 的复习重心。</p>
+</blockquote>
+<p><strong>8 套得分汇总（从各卷 key 文件誊抄）：</strong></p>
+<pre><code class="language-text">卷 1（2020 下）  ：____ / 75 = ____%
+卷 2（2021 上）  ：____ / 75 = ____%
+卷 3（2021 下）  ：____ / 75 = ____%
+卷 4（2022 上）⚠️：____ / 70 = ____%（折算，原卷仅 34 题 + 回忆版 35-70）
+卷 5（2022 下）  ：____ / 75 = ____%
+卷 6（2023 上）  ：____ / 75 = ____%
+卷 7（2019 上）  ：____ / 75 = ____%
+卷 8（2019 下）  ：____ / 75 = ____%
+平均            ：____%   （合格 45/75 = 60%，目标 ≥ 55/75 ≈ 73%）
+</code></pre>
+<p><strong>趋势判定：</strong>
+- □ <strong>稳定在 55+（8 套中 ≥ 6 套）</strong>：选择题已达标。Phase 3 可把重心放在<strong>大题</strong>（下午卷）上，
+  上午每天只做 15 题保持手感。
+- □ <strong>在 45-55 之间波动</strong>：基础在但不稳。Phase 3 每天上午仍做半套卷（35 题）+ 错题回归，
+  重点攻<strong>反复丢分的科目</strong>（见下方弱科统计）。
+- □ <strong>低于 45 或持续下降</strong>：⚠️ 需要减速。回 Phase 1 笔记把<strong>弱科整章重看</strong>，
+  并把 Phase 2 错题按知识点重新归类后<strong>三轮重做</strong>（Day 23 的回归日清单）。</p>
+<p><strong>弱科统计（把 8 套的分科正确率按科目平均，&lt; 60% 的科目打 ☑）：</strong></p>
+<ul>
+<li>☐ 计算机基础（8 套平均 ____%）</li>
+<li>☐ 操作系统（8 套平均 ____%）</li>
+<li>☐ 网络（8 套平均 ____%）</li>
+<li>☐ 数据库（8 套平均 ____%）</li>
+<li>☐ 数据结构（8 套平均 ____%）</li>
+<li>☐ 软件工程（8 套平均 ____%）</li>
+<li>☐ 知识产权（8 套平均 ____%）</li>
+<li>☐ 计算机英语（8 套平均 ____%）</li>
+</ul>
+<blockquote>
+<p>☑ 的科目写入 <code>knowledge-checklist.md</code> 的"Phase 3 重点"区，并指定 Phase 3 每天的补弱时间段。</p>
+</blockquote>
+<p><strong>Phase 2 弱科登记（单科 &lt; 60% 的科目写在这里）：</strong></p>
+<ul>
+<li>☐ 计算机基础：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 操作系统：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 网络：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据库：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 数据结构：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 软件工程：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 知识产权：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+<li>☐ 计算机英语：<strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>把做错的题按 <code>题目 → 错因 → 正确思路 → 知识点</code> 逐条登记（复制模板新增）。
+<strong>本卷重点自查</strong>：
+- <strong>计算跳步类</strong>（Q2 串并联可靠度、Q4-5 编址与芯片数、Q6 重叠流水线、Q17-18 关键路径/总时差、
+  Q23-25 前驱图 PV 三空连环、Q28 SSTF 同柱面内排序、Q34-35 路径数与 McCabe、Q57 对称矩阵下标
+  （注意 i≤j 的对称变换）、Q58 先序+中序还原二叉树、Q59 树叶数公式、Q64-65 哈夫曼编码与压缩比、
+  Q68 IPv6 = 2⁹⁶ 而非 96/128）：重算必须列中间量。
+- <strong>概念混淆类</strong>（Q29 Scrum 步骤、Q30 CMM 等级、Q31 质量模型子特性、Q33 文档与阶段、
+  Q36 软件维护、Q38-40 面向对象、Q41 UML 状态图、Q51 两级映像、Q62-63 算法策略）：
+  回对应笔记的<strong>对比表整体重背</strong>。
+- <strong>模式类</strong>（Q44-47 桥接模式：意图/角色/适用场景/类型一起记；Q50 有限自动机与正规式）。
+- <strong>否定式审题类</strong>（Q3、Q7、Q15、Q19、Q26、Q30、Q31、Q33、Q36、Q41、Q43）：
+  先<strong>圈出否定词</strong>再读选项。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>（计算题把每一步列出来）：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题目简述）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 本卷做完，Phase 2 的 8 套上午真题全部完成——Step 3 的趋势分析是今日最重要的产出，
+  它决定 Phase 3 的重心分配（上午维持 vs 大题突破）。
+- Q17-18 若因无权值跳过，务必找原卷/解析书原图补算一遍，关键路径与总时差是高频考点不能放过。
+- 8 套弱科 ☑ 的科目写入 knowledge-checklist.md 的&quot;Phase 3 重点&quot;区。
+- 明日 Day 26：阶段总结 + 选择题全真模拟（严格 150 分钟，用没做过的卷子或模拟卷）。
+</code></pre>
+<hr />
+<hr />
+<h2>Day 26（10/16）反思：阶段总结 + 选择题全真模拟（2018 上半年上午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 2 收尾：全真模拟一套完整选择题（严格 150 分钟，用没做过的卷子）
+  模拟卷：docs/practice/papers/2018H1-mock-questions.md（2018 上半年上午，75 题）
+  - 8:30 开始，11:00 前结束，严格闭卷、断网、手机静音
+  - 用答题卡涂卡（不只是在卷面上选），模拟真实考场流程
+- 对答案：docs/practice/papers/2018H1-mock-key.md
+  - ⚠️ 答案来自清华版官方解析书《2017-2019 试题分析与解答》第 7 章（OCR 逐页提取）
+    ——比网络核对权威；据此修正了 2 题网络误传（Q12=C、Q29=D）
+- 整理 Phase 2 高频错题 TOP 10：docs/practice/top10-errors.md
+- 打卡：tracker.md Day 26 行（总分 + 八模块正确率）
+</code></pre>
+<h3>Step 1：全真模拟（上午 8:30-11:00，150 分钟）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>严格计时</strong>，到 11:00 立即停笔。不会的题<strong>先标记跳过</strong>（铅笔点个点），最后回来做。
+2. <strong>最后 15 分钟必须留给涂卡检查</strong>：涂卡与题号对齐、有无漏涂——考场最常见的失分是涂错位。
+3. 分模块计时（计分表里有时长列），找出"哪个模块慢"——慢的模块是考场上时间风险的来源。
+4. 英语题 71-75 不要最后才做：它读题慢但选项规律强（就近指代），时间紧时反而更慌。</p>
+<p><strong>自评记录</strong>：
+```text
+总分：<strong><em>_ / 75（合格线 45）
+用时：</em></strong><em> 分钟　涂卡检查用了 <strong><em>_ 分钟　标记跳过的题：</em></strong></em> 道</p>
+<p>八模块正确率：
+  计算机基础（1-5）        ：<strong><em>_ / 5   </em></strong><em>%
+  操作系统（6-13）         ：<strong><em>_ / 8   </em></strong></em>%
+  数据库（14-23）          ：<strong><em>_ / 10  </em></strong><em>%
+  计算机网络（24-33）      ：<strong><em>_ / 10  </em></strong></em>%
+  计算机组成（34-45）      ：<strong><em>_ / 12  </em></strong><em>%
+  软件工程（46-56）        ：<strong><em>_ / 11  </em></strong></em>%
+  数据结构与算法（57-65）  ：<strong><em>_ / 9   </em></strong><em>%
+  计算机英语（71-75）      ：<strong><em>_ / 5   </em></strong></em>%
+```
+⚠️ 题号区间是按本卷常见分布给的参考，实际以卷面为准，重点看<strong>模块正确率</strong>而非题号。</p>
+</blockquote>
+<h3>Step 2：对答案 + 盲区定位（下午 2.5h）</h3>
+<ol>
+<li>打开 <code>2018H1-mock-key.md</code> 的<strong>答案速查表</strong>先对总分布，再逐题看解析。</li>
+<li><strong>分歧题重点</strong>：Q12（=C，条例口径）、Q29（=D，增量模型）——这两题<strong>多数网络来源是错的</strong>，
+   看官方解析书的推理过程，纠正的是"凭印象选"的习惯。</li>
+<li><strong>图形题</strong>：Q17-18（关键路径边权）、Q62-65（活动表）原图未复原，若手边有原卷 PDF 对照原图重算。</li>
+<li><strong>盲区判定</strong>：正确率 &lt; 60% 的模块写入"今晚重点"——这些是 Phase 3/4 要定向补的。</li>
+<li>把错题按 <code>top10-errors.md</code> 的 10 个知识点归类：错题落在哪个 TOP 上，就在 TOP 旁画正字。</li>
+</ol>
+<h3>Step 3：高频错题 TOP 10 + 打卡（晚上 1.5h）</h3>
+<ol>
+<li>通读 <code>top10-errors.md</code>：每条<strong>先遮住"正确套路"自己复述</strong>，复述不出就抄一遍。</li>
+<li>错题归类的正字结果：TOP 旁画正字最多的 3 个知识点，写入"考前必须再看的 5 个点"候选。</li>
+<li><strong>30 秒速查表</strong>（文末 20 行公式口诀）：从第 1 行念到第 20 行，<strong>卡壳的那一行</strong>就是有概率丢分的地方，
+   标出来每天念一遍直到顺。</li>
+<li>打卡：总分与模块正确率写进 tracker.md Day 26 行。</li>
+</ol>
+<h3>今日错题（错题四要素）</h3>
+<p><strong>错题 1：</strong>（题号）
+- <strong>错因</strong>（是"知识点没掌握"还是"时间不够慌的"还是"分歧题被网络来源带偏"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 对应 TOP 编号</strong>：</p>
+<p><strong>错题 2：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 对应 TOP 编号</strong>：</p>
+<p><strong>错题 3：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 对应 TOP 编号</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。重点登记<strong>落在 TOP 1-3 上的错题</strong>。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 模拟总分判定（与 Day 25 的 8 套趋势分析对照）：
+  ≥ 60 分 ⇒ 上午已稳，Phase 3 全力大题；
+  45-59 ⇒ 上午合格但有余量，每天保持 20 道选择手感；
+  &lt; 45 ⇒ 盲区模块回 Phase 1 对应章节整章重看，别急着进 Phase 3。
+- TOP 正字最多的 3 个知识点 → 明天起每天开头重做 2-3 道相关题。
+- 明日 Day 27（按计划为 Phase 3 大题专项① DFD+UML）：今天的选择结果决定下午大题的精力分配。
+</code></pre>
+<hr />
+<h2>Day 27（10/17）反思：Phase 3 大题专项① —— 数据流图（DFD）+ UML（科目二下午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 3 第一天，科目二（下午）大题专项：DFD + UML，各 2 道真题（计时但不限死，重在流程完整）
+  题目：docs/practice/subject2/dfd-uml-exercises.md
+  - DFD ×2：2020 年下半年试题一（智能检测系统）、2021 年下半年试题一（智慧农业平台）
+  - UML ×2：2020 年下半年试题三（房产信息管理）、2023 年上半年试题三（数字图书馆）
+  ⚠️ 原计划用 2021 下试题三（吃金币游戏），但其问题/答案页在源文本中整页缺失，已改选
+     内容完整、考点对口的 2020 下与 2023 上试题三
+- 对答案：docs/practice/subject2/dfd-uml-key.md（逐问答案逐字转录 + 丢分点解析 + 知识点归属）
+- 答题模板整理：docs/practice/subject2/dfd-uml-notes.md
+  （DFD 四步法 + 平衡检查三规则 + UML 类图填空三招 + 类间六关系判别 + 高频考点清单）
+- 打卡：tracker.md Day 27 行（每题自评：掌握 / 部分掌握 / 不会）
+</code></pre>
+<h3>Step 1：做 4 道大题（上午 3h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>每道题按考试节奏：先读【说明】→ 再读图 → 最后逐问作答</strong>，不会的空也写关键名词（步骤分）。
+2. <strong>绝不留空</strong>：下午卷按步骤给分，写出实体名/数据流名/类名就能拿分。
+3. DFD 题先在草稿上画<strong>外部实体清单 / 数据存储清单 / 加工清单</strong>，再逐问对照填空。
+4. UML 题先区分题目考的是<strong>类图</strong>（填类名/属性/方法/关系）还是<strong>用例图</strong>（Actor/用例/include/extend）。
+5. ⚠️ exercises 文件的图形复原是<strong>结构性推断</strong>（标注【存疑：图形复原】），与原卷图可能在细节上
+   有差异；DFD 问题 1/2 的"编号↔名称"对应只能由原卷给出，若手边有原卷 PDF 对照原图做。</p>
+<p><strong>自评记录</strong>（每题 15 分）：
+<code>text
+2020 下 DFD（智能检测系统）：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2021 下 DFD（智慧农业平台）：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2020 下 UML（房产信息管理）：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2023 上 UML（数字图书馆）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+合计                        ：____ / 60</code></p>
+</blockquote>
+<h3>Step 2：对答案 + 整理答题模板（下午 2.5h）</h3>
+<ol>
+<li>打开 <code>dfd-uml-key.md</code>，<strong>逐问</strong>核对（DFD 的每个 E/D/P 空、UML 的每个类/关系空）。</li>
+<li>丢分的空，在 key 的"丢分点解析"旁用自己的话写一遍正确思路——<strong>写出来才算会</strong>。</li>
+<li>把 <code>dfd-uml-notes.md</code> 的两个模板<strong>抄写一遍</strong>（不是看一遍）：</li>
+<li><strong>DFD 四步法</strong>：识别外部实体 → 定位数据存储 → 检查数据流平衡（守恒/父子图平衡/无悬空流）→ 分解加工（避开三类错误：有输入无输出/有输出无输入/输入不足以产生输出）</li>
+<li><strong>UML 类图三招</strong>：名词找类、动词找方法、关键词判关系；类间六关系（泛化/实现/关联/依赖/聚合/组合）的符号与代码级判别</li>
+<li><strong>自查：模板能否默写？</strong> 若不能，说明还没内化，今晚再抄一遍。</li>
+</ol>
+<h3>Step 3：丢分点回顾（晚上 1.5h）</h3>
+<ul>
+<li>DFD 丢分多为<strong>数据流平衡没检查</strong>（补流时只看局部不看整体）——用 notes 的三规则重查一遍错题。</li>
+<li>UML 丢分多为<strong>关系判错</strong>（聚合 vs 组合 vs 关联）——回 day17-uml.md 的对比表重背，再结合
+  本卷类图的代码级线索（构造函数是否创建对象、生命周期是否一致）判别。</li>
+<li>⚠️ 2020 下问题 3 的"产品监测信息 P2→P3"疑为 OCR 误识（应为 P3→P4"产品检测信息"），
+  若你的答案与此相关，以 key 的标注说明为准，不必纠结。</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>大题错题同样按四要素登记，但"错因"要细化到<strong>空</strong>（哪个填空错了）。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题空，如「2020 下 DFD 问题 3 第 2 个空」）
+- <strong>错因</strong>（是"没看到平衡规则"还是"实体识别错"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 大题专项第一天若 4 道题合计 &lt; 36/60，今晚先把 DFD/UML 模板各默写一遍再睡。
+- 明日 Day 28 大题专项②：数据库设计（E-R 图 + SQL），exercises 文件尚未交付，届时按同样流程做。
+- 科目二合格线 45/75：四类大题（DFD/E-R/UML/算法或模式）各拿 10-12 分即可，**不求满分求稳定**。
+</code></pre>
+<hr />
+<hr />
+<h2>Day 28（10/18）反思：Phase 3 大题专项② —— 数据库设计（E-R 图 + 关系模式 + SQL）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 3 大题专项②：科目二试题二（数据库设计），4 道真题（计时但不限死，重在流程完整）
+  题目：docs/practice/subject2/database-exercises.md
+  - 2020 年下半年试题二（集团信息平台：分公司/业务部/职员，含规范化分解）
+  - 2021 年下半年试题二（汽车维修管理系统：客户/车辆/员工/部门/维修单，含 m:n 转换）
+  - 2022 年上半年试题二（疫苗接种系统：三元联系 + 扩展设计）
+  - 2023 年上半年试题二（汽车零件采购系统：三元联系 + 扩展设计）
+- 对答案：docs/practice/subject2/database-key.md（逐问答案 + 丢分点解析 + 知识点归属）
+- 答题模板整理：docs/practice/subject2/database-notes.md
+  （E-R 三步法 + 1:1/1:n/m:n 判定口诀 + 关系模式转换规则 + SQL 常见考法 + 高频丢分点清单）
+- 打卡：tracker.md Day 28 行（每题自评：掌握 / 部分掌握 / 不会）
+</code></pre>
+<h3>Step 1：做 4 道大题（上午 3h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. 每道题按考试节奏：先读【需求分析结果】→ 圈量词句（一名/多名/只属于/至少有）→ 再看关系模式 → 最后逐问作答。
+2. <strong>判定联系类型先写"唯一/不唯一"对照，再套口诀</strong>：两端都唯一 1:1；一端唯一一端不唯一 1:n；两端都不唯一 m:n。
+3. 关系模式填空先查"需求属性清单里有、模式里缺的"，再查"1:n 联系的 1 端主键"——<strong>两类缺项都要填</strong>。
+4. <strong>绝不留空</strong>：主键外键题写出属性名就能拿分；范式题写出"存在数据冗余 + 分解为两个模式"的套路。
+5. ⚠️ 2021 下汽车维修题的答案页在源中缺失，key 全部为推导答案（标【存疑：推导答案】），
+   已用网络参考答案核对；其余 3 题为源中官方答案。</p>
+<p><strong>自评记录</strong>（每题 15 分）：
+<code>text
+2020 下（集团信息平台）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2021 下（汽车维修管理）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2022 上（疫苗接种系统）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2023 上（汽车零件采购）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+合计                    ：____ / 60</code></p>
+</blockquote>
+<h3>Step 2：对答案 + 整理答题模板（下午 2.5h）</h3>
+<ol>
+<li>打开 <code>database-key.md</code>，<strong>逐问</strong>核对（每个属性空、每个主外键、每个联系类型）。</li>
+<li>丢分的空，在 key 的"丢分点解析"旁用自己的话写一遍正确思路——<strong>写出来才算会</strong>。</li>
+<li>把 <code>database-notes.md</code> 的模板<strong>抄写一遍</strong>：</li>
+<li><strong>E-R 三步法</strong>：需求找实体 → 量词句定联系类型 → 属性挂实体</li>
+<li><strong>关系模式转换规则</strong>：1:n 把 1 端主键放 n 端；m:n 必须转独立关系（两端主键组合为新关系的主键）</li>
+<li><strong>主外键判定</strong>：主键看"唯一标识每一个元组"那句；外键看模式中引用别的关系主键的属性</li>
+<li><strong>SQL 考法补充</strong>：2020-2023 的试题二均不含 SQL 书写题（SQL 在上午卷考），但模板里的
+   CREATE TABLE / SELECT JOIN / GRANT / VIEW 四类考法要看一遍例句，上午卷会考。</li>
+<li><strong>自查：判定口诀能否默写？</strong> 若不能，今晚再抄一遍。</li>
+</ol>
+<h3>Step 3：丢分点回顾（晚上 1.5h）</h3>
+<ul>
+<li>最常见丢分：<strong>关系模式填空漏属性</strong>——需求清单里有、模式里缺的属性（如 2021 下维修单的"车牌号"）
+  与 1:n 转换的 1 端主键（如"员工号"）是两类缺项，<strong>都要填进空里</strong>（2021 下 (d) = 车牌号 + 员工号）。</li>
+<li>联系类型判错：回需求原句找量词，在草稿上写"X 端：唯一 / Y 端：不唯一"再套口诀。</li>
+<li>主键外键漏写：填空时新加进去的属性，到主外键题里<strong>也要算外键</strong>（如车辆关系的客户号）。</li>
+<li>范式题（2020 下问题 4）：套路答案是"数据冗余 + 修改/插入/删除异常 + 分解为两个模式"，背熟。</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>大题错题按<strong>空</strong>登记，错因细化到空。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题空，如「2021 下试题二 问题2 (d)」）
+- <strong>错因</strong>（是"漏了需求清单里的属性"还是"忘了 1:n 转换"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 大题专项若合计 &lt; 36/60，今晚把 E-R 判定口诀与关系模式转换规则各默写一遍再睡。
+- 明日 Day 29 大题专项③：设计模式（试题五 C++ / 试题六 Java）+ 算法填空（试题四 C），
+  用今天 day20-design-patterns.md 的识别表做前置准备。
+- 科目二合格线 45/75：四类大题各拿 10-12 分即可，**不求满分求稳定**。
+</code></pre>
+<hr />
+<h2>Day 29（10/19）反思：Phase 3 大题专项③ —— 设计模式 + 算法填空（科目二下午）</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 3 大题专项③：科目二试题四（C 算法填空）+ 试题五/六（设计模式，C++/Java 二选一）
+  题目：docs/practice/subject2/patterns-algo-exercises.md
+  - 算法 ×2：2021 下试题四（编辑距离，动态规划·序列型）、2022 上试题四（矩阵连乘，动态规划·区间型）
+  - 设计模式 ×2：2021 下试题六（Java，享元模式）、2022 上试题五（C++，备忘录模式）
+  ⚠️ 选材替换（源不完整）：2020 下试题四（代码与答案错位）、2021 上试题四（OCR 误识多）、
+     2022 下试题四/五/六（答案整段缺失）、2023 上试题四（题目缺失）均已弃用
+- 对答案：docs/practice/subject2/patterns-algo-key.md（逐空答案 + 丢分点解析 + 知识点归属）
+- 速查表整理：docs/practice/subject2/patterns-algo-notes.md
+  （场景关键词→模式识别表 + 模式意图/角色结构/代码特征/考频 + 算法填空答题策略 + 常考算法骨架清单）
+- 打卡：tracker.md Day 29 行（每题自评：掌握 / 部分掌握 / 不会）
+</code></pre>
+<h3>Step 1：做 4 道大题（上午 3h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>算法题先读【说明】理清算法目标</strong>，再读代码标循环不变量，最后从边界条件反推空位。
+2. 动态规划题先在草稿上写出<strong>状态转移方程</strong>（编辑距离：D[i][j] 由左/上/左上推；矩阵连乘：按区间长度枚举断点），
+   再对照代码骨架找空位——方程写出来，空位自然对上。
+3. <strong>设计模式题先判模式</strong>（用 day20 的识别表或 notes 的速查表），再对照类图找角色对应，最后填代码空。
+4. <strong>绝不留空</strong>：算法空写出数组下标或变量名也能拿分；模式空写出角色名（如 FlyweightFactory）就能拿分。
+5. 试题五（C++）与试题六（Java）考试时二选一，平时两道都做，考场选更有把握的。</p>
+<p><strong>自评记录</strong>（每题 15 分）：
+<code>text
+2021 下试题四（编辑距离·C）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2022 上试题四（矩阵连乘·C）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2021 下试题六（享元·Java）   ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+2022 上试题五（备忘录·C++）  ：____ 分　□ 掌握 □ 部分掌握 □ 不会
+合计                        ：____ / 60</code></p>
+</blockquote>
+<h3>Step 2：对答案 + 整理速查表（下午 2.5h）</h3>
+<ol>
+<li>打开 <code>patterns-algo-key.md</code>，<strong>逐空</strong>核对；丢分的空在解析旁用自己的话写一遍正确思路。</li>
+<li>算法空：确认每个空<strong>为什么填这个</strong>（是状态转移的哪一项、还是循环边界），不要只背答案。</li>
+<li>模式空：把该模式的<strong>角色结构</strong>默写一遍（谁继承谁、谁聚合谁、多态调用在哪个方法里）。</li>
+<li>把 <code>patterns-algo-notes.md</code> 的识别表<strong>遮住答案列自测</strong>：看到场景关键词能条件反射出模式名。</li>
+<li><strong>算法骨架清单</strong>过一遍：排序/查找/树的遍历/动态规划（序列型/区间型/背包）/贪心/图遍历——
+   每类在草稿上写一次核心循环结构。</li>
+</ol>
+<h3>Step 3：丢分点回顾（晚上 1.5h）</h3>
+<ul>
+<li>算法填空最常见丢分：<strong>循环边界差 1</strong>（i 从 0 还是 1、j &lt; n 还是 &lt;= n）——回到说明里看序列是 0 基还是 1 基。</li>
+<li>DP 题若推不出方程：先在草稿上<strong>手算一个 3×3 的小例子</strong>，规律就出来了，别盯着代码硬看。</li>
+<li>模式题若判错模式：回 day20-design-patterns.md 的识别表 + 本类题的【说明】关键词重判。</li>
+<li>打卡：把 4 题自评写进 tracker.md Day 29 行。</li>
+</ul>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>大题错题按<strong>空</strong>登记，错因细化到空。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题空，如「2021 下试题四 空(3)」）
+- <strong>错因</strong>（是"状态转移方程没推出"还是"循环边界错"？）：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<p><strong>错题 3：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 二轮重点项</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：把其余错题补在下方，格式同上。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 大题专项③若合计 &lt; 36/60：动态规划是重中之重，今晚把编辑距离与矩阵连乘的状态转移方程各默写一遍。
+- 考场选题策略：试题五（C++）与试题六（Java）二选一，**选你今天得分高的那道**，不要临场换。
+- 明日 Day 30：全真模拟（选择 + 大题完整版），是检验三周学习成果的总测验。
+- 科目二合格线 45/75：四类大题各拿 10-12 分即可，**不求满分求稳定**。
+</code></pre>
+<hr />
+<hr />
+<h2>Day 30（10/20）反思：全真模拟完整版（选择 + 大题）—— 三周学习总检验</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- 上午 8:30-11:00：全真模拟选择题 75 题（严格 150 分钟）
+  模拟卷：docs/practice/papers/2018H2-mock-questions.md（2018 下半年上午）
+  ⚠️ 本地无 2018下官方答案册（解析书只覆盖 2017–2019上），答案为网络交叉核对
+     （A/B/C 同源希赛转载链，裁决力有限；所有计算题已独立重算）
+- 下午 14:00-15:30：全真模拟大题 4 道（严格 90 分钟）
+  模拟卷：docs/practice/mock-exam/subject2-questions.md
+  - 2023上 试题一 DFD（农事管理服务平台）
+  - 2022下 试题二 E-R（营销公司业务管理）⚠️ 源无答案→推导
+  - 2022上 试题三 UML（地址簿管理系统）
+  - 2021上 试题四 算法（凸多边形最优三角剖分，区间 DP）
+- 下午 15:30-16:30：对答案，算总分
+  答案：papers/2018H2-mock-key.md（含&quot;模拟卷 vs 8 套真题对比区&quot;）
+       mock-exam/subject2-key.md（含&quot;模拟得分自评指引&quot;）
+- 晚上：全面复盘，列出&quot;考前必须再看的 5 个点&quot;
+  清单：docs/practice/mock-exam/pre-exam-5-points.md（默认版 5 点 + 个性化模板）
+- 打卡：tracker.md Day 30 行（选择总分 + 大题总分 + 折算总分）
+</code></pre>
+<h3>Step 1：上午全真模拟（8:30-11:00）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. 完全按考试流程：涂卡、计时、中途不看答案、不去厕所之外的分心。
+2. 这是<strong>唯一一套"非已交付 8 套真题"的上午整卷</strong>，结果最能反映真实水平——认真对待。
+3. 分歧题（Q33/Q43/Q56/Q65，已标⚠️）做完后看 key 的裁决理由，<strong>不要纠结</strong>——
+   Q56 题目本身有瑕疵，Q65 是理论争议，这两题对了不算会、错了不算不会。</p>
+<p><strong>自评记录</strong>：
+<code>text
+上午总分：____ / 75（合格 45）　用时 ____ 分钟
+⚠️ 分歧题对错：Q33 ☐对 ☐错　Q43 ☐对 ☐错　Q56 ☐对 ☐错　Q65 ☐对 ☐错
+慢的模块（计时最久）：______________　正确率最低的模块：______________</code></p>
+</blockquote>
+<h3>Step 2：下午大题全真模拟（14:00-15:30，90 分钟）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. 4 道题 90 分钟，<strong>每题上限 22 分钟</strong>，到点立即下一题，绝不恋战。
+2. <strong>先花 5 分钟通览 4 题</strong>，按"有把握程度"排序，从最有把握的开始做（先拿稳定分）。
+3. <strong>绝不留空</strong>：写出实体名/数据流名/类名/属性名/数组下标都给步骤分。
+4. E-R 题先在草稿上写"X 端：唯一 / Y 端：不唯一"对照再套判定口诀。
+5. DP 题先写状态转移方程（哪怕只写在草稿上），再对照代码骨架找空位。</p>
+<p><strong>自评记录</strong>（每题 15 分，合计 60，折算合格线 36）：
+<code>text
+试题一 DFD（2023上 农事管理）  ：____ / 15　用时 ____ 分钟　□掌握 □部分 □不会
+试题二 E-R （2022下 营销公司）  ：____ / 15　用时 ____ 分钟　□掌握 □部分 □不会
+试题三 UML （2022上 地址簿）    ：____ / 15　用时 ____ 分钟　□掌握 □部分 □不会
+试题四 算法（2021上 凸三角剖分）：____ / 15　用时 ____ 分钟　□掌握 □部分 □不会
+合计：____ / 60　折算（×75/60）：____ / 75</code></p>
+</blockquote>
+<h3>Step 3：对答案 + 算总分（15:30-16:30）</h3>
+<ol>
+<li>上午对 <code>2018H2-mock-key.md</code>：先看答案速查表，<strong>⚠️ 分歧题读裁决理由</strong>（Q33=B 多数、Q43=C、
+   Q56 题目瑕疵各源取 D、Q65 理论争议按公开键 C）。</li>
+<li>看 key 末尾<strong>"模拟卷 vs 8 套真题对比区"</strong>：本卷考了而 8 套卷没考的知识点 = <strong>盲区</strong>，
+   8 套卷高频而本卷没考的 = 可能没覆盖到（但别慌，说明你练得多）。</li>
+<li>下午对 <code>mock-exam/subject2-key.md</code>：逐空核对；每题 &lt; 8 分的题，今晚必须回看对应专项模板。</li>
+<li><strong>算总分</strong>：选择 ×1 + 大题 ×(75/60)，写进 tracker.md Day 30 行。</li>
+</ol>
+<h3>Step 4：全面复盘 + 考前 5 点清单（晚上 1.5h）</h3>
+<ol>
+<li>打开 <code>pre-exam-5-points.md</code>，<strong>填写个性化 5 点</strong>（不要直接用默认版）：</li>
+<li>每点写清「知识点 / 为什么易错 / 考前怎么看（指向具体文件的具体章节/题号）」；</li>
+<li><strong>失分点优先</strong>：模拟中真正丢分的地方排前面；</li>
+<li>没有更个性化的发现就用默认版（默认版基于本仓库已记录的高频失分，质量够用）。</li>
+<li>大题失分回看：试题一丢分→<code>subject2/dfd-uml-notes.md</code> 四步法；试题二→<code>database-notes.md</code>
+   判定口诀；试题三→类间六关系；试题四→<code>patterns-algo-notes.md</code> DP 三件套。</li>
+<li><strong>这是三周学习的总检验</strong>：结果好不要松懈（真题难度有波动），结果差不要崩（还有 4 天可补）。</li>
+</ol>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>大题错题按<strong>空</strong>登记，错因细化到空。</p>
+</blockquote>
+<p><strong>错题 1：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 考前 5 点候选</strong>：</p>
+<p><strong>错题 2：</strong>（题号与题空）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 考前 5 点候选</strong>：</p>
+<p><strong>错题 3：</strong>（题号）
+- <strong>错因</strong>：
+- <strong>正确思路</strong>：
+- <strong>知识点 / 考前 5 点候选</strong>：</p>
+<blockquote>
+<p><strong>错题 &gt; 3 道</strong>：补在下方，格式同上。<strong>只登记"知识点不会"的错题</strong>，分歧题/瑕疵题不算。</p>
+</blockquote>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 总分判定：
+  选择 ≥45 且大题 ≥36（折算 ≥45）⇒ 两科都稳，Phase 4 按计划巩固记忆即可；
+  选择 ≥45 但大题 &lt;36 ⇒ 大题是短板，Day 31-32 每天加做 1 道大题（从专项 exercises 里选没做过的）；
+  选择 &lt;45 但大题 ≥36 ⇒ 选择是短板，Day 31 的 20 道手感题 + TOP10 每天过 3 条；
+  两科都 &lt;45 ⇒ 重点先保大题（大题提分比选择快），选择只抓 TOP10。
+- 考前 5 点清单已填好 ⇒ 明天 Day 31 上午按清单定向复习。
+- 无论结果如何：**学到的东西不会因为一次模拟消失**，考场状态 &gt; 模拟分数。
+</code></pre>
+<hr />
+<hr />
+<hr />
+<h2>Day 31（10/21）反思：查漏补缺（弹性日）—— 按模拟失分定向补强</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 3 收官：弹性日，不学新知识，只补漏洞 + 保持手感
+  工作单：docs/practice/day31-targeted-review.md
+- 上午 3h：按&quot;考前必须再看的 5 个点&quot;定向复习（pre-exam-5-points.md 的自填版或默认版）
+  - 每点：回看具体文件/题号 → 3 分钟速记卡 → 2 道自测小题（先做后对答案）
+- 下午 2.5h：错题本最后一轮筛查（只看&quot;仍错&quot;的题，不重做已会的）
+  - reflection.md 各日错题区（重复出现 ≥2 次的进&quot;最终漏洞清单&quot;）
+  - review-round1/2/3.md 的仍错登记
+  - 8 套卷 key 的⚠️/【存疑】/勘误题（确认口径即可，不必重算——这些是来源问题不是你的问题）
+  - top10-errors.md 逐条自评&quot;已修复 / 仍模糊&quot;
+- 晚上 1.5h：保持手感 20 道选择题（计时 30 分钟，目标 ≥80%）
+- 打卡：tracker.md Day 31 行
+</code></pre>
+<h3>Step 0：先做弹性日决策（15 分钟）</h3>
+<blockquote>
+<p>打开 <code>day31-targeted-review.md</code> 的决策树，<strong>先记录 Day 30 模拟得分</strong>：
+<code>text
+Day 30 上午选择：____ / 75　Day 30 下午大题：____ / 60（折算 ____ / 75）
+今天重心：☐ 大题模板（大题 &lt;36/60）☐ 高频错题 TOP10（选择 &lt;45/75）☐ 标准流程（两科都达标）</code>
+<strong>决策重于执行</strong>：弹性日的意义是把有限精力投在最大漏洞上，不要四平八稳地走流程。</p>
+</blockquote>
+<h3>Step 1：按 5 点定向复习（上午 3h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. 打开 <code>pre-exam-5-points.md</code>——<strong>若已自填 5 点用自填版，未自填用默认版</strong>。
+2. 每点按"回看材料 → 3 分钟速记卡 → 2 道自测小题"走一遍，<strong>自测题先做再对答案</strong>。
+3. 计算型考点（关键路径/页式地址/候选码）<strong>必须在草稿纸上重算</strong>，看懂 ≠ 会算。
+4. 每点结束后立即自评：☐ 已修复 ☐ 仍模糊 —— <strong>仍模糊的点写进下方"最终漏洞清单"</strong>。</p>
+<p><strong>5 点自评记录</strong>：
+<code>text
+第 1 点（关键路径与总时差）  ：____ 自测 ____/2　☐已修复 ☐仍模糊
+第 2 点（页式地址转换）      ：____ 自测 ____/2　☐已修复 ☐仍模糊
+第 3 点（E-R 判定与转换）    ：____ 自测 ____/2　☐已修复 ☐仍模糊
+第 4 点（DP 状态转移）       ：____ 自测 ____/2　☐已修复 ☐仍模糊
+第 5 点（设计模式角色结构）  ：____ 自测 ____/2　☐已修复 ☐仍模糊
+自填点 6（若有）：____________________　☐已修复 ☐仍模糊
+自填点 7（若有）：____________________　☐已修复 ☐仍模糊</code></p>
+</blockquote>
+<h3>Step 2：错题最后一轮筛查（下午 2.5h）</h3>
+<blockquote>
+<p><strong>筛查纪律</strong>：只"看思路 + 口述正确解法"，<strong>不重新计算整套题</strong>（保持手感留到 Step 3）。</p>
+<p><strong>四步筛查</strong>：
+1. 翻 <code>reflection.md</code> 各日"今日错题"区 → <strong>重复出现 ≥2 次</strong>的知识点列入最终漏洞清单；
+2. 翻 <code>review-round1/2/3.md</code> 的仍错登记（第三轮门槛 85% 未达标的部分）；
+3. 翻 8 套真题 key 里标⚠️/【存疑】/勘误的题 → <strong>只确认口径</strong>（来源问题，不是你的漏洞）；
+4. 翻 <code>top10-errors.md</code> 10 条 → 逐条自评"已修复 / 仍模糊"。</p>
+<p><strong>最终漏洞清单</strong>（今天最重要的产出，考前两天只看它）：
+<code>text
+序号 | 知识点 | 出现次数 | 状态 | 考前怎么看（文件/题号） | 已解决
+  1  | ______ | ________ | ____ | ____________________ | ☐
+  2  | ______ | ________ | ____ | ____________________ | ☐
+  3  | ______ | ________ | ____ | ____________________ | ☐
+  4  | ______ | ________ | ____ | ____________________ | ☐
+  5  | ______ | ________ | ____ | ____________________ | ☐
+  6  | ______ | ________ | ____ | ____________________ | ☐
+  7  | ______ | ________ | ____ | ____________________ | ☐
+  8  | ______ | ________ | ____ | ____________________ | ☐</code>
+⚠️ 清单条数：<strong>0 条</strong> = 漏洞已清空，明天起只巩固；<strong>1-3 条</strong> = 正常，明天重点看；
+<strong>≥4 条</strong> = 今晚加班把前 3 条过一遍，别全压到考前一天。</p>
+</blockquote>
+<h3>Step 3：保持手感 20 道选择题（晚上 1.5h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>计时 30 分钟</strong>做完（平均 1.5 分钟/题），对答案后逐题看解析的"在练哪个漏洞"标注。
+2. 保持手感不是新学——正确率<strong>应该高</strong>（≥80%）；低于 80% 说明手感在降温，明天 Day 32
+   做速记卡时把对应知识点重点过。
+3. ⚠️ 20 题已排除所有分歧/勘误/存疑题——<strong>每道题的答案都是干净的</strong>，错就是真不会。</p>
+<p><strong>自评记录</strong>：
+<code>text
+20 题得分：____ / 20（____ %）　用时 ____ 分钟
+错题知识点：____________________
+判定：☐ ≥80% 手感在　☐ 60-80% 有降温风险，明天速记卡重点过　☐ &lt;60% 回看最终漏洞清单</code></p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>今天以"筛查"为主，错题区登记<strong>最终漏洞清单里仍模糊的点</strong>。</p>
+</blockquote>
+<p><strong>漏洞 1：</strong>（知识点）
+- <strong>为什么仍模糊</strong>（是公式记不住，还是推导过程理不顺？）：
+- <strong>正确思路 / 公式</strong>：
+- <strong>考前怎么看（具体文件 + 题号）</strong>：</p>
+<p><strong>漏洞 2：</strong>（知识点）
+- <strong>为什么仍模糊</strong>：
+- <strong>正确思路 / 公式</strong>：
+- <strong>考前怎么看（具体文件 + 题号）</strong>：</p>
+<p><strong>漏洞 3：</strong>（知识点）
+- <strong>为什么仍模糊</strong>：
+- <strong>正确思路 / 公式</strong>：
+- <strong>考前怎么看（具体文件 + 题号）</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 最终漏洞清单条数 ____ 条：写入 day32-sprint.md 的打卡区，明天冲刺时只看这些 + 速记卡。
+- 20 题正确率判定：≥80% 手感在，明天正常节奏；&lt;80% 明天上午框架图回顾时把错的知识点
+  对应章节多看 10 分钟。
+- 明日 Day 32（考前冲刺①）：框架图回顾 + 速记卡背诵 + 大题模板默写验收，**不做新题**。
+- 距考试还有 3 天：**状态 &gt; 知识量**，今晚不要熬夜补漏洞，睡好比多看一页笔记值。
+</code></pre>
+<hr />
+<h2>Day 32（10/22）反思：考前冲刺① —— 框架图回顾 + 记忆性内容背诵</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 4 第一天：巩固记忆、调整状态，不做新题、不学新知识
+  工作单：docs/practice/day32-sprint.md
+- 上午 3h：六科框架图回顾（每科 15-30 分钟 + 3 分钟自测）
+  - OS / 网络 / 数据库 / 组成 / 软工 / 数据结构 六张 index 框架图
+  - 每张框架图回顾完，**合上文件口述框架**，卡住的地方标出来
+- 下午 2h：记忆性内容背诵（day32-sprint.md 的 10 张速记卡）
+  - 协议层级归属 / 端口号 / 加密算法参数 / 范式定义 / 16 个设计模式意图
+  - 维护四类型与占比 / 六大过程模型 / 必背公式 / 白盒覆盖六级 / 耦合内聚七级
+- 下午 0.5h：看高频考点清单（strategies/high-frequency-topics.md + exam-tips.md + quick-reference.md）
+- 晚上 1.5h：大题模板默写验收（subject2-notes.md 五张表）
+- 打卡：tracker.md Day 32 行
+</code></pre>
+<h3>Step 1：框架图回顾（上午 3h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>只看框架，不深挖细节</strong>——目的是"激活记忆"不是"重新学"。
+2. 每张框架图看完<strong>立即合上文件口述</strong>：能口述出来的才算会；卡住的地方写进下方"自测卡住记录"。
+3. 卡住的知识点<strong>不要当场展开学</strong>（会越看越焦虑、还会超时），标出来晚上重点看一眼。</p>
+<p><strong>自测卡住记录</strong>（框架图口述时卡住的地方）：
+<code>text
+OS         卡在：________________________________
+网络       卡在：________________________________
+数据库     卡在：________________________________
+组成       卡在：________________________________
+软工       卡在：________________________________
+数据结构   卡在：________________________________</code></p>
+</blockquote>
+<h3>Step 2：记忆性内容背诵（下午 2h）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. 速记卡<strong>遮住答案列自测</strong>，能答出的划掉，答不出的画 ○——晚上只看画 ○ 的。
+2. 数字类（端口号/加密参数/维护占比）<strong>必须背到条件反射</strong>，考场没有推导时间。
+3. 公式类（Cache 命中率/流水线/子网/关键路径/McCabe）<strong>在草稿纸上默写</strong>，不是看懂。</p>
+<p><strong>自测记录</strong>：
+<code>text
+10 张速记卡：答对 ____ / 10 张的全部条目
+画 ○ 的卡：____________________（晚上只看这些）
+公式默写：Cache 命中率 ☐  流水线吞吐率 ☐  子网主机数 ☐  ve/vl 取法 ☐  McCabe ☐</code></p>
+</blockquote>
+<h3>Step 3：高频考点清单回看（下午 0.5h）</h3>
+<ul>
+<li><code>strategies/high-frequency-topics.md</code>：对照检查"哪些高频点我还没把握"。</li>
+<li><code>strategies/exam-tips.md</code>：临场技巧（⚠️ 大题实考 <strong>150 分钟 5 题</strong>，每题 ≤25-28 分钟）。</li>
+<li><code>strategies/quick-reference.md</code>：当默写提纲——看标题默内容，再扫正文核对。</li>
+</ul>
+<h3>Step 4：大题模板默写验收（晚上 1.5h）</h3>
+<blockquote>
+<p><strong>不看 <code>subject2-notes.md</code>，默写五张表</strong>：
+<code>text
+☐ 1. DFD 四步法 + 数据流平衡三规则 + 三类常见错误（官方原文三句话）
+☐ 2. E-R 判定口诀（两端唯一→1:1…）+ 关系模式转换规则（1:n / m:n）
+☐ 3. 类间六关系（符号+代码特征）+ 用例三关系（include/extend 方向）
+☐ 4. DP 状态转移三件套（定义状态/写转移方程/定边界与遍历序）
+☐ 5. 模式速选表（8 个场景关键词→模式）+ 填空通用三招</code>
+默写不全的表，<strong>今晚补抄一遍</strong>，明天 Day 33 上午最后看一次。</p>
+</blockquote>
+<h3>今日错题（错题四要素）</h3>
+<blockquote>
+<p>今天不做新题，错题区登记"框架/速记卡默写卡住"的知识点。</p>
+</blockquote>
+<p><strong>卡住点 1：</strong>（如" Cache 三映射地址结构"）
+- <strong>卡在哪一步</strong>（是结构画不出，还是地址计算公式写不出？）：
+- <strong>正确结构/公式</strong>：
+- <strong>对应速记卡 / 考前 5 点候选</strong>：</p>
+<p><strong>卡住点 2：</strong>
+- <strong>卡在哪一步</strong>：
+- <strong>正确结构/公式</strong>：
+- <strong>对应速记卡 / 考前 5 点候选</strong>：</p>
+<p><strong>卡住点 3：</strong>
+- <strong>卡在哪一步</strong>：
+- <strong>正确结构/公式</strong>：
+- <strong>对应速记卡 / 考前 5 点候选</strong>：</p>
+<h3>收获与体会</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>遇到的困难</h3>
+<pre><code class="language-text">
+</code></pre>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 速记卡正确率判定：≥90% 条目答对 ⇒ 记忆到位，明天只过画 ○ 的；
+  70-90% ⇒ 今晚把画 ○ 的卡抄一遍；&lt; 70% ⇒ 今晚重背加密参数/端口号/公式三张硬数字卡。
+- 框架图卡住的知识点：能当场消化的今晚看一眼，不能的写进&quot;考前 5 点清单&quot;明天最后看。
+- 明日 Day 33（考前一天，轻度）：只过 5 点清单 + 默写卡 + 证件准备，**22:30 前必须入睡**。
+</code></pre>
+<hr />
+<h2>Day 33（10/23）反思：考前一天 —— 轻度复习 + 证件准备 + 调整状态</h2>
+<h3>今日学习内容</h3>
+<pre><code class="language-text">- Phase 4 第二天（考前最后一天）：不学新知识、不做新题
+  行动手册：docs/practice/day33-pre-exam.md
+- 上午 2h（严格限时）：轻度复习
+  - subject2-notes.md §〇 考场策略 + §六 高频丢分点总表
+  - day32-sprint.md 的速记卡（只看昨天画 ○ 的）
+  - strategies/exam-tips.md + quick-reference.md
+  - 六张框架图每张 ≤5 分钟翻一遍
+- 下午 1h：物资与考场确认（准考证打印 2 份、身份证、2B 铅笔 2 支、橡皮、黑色签字笔、
+  机械手表、路线与时间预留 30 分钟）
+- 晚上：20:30 前停止学习，准备明天衣物文具；22:30 前入睡
+- 打卡：tracker.md Day 33 行（物资 ☐ 路线 ☐ 入睡 ☐）
+</code></pre>
+<h3>Step 1：轻度复习（上午 2h，到点就停）</h3>
+<blockquote>
+<p><strong>执行纪律</strong>：
+1. <strong>严格限时 2 小时</strong>，多看一分钟都是焦虑税。
+2. <strong>只看框架与速记类文件</strong>，不做题、不碰没学过的章节、不刷手机"押题"。
+3. 计算型考点（关键路径/页式地址/候选码）在草稿纸上<strong>重算一遍</strong>，不能只看公式。
+4. 卡住的地方<strong>标出来立刻往下走</strong>，留到晚上最后看一眼（只看不做）。</p>
+</blockquote>
+<h3>Step 2：物资与考场确认（下午 1h）</h3>
+<blockquote>
+<p><strong>逐项打钩</strong>（手册里有完整清单）：
+<code>text
+☐ 身份证（原件，检查有效期）
+☐ 准考证（打印 2 份；已确认考点名称/考场号/座位号）
+☐ 2B 铅笔 2 支（已削好 + 涂卡测试）
+☐ 橡皮、黑色签字笔 2-3 支
+☐ 手表（机械或石英，智能手表禁带）
+☐ 交通方式与时长已确认，上午 8:30 前、下午 13:30 前到考场
+☐ 午餐地点与午休方案已定（清淡饮食）</code></p>
+</blockquote>
+<h3>Step 3：晚间流程</h3>
+<ul>
+<li>18:00-20:00：把上午标出的卡住点最后看一遍（<strong>只看不做</strong>）。</li>
+<li>20:30 后：停止学习。准备好明天的衣物、文具袋、准考证、身份证，放门口显眼处。</li>
+<li>22:30 前入睡。<strong>失眠不要焦虑</strong>：闭目养神也是休息，不要因此熬夜。</li>
+</ul>
+<h3>考试日作战计划（10/24，明天）</h3>
+<blockquote>
+<p><strong>上午 9:00-11:30 科目一（选择 75 题）</strong>
+- 开考前 5 分钟填好姓名准考证号；
+- <strong>先易后难</strong>，不会的题标记跳过，最后回来做；
+- <strong>最后 15 分钟必须留给涂卡检查</strong>（涂满 75 格、题号与选项对齐、无漏涂）；
+- 75 题 150 分钟，平均 2 分钟/题，时间够，不要慌。</p>
+<p><strong>下午 14:00-16:30 科目二（大题 5 道）</strong>
+- <strong>先 10 分钟通览全部试题</strong>，定好试题五（C++）还是试题六（Java），<strong>定了不换</strong>；
+- 每题上限 25 分钟，到点立即下一题；
+- <strong>绝不留空</strong>：写出实体名/数据流名/类名/角色名/数组下标都给步骤分；
+- 填空题即使不会也写上最可能的答案（空着必 0 分）；
+- 留 10 分钟检查漏空的题。</p>
+<p><strong>两个科目之间的中午</strong>：不对答案（影响下午心态）、午休 20-30 分钟、清淡饮食。</p>
+</blockquote>
+<h3>今日反思（考前最后一次写反思）</h3>
+<pre><code class="language-text">- 复习到现在，我最有把握的题型是：____________________________________
+- 我最担心、但已尽力准备的知识点是：____________________________________
+- 明天考场上我要提醒自己的一句话：____________________________________
+- 无论结果如何，这三十四天我做到了：____________________________________
+</code></pre>
+<blockquote>
+<p><strong>今晚只做三件事</strong>：检查物资、定好闹钟、22:30 前入睡。
+<strong>明天的事明天做</strong>——进考场前 30 秒，把 <code>top10-errors.md</code> 的 30 秒速查表从第 1 行念到
+第 20 行，卡壳的那一行再默一遍。然后，去把属于你的分数拿回来。</p>
+</blockquote>
+<h3>明日计划调整</h3>
+<pre><code class="language-text">- 10/24（Day 34）考试日：按时参加考试，按作战计划执行。
+- 考完当晚：更新 tracker.md Day 34 行（考试情况记录）；对答案与否自愿。
+- 无论结果，坚持到考完就是胜利。
+</code></pre>
+<hr />
+<h2>每周反思</h2>
+<h3>本周学习总结</h3>
+<pre><code>
+</code></pre>
+<h3>本周正确率趋势</h3>
+<table>
+<thead>
+<tr>
+<th>科目</th>
+<th>周初</th>
+<th>周中</th>
+<th>周末</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>下周计划调整</h3>
+<pre><code>
+</code></pre>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../index.html">← 返回文档目录</a>
+    <a href="../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/practice/reflection.md">docs/practice/reflection.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

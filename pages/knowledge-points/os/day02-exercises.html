@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2（9/22）操作系统② 练习题：内存管理（20 选择题 + 3 地址转换计算题） · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 os 📁 day02-exercises.md</div>
+<h1>Day 2（9/22）操作系统② 练习题：内存管理（20 选择题 + 3 地址转换计算题）</h1>
+<blockquote>
+<p>说明：第 1–20 题为「内存管理」选择题（覆盖分页/分段/段页式/虚拟内存/置换算法/缺页/TLB）；第 21–23 题为<strong>地址转换计算题</strong>（必考，含完整解答步骤）。
+<strong>完整答案解析在文件末尾</strong>。建议先独立完成（选择题约 40 分钟，计算题再 40 分钟），再对答案。</p>
+</blockquote>
+<hr />
+<h2>附：Day2 笔记「快速自测」速答</h2>
+<ol>
+<li>逻辑地址（按 32 位补齐为 0x0001A2B3）切低 12 位：页内偏移 = 0x2B3，剩下的高位 = 0x1A，即页号 = 0x1A。</li>
+<li>页号 = 7000 ÷ 2048 = 3，偏移 = 7000 − 3×2048 = 856；物理地址 = 8 × 2048 + 856 = 17240。</li>
+<li>3 次（外层页表 + 内层页表 + 数据）。</li>
+<li>能，叫 <strong>Belady 异常</strong>（FIFO 特有）。</li>
+<li><strong>LRU</strong> 的近似（NRU 算法）。</li>
+</ol>
+<hr />
+<h2>第一部分：选择题（1–20）</h2>
+<p><strong>1.</strong> 分页存储管理中，页和页框（物理块）的关系是（ ）。</p>
+<ul>
+<li>A. 页大于页框</li>
+<li>B. 页小于页框</li>
+<li>C. 页与页框大小相等</li>
+<li>D. 大小可任意配置</li>
+</ul>
+<p><strong>2.</strong> 某系统采用分页存储，页大小为 4KB，逻辑地址为 32 位，则逻辑地址中「页内偏移」占（ ）位。</p>
+<ul>
+<li>A. 10</li>
+<li>B. 12</li>
+<li>C. 20</li>
+<li>D. 32</li>
+</ul>
+<p><strong>3.</strong> 分页地址转换中，物理地址的计算公式是（ ）。</p>
+<ul>
+<li>A. 物理地址 = 页号 × 页大小 + 页内偏移</li>
+<li>B. 物理地址 = 块号 × 页大小 + 页内偏移</li>
+<li>C. 物理地址 = 块号 + 页内偏移</li>
+<li>D. 物理地址 = 页号 + 页内偏移</li>
+</ul>
+<p><strong>4.</strong> 分段存储管理中，物理地址的计算公式是（ ）。</p>
+<ul>
+<li>A. 物理地址 = 段基址 × 段长 + 段内偏移</li>
+<li>B. 物理地址 = 段基址 + 段内偏移</li>
+<li>C. 物理地址 = 段号 × 段长 + 段内偏移</li>
+<li>D. 物理地址 = 段号 + 段内偏移</li>
+</ul>
+<p><strong>5.</strong> 分页存储管理相对于连续分配，主要消除的是（ ）。</p>
+<ul>
+<li>A. 内部碎片</li>
+<li>B. 外部碎片</li>
+<li>C. 越界错误</li>
+<li>D. 缺页中断</li>
+</ul>
+<p><strong>6.</strong> 分段存储管理中，系统进行地址越界检查的依据是（ ）。</p>
+<ul>
+<li>A. 段类型</li>
+<li>B. 段号</li>
+<li>C. 段长</li>
+<li>D. 段基址</li>
+</ul>
+<p><strong>7.</strong> 下列存储管理方式中，<strong>不会</strong>产生内部碎片的是（ ）。</p>
+<ul>
+<li>A. 分页存储</li>
+<li>B. 固定分区分配</li>
+<li>C. 段页式存储</li>
+<li>D. 分段存储</li>
+</ul>
+<p><strong>8.</strong> 段页式存储管理中，从逻辑地址到物理地址的转换，需要访问的表依次是（ ）。</p>
+<ul>
+<li>A. 页表 → 段表</li>
+<li>B. 段表 → 页表</li>
+<li>C. 只访问段表</li>
+<li>D. 只访问页表</li>
+</ul>
+<p><strong>9.</strong> 一个进程采用分页存储，无快表（TLB），访问一次内存数据最少需要（ ）次访存。</p>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+<p><strong>10.</strong> 在引入快表（TLB）的分页系统中，若 TLB 命中，访问一次内存数据需要（ ）次访存。</p>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 0</li>
+</ul>
+<p><strong>11.</strong> 快表（TLB）的实质是（ ）。</p>
+<ul>
+<li>A. 放在主存中的完整页表</li>
+<li>B. 用相联存储器实现的高速页表项缓存</li>
+<li>C. 磁盘上的交换区</li>
+<li>D. 进程控制块的一部分</li>
+</ul>
+<p><strong>12.</strong> 虚拟内存管理的基础（理论依据）是（ ）。</p>
+<ul>
+<li>A. 程序的局部性原理</li>
+<li>B. 内存的分区技术</li>
+<li>C. 磁盘的高速旋转</li>
+<li>D. 操作系统的分时特性</li>
+</ul>
+<p><strong>13.</strong> 虚拟存储器的三个主要特征是（ ）。</p>
+<ul>
+<li>A. 一次性、驻留性、虚拟性</li>
+<li>B. 多次性、对换性、虚拟性</li>
+<li>C. 多次性、内存性、对换性</li>
+<li>D. 一次性、对换性、虚拟性</li>
+</ul>
+<p><strong>14.</strong> 缺页中断属于（ ），并且发生在（ ）。</p>
+<ul>
+<li>A. 外部中断；指令执行之前</li>
+<li>B. 外部中断；指令执行之后</li>
+<li>C. 内部中断（异常）；指令执行期间</li>
+<li>D. 内部中断；指令执行之前</li>
+</ul>
+<p><strong>15.</strong> 关于缺页中断的处理，下列描述正确的是（ ）。</p>
+<ul>
+<li>A. 缺页中断只产生一次，一条指令至多产生一次缺页</li>
+<li>B. 缺页中断发生时，若内存无空闲块，需先按置换算法换出一页</li>
+<li>C. 缺页时直接丢弃当前指令即可</li>
+<li>D. 缺页中断只发生在指令执行结束后</li>
+</ul>
+<p><strong>16.</strong> 下列页面置换算法中，能作为衡量其他算法性能"理论上最优参照"的是（ ）。</p>
+<ul>
+<li>A. FIFO</li>
+<li>B. LRU</li>
+<li>C. OPT</li>
+<li>D. Clock</li>
+</ul>
+<p><strong>17.</strong> OPT（最佳置换）算法淘汰的页面是（ ）。</p>
+<ul>
+<li>A. 最早进入内存的页面</li>
+<li>B. 最近最久未使用的页面</li>
+<li>C. 将来最长时间内不再被访问的页面</li>
+<li>D. 访问位为 0 的页面</li>
+</ul>
+<p><strong>18.</strong> 下列页面置换算法中，可能出现 Belady 异常的是（ ）。</p>
+<ul>
+<li>A. FIFO</li>
+<li>B. LRU</li>
+<li>C. OPT</li>
+<li>D. Clock</li>
+</ul>
+<p><strong>19.</strong> Clock（时钟）置换算法是下列哪种算法的近似实现？（ ）</p>
+<ul>
+<li>A. FIFO</li>
+<li>B. LRU</li>
+<li>C. OPT</li>
+<li>D. 最佳适应</li>
+</ul>
+<p><strong>20.</strong> 某系统内存访问时间 100ns，缺页率 1%，缺页处理时间 8ms，则有效访问时间约为（ ）。</p>
+<ul>
+<li>A. 100ns 左右</li>
+<li>B. 80μs 左右</li>
+<li>C. 8ms 左右</li>
+<li>D. 800ns 左右</li>
+</ul>
+<hr />
+<h2>第二部分：地址转换计算题（21–23）</h2>
+<p><strong>21.（页式地址转换）</strong> 某分页系统，页面大小为 4KB，页表（部分）如下：</p>
+<table>
+<thead>
+<tr>
+<th>页号</th>
+<th>块号（页框号）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>求：
+（1）逻辑地址 10240 对应的页号、页内偏移；
+（2）该逻辑地址转换后的物理地址（十进制）。</p>
+<p><strong>22.（多级页表访存次数 + TLB 平均访存次数）</strong> 某系统采用二级页表（无快表）。</p>
+<p>（1）访问一次内存数据，最少需要多少次访存？请说明分别是哪几次。
+（2）若增加快表 TLB，命中率为 90%（忽略快表本身的访问时间），平均每次访问数据需要多少次访存？
+（3）若快表命中率 90%、快表访问时间 20ns、内存访问时间 100ns，求平均有效访问时间 EAT。</p>
+<p><strong>23.（综合：页表大小 + 置换算法）</strong> 某进程逻辑地址空间 32 位，页大小 4KB，页表项（含状态位、访问位、修改位等控制位）每项 4 字节。</p>
+<p>（1）该进程逻辑地址空间最多可划分为多少个页面？
+（2）该进程的页表最多占用多少内存（用 MB 表示）？
+（3）若该进程某段时间的页面访问序列为 <code>3, 2, 1, 0, 3, 2, 4, 3, 2, 1, 0, 4</code>，内存分配 3 个物理块（初始为空），分别用 <strong>FIFO</strong> 和 <strong>LRU</strong> 计算缺页次数。</p>
+<hr />
+<h1>答案解析</h1>
+<h2>第一部分（1–20）</h2>
+<p><strong>1. C</strong> 分页中页与页框大小<strong>相等</strong>（都是固定的 2 的幂次方字节，如 4KB）。这是地址转换"页内偏移原样搬运"成立的前提。（知识点：分页基本概念）</p>
+<p><strong>2. B</strong> 页大小 4KB = 2^12，故页内偏移占 12 位；页号占 32 − 12 = 20 位。（知识点：逻辑地址结构拆分）</p>
+<p><strong>3. B</strong> 物理地址 = <strong>块号 × 页大小 + 页内偏移</strong>。块号来自页表，页内偏移原样搬。A 把页号当块号，C/D 漏乘页大小。（知识点：地址转换公式）</p>
+<p><strong>4. B</strong> 段式物理地址 = <strong>段基址 + 段内偏移</strong>（段基址本身是内存字节地址，直接加）。与页式"乘页大小"形成对照。（知识点：段式地址转换）</p>
+<p><strong>5. B</strong> 页式把进程切成等大小页，离散装入任意页框，消除了连续分配带来的<strong>外部碎片</strong>（页内的小浪费属内部碎片，依然存在）。（知识点：碎片）</p>
+<p><strong>6. C</strong> 段式保护利用<strong>段长</strong>：段内偏移 ≥ 段长即越界，产生分段越界中断。段基址用于合成地址，不是越界判断依据。（知识点：段式越界检查）</p>
+<p><strong>7. D</strong> 分段存储按程序的逻辑单位<strong>变长分配</strong>、段内连续完整使用，不存在"分配的空间大于实际需要"的浪费，故<strong>没有内部碎片</strong>（但会产生段间空闲的<strong>外部碎片</strong>）。A 分页（最后一页装不满的页内零头）、B 固定分区（分区大于进程）、C 段页式（每段内部分页，同样有页内零头）都属于"分配固定大小的块"，都会产生<strong>内部碎片</strong>。（知识点：内部碎片 vs 外部碎片）</p>
+<p><strong>8. B</strong> 段页式先按段号查<strong>段表</strong>得该段页表地址，再按页号查<strong>页表</strong>得块号，顺序为「段表 → 页表」。（知识点：段页式地址转换）</p>
+<p><strong>9. B</strong> 无快表时一级页表：查内存页表 1 次 + 访内存数据 1 次 = <strong>2 次</strong>。（知识点：访存次数）</p>
+<p><strong>10. A</strong> TLB 命中时，快表访问算寄存器/硬件级不算访存，只需<strong>再访数据 1 次</strong>。（知识点：TLB 命中访存次数）</p>
+<p><strong>11. B</strong> TLB 是<strong>相联存储器实现的高速页表项缓存</strong>，只存活跃项。A 是慢表定义，C/D 无关。（知识点：快表）</p>
+<p><strong>12. A</strong> 虚拟内存的理论基础是<strong>局部性原理</strong>（时间局部性 + 空间局部性）。（知识点：局部性原理）</p>
+<p><strong>13. B</strong> 虚拟存储三特征：<strong>多次性、对换性、虚拟性</strong>。A/C/D 的"一次性/驻留性/内存性"是错误拼凑。（知识点：虚拟内存特征）</p>
+<p><strong>14. C</strong> 缺页中断是<strong>内部中断（异常）</strong>，在<strong>指令执行期间</strong>产生；处理完后需<strong>重新执行被中断的那条指令</strong>。（知识点：缺页中断性质）</p>
+<p><strong>15. B</strong> 缺页且无空闲块时，先按置换算法选一页换出（若被修改需先写回磁盘），再调入所需页。A 错：一条指令可跨页、含多个操作数，<strong>可能产生多次缺页</strong>；C/D 明显错误。（知识点：缺页处理流程）</p>
+<p><strong>16. C</strong> OPT 是理论最优参照。FIFO/LRU/Clock 都是可实现但性能次于 OPT 的算法。（知识点：置换算法定位）</p>
+<p><strong>17. C</strong> OPT 淘汰<strong>将来最长时间内不再被访问</strong>的页面（无法预知未来，故实际不可实现）。（知识点：OPT）</p>
+<p><strong>18. A</strong> <strong>Belady 异常只出现在 FIFO</strong>：增加物理块，缺页次数反而增多。LRU/OPT/Clock 都是栈式算法，无 Belady 异常。（知识点：Belady 异常）</p>
+<p><strong>19. B</strong> Clock（NRU）是 <strong>LRU 的近似</strong>，用访问位近似"最近未使用"信息，硬件开销远小于精确 LRU。（知识点：Clock 算法）</p>
+<p><strong>20. B</strong> EAT = (1−p)×100 + p×8×10^6 = 0.99×100 + 0.01×8,000,000 = 99 + 80,000 = 80099ns ≈ <strong>80μs</strong>。（知识点：含缺页的有效访问时间）</p>
+<hr />
+<h2>第二部分（21–23）</h2>
+<h3>21. 页式地址转换</h3>
+<p>（1）页大小 S = 4KB = 4096B。</p>
+<ul>
+<li>页号 P = 10240 ÷ 4096 = <strong>2</strong>（10240 = 2 × 4096 + 2048）。</li>
+<li>页内偏移 W = 10240 mod 4096 = <strong>2048</strong>。</li>
+</ul>
+<p>（2）查页表：页号 2 → 块号 <strong>8</strong>。</p>
+<ul>
+<li>物理地址 PA = 8 × 4096 + 2048 = 32768 + 2048 = <strong>34816</strong>。</li>
+</ul>
+<blockquote>
+<p>验证：块号 8 起始地址 = 8 × 4096 = 32768，加偏移 2048 → 34816。✅
+也可二进制切位：4096 = 2^12，逻辑地址 10240 = 0x2800，低 12 位 0x800 = 2048（偏移），高位 = 2（页号）。✅</p>
+</blockquote>
+<h3>22. 多级页表访存次数 + TLB</h3>
+<p>（1）二级页表（无快表）访问一次数据 = 访问<strong>外层（顶级）页表</strong> + 访问<strong>内层（二级）页表</strong> + 访问<strong>数据</strong> = <strong>3 次访存</strong>。</p>
+<p>（2）TLB 命中率 90%（忽略快表时间）：</p>
+<ul>
+<li>命中：TLB 直接得块号，只需<strong>访数据 1 次</strong>；</li>
+<li>未命中：查二级页表 2 次 + 访数据 1 次 = <strong>3 次</strong>；</li>
+<li>平均访存次数 = 0.9 × 1 + 0.1 × 3 = 0.9 + 0.3 = <strong>1.2 次</strong>。</li>
+</ul>
+<p>（3）快表访问 20ns、内存访问 100ns、命中率 90%：</p>
+<ul>
+<li>命中：20（快表）+ 100（数据）= 120ns；</li>
+<li>未命中：20（快表）+ 100×2（两级页表都在内存）+ 100（数据）＝ 320ns；
+  （这里未命中需访问内存 3 次：两次页表 + 一次数据，故 t_mem 出现 3 次。）</li>
+<li>EAT = 0.9 × 120 + 0.1 × 320 = 108 + 32 = <strong>140 ns</strong>。</li>
+</ul>
+<h3>23. 综合题</h3>
+<p>（1）页大小 4KB = 2^12，页号位宽 = 32 − 12 = 20 位 → 最多 <strong>2^20 = 1,048,576 个页面</strong>。</p>
+<p>（2）页表大小 = 页表项数 × 每项大小 = 2^20 × 4B = 4,194,304 B = <strong>4 MB</strong>。</p>
+<p>（3）访问序列 <code>3,2,1,0,3,2,4,3,2,1,0,4</code>，3 个物理块。</p>
+<p><strong>FIFO（框0 = 队头，最早进入）：</strong></p>
+<pre><code>页:    3   2   1   0   3   2   4   3   2   1   0   4
+框0:   3   3   3   2   1   0   3   3   3   2   4   4
+框1:   -   2   2   1   0   3   2   2   2   4   1   1
+框2:   -   -   1   0   3   2   4   4   4   1   0   0
+缺页   ×   ×   ×   ×   ×   ×   ×   ✓   ✓   ×   ×   ✓
+</code></pre>
+<p>缺页次数 = <strong>9 次</strong>（第 1,2,3,4,5,6,7,10,11 步缺页；第 8、9、12 步命中）。</p>
+<p><strong>LRU（框0 = 最久未用，框2 = 最近使用；每次访问都把该页挪到框2）：</strong></p>
+<pre><code>页:    3   2   1   0   3   2   4   3   2   1   0   4
+框0:   3   3   3   2   1   0   3   2   4   3   2   1   ← 最久未用
+框1:   -   2   2   1   0   3   2   4   3   2   1   0
+框2:   -   -   1   0   3   2   4   3   2   1   0   4   ← 最近使用
+缺页   ×   ×   ×   ×   ×   ×   ×   ✓   ✓   ×   ×   ×
+</code></pre>
+<p>缺页次数 = <strong>10 次</strong>（第 1,2,3,4,5,6,7,10,11,12 步缺页；第 8、9 步命中）。</p>
+<blockquote>
+<p><strong>说明</strong>：该序列下 <strong>FIFO 缺页 9 次、LRU 缺页 10 次</strong>——LRU 并非对每个引用串都优于 FIFO。这正说明<strong>必须逐格手算，不能背"谁一定比谁少"的结论</strong>。两者的演进过程（每一步淘汰哪一页）不同，逐格核对上面的表即可看到：
+- 第 4 步：FIFO 淘汰 3（队头），LRU 也淘汰 3（最久未用，恰好一致）；
+- 第 7 步：FIFO 淘汰 0，LRU 也淘汰 0；
+- 第 10 步：FIFO 淘汰 3、LRU 淘汰 4（开始分道扬镳）；
+- 第 12 步：FIFO 命中 4，LRU <strong>缺页</strong>（淘汰 2 换入 4）——这正是两者相差 1 次的来源。</p>
+<p>更直观的「块数变多反而缺页变多」现象，见笔记 7.3 节的 Belady 序列 <code>1,2,3,4,1,2,5,1,2,3,4,5</code>：FIFO 在 3 块缺页 9 次、4 块缺页 10 次（Belady 异常），而 LRU 不会出现此现象。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/os/day02-exercises.md">docs/knowledge-points/os/day02-exercises.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>搜索 · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="assets/base.css">
+</head>
+<body>
+<div class="page">
+<h1>🔍 全站文档搜索</h1>
+<p><input id="q" type="text" placeholder="输入关键词，如：子网、候选码、Belady…"
+   style="width:min(100%,28rem);padding:.5rem .7rem;font-size:1rem;"></p>
+<div id="out"></div>
+<p><a href="index.html">← 返回网站首页</a> ｜ <a href="pages/index.html">📖 文档目录</a></p>
+</div>
+<script>
+var IDX = null;
+fetch("search-index.json").then(function (r) { return r.json(); }).then(function (d) {
+  IDX = d; document.getElementById("q").focus();
+});
+function run() {
+  var q = document.getElementById("q").value.trim().toLowerCase();
+  var out = document.getElementById("out");
+  out.textContent = "";
+  if (!IDX || !q) { return; }
+  var hits = [];
+  for (var i = 0; i < IDX.length; i++) {
+    var it = IDX[i];
+    var t = (it.title + " " + it.text).toLowerCase();
+    if (t.indexOf(q) >= 0) { hits.push(it); if (hits.length >= 50) break; }
+  }
+  out.appendChild(Object.assign(document.createElement("p"), { textContent: "共 " + hits.length + " 条结果" }));
+  hits.forEach(function (it) {
+    var d = document.createElement("div"); d.className = "card";
+    var a = document.createElement("a"); a.href = it.url; a.textContent = it.title; a.style.fontWeight = "700";
+    d.appendChild(a);
+    var p = document.createElement("p");
+    var pos = it.text.toLowerCase().indexOf(q);
+    p.textContent = "…" + it.text.slice(Math.max(0, pos - 40), pos + 80) + "…";
+    d.appendChild(p);
+    out.appendChild(d);
+  });
+}
+document.getElementById("q").addEventListener("input", run);
+</script>
+</body>
+</html>

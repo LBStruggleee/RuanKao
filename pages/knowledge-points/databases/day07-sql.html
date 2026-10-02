@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 7（9/27）数据库系统①：关系模型与 SQL · 软考软件设计师备考站</title>
+<link rel="stylesheet" href="../../../assets/base.css">
+</head>
+<body>
+<nav class="topnav">
+  <a href="../../../index.html">🏠 网站首页</a>
+  <a href="../../index.html">📖 文档目录</a>
+  <a href="../../../reference/ds-learning-path.html">🎓 交互课程</a>
+  <a href="../../../reference/mistake-notebook.html">📓 错题本</a>
+  <a href="../../../search.html">🔍 搜索</a>
+</nav>
+<div class="page">
+<div class="crumb">📖 文档 · knowledge-points 📁 databases 📁 day07-sql.md</div>
+<h1>Day 7（9/27）数据库系统①：关系模型与 SQL</h1>
+<blockquote>
+<p><strong>考试地位</strong>：SQL 是<strong>科目二（软件设计）大题的必考内容</strong>——近年的大题几乎每年都有一道"读 SQL / 写 SQL / 补全 SQL"的题（5 空 × 15 分 = 最高 15 分，占大题总分 15/75 ≈ 20%）；科目一的选择题中，<strong>关系代数与 SQL 语义</strong>每年稳定出现 2–3 道。数据库是<strong>弱项科目</strong>，但 SQL 是<strong>短期内最容易拿到手的分数</strong>：规则固定、套路清晰，今天练熟 = 大题稳拿。</p>
+<p><strong>今日目标</strong>：① 关系模型三要素 + 关系代数五种运算能口述；② SQL 完整 SELECT 语法与<strong>执行顺序</strong>能默写；③ 四种 JOIN 的结果差异能画出来；④ WHERE vs HAVING、NULL 与聚合两大陷阱不再错。</p>
+</blockquote>
+<hr />
+<h2>§零：全文例题使用的三张表</h2>
+<blockquote>
+<p>本文所有例题、所有查询结果都基于下面这份数据。<strong>这份数据是专门为易错点设计的</strong>：有选了课没成绩的（1002 的 C2 成绩为 NULL）、有一门课都没选的（1007）、有选了全部课的（1001）。</p>
+</blockquote>
+<p><strong>S（学生表）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Sdept</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+<td>计算机系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李华</td>
+<td>计算机系</td>
+<td>20</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王芳</td>
+<td>数学系</td>
+<td>18</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>赵磊</td>
+<td>数学系</td>
+<td>21</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>钱娜</td>
+<td>信息系</td>
+<td>23</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>孙强</td>
+<td>信息系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>计算机系</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>C（课程表）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>Cname</th>
+<th>Cpno（先修课号）</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>数据库</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据结构</td>
+<td>NULL</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>操作系统</td>
+<td>NULL</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>编译原理</td>
+<td>2</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SC（选课表，共 14 行）</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Cno</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>1</td>
+<td>92</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>2</td>
+<td>85</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>3</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>1</td>
+<td>75</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>2</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>3</td>
+<td>90</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>4</td>
+<td>79</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>2</td>
+<td>70</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>1</td>
+<td>95</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>3</td>
+<td>78</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>2</td>
+<td>88</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>3</td>
+<td>55</td>
+</tr>
+</tbody>
+</table>
+<p><strong>快速读数据（先记住这三条，后面例题全靠它们）</strong>
+- <strong>1001 张明</strong>选了 4 门课（C1、C2、C3、C4 全选）→ 他是<strong>唯一选了全部课程</strong>的学生。
+- <strong>1002 李华</strong>选了 2 门课，其中 C2 <strong>成绩为 NULL</strong>（选了课但还没考试）。
+- <strong>1007 周敏</strong>一门课都没选（SC 表里没有她的任何行）。</p>
+<hr />
+<h2>§一、关系模型三要素</h2>
+<p>关系模型由<strong>三要素</strong>组成，这是概念题的标准考点（"关系模型由____组成"）：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>内容</th>
+<th>通俗解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 关系数据结构</strong></td>
+<td>关系（一张二维表）及相关的域、笛卡尔积等概念</td>
+<td>数据<strong>长什么样</strong></td>
+</tr>
+<tr>
+<td><strong>② 关系操作集合</strong></td>
+<td>选择、投影、连接、除、并、交、差等关系运算（关系代数）</td>
+<td>能对数据<strong>做什么</strong></td>
+</tr>
+<tr>
+<td><strong>③ 关系完整性约束</strong></td>
+<td>实体完整性、参照完整性、用户定义完整性</td>
+<td>数据必须满足<strong>什么规则</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>1.1 术语对照表（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>关系模型术语</th>
+<th>日常叫法</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>关系（Relation）</strong></td>
+<td>一张表（Table）</td>
+<td>一张二维表就是一个关系</td>
+</tr>
+<tr>
+<td><strong>元组（Tuple）</strong></td>
+<td>一行（记录）</td>
+<td>表里的一行</td>
+</tr>
+<tr>
+<td><strong>属性（Attribute）</strong></td>
+<td>一列（字段）</td>
+<td>表里的一列</td>
+</tr>
+<tr>
+<td><strong>域（Domain）</strong></td>
+<td>列的取值范围</td>
+<td>属性值的合法集合，如 Age ∈ {15, …, 45}</td>
+</tr>
+<tr>
+<td><strong>码 / 键（Key）</strong></td>
+<td>能唯一标识元组的属性组</td>
+<td>见下方"码家族"</td>
+</tr>
+<tr>
+<td><strong>目（Degree）</strong></td>
+<td>表的<strong>列数</strong></td>
+<td>关系有 n 列就叫 n 目关系</td>
+</tr>
+<tr>
+<td><strong>基数（Cardinality）</strong></td>
+<td>表的<strong>行数</strong></td>
+<td>关系有 m 行就说基数为 m</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：<strong>"目"数列数、"基数"数行数</strong>。考题常把两者反过来问，例如"一个 5 目 1000 个元组的关系"= 5 列、1000 行。</p>
+</blockquote>
+<p><strong>码（Key）家族</strong></p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>候选码</strong></td>
+<td>能唯一标识元组、且<strong>任何真子集都不能</strong>标识的属性组（最小性）</td>
+</tr>
+<tr>
+<td><strong>主码（Primary Key）</strong></td>
+<td>从候选码中<strong>人为选定</strong>一个</td>
+</tr>
+<tr>
+<td><strong>全码（All-key）</strong></td>
+<td>关系的<strong>所有属性</strong>合起来才是候选码（极端情况）</td>
+</tr>
+<tr>
+<td><strong>外码（Foreign Key）</strong></td>
+<td>本关系的非主属性，但它引用了<strong>另一个关系的主码</strong></td>
+</tr>
+<tr>
+<td><strong>主属性</strong></td>
+<td><strong>包含在任何一个候选码中</strong>的属性</td>
+</tr>
+<tr>
+<td><strong>非主属性</strong></td>
+<td>不包含在任何候选码中的属性</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>例：SC 表中 (Sno, Cno) 必须组合起来才能唯一标识一行 → <strong>(Sno, Cno) 是主码</strong>，Sno 和 Cno 都是主属性；Grade 是非主属性。</p>
+</blockquote>
+<h3>1.2 关系模型对关系的基本要求（= 1NF 的要求）</h3>
+<ul>
+<li>每一列必须是<strong>原子的</strong>（不可再分），<strong>不允许"表中有表"</strong>——这正是第一范式 1NF 的内容。</li>
+<li>列的取值来自同一个域；每一列有唯一的列名；行的顺序、列的顺序<strong>无关紧要</strong>。</li>
+<li><strong>任意两行不能完全相同</strong>（关系是集合，集合元素不重复）。</li>
+</ul>
+<h3>1.3 三类完整性约束</h3>
+<table>
+<thead>
+<tr>
+<th>完整性</th>
+<th>内容</th>
+<th>对应约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>实体完整性</strong></td>
+<td>主码<strong>不能取空值</strong>，且必须<strong>唯一</strong></td>
+<td><code>PRIMARY KEY</code></td>
+</tr>
+<tr>
+<td><strong>参照完整性</strong></td>
+<td>外码要么<strong>全为空</strong>，要么必须<strong>等于被引用关系中某个已存在的主码值</strong></td>
+<td><code>FOREIGN KEY … REFERENCES …</code></td>
+</tr>
+<tr>
+<td><strong>用户定义完整性</strong></td>
+<td>用户根据业务定义的约束，如年龄 0–150、性别男女</td>
+<td><code>CHECK</code> / <code>NOT NULL</code> / <code>UNIQUE</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：参照完整性允许外码<strong>为空</strong>（"还没分配"），只是<strong>不能填一个不存在的主码值</strong>。
+⚠️ <strong>CHECK 与 NULL</strong>：<code>CHECK(Grade&gt;=0 AND Grade&lt;=100)</code> 对 <strong>NULL 成绩是放行的</strong>——NULL 参与比较结果是 UNKNOWN，CHECK 把 UNKNOWN 当作通过。所以 1002 的 C2 成绩为 NULL 可以插入（本文数据已实际验证）。</p>
+</blockquote>
+<hr />
+<h2>§二、关系代数（过程化语言）</h2>
+<p>关系代数是<strong>过程化</strong>语言（写清"怎么算"），SQL 是<strong>非过程化</strong>语言（只说"要什么"）。这是选择题高频考点。</p>
+<p><strong>五种基本运算</strong>：<strong>选择 σ、投影 π、并 ∪、差 −、笛卡尔积 ×</strong>（附加运算：交 ∩、连接 ⋈、除 ÷ 都可由基本运算导出）。</p>
+<h3>2.1 选择（Selection，σ）——"选行"</h3>
+<p><strong>形式化定义</strong>：σ_F(R) = { t | t ∈ R ∧ F(t) 为真 }</p>
+<p>F 是条件表达式，可含比较运算（&gt;、≥、=、≠、&lt;、≤）和逻辑运算（∧ 与、∨ 或、¬ 非）。<strong>选择是横向切割，只动行，不动列。</strong></p>
+<p><strong>例 1</strong>：σ_{Sdept='计算机系'}(S)</p>
+<pre><code class="language-text">运算过程：在 S 中逐行检查 Sdept='计算机系' 是否为真
+结果（3 行，4 列不变）：
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Sdept</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+<td>计算机系</td>
+<td>19</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>李华</td>
+<td>计算机系</td>
+<td>20</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>计算机系</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>例 2</strong>：σ_{Age≥20}(S)</p>
+<pre><code class="language-text">运算过程：在 S 中逐行检查 Age≥20 是否为真（列数仍为 4，一行都不删）
+结果（4 行，4 列不变）：
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Sdept</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1002</td>
+<td>李华</td>
+<td>计算机系</td>
+<td>20</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>赵磊</td>
+<td>数学系</td>
+<td>21</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>钱娜</td>
+<td>信息系</td>
+<td>23</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>计算机系</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>若只想取姓名和年龄两列，那是<strong>先 σ 后 π</strong> 的组合：π_{Sname, Age}(σ_{Age≥20}(S))——此时中间的 σ 仍是 4 列，只有最后一步 π 才把列削减到 2 列（见 §2.2 例 3）。</p>
+<p>SQL 对应：<code>SELECT * FROM S WHERE Sdept='计算机系'</code> —— <strong>σ ↔ WHERE</strong>。</p>
+</blockquote>
+<h3>2.2 投影（Projection，π）——"选列"</h3>
+<p><strong>形式化定义</strong>：π_A(R) = { t[A] | t ∈ R }，其中 A 是 R 的属性子集。</p>
+<p><strong>投影是纵向切割，只动列</strong>。投影后<strong>可能去掉重复行</strong>（因为关系是集合）。</p>
+<p><strong>例 3</strong>：π_{Sname, Age}(S)</p>
+<table>
+<thead>
+<tr>
+<th>Sname</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张明</td>
+<td>19</td>
+</tr>
+<tr>
+<td>李华</td>
+<td>20</td>
+</tr>
+<tr>
+<td>王芳</td>
+<td>18</td>
+</tr>
+<tr>
+<td>赵磊</td>
+<td>21</td>
+</tr>
+<tr>
+<td>钱娜</td>
+<td>23</td>
+</tr>
+<tr>
+<td>孙强</td>
+<td>19</td>
+</tr>
+<tr>
+<td>周敏</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>例 4</strong>（投影去重的典型）：π_{Sdept}(S)</p>
+<table>
+<thead>
+<tr>
+<th>Sdept</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机系</td>
+</tr>
+<tr>
+<td>数学系</td>
+</tr>
+<tr>
+<td>信息系</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>3 行而非 7 行——<strong>计算机系出现了 3 次但只保留 1 次</strong>。SQL 对应：<code>SELECT DISTINCT Sdept FROM S</code>——<strong>π ↔ SELECT 的列 + DISTINCT</strong>。</p>
+</blockquote>
+<h3>2.3 笛卡尔积（Cartesian Product，×）</h3>
+<p><strong>形式化定义</strong>：R(A) × S(B) 是 R 中每个元组与 S 中每个元组拼接成的所有元组，共 <strong>|R| × |S|</strong> 行。</p>
+<p><strong>例 5</strong>：S × SC，行数 = <strong>7 × 14 = 98</strong> 行。</p>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：写 <code>FROM S, SC</code> 而忘了连接条件 → 就是笛卡尔积，<strong>结果行数 = 左表行数 × 右表行数</strong>，是性能与正确性的双重灾难。面试/考试常考的"查询返回了多少行"就是数这个。</p>
+</blockquote>
+<h3>2.4 连接（Join，⋈）——"带条件的笛卡尔积"</h3>
+<p><strong>形式化定义</strong>（θ 连接）：</p>
+<blockquote>
+<p>R ⋈<em>{AθB} S = σ</em>{AθB}(R × S)</p>
+</blockquote>
+<p>即：先做笛卡尔积，再按条件 A θ B 筛选。θ 是比较运算符。</p>
+<table>
+<thead>
+<tr>
+<th>连接类型</th>
+<th>定义</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>θ 连接</strong></td>
+<td>R ⋈<em>{AθB} S = σ</em>{AθB}(R × S)</td>
+<td>θ 可以是 &gt;、&lt;、≥、≤、=、≠</td>
+</tr>
+<tr>
+<td><strong>等值连接</strong></td>
+<td>θ 为 <strong>=</strong> 的连接</td>
+<td>保留<strong>两表的连接属性</strong>（重复列留着）</td>
+</tr>
+<tr>
+<td><strong>自然连接（Natural Join）</strong></td>
+<td>在<strong>所有同名属性</strong>上做等值连接，并<strong>去掉重复的连接属性列</strong></td>
+<td>结果列数更少</td>
+</tr>
+<tr>
+<td><strong>外连接</strong></td>
+<td>在内连接基础上，把<strong>未匹配的行也保留</strong>，缺的列补 NULL</td>
+<td>分左外 / 右外 / 全外</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>等值连接 vs 自然连接</strong>（高频考点）：<strong>等值连接保留两个连接列，自然连接把它们合并成一列</strong>。例如 S ⋈ SC：等值连接保留 S.Sno 和 SC.Sno 两列；自然连接只留一列 Sno。</p>
+</blockquote>
+<p><strong>例 6</strong>（等值连接 + 选择 + 投影组合，最经典的考题形态）：</p>
+<blockquote>
+<p>π_{Sno, Sname}(σ_{Cno='1' ∧ Grade≥80}(S ⋈ SC))</p>
+</blockquote>
+<p><strong>分步运算</strong>：
+1. S ⋈ SC（按 Sno 等值连接）：<strong>14 行</strong>（SC 的 14 行都能匹配到 S）。
+2. σ_{Cno='1' ∧ Grade≥80}：C1 且成绩≥80 的选课行——C1 的成绩为 92(1001)、75(1002)、80(1003)、95(1005)，≥80 的有 92、80、95 → <strong>3 行</strong>。
+3. π_{Sno,Sname}：</p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>王芳</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>钱娜</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>SQL 对应：<code>SELECT S.Sno, Sname FROM S JOIN SC ON S.Sno=SC.Sno WHERE SC.Cno='1' AND SC.Grade&gt;=80</code>（已实际执行验证，结果与上面完全一致）。</p>
+</blockquote>
+<h3>2.5 除运算（Division，÷）——"包含全部"</h3>
+<p><strong>这是最难、也最常考的运算</strong>，专用于表达"<strong>查询……全部……</strong>"这类需求。</p>
+<p><strong>形式化定义</strong>：设关系 R 的属性为 A∪B，关系 S 的属性为 B（B 是 R 的一部分属性）：</p>
+<blockquote>
+<p>R ÷ S = π_A(R) − π_A( π_A(R) × S − R )</p>
+</blockquote>
+<p><strong>语义</strong>：R ÷ S 的结果是 A 上的一组取值 t，使得<strong>对 S 中的每一个元组 s，(t, s) 都在 R 中</strong>——即"<strong>t 与 S 的所有组合都存在于 R</strong>"。</p>
+<p><strong>例 7</strong>：π_{Sno, Cno}(SC) ÷ π_{Cno}(C) —— 查询<strong>选修了全部课程</strong>的学生。</p>
+<p><strong>分步运算</strong>：
+1. C 表的全部课程号 = {1, 2, 3, 4}（π_{Cno}(C) 共 4 行）。
+2. 各学生选课集合（π_{Sno,Cno}(SC) 的 14 行按 Sno 分组）：</p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>选课集合</th>
+<th>是否 ⊇ {1,2,3,4}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>{1, 2, 3, 4}</td>
+<td>✅ <strong>是</strong></td>
+</tr>
+<tr>
+<td>1002</td>
+<td>{1, 2}</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>{1, 3, 4}</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>{2}</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>{1, 3}</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>{2, 3}</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>{} （SC 中无记录）</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><strong>结果</strong>：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>SQL 对应（除运算没有直接的 SQL 关键字，用 <strong>NOT EXISTS 双重否定</strong>实现）：
+<code>sql
+SELECT Sno, Sname FROM S
+WHERE NOT EXISTS (                      -- 不存在一门课……
+    SELECT * FROM C
+    WHERE NOT EXISTS (                  -- ……该学生没有选
+        SELECT * FROM SC
+        WHERE SC.Sno = S.Sno AND SC.Cno = C.Cno
+    )
+);</code>
+<strong>双重否定记法</strong>：<code>不存在 X 使得 不存在 Y</code> = <code>对每个 X 都存在 Y</code> = "<strong>全部</strong>"。已实际执行验证，结果 = 张明（1001）。</p>
+</blockquote>
+<h3>2.6 关系代数 ↔ SQL 对照表（必背）</h3>
+<table>
+<thead>
+<tr>
+<th>关系代数</th>
+<th>SQL</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>σ_F(R)</td>
+<td><code>WHERE F</code></td>
+<td>选择 = 行过滤</td>
+</tr>
+<tr>
+<td>π_A(R)</td>
+<td><code>SELECT A</code>（必要时加 <code>DISTINCT</code>）</td>
+<td>投影 = 列选择；<strong>π 天然去重，SQL 要手动 DISTINCT</strong></td>
+</tr>
+<tr>
+<td>R × S</td>
+<td><code>FROM R, S</code>（无连接条件）/ <code>CROSS JOIN</code></td>
+<td>笛卡尔积</td>
+</tr>
+<tr>
+<td>R ⋈_θ S</td>
+<td><code>R JOIN S ON θ</code></td>
+<td>θ 连接</td>
+</tr>
+<tr>
+<td>自然连接</td>
+<td><code>NATURAL JOIN</code> / 同名列等值连接并去重</td>
+<td></td>
+</tr>
+<tr>
+<td>R ∪ S</td>
+<td><code>UNION</code>（去重）/ <code>UNION ALL</code>（不去重）</td>
+<td>并</td>
+</tr>
+<tr>
+<td>R ∩ S</td>
+<td><code>INTERSECT</code></td>
+<td>交</td>
+</tr>
+<tr>
+<td>R − S</td>
+<td><code>EXCEPT</code>（Oracle 写 <code>MINUS</code>）</td>
+<td>差</td>
+</tr>
+<tr>
+<td>R ÷ S</td>
+<td><code>NOT EXISTS</code> 双重否定</td>
+<td><strong>"全部"型查询</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>记忆口诀</strong>：<strong>σ 选行、π 选列、⋈ 连表、÷ 全部、∪∩− 集合</strong>。</p>
+</blockquote>
+<hr />
+<h2>§三、SQL 完整语法</h2>
+<h3>3.1 SQL 语言分类</h3>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>全称</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DDL</strong>（数据定义语言）</td>
+<td>Data Definition Language</td>
+<td><code>CREATE</code>、<code>DROP</code>、<code>ALTER</code>（部分系统含 <code>TRUNCATE</code>）</td>
+</tr>
+<tr>
+<td><strong>DML</strong>（数据操纵语言）</td>
+<td>Data Manipulation Language</td>
+<td><code>INSERT</code>、<code>DELETE</code>、<code>UPDATE</code>、<code>SELECT</code></td>
+</tr>
+<tr>
+<td><strong>DCL</strong>（数据控制语言）</td>
+<td>Data Control Language</td>
+<td><code>GRANT</code>、<code>REVOKE</code>、<code>COMMIT</code>、<code>ROLLBACK</code></td>
+</tr>
+<tr>
+<td>（DQL）</td>
+<td>数据查询语言</td>
+<td>部分教材把 <code>SELECT</code> 从 DML 中单独列出</td>
+</tr>
+<tr>
+<td>（TCL）</td>
+<td>事务控制语言</td>
+<td>部分教材把 <code>COMMIT</code>/<code>ROLLBACK</code> 从 DCL 中单独列出</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>易错点（考过）</strong>：不同教材对 <code>SELECT</code> 和 <code>COMMIT</code>/<code>ROLLBACK</code> 的归属有分歧。<strong>软考按 DDL / DML / DCL 三分法</strong>作答：<strong>CREATE、DROP、ALTER 一定是 DDL</strong>（最稳的判据）；<code>GRANT</code>/<code>REVOKE</code> 一定是 DCL。</p>
+</blockquote>
+<h3>3.2 DDL：数据定义</h3>
+<p><strong>建表（含完整三类完整性约束）</strong></p>
+<pre><code class="language-sql">CREATE TABLE SC (
+    Sno   CHAR(4)     NOT NULL,          -- 用户定义完整性：非空
+    Cno   CHAR(2)     NOT NULL,
+    Grade SMALLINT,                      -- 允许为空（没考试的学生）
+    PRIMARY KEY (Sno, Cno),              -- 实体完整性：主码非空且唯一
+    FOREIGN KEY (Sno) REFERENCES S(Sno), -- 参照完整性：外码
+    FOREIGN KEY (Cno) REFERENCES C(Cno),
+    CHECK (Grade &gt;= 0 AND Grade &lt;= 100)  -- 用户定义完整性：检查约束
+);
+</code></pre>
+<blockquote>
+<p>已用本文数据实际验证：插入 (1001,1,92) 成功；插入 (1001,1,50) 因<strong>主码重复</strong>被拒绝；插入 (1001,5,120) 因 <strong>CHECK 违反</strong>被拒绝；插入 (1002,2,NULL) <strong>成功</strong>（NULL 通过 CHECK）。</p>
+</blockquote>
+<p><strong>常用 DDL 一览</strong></p>
+<pre><code class="language-sql">DROP TABLE SC;                          -- 删除表（结构+数据）
+ALTER TABLE SC ADD COLUMN Teacher CHAR(8);  -- 增加列
+CREATE VIEW v_cs AS SELECT * FROM S WHERE Sdept='计算机系';  -- 建视图（虚表）
+CREATE INDEX idx_sno ON SC(Sno);        -- 建索引
+</code></pre>
+<p><strong>视图（VIEW）</strong>：是一张<strong>虚表</strong>——数据库只存它的定义（一条 SELECT），不存数据。视图可以简化查询、提供逻辑数据独立性、实现权限控制。带 <code>WITH CHECK OPTION</code> 的视图会拒绝执行那些会使视图查不到该行的 INSERT/UPDATE。</p>
+<h3>3.3 DML：数据更新</h3>
+<pre><code class="language-sql">-- 插入
+INSERT INTO S VALUES ('1008', '吴迪', '计算机系', 20);
+INSERT INTO S (Sno, Sname) VALUES ('1009', '郑爽');   -- 未列出的列取 NULL
+
+-- 修改
+UPDATE SC SET Grade = Grade + 5 WHERE Sno = '1006';   -- 孙强 C2: 88→93, C3: 55→60
+
+-- 删除
+DELETE FROM SC WHERE Grade IS NULL;                  -- 删除 1002 的 C2 记录
+</code></pre>
+<blockquote>
+<p>已实际验证：UPDATE 后 1006 的成绩变为 C2=93、C3=60；DELETE 后 1002 只剩 C1=75 一条记录，SC 表从 14 行变 13 行。
+⚠️ <strong>DELETE vs TRUNCATE vs DROP</strong>：<code>DELETE</code> 是 DML、可带 WHERE、可回滚；<code>TRUNCATE</code> 是 DDL、清空全表、不可回滚、速度快；<code>DROP</code> 连表结构一起删。
+⚠️ <strong>删除一行用主码定位</strong>：<code>DELETE FROM SC WHERE Sno='1006' AND Cno='3'</code>——<strong>只用 Sno 会删掉该学生的所有选课行</strong>。</p>
+</blockquote>
+<h3>3.4 DQL：完整查询语法与执行顺序</h3>
+<p><strong>完整语法模板</strong></p>
+<pre><code class="language-sql">SELECT [DISTINCT] 列名/表达式/聚合函数 [AS 别名]     -- ⑤ 选列
+FROM   表1 [JOIN 类型 JOIN 表2 ON 连接条件]          -- ① 确定数据来源
+WHERE  行过滤条件                                    -- ② 过滤行
+GROUP BY 分组列                                     -- ③ 分组
+HAVING 组过滤条件                                    -- ④ 过滤组
+ORDER BY 排序列 [ASC|DESC]                          -- ⑥ 排序
+[LIMIT n];                                          -- ⑦ 限定行数
+</code></pre>
+<p><strong>逻辑执行顺序（必须倒背如流）</strong></p>
+<blockquote>
+<p><strong>FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</strong></p>
+</blockquote>
+<p><strong>记忆口诀</strong>：<strong>"先找表（FROM），再筛行（WHERE），再分组（GROUP BY），再筛组（HAVING），最后选列（SELECT）、去重（DISTINCT）、排序（ORDER BY）、限量（LIMIT）"</strong>。</p>
+<p><strong>执行顺序解释了三条硬规则</strong>（选择题常考）：</p>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WHERE 中不能用聚合函数</strong>（<code>WHERE AVG(Grade)&gt;80</code> 非法）</td>
+<td>WHERE 在 GROUP BY <strong>之前</strong>执行，那时还没有分组，谈不上聚合</td>
+</tr>
+<tr>
+<td><strong>WHERE 中不能用 SELECT 中定义的别名</strong></td>
+<td>SELECT 在 WHERE <strong>之后</strong>执行，别名还没诞生（MySQL 是例外，但软考按标准 SQL）</td>
+</tr>
+<tr>
+<td><strong>HAVING 中可以用聚合函数，WHERE 中不能</strong></td>
+<td>HAVING 在分组<strong>之后</strong>执行，专门用来过滤组</td>
+</tr>
+</tbody>
+</table>
+<h3>3.5 聚合函数（COUNT / SUM / AVG / MAX / MIN）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th>对 NULL 的处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COUNT(*)</code></td>
+<td>统计<strong>行数</strong></td>
+<td><strong>NULL 也算 1 行</strong>（统计的是行，不是某列的值）</td>
+</tr>
+<tr>
+<td><code>COUNT(列)</code></td>
+<td>统计该列<strong>非空</strong>值的个数</td>
+<td><strong>忽略 NULL</strong></td>
+</tr>
+<tr>
+<td><code>COUNT(DISTINCT 列)</code></td>
+<td>统计该列非空且去重后的个数</td>
+<td>忽略 NULL</td>
+</tr>
+<tr>
+<td><code>SUM(列)</code></td>
+<td>求和</td>
+<td><strong>忽略 NULL</strong></td>
+</tr>
+<tr>
+<td><code>AVG(列)</code></td>
+<td>平均值 = SUM/COUNT（都忽略 NULL）</td>
+<td><strong>忽略 NULL</strong>（分母不含 NULL 行）</td>
+</tr>
+<tr>
+<td><code>MAX(列)</code> / <code>MIN(列)</code></td>
+<td>最大 / 最小</td>
+<td>忽略 NULL</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>第一大陷阱——NULL 与聚合</strong>：<code>COUNT(*)</code> 数行、<code>COUNT(列)</code> 数非空值、<code>AVG</code> 的分母只算非空行。三者对 NULL 的态度不同，务必区分。
+⚠️ 聚合函数<strong>只能出现在 SELECT 列表、HAVING 子句、ORDER BY 子句</strong>中，<strong>不能出现在 WHERE 中</strong>。
+⚠️ 聚合函数<strong>会自动跳过 NULL 行</strong>：<code>SELECT AVG(Grade) FROM SC WHERE Cno='2'</code> 的分母是 3 不是 4（见 §四例 5）。</p>
+</blockquote>
+<h3>3.6 分组：GROUP BY 与 HAVING</h3>
+<p><strong>用途</strong>：按某列分组后，对每组施加聚合。</p>
+<p><strong>例</strong>：查询每门课的选课人数和平均成绩</p>
+<pre><code class="language-sql">SELECT Cno, COUNT(*) AS 选课人数, AVG(Grade) AS 平均成绩
+FROM SC
+GROUP BY Cno
+HAVING COUNT(*) &gt;= 3          -- 只要选课人数 ≥ 3 的课
+ORDER BY 平均成绩 DESC;        -- 按平均成绩降序
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>选课人数</th>
+<th>平均成绩</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>4</td>
+<td>85.5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>81.0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>77.75</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结果推导</strong>（已实际执行验证）：C1 成绩 92/75/80/95 → 人数 4、均值 (92+75+80+95)/4 = <strong>85.5</strong>；C2 成绩 85/NULL/70/88 → 人数 <strong>4</strong>（COUNT(<em>) 数行，NULL 行也算）、均值 = (85+70+88)/</em><em>3</em><em> = </em><em>81.0</em><em>（AVG 忽略 NULL）；C3 成绩 88/90/78/55 → 人数 4、均值 311/4 = </em><em>77.75</em><em>；C4 只有 1003 的 79 → 人数 1，被 <code>HAVING COUNT(*)&gt;=3</code> </em><em>过滤</em>*。</p>
+<blockquote>
+<p>⚠️ <strong>WHERE vs HAVING 对照表（必考）</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>WHERE</th>
+<th>HAVING</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>作用</td>
+<td>过滤<strong>行</strong>（分组前）</td>
+<td>过滤<strong>组</strong>（分组后）</td>
+</tr>
+<tr>
+<td>执行时机</td>
+<td>GROUP BY <strong>之前</strong></td>
+<td>GROUP BY <strong>之后</strong></td>
+</tr>
+<tr>
+<td>能否用聚合函数</td>
+<td><strong>不能</strong></td>
+<td><strong>能</strong></td>
+</tr>
+<tr>
+<td>能否引用 SELECT 别名</td>
+<td>不能（标准 SQL）</td>
+<td>部分系统可以</td>
+</tr>
+<tr>
+<td>没有 GROUP BY 时</td>
+<td>单独可用</td>
+<td>单独可用（把整张表当一组）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>连接条件 vs 过滤条件</strong>（左外连接里的经典陷阱）：
+- <strong>内连接</strong>中，<code>ON 连接条件</code> 与 <code>WHERE 过滤条件</code> 效果相同。
+- <strong>外连接</strong>中<strong>完全不同</strong>：<code>ON</code> 里写的是连接条件，不匹配的行<strong>保留并补 NULL</strong>；<code>WHERE</code> 里写的是过滤条件，<strong>直接删除整行</strong>。
+- 例：<code>S LEFT JOIN SC ON S.Sno=SC.Sno WHERE Grade&gt;=80</code> 会把 1007（成绩为 NULL）<strong>过滤掉</strong>；若想保留 1007，过滤条件要写进 <code>ON</code> 或改用内连接再 UNION。<strong>左外连接一旦在 WHERE 中限制了右表列，往往就退化成内连接。</strong></p>
+</blockquote>
+<h3>3.7 连接（JOIN）：四种 JOIN 的结果差异</h3>
+<p>用同一份数据（S 7 行、SC 14 行）对比，<strong>已逐行实际执行验证</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>JOIN</th>
+<th>语义</th>
+<th>结果行数</th>
+<th>相对内连接多了谁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>S INNER JOIN SC</code></td>
+<td>只保留<strong>两边都匹配</strong>的行</td>
+<td><strong>14</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>S LEFT JOIN SC</code></td>
+<td>保留<strong>左表全部行</strong>，右表无匹配补 NULL</td>
+<td><strong>15</strong></td>
+<td>+ 1007 周敏（SC 列为 NULL）</td>
+</tr>
+<tr>
+<td><code>S RIGHT JOIN SC</code></td>
+<td>保留<strong>右表全部行</strong>，左表无匹配补 NULL</td>
+<td><strong>14</strong></td>
+<td>无（SC 的 14 行<strong>全部</strong>都能匹配到 S → 与内连接相同）</td>
+</tr>
+<tr>
+<td><code>S FULL OUTER JOIN SC</code></td>
+<td>左右两表的行<strong>全部保留</strong></td>
+<td><strong>15</strong></td>
+<td>+ 1007 周敏</td>
+</tr>
+</tbody>
+</table>
+<p><strong>左外连接示例</strong>（<code>SELECT S.Sno, Sname, SC.Cno, Grade FROM S LEFT JOIN SC ON S.Sno=SC.Sno</code>，共 15 行，此处只看 1007）：</p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+<th>Cno</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+<td>NULL</td>
+<td>NULL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>自连接（Self Join）</strong>：一张表和自己连接，<strong>必须起别名</strong>。</p>
+<pre><code class="language-sql">-- 查询每门课及其直接先修课名（C 表自连接）
+SELECT C1.Cno, C1.Cname, C2.Cname AS 先修课
+FROM C C1 LEFT JOIN C C2 ON C1.Cpno = C2.Cno;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>Cname</th>
+<th>先修课</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>数据库</td>
+<td>数据结构</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据结构</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>3</td>
+<td>操作系统</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>4</td>
+<td>编译原理</td>
+<td>数据结构</td>
+</tr>
+</tbody>
+</table>
+<p><strong>外连接的方向记忆</strong>：<strong>LEFT 保留左、RIGHT 保留右、FULL 全保留</strong>；谁被保留，谁没匹配上就给对方补 NULL。</p>
+<h3>3.8 子查询</h3>
+<p><strong>按出现位置分类</strong></p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>例子</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WHERE 子查询</strong></td>
+<td><code>WHERE Sno IN (…)</code></td>
+<td>最常见，结果当条件用</td>
+</tr>
+<tr>
+<td><strong>FROM 子查询（派生表）</strong></td>
+<td><code>FROM (SELECT …) T</code></td>
+<td>结果当表用，<strong>必须起别名</strong></td>
+</tr>
+<tr>
+<td><strong>HAVING 子查询</strong></td>
+<td><code>HAVING AVG(Grade) &gt; (SELECT …)</code></td>
+<td>过滤组</td>
+</tr>
+<tr>
+<td><strong>SELECT 子查询（标量子查询）</strong></td>
+<td><code>SELECT Sname, (SELECT …) AS …</code></td>
+<td>只能返回单行单列</td>
+</tr>
+</tbody>
+</table>
+<p><strong>按是否相关分类</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>不相关子查询</strong></td>
+<td>子查询<strong>独立</strong>执行一次，结果供外层使用</td>
+<td><code>SELECT Sname FROM S WHERE Sno IN (SELECT Sno FROM SC WHERE Cno='1')</code></td>
+</tr>
+<tr>
+<td><strong>相关子查询</strong></td>
+<td>子查询<strong>引用了外层查询的列</strong>，外层每查一行就执行一次</td>
+<td><code>SELECT … WHERE EXISTS (SELECT * FROM SC WHERE SC.Sno=S.Sno AND …)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>EXISTS 与 IN</strong></p>
+<pre><code class="language-sql">-- IN：判断某值是否在子查询结果集合中
+SELECT Sname FROM S WHERE Sno IN (SELECT Sno FROM SC WHERE Cno='1');
+-- 结果：张明、李华、王芳、钱娜（4 人选了 C1）
+
+-- EXISTS：判断子查询是否&quot;有行返回&quot;，不关心具体返回什么
+SELECT Sname FROM S WHERE EXISTS (SELECT * FROM SC WHERE SC.Sno=S.Sno AND SC.Cno='1');
+-- 结果同上（相关子查询，外层每行都触发一次内层执行）
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>EXISTS 的关键</strong>：<code>SELECT *</code> 还是 <code>SELECT 1</code> 还是 <code>SELECT 'x'</code> <strong>都一样</strong>——EXISTS 只看<strong>有没有行返回</strong>（true/false），不在意列的内容。题目问"<code>EXISTS (SELECT * …)</code> 等价于什么"时不要被 <code>*</code> 迷惑。
+⚠️ <strong>NOT IN 的 NULL 陷阱</strong>：若子查询结果里含 NULL，<code>x NOT IN (…)</code> 可能<strong>永远为假</strong>（因为 <code>x &lt;&gt; NULL</code> 是 UNKNOWN）。<strong>NOT EXISTS 不受此影响</strong>——表达"不存在"时优先用 NOT EXISTS。</p>
+</blockquote>
+<p><strong>NOT EXISTS 双重否定表达"全部"</strong>（见 §2.5 除运算）：查询选修了全部课程的学生。</p>
+<h3>3.9 集合运算</h3>
+<table>
+<thead>
+<tr>
+<th>运算</th>
+<th>关键字</th>
+<th>结果</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>并</td>
+<td><code>UNION</code></td>
+<td>去重合并</td>
+<td>两查询<strong>列数相同</strong>、对应列<strong>类型兼容</strong></td>
+</tr>
+<tr>
+<td>并（不去重）</td>
+<td><code>UNION ALL</code></td>
+<td>保留重复行</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>交</td>
+<td><code>INTERSECT</code></td>
+<td>交集</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>差</td>
+<td><code>EXCEPT</code>（Oracle: <code>MINUS</code>）</td>
+<td>在前者中但不在后者中</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-sql">-- 选了 C1 或 C2 的学生（并）
+SELECT Sno FROM SC WHERE Cno='1'
+UNION
+SELECT Sno FROM SC WHERE Cno='2';
+-- 结果 6 行：1001、1002、1003、1004、1005、1006（1007 没选课）
+
+-- 同时选了 C1 和 C2 的学生（交）
+SELECT Sno FROM SC WHERE Cno='1'
+INTERSECT
+SELECT Sno FROM SC WHERE Cno='2';
+-- 结果 2 行：1001、1002（注意：1002 的 C2 成绩虽为 NULL，但&quot;选了课&quot;这一事实成立）
+
+-- 选了 C1 但没选 C2 的学生（差）
+SELECT Sno FROM SC WHERE Cno='1'
+EXCEPT
+SELECT Sno FROM SC WHERE Cno='2';
+-- 结果 2 行：1003、1005
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：<strong>UNION 默认去重</strong>（等价于并集），<strong>UNION ALL 不去重</strong>（结果行数可能更多）。问"返回多少行"时一定要看清楚是哪个。
+⚠️ <strong>标准 SQL 不保证集合运算结果的顺序</strong>（UNION/INTERSECT/EXCEPT 的结果在标准 SQL 中是<strong>无序</strong>的）；需要顺序<strong>必须显式加 ORDER BY</strong>。某些实现（如 SQLite/MySQL）恰好按第一列升序输出，但这只是<strong>实现习惯、不能作为答题依据</strong>——考试按标准 SQL 语义作答。</p>
+</blockquote>
+<hr />
+<h2>§四、完整 SQL 例题（4 道，含表数据 / 查询 / 结果推导）</h2>
+<blockquote>
+<p>所有结果均已用 SQLite 实际执行验证。</p>
+</blockquote>
+<h3>例 1：分组统计（GROUP BY + HAVING + ORDER BY + NULL）</h3>
+<p><strong>题目</strong>：查询选课人数 ≥ 3 的课程号、选课人数、平均成绩，按平均成绩降序。</p>
+<pre><code class="language-sql">SELECT Cno, COUNT(*) AS 选课人数, AVG(Grade) AS 平均成绩
+FROM SC
+GROUP BY Cno
+HAVING COUNT(*) &gt;= 3
+ORDER BY 平均成绩 DESC;
+</code></pre>
+<p><strong>推导过程</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>各成绩</th>
+<th>COUNT(*)</th>
+<th>SUM/AVG 分母</th>
+<th>平均成绩</th>
+<th>是否 ≥3 人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>92, 75, 80, 95</td>
+<td>4</td>
+<td>342 / 4</td>
+<td><strong>85.5</strong></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>2</td>
+<td>85, <strong>NULL</strong>, 70, 88</td>
+<td><strong>4</strong></td>
+<td>243 / <strong>3</strong></td>
+<td><strong>81.0</strong></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>3</td>
+<td>88, 90, 78, 55</td>
+<td>4</td>
+<td>311 / 4</td>
+<td><strong>77.75</strong></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>4</td>
+<td>79</td>
+<td>1</td>
+<td>79 / 1</td>
+<td>79.0</td>
+<td>❌ 被 HAVING 过滤</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最终结果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Cno</th>
+<th>选课人数</th>
+<th>平均成绩</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>4</td>
+<td>85.5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>81.0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>77.75</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>本题三个考点一次练到</strong>：① COUNT(*) 数行（C2 的 NULL 行算 1 人）；② AVG 忽略 NULL（C2 分母是 3 不是 4，均值 81.0 而非 60.75）；③ HAVING 在分组后过滤组（C4 被淘汰）。</p>
+</blockquote>
+<h3>例 2：三表连接 + 条件过滤 + 排序</h3>
+<p><strong>题目</strong>：查询计算机系学生中成绩 ≥ 80 的姓名、课程名、成绩，按成绩降序。</p>
+<pre><code class="language-sql">SELECT Sname, Cname, Grade
+FROM S JOIN SC ON S.Sno = SC.Sno
+     JOIN C ON SC.Cno = C.Cno
+WHERE Sdept = '计算机系' AND Grade &gt;= 80
+ORDER BY Grade DESC;
+</code></pre>
+<p><strong>推导过程</strong>：
+1. 计算机系学生：1001 张明、1002 李华、1007 周敏。
+2. JOIN SC：张明有 4 条选课（92/85/88/79）、李华有 2 条（75/NULL）、周敏 <strong>0 条</strong>（被内连接淘汰）。
+3. 筛选 Grade≥80：张明 92(C1 数据库)、88(C3 操作系统)、85(C2 数据结构)；李华 75 和 NULL 均不满足。
+4. 降序排列。</p>
+<p><strong>最终结果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Sname</th>
+<th>Cname</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张明</td>
+<td>数据库</td>
+<td>92</td>
+</tr>
+<tr>
+<td>张明</td>
+<td>操作系统</td>
+<td>88</td>
+</tr>
+<tr>
+<td>张明</td>
+<td>数据结构</td>
+<td>85</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>考点</strong>：内连接自动丢弃"没选课"的周敏；NULL 成绩既不满足 <code>&gt;=80</code> 也不满足任何比较。</p>
+</blockquote>
+<h3>例 3：左外连接找出"没有匹配"的行</h3>
+<p><strong>题目</strong>：查询一门课都没选的学生。</p>
+<pre><code class="language-sql">SELECT S.Sno, Sname
+FROM S LEFT JOIN SC ON S.Sno = SC.Sno
+WHERE SC.Sno IS NULL;
+</code></pre>
+<p><strong>推导过程</strong>：左外连接保留全部 7 名学生；1007 周敏在 SC 中无匹配行，其 SC.Sno、SC.Cno、SC.Grade 全部补 NULL；<code>WHERE SC.Sno IS NULL</code> 只留下她。</p>
+<p><strong>最终结果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1007</td>
+<td>周敏</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>这是"左外连接 + IS NULL"的标准范式</strong>：<strong>找出"在 A 中但不在 B 中"的行</strong>。等价写法：<code>SELECT … FROM S WHERE Sno NOT IN (SELECT Sno FROM SC)</code>。
+⚠️ 判断"无匹配"必须用 <code>IS NULL</code>，<strong>不能写 <code>= NULL</code></strong>（<code>SC.Sno = NULL</code> 的结果是 UNKNOWN，一行都查不出来）。</p>
+</blockquote>
+<h3>例 4：NOT EXISTS 双重否定（除运算的 SQL 实现）</h3>
+<p><strong>题目</strong>：查询选修了<strong>全部课程</strong>的学生姓名。</p>
+<pre><code class="language-sql">SELECT Sno, Sname
+FROM S
+WHERE NOT EXISTS (
+    SELECT * FROM C
+    WHERE NOT EXISTS (
+        SELECT * FROM SC
+        WHERE SC.Sno = S.Sno AND SC.Cno = C.Cno
+    )
+);
+</code></pre>
+<p><strong>推导过程</strong>：
+1. 外层遍历每个学生 s：内层第一重 = "<strong>存在一门课 c，s 没选</strong>"。
+2. <code>NOT EXISTS(第一重)</code> = "<strong>不存在这样一门课</strong>" = "<strong>每门课 s 都选了</strong>"。
+3. 逐个学生对照：张明选了 {1,2,3,4} = 全部课程 ✅；其余学生的选课集合都缺课 ❌。</p>
+<p><strong>最终结果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Sno</th>
+<th>Sname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>张明</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>对应关系代数</strong>：π_{Sno,Cno}(SC) ÷ π_{Cno}(C)。<strong>"全部"型题目在 SQL 里就是双重否定</strong>，这是科目二大题的高频写法。</p>
+</blockquote>
+<h3>例 5（补充）：聚合函数对 NULL 的三种态度</h3>
+<p><strong>题目</strong>：统计 C2（数据结构）这门课的选课人数、有成绩的人数、平均分。</p>
+<pre><code class="language-sql">SELECT COUNT(*) AS 选课人数, COUNT(Grade) AS 有成绩人数, AVG(Grade) AS 平均分
+FROM SC
+WHERE Cno = '2';
+</code></pre>
+<p><strong>推导过程</strong>：C2 共 4 条记录（1001→85、1002→<strong>NULL</strong>、1004→70、1006→88）。
+- <code>COUNT(*)</code> = <strong>4</strong>（数行，NULL 行也算）
+- <code>COUNT(Grade)</code> = <strong>3</strong>（数非空成绩值，NULL 跳过）
+- <code>AVG(Grade)</code> = (85+70+88)/3 = 243/3 = <strong>81.0</strong>（分母 3，不是 4）</p>
+<p><strong>最终结果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>选课人数</th>
+<th>有成绩人数</th>
+<th>平均分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>3</td>
+<td>81.0</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>这张表是第一大考点的浓缩</strong>：<code>COUNT(*)</code> ≠ <code>COUNT(列)</code> ≠ <code>AVG(列)</code> 的分母。</p>
+</blockquote>
+<hr />
+<h2>§五、常见陷阱表（考前必看）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>陷阱</th>
+<th>错误写法</th>
+<th>正确写法</th>
+<th>结果差异</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>判空</td>
+<td><code>WHERE Grade = NULL</code></td>
+<td><code>WHERE Grade IS NULL</code></td>
+<td><code>= NULL</code> 恒为 UNKNOWN，<strong>一行查不出</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>聚合与 NULL</td>
+<td>认为 <code>AVG</code> 分母含 NULL 行</td>
+<td><code>AVG</code> <strong>忽略 NULL</strong>；<code>COUNT(*)</code> <strong>不忽略</strong></td>
+<td>C2 例：均值分母 3 而非 4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>聚合放 WHERE</td>
+<td><code>WHERE AVG(Grade)&gt;80</code></td>
+<td><code>HAVING AVG(Grade)&gt;80</code></td>
+<td><strong>语法错误</strong>，WHERE 在分组前执行</td>
+</tr>
+<tr>
+<td>4</td>
+<td>WHERE vs HAVING</td>
+<td>用 HAVING 过滤<strong>未分组</strong>的单行条件</td>
+<td>行过滤用 WHERE、组过滤才用 HAVING</td>
+<td>语义不同；WHERE 更快（先过滤后分组）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>连接条件 vs 过滤条件（外连接）</td>
+<td>左外连接后 <code>WHERE 右表列 IS NOT NULL</code></td>
+<td>过滤右表条件应放进 <code>ON</code>（或改用内连接）</td>
+<td><strong>外连接 + WHERE 限制右表 → 退化成内连接</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>忘了连接条件</td>
+<td><code>FROM S, SC</code>（无 WHERE）</td>
+<td><code>FROM S JOIN SC ON …</code></td>
+<td><strong>笛卡尔积</strong>：7×14 = <strong>98</strong> 行</td>
+</tr>
+<tr>
+<td>7</td>
+<td>UNION vs UNION ALL</td>
+<td>求"并集"时用了 <code>UNION ALL</code></td>
+<td>求并集用 <code>UNION</code>（去重）</td>
+<td>UNION ALL 结果可能<strong>多行</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>投影忘去重</td>
+<td><code>SELECT Sdept FROM S</code>（7 行）</td>
+<td><code>SELECT DISTINCT Sdept FROM S</code>（3 行）</td>
+<td>关系代数 π <strong>天然去重</strong>，SQL 要手动 DISTINCT</td>
+</tr>
+<tr>
+<td>9</td>
+<td>NOT IN 含 NULL</td>
+<td><code>WHERE Sno NOT IN (含 NULL 的子查询)</code></td>
+<td>改用 <code>NOT EXISTS</code></td>
+<td>NOT IN 可能<strong>恒为假</strong>（<code>&lt;&gt; NULL</code> 是 UNKNOWN）</td>
+</tr>
+<tr>
+<td>10</td>
+<td>DELETE 范围</td>
+<td><code>DELETE FROM SC WHERE Sno='1006'</code>（删 2 行）</td>
+<td>删一行要<strong>主码定位</strong>：<code>WHERE Sno='1006' AND Cno='3'</code></td>
+<td>少一个条件 = 多删行</td>
+</tr>
+<tr>
+<td>11</td>
+<td>GROUP BY 后的 SELECT</td>
+<td><code>SELECT Sname, AVG(Grade) … GROUP BY Sno</code></td>
+<td>非聚合列必须是<strong>分组列</strong></td>
+<td>标准 SQL 报错；部分系统"随机取值"</td>
+</tr>
+<tr>
+<td>12</td>
+<td>EXISTS 的 SELECT 列表</td>
+<td>以为 <code>EXISTS(SELECT *)</code> 与 <code>EXISTS(SELECT 1)</code> 不同</td>
+<td><strong>完全等价</strong>，只看有无行返回</td>
+<td>无结果差异，是迷惑选项</td>
+</tr>
+<tr>
+<td>13</td>
+<td>ORDER BY 默认方向</td>
+<td>以为默认降序</td>
+<td>默认 <strong>ASC（升序）</strong>，NULL 的位置由系统决定（不要假设）</td>
+<td>"返回顺序"题要看清 ASC/DESC</td>
+</tr>
+<tr>
+<td>14</td>
+<td>DDL/DML 归属</td>
+<td>把 <code>SELECT</code> 当 DDL / 把 <code>COMMIT</code> 当 DML</td>
+<td><code>CREATE/DROP/ALTER</code> = DDL；<code>SELECT/INSERT/UPDATE/DELETE</code> = DML；<code>GRANT/REVOKE/COMMIT/ROLLBACK</code> = DCL</td>
+<td>概念题直接得分点</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>§六、必记结论速查（20 条）</h2>
+<ol>
+<li>关系模型三要素 = <strong>关系数据结构 + 关系操作集合 + 关系完整性约束</strong>。</li>
+<li>术语：<strong>关系=表、元组=行、属性=列、码=键、目=列数、基数=行数</strong>。</li>
+<li>三类完整性 = <strong>实体（主码非空唯一）+ 参照（外码空或存在）+ 用户定义（CHECK 等）</strong>。</li>
+<li>关系代数五种基本运算 = <strong>选择 σ、投影 π、并 ∪、差 −、笛卡尔积 ×</strong>。</li>
+<li><strong>σ 选行（↔ WHERE）；π 选列（↔ SELECT，天然去重）；⋈ 连表（↔ JOIN）；÷ 表"全部"（↔ NOT EXISTS 双重否定）</strong>。</li>
+<li><strong>等值连接保留两列，自然连接合并为一列</strong>。</li>
+<li><strong>笛卡尔积行数 = 左表行数 × 右表行数</strong>。</li>
+<li>SQL 执行顺序 = <strong>FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</strong>。</li>
+<li><strong>WHERE 过滤行（分组前，不能用聚合）；HAVING 过滤组（分组后，能用聚合）</strong>。</li>
+<li><code>COUNT(*)</code> 数行含 NULL；<code>COUNT(列)</code> 数非空值；<code>SUM/AVG/MAX/MIN</code> <strong>全部忽略 NULL</strong>；<code>AVG = SUM(列)/COUNT(列)</code>。</li>
+<li>判空一律 <code>IS NULL</code>，<strong><code>= NULL</code> 恒为 UNKNOWN</strong>（三值逻辑：TRUE / FALSE / <strong>UNKNOWN</strong>）。</li>
+<li><strong>内连接</strong>只留两边都匹配的行；<strong>左外</strong>保留左表全部、右表补 NULL；<strong>右外</strong>对称；<strong>全外</strong>全保留。</li>
+<li><strong>左外连接 + <code>WHERE 右表列 IS NULL</code> = 找"在左表但不在右表"的行</strong>。</li>
+<li><strong>外连接中 <code>ON</code> 是连接条件（保留行），<code>WHERE</code> 是过滤条件（删除行）</strong>——不可互换。</li>
+<li>集合运算 <code>UNION</code>（去重）/ <code>UNION ALL</code>（不去重）/ <code>INTERSECT</code>（交）/ <code>EXCEPT</code>（差），要求<strong>列数相同、类型兼容</strong>。</li>
+<li><strong>EXISTS 只看有无行返回，不看列内容</strong>（<code>SELECT *</code> 与 <code>SELECT 1</code> 等价）。</li>
+<li><strong>"全部"型查询 = NOT EXISTS 双重否定</strong>（除运算的 SQL 实现）；"至少一个" = IN / EXISTS。</li>
+<li>DDL = <code>CREATE/DROP/ALTER</code>；DML = <code>SELECT/INSERT/UPDATE/DELETE</code>；DCL = <code>GRANT/REVOKE/COMMIT/ROLLBACK</code>。</li>
+<li><strong>DELETE 可回滚、可带 WHERE；TRUNCATE 清全表、不可回滚；DROP 连表结构一起删</strong>。</li>
+<li><strong>视图是虚表</strong>（只存定义不存数据）；<code>WITH CHECK OPTION</code> 保证更新后行仍能被视图查到。</li>
+</ol>
+<hr />
+<h2>§七、今日自测（遮住答案，对 §六）</h2>
+<ol>
+<li>关系模型三要素是？</li>
+<li>σ、π、⋈、×、÷ 分别对应 SQL 的什么？</li>
+<li>自然连接与等值连接的区别是？</li>
+<li>SQL 的逻辑执行顺序是？（7 步）</li>
+<li>WHERE 与 HAVING 的三点区别？</li>
+<li>COUNT(*)、COUNT(列)、AVG(列) 对 NULL 分别什么态度？</li>
+<li>判断空值为什么不能用 <code>= NULL</code>？</li>
+<li>左外连接 + <code>WHERE 右表列 IS NULL</code> 查的是什么？</li>
+<li>UNION 与 UNION ALL 的区别？</li>
+<li>"选修了全部课程"用 SQL 怎么写？（关系代数呢？）</li>
+</ol>
+<blockquote>
+<p>答案全部在 §六的 20 条结论里。<strong>能独立答出 8 题以上，再做 <code>day07-exercises.md</code> 的 20 道选择题</strong>。</p>
+</blockquote>
+<div class="lesson-footer">
+  <div class="nav">
+    <a href="../../index.html">← 返回文档目录</a>
+    <a href="../../../reference/ds-learning-path.html">课程总目录</a>
+    <a href="../../../reference/mistake-notebook.html">错题本</a>
+  </div>
+  <p>内容由原资料 Markdown 全文转换生成（<a href="https://lbstruggleee.github.io/RuanKao/blob/main/docs/knowledge-points/databases/day07-sql.md">docs/knowledge-points/databases/day07-sql.md</a> 原文只读）。</p>
+</div>
+</div>
+<div id="rk-badge"></div>
+<script>
+(function () {
+  var b = document.getElementById("rk-badge");
+  function tick() {
+    var d = Math.ceil((new Date(2026, 9, 24, 9, 0, 0) - Date.now()) / 86400000);
+    b.textContent = d > 1 ? "📅 距 10/24 考试还有 " + d + " 天"
+      : d === 1 ? "📅 明天考试，加油！" : d === 0 ? "📅 今天考试！"
+      : "🏁 考试已结束，感谢使用本站";
+  }
+  tick(); setInterval(tick, 3600000);
+})();
+</script>
+</body>
+</html>
