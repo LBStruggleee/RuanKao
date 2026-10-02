@@ -73,6 +73,25 @@
   <script src="assets/vendor/prism-bash.min.js"></script>
   <div id="rk-badge"></div>
   <script>
+    /* 站内 .html 页面（交互课程/错题本/目录）直通：在捕获阶段接管点击，
+       绕过 Docsify 的哈希路由（否则 .html 会被当 Markdown 渲染成静态文本） */
+    (function () {
+      function internalHtml(a) {
+        return a && a.origin === location.origin &&
+          /\.html$/.test(a.pathname) && a.target !== '_blank';
+      }
+      document.addEventListener('click', function (e) {
+        if (e.defaultPrevented || e.button !== 0 ||
+            e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
+        var a = e.target && e.target.closest ? e.target.closest('a') : null;
+        if (!internalHtml(a)) { return; }
+        e.preventDefault();
+        e.stopPropagation();
+        location.href = a.href;
+      }, true);
+    })();
+  </script>
+  <script>
     (function () {
       var badge = document.getElementById('rk-badge');
       function tick() {
