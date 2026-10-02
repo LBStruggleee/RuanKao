@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0026 · 设计模式：23 种的识别与分类（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0026（设计模式 · 1/1）</p>
+    <h1>设计模式：三大类 23 种，认得出来就能拿分</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0025-uml.html">0025 UML</a><br>
+      考点定位：三大类分类、场景关键词→模式识别（<a href="../docs/knowledge-points/software-engineering/day20-design-patterns.md">day20-design-patterns.md</a>，上午 3-4 题 + 下午试题五/六）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    设计模式题 90% 是「给场景认模式」。背熟下面的<strong>关键词→模式对照表</strong>（每条一个『题眼』），再记住三大类各自装哪几个模式，选择模式的题目就变成查表题。
+  </div>
+
+  <h2>一、三大类怎么分</h2>
+  <table class="tight">
+    <tr><th>类别</th><th>管什么</th><th>成员（23 种）</th></tr>
+    <tr><td><strong>创建型（5）</strong></td><td>对象怎么<strong>造</strong></td><td>单例、工厂方法、抽象工厂、建造者、原型</td></tr>
+    <tr><td><strong>结构型（7）</strong></td><td>对象怎么<strong>拼</strong></td><td>适配器、桥接、组合、装饰、外观、享元、代理</td></tr>
+    <tr><td><strong>行为型（11）</strong></td><td>对象怎么<strong>协作</strong></td><td>职责链、命令、解释器、迭代器、中介者、备忘录、观察者、状态、策略、模板方法、访问者</td></tr>
+  </table>
+
+  <h2>二、高频模式速查（题眼 → 模式）</h2>
+  <table class="tight">
+    <tr><th>题眼（场景关键词）</th><th>模式</th><th>意图一句话</th></tr>
+    <tr><td>全局唯一 / 一个类只有一个实例 / 提供全局访问点</td><td><strong>单例</strong></td><td>懒汉（用时才建，需防并发）/ 饿汉（加载即建，天然线程安全）</td></tr>
+    <tr><td>子类决定实例化哪个类 / 延迟到子类</td><td><strong>工厂方法</strong></td><td>定义创建接口，让子类决定造谁</td></tr>
+    <tr><td>创建一族相关产品（产品族）</td><td><strong>抽象工厂</strong></td><td>一个工厂造一整套</td></tr>
+    <tr><td>分步组装复杂对象 / 相同构建过程不同表示</td><td><strong>建造者</strong></td><td>把「组装步骤」与「表示」分离</td></tr>
+    <tr><td>复制克隆已有对象</td><td><strong>原型</strong></td><td>用克隆替代 new</td></tr>
+    <tr><td>接口不兼容要转换</td><td><strong>适配器</strong></td><td>把旧接口包成目标接口</td></tr>
+    <tr><td>抽象与实现分离各自独立变化</td><td><strong>桥接</strong></td><td>两个变化维度解耦</td></tr>
+    <tr><td>树形部分-整体（文件/文件夹）</td><td><strong>组合</strong></td><td>单个与容器统一对待</td></tr>
+    <tr><td>动态给对象加职责 / 不改类加功能</td><td><strong>装饰</strong></td><td>一层层包（Java IO 流）</td></tr>
+    <tr><td>统一复杂子系统的简单入口</td><td><strong>外观（门面）</strong></td><td>一个类包装一堆调用</td></tr>
+    <tr><td>共享细粒度对象 / 大量重复对象省内存</td><td><strong>享元</strong></td><td>共享内部状态（2021 下试题六）</td></tr>
+    <tr><td>控制访问 / 远程 / 保护</td><td><strong>代理</strong></td><td>占位并控制对目标的访问</td></tr>
+    <tr><td>请求沿链条逐级传递 / 谁处理看级别</td><td><strong>职责链</strong></td><td>审批流</td></tr>
+    <tr><td>把请求封装成对象 / 可撤销</td><td><strong>命令</strong></td><td>请求参数化、排队、日志</td></tr>
+    <tr><td>一对多通知 / 发布-订阅</td><td><strong>观察者</strong></td><td>主题变 → 订阅者全部收到通知</td></tr>
+    <tr><td>保存与恢复对象状态（撤销/存档）</td><td><strong>备忘录</strong></td><td>不破坏封装地存快照（2022 上试题五）</td></tr>
+    <tr><td>行为随状态改变（状态机）</td><td><strong>状态</strong></td><td>状态变 → 行为变</td></tr>
+    <tr><td>算法可整体替换（策略 interchangeable）</td><td><strong>策略</strong></td><td>同一接口不同算法</td></tr>
+    <tr><td>固定骨架、子类填细节</td><td><strong>模板方法</strong></td><td>父类定流程，子类填步骤</td></tr>
+  </table>
+
+  <h2>三、大题答题三步（试题五/六）</h2>
+  <ol>
+    <li><strong>读说明找题眼</strong>（「唯一实例」→单例；「保存/恢复」→备忘录；「通知」→观察者）；</li>
+    <li><strong>对类图填角色</strong>：抽象/具体、Subject/Observer、Memento/Originator/Caretaker……；</li>
+    <li><strong>按签名填代码</strong>：看方法名和返回类型反推空缺内容，别自创变量名。</li>
+  </ol>
+
+  <h2>四、自查（全对过课）</h2>
+  <div id="quiz26"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>三大类：创建 5（单例/工厂方法/抽象工厂/建造者/原型）、结构 7（适配器/桥接/组合/装饰/外观/享元/代理）、行为 11。</li>
+      <li>题眼直查：唯一实例→单例；产品族→抽象工厂；树形→组合；动态加职责→装饰；发布订阅→观察者；保存恢复→备忘录；算法替换→策略；骨架细节→模板方法。</li>
+      <li>单例：懒汉用时建（防并发）、饿汉加载建（线程安全）。</li>
+      <li>大题三步：找题眼 → 填角色 → 按签名补码。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0025-uml.html">← 上一课 0025 UML</a>
+      <a href="0027-bonus.html">下一课 → 0027 保底专项：法规·标准·多媒体</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>下午大题实战</strong>：<a href="../docs/practice/subject2/patterns-algo-exercises.md">patterns-algo-exercises.md（享元+备忘录真题）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「装饰和代理怎么区分」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz26", {
+  title: "本课自查（8 题，先认模式再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "系统要求一个类只能有一个实例并提供全局访问点，应使用？",
+      options: ["单例（Singleton）", "原型（Prototype）", "工厂方法", "外观（Facade）"],
+      answer: 0,
+      opts: [
+        "✓ 『唯一实例 + 全局访问点』就是单例的定义；实现上区分懒汉（用时建）与饿汉（加载建）。",
+        "原型是复制克隆已有对象。",
+        "工厂方法管『由哪个子类实例化』。",
+        "外观是给复杂子系统一个简单入口。"
+      ],
+      explain: "懒汉需防并发（加锁/静态内部类），饿汉天然线程安全。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "『在不修改类的前提下动态地给对象增加职责』是？",
+      options: ["装饰（Decorator）", "适配器（Adapter）", "代理（Proxy）", "桥接（Bridge）"],
+      answer: 0,
+      opts: [
+        "✓ 装饰 = 一层包一层地加职责（Java 的 BufferedReader 包 FileReader）。",
+        "适配器管『接口不兼容的转换』，不为加功能。",
+        "代理管『控制访问』（远程/保护/延迟）。",
+        "桥接管『抽象与实现两个维度解耦』。"
+      ],
+      explain: "结构与行为配对：转换→适配器；加职责→装饰；控访问→代理。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "『主题对象状态变化时，自动通知所有依赖它的对象』是？",
+      options: ["观察者（Observer）", "备忘录（Memento）", "状态（State）", "中介者（Mediator）"],
+      answer: 0,
+      opts: [
+        "✓ 观察者 = 发布-订阅：Subject 变化 → notify 全部 Observer。",
+        "备忘录管保存/恢复快照。",
+        "状态模式管『自己』的行为随状态变。",
+        "中介者管多对象交互改星型。"
+      ],
+      explain: "『通知/订阅/一对多依赖』→ 观察者，GUI 与消息系统的基石。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "需要保存对象的某个状态快照以便之后恢复（如撤销操作），应使用？",
+      options: ["备忘录（Memento）", "命令（Command）", "原型（Prototype）", "享元（Flyweight）"],
+      answer: 0,
+      opts: [
+        "✓ 备忘录：Originator 生成快照、Caretaker 保管，不破坏封装地恢复——2022 上下午真题。",
+        "命令封装的是『请求』，撤销只是其附带能力。",
+        "原型是克隆整个对象来创建新对象。",
+        "享元是共享对象省内存。"
+      ],
+      explain: "题眼『保存/恢复/撤销/存档』→ 备忘录。",
+      source: "day20-design-patterns.md ｜ docs/practice/subject2/patterns-algo-key.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "同一个接口下可以整体替换不同的算法实现，是？",
+      options: ["策略（Strategy）", "状态（State）", "模板方法（Template Method）", "命令（Command）"],
+      answer: 0,
+      opts: [
+        "✓ 策略：把算法族各自封装、可互相替换（如排序策略/支付方式切换）。",
+        "状态是『状态变了行为跟着变』，由状态机驱动而非用户选择替换。",
+        "模板方法是父类定骨架、子类填细节。",
+        "命令封装的是请求本身。"
+      ],
+      explain: "辨析：策略=用户挑算法；状态=状态机切换行为。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "文件与文件夹可以统一用『打开/大小/删除』处理，树形部分-整体结构应使用？",
+      options: ["组合（Composite）", "外观（Facade）", "建造者（Builder）", "迭代器（Iterator）"],
+      answer: 0,
+      opts: [
+        "✓ 组合：叶子与容器实现同一接口，用户对单个对象和组合对象一视同仁。",
+        "外观是给子系统一个统一入口。",
+        "建造者是分步组装复杂对象。",
+        "迭代器是顺序访问集合元素。"
+      ],
+      explain: "题眼『树形/部分-整体/目录』→ 组合模式。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "父类定义算法骨架，某些步骤延迟到子类实现，是？",
+      options: ["模板方法（Template Method）", "策略（Strategy）", "工厂方法（Factory Method）", "访问者（Visitor）"],
+      answer: 0,
+      opts: [
+        "✓ 模板方法：父类定流程（final 骨架），子类重写若干步骤——『钩子 + 骨架』。",
+        "策略是整个算法可替换，不是骨架+步骤。",
+        "工厂方法只管实例化交给子类。",
+        "访问者管『数据结构稳定、操作多变』。"
+      ],
+      explain: "题眼『固定流程/骨架/步骤由子类实现』→ 模板方法。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §二"
+    },
+    {
+      q: "创建一族相关或相互依赖的产品对象（如『Win 全家桶』与『Mac 全家桶』），是？",
+      options: ["抽象工厂（Abstract Factory）", "工厂方法（Factory Method）", "建造者（Builder）", "适配器（Adapter）"],
+      answer: 0,
+      opts: [
+        "✓ 抽象工厂一个工厂负责一整族产品；增加新『族』容易、增加新『品种』难。",
+        "工厂方法只针对单一产品等级。",
+        "建造者管分步组装。",
+        "适配器管接口转换。"
+      ],
+      explain: "辨析：单个产品→工厂方法；产品族→抽象工厂；分步组装→建造者。",
+      source: "day20-design-patterns.md ｜ Lesson 0026 §一"
+    }
+  ]
+});
+</script>
+</body>
+</html>

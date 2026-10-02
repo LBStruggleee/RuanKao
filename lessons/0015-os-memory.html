@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0015 · OS 内存管理：分页、虚拟内存与置换算法（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0015（OS 回补 · 2/2）</p>
+    <h1>OS 内存管理：分页地址转换、虚拟内存与页面置换</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0014-os-process.html">0014 OS 进程管理</a><br>
+      考点定位：页式地址转换（<strong>必考计算</strong>）、访存次数与 TLB、置换算法缺页次数（<a href="../docs/knowledge-points/os/day02-memory.md">day02-memory.md</a> 交互版）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    两个「算分器」：①页式地址转换三步公式（P=LA÷S 取整、W=LA mod S、物理地址=块号×S+W）——用下面的计算挑战刷到条件反射；②置换算法缺页次数——用模拟器亲眼看 FIFO 怎么触发 Belady 异常（块数变多缺页反而变多）。
+  </div>
+
+  <h2>一、分页存储：把内存切成固定大小的页框</h2>
+  <p>逻辑地址空间切成<strong>页</strong>，物理内存切成同样大小的<strong>块（页框）</strong>，靠<strong>页表</strong>记录「第 i 页 → 第 b 块」。优点：无外部碎片（<a href="0013-day03-os-exercises.html">0013 Q10</a>：只有内部碎片）；缺点：页表本身占内存、多一次访存。</p>
+  <span class="formula">页号 P = 逻辑地址 LA ÷ 页大小 S（取整）　页内偏移 W = LA mod S<br>物理地址 = 块号 × S + W　　（口诀：页式乘、段式加）</span>
+  <p><strong>例</strong>：页大小 1 KB（1024 B），逻辑地址 5000 → P = 5000÷1024 取整 = <strong>4</strong>，W = 5000 mod 1024 = <strong>904</strong>；查页表第 4 页 → 块 8 → 物理地址 = 8×1024+904 = <strong>9224</strong>。页大小是 2 的幂时可直接<strong>二进制切位</strong>：低位 = 偏移，高位 = 页号。</p>
+  <div class="callout warn">
+    <span class="tag">⚠ 对比：段式</span>
+    段式 = <strong>段基址 + 段内偏移</strong>（段长可变、利于共享保护、产生外部碎片）；段页式 = 先分段、段内分页（先查段表再查页表）。
+  </div>
+
+  <h2>二、访存次数与 TLB</h2>
+  <span class="formula">一级页表：2 次访存（查表 1 + 取数 1）｜二级：3 次｜三级：4 次｜<strong>TLB 命中：1 次</strong></span>
+  <ul>
+    <li><strong>TLB（快表）</strong> = <strong>相联存储器</strong>实现的页表项缓存——硬件并行查找，<strong>不算访存</strong>；命中则页框号直接到手。</li>
+    <li><strong>有效访问时间 EAT = h×(t1+t2) + (1−h)×(t1+2t2)</strong>（t1 查表、t2 取数，h 为命中率；二级页表把 t1 展开）。</li>
+    <li>缺页中断是<strong>内部异常</strong>，在<strong>指令执行期间</strong>产生，处理后<strong>重新执行该指令</strong>。</li>
+  </ul>
+
+  <h2>三、虚拟内存与置换算法</h2>
+  <p><strong>虚拟内存</strong>：进程只装部分页面即可运行（依据<strong>局部性原理</strong>）。三特征：<strong>多次性、对换性、虚拟性</strong>。访问不在内存的页 → 缺页 → 从磁盘调入 → 内存满则<strong>置换</strong>一页出去。谁出去？四种算法：</p>
+  <table class="tight">
+    <tr><th>算法</th><th>淘汰谁</th><th>要点</th></tr>
+    <tr><td>OPT 最优</td><td>未来最久不用的页</td><td>理论最低缺页率，<strong>无法实现</strong>（要预知未来），作评价基准</td></tr>
+    <tr><td>FIFO 先进先出</td><td>最早进入的页</td><td><strong>唯一会出现 Belady 异常</strong>（块数变多缺页反而变多）</td></tr>
+    <tr><td>LRU 最近最久未用</td><td>最久未被访问的页</td><td>看「过去」，硬件开销大；<strong>LRU ≠ LFU</strong>（LFU 数次数）</td></tr>
+    <tr><td>Clock（NRU）</td><td>访问位循环扫描</td><td>LRU 的低成本近似</td></tr>
+  </table>
+
+  <h2>四、动手：置换模拟器 + Belady 亲手触发</h2>
+  <div id="pgrep"></div>
+  <div class="callout tip">
+    <span class="tag">💡 观察任务</span>
+    引用串 1,2,3,4,1,2,5,1,2,3,4,5：①FIFO 3 块 → 缺页 <strong>9</strong>；切到 4 块 → 缺页 <strong>10</strong>（点 Belady 对比按钮）——块变多反而更差！②切 LRU 3 块 → 缺页 10，OPT 3 块 → 缺页 7（理论下限）。这三个数字建议背下来，选择题可能原样出现。
+  </div>
+
+  <h2>五、计算挑战（先动笔再填）</h2>
+  <div id="cd15"></div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz15"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>P = LA÷S 取整、W = LA mod S、物理地址 = 块号×S+W（页式乘、段式加）。</li>
+      <li>访存：一级 2、二级 3、三级 4、TLB 命中 1；TLB = 相联存储器；缺页 = 内部异常、指令执行期间。</li>
+      <li>虚拟内存三特征：多次性、对换性、虚拟性；基础 = 局部性原理。</li>
+      <li>置换：OPT 看未来（不可实现）、FIFO 唯一 Belady、LRU 看过去、Clock 近似；经典串 9/10/10/7。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0014-os-process.html">← 上一课 0014 OS 进程管理</a>
+      <a href="0016-network-layers.html">下一课 → 0016 网络分层与协议</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../docs/knowledge-points/os/day02-exercises.md">day02-exercises.md（20 题）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么物理地址要乘页大小」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/page-replacement.js"></script>
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+PageReplacement.mount("pgrep", { ref: "1,2,3,4,1,2,5,1,2,3,4,5", frameOptions: [3, 4] });
+
+CalcDrill.mount("cd15", {
+  title: "地址转换 + EAT 计算挑战",
+  questions: [
+    { text: "页大小 1 KB，逻辑地址 5000 的页号 P = ___", answer: 4, mode: "exact",
+      derive: "P = 5000 ÷ 1024 = 4.88 取整 = 4（1024×4=4096 ≤ 5000 < 5120）。" },
+    { text: "同上，页内偏移 W = ___", answer: 904, mode: "exact",
+      derive: "W = 5000 mod 1024 = 5000 − 4096 = 904。" },
+    { text: "同上，页 4 对应块号 8，物理地址 = ___", answer: 9224, mode: "exact",
+      derive: "物理地址 = 块号 × 页大小 + W = 8 × 1024 + 904 = 9224。" },
+    { text: "二级页表（无快表）访问一次数据需 ___ 次访存", answer: 3, mode: "exact",
+      derive: "查外层页表 1 + 查内层页表 1 + 访问数据 1 = 3 次；TLB 命中则只需 1 次。" },
+    { text: "命中率 h=90%，快表查找 20ns，访存一次 100ns。按 EAT = h×(t1+t2) + (1−h)×(t1+2t2) 计算，EAT = ___ ns（整数）", answer: 130, mode: "exact",
+      derive: "命中：快表 20 + 取数 100 = 120；未命中：快表 20 + 查内存页表 100 + 取数 100 = 220。EAT = 0.9×120 + 0.1×220 = 108 + 22 = 130 ns。" },
+    { text: "引用串 1,2,3,4,1,2,5,1,2,3,4,5 用 OPT（3 块），缺页 ___ 次", answer: 7, mode: "exact",
+      derive: "OPT 淘汰『未来最久不用』的页，7 次是理论下限（模拟器可验证）。" }
+  ]
+});
+
+Quiz.render("quiz15", {
+  title: "本课自查（8 题，先算再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "页式系统中，逻辑地址到物理地址的正确转换是？",
+      options: ["物理地址 = 块号 × 页大小 + 页内偏移", "物理地址 = 页号 × 页大小 + 页内偏移", "物理地址 = 段基址 + 段内偏移", "物理地址 = 块号 + 页内偏移"],
+      answer: 0,
+      opts: [
+        "✓ 页表查出块号，物理地址 = 块号 × 页大小 + W（页内偏移原样搬运）。",
+        "页号是逻辑编号——必须先经页表翻译成块号。",
+        "这是段式的公式（口诀：页式乘、段式加）。",
+        "漏乘页大小：相邻块相差整整一页。"
+      ],
+      explain: "三步：P = LA÷S 取整 → W = LA mod S → 物理地址 = 块号×S + W。",
+      source: "day02-memory.md §3 ｜ Lesson 0015 §一"
+    },
+    {
+      q: "分页存储管理产生的碎片是？",
+      options: ["内部碎片（最后一页装不满）", "外部碎片", "无任何碎片", "内部+外部碎片"],
+      answer: 0,
+      opts: [
+        "✓ 页框固定大小，最后一页往往装不满——页框内部浪费即内部碎片。",
+        "外部碎片是可变分配（动态分区、分段）的产物。",
+        "『无碎片』只有理想压缩后才成立。",
+        "分页不产生外部碎片（离散分配不切空闲区）。"
+      ],
+      explain: "判别口诀：固定划分 → 内部碎片；可变划分 → 外部碎片。",
+      source: "day02-memory.md §2 ｜ Lesson 0013 Q10"
+    },
+    {
+      q: "引入快表（TLB）后，页在快表中命中时的访存次数是？",
+      options: ["1 次", "2 次", "3 次", "0 次"],
+      answer: 0,
+      opts: [
+        "✓ TLB 是相联存储器、硬件级查找不算访存；页框号直接到手，只访问数据 1 次。",
+        "2 次是 TLB 未命中时一级页表的开销。",
+        "3 次对应二级页表未命中。",
+        "数据总要真的读一次内存。"
+      ],
+      explain: "EAT = h×(t1+t2) + (1−h)×(t1+2t2)（一级页表）；命中分支里只有 t2。",
+      source: "day02-memory.md §3.5 ｜ Lesson 0015 §二"
+    },
+    {
+      q: "缺页中断的性质是？",
+      options: ["内部异常，在指令执行期间产生", "外部硬件中断", "系统调用（访管中断）", "时钟中断的一种"],
+      answer: 0,
+      opts: [
+        "✓ 执行指令访问缺页时触发 → 内部异常；处理完要重新执行被中断的那条指令。",
+        "它是程序执行引发的异常，不是外部设备中断。",
+        "访管是主动系统调用，另一类。",
+        "时钟中断由定时器产生，与缺页无关。"
+      ],
+      explain: "三特征：内部异常 / 指令执行期间 / 处理后重执行该指令。",
+      source: "day02-memory.md §6 ｜ Lesson 0015 §二"
+    },
+    {
+      q: "虚拟内存的三个主要特征是？",
+      options: ["多次性、对换性、虚拟性", "一次性、常驻性、共享性", "并发性、共享性、虚拟性", "局部性、顺序性、随机性"],
+      answer: 0,
+      opts: [
+        "✓ 作业分多次调入（多次性）、内存不满可换出（对换性）、逻辑容量大于物理容量（虚拟性）。",
+        "虚拟内存恰恰反对『一次性整体装入』。",
+        "并发/共享是操作系统的整体特征，不是虚拟内存三特征。",
+        "局部性是它的『原理基础』，不是特征本身。"
+      ],
+      explain: "实现依据：局部性原理（时间局部性 + 空间局部性）。",
+      source: "day02-memory.md §5 ｜ Lesson 0015 §三"
+    },
+    {
+      q: "会出现 Belady 异常（块数增多、缺页反而增多）的算法是？",
+      options: ["FIFO", "LRU", "OPT", "Clock"],
+      answer: 0,
+      opts: [
+        "✓ FIFO 只记进入顺序，与访问历史无关——经典反例 3 块缺 9 次、4 块缺 10 次。",
+        "LRU 是栈式算法，块多缺页单调不增。",
+        "OPT 是理论最优，永远不会 Belady。",
+        "Clock 是 LRU 的近似，同样栈式。"
+      ],
+      explain: "经典数字：引用串 1,2,3,4,1,2,5,1,2,3,4,5 下 FIFO 3块=9、4块=10（模拟器一键复现）。",
+      source: "day02-memory.md §7 ｜ Lesson 0015 §三、§四"
+    },
+    {
+      q: "LRU 与 LFU 的区别，正确的是？",
+      options: ["LRU 淘汰最久未访问的页，LFU 淘汰访问次数最少的页", "两者完全相同", "LRU 看未来，LFU 看过去", "LFU 是 Clock 的别名"],
+      answer: 0,
+      opts: [
+        "✓ LRU 比的是『上一次访问距今多久』，LFU 比的是『访问总次数』——一个看新旧、一个看频次。",
+        "看新旧 vs 看频次，淘汰对象常常不同。",
+        "看未来的是 OPT。",
+        "Clock 是 LRU 的近似实现。"
+      ],
+      explain: "考试爱用『很久前频繁访问 vs 刚访问过一次』的例子区分两者。",
+      source: "day02-memory.md §7 ｜ Lesson 0015 §三"
+    },
+    {
+      q: "段式存储管理的正确说法是？",
+      options: ["物理地址 = 段基址 + 段内偏移，利于共享保护", "与页式完全一样乘页大小", "无外部碎片", "段长固定不可变"],
+      answer: 0,
+      opts: [
+        "✓ 段表存『基址 + 段长』，物理地址 = 基址 + 偏移；段是逻辑单位（代码段/数据段），便于共享与保护。",
+        "『乘』是页式；段式是加（页式乘、段式加）。",
+        "段长可变，空闲区被切碎 → 有外部碎片。",
+        "段按逻辑意义划分，长短不一。"
+      ],
+      explain: "段页式 = 先分段再段内分页：先查段表得页表基址，再查页表得块号。",
+      source: "day02-memory.md §2 ｜ Lesson 0015 §一"
+    }
+  ]
+});
+</script>
+</body>
+</html>

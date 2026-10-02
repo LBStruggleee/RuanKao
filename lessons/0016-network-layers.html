@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0016 · 计算机网络：分层模型与协议归属（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0016（计算机网络 · 1/3）</p>
+    <h1>分层模型与协议归属：把协议放对楼层</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0015-os-memory.html">0015 OS 内存管理</a><br>
+      考点定位：OSI/TCP-IP 对照、协议层级归属（<a href="../docs/knowledge-points/networks/day04-protocols.md">day04-protocols.md</a>，20 题里 12 道层级判断）、设备所在层
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    网络第一题永远是「某某协议/设备在第几层」。背下一张归属总表 + 三个高频陷阱（<strong>ARP 在网际层、ICMP 在网络层、端口在 TCP/UDP 头部</strong>），这部分分就稳了。
+  </div>
+
+  <h2>一、两层楼对照：OSI 七层 vs TCP/IP 四层</h2>
+  <table class="tight">
+    <tr><th>OSI 七层</th><th>TCP/IP 四层</th><th>干什么（一句话）</th><th>代表协议/设备</th></tr>
+    <tr><td>7 应用</td><td rowspan="3">4 应用</td><td>给用户软件用的接口</td><td>HTTP/FTP/SMTP/DNS/Telnet/SNMP</td></tr>
+    <tr><td>6 表示</td><td>格式转换、加密压缩</td><td>（JPEG/加密在此概念层）</td></tr>
+    <tr><td>5 会话</td><td>建立/管理/终止会话</td><td>（RPC/SQL 会话概念）</td></tr>
+    <tr><td>4 传输</td><td>3 传输</td><td>端到端可靠/不可靠传输</td><td><strong>TCP / UDP</strong>（端口在这层）</td></tr>
+    <tr><td>3 网络</td><td>2 网际</td><td>路由选路、逻辑地址</td><td><strong>IP/ICMP/ARP/RARP/IGMP</strong>；路由器</td></tr>
+    <tr><td>2 数据链路</td><td rowspan="2">1 网络接口</td><td>成帧、MAC 寻址、差错检测</td><td>以太网/PPP；<strong>交换机、网桥</strong></td></tr>
+    <tr><td>1 物理</td><td>比特流上媒介</td><td>网线/光纤；<strong>中继器、集线器 Hub</strong></td></tr>
+  </table>
+  <p>数据发送时逐层<strong>封装</strong>（加头部），接收时逐层<strong>解封装</strong>——顺序：应用 → 传输(段) → 网际(包) → 链路(帧) → 物理(比特)。</p>
+
+  <h2>二、归属总表（必背，按楼层背）</h2>
+  <table class="tight">
+    <tr><th>层</th><th>协议（全称顺一遍）</th><th>记忆锚点</th></tr>
+    <tr><td>应用</td><td>HTTP 万维网 / FTP 20+21 文件 / SMTP 25 发邮件 / POP3 110 收邮件 / DNS 53 域名→IP / Telnet 23 远程登录 / SNMP 161 网管 / DHCP 67-68 自动分配 IP / TFTP 69 简单文件</td><td>「上网收发找名字，远程网管自动配」</td></tr>
+    <tr><td>传输</td><td><strong>TCP</strong> 可靠连接 / <strong>UDP</strong> 无连接快速</td><td>端口（0–65535）装在 TCP/UDP 头部</td></tr>
+    <tr><td>网际/网络</td><td><strong>IP</strong> 寻址 / <strong>ICMP</strong> 差错报告（ping 用它）/ <strong>ARP</strong> IP→MAC / RARP MAC→IP / IGMP 组播</td><td><em>ARP/ICMP 都在网际层，不在应用层！</em></td></tr>
+    <tr><td>数据链路</td><td>以太网 Ethernet / PPP / VLAN(802.1Q) / CSMA/CD</td><td>MAC 地址 48 位</td></tr>
+    <tr><td>物理</td><td>RJ45 / 光纤 / 比特流</td><td>只管信号</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 三个高频陷阱</span>
+    ① <strong>ARP 在网际层</strong>（不是应用层）——它服务于 IP 到 MAC 的解析；② <strong>ICMP 在网络层</strong>（ping 是应用但承载它的 ICMP 在网络层）；③ <strong>端口号在传输层 TCP/UDP 首部</strong>（不在 IP 头部）。
+  </div>
+
+  <h2>三、设备在几层（一个判断口诀）</h2>
+  <p>看设备「读到了哪一层地址」：<strong>只转发电信号 = 物理（中继器/Hub）；认 MAC = 数据链路（交换机/网桥）；认 IP = 网络（路由器）；还要管应用内容 = 网关/应用层防火墙</strong>。</p>
+
+  <h2>四、自查（全对过课）</h2>
+  <div id="quiz16"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>OSI 七层 ↔ TCP/IP 四层对照；发送封装、接收解封装。</li>
+      <li>应用层协议背端口号：FTP 21/SMTP 25/DNS 53/HTTP 80/HTTPS 443/Telnet 23/POP3 110/SNMP 161。</li>
+      <li>三个陷阱：<strong>ARP 网际层、ICMP 网络层、端口在传输层头部</strong>。</li>
+      <li>设备按「读到哪层地址」归层：Hub 物理、交换机链路、路由器网络。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0015-os-memory.html">← 上一课 0015 OS 内存管理</a>
+      <a href="0017-tcp-subnet.html">下一课 → 0017 TCP 与子网划分</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../docs/knowledge-points/networks/day04-exercises.md">day04-exercises.md（20 题，12 道层级判断）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么 ARP 不是应用层」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz16", {
+  title: "本课自查（8 题，全对过课）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "ARP 协议工作在 TCP/IP 模型的哪一层？",
+      options: ["网际层", "应用层", "传输层", "网络接口层"],
+      answer: 0,
+      opts: [
+        "✓ ARP 把 IP 解析成 MAC，服务于网际层的 IP 寻址——教材口径归【网际层】（高频陷阱！）。",
+        "『看起来像应用』是陷阱——解析结果供 IP 使用，不在应用层。",
+        "端口才是传输层的事，ARP 没有端口。",
+        "它在网络接口层之上、为 IP 服务，归属网际层。"
+      ],
+      explain: "三陷阱之首：ARP = 网际层；ICMP = 网络层；端口 = 传输层。",
+      source: "day04-protocols.md ｜ Lesson 0016 §二"
+    },
+    {
+      q: "ping 命令用到的协议是？它位于？",
+      options: ["ICMP，网络层", "ARP，网际层", "UDP，传输层", "SMTP，应用层"],
+      answer: 0,
+      opts: [
+        "✓ ping 利用 ICMP 的回显请求/应答测试连通性，ICMP 属网络层。",
+        "ARP 负责 IP→MAC 解析，与 ping 无关。",
+        "ping 不用 UDP 端口。",
+        "SMTP 是发邮件的。"
+      ],
+      explain: "『ping = ICMP 回显』是网络层题的送分点。",
+      source: "day04-protocols.md ｜ Lesson 0016 §二"
+    },
+    {
+      q: "端口号（如 80、21）封装在哪个位置？",
+      options: ["TCP/UDP 首部", "IP 首部", "以太网帧头", "应用数据里"],
+      answer: 0,
+      opts: [
+        "✓ 端口标识『进程到进程』的通信，由传输层 TCP/UDP 首部携带。",
+        "IP 首部装的是 IP 地址与协议号，没有端口。",
+        "帧头是 MAC 地址。",
+        "端口是传输层的正式字段，不是应用自己约定的位置。"
+      ],
+      explain: "传输层两大职责：端口复用分用 + 可靠/不可靠传输。",
+      source: "day04-protocols.md ｜ Lesson 0016 §一"
+    },
+    {
+      q: "交换机（Switch）工作在 OSI 的？",
+      options: ["数据链路层", "物理层", "网络层", "传输层"],
+      answer: 0,
+      opts: [
+        "✓ 交换机按 MAC 地址表转发帧——读到链路层地址。",
+        "只放大转发信号的是集线器/中继器（物理层）。",
+        "按 IP 转发的是路由器（网络层）。",
+        "交换机不看端口号。"
+      ],
+      explain: "口诀：Hub 物理、交换机链路、路由器网络。",
+      source: "day04-protocols.md ｜ Lesson 0016 §三"
+    },
+    {
+      q: "下列协议中，属于应用层的是？",
+      options: ["SNMP", "ARP", "ICMP", "TCP"],
+      answer: 0,
+      opts: [
+        "✓ SNMP（简单网络管理协议）是应用层协议（端口 161）。",
+        "ARP 在网际层（高频陷阱）。",
+        "ICMP 在网络层（高频陷阱）。",
+        "TCP 是传输层协议本体。"
+      ],
+      explain: "应用层全家桶：HTTP/FTP/SMTP/POP3/DNS/Telnet/SNMP/DHCP/TFTP。",
+      source: "day04-protocols.md ｜ Lesson 0016 §二"
+    },
+    {
+      q: "SMTP 的默认端口号是？",
+      options: ["25", "23", "53", "110"],
+      answer: 0,
+      opts: [
+        "✓ SMTP 发邮件 = 25；顺带：POP3 收邮件 = 110。",
+        "23 是 Telnet 远程登录。",
+        "53 是 DNS。",
+        "110 是 POP3。"
+      ],
+      explain: "背端口号速记：21 FTP、23 Telnet、25 SMTP、53 DNS、80 HTTP、110 POP3、161 SNMP、443 HTTPS。",
+      source: "day04-protocols.md ｜ Lesson 0016 §二"
+    },
+    {
+      q: "数据发送方自上而下的封装顺序是？",
+      options: ["应用 → 传输 → 网际 → 网络接口", "网络接口 → 网际 → 传输 → 应用", "传输 → 应用 → 网际 → 网络接口", "网际 → 传输 → 应用 → 网络接口"],
+      answer: 0,
+      opts: [
+        "✓ 发送端逐层加头（封装）：应用数据 → TCP/UDP 段 → IP 包 → 帧 → 比特。",
+        "那是接收方解封装的方向。",
+        "顺序错乱。",
+        "顺序错乱。"
+      ],
+      explain: "接收方反之自下而上逐层去头（解封装）。",
+      source: "day04-protocols.md ｜ Lesson 0016 §一"
+    },
+    {
+      q: "在 OSI 参考模型中，负责『格式转换与加密压缩』的是？",
+      options: ["表示层", "会话层", "应用层", "传输层"],
+      answer: 0,
+      opts: [
+        "✓ 表示层：数据格式转换、加密/解密、压缩——『翻译官』。",
+        "会话层管会话建立与终止。",
+        "应用层是用户接口，不管编码细节。",
+        "传输层管端到端传输。"
+      ],
+      explain: "OSI 上三层记忆：应用（用）、表示（翻译）、会话（开场收场）。",
+      source: "day04-protocols.md ｜ Lesson 0016 §一"
+    }
+  ]
+});
+</script>
+</body>
+</html>

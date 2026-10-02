@@ -13,11 +13,30 @@
     - [0008 查找：折半与哈希](lessons/0008-searching.html)
     - [0009 排序总表](lessons/0009-sorting.html)
     - [🏁 出关测试：30 题诊断卷](docs/knowledge-points/data-structures/day01-diagnostic.md)
-  - 操作系统回补
+  - 操作系统
     - [0010 磁盘是怎么工作的（先修）](lessons/0010-disk-foundation.html)
     - [0011 磁盘调度](lessons/0011-disk-scheduling.html)
     - [0012 文件系统与索引计算](lessons/0012-file-system-structures.html)
     - [0013 OS 综合练习卷 25 题](lessons/0013-day03-os-exercises.html)
+    - [0014 进程管理：状态与 PV](lessons/0014-os-process.html)
+    - [0015 内存管理：分页与置换](lessons/0015-os-memory.html)
+  - 计算机网络
+    - [0016 分层模型与协议归属](lessons/0016-network-layers.html)
+    - [0017 TCP 与子网划分](lessons/0017-tcp-subnet.html)
+    - [0018 信息安全](lessons/0018-security.html)
+  - 数据库
+    - [0019 关系代数与 SQL](lessons/0019-relational-sql.html)
+    - [0020 范式与 E-R 图](lessons/0020-normalization-er.html)
+  - 计算机组成
+    - [0021 CPU、寻址与流水线](lessons/0021-cpu-pipeline.html)
+    - [0022 Cache 与总线](lessons/0022-cache-bus.html)
+  - 软件工程
+    - [0023 过程模型与 DFD](lessons/0023-process-models.html)
+    - [0024 测试与 McCabe](lessons/0024-testing.html)
+    - [0025 UML：十三图与六关系](lessons/0025-uml.html)
+  - 设计模式与保底
+    - [0026 设计模式](lessons/0026-design-patterns.html)
+    - [0027 保底专项：法规·标准·多媒体·英语](lessons/0027-bonus.html)
 
 - **📓 错题本**
   - [作答记录与错题整理](reference/mistake-notebook.html)

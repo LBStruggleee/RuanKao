@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0025 · UML：十三图与类间六关系（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0025（软件工程 · 3/3）</p>
+    <h1>UML：十三图 + 类间六关系「依关聚组泛实」</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0024-testing.html">0024 测试与 McCabe</a><br>
+      考点定位：13 图分类、类间六关系判别、include/extend 箭头方向（<a href="../docs/knowledge-points/software-engineering/day17-uml.md">day17-uml.md</a>，下午试题三大题）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    类间六关系口诀「<strong>依关聚组泛实</strong>」（依赖/关联/聚合/组合/泛化/实现），判别口诀看「能不能活」；用例图 include/extend 的<strong>箭头方向相反</strong>是每年一考的送分题。
+  </div>
+
+  <h2>一、13 图分类（静态看结构、动态看行为）</h2>
+  <table class="tight">
+    <tr><th>静态图（结构）</th><th>动态图（行为）</th></tr>
+    <tr><td><strong>类图</strong>、对象图、构件图、部署图、包图、组合结构图、制品图</td><td><strong>用例图</strong>、<strong>顺序图</strong>、通信图、<strong>状态图</strong>、<strong>活动图</strong>、定时图、交互概览图</td></tr>
+  </table>
+  <ul>
+    <li><strong>用例图</strong>：参与者 + 用例 + 关系（下午大题第一问常考补用例名）。</li>
+    <li><strong>顺序图</strong>：按时间竖排消息；同步消息实心三角箭头、异步开放箭头、返回虚线；对象下有生命线与激活条。</li>
+    <li><strong>状态图</strong>：单个对象的状态变迁（状态→事件/动作→状态）；<strong>活动图</strong>：跨对象的工作流，有<strong>泳道</strong>、分叉汇合，类似流程图但描述的是行为流转。</li>
+  </ul>
+
+  <h2>二、类间六关系「依关聚组泛实」（强度从弱到强）</h2>
+  <table class="tight">
+    <tr><th>关系</th><th>含义</th><th>判别口诀</th><th>UML 记号</th></tr>
+    <tr><td>依赖</td><td>临时用一下（参数、局部变量）</td><td>『用完就走』</td><td>虚线箭头</td></tr>
+    <tr><td>关联</td><td>长期知道对方（成员变量）</td><td>『长期认识』</td><td>实线（可有箭头/多重性 1..*）</td></tr>
+    <tr><td>聚合 Aggregation</td><td>整体-部分，<strong>部分能独立存在</strong></td><td>『部门走了员工还在』</td><td>空心菱形（在整体端）</td></tr>
+    <tr><td>组合 Composition</td><td>整体-部分，<strong>同生共死</strong></td><td>『公司没了部门也没了』</td><td>实心菱形（在整体端）</td></tr>
+    <tr><td>泛化 Generalization</td><td>继承，is-a</td><td>『老虎是动物』</td><td>空心三角实线（指向父类）</td></tr>
+    <tr><td>实现 Realization</td><td>实现接口，can-do</td><td>『实现接口的承诺』</td><td>空心三角虚线（指向接口）</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 聚合 vs 组合（最易混）</span>
+    问一句「部分能离开整体独立存在吗」：能 → <strong>聚合</strong>（空心菱形）；不能（同生共死）→ <strong>组合</strong>（实心菱形）。菱形永远画在<strong>整体端</strong>。
+  </div>
+
+  <h2>三、用例图的 include / extend（方向相反！）</h2>
+  <table class="tight">
+    <tr><th></th><th>include 包含</th><th>extend 扩展</th></tr>
+    <tr><td>语义</td><td>基用例<strong>必然</strong>执行被包含用例（公共子流程抽取）</td><td>扩展用例<strong>可选</strong>地插入基用例（异常/可选流程）</td></tr>
+    <tr><td>箭头</td><td>基用例 ──«include»──▶ 被包含用例</td><td><strong>扩展用例</strong> ──«extend»──▶ <strong>基用例</strong></td></tr>
+  </table>
+  <p>记忆：<strong>include 从基指向被包含（必经之路）；extend 从扩展指回基（可选插曲）——两者方向相反</strong>，这是用例图最高频的一分。</p>
+
+  <h2>四、自查（全对过课）</h2>
+  <div id="quiz25"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>13 图分静态（类/对象/构件/部署/包…）与动态（用例/顺序/状态/活动…）。</li>
+      <li>六关系「依关聚组泛实」：强度递增；<strong>聚合空心菱形（可独立）、组合实心菱形（同生共死）</strong>，菱形在整体端。</li>
+      <li>泛化实线空心三角（is-a）、实现虚线空心三角（接口）。</li>
+      <li>include 基→被包含（必执行）；extend 扩展→基（可选）——<strong>方向相反</strong>。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0024-testing.html">← 上一课 0024 测试与 McCabe</a>
+      <a href="0026-design-patterns.html">下一课 → 0026 设计模式</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../docs/knowledge-points/software-engineering/day17-exercises.md">day17-exercises.md（25 题）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「菱形画在哪端」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz25", {
+  title: "本课自查（8 题，全对过课）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "『汽车』与『发动机』之间的关系是？",
+      options: ["组合（同生共死，实心菱形）", "聚合（空心菱形）", "泛化", "依赖"],
+      answer: 0,
+      opts: [
+        "✓ 发动机是汽车的组成部分，随汽车整体存在——同生共死 → 组合，实心菱形画在汽车端。",
+        "聚合要求部分能独立存在（如部门与员工）。",
+        "泛化是继承 is-a，汽车不是发动机。",
+        "依赖是临时使用关系。"
+      ],
+      explain: "判别口诀：部分能否独立存在——不能 → 组合（实心菱形）。",
+      source: "day17-uml.md §2 ｜ Lesson 0025 §二"
+    },
+    {
+      q: "『部门』与『员工』（员工可调入其他部门）的关系是？",
+      options: ["聚合（空心菱形）", "组合（实心菱形）", "实现", "关联无整体部分义"],
+      answer: 0,
+      opts: [
+        "✓ 员工能离开部门独立存在（调岗不消失）→ 整体-部分但可分离 → 聚合，空心菱形。",
+        "组合要求同生共死——员工不是部门的一部分生命。",
+        "实现针对接口。",
+        "两者确有整体-部分语义，聚合更精确。"
+      ],
+      explain: "菱形口诀：能独立→空心聚合；同生共死→实心组合。",
+      source: "day17-uml.md §2 ｜ Lesson 0025 §二"
+    },
+    {
+      q: "类 A 实现了接口 B，正确的 UML 表示是？",
+      options: ["虚线 + 空心三角箭头指向 B", "实线 + 空心三角箭头指向 B", "实心菱形指向 B", "虚线箭头指向 B"],
+      answer: 0,
+      opts: [
+        "✓ 实现 = 虚线 + 空心三角（指向接口）；泛化 = 实线 + 空心三角（指向父类）——线型是分界。",
+        "实线空心三角是泛化（继承）。",
+        "实心菱形是组合。",
+        "虚线普通箭头是依赖。"
+      ],
+      explain: "三角箭头指向『被继承/被实现的抽象』；实线泛化、虚线实现。",
+      source: "day17-uml.md §2 ｜ Lesson 0025 §二"
+    },
+    {
+      q: "用例图中，『登录』必然执行『验证密码』，两者的关系应表示为？",
+      options: ["登录 ─«include»→ 验证密码", "验证密码 ─«extend»→ 登录", "泛化关系", "组合关系"],
+      answer: 0,
+      opts: [
+        "✓ 必然执行的公共子流程用 include：从基用例（登录）指向被包含用例（验证密码）。",
+        "extend 是可选流程，且箭头方向相反（扩展→基）。",
+        "用例之间不用泛化/继承表达包含。",
+        "用例图没有组合。"
+      ],
+      explain: "include = 必经之路；extend = 可选插曲——两者箭头方向相反。",
+      source: "day17-uml.md §3 ｜ Lesson 0025 §三"
+    },
+    {
+      q: "关于 extend 关系，正确的是？",
+      options: ["箭头从扩展用例指向基用例，扩展可选执行", "箭头从基用例指向扩展用例", "扩展必须每次都执行", "extend 等价于 include"],
+      answer: 0,
+      opts: [
+        "✓ 扩展用例在特定条件下插入基用例——箭头由『扩展』指回『基』，方向与 include 相反。",
+        "那是 include 的方向。",
+        "必执行的是 include；extend 恰恰是可选。",
+        "两者方向与语义都相反，是最经典考点。"
+      ],
+      explain: "背这句：include 必经、extend 可选；include 基→被包含、extend 扩展→基。",
+      source: "day17-uml.md §3 ｜ Lesson 0025 §三"
+    },
+    {
+      q: "顺序图中，同步消息的表示是？",
+      options: ["实心三角箭头", "开放（普通）箭头", "虚线箭头", "双线箭头"],
+      answer: 0,
+      opts: [
+        "✓ 同步消息（等待返回才继续）= 实心三角；异步 = 开放箭头；返回 = 虚线。",
+        "开放箭头是异步消息。",
+        "虚线是返回消息。",
+        "无此记号。"
+      ],
+      explain: "顺序图三箭头：实心三角同步、开放异步、虚线返回。",
+      source: "day17-uml.md §4 ｜ Lesson 0025 §一"
+    },
+    {
+      q: "描述单个对象在事件触发下的状态变迁，应使用？",
+      options: ["状态图", "活动图", "用例图", "部署图"],
+      answer: 0,
+      opts: [
+        "✓ 状态图：状态 + 事件触发的转换——描述一个对象的生命周期行为。",
+        "活动图描述跨对象的工作流（有泳道/分叉汇合）。",
+        "用例图描述系统功能与参与者。",
+        "部署图是静态的硬件拓扑。"
+      ],
+      explain: "配对：单对象状态变迁→状态图；跨对象流程→活动图。",
+      source: "day17-uml.md §5 ｜ Lesson 0025 §一"
+    },
+    {
+      q: "UML 中属于静态图（结构图）的是？",
+      options: ["类图", "顺序图", "活动图", "状态图"],
+      answer: 0,
+      opts: [
+        "✓ 类图描述类的结构与类间关系——静态结构图之王（也是考频最高的 UML 图）。",
+        "顺序图是动态交互图。",
+        "活动图是动态行为图。",
+        "状态图是动态行为图。"
+      ],
+      explain: "分类口诀：静态=类/对象/构件/部署/包；动态=用例/顺序/通信/状态/活动。",
+      source: "day17-uml.md §1 ｜ Lesson 0025 §一"
+    }
+  ]
+});
+</script>
+</body>
+</html>

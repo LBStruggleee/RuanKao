@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0024 · 测试与 McCabe：黑盒白盒 + 圈复杂度（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0024（软件工程 · 2/3）</p>
+    <h1>测试与 McCabe：覆盖六级 + 圈复杂度三算</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0023-process-models.html">0023 过程模型与 DFD</a><br>
+      考点定位：黑盒三法、白盒覆盖六级、<strong>McCabe 圈复杂度 V=E−N+2</strong>（必考计算，<a href="../docs/knowledge-points/software-engineering/day13-test.md">day13-test.md</a>）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    一句定位词分清测试类型（单元/集成/系统/验收、黑盒看功能白盒看结构），六级覆盖按强度排序，<strong>McCabe 三个公式互相换算</strong>：V = E − N + 2 = 判定节点数 + 1 = 封闭区域数。
+  </div>
+
+  <h2>一、测试分类（一句定位词）</h2>
+  <table class="tight">
+    <tr><th>阶段</th><th>谁来做</th><th>定位词</th></tr>
+    <tr><td>单元测试</td><td>开发者</td><td>单个模块；常用<strong>白盒</strong>；需要驱动/桩模块</td></tr>
+    <tr><td>集成测试</td><td>开发者/测试</td><td>模块拼起来；接口；自顶向下需<strong>桩模块</strong>、自底向上需<strong>驱动模块</strong></td></tr>
+    <tr><td>系统测试</td><td>独立测试</td><td>整个系统（性能/安全/恢复…）</td></tr>
+    <tr><td>验收测试</td><td>用户主导</td><td>Alpha 在开发方场地、Beta 在用户实际环境</td></tr>
+  </table>
+  <p><strong>黑盒（功能）三法</strong>：<strong>等价类</strong>（有效+无效类各取代表）、<strong>边界值</strong>（在等价类边界多测一发——最易出错的点）、因果图（条件组合）。<strong>白盒（结构）</strong>：逻辑覆盖，见下。</p>
+
+  <h2>二、白盒覆盖六级（由弱到强）</h2>
+  <span class="formula">语句 ⊂ 判定 ⊂ 条件/判定-条件 ⊂ 条件组合 ⊂ 路径</span>
+  <table class="tight">
+    <tr><th>覆盖</th><th>要求</th><th>记忆</th></tr>
+    <tr><td>语句覆盖</td><td>每条语句至少执行一次</td><td>最弱</td></tr>
+    <tr><td>判定覆盖（分支）</td><td>每个判定的真/假分支各走一次</td><td>比语句强</td></tr>
+    <tr><td>条件覆盖</td><td>每个<strong>原子条件</strong>真假各一次</td><td><em>不保证判定覆盖</em>（条件都对但判定结果可能同向）</td></tr>
+    <tr><td>判定-条件覆盖</td><td>判定 + 条件都满足</td><td>两者合体</td></tr>
+    <tr><td>条件组合覆盖</td><td>每个判定内条件取值组合全覆盖</td><td>组合爆炸</td></tr>
+    <tr><td>路径覆盖</td><td>所有可能路径</td><td>最强、通常不可行</td></tr>
+  </table>
+
+  <h2>三、McCabe 圈复杂度 V(G)（必考计算）</h2>
+  <span class="formula">V(G) = E − N + 2（边−节点+2） = 判定节点数 + 1 = 封闭区域数</span>
+  <ul>
+    <li>控制流图化简：顺序语句合并成一个节点；<strong>if/while/for 每个判定算 1 个判定节点</strong>；case 分支按判定算。</li>
+    <li><strong>V(G) = 线性独立路径数</strong>（再新增一条边都必是新路径）；经验值 V ≤ 10 为宜。</li>
+    <li>例：两个串联 if 的程序：E=6、N=5 → V = 6−5+2 = <strong>3</strong>；用判定数验证：2 个判定 + 1 = 3 ✓。</li>
+  </ul>
+
+  <h2>四、自查（先画图数一遍再点）</h2>
+  <div id="quiz24"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>测试定位：单元白盒、验收用户主导（Alpha/Beta）；集成自顶向下用桩、自底向上用驱动。</li>
+      <li>黑盒三法：等价类/边界值/因果图；白盒六级：语句→判定→条件→判定-条件→条件组合→路径。</li>
+      <li>条件覆盖<strong>不保证</strong>判定覆盖。</li>
+      <li><strong>V = E−N+2 = 判定数+1 = 区域数</strong> = 独立路径数。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0023-process-models.html">← 上一课 0023 过程模型与 DFD</a>
+      <a href="0025-uml.html">下一课 → 0025 UML 十三图与类关系</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../docs/knowledge-points/software-engineering/day13-exercises.md">day13-exercises.md（20 题 + 3 道独立路径计算）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「条件覆盖为什么会漏判定」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz24", {
+  title: "本课自查（8 题，先画图再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "McCabe 圈复杂度 V(G) 的公式是？",
+      options: ["V = E − N + 2", "V = N − E + 2", "V = E + N − 2", "V = E × N / 2"],
+      answer: 0,
+      opts: [
+        "✓ 边数 − 节点数 + 2；等价于『判定节点数 + 1』和『封闭区域数』。",
+        "符号反了会出负数。",
+        "加减号都不对。",
+        "没有这种公式。"
+      ],
+      explain: "三算互验：E−N+2 = 判定+1 = 区域数——两两一致才算对。",
+      source: "day13-test.md §4 ｜ Lesson 0024 §三"
+    },
+    {
+      q: "一个程序有 2 个 if 判定节点、无循环。它的 V(G) 是？",
+      options: ["3", "2", "4", "1"],
+      answer: 0,
+      opts: [
+        "✓ V = 判定节点数 + 1 = 2 + 1 = 3（3 条线性独立路径）。",
+        "2 是判定数本身，忘了 +1。",
+        "4 多加了。",
+        "1 表示无判定。"
+      ],
+      explain: "V(G) = 独立路径数：V=3 意味着最多再补 2 条用例即可覆盖全部独立路径。",
+      source: "day13-test.md §4 ｜ Lesson 0024 §三"
+    },
+    {
+      q: "白盒覆盖中，最弱的标准是？",
+      options: ["语句覆盖", "判定覆盖", "条件组合覆盖", "路径覆盖"],
+      answer: 0,
+      opts: [
+        "✓ 语句覆盖只保证『每行跑到过』，连分支都未必走全——最弱。",
+        "判定覆盖要求真假分支各一次，强于语句。",
+        "条件组合接近最强。",
+        "路径覆盖最强。"
+      ],
+      explain: "强度链：语句 < 判定 ≤ 条件/判定-条件 < 条件组合 ≤ 路径。",
+      source: "day13-test.md §3 ｜ Lesson 0024 §二"
+    },
+    {
+      q: "关于条件覆盖，正确的说法是？",
+      options: ["满足条件覆盖不一定满足判定覆盖", "条件覆盖必然包含判定覆盖", "条件覆盖强于路径覆盖", "条件覆盖要求每个判定真假各一次"],
+      answer: 0,
+      opts: [
+        "✓ 反例：a>0 与 b>0 都测了真假，但可能每次都凑成同一判定结果——判定的另一分支没走到。",
+        "『必然包含』恰是它的经典误区。",
+        "路径覆盖才是最强。",
+        "那是判定覆盖的定义。"
+      ],
+      explain: "正因如此才有『判定-条件覆盖』把两者合并。",
+      source: "day13-test.md §3 ｜ Lesson 0024 §二"
+    },
+    {
+      q: "自顶向下集成测试需要编写？",
+      options: ["桩模块（Stub）", "驱动模块（Driver）", "Alpha 环境", "Beta 用户"],
+      answer: 0,
+      opts: [
+        "✓ 自顶向下：上层先测，下层未完成 → 用桩模块替身应答。",
+        "驱动模块是自底向上测试时调用下层模块的『临时主程序』。",
+        "Alpha 是验收测试的场地类型。",
+        "Beta 是用户实际环境验收。"
+      ],
+      explain: "配对：自顶向下→桩（假装下属）；自底向上→驱动（假装领导）。",
+      source: "day13-test.md §2 ｜ Lesson 0024 §一"
+    },
+    {
+      q: "黑盒测试方法不包括？",
+      options: ["路径覆盖", "等价类划分", "边界值分析", "因果图"],
+      answer: 0,
+      opts: [
+        "✓ 路径覆盖要看代码结构 → 白盒；黑盒只看输入输出。",
+        "等价类是黑盒第一法。",
+        "边界值在等价类边界补测，黑盒经典。",
+        "因果图把条件组合映射成动作，黑盒三法之一。"
+      ],
+      explain: "黑盒三法：等价类 / 边界值 / 因果图（+错误推测）。",
+      source: "day13-test.md §2 ｜ Lesson 0024 §一"
+    },
+    {
+      q: "由用户在开发方场地进行的验收测试称为？",
+      options: ["Alpha 测试", "Beta 测试", "系统测试", "回归测试"],
+      answer: 0,
+      opts: [
+        "✓ Alpha = 用户在开发方场地、开发方指导下测；Beta = 用户在自己实际环境测。",
+        "Beta 是用户自己的环境。",
+        "系统测试由独立测试团队做，不是验收。",
+        "回归测试是改代码后重跑既有用例。"
+      ],
+      explain: "配对：Alpha 开发方场地 / Beta 用户环境。",
+      source: "day13-test.md §2 ｜ Lesson 0024 §一"
+    },
+    {
+      q: "等价类划分测试时，应当选取？",
+      options: ["有效等价类和无效等价类的代表值都测", "只测有效等价类", "只测无效等价类", "测所有可能取值"],
+      answer: 0,
+      opts: [
+        "✓ 有效类证明『能对』，无效类证明『能拒』——两头都要有代表上场。",
+        "只测有效会漏掉非法输入的防御。",
+        "只测无效则功能正确性没验证。",
+        "全测在取值无穷时不可行——等价类的意义就是压缩用例数。"
+      ],
+      explain: "配合边界值：在等价类的边界处再多测几个点。",
+      source: "day13-test.md §2 ｜ Lesson 0024 §一"
+    }
+  ]
+});
+</script>
+</body>
+</html>

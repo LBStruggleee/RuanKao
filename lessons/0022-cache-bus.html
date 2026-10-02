@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0022 · Cache 与总线：命中率与地址映射（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0022（计算机组成 · 2/2）</p>
+    <h1>Cache 与总线：命中率计算 + 三种映射</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0021-cpu-pipeline.html">0021 CPU 与流水线</a><br>
+      考点定位：命中率/平均访问时间/加速比（必考计算）、三种映射的地址拆分、总线带宽（<a href="../docs/knowledge-points/architecture/day11-cache.md">day11-cache.md</a>）
+    </p>
+  </div>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    一组公式通吃 Cache 计算题：<strong>ta = h×tc + (1−h)×tm；S = tm/ta；e = tc/ta</strong>。再加三种映射的「地址怎么切」（Tag | 行号/组号 | 块内偏移），和总线带宽 = 频率×宽度÷8。
+  </div>
+
+  <h2>一、存储层次与局部性</h2>
+  <p>寄存器 → Cache → 主存 → 辅存：越往上<strong>越快越贵越小</strong>。Cache 有效的前提是<strong>局部性原理</strong>：刚用过的很快再用（时间局部性）、相邻的马上要用（空间局部性）。</p>
+
+  <h2>二、命中率计算（一组公式通吃）</h2>
+  <span class="formula">平均访问时间 ta = h×tc + (1−h)×tm　　加速比 S = tm / ta　　访问效率 e = tc / ta</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：Cache 速度 tc=20ns，主存 tm=100ns，命中率 h=90%：<br>
+    ta = 0.9×20 + 0.1×100 = <strong>28 ns</strong>；S = 100/28 ≈ <strong>3.57</strong>；e = 20/28 ≈ <strong>71.4%</strong>。</p>
+    <p style="margin-bottom:0;"><strong>反解</strong>：要 ta ≤ 30ns，则 h ≥ (tm−ta)/(tm−tc) = (100−30)/(100−20) = <strong>87.5%</strong>（万能反解式）。</p>
+  </div>
+
+  <h2>三、三种映射：主存块能住 Cache 哪里？</h2>
+  <table class="tight">
+    <tr><th>映射</th><th>规则</th><th>主存地址切分</th><th>优缺点</th></tr>
+    <tr><td><strong>直接映射</strong></td><td>主存块 i → Cache 行 (i mod 行数)</td><td><strong>Tag | 行号 | 块内</strong></td><td>快、冲突多</td></tr>
+    <tr><td><strong>全相联</strong></td><td>想住哪行住哪行</td><td><strong>Tag | 块内</strong>（无行号字段）</td><td>最灵活、比较器多（贵）</td></tr>
+    <tr><td><strong>组相联</strong></td><td>组间直接、组内全相联</td><td><strong>Tag | 组号 | 块内</strong></td><td>折中（主流，2/4 路组相联）</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频陷阱</span>
+    ① 全相联地址里<strong>没有行号字段</strong>（Tag 全长）；② 组相联『路数翻倍 ⇒ 组数减半 ⇒ Tag 加 1 位』；③ 计算各字段位数：块内 = log₂(块大小)，行号 = log₂(行数)，其余全是 Tag。
+  </div>
+
+  <h2>四、替换与写入</h2>
+  <ul>
+    <li>替换算法：<strong>LRU / FIFO / RAND</strong>（LRU ≠ LFU）——与页面置换思想一致（<a href="0015-os-memory.html">Lesson 0015</a>）。</li>
+    <li>写策略：<strong>写直达</strong>（同时写 Cache 与主存，简单慢）/ <strong>写回</strong>（只写 Cache、替换时才写主存，需脏位）。</li>
+    <li>与虚拟存储的分工：<strong>TLB 管「虚拟→物理」转换，Cache 管「物理→数据」</strong>——两级各司其职。</li>
+  </ul>
+
+  <h2>五、总线</h2>
+  <table class="tight">
+    <tr><th>总线</th><th>方向</th><th>内容</th></tr>
+    <tr><td>数据总线 DB</td><td><strong>双向</strong></td><td>数据</td></tr>
+    <tr><td>地址总线 AB</td><td><strong>单向</strong>（CPU→外）</td><td>地址；<strong>宽度 n 位 → 寻址 2ⁿ 空间</strong></td></tr>
+    <tr><td>控制总线 CB</td><td>双向（整体）</td><td>时序与控制信号</td></tr>
+  </table>
+  <span class="formula">总线带宽 = 总线工作频率 × 总线宽度（字节）　例：100MHz × 32bit/8 = 400 MB/s</span>
+
+  <h2>六、计算挑战（先动笔再填）</h2>
+  <div id="cd22"></div>
+
+  <h2>七、自查（全对过课）</h2>
+  <div id="quiz22"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>ta = h×tc+(1−h)×tm；S = tm/ta；e = tc/ta；反解 h = (tm−ta)/(tm−tc)。</li>
+      <li>映射三态：直接 Tag|行号|块内；全相联无行号；组相联 Tag|组号|块内，路数×2 ⇒ 组数÷2 ⇒ Tag+1。</li>
+      <li>LRU/FIFO/RAND 替换；写直达 vs 写回（脏位）；TLB 虚→实、Cache 实→数据。</li>
+      <li>地址总线单向、数据总线双向；带宽 = 频率 × 宽度/8。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0021-cpu-pipeline.html">← 上一课 0021 CPU 与流水线</a>
+      <a href="0023-process-models.html">下一课 → 0023 软件工程：过程模型与 DFD</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../docs/knowledge-points/architecture/day11-exercises.md">day11-exercises.md（20 题 + 3 道独立计算）</a>；错题登记 <a href="../docs/practice/reflection.md">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「Tag 到底怎么算位数」），把那句话发我，我只讲那一点。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd22", {
+  title: "Cache 命中率 + 总线带宽计算挑战",
+  questions: [
+    { text: "tc=20ns、tm=100ns、h=90%。平均访问时间 ta = ___ ns", answer: 28, mode: "exact",
+      derive: "ta = 0.9×20 + 0.1×100 = 18 + 10 = 28 ns。" },
+    { text: "同上，加速比 S = tm/ta = 100/28 ≈ ___（两位小数）", answer: 3.57, mode: "round",
+      derive: "S = 100/28 ≈ 3.57（不用流水线的时间比例换算）。" },
+    { text: "同上，访问效率 e = tc/ta = 20/28 ≈ ___%（整数）", answer: 71, mode: "round",
+      derive: "e = 20/28 ≈ 0.714 → 71%。" },
+    { text: "要求 ta ≤ 30ns（tc=20、tm=100），命中率至少 h = (tm−ta)/(tm−tc) = ___%（整数）", answer: 88, mode: "round",
+      derive: "h ≥ (100−30)/(100−20) = 70/80 = 0.875 → 87.5%，整数填 88。万能反解式必背。" },
+    { text: "总线频率 100MHz、宽度 32 位，带宽 = ___ MB/s", answer: 400, mode: "exact",
+      derive: "带宽 = 100M × 32bit ÷ 8 = 100M × 4B = 400 MB/s（别忘了除 8 变字节）。" },
+    { text: "Cache 8 行 × 块大小 16B，地址切分中『块内偏移』占 ___ 位", answer: 4, mode: "exact",
+      derive: "块内偏移 = log₂16 = 4 位；行号 = log₂8 = 3 位；其余高位都是 Tag。" }
+  ]
+});
+
+Quiz.render("quiz22", {
+  title: "本课自查（8 题，先算再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "Cache 访问效率 e 的计算公式是？",
+      options: ["e = tc / ta", "e = ta / tc", "e = tm / ta", "e = h × ta"],
+      answer: 0,
+      opts: [
+        "✓ 效率 = 纯 Cache 访问时间占平均时间的比例：tc/ta。",
+        "分子分母反了。",
+        "tm/ta 是加速比 S。",
+        "h 是命中率，不是效率。"
+      ],
+      explain: "公式三件套：ta = h·tc+(1−h)·tm；S = tm/ta；e = tc/ta。",
+      source: "day11-cache.md §4 ｜ Lesson 0022 §二"
+    },
+    {
+      q: "全相联映射的主存地址中包含的字段是？",
+      options: ["Tag + 块内偏移（没有行号）", "Tag + 行号 + 块内偏移", "行号 + 块内偏移", "组号 + 块内偏移"],
+      answer: 0,
+      opts: [
+        "✓ 全相联想住哪行住哪行——没有『行号』概念，Tag 必须覆盖全部高位。",
+        "行号是直接映射的切法。",
+        "少了 Tag 无法判断是谁的数据。",
+        "组号是组相联的切法。"
+      ],
+      explain: "高频陷阱：『全相联无行号字段』；直接映射才有 Tag|行号|块内。",
+      source: "day11-cache.md §3 ｜ Lesson 0022 §三"
+    },
+    {
+      q: "组相联映射中，路数翻倍（如 2 路 → 4 路，Cache 容量不变）会导致？",
+      options: ["组数减半，Tag 加 1 位", "组数加倍，Tag 减 1 位", "行数减半", "块内偏移加 1 位"],
+      answer: 0,
+      opts: [
+        "✓ 组数 = 行数 ÷ 路数：路数×2 → 组数÷2 → 组号少 1 位、Tag 多 1 位。",
+        "方向反了。",
+        "行数 = 容量÷块大小，与路数无关。",
+        "块内偏移只由块大小决定。"
+      ],
+      explain: "连锁口诀：路数 ×2 ⇒ 组数 ÷2 ⇒ 组号 −1 位 ⇒ Tag +1 位。",
+      source: "day11-cache.md §3 ｜ Lesson 0022 §三"
+    },
+    {
+      q: "地址总线宽度为 32 位时，CPU 的寻址空间是？",
+      options: ["4 GB（2³² 字节）", "2 GB", "8 GB", "32 MB"],
+      answer: 0,
+      opts: [
+        "✓ 寻址空间 = 2^总线宽度 = 2³² = 4 GB。",
+        "2³¹ 才是 2GB。",
+        "2³³ = 8GB，多算一位。",
+        "单位差了三个数量级。"
+      ],
+      explain: "地址总线『单向 + 决定寻址空间』；数据总线『双向 + 决定一次搬多少』。",
+      source: "day11-cache.md §6 ｜ Lesson 0022 §五"
+    },
+    {
+      q: "总线的带宽计算正确的是？",
+      options: ["工作频率 × 总线宽度（字节）", "工作频率 × 总线宽度（位）", "宽度 ÷ 频率", "频率 + 宽度"],
+      answer: 0,
+      opts: [
+        "✓ 每秒传 频率 次每次 宽度 字节 → 带宽 = 频率×宽度/8。100MHz×32bit → 400 MB/s。",
+        "不除以 8 会把 bit 当 Byte，差 8 倍——高频错误。",
+        "带宽是乘出来的吞吐量。",
+        "频率与宽度是相乘关系。"
+      ],
+      explain: "『除 8』是总线带宽题最常见坑（0011 速查卡同款提醒）。",
+      source: "day11-cache.md §6 ｜ Lesson 0022 §五"
+    },
+    {
+      q: "Cache 的有效性依赖于？",
+      options: ["程序的局部性原理", "CPU 主频", "主存容量大", "总线带宽高"],
+      answer: 0,
+      opts: [
+        "✓ 时间局部性（刚用过马上再用）+ 空间局部性（相邻的马上要用）让小 Cache 能拦住大部分访问。",
+        "主频影响整体速度，不是 Cache 原理。",
+        "主存容量与命中率原理无关。",
+        "带宽是总线话题。"
+      ],
+      explain: "与虚拟内存同根：都靠局部性——所以 TLB/Cache/缺页 一家人。",
+      source: "day11-cache.md §1 ｜ Lesson 0022 §一"
+    },
+    {
+      q: "『写回（write-back）』策略的特点是？",
+      options: ["只写 Cache，替换出去时才写主存（需脏位）", "每次写 Cache 同时写主存", "只写主存", "禁止写操作"],
+      answer: 0,
+      opts: [
+        "✓ 用『脏位』标记改过的块，替换时统一刷回主存——减少访存但控制复杂。",
+        "那是写直达（write-through）：简单但慢。",
+        "CPU 至少要写 Cache。",
+        "写操作是基本功能。"
+      ],
+      explain: "配对：写直达=简单慢；写回=快但要脏位。",
+      source: "day11-cache.md §5 ｜ Lesson 0022 §四"
+    },
+    {
+      q: "CPU 访问一个虚拟地址的正确顺序是？",
+      options: ["先查 TLB（虚→实转换），再以物理地址查 Cache 取数据", "先查 Cache 再查 TLB", "TLB 和 Cache 同时给出数据", "先访问主存再查 TLB"],
+      answer: 0,
+      opts: [
+        "✓ TLB 负责『虚拟页→物理块』转换，Cache 按『物理地址』存数据——先转换、后取数。",
+        "没有物理地址，Cache 无法比对 Tag。",
+        "TLB 未命中时仍需页表，不能保证同时命中。",
+        "顺序反了——主存是 Cache 未命中才访问的。"
+      ],
+      explain: "分工口诀：TLB 管翻译（虚→实），Cache 管取货（实→数据）。",
+      source: "day11-cache.md §7 ｜ Lesson 0022 §四"
+    }
+  ]
+});
+</script>
+</body>
+</html>
