@@ -563,5 +563,50 @@ body.sidebar-open .page {
   .dsim, button, .no-print { display: none !important; }
   pre { background: #f0ede5 !important; color: #333 !important; }
   a { color: inherit; text-decoration: none; }
-  .sidebar, .sidebar-toggle, .sidebar-overlay { display: none !important; }
+  .sidebar, .sidebar-toggle, .sidebar-overlay, .pomodoro-rail { display: none !important; }
 }
+
+/* ---------- 右侧番茄钟（宽屏右侧留白区） ---------- */
+.pomodoro-rail {
+  display: none;
+  position: fixed;
+  top: 2rem;
+  right: 1.5rem;
+  width: 272px;
+  z-index: 60;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  padding: 1rem 1.2rem 1.1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+/* 280 侧栏 + 860 内容 + 272 右栏 + 间距，≥1500px 才放得下 */
+@media (min-width: 1500px) { .pomodoro-rail { display: block; } }
+
+.pomo-head { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.2rem; }
+.pomo-mode { font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 0.4rem; }
+.pomo-mode.focus { color: var(--accent); background: var(--accent-soft); }
+.pomo-mode.break { color: var(--gold); background: var(--gold-soft); }
+.pomo-time {
+  font-family: var(--mono);
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0.2rem 0 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.pomo-btns { display: flex; gap: 0.6rem; justify-content: center; margin-bottom: 0.6rem; }
+.pomo-btns button {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.35rem 1.1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.pomo-start { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.pomo-start:hover { filter: brightness(1.08); }
+.pomo-reset { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+.pomo-reset:hover { color: var(--ink); border-color: var(--ink-soft); }
+.pomo-done { font-size: 0.88rem; color: var(--ink); }
+.pomo-tip { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.3rem; }
