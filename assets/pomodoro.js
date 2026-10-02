@@ -1,13 +1,14 @@
 /* ============================================================
- * pomodoro.js — 右侧番茄钟专注计时器（零依赖，动态注入）
+ * pomodoro.js — 右侧番茄钟 · Liquid Glass 胶囊（零依赖，动态注入）
  *
- * 由 sidebar.js 按需动态加载，页面无需单独引用；
- * 仅视口 ≥1500px（右侧有留白）时通过 CSS 显示。
+ * 由 sidebar.js 按需动态加载，页面无需单独引用。
+ * 设计：iOS 26 Liquid Glass 语言 —— 收起态是贴右缘的半透明胶囊
+ * （落在正文右侧留白内，不遮挡内容），点击后 morph 展开为玻璃卡片；
+ * 点外部 / Esc 收回。运行中状态点呼吸脉冲，色调随专注/休息切换。
  *
  * - 专注 25 分钟 / 休息 5 分钟，到点提示音并自动切换模式
- * - 计时状态持久化 localStorage（rkPomodoroState）：
- *   本站是多页文档集，跳页/刷新不丢计时；若离开期间到点，
- *   回来按"完成一次"处理（只计 1 个，不按时间累积）
+ * - 计时状态持久化 localStorage（rkPomodoroState）：本站是多页文档集，
+ *   跳页/刷新不丢计时；离开期间到点，回来按"完成一次"处理
  * - 今日完成番茄数按天清零
  * ============================================================ */
 (function () {
@@ -36,6 +37,7 @@
   var state = loadState() || { mode: "focus", running: false, endAt: 0, remain: FOCUS, day: today(), done: 0 };
   if (state.day !== today()) { state.day = today(); state.done = 0; }
 
+  var rail = null;
   var els = {};
   var origTitle = null;
   var audioCtx = null;
@@ -78,15 +80,18 @@
   }
 
   function render() {
-    var r = remaining();
-    els.time.textContent = fmt(r);
+    var txt = fmt(remaining());
+    els.mini.textContent = txt;
+    els.time.textContent = txt;
     els.mode.textContent = state.mode === "focus" ? "专注" : "休息";
     els.mode.className = "pomo-mode " + state.mode;
     els.start.textContent = state.running ? "暂停" : "开始";
-    els.done.textContent = "🍅 今日已完成 " + state.done + " 个番茄";
+    els.done.textContent = "🍅 今日已完成 " + state.done + " 个";
+    rail.classList.toggle("running", state.running);
+    rail.classList.toggle("break", state.mode === "break");
     if (state.running) {
       if (origTitle === null) origTitle = document.title;
-      document.title = "⏱ " + fmt(r) + " · " + (state.mode === "focus" ? "专注" : "休息") + "｜" + origTitle;
+      document.title = "⏱ " + txt + " · " + (state.mode === "focus" ? "专注" : "休息") + "｜" + origTitle;
     } else if (origTitle !== null) {
       document.title = origTitle;
       origTitle = null;
@@ -118,22 +123,35 @@
     render();
   }
 
+  function collapse() {
+    rail.classList.remove("open");
+    els.pill.setAttribute("aria-expanded", "false");
+  }
+
   function build() {
     if (document.getElementById("pomodoroRail")) return;
-    var rail = document.createElement("aside");
-    rail.className = "pomodoro-rail";
+    rail = document.createElement("aside");
+    rail.className = "pomo-glass";
     rail.id = "pomodoroRail";
     rail.innerHTML =
-      '<div class="pomo-head">⏱ <span class="pomo-mode focus">专注</span></div>' +
+      '<button class="pomo-pill" id="pomoPill" aria-expanded="false" aria-label="番茄钟：点击展开或收起" title="番茄钟">' +
+      '<span class="pomo-dot"></span>' +
+      '<span class="pomo-mini">25:00</span>' +
+      '<span class="pomo-chev">▾</span>' +
+      "</button>" +
+      '<div class="pomo-body">' +
+      '<div class="pomo-row1"><span class="pomo-mode focus">专注</span><span class="pomo-hint">25 + 5</span></div>' +
       '<div class="pomo-time">25:00</div>' +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" id="pomoStart">开始</button>' +
       '<button class="pomo-reset" id="pomoReset">重置</button>' +
       "</div>" +
-      '<div class="pomo-done">🍅 今日已完成 0 个番茄</div>' +
-      '<div class="pomo-tip">25 分钟专注 + 5 分钟休息</div>';
+      '<div class="pomo-done">🍅 今日已完成 0 个</div>' +
+      "</div>";
     document.body.appendChild(rail);
 
+    els.pill = rail.querySelector("#pomoPill");
+    els.mini = rail.querySelector(".pomo-mini");
     els.time = rail.querySelector(".pomo-time");
     els.mode = rail.querySelector(".pomo-mode");
     els.start = rail.querySelector("#pomoStart");
@@ -146,7 +164,22 @@
     render();
     setInterval(tick, 250);
 
-    els.start.addEventListener("click", function () {
+    els.pill.addEventListener("click", function () {
+      var open = rail.classList.toggle("open");
+      els.pill.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    // 点胶囊外部收回（capture 阶段，先于其他 handler）
+    document.addEventListener("click", function (e) {
+      if (rail.classList.contains("open") && !rail.contains(e.target)) collapse();
+    }, true);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") collapse();
+    });
+
+    els.start.addEventListener("click", function (e) {
+      e.stopPropagation();
       if (state.running) {
         state.remain = Math.max(0, remaining());
         state.running = false;
@@ -159,7 +192,8 @@
       render();
     });
 
-    document.getElementById("pomoReset").addEventListener("click", function () {
+    document.getElementById("pomoReset").addEventListener("click", function (e) {
+      e.stopPropagation();
       state.mode = "focus";
       state.remain = FOCUS;
       state.running = false;

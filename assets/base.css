@@ -563,50 +563,161 @@ body.sidebar-open .page {
   .dsim, button, .no-print { display: none !important; }
   pre { background: #f0ede5 !important; color: #333 !important; }
   a { color: inherit; text-decoration: none; }
-  .sidebar, .sidebar-toggle, .sidebar-overlay, .pomodoro-rail { display: none !important; }
+  .sidebar, .sidebar-toggle, .sidebar-overlay, .pomo-glass { display: none !important; }
 }
 
-/* ---------- 右侧番茄钟（宽屏右侧留白区） ---------- */
-.pomodoro-rail {
+/* ---------- 右侧番茄钟 · Liquid Glass 胶囊（可展开/收起） ----------
+   收起态：贴右缘小胶囊，落在正文右侧留白内，不遮挡内容；
+   展开态：morph 成玻璃卡片（模糊背后内容 + 高光描边 + 弹性过渡）。 */
+.pomo-glass {
   display: none;
   position: fixed;
-  top: 2rem;
-  right: 1.5rem;
-  width: 272px;
-  z-index: 60;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 0.8rem;
-  padding: 1rem 1.2rem 1.1rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  text-align: center;
+  top: 50%;
+  right: 0.9rem;
+  transform: translateY(-50%);
+  z-index: 900;
+  flex-direction: column;
+  align-items: flex-end;
+  width: max-content;
+  background: rgba(255, 253, 248, 0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(38, 49, 59, 0.14),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition: border-radius 0.35s cubic-bezier(0.34, 1.3, 0.5, 1),
+              box-shadow 0.35s ease, background 0.35s ease;
 }
-/* 280 侧栏 + 860 内容 + 272 右栏 + 间距，≥1500px 才放得下 */
-@media (min-width: 1500px) { .pomodoro-rail { display: block; } }
+/* 无 backdrop-filter 时退化为接近不透明，保证可读性 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pomo-glass { background: rgba(255, 253, 248, 0.94); }
+}
+/* 1280px 起右侧留白即可容纳收起胶囊（不与正文重叠） */
+@media (min-width: 1280px) { .pomo-glass { display: flex; } }
 
-.pomo-head { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.2rem; }
-.pomo-mode { font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 0.4rem; }
-.pomo-mode.focus { color: var(--accent); background: var(--accent-soft); }
-.pomo-mode.break { color: var(--gold); background: var(--gold-soft); }
-.pomo-time {
+/* 运行中的色调光晕：专注=松绿，休息=旧金 */
+.pomo-glass.running {
+  box-shadow: 0 8px 28px rgba(14, 107, 92, 0.22),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.pomo-glass.running.break {
+  box-shadow: 0 8px 28px rgba(138, 109, 31, 0.26),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* —— 收起态：胶囊 —— */
+.pomo-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 0;
+  background: transparent;
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  border-radius: 999px;
+  transition: transform 0.15s ease;
+}
+.pomo-pill:hover { transform: scale(1.04); }
+.pomo-pill:active { transform: scale(0.96); }
+.pomo-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 107, 92, 0.15);
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+.pomo-glass.break .pomo-dot {
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(138, 109, 31, 0.18);
+}
+.pomo-glass.running .pomo-dot { animation: pomoPulseGreen 1.6s ease-in-out infinite; }
+.pomo-glass.running.break .pomo-dot { animation: pomoPulseGold 1.6s ease-in-out infinite; }
+@keyframes pomoPulseGreen {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(14, 107, 92, 0.15); }
+  50% { box-shadow: 0 0 0 6px rgba(14, 107, 92, 0.3); }
+}
+@keyframes pomoPulseGold {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(138, 109, 31, 0.18); }
+  50% { box-shadow: 0 0 0 6px rgba(138, 109, 31, 0.32); }
+}
+.pomo-mini {
   font-family: var(--mono);
-  font-size: 2.6rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  margin: 0.2rem 0 0.6rem;
+  letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
 }
-.pomo-btns { display: flex; gap: 0.6rem; justify-content: center; margin-bottom: 0.6rem; }
+.pomo-chev { font-size: 0.65rem; color: var(--ink-soft); transition: transform 0.35s ease; }
+.pomo-glass.open .pomo-chev { transform: rotate(180deg); }
+
+/* —— 展开态：玻璃卡片 —— */
+.pomo-glass.open {
+  border-radius: 1.4rem;
+  background: rgba(255, 253, 248, 0.68);
+  box-shadow: 0 14px 44px rgba(38, 49, 59, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.pomo-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 0.95rem;
+  width: 13.5rem;
+  transform: translateY(-6px);
+  text-align: center;
+  transition: max-height 0.35s cubic-bezier(0.34, 1.3, 0.5, 1),
+              opacity 0.25s ease, padding 0.35s ease, transform 0.35s ease;
+}
+.pomo-glass.open .pomo-body {
+  max-height: 18rem;
+  opacity: 1;
+  padding: 0.15rem 0.95rem 0.95rem;
+  transform: translateY(0);
+}
+.pomo-row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.4rem 0 0.1rem;
+}
+.pomo-hint { font-size: 0.72rem; color: var(--ink-soft); }
+.pomo-mode { font-weight: 700; font-size: 0.85rem; padding: 0.05rem 0.55rem; border-radius: 0.4rem; }
+.pomo-mode.focus { color: var(--accent); background: rgba(14, 107, 92, 0.12); }
+.pomo-mode.break { color: var(--gold); background: rgba(138, 109, 31, 0.14); }
+.pomo-time {
+  font-family: var(--mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  margin: 0.1rem 0 0.5rem;
+}
+.pomo-btns { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.55rem; }
 .pomo-btns button {
   font: inherit;
-  font-size: 0.95rem;
-  padding: 0.35rem 1.1rem;
-  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
   cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease;
 }
-.pomo-start { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.pomo-btns button:active { transform: scale(0.95); }
+.pomo-start {
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  box-shadow: 0 2px 8px rgba(14, 107, 92, 0.3);
+}
 .pomo-start:hover { filter: brightness(1.08); }
-.pomo-reset { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
-.pomo-reset:hover { color: var(--ink); border-color: var(--ink-soft); }
-.pomo-done { font-size: 0.88rem; color: var(--ink); }
-.pomo-tip { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.3rem; }
+.pomo-reset {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+  border: 1px solid rgba(38, 49, 59, 0.15);
+}
+.pomo-reset:hover { color: var(--ink); }
+.pomo-done { font-size: 0.82rem; color: var(--ink-soft); }
