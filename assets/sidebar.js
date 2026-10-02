@@ -38,7 +38,7 @@
     { id: "0024", title: "软件测试", file: "0024-testing.html" },
     { id: "0025", title: "UML 建模", file: "0025-uml.html" },
     { id: "0026", title: "设计模式", file: "0026-design-patterns.html" },
-    { id: "0027", title: " bonus：知识产权与标准化", file: "0027-bonus.html" },
+    { id: "0027", title: "知识产权与标准化", file: "0027-bonus.html" },
     { id: "0028", title: "算法填空专项", file: "0028-algo-blanks.html" }
   ];
 
@@ -115,11 +115,16 @@
       sidebar.classList.add("open");
       overlayEl.classList.add("show");
       document.body.classList.add("sidebar-open");
+      try { localStorage.setItem("rkSidebarCollapsed", "0"); } catch (e) {}
     }
     function closeSidebar() {
       sidebar.classList.remove("open");
       overlayEl.classList.remove("show");
       document.body.classList.remove("sidebar-open");
+      // 记住收起偏好（仅桌面端收起才算数；移动端本来就默认收起）
+      if (window.innerWidth > 1024) {
+        try { localStorage.setItem("rkSidebarCollapsed", "1"); } catch (e) {}
+      }
     }
 
     toggle.addEventListener("click", openSidebar);
@@ -130,7 +135,10 @@
       if (e.key === "Escape") closeSidebar();
     });
 
-    if (window.innerWidth > 1024) {
+    // 桌面端默认展开，但尊重用户上一次的收起偏好；移动端始终收起待展开
+    var collapsedPref = null;
+    try { collapsedPref = localStorage.getItem("rkSidebarCollapsed"); } catch (e) {}
+    if (window.innerWidth > 1024 && collapsedPref !== "1") {
       sidebar.classList.add("open");
       document.body.classList.add("sidebar-open");
     }

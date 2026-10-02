@@ -419,7 +419,7 @@ button.btn.ghost {
 /* ---------- 打印 ---------- */
 /* ---------- 侧边栏导航 ---------- */
 .sidebar-toggle {
-  display: none;
+  display: flex;                 /* 全端可见：收起后靠它重新展开 */
   position: fixed;
   top: 0.8rem;
   left: 0.8rem;
@@ -437,6 +437,7 @@ button.btn.ghost {
   justify-content: center;
   padding: 0;
 }
+body.sidebar-open .sidebar-toggle { display: none; }  /* 展开时用侧边栏内的 × 收起 */
 
 .sidebar-overlay {
   display: none;
@@ -547,10 +548,12 @@ body.sidebar-open .page {
 }
 
 @media (max-width: 1024px) {
-  .sidebar-toggle { display: flex; }
   .sidebar-overlay { display: block; pointer-events: none; }
   .sidebar-overlay.show { pointer-events: auto; }
   body.sidebar-open .page { margin-left: 0; }
+  /* 固定定位的汉堡按钮占据左上角，内容让出空间避免遮挡 */
+  .topnav { padding-left: 3.8rem; }
+  .page { padding-top: 3.9rem; }
 }
 
 @media print {
