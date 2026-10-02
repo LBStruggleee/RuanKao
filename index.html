@@ -74,11 +74,22 @@
   <div id="rk-badge"></div>
   <script>
     /* 站内 .html 页面（交互课程/错题本/目录）直通：在捕获阶段接管点击，
-       绕过 Docsify 的哈希路由（否则 .html 会被当 Markdown 渲染成静态文本） */
+       绕过 Docsify 的哈希路由（否则 .html 会被当 Markdown 渲染成静态文本）。
+       兼容三种链接形态：绝对 URL / 相对路径 / Docsify 编译出的 #/... 路由
+       （后者来自被缓存的旧版 _sidebar.md，同样接管）。 */
     (function () {
+      function targetOf(a) {
+        var h = a.getAttribute('href') || '';
+        if (/^https?:\/\//.test(h)) { return h; }
+        if (h.indexOf('#/') === 0) { return location.origin + location.pathname + h.slice(1); }
+        return new URL(h, location.href).href;
+      }
       function internalHtml(a) {
-        return a && a.origin === location.origin &&
-          /\.html$/.test(a.pathname) && a.target !== '_blank';
+        if (!a || a.target === '_blank') { return false; }
+        var h = a.getAttribute('href') || '';
+        if (!/\.html$/.test(h)) { return false; }
+        if (/^https?:\/\//.test(h)) { return a.origin === location.origin; }
+        return true;
       }
       document.addEventListener('click', function (e) {
         if (e.defaultPrevented || e.button !== 0 ||
@@ -87,7 +98,7 @@
         if (!internalHtml(a)) { return; }
         e.preventDefault();
         e.stopPropagation();
-        location.href = a.href;
+        location.href = targetOf(a);
       }, true);
     })();
   </script>
