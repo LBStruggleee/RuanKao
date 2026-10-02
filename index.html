@@ -73,6 +73,19 @@
   <script src="assets/vendor/prism-bash.min.js"></script>
   <div id="rk-badge"></div>
   <script>
+    /* 自愈：任何被缓存旧版页面劫持出的 .html 路由（#/lessons/xxx.html），
+       一律立即跳回独立页面——交互课程只能以独立页形式运行 */
+    (function () {
+      function heal() {
+        if (/\.html$/.test(location.hash)) {
+          location.replace(location.origin + location.pathname + location.hash.slice(1));
+        }
+      }
+      window.addEventListener("hashchange", heal);
+      heal();
+    })();
+  </script>
+  <script>
     /* 站内 .html 页面（交互课程/错题本/目录）直通：在捕获阶段接管点击，
        绕过 Docsify 的哈希路由（否则 .html 会被当 Markdown 渲染成静态文本）。
        兼容三种链接形态：绝对 URL / 相对路径 / Docsify 编译出的 #/... 路由
