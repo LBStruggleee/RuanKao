@@ -151,7 +151,8 @@ def main():
           page_html("../", "文档目录", "index", dir_body))
 
     # ---- 搜索索引 + 搜索页 ----
-    idx = [{"url": p, "title": t, "text": x} for (p, t, x) in converted]
+    # url 加 pages/ 前缀：search.html 在仓库根，结果文件都在 pages/ 下
+    idx = [{"url": "pages/" + p, "title": t, "text": x} for (p, t, x) in converted]
     write(os.path.join(ROOT, "search-index.json"),
           json.dumps(idx, ensure_ascii=False))
     write(os.path.join(ROOT, "search.html"), SEARCH_HTML)
@@ -189,6 +190,7 @@ SEARCH_HTML = """<!DOCTYPE html>
 <div id="out"></div>
 <p><a href="index.html">← 返回网站首页</a> ｜ <a href="pages/index.html">📖 文档目录</a></p>
 </div>
+<script src="assets/sidebar.js"></script>
 <script>
 var IDX = null;
 fetch("search-index.json").then(function (r) { return r.json(); }).then(function (d) {

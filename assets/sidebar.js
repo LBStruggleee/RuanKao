@@ -47,30 +47,29 @@
     var isLesson = path.indexOf("/lessons/") >= 0;
     var isPage = path.indexOf("/pages/") >= 0;
     var isReference = path.indexOf("/reference/") >= 0;
-    var isRoot = path === "/" || path === "/index.html";
-
     var currentFile = path.split("/").pop();
+    var isRoot = !isLesson && !isPage && !isReference && (currentFile === "index.html" || currentFile === "");
 
     var html = '<nav class="sidebar" id="sidebar">';
     html += '<div class="sidebar-header">';
-    html += '<a href="' + getRelRoot() + 'index.html" class="sidebar-brand">📚 软考备考站</a>';
+    html += '<a href="' + REL_ROOT + 'index.html" class="sidebar-brand">📚 软考备考站</a>';
     html += '<button class="sidebar-close" id="sidebarClose" aria-label="收起侧边栏">×</button>';
     html += '</div>';
 
     html += '<div class="sidebar-section">';
-    html += '<a href="' + getRelRoot() + 'index.html" class="sidebar-link' + (isRoot ? " active" : "") + '">🏠 网站首页</a>';
-    html += '<a href="' + getRelRoot() + 'pages/index.html" class="sidebar-link' + (isPage && currentFile === "index.html" ? " active" : "") + '">📖 文档目录</a>';
-    html += '<a href="' + getRelRoot() + 'search.html" class="sidebar-link">🔍 全站搜索</a>';
-    html += '<a href="' + getRelRoot() + 'reference/mistake-notebook.html" class="sidebar-link' + (isReference && currentFile === "mistake-notebook.html" ? " active" : "") + '">📓 错题本</a>';
-    html += '<a href="' + getRelRoot() + 'pages/practice/tracker.html" class="sidebar-link">🗓 打卡表</a>';
-    html += '<a href="' + getRelRoot() + 'pages/knowledge-points/exam-guide.html" class="sidebar-link">📋 考试大纲</a>';
+    html += '<a href="' + REL_ROOT + 'index.html" class="sidebar-link' + (isRoot ? " active" : "") + '">🏠 网站首页</a>';
+    html += '<a href="' + REL_ROOT + 'pages/index.html" class="sidebar-link' + (isPage && currentFile === "index.html" ? " active" : "") + '">📖 文档目录</a>';
+    html += '<a href="' + REL_ROOT + 'search.html" class="sidebar-link">🔍 全站搜索</a>';
+    html += '<a href="' + REL_ROOT + 'reference/mistake-notebook.html" class="sidebar-link' + (isReference && currentFile === "mistake-notebook.html" ? " active" : "") + '">📓 错题本</a>';
+    html += '<a href="' + REL_ROOT + 'pages/practice/tracker.html" class="sidebar-link">🗓 打卡表</a>';
+    html += '<a href="' + REL_ROOT + 'pages/exam-guide.html" class="sidebar-link">📋 考试大纲</a>';
     html += '</div>';
 
     html += '<div class="sidebar-section">';
     html += '<div class="sidebar-title">🎓 交互课程（按学习顺序）</div>';
     LESSONS.forEach(function (l) {
       var active = isLesson && currentFile === l.file ? " active" : "";
-      html += '<a href="' + getRelRoot() + 'lessons/' + l.file + '" class="sidebar-link sidebar-lesson' + active + '"><span class="lesson-num">' + l.id + '</span>' + l.title + '</a>';
+      html += '<a href="' + REL_ROOT + 'lessons/' + l.file + '" class="sidebar-link sidebar-lesson' + active + '"><span class="lesson-num">' + l.id + '</span>' + l.title + '</a>';
     });
     html += '</div>';
 
@@ -79,14 +78,13 @@
     return html;
   }
 
-  function getRelRoot() {
-    var path = window.location.pathname;
-    var depth = path.split("/").filter(function (p) { return p && p !== "index.html"; }).length;
-    if (path === "/" || path === "/index.html") return "";
-    var prefix = "";
-    for (var i = 0; i < depth; i++) prefix += "../";
-    return prefix;
-  }
+  /* 根目录相对前缀：由本脚本自身的 src 推导（"../assets/sidebar.js" → "../"）。
+   * 不用 location.pathname 数层数——那会把文件名也当目录层，多跳一级跳出站点。 */
+  var REL_ROOT = (function () {
+    var el = document.querySelector('script[src$="sidebar.js"]');
+    var up = el ? (el.getAttribute("src").match(/\.\.\//g) || []).length : 0;
+    return new Array(up + 1).join("../");
+  })();
 
   function inject() {
     var existing = document.getElementById("sidebar");
