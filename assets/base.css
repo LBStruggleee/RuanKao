@@ -563,12 +563,43 @@ body.sidebar-open .page {
   .dsim, button, .no-print { display: none !important; }
   pre { background: #f0ede5 !important; color: #333 !important; }
   a { color: inherit; text-decoration: none; }
-  .sidebar, .sidebar-toggle, .sidebar-overlay, .pomo-glass { display: none !important; }
+  .sidebar, .sidebar-toggle, .sidebar-overlay, .pomo-glass, .pomo-circle, .pomo-modal { display: none !important; }
 }
 
-/* ---------- 右侧番茄钟 · Liquid Glass 胶囊（可展开/收起） ----------
-   收起态：贴右缘小胶囊，落在正文右侧留白内，不遮挡内容；
-   展开态：morph 成玻璃卡片（模糊背后内容 + 高光描边 + 弹性过渡）。 */
+/* ---------- 番茄钟 · Liquid Glass（桌面胶囊 / 移动圆圈+弹窗） ----------
+   配色绑定站点色板：浅色=暖纸白玻璃 + 深松绿/旧金；
+   .pomo-dark 覆写同组变量为深色。 */
+.pomo-glass, .pomo-circle, .pomo-modal-card {
+  --pg-ink: #26313b;
+  --pg-ink-soft: #5b6875;
+  --pg-bg: rgba(255, 253, 248, 0.55);
+  --pg-bg-strong: rgba(255, 253, 248, 0.72);
+  --pg-border: rgba(255, 255, 255, 0.65);
+  --pg-highlight: rgba(255, 255, 255, 0.7);
+  --pg-accent: #0e6b5c;            /* 站点主色：深松绿 */
+  --pg-accent-soft: rgba(14, 107, 92, 0.12);
+  --pg-gold: #8a6d1f;              /* 站点辅色：旧金 */
+  --pg-gold-soft: rgba(138, 109, 31, 0.14);
+  --pg-shadow: rgba(38, 49, 59, 0.14);
+  --pg-fallback: rgba(255, 253, 248, 0.95);
+  color: var(--pg-ink);
+}
+.pomo-dark {
+  --pg-ink: #e8edf0;
+  --pg-ink-soft: #9aa7b1;
+  --pg-bg: rgba(30, 38, 46, 0.58);
+  --pg-bg-strong: rgba(30, 38, 46, 0.78);
+  --pg-border: rgba(255, 255, 255, 0.14);
+  --pg-highlight: rgba(255, 255, 255, 0.18);
+  --pg-accent: #5cc2a2;
+  --pg-accent-soft: rgba(92, 194, 162, 0.16);
+  --pg-gold: #dcb95e;
+  --pg-gold-soft: rgba(220, 185, 94, 0.18);
+  --pg-shadow: rgba(0, 0, 0, 0.45);
+  --pg-fallback: rgba(30, 38, 46, 0.96);
+}
+
+/* —— 桌面：贴右缘胶囊，可 morph 展开 —— */
 .pomo-glass {
   display: none;
   position: fixed;
@@ -579,34 +610,35 @@ body.sidebar-open .page {
   flex-direction: column;
   align-items: flex-end;
   width: max-content;
-  background: rgba(255, 253, 248, 0.55);
+  background: var(--pg-bg);
   -webkit-backdrop-filter: blur(18px) saturate(1.6);
   backdrop-filter: blur(18px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--pg-border);
   border-radius: 999px;
-  box-shadow: 0 8px 28px rgba(38, 49, 59, 0.14),
-              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 28px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
   transition: border-radius 0.35s cubic-bezier(0.34, 1.3, 0.5, 1),
               box-shadow 0.35s ease, background 0.35s ease;
 }
 /* 无 backdrop-filter 时退化为接近不透明，保证可读性 */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .pomo-glass { background: rgba(255, 253, 248, 0.94); }
+  .pomo-glass, .pomo-circle, .pomo-modal-card { background: var(--pg-fallback); }
 }
 /* 1280px 起右侧留白即可容纳收起胶囊（不与正文重叠） */
 @media (min-width: 1280px) { .pomo-glass { display: flex; } }
 
 /* 运行中的色调光晕：专注=松绿，休息=旧金 */
 .pomo-glass.running {
-  box-shadow: 0 8px 28px rgba(14, 107, 92, 0.22),
-              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 28px var(--pg-accent-soft),
+              0 8px 28px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
 }
 .pomo-glass.running.break {
-  box-shadow: 0 8px 28px rgba(138, 109, 31, 0.26),
-              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 28px var(--pg-gold-soft),
+              0 8px 28px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
 }
 
-/* —— 收起态：胶囊 —— */
 .pomo-pill {
   display: flex;
   align-items: center;
@@ -615,7 +647,7 @@ body.sidebar-open .page {
   background: transparent;
   padding: 0.55rem 0.85rem;
   font: inherit;
-  color: var(--ink);
+  color: var(--pg-ink);
   cursor: pointer;
   border-radius: 999px;
   transition: transform 0.15s ease;
@@ -626,24 +658,24 @@ body.sidebar-open .page {
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(14, 107, 92, 0.15);
+  background: var(--pg-accent);
+  box-shadow: 0 0 0 3px var(--pg-accent-soft);
   transition: background 0.3s;
   flex-shrink: 0;
 }
 .pomo-glass.break .pomo-dot {
-  background: var(--gold);
-  box-shadow: 0 0 0 3px rgba(138, 109, 31, 0.18);
+  background: var(--pg-gold);
+  box-shadow: 0 0 0 3px var(--pg-gold-soft);
 }
 .pomo-glass.running .pomo-dot { animation: pomoPulseGreen 1.6s ease-in-out infinite; }
 .pomo-glass.running.break .pomo-dot { animation: pomoPulseGold 1.6s ease-in-out infinite; }
 @keyframes pomoPulseGreen {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(14, 107, 92, 0.15); }
-  50% { box-shadow: 0 0 0 6px rgba(14, 107, 92, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 3px var(--pg-accent-soft); }
+  50% { box-shadow: 0 0 0 6px var(--pg-accent-soft); }
 }
 @keyframes pomoPulseGold {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(138, 109, 31, 0.18); }
-  50% { box-shadow: 0 0 0 6px rgba(138, 109, 31, 0.32); }
+  0%, 100% { box-shadow: 0 0 0 3px var(--pg-gold-soft); }
+  50% { box-shadow: 0 0 0 6px var(--pg-gold-soft); }
 }
 .pomo-mini {
   font-family: var(--mono);
@@ -652,15 +684,14 @@ body.sidebar-open .page {
   letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
 }
-.pomo-chev { font-size: 0.65rem; color: var(--ink-soft); transition: transform 0.35s ease; }
+.pomo-chev { font-size: 0.65rem; color: var(--pg-ink-soft); transition: transform 0.35s ease; }
 .pomo-glass.open .pomo-chev { transform: rotate(180deg); }
 
-/* —— 展开态：玻璃卡片 —— */
 .pomo-glass.open {
   border-radius: 1.4rem;
-  background: rgba(255, 253, 248, 0.68);
-  box-shadow: 0 14px 44px rgba(38, 49, 59, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  background: var(--pg-bg-strong);
+  box-shadow: 0 14px 44px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
 }
 .pomo-body {
   overflow: hidden;
@@ -688,10 +719,18 @@ body.sidebar-open .page {
   justify-content: space-between;
   margin: 0.4rem 0 0.1rem;
 }
-.pomo-hint { font-size: 0.72rem; color: var(--ink-soft); }
-.pomo-mode { font-weight: 700; font-size: 0.85rem; padding: 0.05rem 0.55rem; border-radius: 0.4rem; }
-.pomo-mode.focus { color: var(--accent); background: rgba(14, 107, 92, 0.12); }
-.pomo-mode.break { color: var(--gold); background: rgba(138, 109, 31, 0.14); }
+.pomo-mactions { display: flex; align-items: center; gap: 0.15rem; }
+.pomo-theme, .pomo-close {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0.15rem 0.3rem;
+  border-radius: 0.4rem;
+  color: var(--pg-ink-soft);
+}
+.pomo-theme:hover, .pomo-close:hover { background: var(--pg-accent-soft); color: var(--pg-ink); }
 .pomo-time {
   font-family: var(--mono);
   font-size: 2.4rem;
@@ -711,16 +750,99 @@ body.sidebar-open .page {
 }
 .pomo-btns button:active { transform: scale(0.95); }
 .pomo-start {
-  background: var(--accent);
+  background: var(--pg-accent);
   color: #fff;
   border: 0;
-  box-shadow: 0 2px 8px rgba(14, 107, 92, 0.3);
+  box-shadow: 0 2px 8px var(--pg-accent-soft);
 }
 .pomo-start:hover { filter: brightness(1.08); }
+.pomo-dark .pomo-start { color: #0e2a22; }
 .pomo-reset {
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--ink-soft);
-  border: 1px solid rgba(38, 49, 59, 0.15);
+  background: var(--pg-bg);
+  color: var(--pg-ink-soft);
+  border: 1px solid var(--pg-border);
 }
-.pomo-reset:hover { color: var(--ink); }
-.pomo-done { font-size: 0.82rem; color: var(--ink-soft); }
+.pomo-reset:hover { color: var(--pg-ink); }
+.pomo-done { font-size: 0.82rem; color: var(--pg-ink-soft); }
+.pomo-tip { font-size: 0.72rem; color: var(--pg-ink-soft); margin-top: 0.35rem; }
+
+/* —— 移动端：右下角小圆圈（环形进度 + 中央倒计时） —— */
+.pomo-circle {
+  display: none;
+  position: fixed;
+  right: 1rem;
+  bottom: 1.4rem;
+  width: 3.6rem;
+  height: 3.6rem;
+  z-index: 900;
+  align-items: center;
+  justify-content: center;
+  background: var(--pg-bg-strong);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  backdrop-filter: blur(14px) saturate(1.5);
+  border: 1px solid var(--pg-border);
+  border-radius: 50%;
+  box-shadow: 0 6px 20px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease;
+}
+.pomo-circle:active { transform: scale(0.92); }
+@media (max-width: 1279.98px) {
+  .pomo-circle { display: flex; }
+  .pomo-glass { display: none !important; }
+}
+.pomo-circ-time {
+  position: relative;
+  z-index: 1;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.pomo-ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  transform: rotate(-90deg);
+}
+.pomo-ring circle { fill: none; stroke-width: 3; }
+.pomo-ring-bg { stroke: rgba(128, 128, 128, 0.2); }
+.pomo-ring-fg {
+  stroke: var(--pg-accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s linear, stroke 0.3s ease;
+}
+.pomo-circle.break .pomo-ring-fg { stroke: var(--pg-gold); }
+
+/* —— 移动端：屏幕中央玻璃弹窗 —— */
+.pomo-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 26, 32, 0.4);
+}
+.pomo-modal.open { display: flex; }
+@media (min-width: 1280px) { .pomo-modal { display: none !important; } }
+.pomo-modal-card {
+  width: min(84vw, 20rem);
+  border-radius: 1.4rem;
+  background: var(--pg-bg-strong);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid var(--pg-border);
+  box-shadow: 0 18px 50px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+  padding: 1rem 1.2rem 1.2rem;
+  text-align: center;
+  animation: pomoPop 0.3s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+@keyframes pomoPop {
+  from { transform: scale(0.85); opacity: 0; }
+}

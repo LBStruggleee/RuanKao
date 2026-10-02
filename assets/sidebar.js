@@ -156,8 +156,8 @@
   }
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=2：胶囊玻璃形态改版，防止 CDN 缓存旧版脚本
+  // v=3：移动端圆圈+弹窗、深浅色主题、站点配色统一
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=2";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=3";
   document.head.appendChild(rail);
 })();
