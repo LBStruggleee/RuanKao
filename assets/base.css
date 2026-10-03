@@ -637,6 +637,12 @@ body.sidebar-open .page {
   .sidebar, .sidebar-toggle, .sidebar-overlay, .pomo-glass, .pomo-circle, .pomo-modal, .rk-theme-fab { display: none !important; }
 }
 
+/* 减弱动态效果偏好：关闭番茄钟过渡与脉冲动画 */
+@media (prefers-reduced-motion: reduce) {
+  .pomo-glass, .pomo-body, .pomo-circle, .pomo-modal-card { transition: none !important; }
+  .pomo-glass.running .pomo-dot, .pomo-glass.running.break .pomo-dot { animation: none !important; }
+}
+
 /* ---------- 全局主题切换悬浮按钮（页面右上角，theme.js 注入） ---------- */
 .rk-theme-fab {
   position: fixed;
