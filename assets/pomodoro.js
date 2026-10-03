@@ -12,7 +12,8 @@
  *   html.dark .pomo-glass 等选择器整体覆写 --pg-* 变量。
  *
  * 计时：
- *   - 专注 25 分钟 / 休息 5 分钟，到点提示音并自动切换模式
+ *   - 默认专注 25 分钟 / 休息 5 分钟，卡片/弹窗里可 ± 调整（1–120 / 1–60），
+ *     到点提示音并自动切换模式
  *   - 状态持久化 localStorage（rkPomodoroState）：跳页/刷新不丢计时，
  *     离开期间到点按"完成一次"处理
  *   - 今日完成番茄数按天清零
@@ -42,8 +43,10 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
 
-  var state = loadState() || { mode: "focus", running: false, endAt: 0, remain: FOCUS, day: today(), done: 0 };
+  var state = loadState() || { mode: "focus", running: false, endAt: 0, remain: FOCUS, day: today(), done: 0, focusMin: 25, breakMin: 5 };
   if (state.day !== today()) { state.day = today(); state.done = 0; }
+  if (!state.focusMin) state.focusMin = 25;
+  if (!state.breakMin) state.breakMin = 5;
 
   var rail = null, circle = null, modal = null;
   var els = {};
@@ -87,6 +90,11 @@
     return (state.endAt - Date.now()) / 1000;
   }
 
+  function totalSec(mode) {
+    var m = mode === "focus" ? state.focusMin : state.breakMin;
+    return Math.max(1, Math.round(m)) * 60;
+  }
+
   /* ---------- 渲染 ---------- */
 
   function render() {
@@ -101,9 +109,14 @@
 
     // 移动端圆圈：中央倒计时 + 环形进度
     els.circ.textContent = txt;
-    var total = isFocus ? FOCUS : BREAK;
+    var total = totalSec(state.mode);
     var frac = total > 0 ? Math.max(0, Math.min(1, remaining() / total)) : 0;
     els.ring.style.strokeDashoffset = (RING_C * (1 - frac)).toFixed(1);
+
+    // 时长设置行
+    els.setVals.forEach(function (b) {
+      b.textContent = b.getAttribute("data-set-val") === "focus" ? state.focusMin : state.breakMin;
+    });
 
     // 移动端弹窗
     els.mTime.textContent = txt;
@@ -137,10 +150,10 @@
     if (state.mode === "focus") {
       state.done += 1;
       state.mode = "break";
-      state.remain = BREAK;
+      state.remain = totalSec("break");
     } else {
       state.mode = "focus";
-      state.remain = FOCUS;
+      state.remain = totalSec("focus");
     }
     saveState();
     beep();
@@ -183,8 +196,23 @@
   function onReset(e) {
     e.stopPropagation();
     state.mode = "focus";
-    state.remain = FOCUS;
+    state.remain = totalSec("focus");
     state.running = false;
+    saveState();
+    render();
+  }
+
+  function onSet(e) {
+    var act = e.currentTarget.getAttribute("data-set");
+    var isFocus = act.indexOf("focus") === 0;
+    var d = act.indexOf("plus") >= 0 ? 1 : -1;
+    if (isFocus) {
+      state.focusMin = Math.min(120, Math.max(1, state.focusMin + d));
+      if (state.mode === "focus" && !state.running) state.remain = totalSec("focus");
+    } else {
+      state.breakMin = Math.min(60, Math.max(1, state.breakMin + d));
+      if (state.mode === "break" && !state.running) state.remain = totalSec("break");
+    }
     saveState();
     render();
   }
@@ -207,12 +235,15 @@
       '<div class="pomo-body">' +
       '<div class="pomo-row1"><span class="pomo-mode focus">专注</span><button class="pomo-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button></div>' +
       '<div class="pomo-time">25:00</div>' +
+      '<div class="pomo-set">' +
+      '<span class="pomo-set-g">专注<button data-set="focus-minus" type="button" aria-label="专注减一分钟">−</button><b data-set-val="focus">25</b><button data-set="focus-plus" type="button" aria-label="专注加一分钟">+</button></span>' +
+      '<span class="pomo-set-g">休息<button data-set="break-minus" type="button" aria-label="休息减一分钟">−</button><b data-set-val="break">5</b><button data-set="break-plus" type="button" aria-label="休息加一分钟">+</button></span>' +
+      "</div>" +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" type="button">开始</button>' +
       '<button class="pomo-reset" type="button">重置</button>' +
       "</div>" +
       '<div class="pomo-done">🍅 今日已完成 0 个</div>' +
-      '<div class="pomo-tip">25 分钟专注 + 5 分钟休息</div>' +
       "</div>";
     document.body.appendChild(rail);
 
@@ -242,12 +273,15 @@
       '<button class="pomo-close" type="button" aria-label="关闭">×</button>' +
       "</span></div>" +
       '<div class="pomo-time">25:00</div>' +
+      '<div class="pomo-set">' +
+      '<span class="pomo-set-g">专注<button data-set="focus-minus" type="button" aria-label="专注减一分钟">−</button><b data-set-val="focus">25</b><button data-set="focus-plus" type="button" aria-label="专注加一分钟">+</button></span>' +
+      '<span class="pomo-set-g">休息<button data-set="break-minus" type="button" aria-label="休息减一分钟">−</button><b data-set-val="break">5</b><button data-set="break-plus" type="button" aria-label="休息加一分钟">+</button></span>' +
+      "</div>" +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" type="button">开始</button>' +
       '<button class="pomo-reset" type="button">重置</button>' +
       "</div>" +
       '<div class="pomo-done">🍅 今日已完成 0 个</div>' +
-      '<div class="pomo-tip">25 分钟专注 + 5 分钟休息</div>' +
       "</div>";
     document.body.appendChild(modal);
 
@@ -260,6 +294,7 @@
     els.mcard = modal.querySelector(".pomo-modal-card");
     els.mTime = els.mcard.querySelector(".pomo-time");
     els.mMode = els.mcard.querySelector(".pomo-mode");
+    els.setVals = Array.prototype.slice.call(document.querySelectorAll("[data-set-val]"));
     els.starts = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-start, .pomo-modal .pomo-start"));
     els.dones = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-done, .pomo-modal .pomo-done"));
 
@@ -372,6 +407,8 @@
     els.starts.forEach(function (b) { b.addEventListener("click", onStart); });
     Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-reset, .pomo-modal .pomo-reset"))
       .forEach(function (b) { b.addEventListener("click", onReset); });
+    Array.prototype.slice.call(document.querySelectorAll("[data-set]"))
+      .forEach(function (b) { b.addEventListener("click", onSet); });
   }
 
   if (document.readyState === "loading") {

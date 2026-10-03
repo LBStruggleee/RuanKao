@@ -164,8 +164,8 @@
   document.head.appendChild(themeEl);
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=5：移动端圆圈可拖拽移动（贴边+位置记忆）
+  // v=6：番茄钟时长可设置（专注/休息 ± 分钟）
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=5";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=6";
   document.head.appendChild(rail);
 })();

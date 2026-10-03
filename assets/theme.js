@@ -54,6 +54,24 @@
 
   apply();
 
+  // 页面右上角常驻主题按钮（所有视口可见，不藏在侧边栏/番茄钟里）
+  function buildFab() {
+    if (document.getElementById("rkThemeFab")) return;
+    var b = document.createElement("button");
+    b.className = "rk-theme-fab";
+    b.id = "rkThemeFab";
+    b.type = "button";
+    b.setAttribute("data-theme-toggle", "");
+    b.setAttribute("aria-label", "切换深浅色模式");
+    document.body.appendChild(b);
+    updateBtns();
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buildFab);
+  } else {
+    buildFab();
+  }
+
   document.addEventListener("click", function (e) {
     var b = e.target;
     while (b && b !== document.documentElement) {
