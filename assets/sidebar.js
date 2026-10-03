@@ -164,8 +164,8 @@
   document.head.appendChild(themeEl);
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=6：番茄钟时长可设置（专注/休息 ± 分钟）
+  // v=7：移除番茄钟内的主题切换（统一用页面右上角悬浮按钮）
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=6";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=7";
   document.head.appendChild(rail);
 })();

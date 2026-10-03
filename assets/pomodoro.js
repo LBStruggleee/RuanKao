@@ -233,7 +233,7 @@
       '<span class="pomo-chev">▾</span>' +
       "</button>" +
       '<div class="pomo-body">' +
-      '<div class="pomo-row1"><span class="pomo-mode focus">专注</span><button class="pomo-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button></div>' +
+      '<div class="pomo-row1"><span class="pomo-mode focus">专注</span></div>' +
       '<div class="pomo-time">25:00</div>' +
       '<div class="pomo-set">' +
       '<span class="pomo-set-g">专注<button data-set="focus-minus" type="button" aria-label="专注减一分钟">−</button><b data-set-val="focus">25</b><button data-set="focus-plus" type="button" aria-label="专注加一分钟">+</button></span>' +
@@ -269,7 +269,6 @@
       '<div class="pomo-modal-card" role="dialog" aria-label="番茄钟设置">' +
       '<div class="pomo-row1"><span class="pomo-mode focus">专注</span>' +
       '<span class="pomo-mactions">' +
-      '<button class="pomo-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button>' +
       '<button class="pomo-close" type="button" aria-label="关闭">×</button>' +
       "</span></div>" +
       '<div class="pomo-time">25:00</div>' +
