@@ -132,13 +132,11 @@
       bNo.addEventListener("click", function () { answer(false); });
     });
 
-    /* ---------- ③ 循环队列 ---------- */
+    /* ---------- ③ 循环队列（格子持久化 + 滑动指针动画） ---------- */
     var qPanel = el("div", "lab-panel");
     qPanel.appendChild(el("h4", null, "③ 循环队列（" + M + " 格，牺牲一格判满）"));
-    var qRow = el("div", "lab-row");
-    qPanel.appendChild(qRow);
-    var qMarks = el("div", "lab-row sq-marks");
-    qPanel.appendChild(qMarks);
+    var qStage = el("div", "lab-row sq-stage");
+    qPanel.appendChild(qStage);
     var qStatus = el("p", "sq-qstatus");
     qPanel.appendChild(qStatus);
     var qMsg = el("p", "lab-msg");
@@ -151,26 +149,53 @@
     qPanel.appendChild(qBtns);
     root.appendChild(qPanel);
 
-    var front = 0, rear = 0, cellsArr = [], tokenIdx = 0;
+    var front = 0, rear = 0, cellsArr = [], tokenIdx = 0, animating = false;
+    var qCells = [];
+    (function buildCells() {
+      for (var i = 0; i < M; i++) {
+        var c = el("div", "lab-cell");
+        c.appendChild(el("span", "lab-idx", "格" + i));
+        c.appendChild(el("span", "sq-token", "·"));
+        qStage.appendChild(c);
+        qCells.push(c);
+      }
+      var pf = el("span", "sq-pointer front", "front");
+      var pr = el("span", "sq-pointer rear", "rear");
+      qStage.appendChild(pf);
+      qStage.appendChild(pr);
+      qCells.frontBadge = pf;
+      qCells.rearBadge = pr;
+    })();
+
     function count() { return (rear - front + M) % M; }
-    function renderQueue() {
-      qRow.textContent = "";
-      qMarks.textContent = "";
+
+    /* 只更新内容与指针位置：格子和指针元素持久存在，交给 CSS 过渡去做动画 */
+    function sync() {
       for (var i = 0; i < M; i++) {
         var occupied = (cellsArr[i] !== null && cellsArr[i] !== undefined);
-        var c = el("div", "lab-cell" + (occupied ? " visited" : ""), occupied ? String(cellsArr[i]) : "·");
-        c.appendChild(el("span", "lab-idx", "格" + i));
-        qRow.appendChild(c);
-        var tag = [];
-        if (i === front) { tag.push("front"); }
-        if (i === rear) { tag.push("rear"); }
-        qMarks.appendChild(el("span", "lab-idx", tag.length ? "↑" + tag.join("/↑") : " "));
+        var c = qCells[i];
+        c.querySelector(".sq-token").textContent = occupied ? String(cellsArr[i]) : "·";
+        c.classList.toggle("visited", occupied);
       }
+      var cf = qCells[front], cr = qCells[rear];
+      qCells.frontBadge.style.left = (cf.offsetLeft + cf.offsetWidth / 2) + "px";
+      qCells.rearBadge.style.left = (cr.offsetLeft + cr.offsetWidth / 2) + "px";
       qStatus.textContent = "front=" + front + "，rear=" + rear +
         "，元素个数 = (rear−front+" + M + ") mod " + M + " = " + count() +
         (count() === M - 1 ? "　【队满：牺牲了 1 格】" : (count() === 0 ? "　【队空】" : ""));
     }
+
+    function pulse(cell) {
+      cell.classList.add("sq-pop");
+      setTimeout(function () { cell.classList.remove("sq-pop"); }, 450);
+    }
+    function wrapPulse(cell) {
+      cell.classList.add("sq-wrap-pulse");
+      setTimeout(function () { cell.classList.remove("sq-wrap-pulse"); }, 780);
+    }
+
     btnEn.addEventListener("click", function () {
+      if (animating) return;
       if (count() === M - 1) {
         setMsg(qMsg, "队满！(rear+1) mod " + M + " = " + ((rear + 1) % M) + " = front，不能再入。" +
           "『牺牲一格判满』：宁可永远空一格，换来判满判空条件不冲突——必考。", "badly");
@@ -178,31 +203,51 @@
       }
       if (tokenIdx >= tokens.length) { tokenIdx = 0; }
       var v = tokens[tokenIdx++];
-      cellsArr[rear] = v;
       var at = rear;
+      var wrapped = (at === M - 1);          // rear 正要从最后一格绕回格 0
+      cellsArr[at] = v;
       rear = (rear + 1) % M;
+      animating = true;
       setMsg(qMsg, "入队 " + v + " → 放进格" + at + "，rear = (rear+1) mod " + M + " = " + rear + "。当前个数 " + count() + "。");
-      renderQueue();
+      sync();
+      pulse(qCells[at]);
+      if (wrapped) wrapPulse(qCells[at]);
+      setTimeout(function () { animating = false; }, 420);
     });
+
     btnDe.addEventListener("click", function () {
+      if (animating) return;
       if (count() === 0) {
         setMsg(qMsg, "队空：front == rear → 不能出队。", "badly");
         return;
       }
       var v = cellsArr[front];
-      cellsArr[front] = null;
-      front = (front + 1) % M;
-      setMsg(qMsg, "出队 " + v + "，front = (front+1) mod " + M + " = " + front + "。当前个数 " + count() + "。");
-      renderQueue();
+      var leaving = qCells[front];
+      var wrappedOut = (front === M - 1);    // front 正要从最后一格绕回格 0
+      var nextFront = (front + 1) % M;
+      animating = true;
+      setMsg(qMsg, "出队 " + v + "，front = (front+1) mod " + M + " = " + nextFront + "。当前个数 " + (count() - 1) + "。");
+      leaving.classList.add("sq-vacate");
+      setTimeout(function () {
+        leaving.classList.remove("sq-vacate");
+        cellsArr[front] = null;
+        front = nextFront;
+        sync();
+        if (wrappedOut) wrapPulse(leaving);
+        animating = false;
+      }, 250);
     });
+
     btnQReset.addEventListener("click", function () {
       front = 0; rear = 0; cellsArr = []; tokenIdx = 0;
       setMsg(qMsg, "已重置。多入几个再出几个，盯住 front/rear 怎么『绕圈』——这就是循环的含义。");
-      renderQueue();
+      sync();
     });
 
+    window.addEventListener("resize", function () { sync(); });
+
     renderStack();
-    renderQueue();
+    sync();
   }
 
   global.StackQueue = { mount: mount, simulate: function (tokens, seq) { return null; } };
