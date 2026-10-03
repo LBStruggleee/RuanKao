@@ -861,13 +861,19 @@ html.dark .pomo-start { color: #0e2a22; }
 .pomo-reset:hover { color: var(--pg-ink); }
 .pomo-set {
   display: flex;
-  justify-content: center;
-  gap: 1.1rem;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
   margin-bottom: 0.55rem;
   font-size: 0.78rem;
   color: var(--pg-ink-soft);
 }
-.pomo-set-g { display: inline-flex; align-items: center; gap: 0.25rem; }
+.pomo-set-g {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
 .pomo-set-g button {
   width: 1.35rem;
   height: 1.35rem;
