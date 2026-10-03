@@ -1147,10 +1147,9 @@ html.dark .daily-tag { color: var(--pg-accent); }
   z-index: 898;
   background: rgba(20, 26, 32, 0.42);
 }
-.pomo-veil.show { display: block; }
-.daily-veil.show { display: block; }
-
 @media (max-width: 1499.98px) {
+  .pomo-veil.show { display: block; }
+  .daily-veil.show { display: block; }
   .pomo-glass.open {
     left: 50%;
     top: 50%;
