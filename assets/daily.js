@@ -261,12 +261,14 @@
     openCard = name;
     els.factCard.classList.toggle("open", name === "fact");
     els.quizCard.classList.toggle("open", name === "quiz");
+    els.veil.classList.toggle("show", true);
     if (name === "fact") renderFact(); else renderQuiz();
   }
   function closeAll() {
     openCard = null;
     els.factCard.classList.remove("open");
     els.quizCard.classList.remove("open");
+    els.veil.classList.remove("show");
   }
 
   /* ---------------- 构建 DOM ---------------- */
@@ -294,6 +296,11 @@
     quizCard.innerHTML = '<div class="daily-inner"></div>';
     document.body.appendChild(quizCard);
 
+    var veil = document.createElement("div");
+    veil.className = "daily-veil";
+    document.body.appendChild(veil);
+
+    els.veil = veil;
     els.factCard = factCard;
     els.quizCard = quizCard;
     els.factBody = factCard.querySelector(".daily-inner");

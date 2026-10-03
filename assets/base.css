@@ -728,8 +728,8 @@ html.dark .daily-tab {
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .pomo-glass, .pomo-circle, .pomo-modal-card, .daily-card, .daily-tab { background: var(--pg-fallback); }
 }
-/* 1280px 起右侧留白即可容纳收起胶囊（不与正文重叠） */
-@media (min-width: 1280px) { .pomo-glass { display: flex; } }
+/* 1300px 起右侧留白即可容纳收起胶囊（不与正文重叠） */
+@media (min-width: 1300px) { .pomo-glass { display: flex; } }
 
 /* 运行中的色调光晕：专注=松绿，休息=旧金 */
 .pomo-glass.running {
@@ -941,7 +941,7 @@ html.dark .pomo-start { color: #0e2a22; }
   box-shadow: 0 12px 30px var(--pg-shadow),
               inset 0 1px 0 var(--pg-highlight);
 }
-@media (max-width: 1279.98px) {
+@media (max-width: 1299.98px) {
   .pomo-circle { display: flex; }
   .pomo-glass { display: none !important; }
 }
@@ -1005,9 +1005,11 @@ html.dark .pomo-start { color: #0e2a22; }
   right: 0.9rem;
   bottom: 1.4rem;
   z-index: 940;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
 }
-@media (min-width: 1280px) { .daily-dock { display: flex; } }
+@media (min-width: 1300px) { .daily-dock { display: flex; } }
 
 .daily-tab {
   border: 1px solid var(--pg-border);
@@ -1046,7 +1048,7 @@ html.dark .pomo-start { color: #0e2a22; }
   color: var(--pg-ink);
   animation: dailyPop 0.25s cubic-bezier(0.34, 1.3, 0.5, 1);
 }
-@media (min-width: 1280px) { .daily-card.open { display: block; } }
+@media (min-width: 1300px) { .daily-card.open { display: block; } }
 @keyframes dailyPop {
   from { transform: translateY(8px) scale(0.96); opacity: 0; }
 }
@@ -1135,4 +1137,31 @@ html.dark .daily-tag { color: var(--pg-accent); }
   font-family: var(--mono);
   margin-right: 0.35rem;
   color: var(--pg-ink);
+}
+
+/* ---------- 内容优先：窄于 1500px 时，展开的卡片改为居中弹窗 + 遮罩 ---------- */
+.pomo-veil, .daily-veil {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 898;
+  background: rgba(20, 26, 32, 0.42);
+}
+.pomo-veil.show { display: block; }
+.daily-veil.show { display: block; }
+
+@media (max-width: 1499.98px) {
+  .pomo-glass.open {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+  }
+  .daily-card.open {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+  }
 }

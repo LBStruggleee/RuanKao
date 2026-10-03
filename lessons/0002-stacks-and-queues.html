@@ -47,7 +47,7 @@
 
   <h2>三、队列：排队（先进先出 FIFO）</h2>
   <p>队列是<strong>排队</strong>：从队尾<strong>入队</strong>，从队头<strong>出队</strong>，<strong>先进先出</strong>。「入队出队分别在两端」——记牢这句，2021H2 真题就是把「同一端」的栈混进队列选项里。</p>
-  <p>应用场景：打印缓冲、消息队列、操作系统<strong>就绪队列</strong>（Day 1 的 RR 调度就是从队列头取进程）、<strong>广度优先搜索 BFS</strong>。</p>
+  <p>应用场景：打印缓冲、消息队列、操作系统<strong>就绪队列</strong>（RR 时间片轮转调度就是从队列头取下一个进程运行）、<strong>广度优先搜索 BFS</strong>。</p>
 
   <h2>四、必考计算：循环队列</h2>
   <p>数组实现的队列会「假溢出」——出队后前面空着却不能再入队。解决办法：<strong>首尾相连成环</strong>（取模绕圈）。</p>
@@ -87,7 +87,7 @@
       <a href="../reference/ds-learning-path.html">课程总目录</a>
     </div>
     <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
-    <p>💬 卡在哪一步（比如「为什么判满要牺牲一格」），把那句话发我，我只讲那一点。</p>
+    <p>💬 卡在哪一步（比如「为什么判满要牺牲一格」），回对应章节把那句话的上下文重读一遍。</p>
   </div>
 
 </div>

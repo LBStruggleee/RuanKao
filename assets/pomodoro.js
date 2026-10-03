@@ -14,6 +14,7 @@
  * 计时：
  *   - 默认专注 25 分钟 / 休息 5 分钟，卡片/弹窗里可 ± 调整（1–120 / 1–60），
  *     到点提示音并自动切换模式
+ *   - 不改动标签页标题；窄屏（<1500px）展开时以居中弹窗呈现，不遮挡正文
  *   - 状态持久化 localStorage（rkPomodoroState）：跳页/刷新不丢计时，
  *     离开期间到点按"完成一次"处理
  *   - 今日完成番茄数按天清零
@@ -48,9 +49,8 @@
   if (!state.focusMin) state.focusMin = 25;
   if (!state.breakMin) state.breakMin = 5;
 
-  var rail = null, circle = null, modal = null;
+  var rail = null, circle = null, modal = null, veil = null;
   var els = {};
-  var origTitle = null;
   var audioCtx = null;
 
   function fmt(sec) {
@@ -131,14 +131,6 @@
     rail.classList.toggle("break", !isFocus);
     circle.classList.toggle("running", state.running);
     circle.classList.toggle("break", !isFocus);
-
-    if (state.running) {
-      if (origTitle === null) origTitle = document.title;
-      document.title = "⏱ " + txt + " · " + (isFocus ? "专注" : "休息") + "｜" + origTitle;
-    } else if (origTitle !== null) {
-      document.title = origTitle;
-      origTitle = null;
-    }
   }
 
   function finish() {
@@ -171,6 +163,7 @@
   function collapse() {
     rail.classList.remove("open");
     els.pill.setAttribute("aria-expanded", "false");
+    if (veil) veil.classList.remove("show");
   }
   function openModal() {
     modal.classList.add("open");
@@ -247,6 +240,11 @@
       "</div>";
     document.body.appendChild(rail);
 
+    // 窄屏（<1500px）展开时的遮罩：内容优先，卡片悬浮居中
+    veil = document.createElement("div");
+    veil.className = "pomo-veil";
+    document.body.appendChild(veil);
+
     // 移动端：右下角小圆圈（环形进度 + 中央倒计时）
     circle = document.createElement("button");
     circle.className = "pomo-circle";
@@ -307,6 +305,7 @@
     els.pill.addEventListener("click", function () {
       var open = rail.classList.toggle("open");
       els.pill.setAttribute("aria-expanded", open ? "true" : "false");
+      if (veil) veil.classList.toggle("show", open);
     });
 
     // 点胶囊外部收回（capture 阶段，先于其他 handler）
