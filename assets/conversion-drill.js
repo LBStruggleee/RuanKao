@@ -92,6 +92,9 @@
 
     var types = ["circle", "half", "unit", "binary", "dist"];
     var idx = 0, score = 0, q = null;
+    // 挂载首轮不抢焦点：页面加载中聚焦视口外的输入框会触发浏览器自动滚屏，
+    // 导致从别的页面跳进来时落到页面中段。下一题/再来一轮时才聚焦。
+    var firstLoad = true;
 
     var counter = el("p", null, ""); root.appendChild(counter);
     var qText = el("p", "cdrv-q"); root.appendChild(qText);
@@ -116,7 +119,7 @@
       derive.classList.remove("show");
       btn.disabled = false; btn.style.display = "";
       nextBtn.style.display = "none";
-      input.focus();
+      if (firstLoad) { firstLoad = false; } else { input.focus(); }
     }
 
     function submit() {
