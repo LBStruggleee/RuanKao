@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0025 · TCP 与子网划分：可靠传输 + 必考计算（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0025（计算机网络 · 2/2）</p>
+    <h1>TCP 与子网划分：三次握手 + 必考计算</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0024-network-layers.html">0024 分层模型</a><br>
+      考点定位：三次握手/四次挥手状态、TCP vs UDP、<strong>子网划分 5 步法（必考计算，day05 有 8 道计算题）</strong>
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    子网划分是网络板块<strong>计算量最大的必考点</strong>：5 步法（掩码→块大小→网络地址→广播地址→主机数）刷熟后 90 秒一题。TCP 三次握手/四次挥手的状态名则是送分概念题。
+  </div>
+
+  <h2>一、TCP vs UDP（一句话分家）</h2>
+  <table class="tight">
+    <tr><th></th><th>TCP</th><th>UDP</th></tr>
+    <tr><td>连接</td><td><strong>面向连接</strong>（三次握手建立）</td><td>无连接，发完就算</td></tr>
+    <tr><td>可靠性</td><td>可靠（确认重传、排序、流量/拥塞控制）</td><td>不可靠（可能丢、乱序）</td></tr>
+    <tr><td>速度/开销</td><td>慢、头部 20 字节起</td><td>快、头部 8 字节</td></tr>
+    <tr><td>场景</td><td>网页 HTTP、邮件、文件传输</td><td>DNS 查询、视频直播、语音</td></tr>
+  </table>
+
+  <h2>二、三次握手 / 四次挥手（状态名必背）</h2>
+  <pre>三次握手（建立）：                       四次挥手（释放）：
+客户端 SYN ──→ 服务端    [SYN_SENT]      主动方 FIN ──→          [FIN_WAIT_1]
+     ←── SYN+ACK         [SYN_RCVD]           ←── ACK            [CLOSE_WAIT→LAST_ACK]
+客户端 ACK ──→           [ESTABLISHED]        ←── FIN
+                                              ACK ──→            [TIME_WAIT→CLOSED]
+  双方进入 ESTABLISHED                  等待 2MSL 后 CLOSED（确保最后 ACK 达到）</pre>
+  <ul>
+    <li><strong>为什么三次</strong>：双方都确认「我能发你能收」；两次会导致失效的连接请求突然到达造成资源浪费。</li>
+    <li><strong>为什么四次</strong>：关闭是两个方向各关一次（半关闭）。</li>
+    <li><strong>TIME_WAIT 等 2MSL</strong>：保证最后的 ACK 能重发、旧报文消亡。</li>
+  </ul>
+  <p>流量控制 = <strong>滑动窗口</strong>（接收方通告窗口）；拥塞控制四招：<strong>慢开始（指数增）→ 拥塞避免（线性加 1）→ 超时则 ssthresh=当前一半、cwnd 重回 1；快重传（3 个重复 ACK）+ 快恢复</strong>。</p>
+
+  <h2>三、子网划分 5 步法（必考计算）</h2>
+  <span class="formula">①掩码 /n → ②块大小 = 256 − 掩码末字节值 → ③网络地址 = IP 按块取整段起点<br>④广播地址 = 下一网络地址 − 1 → ⑤可用主机数 = 2^(32−n) − 2</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例 1</strong>：192.168.1.130 /26（掩码 255.255.255.192）：</p>
+    <p>块大小 = 256−192 = <strong>64</strong> → 段起点：0, 64, <strong>128</strong>, 192 → 130 落在 <strong>128–191</strong> 段 → 网络地址 <strong>192.168.1.128</strong>，广播 <strong>192.168.1.191</strong>，可用主机 2⁶−2 = <strong>62</strong>。</p>
+    <p style="margin-bottom:0;"><strong>例 2</strong>：172.16.55.200 /20（掩码 255.255.240.0）：第三字节块 = 256−240 = <strong>16</strong> → 段 48–63 → 网络 <strong>172.16.48.0</strong>，广播 <strong>172.16.63.255</strong>，主机 2¹²−2 = <strong>4094</strong>。</p>
+  </div>
+  <div class="callout warn">
+    <span class="tag">⚠ 三个陷阱</span>
+    ① 可用主机数要 <strong>−2</strong>（网络地址 + 广播地址不可用）；② <strong>CIDR 聚合</strong>：4 个连续 /24 聚合成一个 <strong>/22</strong>（往左退 2 位）；③ 同一子网判断 = 网络地址相同（按最长掩码算）。
+  </div>
+
+  <h2>四、计算挑战（先动笔再填）</h2>
+  <div id="cd17"></div>
+
+  <h2>五、自查（全对过课）</h2>
+  <div id="quiz17"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>TCP 面向连接可靠（HTTP/邮件）、UDP 无连接快（DNS/直播）；握手 SYN_SENT→SYN_RCVD→ESTABLISHED。</li>
+      <li>TIME_WAIT 等 2MSL；拥塞控制：慢开始指数、拥塞避免线性、超时减半 ssthresh、快重传 3 重复 ACK。</li>
+      <li>子网 5 步法：掩码 → 块 256−末字节 → 网络 → 广播 → 主机 2^(32−n)−2。</li>
+      <li>/26 → 62 主机；/20 → 4094；4×/24 → /22。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0024-network-layers.html">← 上一课 0024 网络分层</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0026-security.html">下一课 → 0026 信息安全</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../pages/knowledge-points/networks/day05-exercises.html">day05-exercises.md（20 题，8 道子网计算）</a>；错题登记 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么主机数要减 2」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd17", {
+  title: "子网划分计算挑战（5 步法）",
+  questions: [
+    { text: "192.168.1.130/26 的网络地址末字节 = ___（即 192.168.1.___）", answer: 128, mode: "exact",
+      derive: "掩码 255.255.255.192 → 块大小 256−192=64 → 段 0/64/128/192 → 130 ∈ [128,191] → 网络地址 192.168.1.128。" },
+    { text: "同上，广播地址末字节 = ___", answer: 191, mode: "exact",
+      derive: "广播 = 下一网络地址 −1 = 128+64−1 = 191。" },
+    { text: "/26 网络的可用主机数 = ___", answer: 62, mode: "exact",
+      derive: "主机位 = 32−26 = 6 → 2⁶−2 = 62（去掉网络地址和广播地址）。" },
+    { text: "172.16.55.200/20 的网络地址第三字节 = ___（即 172.16.___.0）", answer: 48, mode: "exact",
+      derive: "第三字节掩码 240 → 块 256−240=16 → 段 0/16/32/48/… → 55 ∈ [48,63] → 第三字节 48。" },
+    { text: "/20 网络的可用主机数 = ___", answer: 4094, mode: "exact",
+      derive: "主机位 = 32−20 = 12 → 2¹²−2 = 4096−2 = 4094。" },
+    { text: "聚合 4 个连续的 /24 网段，聚合后的前缀长度 = /___", answer: 22, mode: "exact",
+      derive: "4 = 2² → 往左取 2 位 → /24 −2 = /22（覆盖 2²=4 个 /24，主机位多 2 位）。" }
+  ]
+});
+
+Quiz.render("quiz17", {
+  title: "本课自查（8 题，先算再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "TCP 建立连接需要几次握手？",
+      options: ["3 次", "2 次", "4 次", "1 次"],
+      answer: 0,
+      opts: [
+        "✓ SYN → SYN+ACK → ACK，双方各确认一次收发能力。",
+        "2 次无法防止失效连接请求造成的资源浪费。",
+        "4 次是断开（挥手）的次数。",
+        "1 次连对方的应答都收不到。"
+      ],
+      explain: "握手状态：客户端 SYN_SENT → 服务端 SYN_RCVD → 双方 ESTABLISHED。",
+      source: "day05-tcp.md ｜ Lesson 0025 §二"
+    },
+    {
+      q: "TCP 主动关闭方在发出 FIN、收到 ACK 后进入的状态是？",
+      options: ["FIN_WAIT（等待对方 FIN）", "TIME_WAIT（等 2MSL）", "CLOSED", "SYN_RCVD"],
+      answer: 0,
+      opts: [
+        "✓ 半关闭：本方不发数据了，还要等对方的 FIN（FIN_WAIT_1/2），收到后回 ACK 才进 TIME_WAIT。",
+        "TIME_WAIT 在最后：发出最后一个 ACK 后等 2MSL。",
+        "CLOSED 是最终态。",
+        "SYN_RCVD 是握手阶段服务端的状态。"
+      ],
+      explain: "四次挥手 = 两个方向各关一次；最后主动方 TIME_WAIT 等 2MSL 保证 ACK 可重发。",
+      source: "day05-tcp.md ｜ Lesson 0025 §二"
+    },
+    {
+      q: "下列应用中，最适合使用 UDP 的是？",
+      options: ["视频直播", "网页浏览", "邮件发送", "文件下载"],
+      answer: 0,
+      opts: [
+        "✓ 直播丢一两帧无所谓、要低延迟——UDP 的不可靠+快正合适。",
+        "网页 HTTP 基于 TCP（要完整）。",
+        "邮件 SMTP 基于 TCP。",
+        "文件一个字节都不能丢 → TCP。"
+      ],
+      explain: "选型口诀：要完整用 TCP，要快能用 UDP（DNS 查询也是 UDP 53）。",
+      source: "day05-tcp.md ｜ Lesson 0025 §一"
+    },
+    {
+      q: "IP 地址 192.168.1.130/26 的广播地址是？",
+      options: ["192.168.1.191", "192.168.1.255", "192.168.1.128", "192.168.1.190"],
+      answer: 0,
+      opts: [
+        "✓ 块大小 64，130 落在 128–191 段 → 广播 = 段尾 191。",
+        "255 是不加子网时的老广播——/26 已把段切小。",
+        "128 是网络地址。",
+        "190 是最后一个可用主机地址（广播 −1）。"
+      ],
+      explain: "5 步法：块 64 → 段 128–191 → 网络头 128、广播尾 191。",
+      source: "day05-tcp.md ｜ Lesson 0025 §三"
+    },
+    {
+      q: "/28 子网的可用主机数是？",
+      options: ["14", "16", "30", "15"],
+      answer: 0,
+      opts: [
+        "✓ 主机位 32−28 = 4 → 2⁴ = 16 个地址 −2（网络+广播）= 14。",
+        "16 忘了减 2（网络地址和广播地址不可用）。",
+        "30 是 /27 的结果。",
+        "15 = 2⁴−1，只减了广播没减网络。"
+      ],
+      explain: "可用主机 = 2^(32−前缀) − 2，永远减 2。",
+      source: "day05-tcp.md ｜ Lesson 0025 §三"
+    },
+    {
+      q: "拥塞控制中发生超时后，正确动作是？",
+      options: ["ssthresh = 当前拥塞窗口一半，cwnd 重设为 1，重新慢开始", "cwnd 加倍", "立即关闭连接", "增大 ssthresh"],
+      answer: 0,
+      opts: [
+        "✓ 超时=网络严重拥塞：阈值砍半、窗口归 1，从慢开始重来。",
+        "加倍的只有慢开始阶段的指数增长，不是超时后的处理。",
+        "拥塞控制就是为避免关闭而设计的。",
+        "方向反了——阈值要减半。"
+      ],
+      explain: "对照：收到 3 个重复 ACK 是『快重传+快恢复』（阈值减半、cwnd 从新阈值线性开始）。",
+      source: "day05-tcp.md ｜ Lesson 0025 §二"
+    },
+    {
+      q: "主机 A（192.168.1.130/26）与主机 B（192.168.1.190/26）的关系是？",
+      options: ["同一子网（.128–.191 段内）", "不同子网", "B 是 A 的网关", "只有 A 的地址合法"],
+      answer: 0,
+      opts: [
+        "✓ 两者都在 128–191 段 → 网络地址同为 192.168.1.128 → 同子网，可直接通信。",
+        "段范围算错才会判成不同子网。",
+        "网关是跨网段的出口，这里没有此含义。",
+        ".130 和 .190 都是 /26 内的合法主机地址。"
+      ],
+      explain: "同子网判断：按掩码分别算网络地址，相同则同网。",
+      source: "day05-tcp.md ｜ Lesson 0025 §三"
+    },
+    {
+      q: "TCP 的流量控制是通过什么机制实现的？",
+      options: ["滑动窗口（接收方通告窗口大小）", "三次握手", "端口复用", "校验和重传"],
+      answer: 0,
+      opts: [
+        "✓ 接收方在 ACK 中通告剩余缓冲（窗口），发送方发送量不超过它——防止淹没接收方。",
+        "握手管建立连接，不管速率。",
+        "端口负责进程级复用分用。",
+        "校验和管差错检测，重传由确认超时触发。"
+      ],
+      explain: "区分：流量控制管『对方』（端到端），拥塞控制管『网络』（全局）。",
+      source: "day05-tcp.md ｜ Lesson 0025 §二"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

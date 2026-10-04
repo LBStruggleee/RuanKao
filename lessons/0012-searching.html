@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0012 · 查找：折半与哈希（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0012（数据结构与算法 · 8/10）</p>
+    <h1>查找：折半砍一半，哈希一步到位</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0011-graph-algorithms.html">0011 图四大算法</a><br>
+      考点定位：折半比较次数 ⌊log₂n⌋+1、哈希冲突处理与 ASL 手算（<a href="../pages/practice/phase1-comprehensive-quiz.html">阶段综合卷</a> 与真题反复出现）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    两个「一秒出答案」：折半查找 n 个元素最多比较 <strong>⌊log₂n⌋ + 1</strong> 次；哈希表成功查找平均次数 <strong>ASL = 每个元素的比较次数加起来 ÷ 元素数</strong>。把本课样例表算熟，计算器都不用开。
+  </div>
+
+  <h2>一、折半查找：每次砍一半</h2>
+  <p>在<strong>有序</strong>序列里找 x：看中间那个，大了往左半、小了往右半。两个前提缺一不可：<strong>①序列有序 ②顺序存储（数组）</strong>——链表没法跳到中间（<a href="0005-arrays-and-linked-lists.html">Lesson 0005</a>：数组才能按下标直达）。</p>
+  <span class="formula">mid = ⌊(low + high) / 2⌋　　最多比较次数 = ⌊log₂n⌋ + 1</span>
+  <table class="tight">
+    <tr><th>n</th><th>最多比较次数 ⌊log₂n⌋+1</th></tr>
+    <tr><td>15</td><td class="num">4</td></tr>
+    <tr><td>63</td><td class="num">6</td></tr>
+    <tr><td>64</td><td class="num">7（满树多一层）</td></tr>
+    <tr><td>100</td><td class="num">7</td></tr>
+    <tr><td>1023</td><td class="num">10</td></tr>
+  </table>
+  <p>把比较过程画成树就是<strong>判定树</strong>：mid 是根，左右半区是左右子树——成功/失败的查找最多走树深（<a href="0007-binary-tree-basics.html">0007 的树性质</a>在背后撑腰）。</p>
+
+  <h2>二、哈希：算出地址直接住进去</h2>
+  <p>不想比较，想<strong>用关键字直接算出存储地址</strong>：H(key) = key mod p（<strong>除留余数法</strong>，p 取<strong>不大于表长的最大质数</strong>，让散布均匀）。两个 key 算出同一地址 = <strong>冲突</strong>，处理办法三种：</p>
+  <table class="tight">
+    <tr><th>方法</th><th>做法</th><th>要点</th></tr>
+    <tr><td><strong>线性探测</strong></td><td>占了就往后挪一格（di = 1,2,3…）</td><td>简单，但会<strong>堆积</strong>（连片占满，越堵越堵）</td></tr>
+    <tr><td><strong>二次探测</strong></td><td>跳 1², −1², 2², −2²…</td><td>跳跃式，缓解堆积</td></tr>
+    <tr><td><strong>链地址</strong></td><td>同义词挂成一条链表</td><td>本质就是 <a href="0005-arrays-and-linked-lists.html">Lesson 0005 的链表</a>；删除方便</td></tr>
+  </table>
+  <span class="formula">装填因子 α = 元素数 ÷ 表长（越大越挤，冲突越多，ASL 越大）　　ASL(成功) = Σ每个元素的比较次数 ÷ 元素数</span>
+
+  <h3>样例手算（背熟流程）</h3>
+  <div class="card">
+    <p style="margin-top:0;">H(k) = k mod 7，表长 7，依次插入 <strong>16, 24, 9, 3</strong>（线性探测）：</p>
+    <p>16 → 16 mod 7 = <strong>2</strong>（空 → 入格2，比较1次）；24 → <strong>3</strong>（空 → 格3，1次）；9 → 2（被 16 占）→ 探 3（被 24 占）→ 探 <strong>4</strong>（入，3次）；3 → 3（占）→ 探 4（占）→ 探 <strong>5</strong>（入，3次）。</p>
+    <p style="margin-bottom:0;"><strong>ASL(成功) = (1 + 1 + 3 + 3) ÷ 4 = 2</strong>；装填因子 α = 4/7 ≈ 0.57。</p>
+  </div>
+
+  <h2>三、动手：折半次数 + ASL 计算挑战（先动笔再填）</h2>
+  <div id="cd8"></div>
+
+  <h2>四、自查（全对过课）</h2>
+  <div id="quiz-ds8"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>折半 = 有序 + 顺序存储；最多比较 <strong>⌊log₂n⌋ + 1</strong> 次（n=15→4，n=100→7，n=1023→10）。</li>
+      <li>H(k)=k mod p，p = 不大于表长的最大质数；线性探测会堆积、二次探测跳跃、链地址挂链表。</li>
+      <li>α = 元素数/表长，越大越挤；ASL(成功) = 比较次数总和 ÷ 元素数（样例表 = 2）。</li>
+      <li>判定树 = 折半过程的树形化，深度就是比较次数上限。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0011-graph-algorithms.html">← 上一课 0011 图四大算法</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0013-sorting.html">下一课 → 0013 排序</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么 p 要选质数」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd8", {
+  title: "折半次数 + 哈希 ASL 计算挑战",
+  questions: [
+    { text: "对 15 个元素的有序表折半查找，最多比较 ___ 次", answer: 4, mode: "exact",
+      derive: "⌊log₂15⌋ + 1 = 3 + 1 = 4（15 个节点判定树深 4 层）。" },
+    { text: "对 100 个元素的有序表折半查找，最多比较 ___ 次", answer: 7, mode: "exact",
+      derive: "⌊log₂100⌋ + 1 = 6 + 1 = 7（64 ≤ 100 < 128）。" },
+    { text: "对 1023 个元素的有序表折半查找，最多比较 ___ 次", answer: 10, mode: "exact",
+      derive: "1023 = 2¹⁰ − 1 → 判定树满 10 层 → 最多 10 次。" },
+    { text: "样例表（H=k mod 7，插入 16,24,9,3，线性探测）查找成功的 ASL = ___", answer: 2, mode: "exact",
+      derive: "比较次数 16:1、24:1、9:3、3:3 → ASL = (1+1+3+3) ÷ 4 = 2。" },
+    { text: "同一样例表的装填因子 α = 元素数 ÷ 表长 = ___（两位小数）", answer: 0.57, mode: "precise",
+      derive: "α = 4/7 ≈ 0.57。α 越接近 1 越拥挤、冲突越多。" },
+    { text: "同一样例表中，关键字 10 的哈希地址 H(10) = 10 mod 7 = ___", answer: 3, mode: "exact",
+      derive: "H(10) = 10 mod 7 = 3——但格 3 被 24 占着，插入时还得线性探测，这正是冲突。" }
+  ]
+});
+
+Quiz.render("quiz-ds8", {
+  title: "本课自查（7 题，先算再点）",
+  passNote: "7/7，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "折半查找的前提条件是？",
+      options: ["序列有序且顺序存储", "只需序列有序", "元素互不相同即可", "必须是完全二叉树"],
+      answer: 0,
+      opts: [
+        "✓ 有序才能决定『往左还是往右』；顺序存储才能 O(1) 跳到中点（链表跳不了）。",
+        "无序时中点没有任何淘汰一半的依据。",
+        "重复元素影响的是相等时的处理，不是前提。",
+        "判定树只是过程的抽象，不是存储前提。"
+      ],
+      explain: "两个前提各出过判断题：链表不能折半、无序表不能折半。",
+      source: "Lesson 0012 §一 ｜ 0005 §四"
+    },
+    {
+      q: "对 64 个元素的有序表折半查找，最多比较几次？",
+      options: ["7", "6", "8", "64"],
+      answer: 0,
+      opts: [
+        "✓ ⌊log₂64⌋ + 1 = 6 + 1 = 7——64 = 2⁶，判定树是 7 层满到第 6 层再多一层。",
+        "6 = ⌊log₂64⌋ 忘了 +1（高频错误！）。",
+        "8 多算一层。",
+        "64 是顺序查找最坏次数。"
+      ],
+      explain: "公式 ⌊log₂n⌋ + 1；注意 2 的幂（64/512/1024）时别漏 +1。",
+      source: "Lesson 0012 §一"
+    },
+    {
+      q: "除留余数法 H(k) = k mod p 中，p 应当取？",
+      options: ["不大于表长的最大质数", "任意偶数", "恰好等于表长", "2 的幂"],
+      answer: 0,
+      opts: [
+        "✓ 质数能让余数分布均匀、减少冲突——教材标准口径。",
+        "偶数与公因子会让关键字『扎堆』。",
+        "p 取表长本身时，含因子 p 的 key 全撞一个格。",
+        "2 的幂只保留二进制低位，散布差。"
+      ],
+      explain: "『p 取质数』是哈希小题的固定答案位，几乎每年换着说法问。",
+      source: "Lesson 0012 §二"
+    },
+    {
+      q: "线性探测法处理冲突的主要缺点是？",
+      options: ["堆积：冲突元素连片聚集，越堵越堵", "完全无法处理冲突", "要求表必须有序", "空间开销翻倍"],
+      answer: 0,
+      opts: [
+        "✓ 后一格被占再探下一格，冲突元素连成一片——非同义词也会互相干扰（堆积）。",
+        "它能处理冲突，只是质量差；处理不了的是没有方法。",
+        "哈希表与有序无关。",
+        "空间不变，是探测次数变多。"
+      ],
+      explain: "对策就是二次探测（跳 1²,−1²,2²…）或链地址法。",
+      source: "Lesson 0012 §二"
+    },
+    {
+      q: "二次探测法的探测序列是？",
+      options: ["1², −1², 2², −2², …", "1, 2, 3, 4, …", "2, 4, 8, 16, …", "随机跳格"],
+      answer: 0,
+      opts: [
+        "✓ 先 +1²，再 −1²，再 +2²……跳跃式绕开堆积区。",
+        "那是线性探测。",
+        "指数跳格太远，不是标准二次探测。",
+        "随机探测是另一类方法（伪随机序列）。"
+      ],
+      explain: "三个方法各记一句：线性=顺挪、二次=跳方、链地址=挂链。",
+      source: "Lesson 0012 §二"
+    },
+    {
+      q: "装填因子 α 变大，直接后果是？",
+      options: ["冲突概率增大，平均查找长度变大", "查找更快", "表立即溢出", "必须换质数"],
+      answer: 0,
+      opts: [
+        "✓ α = 元素数/表长，越接近 1 表越挤，碰撞越多，ASL 随之上升。",
+        "方向反了：越满越慢。",
+        "α = 1 只说明满（开放定址下早在这之前就很难插入），不是『立即溢出』。",
+        "质数在建表时已定，与 α 无关。"
+      ],
+      explain: "哈希的效率哲学：用空间换时间，α 就是这个交换的旋钮。",
+      source: "Lesson 0012 §二"
+    },
+    {
+      q: "链地址法解决冲突的本质是？",
+      options: ["把同义词挂成一条链表（数组 + 链表）", "把元素重新哈希到别的表", "删除表尾元素腾位置", "排序后改用折半查找"],
+      answer: 0,
+      opts: [
+        "✓ 每个格子挂一条链表，同义词依次入链——正是 Lesson 0005『数组 + 链表』的合体。",
+        "那是再哈希法。",
+        "开放定址才纠结删除问题（需标记），链地址直接摘节点。",
+        "哈希追求 O(1)，排序折半是 O(log n)，方向反了。"
+      ],
+      explain: "链地址还有个好处：删除方便（开放定址删除要打删除标记）。",
+      source: "Lesson 0012 §二 ｜ 0005 §三"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

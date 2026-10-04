@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0022 · 范式与 E-R 图：候选码判定与模式转换（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0022（数据库 · 2/3）</p>
+    <h1>范式与 E-R 图：候选码判定 + 模式转换</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0021-relational-sql.html">0021 关系代数与 SQL</a><br>
+      考点定位：候选码 4 步判定、1NF–BCNF 分界、M:N 联系转换（<a href="../pages/knowledge-points/databases/day08-er.html">day08-er.md</a>，下午大题 E-R 的根基）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    范式题的解题起点永远是<strong>候选码</strong>——4 步判定法（L/R/N/LR 分类 → L、N 直接入码 → 求闭包 → 不够再配 LR）。加上三条范式快解和 E-R「M:N 独立成表」铁律，上午判断题 + 下午 E-R 大题一起吃。
+  </div>
+
+  <h2>一、函数依赖（FD）三兄弟</h2>
+  <table class="tight">
+    <tr><th>依赖</th><th>定义</th><th>例子</th><th>引发问题</th></tr>
+    <tr><td>完全依赖</td><td>码的<strong>全部</strong>才能决定它</td><td>(学号,课号) → 成绩</td><td>—</td></tr>
+    <tr><td><strong>部分依赖</strong></td><td>码的<strong>一部分</strong>就能决定非主属性</td><td>(学号,课号) → 学生姓名</td><td>违反 <strong>2NF</strong>（冗余/异常）</td></tr>
+    <tr><td><strong>传递依赖</strong></td><td>A→B、B→C（B 不依赖于 A）</td><td>学号→系名→系主任</td><td>违反 <strong>3NF</strong></td></tr>
+  </table>
+
+  <h2>二、候选码判定 4 步法（一切范式题的起点）</h2>
+  <ol>
+    <li>把属性按在依赖中出现的位置分类：<strong>L</strong>（只出现在左部）、<strong>R</strong>（只在右部）、<strong>N</strong>（不出现）、<strong>LR</strong>（两边都有）；</li>
+    <li><strong>L 和 N 一定在候选码里</strong>；R 一定不在；</li>
+    <li>求 (L∪N) 的属性闭包（用 Armstrong：自反/增广/传递推）——若已含全部属性，它就是候选码；</li>
+    <li>若没含全部，把 LR 属性逐个/组合加入再求闭包，恰好覆盖全属性的即为候选码（可能有多个）。</li>
+  </ol>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：R(A,B,C,D)，F = {A→B, B→C}。分类：A 是 L，D 是 N，B、C 是 R。候选码必含 A、D → (AD)⁺ = {A,D,B,C}（A→B→C）→ 覆盖全部 → <strong>候选码 AD</strong>。</p>
+  </div>
+
+  <h2>三、范式：1NF → 2NF → 3NF → BCNF</h2>
+  <span class="formula">1NF 属性原子 → 2NF 消除非主属性对码的部分依赖 → 3NF 消除传递依赖 → BCNF 所有决定因素都是候选码</span>
+  <p><strong>三条考场快解</strong>（原资料口径）：</p>
+  <ul>
+    <li>候选码都是<strong>单属性</strong> → 不存在部分依赖 → 至少 2NF；</li>
+    <li><strong>全部属性都是主属性</strong>（都在某候选码里）→ 至少 3NF；</li>
+    <li>每个函数依赖的<strong>左部都是候选码</strong> → BCNF。</li>
+  </ul>
+  <div class="card">
+    <p style="margin-top:0;"><strong>3NF vs BCNF 分界例（背）</strong>：R(A,B,C)，F = {AB→C, C→B}。候选码：AB 与 AC。C→B 的左部 C <strong>不是候选码</strong> → 不是 BCNF；但 B 是主属性、不存在非主属性传递依赖 → 仍是 <strong>3NF</strong>。结论：<strong>3NF 但非 BCNF</strong>。</p>
+  </div>
+
+  <h2>四、E-R 图与模式转换（下午大题铁律）</h2>
+  <ul>
+    <li>E-R 三要素：<strong>实体、属性、联系</strong>；联系类型判定：两个方向各取一端问「最多几个」→ 1:1 / 1:N / M:N。</li>
+    <li>转换规则：<strong>实体 → 一个关系模式</strong>；<strong>1:1 联系</strong>：并入任意一端；<strong>1:N 联系</strong>：并入 <strong>N 端</strong>（加对方主键做外键）；<strong>M:N 联系</strong>：<strong>必须独立成一个关系模式</strong>，主键 = 双方主键的组合。</li>
+  </ul>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频判断</span>
+    『M:N 联系可以合并进任何一端』——错！只有 1:1 和 1:N 能并入；M:N 独立成表，这是 E-R 大题判分点。
+  </div>
+
+  <h2>五、自查（先动笔推候选码再点）</h2>
+  <div id="quiz20"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>候选码 4 步：<strong>L/R/N/LR 分类 → L、N 直接入码 → 求闭包 → LR 补齐</strong>。</li>
+      <li>范式链：1NF 原子 → 2NF 消部分依赖 → 3NF 消传递依赖 → BCNF 决定因素皆候选码。</li>
+      <li>快解：单属性码≥2NF；全主属性≥3NF；左部皆码=BCNF。R(A,B,C) F={AB→C,C→B} → 3NF 非 BCNF。</li>
+      <li>E-R 转换：<strong>1:1 并任一端、1:N 并 N 端、M:N 独立成表</strong>（主键 = 双方主键组合）。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0021-relational-sql.html">← 上一课 0021 关系代数与 SQL</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0023-db-advanced.html">下一课 → 0023 数据库进阶</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>课后练习</strong>：<a href="../pages/knowledge-points/databases/day08-exercises.html">day08-exercises.md（20 题，含 E-R 大题）</a>；错题登记 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「闭包怎么求」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz20", {
+  title: "本课自查（8 题，先推候选码再点）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "R(A,B,C,D)，F = {A→B, B→C}。其候选码是？",
+      options: ["AD", "A", "AB", "ACD"],
+      answer: 0,
+      opts: [
+        "✓ A 是 L 类、D 是 N 类 → 必含 AD；(AD)⁺ = {A,D,B,C} 覆盖全属性 → 候选码 AD。",
+        "A 的闭包 {A,B,C} 不含 D，覆盖不全。",
+        "AB 同样不含 D，且 B 是 R 类属性（可被推出）。",
+        "C 是 R 类属性，不可能出现在候选码里。"
+      ],
+      explain: "4 步法：分类 → L、N 入码 → 求闭包 → LR 补齐。R 类属性永远进不了候选码。",
+      source: "day08-er.md §2 ｜ Lesson 0022 §二"
+    },
+    {
+      q: "(学号, 课号) → 学生姓名（学号 → 学生姓名也成立），前者是？",
+      options: ["部分依赖，违反 2NF", "完全依赖，符合 2NF", "传递依赖，违反 3NF", "多值依赖"],
+      answer: 0,
+      opts: [
+        "✓ 码的一部分（学号）就能决定非主属性 → 部分依赖，2NF 要求消除它。",
+        "完全依赖需要整个码才决定，这里学号单打独斗就够了。",
+        "传递依赖是 A→B→C 的链式结构，这里是码内拆分问题。",
+        "考点是函数依赖的分类，与多值依赖无关。"
+      ],
+      explain: "2NF 只对非主属性提要求：消除部分依赖（分解成两个表即可）。",
+      source: "day08-er.md §1 ｜ Lesson 0022 §一"
+    },
+    {
+      q: "学号 → 系名，系名 → 系主任。『系主任』对『学号』是？",
+      options: ["传递依赖，违反 3NF", "部分依赖，违反 2NF", "完全依赖", "不存在依赖"],
+      answer: 0,
+      opts: [
+        "✓ 学号→系名→系主任构成链式传递 → 3NF 要求消除（把系信息拆成独立表）。",
+        "部分依赖说的是『码的一部分决定非主属性』，结构不同。",
+        "完全依赖要求无中间环节。",
+        "明显的函数依赖链。"
+      ],
+      explain: "3NF 消传递依赖：系名、系主任拆出去，原表留外键。",
+      source: "day08-er.md §1 ｜ Lesson 0022 §一"
+    },
+    {
+      q: "R(A,B,C)，F = {AB→C, C→B}。该关系模式最高满足？",
+      options: ["3NF（但不是 BCNF）", "BCNF", "只有 2NF", "连 1NF 都不满足"],
+      answer: 0,
+      opts: [
+        "✓ 候选码 AB、AC；C→B 的左部 C 不是候选码 → 非 BCNF；但全部属性都是主属性、无非主属性传递依赖 → 3NF。",
+        "BCNF 要求每个依赖左部都是候选码，C 不满足。",
+        "没有非主属性，不存在部分/传递依赖问题，2NF 早满足。",
+        "属性已原子，1NF 当然满足。"
+      ],
+      explain: "快解：全主属性 → 至少 3NF；左部皆码才 BCNF。这道是 3NF 与 BCNF 分界的标准例。",
+      source: "day08-er.md §3 ｜ Lesson 0022 §三"
+    },
+    {
+      q: "学生（学号）与课程（课号）之间是 M:N 联系『选修』。转换为关系模式时，『选修』应当？",
+      options: ["独立成一个模式，主键 = (学号, 课号)", "并入学生表", "并入课程表", "不转换为关系模式"],
+      answer: 0,
+      opts: [
+        "✓ M:N 联系必须独立成表，主键为双方主键组合（还可带成绩等属性）。",
+        "1:N 才能并入 N 端；M:N 并入会造成大量冗余。",
+        "同上，任何一端都装不下多对多。",
+        "不转换则联系信息丢失，E-R 图就没意义了。"
+      ],
+      explain: "铁律：1:1 并任一端；1:N 并 N 端；M:N 独立成表。",
+      source: "day08-er.md §4 ｜ Lesson 0022 §四"
+    },
+    {
+      q: "实体完整性约束指的是？",
+      options: ["主键非空且唯一", "外键必须存在于被参照表", "用户自定义的取值范围", "字段不能重复存储"],
+      answer: 0,
+      opts: [
+        "✓ 实体完整性 = 主属性（主键）不为空、不重复。",
+        "那是参照完整性（外键约束）。",
+        "那是用户定义完整性（如 CHECK 年龄>0）。",
+        "『字段不重复』表述不成立——是主键取值不重复。"
+      ],
+      explain: "三完整性配对：实体→主键、参照→外键、用户定义→业务规则。",
+      source: "day07-sql.md §1 ｜ Lesson 0022 §一"
+    },
+    {
+      q: "1NF 的要求是？",
+      options: ["每个属性都是不可再分的原子值", "消除部分依赖", "消除传递依赖", "所有决定因素都是候选码"],
+      answer: 0,
+      opts: [
+        "✓ 1NF = 元组的每个分量不可再分（不能『数组套数组』）——关系表的最基本要求。",
+        "那是 2NF 的任务。",
+        "那是 3NF 的任务。",
+        "那是 BCNF 的任务。"
+      ],
+      explain: "范式递进链：1NF 原子 → 2NF 消部分 → 3NF 消传递 → BCNF 皆码。",
+      source: "day08-er.md §3 ｜ Lesson 0022 §三"
+    },
+    {
+      q: "R(A,B,C,D)，F = {AB→C, C→D}。候选码是？",
+      options: ["AB", "AC", "AD", "BCD"],
+      answer: 0,
+      opts: [
+        "✓ A 是 L 类、B 是 LR、C 中转、D 是 R 类；(AB)⁺ = {A,B,C,D} 覆盖全部 → 候选码 AB。",
+        "(AC)⁺ = {A,C,D} 缺 B。",
+        "(AD)⁺ = {A,D} 太少。",
+        "C、D 是 R 类属性，不能进候选码。"
+      ],
+      explain: "先分类：A=L，D=R；L 类属性 A 必在码中，与 LR 类 B 组合试闭包。",
+      source: "day08-er.md §2 ｜ Lesson 0022 §二"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

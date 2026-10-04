@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0033 · 保底专项：法规·标准·多媒体·英语（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0033（综合保底）</p>
+    <h1>保底拿分：法规年限、标准分级、多媒体容量、英语套路</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>30 分钟</b> ｜ 上一课：<a href="0032-design-patterns.html">0032 设计模式</a><br>
+      考点定位：知识产权保护期数字、GB/T 含义、多媒体容量计算（<a href="../pages/strategies/high-frequency-topics.html">高频清单「保底拿分项」</a>，约 5-6 分）
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    这 5-6 分不靠理解、只靠<strong>背数字 + 会换算</strong>：著作权「署名永久、财产终生+50 年」；专利「发明 20、实用新型 10、外观 15」；商标 10 年可续；GB/T 是推荐性；图像容量 = 像素×位深÷8。
+  </div>
+
+  <h2>一、知识产权：保护期数字（必背）</h2>
+  <table class="tight">
+    <tr><th>对象</th><th>权利</th><th>保护期</th></tr>
+    <tr><td rowspan="2">著作权</td><td>署名权、修改权、保护作品完整权（人身权）</td><td><strong>不受限制（永久）</strong></td></tr>
+    <tr><td>发表权 + 财产权（获得报酬）</td><td>自然人：<strong>作者终生 + 死后 50 年</strong>（至当年 12 月 31 日）；法人作品：<strong>首次发表后 50 年</strong></td></tr>
+    <tr><td rowspan="3">专利权</td><td>发明专利</td><td><strong>20 年</strong>（自申请日起）</td></tr>
+    <tr><td>实用新型</td><td><strong>10 年</strong></td></tr>
+    <tr><td>外观设计</td><td><strong>15 年</strong>（2021 年新专利法）</td></tr>
+    <tr><td>注册商标</td><td>专用权</td><td><strong>10 年，可无限续展</strong>（期满前 12 个月内申请，宽展期 6 个月）</td></tr>
+    <tr><td>商业秘密</td><td>—</td><td>只要保密就<strong>无期限</strong></td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频判断</span>
+    ① 职务作品：一般归作者，但主要利用单位物质技术条件并由单位承担责任的作品，作者只保留署名权、其余归单位；② 委托开发：有合同按合同，<strong>无合同归实际创作方（受托人）</strong>；③ 「销售不知道是侵权的产品且能说明来源」不承担赔偿责任但仍属侵权。
+  </div>
+
+  <h2>二、标准化：分级与代号</h2>
+  <table class="tight">
+    <tr><th>层级</th><th>代号</th><th>性质</th></tr>
+    <tr><td>国际标准</td><td>ISO / IEC</td><td>—</td></tr>
+    <tr><td>国家标准</td><td><strong>GB</strong>（强制性，必须执行）/ <strong>GB/T</strong>（<strong>推荐性</strong>）</td><td>代号称「GB + 数字」</td></tr>
+    <tr><td>行业标准</td><td>如 XB/T、YD/T</td><td>无国标时制定</td></tr>
+    <tr><td>地方标准</td><td>DB</td><td>省域</td></tr>
+    <tr><td>企业标准</td><td>Q/</td><td>企业内</td></tr>
+  </table>
+  <p>口诀：<strong>GB/T 的 T = 推荐（tui）</strong>——看到「必须执行」选 GB，看到「鼓励采用」选 GB/T。</p>
+
+  <h2>三、多媒体容量计算（两公式）</h2>
+  <span class="formula">图像 = 水平像素 × 垂直像素 × 颜色深度(bit) ÷ 8（字节）<br>声音 = 采样频率(Hz) × 量化位数 × 声道数 ÷ 8 × 时间(s)</span>
+  <p><strong>例</strong>：800×600 的 24 位真彩图像 = 800×600×24÷8 = <strong>1,440,000 B ≈ 1.44 MB</strong>；CD 音质（44.1kHz、16 位、双声道）每秒 = 44100×16×2÷8 = <strong>176,400 B ≈ 172 KB</strong>。</p>
+
+  <h2>四、专业英语（上午卷 71–75 题）完形套路</h2>
+  <ol>
+    <li><strong>先读首句定主题</strong>：这句话通常告诉你文章在讲什么技术（networking/database/testing…）；</li>
+    <li><strong>看空格前后搭配</strong>：介词（between…and）、冠词、固定动词搭配往往直接锁定词性；</li>
+    <li><strong>术语优先</strong>：选项里若有本课学过的技术名词（requirement/specification/algorithm/protocol），大概率就是答案；</li>
+    <li>五个空通常对应五段逻辑——每段各出一个，<strong>段落主旨 = 空格答案</strong>。</li>
+  </ol>
+  <p>高频词小表：requirement 需求 / specification 规格 / algorithm 算法 / protocol 协议 / interface 接口 / middleware 中间件 / repository 仓库 / evaluation 评估 / maintenance 维护 / inheritance 继承。</p>
+
+  <h2>五、计算挑战（先动笔再填）</h2>
+  <div id="cd27"></div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz27"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>著作权：署名/修改/完整权永久；财产权 = 终生+50（自然人）/ 发表后 50（法人）。</li>
+      <li>专利：发明 20、实用新型 10、外观 15（自申请日）；商标 10 年可续；商业秘密无限期。</li>
+      <li>GB 强制、GB/T 推荐；分级：国际>国家>行业>地方>企业。</li>
+      <li>图像 = 像素×位深÷8；声音 = 采样率×位深×声道÷8×秒；英语题先定主题、看搭配、术语优先。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0032-design-patterns.html">← 上一课 0032 设计模式</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0034-algo-blanks.html">下一课 → 0034 算法填空</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>🏁 全部 27 课到此收官</strong>！接下来：① 回数据结构做出关测试（<a href="../pages/knowledge-points/data-structures/day01-diagnostic.html">30 题诊断卷</a>）；② 按日历进入真题卷（10 套全在侧边栏）；③ 每天错题进错题本「只练待重做」。</p>
+    <p>💬 任何卡点回到对应章节重走一遍交互环节——准确性比什么都重要。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd27", {
+  title: "多媒体容量计算挑战",
+  questions: [
+    { text: "800×600 的 24 位真彩图像，未压缩存储约需 ___ 字节", answer: 1440000, mode: "exact",
+      derive: "800 × 600 × 24 ÷ 8 = 1,440,000 B ≈ 1.44 MB。" },
+    { text: "CD 音质（44100Hz、16 位、双声道）录音 1 秒，约需 ___ 字节", answer: 176400, mode: "exact",
+      derive: "44100 × 16 × 2 ÷ 8 = 176,400 B ≈ 172 KB。" },
+    { text: "上题的音频录 1 分钟约 ___ MB（整数，按 176400×60÷1024² 估算）", answer: 10, mode: "round",
+      derive: "176400 × 60 = 10,584,000 B ÷ 1024² ≈ 10.1 MB —— CD 每分钟约 10MB，一个道理。" }
+  ]
+});
+
+Quiz.render("quiz27", {
+  title: "本课自查（8 题，全对过课）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "著作权的署名权、修改权、保护作品完整权的保护期是？",
+      options: ["不受限制（永久）", "作者终生", "终生 + 50 年", "发表后 50 年"],
+      answer: 0,
+      opts: [
+        "✓ 三项人身权中的署名权、修改权、保护作品完整权永久受保护。",
+        "『终生』只对财产权的一部分成立。",
+        "终生+50 年是自然人的发表权和财产权期限。",
+        "那是法人作品的期限。"
+      ],
+      explain: "记忆骨架：人身（署名/修改/完整）永久；财产随人走（终生+50）。",
+      source: "高频清单·保底项 ｜ Lesson 0033 §一"
+    },
+    {
+      q: "自然人作品的发表权和财产权（获得报酬权）保护期是？",
+      options: ["作者终生及死后 50 年（至当年 12 月 31 日）", "作品完成后 50 年", "作者终生", "永久保护"],
+      answer: 0,
+      opts: [
+        "✓ 终生 + 死后 50 年，截止到死后第 50 年的 12 月 31 日。",
+        "『完成后 50 年』是法人作品的口径（首次发表后 50 年）。",
+        "漏了死后的 50 年。",
+        "永久保护的只有署名/修改/完整三项人身权。"
+      ],
+      explain: "法人作品：首次发表后 50 年（创作完成也不发表就不受财产权保护）。",
+      source: "Lesson 0033 §一"
+    },
+    {
+      q: "发明专利权的保护期限是？",
+      options: ["20 年（自申请日起）", "10 年", "15 年", "50 年"],
+      answer: 0,
+      opts: [
+        "✓ 发明 20 年——注意起算点是『申请日』，不是授权日。",
+        "10 年是实用新型。",
+        "15 年是外观设计（2021 年新专利法）。",
+        "50 年是著作权口径。"
+      ],
+      explain: "三连背：发明 20 / 实用新型 10 / 外观 15，都自申请日起算。",
+      source: "Lesson 0033 §一"
+    },
+    {
+      q: "GB/T 18142 中的『T』表示该标准是？",
+      options: ["推荐性标准", "强制性标准", "国际标准", "行业标准"],
+      answer: 0,
+      opts: [
+        "✓ T = 推荐（tui）：鼓励采用、不作强制；GB（无 T）才是强制性标准。",
+        "强制性标准代号是 GB（无 T）。",
+        "国际标准是 ISO/IEC。",
+        "行业标准代号随行业（如 YD/T）。"
+      ],
+      explain: "『必须执行』找 GB；『鼓励采用』找 GB/T。",
+      source: "Lesson 0033 §二"
+    },
+    {
+      q: "注册商标的有效期与续展规则是？",
+      options: ["10 年，期满前 12 个月内可申请续展，可无限续展", "20 年不可续展", "10 年只能续一次", "永久有效无需续展"],
+      answer: 0,
+      opts: [
+        "✓ 每次续展 10 年，次数不限——商标可以『永续』，这正是它与专利的区别。",
+        "20 年是发明专利的期限。",
+        "续展次数不受限制。",
+        "商标必须按期续展才维持有效。"
+      ],
+      explain: "宽展期 6 个月：期满没及时续还有半年补救期。",
+      source: "Lesson 0033 §一"
+    },
+    {
+      q: "计算机软件著作权自何时产生？",
+      options: ["自开发完成之日起", "自发表之日起", "自登记之日起", "自申请之日起"],
+      answer: 0,
+      opts: [
+        "✓ 中国公民/法人作品著作权自创作完成即自动产生——登记只是辅助证明，不是生效条件。",
+        "发表影响的是财产权保护期的起算（法人作品），不是权利产生。",
+        "软件登记是自愿的，便于举证。",
+        "『申请』是专利的口径。"
+      ],
+      explain: "自动保护原则：完成即有著作权，无需登记或发表。",
+      source: "Lesson 0033 §一"
+    },
+    {
+      q: "委托他人开发软件，合同未约定著作权归属时，著作权归？",
+      options: ["受托方（实际创作方）", "委托方（出资方）", "双方共有", "国家所有"],
+      answer: 0,
+      opts: [
+        "✓ 无约定默认归实际开发者——想拿版权就在合同里写清楚。",
+        "『出钱不等于拥有』是本题的陷阱点。",
+        "默认不共有。",
+        "软件著作权不归国家。"
+      ],
+      explain: "同类：职务作品中主要利用单位物质技术条件并由单位担责的，作者只留署名权。",
+      source: "Lesson 0033 §一"
+    },
+    {
+      q: "上午卷专业英语题（71-75）的推荐做法是？",
+      options: ["先读首句定主题，再看空格前后搭配与术语优先", "五个空随便蒙", "先逐词翻译全文再作答", "全部选同一个字母"],
+      answer: 0,
+      opts: [
+        "✓ 定主题 → 看搭配 → 术语优先：三步把完形填空变成『技术词识别题』。",
+        "五道题有规律可循，放弃可惜。",
+        "时间不够，性价比低。",
+        "无依据的猜测期望只有 1-2 分。"
+      ],
+      explain: "高频词表：requirement/specification/algorithm/protocol/middleware/inheritance…",
+      source: "Lesson 0033 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0013 · 排序总表：稳定性与复杂度（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0013（数据结构与算法 · 9/10）</p>
+    <h1>排序总表：一张表 + 一句口诀收官</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0012-searching.html">0012 查找</a><br>
+      考点定位：稳定性判别、复杂度对比（<a href="../pages/practice/papers/2021H1-morning-key.html">2021H1-Q63</a> 原题）、一趟排序结果手算
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    排序题的答案 90% 在一张表里：<strong>复杂度 + 稳定性</strong>。口诀记不稳定家族「<strong>快选希堆</strong>」（快排、简单选择、希尔、堆），其余都稳定。再用步进实验室亲眼看完三种 O(n²) 排序的每一步比较。
+  </div>
+
+  <h2>一、总表（必背，建议打印）</h2>
+  <table class="tight">
+    <tr><th>算法</th><th>平均时间</th><th>最坏</th><th>稳定性</th><th>一句话特征</th></tr>
+    <tr><td>直接插入</td><td class="num">O(n²)</td><td class="num">O(n²)</td><td><strong>稳定</strong></td><td>基本有序时 ≈ O(n)，最受益</td></tr>
+    <tr><td>冒泡</td><td class="num">O(n²)</td><td class="num">O(n²)</td><td><strong>稳定</strong></td><td>一趟无交换可提前结束</td></tr>
+    <tr><td><strong>快排</strong></td><td class="num"><strong>O(n log n)</strong></td><td class="num"><strong>O(n²)</strong></td><td><strong>不稳定</strong></td><td>平均最快；基本有序时<em>最坏</em>；每趟枢轴归位</td></tr>
+    <tr><td><strong>简单选择</strong></td><td class="num">O(n²)</td><td class="num">O(n²)</td><td><strong>不稳定</strong></td><td>交换次数最少（至多 n−1 次）</td></tr>
+    <tr><td><strong>堆</strong></td><td class="num">O(n log n)</td><td class="num">O(n log n)</td><td><strong>不稳定</strong></td><td>建堆 O(n)；完全二叉树（<a href="0007-binary-tree-basics.html">0007 编号 2i/2i+1</a>）；适合 topK</td></tr>
+    <tr><td>归并</td><td class="num">O(n log n)</td><td class="num">O(n log n)</td><td><strong>稳定</strong></td><td>需要 O(n) 辅助空间（唯一要记空间的大头）</td></tr>
+    <tr><td><strong>希尔</strong></td><td class="num">≈O(n^1.3)</td><td class="num">—</td><td><strong>不稳定</strong></td><td>分组插入的改进</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="tag">💡 口诀</span>
+    不稳定家族：「<strong>快选希堆</strong>」（快排、简单选择、希尔、堆排序）；<strong>其余全稳定</strong>（插入、冒泡、归并、基数）。考试问『哪些稳定/不稳定』，先写这四个再验。
+  </div>
+
+  <h2>二、稳定性是什么（配一个反例）</h2>
+  <p><strong>稳定</strong> = 值相等的两个元素，排完序后<strong>相对先后次序不变</strong>。为什么快排/选择会变？看简单选择的反例：</p>
+  <pre>  [ 3a, 3b, 1 ]  →  第一趟选最小 1，与第 0 位交换 → [ 1, 3b, 3a ]
+  3a 和 3b 次序颠倒了 → 简单选择排序不稳定 ✘</pre>
+  <p>稳定有什么用？<strong>多关键字排序</strong>：先按姓名排、再按部门稳定排——同部门内仍保持姓名序。不稳定做不到。</p>
+
+  <h2>三、三个高频结论（从表里读出来）</h2>
+  <ol>
+    <li><strong>序列基本有序</strong>：直接插入最快（≈O(n)，几乎不用移）；<strong>快排最坏</strong>（枢轴总选在头上，切不均匀 → O(n²)）。</li>
+    <li><strong>只想要前 k 大/小</strong>：堆排序（topK 用小顶堆/大顶堆）。</li>
+    <li><strong>一趟排序之后</strong>：冒泡把最大值顶到末尾；快排把<strong>枢轴放到它的最终位置</strong>——「第 k 趟后某元素是否就位」就按这两句验算。</li>
+  </ol>
+
+  <h2>四、动手：三种 O(n²) 排序逐步看</h2>
+  <div id="sortlab"></div>
+  <div class="callout tip">
+    <span class="tag">💡 观察任务</span>
+    同一个序列 [5,2,8,3,9,1] 分别跑三种算法，盯住右下角的<strong>比较次数</strong>：选择排序的比较次数固定不变；插入排序在基本有序序列（如 [1,2,3,5,8,9]）上会骤降——把序列换成基本有序的再跑一遍插入试试。
+  </div>
+
+  <h2>五、自查（全对过课）</h2>
+  <div id="quiz-ds9"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>不稳定家族「快选希堆」；其余（插入/冒泡/归并/基数）稳定。</li>
+      <li>基本有序：直接插入 ≈O(n) 最爽、快排 O(n²) 最惨。</li>
+      <li>快排一趟 = 枢轴归位；冒泡一趟 = 最大值沉底。</li>
+      <li>堆建堆 O(n)、堆排 O(n log n) 不稳定；归并稳定但要 O(n) 辅助空间。</li>
+      <li>🏁 数据结构路线到此完成——去做出关测试：<a href="../pages/knowledge-points/data-structures/day01-diagnostic.html">30 题诊断卷（计时 40 分钟）</a>，≥24/30 达标。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0012-searching.html">← 上一课 0012 查找</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0014-ds-supplement.html">下一课 → 0014 数据结构补遗</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../pages/practice/reflection.html">reflection.md</a>；诊断卷得分回填 <a href="../pages/practice/tracker.html">tracker</a> 并告诉我——它决定数据结构是「只留回看」还是「哪课重学」。</p>
+    <p>💬 卡在哪一步（比如「为什么快排基本有序反而最坏」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/sort-lab.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+SortLab.mount("sortlab", { array: [5, 2, 8, 3, 9, 1] });
+
+Quiz.render("quiz-ds9", {
+  title: "本课自查（7 题，全对过课 → 出关）",
+  passNote: "7/7，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "下列全部属于『不稳定』排序的一组是？",
+      options: ["快排、希尔、简单选择、堆", "插入、冒泡、归并", "归并、基数、堆", "冒泡、快排、插入"],
+      answer: 0,
+      opts: [
+        "✓ 口诀「快选希堆」：快排、简单选择、希尔、堆排序——四个不稳定的家伙凑齐了。",
+        "这组全稳定（插入/冒泡/归并都在稳定家族）。",
+        "归并、基数稳定，堆不稳定——混了。",
+        "冒泡、插入稳定，只有快排不稳定——混了。"
+      ],
+      explain: "先默写「快选希堆」，剩下的都是稳定——稳定性题永远先套口诀。",
+      source: "docs/practice/papers/2021H1-morning-key.md Q63 同类 ｜ Lesson 0013 §一"
+    },
+    {
+      q: "序列基本有序时，最快的排序是？",
+      options: ["直接插入（≈O(n)）", "快速排序", "简单选择", "堆排序"],
+      answer: 0,
+      opts: [
+        "✓ 基本有序时几乎每个元素不用移动——直接插入退化为『扫一遍』，接近 O(n)。",
+        "快排此时反而最坏：枢轴总切在头上，递归深度 n → O(n²)。",
+        "选择排序无论何时都老老实实 O(n²)。",
+        "堆排序稳定在 O(n log n)，不会因基本有序变快。"
+      ],
+      explain: "同一条序列，插入最优、快排最差——『基本有序』是排序题最爱设的场景。",
+      source: "Lesson 0013 §三"
+    },
+    {
+      q: "对序列 [5, 2, 8, 3, 9, 1] 做一趟冒泡（从左往右相邻比较，大者右移），结果是？",
+      options: ["2 5 3 8 1 9", "1 2 3 5 8 9", "2 3 5 8 1 9", "2 5 3 1 8 9"],
+      answer: 0,
+      opts: [
+        "✓ (5,2)换→(5,8)不换→(8,3)换→(8,9)不换→(9,1)换 → [2,5,3,8,1,9]，最大值 9 沉底。",
+        "那是最终排好的结果——一趟只冒一个泡。",
+        "(9,1) 那次交换漏了。",
+        "8,3 的交换漏了。"
+      ],
+      explain: "冒泡一趟 = 最大值沉底；归位一个元素。在 0013 实验室用步进模式逐步看一遍。",
+      source: "Lesson 0013 §三、§四"
+    },
+    {
+      q: "快速排序做完一趟划分后，枢轴元素一定？",
+      options: ["到达它的最终排序位置", "在最左端", "在序列正中间", "位置不变"],
+      answer: 0,
+      opts: [
+        "✓ 一趟划分 = 比枢轴小的全在左、大的全在右 → 枢轴已在其最终位置（每趟至少定死一个）。",
+        "最左是枢轴的出发位置，不是终点。",
+        "位置由内容决定，不一定中间。",
+        "枢轴正是被移动的主角。"
+      ],
+      explain: "『第 k 趟后哪些元素一定就位』——快排答枢轴、冒泡答已冒出的极值。",
+      source: "Lesson 0013 §三"
+    },
+    {
+      q: "建初始堆（自底向上调整）的时间复杂度是？",
+      options: ["O(n)", "O(n log n)", "O(log n)", "O(n²)"],
+      answer: 0,
+      opts: [
+        "✓ 建堆整体 O(n)——多数节点在底层、下沉距离短，均摊下来是线性；之后每次取顶再调整才是 O(log n)。",
+        "O(n log n) 是堆排序【整体】的复杂度，不是建堆。",
+        "O(log n) 是单次调整。",
+        "选择/插入家族才是 O(n²)。"
+      ],
+      explain: "区分三个数：建堆 O(n)、单次筛选 O(log n)、堆排序整体 O(n log n)。",
+      source: "Lesson 0013 §一"
+    },
+    {
+      q: "归并排序的显著特点是？",
+      options: ["稳定，但需要 O(n) 辅助空间", "不稳定且原地排序", "只在基本有序时高效", "专门用于找前 k 大"],
+      answer: 0,
+      opts: [
+        "✓ 两两合并次序不打乱相等元素（稳定）；合并要临时数组 → O(n) 辅助空间。",
+        "快排/堆/选择才是不稳定家族。",
+        "『基本有序变快』说的是直接插入。",
+        "topK 是堆的招牌。"
+      ],
+      explain: "稳定性题的常客：归并是『稳定 + O(n log n)』的代表，代价是空间。",
+      source: "Lesson 0013 §一"
+    },
+    {
+      q: "稳定性（stable）的含义是？",
+      options: ["相等元素的相对先后次序在排序后保持不变", "排序结果不会出错", "时间复杂度恒定不变", "序列不能有重复元素"],
+      answer: 0,
+      opts: [
+        "✓ 只对『值相等』的元素谈稳定性：原来谁在前，排完还谁在前。",
+        "与正确性无关——所有排序都要求结果有序。",
+        "复杂度恒定说的是 O(n log n) 那类，叫法不同。",
+        "恰恰相反：有重复元素时稳定性才有意义。"
+      ],
+      explain: "稳定的价值：多关键字排序可以『分趟排、后趟不破坏前趟』。",
+      source: "Lesson 0013 §二"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

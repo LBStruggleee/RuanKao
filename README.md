@@ -4,13 +4,13 @@
 > 📅 考试时间：**2026 年 10 月 24 日** ｜ 🎯 目标：一次性通过软件设计师（中级）｜ 📊 基础：零基础 · 学习能力强
 > 💡 本站内容仅供学习交流使用
 
-一套**完整的软考软件设计师备考系统**：28 节交互课程（即时判分 + 逐选项解析）+ 全大纲知识点精讲 + 10 套历年真题（含逐题解析与勘误）+ 下午卷全部 5 道大题专项 + 自动记录的**错题本**。网站在线阅读，仓库保存全部源文件。
+一套**完整的软考软件设计师备考系统**：34 节交互课程（即时判分 + 逐选项解析）+ 全大纲知识点精讲 + 10 套历年真题（含逐题解析与勘误）+ 下午卷全部 5 道大题专项 + 自动记录的**错题本**。网站在线阅读，仓库保存全部源文件。
 
 ## 🌐 在线站点有什么
 
 | 板块 | 内容 | 直达 |
 |------|------|------|
-| 🎓 交互课程（28 课） | 数据结构 9 课 · OS 6 课 · 网络 3 课 · 数据库 2 课 · 组成 2 课 · 软工 3 课 · 设计模式 · 法规保底 · 算法大题套路 | [课程总目录](https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html) |
+| 🎓 交互课程（34 课） | 组成 3 课 → 程序语言 → 数据结构与算法 10 课 → 操作系统 6 课 → 数据库 3 课 → 网络 2 课 + 安全 → 软件工程 3 课 → 面向对象 3 课 → 保底 → 算法大题（新手友好顺序） | [课程总目录](https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html) |
 | 📖 知识点文档（89 篇全文） | docs/ 原资料 Markdown 的全文 HTML 版——大纲、科目精讲、计划、真题解析、策略，与原文件逐字一致 | [文档目录](https://lbstruggleee.github.io/RuanKao/pages/index.html) |
 | 🔍 全站搜索 | 按关键词检索全部文档（纯前端，无需服务端） | [搜索](https://lbstruggleee.github.io/RuanKao/search.html) |
 | 📓 错题本 | 每次作答自动记录，按题判定「待重做 / 已攻克」，支持只练错题、导出 Markdown/JSON | [错题本](https://lbstruggleee.github.io/RuanKao/reference/mistake-notebook.html) |
@@ -29,7 +29,7 @@
 ├── search.html                 # 全站文档搜索（前端检索 search-index.json）
 ├── pages/                      # docs/ 原资料的全文 HTML 镜像（脚本生成，scripts/build_site.py）
 ├── scripts/build_site.py       # md → HTML 文档集生成脚本
-├── lessons/                    # 交互课程（28 课，HTML，可独立打开）
+├── lessons/                    # 交互课程（34 课，HTML，可独立打开）
 ├── reference/                  # 课程总目录 · 错题本 · 速查卡
 ├── assets/                     # 课程组件库（测验/模拟器/训练器/作答存储）
 ├── docs/                       # 知识点精讲 · 真题转录与解析 · 计划与策略
@@ -65,4 +65,4 @@
 
 ---
 
-**28 课 + 10 套真题，足够改变结果 💪**
+**34 课 + 10 套真题，足够改变结果 💪**

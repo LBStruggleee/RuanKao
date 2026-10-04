@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0023 · 数据库进阶：视图、并发控制与模式分解（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0023（数据库 · 3/3）</p>
+    <h1>数据库进阶：视图、并发控制、模式分解与触发器</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>30 分钟</b> ｜ 上一课：<a href="0030-oop-basics.html">0030 面向对象基础</a><br>
+      考点定位：并发三类问题与锁（每年 1~2 题）、视图定义与作用、模式分解无损判断——补上 <a href="0021-relational-sql.html">0021</a> <a href="0022-normalization-er.html">0022</a> 之外的进阶散点
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    两张表 + 一句判据：<strong>并发三类问题</strong>（丢失更新 / 不可重复读 / 读脏数据）按「谁动了谁的数据」对号；<strong>S 锁相容 X 锁不相容</strong>；视图是<strong>虚表</strong>——简化查询 + 提供安全隔离。
+  </div>
+
+  <h2>一、视图：一张「存查询」的虚表</h2>
+  <p><strong>视图（VIEW）</strong>是从一个或多个基本表（或其他视图）导出的<strong>虚表</strong>：数据库只存视图的定义（SELECT 语句），不存视图的数据——查询视图时实时从基本表算出来。</p>
+  <span class="formula">CREATE VIEW 视图名 AS SELECT …（WITH CHECK OPTION 可限制通过视图的更新必须满足条件）</span>
+  <table class="tight">
+    <tr><th>作用</th><th>说明</th></tr>
+    <tr><td><strong>简化查询</strong></td><td>把复杂的多表连接/嵌套封装成一个视图，之后当表用</td></tr>
+    <tr><td><strong>安全隔离（逻辑独立性）</strong></td><td>对用户只开放视图（如隐藏工资列），Grant 权限授到视图粒度；基本表结构变化时改视图定义即可，应用不改——<strong>外模式/模式映像保证逻辑独立性</strong></td></tr>
+    <tr><td><strong>数据独立性</strong></td><td>视图随基本表数据实时更新（虚表）；个别系统支持物化视图（实存数据、需刷新）</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频判断</span>
+    「视图中的数据在数据库中单独存储」——<strong>错</strong>（虚表只存定义）。但「通过视图可以更新基本表数据」——<strong>对</strong>（有限制：通常只允许更新单表、无聚合的视图）。
+  </div>
+
+  <h2>二、并发控制：三类问题与两种锁</h2>
+  <p>多事务并发执行如果不加控制，会出三类数据不一致问题——识别它们的关键是<strong>谁读、谁写、先后顺序</strong>：</p>
+  <table class="tight">
+    <tr><th>问题</th><th>场景（T1 与 T2）</th><th>关键词</th></tr>
+    <tr><td><strong>丢失更新</strong></td><td>T1、T2 都<strong>读后写</strong>同一数据：T2 的写覆盖了 T1 的写</td><td>「更新丢失」「两写互相覆盖」</td></tr>
+    <tr><td><strong>不可重复读</strong></td><td>T1 <strong>两次读同一数据之间</strong>，T2 修改（或删除）了它 → T1 两次读到的值不一样</td><td>「重复读值不同」</td></tr>
+    <tr><td><strong>读脏数据</strong></td><td>T2 读到了 T1 <strong>已撤销（回滚）</strong>的中间值</td><td>「回滚后读到旧值」</td></tr>
+  </table>
+  <p>解法：<strong>封锁</strong>。两种基本锁——<strong>S 锁（共享锁/读锁）</strong>：读数据前加；<strong>X 锁（排他锁/写锁）</strong>：写数据前加。相容矩阵：</p>
+  <table class="tight">
+    <tr><th>已持有 \ 请求</th><th>S 锁</th><th>X 锁</th></tr>
+    <tr><td><strong>S 锁</strong></td><td class="num">✓ 兼容（都可读）</td><td class="num">✗ 冲突</td></tr>
+    <tr><td><strong>X 锁</strong></td><td class="num">✗ 冲突</td><td class="num">✗ 冲突</td></tr>
+  </table>
+  <p><strong>两段锁协议（2PL）</strong>：事务分两个阶段——先只加锁/升级（扩展段），后只解锁（收缩段），两阶段之间不交叉。遵守 2PL <strong>可保证可串行化</strong>（并发结果等价于某个串行执行），但<strong>不能避免死锁</strong>（判断题）。</p>
+
+  <h2>三、模式分解：拆表拆得对不对</h2>
+  <p>范式化（<a href="0022-normalization-er.html">0022</a>）把大表拆成小表的过程就是<strong>模式分解</strong>。拆完必须检查两点：</p>
+  <table class="tight">
+    <tr><th>标准</th><th>含义</th><th>常见考法</th></tr>
+    <tr><td><strong>无损连接</strong></td><td>拆开的两表<strong>自然连接</strong>后能完全还原原表，不多不少</td><td>判断给定分解是否无损（Chase 列表法/公式法：公共属性至少包含一侧的码）</td></tr>
+    <tr><td><strong>保持函数依赖</strong></td><td>原表的函数依赖在分解后仍能在各表上验证</td><td>「分解后能否仍判断 X→Y」</td></tr>
+  </table>
+  <p><strong>快速判据</strong>：R 分解为 R1、R2，若 <strong>R1 ∩ R2 → R1 或 R1 ∩ R2 → R2</strong>（公共属性能函数决定其中一张表的全部属性），则分解<strong>无损</strong>。例：R(学号,姓名,系别) 拆成 R1(学号,姓名) 与 R2(学号,系别)：交集 {学号} → 学号 是 R1 的码 → 无损 ✓。<strong>3NF 一定可以达到既无损又保持依赖的分解；BCNF 能保证无损，不一定保持依赖</strong>（判断题）。</p>
+
+  <h2>四、触发器与存储过程：数据厍里的自动机关</h2>
+  <ul>
+    <li><strong>触发器（Trigger）</strong>：绑定在表上的 <strong>ECA</strong> 规则——<strong>E</strong>vent 事件（INSERT/UPDATE/DELETE）→ <strong>C</strong>ondition 条件 → <strong>A</strong>ction 动作自动执行。用途：复杂完整性约束（如「删除系别时级联删除学生」）、审计日志。定义在表上、由事件自动触发，不能像函数一样手动调用。</li>
+    <li><strong>存储过程</strong>：预编译存放在数据库中的 SQL 程序集，可带参数、被显式调用；优点：预编译效率高、减少网络流量、便于复用。</li>
+    <li><strong>主键 vs 外键</strong>：主键 = 实体完整性（非空唯一）；外键 = 参照完整性（取值必须参照表的主键存在或为空）——两类完整性的定义句年年考。</li>
+  </ul>
+
+  <h2>五、自查（全对过课）</h2>
+  <div id="quiz-db34"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>视图 = 虚表只存定义：简化查询 + 安全隔离 + 逻辑独立性；可有限更新。</li>
+      <li>并发三问题：丢失更新（两写覆盖）、不可重复读（两次读不同）、读脏数据（读到回滚值）。</li>
+      <li>S/S 兼容，凡带 X 都冲突；两段锁保证可串行化但不防死锁。</li>
+      <li>分解判据：R1∩R2 能决定 R1 或 R2 → 无损；3NF 可兼顾无损 + 保持依赖。</li>
+      <li>触发器 ECA 自动执行；主键实体完整性、外键参照完整性。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0022-normalization-er.html">← 上一课 0022 范式与 E-R</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0024-network-layers.html">下一课 → 0024 网络分层</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>课程收官（0004–0023 考纲补强全部完成）</strong>：回<a href="../reference/ds-learning-path.html">课程总目录</a>按薄弱点二刷，然后进入真题卷阶段（<a href="../pages/practice/papers/2023H1-morning-questions.html">2023 上午卷</a> 起步）。</p>
+    <p>💬 卡在哪一步（比如「两段锁为什么还会死锁」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+Quiz.render("quiz-db34", {
+  title: "本课自查（8 题，先想再点）",
+  passNote: "8/8，错题登记错题本",
+  shuffle: true,
+  questions: [
+    {
+      q: "关于视图（VIEW），正确的说法是？",
+      options: ["视图是虚表，数据库中只存放其定义", "视图的数据在数据库中单独存储", "视图只能从一个基本表导出", "通过视图不能查询数据"],
+      answer: 0,
+      opts: [
+        "✓ 视图只存 SELECT 定义，查询时实时从基本表导出——虚表。",
+        "那是物化视图的口径，普通视图不存数据。",
+        "可以由多个基本表（或视图）联合导出。",
+        "视图的主要用途之一就是简化查询。"
+      ],
+      explain: "视图两大价值：简化复杂查询 + 提供安全隔离（隐藏列、授权到视图粒度）。",
+      source: "Lesson 0023 §一"
+    },
+    {
+      q: "事务 T1 读取某数据后，事务 T2 修改了该数据并提交；T1 再次读取时发现值变了。这是并发操作中的（）。", 
+      options: ["不可重复读", "丢失更新", "读脏数据", "死锁"],
+      answer: 0,
+      opts: [
+        "✓ 同一事务内两次读结果不同——不可重复读的定义场景。",
+        "丢失更新是两个事务都写、后写覆盖先写。",
+        "读脏数据读到的是未提交、后被回滚的值。",
+        "死锁是相互等待资源，与本场景无关。"
+      ],
+      explain: "判型三句话：两写覆盖=丢失更新；两读不同=不可重复读；读到回滚值=脏读。",
+      source: "Lesson 0023 §二"
+    },
+    {
+      q: "事务 T2 读取了事务 T1 已修改但随后被 T1 撤销（回滚）的数据，这是（）。", 
+      options: ["读脏数据", "不可重复读", "丢失更新", "幻影读"],
+      answer: 0,
+      opts: [
+        "✓ 读到的是『从未真正存在过』的中间值——脏数据。",
+        "不可重复读强调两次读值不同（T2 已提交）。",
+        "丢失更新针对写操作覆盖。",
+        "幻影读是两次读之间出现了新行，与本题描述不符。"
+      ],
+      explain: "『回滚』是脏读的题眼——T2 拿到的是不存在的值。",
+      source: "Lesson 0023 §二"
+    },
+    {
+      q: "关于共享锁（S 锁）与排他锁（X 锁）的相容关系，正确的是？",
+      options: ["S 锁与 S 锁相容，X 锁与任何锁都冲突", "S 锁与 X 锁相容", "X 锁与 X 锁相容", "所有锁都互不相容"],
+      answer: 0,
+      opts: [
+        "✓ 读读不冲突（可共享），写操作必须独占——S 与 X、X 与 X 均冲突。",
+        "一个在读一个要写，必然冲突。",
+        "两个都要写更是冲突。",
+        "读与读是相容的。"
+      ],
+      explain: "相容矩阵只有一格 ✓：S-S；其余全 ✗。",
+      source: "Lesson 0023 §二"
+    },
+    {
+      q: "关于两段锁协议（2PL），正确的说法是？",
+      options: ["遵守 2PL 的并发调度是可串行化的，但可能发生死锁", "遵守 2PL 就不会死锁", "2PL 保证不产生读脏数据", "2PL 要求先解锁再加锁"],
+      answer: 0,
+      opts: [
+        "✓ 2PL 保证并发结果等价于某个串行执行（可串行化）；两个事务按相反顺序加锁依然可能互相等待而死锁。",
+        "死锁预防另有机制（如资源有序分配），2PL 管不了。",
+        "防脏读靠 X 锁 + 释放时机等具体封锁规则，不是 2PL 的直接保证。",
+        "方向反了：2PL 是先集中加锁（扩展段）、后集中解锁（收缩段）。"
+      ],
+      explain: "固定搭配题：2PL → 可串行化 + 可能死锁，两个半句一起记。",
+      source: "Lesson 0023 §二"
+    },
+    {
+      q: "关系模式 R(学号, 姓名, 系别) 分解为 R1(学号, 姓名) 与 R2(学号, 系别)，该分解（）。", 
+      options: ["是无损连接的", "有损，无法还原", "只保持了依赖但丢失数据", "不能判断"],
+      answer: 0,
+      opts: [
+        "✓ 公式判据：R1 ∩ R2 = {学号}，学号 → R1 的全部属性（学号是 R1 的码）→ 无损连接。",
+        "按判据可还原：R1 ⋈ R2 = R。",
+        "函数依赖 学号→姓名、学号→系别 都还在，依赖也保持了。",
+        "有明确判据可判断。"
+      ],
+      explain: "两分无损判据：公共属性函数决定其中一张表的全部属性即无损。",
+      source: "Lesson 0023 §三"
+    },
+    {
+      q: "关于 3NF 与 BCNF 的模式分解，正确的是？",
+      options: ["3NF 分解可以既无损连接又保持函数依赖", "BCNF 分解总能保持函数依赖", "任何分解都自动无损", "3NF 分解必有损"],
+      answer: 0,
+      opts: [
+        "✓ 定理：任何关系模式都可以分解为 3NF，且同时满足无损连接与保持函数依赖。",
+        "BCNF 能保证无损，但可能丢失部分函数依赖。",
+        "分解是否无损需要用判据检验，不是自动成立。",
+        "方向说反了。"
+      ],
+      explain: "结论背下：3NF 兼得两项；BCNF 无损但可能丢依赖。",
+      source: "Lesson 0023 §三"
+    },
+    {
+      q: "触发器（Trigger）最适合的应用场景是？",
+      options: ["数据变更时自动执行完整性检查或级联操作", "手动批量查询数据", "代替索引加速查询", "存储历史备份文件"],
+      answer: 0,
+      opts: [
+        "✓ ECA 规则：INSERT/UPDATE/DELETE 事件发生时自动执行动作——复杂约束与审计的理想工具。",
+        "手动调用查询用的是普通 SQL 或存储过程。",
+        "加速查询靠索引，不是触发器。",
+        "备份是 DBA/工具的职责。"
+      ],
+      explain: "触发器三要素 E-C-A（事件-条件-动作），定义在表上、事件自动触发。",
+      source: "Lesson 0023 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

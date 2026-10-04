@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0007 · 二叉树：概念与三大性质（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0007（数据结构与算法 · 3/10）</p>
+    <h1>二叉树：概念与三大性质</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0006-stacks-and-queues.html">0006 栈与队列</a><br>
+      考点定位：n₀ = n₂ + 1 与树叶数计算（<a href="../pages/practice/papers/2019H2-morning-key.html">2019H2-Q59</a> 原题）、完全二叉树深度/编号
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    一个公式吃一半分：<strong>树叶数 = 度为 2 的节点数 + 1</strong>（n₀ = n₂ + 1），配合「完全二叉树深度 = ⌊log₂n⌋ + 1」，2019H2-Q59 就是这么考的。学完还能在下面的树上亲手点出叶子验证它。
+  </div>
+
+  <h2>一、树是什么，二叉树特殊在哪</h2>
+  <p>树是<strong>层级结构</strong>：公司组织图、文件夹目录。最顶上叫<strong>根</strong>，没有孩子的节点叫<strong>叶子</strong>。</p>
+  <p><strong>二叉树</strong>：每个节点<strong>至多两个孩子</strong>，且孩子<strong>分左右</strong>（左右是两棵不同的子树，位置有意义）。注意两个易混点：</p>
+  <div class="callout warn">
+    <span class="tag">⚠ 概念辨析</span>
+    ① 二叉树 ≠ 「度为 2 的树」——节点可以只有一个（左）孩子，甚至为空；② 左右<strong>有序</strong>是二叉树的定义，普通树的子树不分左右。
+  </div>
+
+  <h2>二、四个术语（先在下面的树上找一遍）</h2>
+  <table class="tight">
+    <tr><th>术语</th><th>定义</th><th>一句话</th></tr>
+    <tr><td>根</td><td>没有父节点的唯一节点</td><td>最顶上那个</td></tr>
+    <tr><td>叶子（终端节点）</td><td>度为 0，左右孩子都为空</td><td>最末梢</td></tr>
+    <tr><td>节点的度</td><td>孩子的个数（0/1/2）</td><td>分几个叉</td></tr>
+    <tr><td>深度（层数）</td><td>根为第 1 层，往下数</td><td>在第几排</td></tr>
+  </table>
+
+  <h2>三、三大性质（全部必考）</h2>
+  <span class="formula">① 第 i 层至多 2^(i−1) 个节点　　② 深度 k 的二叉树至多 2^k − 1 个节点</span>
+  <p>① 每层最多翻倍：1, 2, 4, 8…；② 全满时 1+2+4+…+2^(k−1) = 2^k − 1。</p>
+  <h3>③ 树叶数 = 度为 2 的节点数 + 1（n₀ = n₂ + 1）</h3>
+  <p><strong>两行推导（理解了就不用背）</strong>：设 n₀/n₁/n₂ 为度为 0/1/2 的节点数。树的总边数 = 节点数 − 1（每个节点上方一条边），也 = 从孩子方向数 = n₁ + 2n₂。于是 n₀+n₁+n₂ − 1 = n₁ + 2n₂，化简得 <strong>n₀ = n₂ + 1</strong>。</p>
+  <div class="callout tip">
+    <span class="tag">💡 考场应用（2019H2-Q59 同款）</span>
+    问「x 个叶子的二叉树有几个度为 2 的节点」→ 直接 x−1。<br>
+    升级版：<strong>n 个节点的完全二叉树求叶子数</strong>——完全树 n₁ 只能是 0（n 奇）或 1（n 偶）；n = 2n₂ + n₁ + 1 反解 n₂，n₀ = n₂ + 1。<br>
+    例：n=100（偶）→ n₁=1 → n₂=49 → <strong>n₀=50</strong>；n=99（奇）→ n₁=0 → n₂=49 → n₀=50。
+  </div>
+
+  <h2>四、满二叉树 vs 完全二叉树</h2>
+  <table class="tight">
+    <tr><th></th><th>满二叉树</th><th>完全二叉树</th></tr>
+    <tr><td>定义</td><td>每层都满（深度 k，节点 2^k − 1）</td><td>只允许<strong>最后一层缺右边的连续若干个</strong>（按层编号连续不断）</td></tr>
+    <tr><td>关系</td><td colspan="2">满二叉树是特殊的完全二叉树；<strong>反过来不成立</strong></td></tr>
+    <tr><td>深度</td><td class="num">log₂(n+1)</td><td class="num"><strong>⌊log₂n⌋ + 1</strong>（n=100 → 7）</td></tr>
+    <tr><td>编号规则（从 1 编）</td><td colspan="2">节点 i 的左孩子 = <strong>2i</strong>，右孩子 = <strong>2i+1</strong>，父 = <strong>⌊i/2⌋</strong>（顺序存储不浪费空间——仅完全树成立）</td></tr>
+  </table>
+
+  <h2>五、动手：在树上亲手验证 n₀ = n₂ + 1</h2>
+  <div id="treelab"></div>
+  <div class="callout tip">
+    <span class="tag">💡 观察任务</span>
+    点完「叶子」和「度为 2」两个游戏后数一数：这棵树叶子 3 个、度为 2 的节点 2 个——3 = 2 + 1，性质③就站在你眼前。「先序遍历」游戏是 Lesson 0008 的预告，可以顺手玩。
+  </div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz-ds3"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>第 i 层至多 2^(i−1)；深度 k 至多 2^k − 1；<strong>n₀ = n₂ + 1</strong>（推导两行：边数守恒）。</li>
+      <li>完全二叉树：深度 <strong>⌊log₂n⌋ + 1</strong>；编号 i（1 起）→ 左孩 2i、右孩 2i+1、父 ⌊i/2⌋。</li>
+      <li>n 节点完全树求叶子：n 偶 → n₁=1；n 奇 → n₁=0；先 n₂ 再 n₀。</li>
+      <li>二叉树子分左右、可为 1 个孩子——不等于「度为 2 的树」。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0006-stacks-and-queues.html">← 上一课 0006 栈与队列</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0008-tree-traversals.html">下一课 → 0008 遍历与重建</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么边数是 n−1」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/tree-lab.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+var TREE = { v: "A", l: { v: "B", l: { v: "D" }, r: { v: "E" } }, r: { v: "C", r: { v: "F" } } };
+
+TreeLab.mount("treelab", {
+  tree: TREE,
+  games: [
+    { type: "concept", target: "leaves", title: "点出所有叶子" },
+    { type: "concept", target: "deg2", title: "点出所有度为2的节点" },
+    { type: "traverse", order: "pre", title: "先序遍历（0008 预告）" }
+  ]
+});
+
+Quiz.render("quiz-ds3", {
+  title: "本课自查（7 题，全对过课）",
+  passNote: "7/7，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "某二叉树有 5 个度为 2 的节点，叶子有多少个？",
+      options: ["6", "5", "7", "4"],
+      answer: 0,
+      opts: [
+        "✓ n₀ = n₂ + 1 = 5 + 1 = 6——注意是『加 1』，不是相等。",
+        "5 是把 n₀ 和 n₂ 当成了相等；差的那 1 个来自根（根没有父边）。",
+        "7 多加了。",
+        "4 是做成了 n₂ − 1。"
+      ],
+      explain: "推导：边数 = n−1 = n₁ + 2n₂，n = n₀+n₁+n₂，消元得 n₀ = n₂ + 1。",
+      source: "docs/practice/papers/2019H2-morning-key.md Q59 同款公式 ｜ Lesson 0007 §三"
+    },
+    {
+      q: "100 个节点的完全二叉树，叶子有多少个？",
+      options: ["50", "49", "51", "25"],
+      answer: 0,
+      opts: [
+        "✓ n 偶 → n₁ = 1；2n₂ + 1 + 1 = 100 → n₂ = 49 → n₀ = 50。",
+        "49 是 n₂（度为 2 的节点数），题目问叶子 n₀ = n₂ + 1。",
+        "51 多加了 1。",
+        "25 无出处。"
+      ],
+      explain: "完全树 n₁ 只能取 0（n 奇）或 1（n 偶）；先由 n = 2n₂ + n₁ + 1 解 n₂，再 n₀ = n₂ + 1。",
+      source: "Lesson 0007 §三"
+    },
+    {
+      q: "100 个节点的完全二叉树，深度是？",
+      options: ["7", "6", "8", "10"],
+      answer: 0,
+      opts: [
+        "✓ ⌊log₂100⌋ + 1 = 6 + 1 = 7（2⁶ = 64 ≤ 100 < 128 = 2⁷）。",
+        "6 = ⌊log₂100⌋ 忘了加 1——深度从第 1 层（根）数起。",
+        "8 超了：128 个节点才需要 8 层。",
+        "10 无出处。"
+      ],
+      explain: "完全二叉树深度 = ⌊log₂n⌋ + 1，两个数背下来：n=100 → 7 层，n=64 → 7 层（满到 6 层多 1 个）。",
+      source: "Lesson 0007 §四"
+    },
+    {
+      q: "二叉树第 4 层至多有多少个节点？",
+      options: ["8", "4", "16", "6"],
+      answer: 0,
+      opts: [
+        "✓ 第 i 层至多 2^(i−1)：第 4 层 = 2³ = 8。",
+        "4 是把公式用成了 2^(i−2)。",
+        "16 = 2⁴——指数没减 1（根在第 1 层）。",
+        "6 无出处。"
+      ],
+      explain: "每层最多翻倍：1, 2, 4, 8, 16…第 i 层 2^(i−1)。",
+      source: "Lesson 0007 §三"
+    },
+    {
+      q: "『二叉树』与『度为 2 的树』的区别是？",
+      options: ["二叉树孩子分左右且节点可为0/1个孩子", "两者完全等价", "二叉树每个节点必须有两个孩子", "度为2的树的孩子分左右"],
+      answer: 0,
+      opts: [
+        "✓ 二叉树允许 0/1/2 个孩子、左右有序；『度为 2 的树』要求至少存在一个度恰为 2 的节点且子树不分左右。",
+        "不等价——左/右位置有没有意义就是区别。",
+        "『至多』两个孩子，可以只有一个（甚至叶子没有）。",
+        "恰好反了：普通树的子树不分左右。"
+      ],
+      explain: "概念题陷阱：『二叉树』名字里的『二』是『至多』，不是『必须有』。",
+      source: "Lesson 0007 §一"
+    },
+    {
+      q: "完全二叉树按层从 1 编号，节点 i 的左孩子编号是？",
+      options: ["2i", "i+1", "2i+1", "⌊i/2⌋"],
+      answer: 0,
+      opts: [
+        "✓ 左孩子 2i、右孩子 2i+1、父 ⌊i/2⌋（1 起编号的完全树专属规律）。",
+        "i+1 是同层右邻。",
+        "2i+1 是右孩子。",
+        "⌊i/2⌋ 是父节点。"
+      ],
+      explain: "这组编号就是『完全树可以无浪费地存进数组』的原因——堆排序也靠它。",
+      source: "Lesson 0007 §四"
+    },
+    {
+      q: "深度为 k 的二叉树，节点总数至多是？",
+      options: ["2^k − 1", "2^(k−1)", "2k − 1", "2^k"],
+      answer: 0,
+      opts: [
+        "✓ 每层取满：1+2+…+2^(k−1) = 2^k − 1（等比求和）。",
+        "2^(k−1) 是【第 k 层】最多节点数。",
+        "2k−1 是线性式，树的层是指数增长。",
+        "2^k 多加了 1（等比求和要减 1）。"
+      ],
+      explain: "配套记：第 i 层至多 2^(i−1)，深 k 至多 2^k − 1。",
+      source: "Lesson 0007 §三"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

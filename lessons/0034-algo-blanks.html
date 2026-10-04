@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0034 · 大题专项：试题四算法填空答题套路（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0034（大题专项 · 试题四）</p>
+    <h1>试题四算法填空：不写代码，只「反推空位」</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>45 分钟</b> ｜ 上一课：<a href="0033-bonus.html">0033 保底专项</a><br>
+      考点定位：下午卷试题四（C 算法填空 15 分，<strong>15 分全在空上</strong>）；本课 = <a href="../pages/practice/subject2/patterns-algo-notes.html">patterns-algo-notes.md</a> 答题策略的交互版
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    试题四不要求你会写算法，只要求你<strong>看懂骨架、反推空位</strong>。四步法 + DP 状态转移三件套 + 下面的填空推演器，目标：4~8 个空里稳拿 5–6 个（≥10 分）。
+  </div>
+
+  <h2>一、题目长什么样（结构固定）</h2>
+  <table class="tight">
+    <tr><th>部分</th><th>内容</th><th>分值</th></tr>
+    <tr><td>【说明】</td><td>算法思想 + <strong>递归式/公式/算例</strong>（免费的验算数据！）</td><td rowspan="3">—</td></tr>
+    <tr><td>变量说明</td><td>每个数组/变量的含义——<strong>抄到草稿上，所有空都围绕它</strong></td></tr>
+    <tr><td>C 代码</td><td>4~8 个空（(1)…(n)）</td><td><strong>问题 1：填空 ≈8 分</strong></td></tr>
+    <tr><td>问题 2</td><td>算法策略 / 复杂度</td><td>2~4 分</td></tr>
+    <tr><td>问题 3</td><td>小数据<strong>手算</strong>模拟</td><td>3~5 分</td></tr>
+  </table>
+
+  <h2>二、填空四步法（每道题都走一遍）</h2>
+  <ol>
+    <li><strong>读【说明】，一句话写下「这个算法在算什么」</strong>——编辑距离 =「把 str1 变成 str2 的最少操作次数」；矩阵连乘 =「最少乘法次数」。把变量含义抄在草稿上（<code>d[i][j]</code> 是什么？）。</li>
+    <li><strong>标出循环不变量</strong>：每层循环在干什么写在旁边（外层=子问题规模、中层=起点、内层=决策）。<em>循环边界就是高频空位</em>。</li>
+    <li><strong>从已知反推空位</strong>：①<em>对称法</em>——给出的边界对面那个就是空；②<em>赋值链法</em>——空在等号右边，看左边变量被谁用；③<em>公式法</em>——把【说明】的算例数字代进空位验算。</li>
+    <li><strong>代入实例自检</strong>：用问题 3 的小数据手算一遍，查<strong>下标越界</strong>（i−1、k+1）与类型匹配。</li>
+  </ol>
+
+  <h2>三、DP 题三件套（试题四的绝对主力）</h2>
+  <span class="formula">① 初始化（边界 for）　② 状态转移（主递推循环体）　③ 结果返回（规模最大的那格）</span>
+  <ul>
+    <li><strong>识别特征</strong>（问题 2 答「动态规划」的四要素）：表格记录子问题解 + 最优子结构 + <strong>自底向上</strong>填表 + 重叠子问题（区别于分治：分治子问题独立、不记忆）。</li>
+    <li><strong>复杂度口诀</strong>：填表格子数 × 每格决策数——双重循环 → O(n²)（编辑距离 O(mn)）；三重循环（枚举断点）→ <strong>O(n³)</strong>（矩阵连乘）。</li>
+  </ul>
+
+  <h2>四、常考骨架（与原资料 2.3 清单一致）</h2>
+  <pre>【一维/二维序列型 DP】                     【区间型 DP（矩阵连乘）】
+for (i = 0; i &lt;= len1; i++) d[i][0] = i;   cost[i][i] = 0;
+for (j = 0; j &lt;= len2; j++) d[0][j] = j;   for (p = 1; p &lt; n; p++)        /* 区间长度 */
+for (i = 1; i &lt;= len1; i++)                  for (i = 0; i &lt; n-p; i++) {  /* 起点 */
+  for (j = 1; j &lt;= len2; j++)                  j = i + p;                /* 终点 */
+    if (str1[i-1] == str2[j-1])                for (k = i; k &lt; j; k++) { /* 断点 */
+      d[i][j] = d[i-1][j-1];                     temp = cost[i][k] + cost[k+1][j]
+    else                                                    + 合并代价;
+      d[i][j] = min(d[i-1][j]+1,               if (更小) { cost 更新; trace 记录; }
+                 d[i][j-1]+1,                } cost[i][j] = tempCost; }
+                 d[i-1][j-1]+1);
+return d[len1][len2];                      合并代价维数口诀：seq[i]×seq[k+1]×seq[j+1]</pre>
+  <p>其他骨架（原资料 2.3）：二分查找（low=mid+1 / high=mid−1 防死循环）、树递归（终止条件 + 左右子递归）、希尔/堆排序挖空、贪心（排序+局部最优）。<strong>挖空点永远在这几处：边界、比较条件、递推表达式、返回值</strong>。</p>
+
+  <h2>五、动手：填空推演器（4 个典型骨架，逐空反推）</h2>
+  <div id="bt"></div>
+  <div class="callout tip">
+    <span class="tag">💡 使用方法</span>
+    每个空先遮住选项<strong>自己说出答案</strong>再点选项——练的是「反推」不是「认对」。答错会告诉你错在哪一类（下标 ±1 / 边界对称 / 漏加一）——这些正是阅卷统计里的丢分大户。
+  </div>
+
+  <h2>六、高频丢分点自查（原资料 3.1 精选）</h2>
+  <ul>
+    <li><strong>下标 ±1</strong>：前缀长度 vs 数组位置差 1（<code>str1[i-1]</code>、<code>seq[k+1]</code>）；</li>
+    <li><strong>边界对称没看出来</strong>：一个边界已给，对面那个就是空；</li>
+    <li><strong>区间换算</strong>：<code>j = i+p</code> 还是 <code>i+p−1</code>——用循环边界核对；</li>
+    <li><strong>结果格子定位</strong>：返回 <code>d[len1][len2]</code>（不是 len1−1）；</li>
+    <li><strong>断点上界</strong>：<code>k &lt; j</code>（写成 k&lt;=j 右段为空）；</li>
+    <li><strong>空要写完整语句</strong>：分号、等号左边都算分；</li>
+    <li><strong>策略题</strong>：看到「表格记录 + 最优子结构 + 自底向上」→ 动态规划，别答分治。</li>
+  </ul>
+
+  <h2>七、自查（全对过课）</h2>
+  <div id="quiz28"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>结构：问题 1 填空 ≈8 分 + 问题 2 策略/复杂度 + 问题 3 手算——<strong>15 分全在空上</strong>。</li>
+      <li>四步法：读说明抄变量含义 → 标循环不变量 → 对称/赋值链/公式反推 → 代入自检查 ±1。</li>
+      <li>DP 三件套：初始化（对称边界）、主递推（三操作取 min/max）、返回（d[len1][len2]）。</li>
+      <li>识别：表格+最优子结构+自底向上+重叠子问题 = DP；复杂度 = 格子数×每格决策数（三重循环 O(n³)）。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0033-bonus.html">← 上一课 0033 保底专项</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>真题实战（下一步）</strong>：①<a href="../pages/practice/subject2/patterns-algo-exercises.html">patterns-algo-exercises.md</a> 的编辑距离 + 矩阵连乘（遮住答案重做）；②对答案 <a href="../pages/practice/subject2/patterns-algo-key.html">patterns-algo-key.md</a>；③丢分点回填 <a href="../pages/practice/subject2/patterns-algo-notes.html">notes 第三章模板</a>；④10/22 用<a href="../pages/practice/mock-exam/subject2-questions.html">全真模拟卷</a>计时 90 分钟。设计模式（试题五/六）的「三招反推法」见 <a href="0032-design-patterns.html">0032</a> + notes 1.3 节。</p>
+    <p>💬 卡在哪一个空（比如「为什么返回 d[len1][len2]」），回对应章节的算法骨架把那个空的前后逻辑重推一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/blank-trainer.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+BlankTrainer.mount("bt", {
+  lessonId: "Lesson 0034",
+  items: [
+    {
+      title: "二分查找（在有序数组中找 key）",
+      intro: "骨架：while 循环里不断把区间对半砍。两个空都围绕『防死循环 + 砍对方向』。",
+      source: "patterns-algo-notes.md §2.3 查找骨架",
+      code: "int low = 0, high = n - 1;\nwhile (low <= high) {\n    mid = ____【(1)】____;\n    if (a[mid] == key) return mid;\n    else if (a[mid] < key) low = ____【(2)】____;\n    else high = mid - 1;\n}\nreturn -1;",
+      blanks: [
+        {
+          id: "(1)",
+          options: ["mid = (low + high) / 2;", "mid = (low + high) * 2;", "mid = (high - low) / 2;", "mid = low + high;"],
+          answer: 0,
+          opts: [
+            "✓ 二分的核心：区间中点 = 两个下标相加除 2（整数除法自动取整）。",
+            "乘 2 会越界且不是中点。",
+            "『差的一半』不是中点位置。",
+            "不除 2 直接越界。"
+          ],
+          explain: "中点公式 mid=(low+high)/2；有的题目写成 low+(high-low)/2 防溢出，等价。"
+        },
+        {
+          id: "(2)",
+          options: ["low = mid + 1;", "low = mid;", "low = mid - 1;", "high = mid + 1;"],
+          answer: 0,
+          opts: [
+            "✓ a[mid] < key 说明目标在右半区，mid 本身已排除 → 必须跳过它（+1），否则区间不缩小、死循环。",
+            "low=mid 不缩小区间，while 可能永远转。",
+            "mid−1 会把可能的目标一起扔掉（目标在 mid 右边）。",
+            "该改的是 low（左边界），high 是另一分支的事。"
+          ],
+          explain: "丢分大户：『+1/−1』。左边界右移必须 +1（mid 已查过），右边界左移必须 −1。"
+        }
+      ]
+    },
+    {
+      title: "编辑距离（DP·序列型）——2021 下真题同款骨架",
+      intro: "d[i][j] = str1 前 i 个字符变成 str2 前 j 个字符的最少操作次数。三个空对应 DP 三件套。",
+      source: "patterns-algo-notes.md §2.3 序列型 ｜ patterns-algo-exercises.md 试题 A 同款",
+      code: "int dp(char *str1, char *str2) {\n    int len1 = strlen(str1), len2 = strlen(str2);\n    for (i = 0; i <= len1; i++)\n        d[i][0] = ____【(1)】____;          /* 列边界：空串 */\n    for (j = 0; j <= len2; j++)\n        d[0][j] = j;                       /* 行边界（已给出，对照用） */\n    for (i = 1; i <= len1; i++)\n        for (j = 1; j <= len2; j++)\n            if (____【(2)】____)\n                d[i][j] = d[i-1][j-1];\n            else\n                d[i][j] = min(d[i-1][j]+1, d[i][j-1]+1, ____【(3)】____);\n    return ____【(4)】____;\n}",
+      blanks: [
+        {
+          id: "(1)",
+          options: ["i", "j", "0", "i - 1"],
+          answer: 0,
+          opts: [
+            "✓ 对称法：行边界 d[0][j]=j 已给出（把 j 个字符全删掉要 j 步）；列边界对称——把 i 个字符全删掉要 i 步。",
+            "j 是另一条边界的变量。",
+            "0 是 cost[i][i]（区间型）的边界，不是编辑距离的。",
+            "i−1 造成负数步数。"
+          ],
+          explain: "『空串变成 i 个字符 = 插入 i 次』。对称法：给出的行边界照抄换轴。"
+        },
+        {
+          id: "(2)",
+          options: ["str1[i-1] == str2[j-1]", "str1[i] == str2[j]", "str1[i-1] == str2[j]", "d[i][j] == d[i-1][j-1]"],
+          answer: 0,
+          opts: [
+            "✓ d 的下标是『前 i 个字符』，数组下标从 0 起——第 i 个字符是 str1[i-1]（下标差 1，第一丢分大户）。",
+            "str1[i] 是第 i+1 个字符，越界风险且错位。",
+            "两个下标基准不一致，比较对象错位。",
+            "这是结果相等时的赋值语句，不是条件。"
+          ],
+          explain: "判断『两个末字符是否相同』→ 相同则不用操作，继承左上角 d[i-1][j-1]。"
+        },
+        {
+          id: "(3)",
+          options: ["d[i-1][j-1] + 1", "d[i-1][j-1]", "d[i][j] + 1", "d[i-1][j] + d[i][j-1]"],
+          answer: 0,
+          opts: [
+            "✓ 三操作缺一不可：删除 d[i-1][j]+1、插入 d[i][j-1]+1、替换 d[i-1][j-1]+1——替换也要 +1（本空最常漏）。",
+            "替换操作本身要消耗 1 步，漏 +1 直接丢分。",
+            "d[i][j] 是正在求的值，不能出现在右边。",
+            "两项相加语义重复且翻倍。"
+          ],
+          explain: "口诀：三操作并列取 min，每项各 +1。漏一项或漏 +1 都是阅卷统计的高频丢分。"
+        },
+        {
+          id: "(4)",
+          options: ["return d[len1][len2];", "return d[len1-1][len2-1];", "return d[0][0];", "return d[n][n];"],
+          answer: 0,
+          opts: [
+            "✓ 整个串的答案 = 『前 len1 个 → 前 len2 个』那一格（规模最大的格子）。",
+            "差一行一列——DP 表的 d[i][j] 定义是『前 i 个』，len1 对应第 len1 行。",
+            "空串对空串恒为 0。",
+            "题目数组维度未必是 [n][n]，且同样定位错。"
+          ],
+          explain: "三件套之③：结果取规模最大的格子。"
+        }
+      ]
+    },
+    {
+      title: "矩阵连乘（DP·区间型）——2022 上真题同款骨架",
+      intro: "cost[i][j] = 计算 Ai…Aj 所需的最少乘法次数；seq 为维数序列。",
+      source: "patterns-algo-notes.md §2.3 区间型 ｜ patterns-algo-exercises.md 试题 B 同款",
+      code: "for (i = 0; i < n; i++) cost[i][i] = 0;\nfor (p = 1; p < n; p++)              /* 区间长度 */\n    for (i = 0; i < n - p; i++) {    /* 起点 */\n        j = ____【(1)】____;          /* 终点 */\n        for (k = i; k < ____【(2)】____; k++) {\n            temp = cost[i][k] + cost[k+1][j]\n                 + ____【(3)】____;\n            if (temp < cost[i][j]) {\n                cost[i][j] = temp;\n                trace[i][j] = k;\n            }\n        }\n    }",
+      blanks: [
+        {
+          id: "(1)",
+          options: ["j = i + p;", "j = i + p - 1;", "j = p - i;", "j = i * p;"],
+          answer: 0,
+          opts: [
+            "✓ 本题口径：p 是『区间长度』（含端点数-1），终点 = 起点 + 长度。用已给的循环边界 i < n-p 核对：j = i+p ≤ n-1 合法。",
+            "i+p-1 是另一种『p=区间含元素数』的口径——必须用本题循环边界核对，本题边界决定是 i+p。",
+            "方向反了（越往右区间应越靠后）。",
+            "乘法无意义。"
+          ],
+          explain: "丢分点『区间长度-跨度换算』：以已给出的 i < n-p 代入验证，j=i+p 才能让最后一轮恰好到 n-1。"
+        },
+        {
+          id: "(2)",
+          options: ["j", "j - 1", "j + 1", "i"],
+          answer: 0,
+          opts: [
+            "✓ 断点 k 把 [i,j] 分成 [i,k] 与 [k+1,j] 两段——k 取到 j-1 为止；若 k=j 则右段 [j+1,j] 为空（非法）。",
+            "k < j-1 会漏掉 k=j-1 的划分方案。",
+            "k=j+1 越界。",
+            "k 从 i 开始已经是循环初值，上界不是 i。"
+          ],
+          explain: "丢分点『断点写成 k<=j』：右段至少要有一个矩阵。"
+        },
+        {
+          id: "(3)",
+          options: ["seq[i] * seq[k+1] * seq[j+1]", "seq[i] * seq[k] * seq[j]", "cost[i][k] * cost[k+1][j]", "seq[k] * seq[k+1]"],
+          answer: 0,
+          opts: [
+            "✓ 合并代价口诀：左段行 × 断缝 × 右段列 = seq[i] × seq[k+1] × seq[j+1]（维数序列首尾相接）。",
+            "中间下标应是『断点+1』，三个数没对齐相邻维。",
+            "那是两段各自的代价，已经在 + 号两边算过。",
+            "只取了断缝一个维，缺左右两维。"
+          ],
+          explain: "维数口诀：seq[起点]×seq[断点+1]×seq[终点+1]——首尾相接。代入【说明】算例 5×100×8 + 5×8×50 即可验证。"
+        }
+      ]
+    },
+    {
+      title: "二叉树遍历（递归骨架）",
+      intro: "递归两件事：终止条件 + 对子问题的递归调用。",
+      source: "patterns-algo-notes.md §2.3 树的遍历",
+      code: "void traverse(BiTree root) {\n    if (____【(1)】____) return;      /* 终止条件 */\n    visit(root);\n    traverse(____【(2)】____);\n    traverse(root->rchild);\n}",
+      blanks: [
+        {
+          id: "(1)",
+          options: ["root == NULL", "root != NULL", "root->lchild == NULL", "root->data == 0"],
+          answer: 0,
+          opts: [
+            "✓ 空树没什么可遍历——直接返回，这是递归的『底线』。",
+            "非空才 return 会一颗树都不遍历。",
+            "只处理了左子树为空的情形，不是整体终止条件。",
+            "数据为 0 与结构无关。"
+          ],
+          explain: "挖空点高频位：递归终止条件。空指针 = 递归出口。"
+        },
+        {
+          id: "(2)",
+          options: ["root->lchild", "root->rchild", "root->lchild->rchild", "root"],
+          answer: 0,
+          opts: [
+            "✓ 下一行已经递归了右子树 root->rchild——对称位置这里就是左子树。",
+            "与下一行重复，右子树会被遍历两次、左子树漏掉。",
+            "跳层访问，破坏遍历序。",
+            "传 root 自己会无限递归。"
+          ],
+          explain: "丢分点『对称的空漏填一个』：两个递归调用是镜像，照着已给的那个填另一个。"
+        }
+      ]
+    }
+  ]
+});
+
+Quiz.render("quiz28", {
+  title: "本课自查（8 题，全对过课）",
+  passNote: "≥ 7/8，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "试题四的 15 分分布是？",
+      options: ["填空约 8 分 + 策略/复杂度 2-4 分 + 手算 3-5 分", "全部 15 分在填空", "全部 15 分在手算", "策略题占 15 分"],
+      answer: 0,
+      opts: [
+        "✓ 问题 1 填空 ≈8 分、问题 2 策略/复杂度 2~4 分、问题 3 手算 3~5 分——填空之外的分靠背特征和画草表。",
+        "问题 2/3 也有分，全押填空会丢。",
+        "手算只有 3~5 分。",
+        "策略题是问题 2，只占 2~4 分。"
+      ],
+      explain: "策略题背特征（表格+最优子结构+自底向上=DP）、手算画草表，都是卷面白给的分。",
+      source: "patterns-algo-notes.md §二 ｜ Lesson 0034 §一"
+    },
+    {
+      q: "填空四步法的第一步是？",
+      options: ["读【说明】，写下算法在算什么并抄变量含义", "直接看代码找空", "先做问题 3 手算", "把所有空先猜一遍"],
+      answer: 0,
+      opts: [
+        "✓ 变量含义（d[i][j] 是什么）是所有空的锚点——抄在草稿上再动笔。",
+        "不看说明直接看代码，等于放弃免费的递归式和算例。",
+        "手算放在最后自检，且需要先读懂变量。",
+        "盲猜没有反推依据。"
+      ],
+      explain: "四步：读说明抄变量 → 标循环不变量 → 反推空位 → 代入自检。",
+      source: "patterns-algo-notes.md §2.1 ｜ Lesson 0034 §二"
+    },
+    {
+      q: "『已给出的一个边界旁边，对称的那个就是空』——这招叫？",
+      options: ["对称法", "赋值链法", "公式法", "排除法"],
+      answer: 0,
+      opts: [
+        "✓ 对称法：编辑距离的行边界给出 d[0][j]=j，列边界 d[i][0]=i 几乎必然是空。",
+        "赋值链法看的是等号左边变量被谁使用。",
+        "公式法是把【说明】的算例代进空位。",
+        "排除法用于选择题选项，不是找空的招式。"
+      ],
+      explain: "三招反推：对称法 / 赋值链法 / 公式法——配合【说明】算例自检。",
+      source: "patterns-algo-notes.md §2.1 ｜ Lesson 0034 §二"
+    },
+    {
+      q: "判断『某题是动态规划』的识别特征不包括？",
+      options: ["子问题相互独立、不记忆", "用表格记录子问题的解", "具有最优子结构", "自底向上填表"],
+      answer: 0,
+      opts: [
+        "✓ 『子问题独立不记忆』是分治的特征——DP 的标志恰恰是『重叠子问题』要记忆化。",
+        "表格记录是 DP 的外在标志。",
+        "最优子结构是 DP 的前提。",
+        "自底向上填表是 DP 的实现方式。"
+      ],
+      explain: "策略题答错分治/贪心是丢分大户：背四要素——表格、最优子结构、自底向上、重叠子问题。",
+      source: "patterns-algo-notes.md §2.2 ｜ Lesson 0034 §三"
+    },
+    {
+      q: "DP 算法的复杂度口诀是？",
+      options: ["填表格子数 × 每格决策数", "递归深度 × 2", "输入规模的对数", "数组元素总和"],
+      answer: 0,
+      opts: [
+        "✓ 编辑距离：mn 格 × 每格 O(1) = O(mn)；矩阵连乘：n² 格 × 枚举断点 n = O(n³)。",
+        "递归深度与 DP 填表无关。",
+        "对数是二分查找的复杂度。",
+        "元素总和与循环层数无关。"
+      ],
+      explain: "三重循环（多一层枚举断点）→ O(n³)——答 O(n²) 是高频丢分。",
+      source: "patterns-algo-notes.md §2.2 ｜ Lesson 0034 §三"
+    },
+    {
+      q: "区间型 DP 中断点循环写成 k <= j 的错误在于？",
+      options: ["右段 [k+1, j] 为空，划分非法", "会漏掉某些划分", "会导致 k 越界", "没错，两种写法等价"],
+      answer: 0,
+      opts: [
+        "✓ k=j 时右段从 j+1 开始——超出区间，right 段不存在；断点上界必须是 k < j。",
+        "方向反了：k<=j 是多划不是漏划。",
+        "k=j 本身不越界，产生的是空段。",
+        "不等价：k=j 的方案不合法。"
+      ],
+      explain: "丢分大户第三名：断点边界。左闭右开 [i, j) 保证两段都非空。",
+      source: "patterns-algo-notes.md §3.1 ｜ Lesson 0034 §六"
+    },
+    {
+      q: "矩阵连乘合并代价的正确维数组合（seq 为维数序列）是？",
+      options: ["seq[i] × seq[k+1] × seq[j+1]", "seq[i] × seq[k] × seq[j]", "seq[k] × seq[j] × seq[i]", "cost[i][k] × cost[j][k]"],
+      answer: 0,
+      opts: [
+        "✓ 左段行 = seq[i]、断缝 = seq[k+1]、右段列 = seq[j+1]——三个维首尾相接（例：5×100×8）。",
+        "三个下标没对齐『左段行-断缝-右段列』的相邻关系。",
+        "顺序与下标全乱。",
+        "cost 是代价表，不是维数。"
+      ],
+      explain: "口诀：seq[起点]×seq[断点+1]×seq[终点+1]；用【说明】的算例代入验证最稳。",
+      source: "patterns-algo-notes.md §2.3 ｜ Lesson 0034 §五"
+    },
+    {
+      q: "编辑距离 DP 表中，整个问题的答案存放在？",
+      options: ["d[len1][len2]", "d[len1-1][len2-1]", "d[0][0]", "d[n][n]（任意大下标）"],
+      answer: 0,
+      opts: [
+        "✓ d[i][j] 定义为『前 i 个 → 前 j 个』，整串就是规模最大的那格 d[len1][len2]。",
+        "差一行一列——把定义里的 i、j 代入核对即可发现。",
+        "空串对空串恒为 0，不是答案。",
+        "下标必须与变量定义对应，不能随手写 n。"
+      ],
+      explain: "三件套之③：结果返回『规模最大的格子』——用变量定义反推下标，别背形状。",
+      source: "patterns-algo-notes.md §3.1 ｜ Lesson 0034 §三"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0011 · 图四大算法：MST / 最短路 / 拓扑 / 关键路径（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0011（数据结构与算法 · 7/10）</p>
+    <h1>图四大算法：最小生成树 · 最短路 · 拓扑 · 关键路径</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>45 分钟</b> ｜ 上一课：<a href="0010-graphs-intro.html">0010 图概念与遍历</a><br>
+      考点定位：关键路径 ve/vl 计算必考（<a href="../pages/practice/top10-errors.html">TOP10 错题</a> 榜首之一）、拓扑序列判定、Prim/Kruskal 辨析
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    关键路径是高频计算大分值题：背下两句口诀——<strong>ve 从前往后取 max，vl 从后往前取 min</strong>——再用本课的 AOE 例题（工期 9 天）把 ve/vl 全表算熟。加上 Kruskal 亲手选边和拓扑序列判定，四大算法各拿一分。
+  </div>
+
+  <h2>一、最小生成树 MST：Prim vs Kruskal</h2>
+  <p>给带权连通图，挑 <strong>n−1</strong> 条边把所有点连起来且<strong>总权最小</strong>。两种贪心：</p>
+  <table class="tight">
+    <tr><th></th><th>Prim（加点法）</th><th>Kruskal（加边法）</th></tr>
+    <tr><td>策略</td><td>从某点出发，每次把「离已长成部分最近」的<strong>顶点</strong>拉进来</td><td>边按权排序，从小到大挑，<strong>成环就跳过</strong></td></tr>
+    <tr><td>判环</td><td>不需要（永远长在同一个连通块上）</td><td>需要（并查集思想）</td></tr>
+    <tr><td>适合</td><td><strong>稠密图</strong></td><td><strong>稀疏图</strong>（先排序）</td></tr>
+  </table>
+  <p>边权互不相同时 MST <strong>唯一</strong>；边权相同则可能多棵，但总权相同。下图 A–C（权4）被跳过就是因为它和 A–B、B–D、C–D 围成环：</p>
+
+  <div id="glab"></div>
+
+  <h2>二、最短路：Dijkstra（单源）</h2>
+  <p>求<strong>一个起点到其余各点</strong>的最短路径：<strong>贪心</strong>——每轮把「当前距离最小的未确定点」定型，再用它松弛邻居。考试要点：①适用于<strong>无负权</strong>边；②贪心逐步扩大「已确定集」；③求<strong>两点间</strong>最短路也用它（从起点算出到终点的答案）。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>微例</strong>：A→B 权 1，A→C 权 4，B→C 权 2。A 到 C？直接走 4，但 A→B→C = 3 更短 → <strong>3</strong>。Dijkstra 的「松弛」就是干这件事：看经过中间点会不会更近。</p>
+  </div>
+
+  <h2>三、拓扑排序：AOV 网排先后</h2>
+  <p>课程有先修关系、任务有依赖——<strong>有向无环图（DAG）</strong>排出一个合法顺序：<strong>每次取「入度为 0」的点输出并删掉它的出边</strong>，直到全部输出；中途找不到入度 0 的点 = <strong>有环</strong>（依赖死锁）。</p>
+  <div class="callout warn">
+    <span class="tag">⚠ 考点</span>
+    拓扑序列<strong>不唯一</strong>（同一时刻可能多个入度 0 的点，选谁都行）；题干给一个序列问「是否可能」→ 逐点模拟入度即可；「拓扑序列存在 ⇔ 图无环」是判断题常客。
+  </div>
+
+  <h2>四、必考计算：关键路径（AOE 网）</h2>
+  <p>AOE 网边=活动（带工期），点=事件。问<strong>整个工程最少多少天</strong>、哪些活动一天都不能拖（<strong>关键活动</strong>）。</p>
+  <span class="formula">ve（最早）从前往后取 MAX：ve[j] = max(ve[i] + w(i,j))<br>vl（最迟）从后往前取 MIN：vl[i] = min(vl[j] − w(i,j))　　关键活动：e = l（无余量）</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>样例 AOE（背熟这张表）</strong>：V1→V2 权3（a1）、V1→V3 权2（a2）、V2→V4 权4（a3）、V3→V4 权3（a4）、V4→V5 权2（a5）。</p>
+    <table class="tight">
+      <tr><th>事件</th><th>ve（最早，取max）</th><th>vl（最迟，取min）</th></tr>
+      <tr><td>V1</td><td class="num">0</td><td class="num">0</td></tr>
+      <tr><td>V2</td><td class="num">0+3 = 3</td><td class="num">7−4 = 3</td></tr>
+      <tr><td>V3</td><td class="num">0+2 = 2</td><td class="num">7−3 = 4</td></tr>
+      <tr><td>V4</td><td class="num">max(3+4, 2+3) = <strong>7</strong></td><td class="num">9−2 = 7</td></tr>
+      <tr><td>V5</td><td class="num">7+2 = <strong>9</strong>（工期）</td><td class="num">9</td></tr>
+    </table>
+    <p style="margin-bottom:0;">活动 a2（V1→V3）：最早开始 e=0，最迟开始 l = vl(V3)−2 = 2 → 有 2 天余量，<strong>非关键</strong>；a1、a3、a5 的 e=l → <strong>关键路径 V1→V2→V4→V5，工期 3+4+2 = 9 天</strong>。</p>
+  </div>
+
+  <h2>五、动手：Kruskal 选边 + ve/vl 计算挑战</h2>
+  <p>下面的选边游戏就是第一节那张图；计算训练器把上表的 ve/vl/工期逐项让你自己填——<strong>先动笔再填数</strong>：</p>
+  <div id="cd7"></div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz-ds7"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>Prim 加点（稠密）、Kruskal 加边跳环（稀疏）；边权互异 ⇒ MST 唯一。</li>
+      <li>Dijkstra = 贪心松弛，单源最短路，不能有负权边。</li>
+      <li>拓扑排序 = 每次摘入度 0 的点；有序列 ⇔ 无环；序列不唯一。</li>
+      <li>关键路径：<strong>ve 前 max、vl 后 min、关键活动 e=l</strong>；工期 = 终点 ve。样例答案：9 天，V1→V2→V4→V5。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0010-graphs-intro.html">← 上一课 0010 图与遍历</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0012-searching.html">下一课 → 0012 查找</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>打卡提醒</strong>：错题按「题目→错因→正确思路→知识点」登记到 <a href="../pages/practice/reflection.html">reflection.md</a>。</p>
+    <p>💬 卡在哪一步（比如「为什么 vl 要取 min」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/graph-lab.js"></script>
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+GraphLab.mount("glab", {
+  vertices: { A: { x: 12, y: 22 }, B: { x: 38, y: 12 }, C: { x: 38, y: 52 },
+              D: { x: 64, y: 22 }, E: { x: 64, y: 72 }, F: { x: 88, y: 42 } },
+  edges: [
+    { a: "A", b: "B", w: 1 }, { a: "B", b: "D", w: 2 }, { a: "C", b: "D", w: 3 },
+    { a: "A", b: "C", w: 4 }, { a: "C", b: "E", w: 5 }, { a: "E", b: "F", w: 6 },
+    { a: "D", b: "F", w: 7 }
+  ],
+  start: "A"
+});
+
+CalcDrill.mount("cd7", {
+  title: "关键路径计算挑战（样例 AOE：V1→V2=3，V1→V3=2，V2→V4=4，V3→V4=3，V4→V5=2）",
+  questions: [
+    { text: "事件 V4 的最早发生时间 ve(V4) = ___（取 max）", answer: 7, mode: "exact",
+      derive: "ve(V4) = max(ve(V2)+4, ve(V3)+3) = max(3+4, 2+3) = max(7,5) = 7。入边的两条路都要等完，取大的。" },
+    { text: "事件 V3 的最迟发生时间 vl(V3) = ___（取 min）", answer: 4, mode: "exact",
+      derive: "vl(V3) = vl(V4) − 3 = 7 − 3 = 4。后继只有 V4，只有一条出路就直接减。" },
+    { text: "整个工程的最短工期 = ___", answer: 9, mode: "exact",
+      derive: "工期 = ve(汇点 V5) = ve(V4) + 2 = 7 + 2 = 9。所有活动必须等最长的那条链走完。" },
+    { text: "活动 a2（V1→V3，权2）的最迟开始时间 l = ___", answer: 2, mode: "exact",
+      derive: "l = vl(V3) − 2 = 4 − 2 = 2。它最早 e = 0，余量 2 天 → 非关键活动。" },
+    { text: "关键活动 a1 的最早开始时间 e = ___", answer: 0, mode: "exact",
+      derive: "a1 从源点 V1 出发，e = ve(V1) = 0；其 l = vl(V2) − 3 = 3 − 3 = 0，e = l → 关键。" },
+    { text: "关键路径 V1→V2→V4→V5 的总权 = ___", answer: 9, mode: "exact",
+      derive: "3 + 4 + 2 = 9，与工期一致——关键路径就是最长（最耗时）路径，它的长度决定工期。" }
+  ]
+});
+
+Quiz.render("quiz-ds7", {
+  title: "本课自查（7 题，先算再点）",
+  passNote: "7/7，错题登记 reflection.md",
+  shuffle: true,
+  questions: [
+    {
+      q: "关于 Prim 与 Kruskal，正确的是？",
+      options: ["Prim 加点适合稠密图，Kruskal 加边适合稀疏图", "两者结果必然不同", "Kruskal 不需要判断环", "Prim 从权最小的边开始"],
+      answer: 0,
+      opts: [
+        "✓ Prim 每次拉最近顶点（邻接矩阵好使）；Kruskal 先把边排序再挑选（边多就亏）。",
+        "边权互异时两者得到同一棵最小生成树。",
+        "Kruskal 的核心恰是『成环就跳过』（并查集判环）。",
+        "从最小边开始的是 Kruskal；Prim 从任意顶点开始拉最近点。"
+      ],
+      explain: "配对记：Prim = 加点 = 稠密；Kruskal = 加边 = 稀疏。MST 总权唯一。",
+      source: "Lesson 0011 §一"
+    },
+    {
+      q: "Kruskal 挑边时遇到『会构成环』的边应当？",
+      options: ["跳过它，看下一条更大的", "选它，删掉别的边", "停止算法", "重新从最小边开始"],
+      answer: 0,
+      opts: [
+        "✓ 生成树必须无环——成环边直接跳过（本课实验室里权 4 的 A–C 就被跳过）。",
+        "选它再删边是『破环法』，不是 Kruskal。",
+        "跳过即可，算法继续，直到选满 n−1 条。",
+        "顺序本来就是从最小到大，不必重来。"
+      ],
+      explain: "判环用并查集：两个端点已经连通（同根）→ 这条边会成环。",
+      source: "Lesson 0011 §一 ｜ §五实验室"
+    },
+    {
+      q: "Dijkstra 算法求最短路采用的策略是？",
+      options: ["贪心：每轮定型当前距离最小的点", "动态规划：填 n×n 表", "分治：图分成两半分别求", "回溯：路径不通就折返"],
+      answer: 0,
+      opts: [
+        "✓ 每轮把『未确定点中当前距离最小』的点确定为最短（不再改变），并松弛其邻居。",
+        "Floyd 才是填全源表的 DP；Dijkstra 是单源贪心。",
+        "图最短路没有这种分治套路。",
+        "DFS 才会折返；Dijkstra 不回头。"
+      ],
+      explain: "两个限制记牢：单源（一个起点）；边权非负。",
+      source: "Lesson 0011 §二"
+    },
+    {
+      q: "拓扑排序的执行规则是？",
+      options: ["每次输出并删除一个入度为 0 的顶点", "每次输出出度最大的顶点", "按字母序输出全部顶点", "按 BFS 层序输出"],
+      answer: 0,
+      opts: [
+        "✓ 入度 0 = 没有任何前驱依赖，可以立即排；删其出边让后继的入度下降。",
+        "度数大小与依赖顺序无关。",
+        "字母序只在并列时决定先后，不是规则本体。",
+        "BFS 层序是遍历，不保证依赖在前（拓扑关心方向）。"
+      ],
+      explain: "存在拓扑序列 ⇔ 有向无环图（DAG）；序列一般不唯一。",
+      source: "Lesson 0011 §三"
+    },
+    {
+      q: "样例 AOE（V1→V2=3，V1→V3=2，V2→V4=4，V3→V4=3，V4→V5=2）的最短工期是？",
+      options: ["9", "7", "5", "12"],
+      answer: 0,
+      opts: [
+        "✓ 关键路径 V1→V2→V4→V5 = 3+4+2 = 9；ve(V4)=max(7,5)=7，工期 ve(V5)=9。",
+        "7 是 ve(V4)——还没走完最后一段 a5=2。",
+        "5 是另一条路 V1→V3→V4 的长度——短的不是关键路径。",
+        "12 是所有活动串起来的总长——活动可以并行。"
+      ],
+      explain: "工期 = 最长路径长度 = ve(汇点)。关键路径是『最长』路径，这点和直觉相反，必记。",
+      source: "docs/practice/top10-errors.md（关键路径条目） ｜ Lesson 0011 §四"
+    },
+    {
+      q: "活动 a2（V1→V3，权 2）的 e=0、l=2，说明它是？",
+      options: ["非关键活动：有 2 天时间余量", "关键活动：l−e=2 大于 0", "无法判断", "必须删掉的活动"],
+      answer: 0,
+      opts: [
+        "✓ e=l 才是关键活动；a2 余量 l−e = 2 天，拖 2 天内不影响工期 → 非关键。",
+        "关键活动的判据恰是 e=l（余量为 0）。",
+        "表都算出来了，可判。",
+        "非关键活动照常执行，只是有缓冲。"
+      ],
+      explain: "关键路径 = 全由关键活动组成 = 最长路径；余量 l−e 就是可拖延的天数。",
+      source: "Lesson 0011 §四"
+    },
+    {
+      q: "求 ve 时『取 max』、求 vl 时『取 min』的原因是？",
+      options: ["ve 要等最慢的入边（万事俱备），vl 要迁就最早的出边（不能耽误后继）", "max/min 只是习惯写法", "ve 对应出边、vl 对应入边", "有环时才需要取 min"],
+      answer: 0,
+      opts: [
+        "✓ 事件最早发生 = 最长链到齐（max）；最迟发生 = 再晚就拖累后继（对后继的 vl−权取 min）。",
+        "取大取小有明确的物理含义。",
+        "方向说反了：ve 看入边、vl 看出边。",
+        "关键路径的图是无环的（AOE 是 DAG）。"
+      ],
+      explain: "口诀原句：ve 从前往后取 max，vl 从后往前取 min；e = ve(起点)，l = vl(终点) − 权。",
+      source: "Lesson 0011 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0029 · 项目管理与软件质量：甘特、PERT、CMM、ISO 9126（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0029（软件工程 · 3/3）</p>
+    <h1>项目管理与软件质量：进度图、成熟度与质量六特性</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0014-ds-supplement.html">0014 数据结构补遗</a><br>
+      考点定位：PERT 三点估算、软件质量六特性选所属、CMM 五级排序、风险管理流程——概念题每年 2~3 道，背口诀即可
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    三组口诀吃三块：<strong>PERT = (乐观 + 4×最可能 + 悲观) ÷ 6</strong>；CMM 五级「<strong>初重定管优</strong>」；ISO 9126 六特性「<strong>功可易效维移</strong>」。外加一句话判型：甘特图直观但<strong>看不出任务依赖</strong>。
+  </div>
+
+  <h2>一、进度管理：甘特图、PERT 与关键路径</h2>
+  <table class="tight">
+    <tr><th>工具</th><th>强项</th><th>弱项 / 考点</th></tr>
+    <tr><td><strong>甘特图（横道图）</strong></td><td>直观展示各任务的<strong>起止时间与进度</strong>，一目了然</td><td><strong>不能清晰反映任务间的依赖关系</strong>；难以定位关键任务——经典判断题</td></tr>
+    <tr><td><strong>PERT 图（网络图）</strong></td><td>用节点/箭头表示<strong>任务依赖</strong>与工期，可求关键路径</td><td>三点估算：(a + 4m + b) ÷ 6，方差 σ² = ((b−a)/6)²</td></tr>
+    <tr><td><strong>关键路径</strong></td><td>耗时最长的路径 = 项目<strong>最短完工时间</strong>；关键路径上的任务松弛时间为 0</td><td>关键路径工期 = 期望工期；压缩非关键任务不影响总工期</td></tr>
+  </table>
+  <div class="card">
+    <p style="margin-top:0;"><strong>PERT 三点估算例</strong>：某任务乐观 4 天、最可能 6 天、悲观 10 天 → 期望工期 = (4 + 4×6 + 10) ÷ 6 = 40/6 ≈ <strong>6.7 天</strong>；方差 = ((10−4)/6)² = 1。</p>
+    <p style="margin-bottom:0;"><strong>关键路径例</strong>：A→B 工期 3+5=8 天，A→C→D 工期 2+4+3=9 天 → 关键路径 A→C→D，项目最短 <strong>9 天</strong>完工。赶工要压关键路径上的任务才有效。</p>
+  </div>
+
+  <h2>二、CMM / CMMI：软件过程成熟度五级</h2>
+  <span class="formula">CMM 五级：<strong>初始级 → 可重复级 → 已定义级 → 已管理级 → 优化级</strong>（口诀：初重定管优）</span>
+  <table class="tight">
+    <tr><th>级别</th><th>特征关键词</th></tr>
+    <tr><td>1 初始级</td><td>混乱，依赖<strong>个人英雄</strong>，过程无序</td></tr>
+    <tr><td>2 可重复级</td><td><strong>项目级</strong>管理：基本的项目成本、进度跟踪，能重复以往成功</td></tr>
+    <tr><td>3 已定义级</td><td><strong>组织级</strong>标准过程：全组织统一 documented 过程</td></tr>
+    <tr><td>4 已管理级</td><td><strong>定量</strong>管理：过程与质量用度量指标控制</td></tr>
+    <tr><td>5 优化级</td><td><strong>持续改进</strong>：新技术、量化反馈驱动过程优化</td></tr>
+  </table>
+  <p><strong>CMMI</strong> 是 CMM 的新版本，融合多学科，分阶段式（同样五级）与连续式两种表示。考法：给一句特征选等级——「项目级跟踪」=2 级、「组织统一标准」=3 级、「定量」=4 级、「持续改进」=5 级。</p>
+
+  <h2>三、风险管理与配置管理：两套流程各走各的</h2>
+  <table class="tight">
+    <tr><th>域</th><th>流程 / 关键词</th></tr>
+    <tr><td><strong>风险管理</strong></td><td>风险识别 → 风险评估（概率×影响，排序）→ 风险应对 → 风险监控；应对策略四选：<strong>规避、转移（买保险/外包）、减轻（降低概率影响）、接受</strong></td></tr>
+    <tr><td><strong>配置管理</strong></td><td>配置项（纳入管理的产物：代码/文档/数据）→ 基线（通过评审的稳定版本，变更需走流程）→ 版本控制 → 变更控制委员会 <strong>CCB</strong> 审批变更</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频判断</span>
+    「基线一经确定不可变更」——<strong>错</strong>。基线可以变更，但必须走正式的变更控制流程（申请 → CCB 评估审批 → 实施 → 验证）。配置管理管的是<strong>变更</strong>，不是禁止变更。
+  </div>
+
+  <h2>四、软件质量：ISO 9126 六大特性</h2>
+  <span class="formula">六大特性（口诀：<strong>功可易效维移</strong>）：功能性 · 可靠性 · 易用性 · 效率 · 维护性 · 可移植性</span>
+  <table class="tight">
+    <tr><th>特性</th><th>一句话定义</th><th>子特性举例</th></tr>
+    <tr><td><strong>功能性</strong></td><td>该做的都做了、做对了</td><td>适合性、准确性、<strong>互操作性</strong>、安全性</td></tr>
+    <tr><td><strong>可靠性</strong></td><td>规定条件下规定时间内不失效</td><td>成熟性、容错性、易恢复性</td></tr>
+    <tr><td><strong>易用性</strong></td><td>用户学得会、用得顺</td><td>易理解、易学、易操作</td></tr>
+    <tr><td><strong>效率</strong></td><td>资源占用与响应速度</td><td>时间特性、资源特性</td></tr>
+    <tr><td><strong>维护性</strong></td><td>改起来容易</td><td>易分析、易修改、稳定性、易测试</td></tr>
+    <tr><td><strong>可移植性</strong></td><td>换环境能跑</td><td>适应性、易安装、一致性、易替换</td></tr>
+  </table>
+  <p>考法：给一句描述选特性——「换操作系统仍能运行」→ 可移植性（适应性）；「界面友好易学」→ 易用性；「故障后能恢复」→ 可靠性（易恢复性）。「互操作性」归属<strong>功能性</strong>（不是效率/可移植）——易错。</p>
+
+  <h2>五、动手：PERT 与可靠性小算（先动笔再填）</h2>
+  <div id="cd32"></div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz-pm32"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>甘特图直观但<strong>看不出依赖</strong>；PERT 三点估算 (a+4m+b)/6；关键路径 = 最长路径 = 最短完工期，松弛 0。</li>
+      <li>CMM 五级「初重定管优」：项目级跟踪=2、组织标准=3、定量=4、持续改进=5。</li>
+      <li>风险应对四策略：规避 / 转移 / 减轻 / 接受；基线可变更但必须走 CCB 流程。</li>
+      <li>ISO 9126 六特性「功可易效维移」；互操作性归功能性。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0028-testing.html">← 上一课 0028 测试与 McCabe</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0030-oop-basics.html">下一课 → 0030 面向对象基础</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p>💬 卡在哪一步（比如「为什么关键路径是最长路径反而决定最短工期」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd32", {
+  title: "PERT 三点估算 + 关键路径小算",
+  questions: [
+    { text: "PERT：乐观 3 天、最可能 6 天、悲观 15 天，期望工期 = ___ 天（一位小数）", answer: 7, mode: "exact",
+      derive: "(3 + 4×6 + 15) ÷ 6 = 42/6 = 7 天。" },
+    { text: "上题的方差 σ² = ((b−a)/6)² = ___（一位小数）", answer: 4, mode: "exact",
+      derive: "((15−3)/6)² = 2² = 4。" },
+    { text: "A→B 工期 4+6 天，A→C→B 工期 3+2+5 天，关键路径工期 = ___ 天", answer: 10, mode: "exact",
+      derive: "A→B=10 天；A→C→B=10 天……本题两路相等——都为 10 天，均为关键路径。" },
+    { text: "若上题 A→C→B 为 11 天，则关键路径是 A→C→B 且项目最短工期 = ___ 天", answer: 11, mode: "exact",
+      derive: "关键路径取最长：11 > 10 → 11 天。压工期必须压关键路径。" }
+  ]
+});
+
+Quiz.render("quiz-pm32", {
+  title: "本课自查（8 题，先想再点）",
+  passNote: "8/8，错题登记错题本",
+  shuffle: true,
+  questions: [
+    {
+      q: "甘特图的主要缺点是？",
+      options: ["难以清晰表达任务间的依赖关系", "不能展示任务起止时间", "无法用于进度跟踪", "只能用于软件测试阶段"],
+      answer: 0,
+      opts: [
+        "✓ 横道图只摆时间条，任务之间谁先谁后、能否并行看不出来——PERT 网络图补这个短板。",
+        "起止时间恰是甘特图的长项。",
+        "进度跟踪（实际 vs 计划）正是甘特图的日常用法。",
+        "全生命周期都能用。"
+      ],
+      explain: "经典判断题：甘特图直观但不能反映依赖与关键路径。",
+      source: "Lesson 0029 §一"
+    },
+    {
+      q: "PERT 三点估算公式（a 乐观、m 最可能、b 悲观）为？",
+      options: ["(a + 4m + b) / 6", "(a + m + b) / 3", "(a + 2m + b) / 4", "(m + b) / 2"],
+      answer: 0,
+      opts: [
+        "✓ 最可能 m 权重 4，两头各 1——标准 PERT 加权公式。",
+        "三点简单平均不是 PERT 的定义。",
+        "权重不对。",
+        "只用了两点的近似，非 PERT。"
+      ],
+      explain: "数字代入别慌：先乘 4 再相加除以 6。",
+      source: "Lesson 0029 §一"
+    },
+    {
+      q: "项目的关键路径是指（）。", 
+      options: ["耗时最长的路径，决定项目最短完工时间", "耗时最短的路径", "成本最高的路径", "风险最大的路径"],
+      answer: 0,
+      opts: [
+        "✓ 所有路径里最长的那条决定了完工下限——它一天不完工项目就一天不能交付；其上任务松弛时间为 0。",
+        "最短路径的任务有大量松弛时间，可以拖延。",
+        "关键路径是时间概念，不是成本概念。",
+        "风险与关键路径是两个维度。"
+      ],
+      explain: "『最长路径决定最短工期』这个反直觉表述要读顺。",
+      source: "Lesson 0029 §一"
+    },
+    {
+      q: "CMM 第二级（可重复级）的关键特征是？",
+      options: ["建立了项目级的管理：成本、进度得到跟踪", "全组织统一的标准过程", "定量度量管理过程", "持续的过程改进"],
+      answer: 0,
+      opts: [
+        "✓ 2 级的核心：单个项目『看得住』——能重复以往类似项目的成功。",
+        "组织级统一标准是 3 级（已定义级）。",
+        "定量管理是 4 级。",
+        "持续改进是 5 级（优化级）。"
+      ],
+      explain: "对号口诀：2 项目级、3 组织级、4 定量、5 改进。",
+      source: "Lesson 0029 §二"
+    },
+    {
+      q: "『过程的性能用定量度量指标进行管理与控制』对应 CMM 的（）级。",
+      options: ["已管理级（4 级）", "可重复级（2 级）", "已定义级（3 级）", "优化级（5 级）"],
+      answer: 0,
+      opts: [
+        "✓ 看到『定量/度量/统计控制』就选 4 级。",
+        "2 级只有基本的项目跟踪，谈不上定量。",
+        "3 级是『有标准』，不是『用数据管』。",
+        "5 级的关键词是持续改进与新技术的引入。"
+      ],
+      explain: "CMM 题的解法就是关键词映射，别背长定义。",
+      source: "Lesson 0029 §二"
+    },
+    {
+      q: "某项目团队为关键岗位聘请了第三方专家并购买了服务保险，属于风险应对策略中的（）。", 
+      options: ["转移", "规避", "减轻", "接受"],
+      answer: 0,
+      opts: [
+        "✓ 花钱把风险的后果转给第三方（外包/保险/担保）= 转移。",
+        "规避是改变计划让风险根本不发生（如砍掉高风险需求）。",
+        "减轻是降低概率或影响，风险仍在自己身上。",
+        "接受是明知有险、预留余量硬扛。"
+      ],
+      explain: "四策略判型：躲开=规避、甩锅=转移、缓释=减轻、硬扛=接受。",
+      source: "Lesson 0029 §三"
+    },
+    {
+      q: "关于配置管理中的基线，正确的是？",
+      options: ["基线可以变更，但必须经过正式的变更控制流程", "基线一经确定绝对不可修改", "基线就是最新的代码版本", "基线只能由开发人员自行修改"],
+      answer: 0,
+      opts: [
+        "✓ 基线 = 通过正式评审的稳定配置项；变更需申请并经 CCB 审批后实施——『管变更』而非『禁变更』。",
+        "绝对不可变是误解，工程现实里基线一定会演进。",
+        "最新未评审的版本不算基线。",
+        "绕过 CCB 直接改基线是配置管理大忌。"
+      ],
+      explain: "CCB（变更控制委员会）是配置管理题的固定出场角色。",
+      source: "Lesson 0029 §三"
+    },
+    {
+      q: "按 ISO 9126，『在指定的条件下使用时，软件被用户理解、学习、操作和吸引的能力』属于（）。", 
+      options: ["易用性", "功能性", "效率", "可移植性"],
+      answer: 0,
+      opts: [
+        "✓ 易理解、易学、易操作——易用性三件套。",
+        "功能性管『功能对不对、全不全、安不安全』。",
+        "效率管时间与资源。",
+        "可移植性管换环境。"
+      ],
+      explain: "六特性口诀「功可易效维移」，考题就是定义句配对。",
+      source: "Lesson 0029 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

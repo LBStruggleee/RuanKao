@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0014 · 数据结构补遗：矩阵地址、串、森林与平衡树（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0014（数据结构与算法 · 10/10）</p>
+    <h1>数据结构补遗：矩阵地址计算、串、森林与平衡树</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0001-computer-math.html">0001 组成计算专题</a><br>
+      考点定位：数组/矩阵地址计算（几乎每年 1 题纯计算）、树/森林与二叉树转换、平衡树概念——补上 <a href="0005-arrays-and-linked-lists.html">0005</a>~<a href="0013-sorting.html">0013</a> 之外的散点
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    一个公式吃一题：<strong>行优先 Loc(a[i][j]) = 基址 + (i×n + j)×L</strong>（n 为列数）。再带三句话：树转二叉树「<strong>左孩子右兄弟</strong>」；树的后序 = 对应二叉树的<strong>中序</strong>；平衡树左右高度差 <strong>≤ 1</strong>。
+  </div>
+
+  <h2>一、多维数组地址计算：先数前面排了多少个</h2>
+  <p>地址计算的本质就一句话：<strong>目标元素前面一共存了多少个元素 × 每个元素的字节数，加到基址上</strong>。</p>
+  <span class="formula">行优先（按行存）：Loc(a[i][j]) = Loc(a₀₀) + ( i × n + j ) × L　　（n = 列数，i/j 从 0 起）<br>列优先（按列存）：Loc(a[i][j]) = Loc(a₀₀) + ( j × m + i ) × L　　（m = 行数）</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：a[5][6] 二维数组（5 行 6 列），基址 1000，每元素 4 字节，<strong>行优先</strong>，求 a[2][3] 的地址：</p>
+    <p>前面有 2 整行（2×6=12 个）+ 本行前 3 个 = 15 个 → 1000 + 15×4 = <strong>1060</strong>。</p>
+    <p style="margin-bottom:0;"><strong>若列优先</strong>：前面有 3 整列（3×5=15 个）+ 本列前 2 个 = 17 个 → 1000 + 17×4 = <strong>1068</strong>。行列数或存储方式一变，答案立刻变——审题两件事：<strong>几行几列？行优先还是列优先？</strong></p>
+  </div>
+  <div class="callout warn">
+    <span class="tag">⚠ 下标从 1 开始的坑</span>
+    若题目说 a[1..5, 1..6]（下标从 1 起），则 a[2,3] 前面有 (2−1)×6 + (3−1) = 8 个 → 1000+8×4 = 1032。公式随下标起点变，<strong>别背死公式，数清前面有几个</strong>。
+  </div>
+  <h3>对称矩阵与稀疏矩阵</h3>
+  <table class="tight">
+    <tr><th>压缩方式</th><th>做法</th><th>考试点</th></tr>
+    <tr><td><strong>下三角/对称矩阵</strong></td><td>只存下三角（含对角线），共 n(n+1)/2 个元素</td><td>给 i、j 求一维下标（数第 i 行前共有几行）</td></tr>
+    <tr><td><strong>三对角矩阵</strong></td><td>只存主对角线及上下两条斜线，3n−2 个元素</td><td>下标换算</td></tr>
+    <tr><td><strong>稀疏矩阵</strong></td><td>非零元素极少，用<strong>三元组 (行,列,值)</strong> 或十字链表存</td><td>三元组表失去了随机存取特性（判断题）</td></tr>
+  </table>
+
+  <h2>二、串：KMP 的思想一句话</h2>
+  <p><strong>串</strong>是内容受限的线性表（元素是字符）。<strong>空串</strong>长度为 0；<strong>空格串</strong>只有空格、长度为空格数——两者不相等（判断题）。</p>
+  <p>朴素模式匹配最坏 O(n×m)（主串回溯）。<strong>KMP 改进</strong>：主串指针<strong>永不回溯</strong>，失配时利用<strong> next 数组</strong>把模式串滑到合适位置继续比，复杂度 O(n+m)。中级只考思想判断，不考手推 next。</p>
+
+  <h2>三、树、森林与二叉树的互转：左孩子右兄弟</h2>
+  <p>任何树/森林都能唯一转成二叉树（<a href="0007-binary-tree-basics.html">0007 的二叉树</a>是万能底座）：</p>
+  <table class="tight">
+    <tr><th>转换</th><th>规则</th><th>要点</th></tr>
+    <tr><td>树 → 二叉树</td><td><strong>左孩子、右兄弟</strong>：节点的左指针指向第一个孩子，右指针指向下一个兄弟</td><td>转换后<strong>根没有右子树</strong></td></tr>
+    <tr><td>森林 → 二叉树</td><td>各棵树先各自转换，第二棵树作为第一棵树<strong>根的右子树</strong>依次连上</td><td>转换后根仍有右子树</td></tr>
+    <tr><td>遍历对应</td><td>树的前序 = 对应二叉树的<strong>前序</strong>；树的后序 = 对应二叉树的<strong>中序</strong></td><td>森林的中序 = 对应二叉树的中序</td></tr>
+  </table>
+  <div class="card">
+    <p style="margin-top:0;margin-bottom:0;"><strong>例</strong>：树有根 R，孩子 A、B（A 的孩子 C）。转二叉树：R 左指 A；A 左指 C，A 右指 B；C、B 无孩子。前序遍历（根左右）：R A C B —— 与树的前序（根 R → 孩子 A → C → B）完全一致 ✓。</p>
+  </div>
+
+  <h2>四、平衡二叉树（AVL）：不让二叉搜索树退化成链</h2>
+  <p><strong>二叉搜索树 BST</strong>：左 < 根 < 右，查找走折半的路径。但按 1,2,3,… 顺序插入会退化成<strong>一条链</strong>，查找从 O(log n) 掉到 O(n)。<strong>AVL 平衡二叉树</strong>在 BST 上加一条约束：</p>
+  <span class="formula">任意节点：左子树高度 − 右子树高度 ∈ {−1, 0, 1}</span>
+  <p>插入导致失衡时靠<strong>旋转</strong>（LL/RR/LR/RL 四种）恢复平衡。中级只考概念判断：<strong>AVL 是平衡的二叉搜索树；n 个节点的 AVL 高度是 O(log n)</strong>；哈夫曼树不是 AVL（先记住两者目的不同：<a href="0009-huffman.html">0009 哈夫曼</a>管带权路径最短）。</p>
+
+  <h2>五、动手：地址计算挑战（先动笔再填）</h2>
+  <div id="cd31"></div>
+
+  <h2>六、自查（全对过课）</h2>
+  <div id="quiz-ds31"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>行优先：基址 + (i×n + j)×L；列优先：基址 + (j×m + i)×L——先确认行列数、下标起点、存储顺序。</li>
+      <li>下三角压缩 n(n+1)/2 个；三对角 3n−2；稀疏矩阵三元组失去随机存取。</li>
+      <li>空串 ≠ 空格串；KMP 主串指针不回溯，O(n+m)。</li>
+      <li>树转二叉树「左孩子右兄弟」，树的前序 = 二叉树前序、树的后序 = 二叉树中序。</li>
+      <li>AVL：左右高度差 ≤ 1 的二叉搜索树，靠旋转防退化。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0013-sorting.html">← 上一课 0013 排序</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0015-os-process.html">下一课 → 0015 进程管理</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p>💬 卡在哪一步（比如「列优先为什么乘行数」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd31", {
+  title: "地址计算挑战（先数前面有几个）",
+  questions: [
+    { text: "a[6][8] 数组（6 行 8 列），基址 1000，每元素 2 字节，行优先：a[3][5] 的地址 = ___", answer: 1058, mode: "exact",
+      derive: "前面 3×8 + 5 = 29 个 → 1000 + 29×2 = 1058。" },
+    { text: "同上数组改列优先：a[3][5] 的地址 = ___", answer: 1064, mode: "exact",
+      derive: "列优先前面 5×6 + 3 = 33 个 → 1000 + 33×2 = 1064。" },
+    { text: "a[1..5, 1..8] 下标从 1 起，行优先，基址 1000，每元素 4 字节：a[3][5] 的地址 = ___", answer: 1064, mode: "exact",
+      derive: "前面 (3−1)×8 + (5−1) = 20 个 → 1000 + 20×4 = 1064。" },
+    { text: "10 阶对称矩阵只存下三角（含对角线），共 ___ 个元素", answer: 55, mode: "exact",
+      derive: "n(n+1)/2 = 10×11/2 = 55。" },
+    { text: "10 阶三对角矩阵压缩存储，共 ___ 个元素", answer: 28, mode: "exact",
+      derive: "3n − 2 = 30 − 2 = 28。" }
+  ]
+});
+
+Quiz.render("quiz-ds31", {
+  title: "本课自查（8 题，先想再点）",
+  passNote: "8/8，错题登记错题本",
+  shuffle: true,
+  questions: [
+    {
+      q: "二维数组按行优先存储时，Loc(a[i][j]) 中『已越过元素个数』的正确表达式（下标从 0 起，n 列）是？",
+      options: ["i×n + j", "j×m + i", "i×m + j", "i + j"],
+      answer: 0,
+      opts: [
+        "✓ 前面有 i 个完整行（每行 n 个）+ 本行前 j 个 = i×n + j。",
+        "那是列优先的表达式（j 个整列、每列 m 个）。",
+        "行优先时整行是 n 个不是 m 个。",
+        "漏乘了每行/每列的个数。"
+      ],
+      explain: "口诀：行优先乘列数，列优先乘行数——被乘的是『一整段』的长度。",
+      source: "Lesson 0014 §一"
+    },
+    {
+      q: "稀疏矩阵常用的存储方法是？",
+      options: ["三元组表或十字链表", "一维数组顺序存满", "完全二叉树", "哈夫曼编码"],
+      answer: 0,
+      opts: [
+        "✓ 只存 (行, 列, 值) 三元组（加行列维数），零元素不存；十字链表支持加减运算。",
+        "把全部元素顺序存满就失去了『压缩』意义。",
+        "完全二叉树与稀疏存储无关。",
+        "哈夫曼是编码压缩，不是矩阵存储。"
+      ],
+      explain: "经典判断题：三元组存储使矩阵失去了随机存取特性——对，要按行扫描找元素。",
+      source: "Lesson 0014 §一"
+    },
+    {
+      q: "关于空串与空格串，正确的是？",
+      options: ["空串长度为 0，空格串由空格组成、长度为空格个数，两者不等", "两者相同", "空格串长度为 0", "空串由空格组成"],
+      answer: 0,
+      opts: [
+        "✓ 空串是『没有字符』；空格串是『有字符，且都是空格』——内容与长度都不同。",
+        "一个是零长度，一个长度 ≥ 1，不可能相同。",
+        "空格串至少有一个空格，长度 ≥ 1。",
+        "空串里连空格都没有。"
+      ],
+      explain: "判断题常客：len(\"\")=0 ≠ len(\"   \")=3。",
+      source: "Lesson 0014 §二"
+    },
+    {
+      q: "KMP 算法相比朴素模式匹配的改进在于？",
+      options: ["主串指针不回溯，失配时按 next 数组滑动模式串", "主串和模式串指针都回溯", "把主串排序后再匹配", "只适用于数字串"],
+      answer: 0,
+      opts: [
+        "✓ 已比较过的主串字符不再重看，用 next 数组决定模式串滑到哪里——O(n+m)。",
+        "两个都回溯正是朴素算法的缺点。",
+        "串匹配与排序无关。",
+        "KMP 对任意字符集成立。"
+      ],
+      explain: "中级只考思想：『主串不回溯 + next 滑动』这句话选对即可，不考手推 next。",
+      source: "Lesson 0014 §二"
+    },
+    {
+      q: "树转换为二叉树后，根节点（）。",
+      options: ["没有右子树", "没有左子树", "左右子树都有", "变成叶子"],
+      answer: 0,
+      opts: [
+        "✓ 『左孩子右兄弟』：根的左指针指第一个孩子；根没有兄弟，所以右子树为空。",
+        "根的左子树恰好装下了整棵树的孩子链。",
+        "只有森林转二叉树，根才有右子树（第二棵树挂上来）。",
+        "根至少有左子树（有孩子时），不会是叶子。"
+      ],
+      explain: "判断题姊妹题：森林转二叉树后根有右子树；树转二叉树后根无右子树。",
+      source: "Lesson 0014 §三"
+    },
+    {
+      q: "树的后根遍历序列等同于对应二叉树的（）遍历序列。",
+      options: ["中序", "前序", "后序", "层序"],
+      answer: 0,
+      opts: [
+        "✓ 树的后根 = 对应二叉树的中序（先遍历左孩子子树，再回根）。",
+        "树的前序才对应二叉树的前序。",
+        "容易望文生义选后序——注意对应关系是『树后序 = 二叉树中序』。",
+        "层序与转换无关。"
+      ],
+      explain: "两张对应卡背下：树前序=二叉前序；树后序=二叉中序。",
+      source: "Lesson 0014 §三"
+    },
+    {
+      q: "AVL 平衡二叉树的定义要点是？",
+      options: ["任意节点左右子树高度差不超过 1", "所有叶子在同一层", "左子树所有节点大于右子树", "带权路径长度最小"],
+      answer: 0,
+      opts: [
+        "✓ 高度差 ∈ {−1, 0, 1}，失衡时旋转调整——本质是防 BST 退化成链。",
+        "『叶子同层』是完全二叉树的特征。",
+        "『左小右大』是二叉搜索树（BST）的有序性，AVL 在此之上再加平衡约束。",
+        "带权路径最短是哈夫曼树（目的完全不同）。"
+      ],
+      explain: "按 1,2,3…顺序插入 BST 会退化成链 O(n)；AVL 靠旋转把查找稳在 O(log n)。",
+      source: "Lesson 0014 §四"
+    },
+    {
+      q: "n 个节点的二叉搜索树，按升序依次插入，查找其中的最大元素需要比较（）次（最坏）。", 
+      options: ["n", "log₂n", "1", "n/2"],
+      answer: 0,
+      opts: [
+        "✓ 升序插入使 BST 退化成右链（全部只有右孩子），最大元素在链尾——找它走 n 步。这正是 AVL 存在的理由。",
+        "log₂n 是平衡 BST 的情形，退化后不成立。",
+        "最大元素在最后，一次比不出来。",
+        "n/2 无依据。"
+      ],
+      explain: "BST 的『最好折半、最坏成链』对比题，是 AVL/平衡概念的前置铺垫。",
+      source: "Lesson 0014 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>
