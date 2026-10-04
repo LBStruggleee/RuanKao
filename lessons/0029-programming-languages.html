@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0029 · 程序语言基础：编译过程、正规式与传值传引用（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0029（程序语言 · 考纲补强 1/6）</p>
+    <h1>程序语言基础：编译流水线、正规式与传值传引用</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0028-algo-blanks.html">0028 算法填空</a><br>
+      考点定位：编译各阶段查什么错（每年 1 题）、正规式与有限自动机（几乎每年 1 题）、传值/传引用（每年 1 题）——本课是上午卷 2~3 分的固定来源
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    三张表打天下：①<strong>编译六阶段</strong>对号入座（哪个阶段查哪种错）；②<strong>正规式三套路</strong>（以 ab 开头 / 以 ab 结尾 / 含 ab）；③<strong>传值 vs 传引用</strong>一句话判据（传拷贝还是传地址）。加起来就是每年稳定的 2~3 分。
+  </div>
+
+  <h2>一、编译与解释：一条流水线 vs 逐句翻译</h2>
+  <p><strong>编译型</strong>（C、C++）：整个源程序一次翻译成目标程序，之后脱离编译器独立运行，<strong>执行速度快</strong>，但跨平台差。<strong>解释型</strong>（Python、JavaScript 的典型实现）：边翻译边执行、不生成完整目标程序，<strong>跨平台好</strong>，执行慢。Java 特殊：先编译成字节码，再由 JVM 解释/即时编译执行。</p>
+  <p>编译的六个阶段（一条流水线，符号表全程服务、错误处理随时介入）：</p>
+  <table class="tight">
+    <tr><th>阶段</th><th>干什么</th><th>能查出什么错（必考）</th></tr>
+    <tr><td>① 词法分析</td><td>字符流 → 单词序列（标识符、关键字、常数、运算符）</td><td><strong>非法字符、单词拼写错误</strong></td></tr>
+    <tr><td>② 语法分析</td><td>单词序列 → 语法树（按文法规则组句子）</td><td><strong>if 缺 then、括号不匹配、分号缺失</strong>（结构错误）</td></tr>
+    <tr><td>③ 语义分析</td><td>检查含义：类型检查、声明先于使用</td><td><strong>类型不匹配、使用未声明的变量</strong></td></tr>
+    <tr><td>④ 中间代码生成</td><td>产生与机器无关的中间表示（四元式/三元式）</td><td>—</td></tr>
+    <tr><td>⑤ 代码优化</td><td>等价变换提效率（合并常量、删公共子表达式）</td><td>—</td></tr>
+    <tr><td>⑥ 目标代码生成</td><td>中间代码 → 汇编/机器码，分配寄存器</td><td>—</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 必考套路</span>
+    题目给一段错误代码问「<strong>在哪一个阶段被发现</strong>」：非法字符/写错关键字 → <strong>词法</strong>；括号不配、语句结构不完整 → <strong>语法</strong>；类型不符、函数未定义就调用 → <strong>语义</strong>。一句话：词法看<strong>字</strong>，语法看<strong>形</strong>，语义看<strong>义</strong>。
+  </div>
+
+  <h2>二、正规式与有限自动机：给单词画模板</h2>
+  <p>词法分析靠<strong>正规式（正则表达式）</strong>描述单词的模板。三种运算：<strong>|</strong> 或、<strong>连接</strong>（隐含）、<strong>*</strong> 重复 0 次或多次。优先级：* 最高，连接次之，| 最低。</p>
+  <table class="tight">
+    <tr><th>要求</th><th>正规式套路</th><th>记忆</th></tr>
+    <tr><td>以 ab 开头</td><td><strong>ab(a|b|c)*</strong>（字母表 {a,b,c}）</td><td>开头写死，后面任意串</td></tr>
+    <tr><td>以 ab 结尾</td><td><strong>(a|b|c)*ab</strong></td><td>任意串 + 结尾写死</td></tr>
+    <tr><td>含 ab</td><td><strong>(a|b|c)*ab(a|b|c)*</strong></td><td>前后任意，中间写死</td></tr>
+    <tr><td>偶数个 a</td><td>b* (ab*ab*)*</td><td>a 成对出现，b 随意填缝</td></tr>
+  </table>
+  <p><strong>有限自动机</strong>是正规式的机器形态，两者等价（正规式 ⇄ 自动机可互相转换）：</p>
+  <table class="tight">
+    <tr><th>对比</th><th>DFA 确定有限自动机</th><th>NFA 非确定有限自动机</th></tr>
+    <tr><td>一个状态 + 一个输入</td><td><strong>唯一</strong>的后继状态</td><td>可有<strong>多个</strong>后继状态</td></tr>
+    <tr><td>空边 ε</td><td>不允许</td><td>允许</td></tr>
+    <tr><td>初态</td><td>唯一</td><td>可以有多个</td></tr>
+    <tr><td>关系</td><td colspan="2">NFA 可确定化 → DFA；DFA 可最小化（合并等价状态）。识别能力<strong>等价</strong></td></tr>
+  </table>
+
+  <h2>三、传值 vs 传引用：拷贝还是地址</h2>
+  <p>函数调用时参数怎么传，决定了<strong>函数内改动会不会影响外面的实参</strong>：</p>
+  <table class="tight">
+    <tr><th>方式</th><th>传什么</th><th>函数内修改形参</th><th>典型语言</th></tr>
+    <tr><td><strong>传值调用</strong></td><td>实参的<strong>拷贝</strong></td><td><strong>不影响</strong>实参</td><td>C 的标量参数、Java 的基本类型</td></tr>
+    <tr><td><strong>引用调用（传地址）</strong></td><td>实参的<strong>地址</strong></td><td><strong>直接影响</strong>实参</td><td>C 的数组/指针参数、Java 的对象引用</td></tr>
+  </table>
+  <div class="card">
+    <p style="margin-top:0;"><strong>经典考题</strong>：<code>void f(int x){ x = 100; }</code> 调用 <code>f(a)</code> 后 a 不变（传值，改的是拷贝）；改成 <code>void f(int *x){ *x = 100; }</code> 调用 <code>f(&a)</code> 后 a = 100（传地址）。</p>
+    <p style="margin-bottom:0;"><strong>Java 判定口诀</strong>：基本类型（int/double…）传值拷贝；对象传的是「引用的拷贝」——函数内改对象<strong>字段</strong>会影响原对象，但让引用指向新对象不影响原变量。</p>
+  </div>
+
+  <h2>四、动手：后缀表达式求值挑战（编译配套·先动笔再填）</h2>
+  <div id="cd29"></div>
+
+  <h2>五、自查（全对过课）</h2>
+  <div id="quiz-pl29"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>编译六阶段：词法 → 语法 → 语义 → 中间代码 → 优化 → 目标代码；符号表全程、错误处理伴随。<strong>词法看字、语法看形、语义看义</strong>。</li>
+      <li>正规式套路：开头/结尾/包含 = 写死对应位置，其余 (a|b|c)*；NFA 可有ε边多后继，可确定化为 DFA，能力等价。</li>
+      <li>传值 = 拷贝不影响实参；传引用 = 地址直接影响实参；Java 基本类型传值、对象传引用。</li>
+      <li>编译型快、解释型跨平台；Java 先编译成字节码再由 JVM 执行。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0028-algo-blanks.html">← 上一课 0028 算法填空</a>
+      <a href="0030-computer-math.html">下一课 → 0030 组成计算专题</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p>💬 卡在哪一步（比如「为什么两个自动机能识别同一语言」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd29", {
+  title: "后缀表达式求值挑战（编译相关·栈的应用）",
+  questions: [
+    { text: "后缀式 3 4 + 的值 = ___", answer: 7, mode: "exact",
+      derive: "3 + 4 = 7。后缀式运算符写在两个操作数之后。" },
+    { text: "后缀式 3 4 + 5 × 的值 = ___", answer: 35, mode: "exact",
+      derive: "先 3+4=7，再 7×5=35——后缀式天然无括号、无优先级歧义。" },
+    { text: "中缀式 (1+2)×3 的后缀式是 1 2 + 3 ___（填运算符）", answer: 0, mode: "exact",
+      derive: "×。（1+2)×3 → 1 2 + 3 ×，括号结构被运算符顺序完全表达。" },
+    { text: "后缀式 6 2 ÷ 3 − 的值 = ___", answer: 0, mode: "exact",
+      derive: "6÷2=3，再 3−3=0。除号后跟的两个数：6 在前 2 在后 → 6÷2。" }
+  ]
+});
+
+Quiz.render("quiz-pl29", {
+  title: "本课自查（8 题，先想再点）",
+  passNote: "8/8，错题登记错题本",
+  shuffle: true,
+  questions: [
+    {
+      q: "源程序中出现「使用了未声明的变量」，这一错误最早在哪个阶段被发现？",
+      options: ["语义分析", "词法分析", "语法分析", "目标代码生成"],
+      answer: 0,
+      opts: [
+        "✓ 「声明先于使用」「类型检查」属于含义层面的检查——语义分析的职责。",
+        "词法只看单个单词是否合法，变量是否声明过它管不着。",
+        "语法只检查结构（括号配对、语句完整），不看含义。",
+        "错误早在生成目标代码之前就该被拦截。"
+      ],
+      explain: "词法看字、语法看形、语义看义——三阶段错误归属是每年固定考点。",
+      source: "Lesson 0029 §一"
+    },
+    {
+      q: "if 语句缺少 then（或括号不匹配），该错误在（）阶段被发现。",
+      options: ["语法分析", "词法分析", "语义分析", "代码优化"],
+      answer: 0,
+      opts: [
+        "✓ 语句结构不完整、括号不配对属于结构错误——语法分析按文法组句时发现。",
+        "缺 then 的每个单词本身都合法，词法阶段看不出来。",
+        "类型与声明都正确，与语义无关。",
+        "优化发生在语法语义都通过之后。"
+      ],
+      explain: "结构问题找语法，含义问题找语义——别被『变量都没定义』这类混合错误绕晕。",
+      source: "Lesson 0029 §一"
+    },
+    {
+      q: "设字母表 Σ = {a, b}，「以 ab 开头」的正规式是？",
+      options: ["ab(a|b)*", "(a|b)*ab", "(a|b)*ab(a|b)*", "a(a|b)*b"],
+      answer: 0,
+      opts: [
+        "✓ 开头写死 ab，后面 (a|b)* 表示任意后缀。",
+        "这是「以 ab 结尾」。",
+        "这是「包含 ab」。",
+        "这是首 a 尾 b 且 a≠b 的模板，不保证开头是 ab。"
+      ],
+      explain: "三套路：开头=前写死；结尾=后写死；包含=前后包夹。",
+      source: "Lesson 0029 §二"
+    },
+    {
+      q: "正规式 (a|b)* 与下列（）等价。",
+      options: ["(a*b*)* 与 (a|b)(a|b)*", "(a|b)(a|b)* 与 a*b*", "(a|b)*a 与 (a|b)*b", "ab 与 ba"],
+      answer: 0,
+      opts: [
+        "✓ (a*b*)* 能产生任意 a、b 组合的串（含空串），与 (a|b)* 等价；(a|b)(a|b)* 是「不含空串」的版本，两者并起来才是全集——本题口径按『可含空串』选 (a*b*)*。",
+        "(a|b)(a|b)* 不含空串，a*b* 只有一种嵌套方式，均不等价于全集。",
+        "两者都强制以 a 或 b 结尾，丢了空串与其他结尾。",
+        "只表示两个具体串 ab、ba。"
+      ],
+      explain: "(a|b)* 含空串——判断等价时永远先检查空串归属。",
+      source: "Lesson 0029 §二"
+    },
+    {
+      q: "关于 DFA 与 NFA，错误的说法是？",
+      options: ["DFA 允许一个状态对同一输入有多个后继", "NFA 允许 ε 空边", "NFA 可以确定化为等价的 DFA", "两者识别的语言能力等价"],
+      answer: 0,
+      opts: [
+        "✓ 「同一输入多个后继」是 NFA 的特征——DFA 每步转移是唯一的，说反了。",
+        "ε 空边（不消耗输入的转移）正是 NFA 的标志性能力。",
+        "子集构造法可将 NFA 确定化为 DFA。",
+        "DFA 与 NFA 识别能力完全等价，都等价于正规式。"
+      ],
+      explain: "记口径：NFA 三『宽』——多后继、ε 边、多初态；DFA 全部唯一。",
+      source: "Lesson 0029 §二"
+    },
+    {
+      q: "C 语言中调用 f(a)（原型 void f(int x)），函数体内 x = 100，调用后实参 a 的值？",
+      options: ["不变", "变为 100", "变为 0", "不确定"],
+      answer: 0,
+      opts: [
+        "✓ 传值调用传的是拷贝，改 x 改的是副本，a 不受影响。",
+        "那是传地址（引用调用）才有的效果。",
+        "没有置 0 的语句。",
+        "传值语义是确定的：拷贝隔离。"
+      ],
+      explain: "想影响实参：C 里传指针 f(&a)，参数声明 int *x。",
+      source: "Lesson 0029 §三"
+    },
+    {
+      q: "Java 中方法参数传递的规则是？",
+      options: ["基本类型传值，对象传引用（的拷贝）", "全部传值且对象完全不互通", "全部传引用", "由编译器自动选择"],
+      answer: 0,
+      opts: [
+        "✓ 基本类型拷贝数值；对象传的是引用的拷贝——改字段影响原对象，重新赋值引用不影响原变量。",
+        "对象通过引用共享，字段修改是互通的。",
+        "Java 没有真正的引用调用（C++ 的 & 那种）。",
+        "规则由语言规范固定，不随编译器变。"
+      ],
+      explain: "考题常设陷阱：方法里 list.add(x) 影响原集合（字段操作），但 list = new ArrayList() 不影响（引用重指）。",
+      source: "Lesson 0029 §三"
+    },
+    {
+      q: "与解释型语言相比，编译型语言的主要特点是？",
+      options: ["先整体翻译成目标程序，执行速度快", "跨平台性更好", "不需要词法语法分析", "边翻译边执行"],
+      answer: 0,
+      opts: [
+        "✓ 一次编译生成目标程序，运行时不再翻译——快；代价是目标程序与平台绑定。",
+        "跨平台是解释型的强项（一份源码处处解释）。",
+        "编译型同样要完整的词法/语法/语义分析。",
+        "边翻译边执行是解释型的定义。"
+      ],
+      explain: "Java 折中：编译成字节码 + JVM 解释/JIT 执行——『先编译后解释』这个说法常出现在考题。",
+      source: "Lesson 0029 §一"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

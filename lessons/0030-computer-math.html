@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0030 · 组成计算专题：补码、浮点、校验码、可靠性、RAID（软考软件设计师）</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0030（计算机组成 · 考纲补强 2/6）</p>
+    <h1>组成计算专题：补码 · 浮点 · 校验码 · 可靠性 · RAID</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0029-programming-languages.html">0029 程序语言基础</a><br>
+      考点定位：补码表示范围、海明码校验位数、可靠性串联并联——每年 3~4 道纯计算题的集中地，公式背熟就是送分
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    五个公式五个分：<strong>补码范围 −2<sup>n−1</sup> ~ 2<sup>n−1</sup>−1</strong>；<strong>海明 2<sup>k</sup> ≥ n+k+1</strong>；<strong>串联 R=R₁R₂ / 并联 1−(1−R₁)(1−R₂)</strong>；奇偶校验<strong>只能检奇数位错</strong>；RAID5 <strong>坏 1 块可恢复</strong>。全是套公式，动笔就能拿分。
+  </div>
+
+  <h2>一、补码：让减法变成加法</h2>
+  <p>计算机里整数一律用<strong>补码</strong>存储——加法器同时搞定减法。规则：<strong>正数的原码反码补码相同</strong>；负数：反码 = 原码按位取反，补码 = 反码 + 1。</p>
+  <span class="formula">n 位补码表示范围：<strong>−2<sup>n−1</sup> ~ +2<sup>n−1</sup>−1</strong>（负数多一个，因为 0 只占一种编码）</span>
+  <table class="tight">
+    <tr><th>位数</th><th>表示范围</th><th>记忆点</th></tr>
+    <tr><td>8 位</td><td class="num">−128 ~ +127</td><td>−128 = 1000 0000，没有对应的 +128</td></tr>
+    <tr><td>16 位</td><td class="num">−32768 ~ +32767</td><td>−2¹⁵ ~ 2¹⁵−1</td></tr>
+    <tr><td>通用</td><td class="num">−2<sup>n−1</sup> ~ 2<sup>n−1</sup>−1</td><td>『负多一』必考判断题</td></tr>
+  </table>
+  <p><strong>例</strong>：−1 的 8 位补码：|−1|=0000 0001 → 反码 1111 1110 → 补码 1111 1111。<strong>规律：全 1 就是 −1</strong>；从 1111 1111（−1）往上减 1 就是 −2、−3…</p>
+
+  <h2>二、浮点数：阶码定范围，尾数定精度</h2>
+  <p>浮点数 N = 尾数 × 2<sup>阶码</sup>。<strong>IEEE 754</strong>（32 位 float）：1 位符号 + 8 位<strong>移码阶码</strong> + 23 位尾数（隐含首位 1，实际精度 24 位）。</p>
+  <ul>
+    <li><strong>对阶原则：小阶向大阶看齐</strong>（小阶尾数右移，丢失的是最低位，误差小）——必考判断。</li>
+    <li>阶码位数决定<strong>表示范围</strong>；尾数位数决定<strong>精度</strong>——两者此消彼长。</li>
+    <li>规格化：尾数最高有效位必须是 1（原码尾数 0.1xxx 形式），提高精度。</li>
+  </ul>
+
+  <h2>三、校验码三兄弟：检一位、纠一位、检任意位</h2>
+  <table class="tight">
+    <tr><th>校验码</th><th>原理</th><th>能力</th></tr>
+    <tr><td><strong>奇偶校验</strong></td><td>补 1 位使整个码字 1 的个数为奇/偶</td><td><strong>只能发现奇数个位错</strong>，不能纠错，不能发现偶数位错</td></tr>
+    <tr><td><strong>海明码</strong></td><td>k 位校验位嵌入 2<sup>i</sup> 位置（1,2,4,8…），分组偶校验</td><td><strong>发现并纠正 1 位错</strong>（检测 2 位错）</td></tr>
+    <tr><td><strong>CRC 循环冗余</strong></td><td>模 2 除法（异或）得校验位拼接在尾部</td><td><strong>检错能力极强</strong>（教材口径：只检错不纠错），靠硬件实现</td></tr>
+  </table>
+  <div class="card">
+    <p style="margin-top:0;"><strong>海明码位数公式（必考）</strong>：信息位 n 位需校验位 k 位，满足：</p>
+    <span class="formula">2<sup>k</sup> ≥ n + k + 1</span>
+    <p style="margin-bottom:0;"><strong>例</strong>：n=4 → 试 k=3：2³=8 ≥ 4+3+1=8 ✓ → 需 <strong>3 位</strong>校验。n=11 → k=4：16 ≥ 16 ✓ → 4 位。口诀：4 位信息 3 校验，11 位信息 4 校验，26 位信息 5 校验。</p>
+  </div>
+  <p><strong>CRC 手算例</strong>：信息 10110，生成多项式 G(x) = x³+x+1（即 <strong>1011</strong>，r=3 位）：信息左移 3 位 → 10110000，对 1011 做模 2 除法（不借位异或）得余数 <strong>r₂r₁r₀</strong>，拼成 10110 r₂r₁r₀ 发送。接收方用同一多项式除：<strong>余数为 0 即无错</strong>。</p>
+
+  <h2>四、可靠性：串联靠乘，并联靠补</h2>
+  <span class="formula">串联（一个坏全坏）：R = R₁ × R₂ × … × R<sub>n</sub><br>并联（冗余备份）：R = 1 − (1−R₁)(1−R₂)…(1−R<sub>n</sub>)</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：两个部件 R₁=R₂=0.9：串联 R = 0.81（更不可靠）；并联 R = 1 − 0.1×0.1 = <strong>0.99</strong>（更可靠）。</p>
+    <p><strong>混合系统</strong>：先并联成组，再串联相乘。如「子系统 A（两个 0.9 并联）与子系统 B（0.9）串联」：A = 0.99 → 总 R = 0.99 × 0.9 = <strong>0.891</strong>。</p>
+    <p style="margin-bottom:0;"><strong>MTBF 平均无故障时间</strong>：可靠性 R(t) = e<sup>−λt</sup>，MTBF = 1/λ。失效率 λ 越小越可靠。</p>
+  </div>
+
+  <h2>五、RAID：冗余磁盘阵列速查</h2>
+  <table class="tight">
+    <tr><th>级别</th><th>技术</th><th>特点</th></tr>
+    <tr><td><strong>RAID 0</strong></td><td>条带化（数据分块分布到多盘）</td><td>读写最快、<strong>无冗余</strong>，坏一块全丢——利用率 100%</td></tr>
+    <tr><td><strong>RAID 1</strong></td><td>镜像（两两互备）</td><td>可靠性最高，利用率 <strong>50%</strong>，成本最高</td></tr>
+    <tr><td><strong>RAID 5</strong></td><td>分布式奇偶校验（校验信息分散在各盘）</td><td><strong>坏任意 1 块可恢复</strong>，利用率 (n−1)/n，最常用</td></tr>
+    <tr><td><strong>RAID 6</strong></td><td>双重校验</td><td>坏 2 块可恢复，写性能更低</td></tr>
+  </table>
+
+  <h2>六、动手：套公式挑战（先动笔再填）</h2>
+  <div id="cd30"></div>
+
+  <h2>七、自查（全对过课）</h2>
+  <div id="quiz-cm30"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>补码范围 <strong>−2<sup>n−1</sup> ~ 2<sup>n−1</sup>−1</strong>（8 位 −128~127）；全 1 = −1。</li>
+      <li>浮点：对阶<strong>小阶向大阶</strong>；阶码管范围、尾数管精度。</li>
+      <li>奇偶校验检奇数位错；<strong>海明 2<sup>k</sup> ≥ n+k+1</strong> 可纠 1 位；CRC 只检错不纠错、余 0 无错。</li>
+      <li>串联相乘、并联 1−∏(1−R)；MTBF = 1/λ。</li>
+      <li>RAID0 快无冗余、RAID1 镜像 50%、RAID5 坏 1 块可恢复。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="0029-programming-languages.html">← 上一课 0029 程序语言基础</a>
+      <a href="0031-ds-supplement.html">下一课 → 0031 数据结构补遗</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p>💬 卡在哪一步（比如「为什么并联公式要 1 减回去」），回对应章节把那句话的上下文重读一遍。</p>
+  </div>
+
+</div>
+
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+CalcDrill.mount("cd30", {
+  title: "套公式挑战（海明 · 可靠性 · 补码）",
+  questions: [
+    { text: "信息位 n=4 时，海明码至少需要 ___ 位校验位", answer: 3, mode: "exact",
+      derive: "2^k ≥ n+k+1：k=3 时 8 ≥ 8 成立 → 3 位。" },
+    { text: "信息位 n=11 时，海明码至少需要 ___ 位校验位", answer: 4, mode: "exact",
+      derive: "k=4：2⁴=16 ≥ 11+4+1=16 成立 → 4 位。" },
+    { text: "两个可靠度 0.8 的部件串联，系统可靠度 = ___（两位小数）", answer: 0.64, mode: "precise",
+      derive: "串联相乘：0.8 × 0.8 = 0.64。" },
+    { text: "两个可靠度 0.8 的部件并联，系统可靠度 = ___（两位小数）", answer: 0.96, mode: "precise",
+      derive: "并联：1 − (1−0.8)² = 1 − 0.04 = 0.96。" },
+    { text: "8 位补码能表示的最小整数是 ___", answer: -128, mode: "exact",
+      derive: "−2⁷ = −128（1000 0000），负数比正数多一个。" },
+    { text: "16 位补码能表示的最大整数是 ___", answer: 32767, mode: "exact",
+      derive: "+2¹⁵ − 1 = 32767。" }
+  ]
+});
+
+Quiz.render("quiz-cm30", {
+  title: "本课自查（8 题，先算再点）",
+  passNote: "8/8，错题登记错题本",
+  shuffle: true,
+  questions: [
+    {
+      q: "8 位补码 1111 1111 表示的十进制数是？",
+      options: ["−1", "255", "−127", "128"],
+      answer: 0,
+      opts: [
+        "✓ 全 1 的补码就是 −1：反码减 1 再取反验证——1111 1110 取反得 0000 0001，符号位 1 → −1。",
+        "255 是把它当无符号数的读法。",
+        "−127 的补码是 1000 0001。",
+        "8 位补码到不了 +128。"
+      ],
+      explain: "规律：全 1 = −1；1000 0000 = −128（负多一）。",
+      source: "Lesson 0030 §一"
+    },
+    {
+      q: "n 位补码的表示范围是？",
+      options: ["−2ⁿ⁻¹ ~ 2ⁿ⁻¹−1", "−2ⁿ⁻¹ ~ 2ⁿ⁻¹", "−(2ⁿ−1) ~ (2ⁿ−1)", "−2ⁿ ~ 2ⁿ"],
+      answer: 0,
+      opts: [
+        "✓ 0 只有一种编码，省下的编码给了最负的数——负数比正数多一个。",
+        "正数越界了：+2ⁿ⁻¹ 需要单独的编码位。",
+        "这是原码/反码的对称范围（±0 各占一个编码）。",
+        "量级完全不对。"
+      ],
+      explain: "『负多一』判断题每年都有：8 位补码能表示 −128 但不能表示 +128。",
+      source: "Lesson 0030 §一"
+    },
+    {
+      q: "浮点数加减法对阶时，正确做法是？",
+      options: ["小阶向大阶对齐", "大阶向小阶对齐", "双向同时调整", "不需要对阶"],
+      answer: 0,
+      opts: [
+        "✓ 小阶尾数右移丢的是最低位，误差最小；大阶尾数左移会丢最高位，不可接受。",
+        "左移丢高位精度，错。",
+        "对阶必须统一到一个阶码，不能双向。",
+        "阶码不同无法直接加减尾数。"
+      ],
+      explain: "口诀：小阶向大阶——丢低位不丢高位。",
+      source: "Lesson 0030 §二"
+    },
+    {
+      q: "奇偶校验码的能力是？",
+      options: ["只能发现奇数个位出错，不能纠错", "能纠正 1 位错", "能发现任意位出错", "既检错又纠错"],
+      answer: 0,
+      opts: [
+        "✓ 一位奇偶位让 1 的个数凑成奇/偶——翻转奇数位会破坏奇偶性被发现，偶数位错则漏检；更定位不了错在哪。",
+        "能纠 1 位错的是海明码。",
+        "偶数个位同时错奇偶性恰好不变，发现不了。",
+        "检错纠错都有的只有海明码（1 位纠错）这类。"
+      ],
+      explain: "三兄弟能力梯度：奇偶（检奇数位错）< 海明（纠 1 位）< CRC（强检错）。",
+      source: "Lesson 0030 §三"
+    },
+    {
+      q: "信息位为 16 位时，海明码至少需要（）位校验位。",
+      options: ["4", "5", "6", "3"],
+      answer: 1,
+      opts: [
+        "4 位：2⁴=16 < 16+4+1=21，不够。",
+        "✓ k=5：2⁵=32 ≥ 16+5+1=22 成立 → 5 位。",
+        "6 位浪费（k 最小化才是『至少』）。",
+        "3 位：2³=8 ≪ 22，差远了。"
+      ],
+      explain: "代公式 2^k ≥ n+k+1，从最小的 k 往上试，第一个满足的就是答案。",
+      source: "Lesson 0030 §三"
+    },
+    {
+      q: "某系统由两个子系统串联而成，可靠度分别为 0.9 和 0.8，系统可靠度是？",
+      options: ["0.72", "0.98", "0.85", "0.9"],
+      answer: 0,
+      opts: [
+        "✓ 串联相乘：0.9 × 0.8 = 0.72——串联只会更不可靠。",
+        "0.98 是并联公式 1−(1−0.9)(1−0.8) 的结果，用错公式。",
+        "取平均没有依据。",
+        "串联下系统可靠度不可能高于最弱部件。"
+      ],
+      explain: "判型口诀：一个坏全坏=串联（乘）；一个够用就行=并联（补）。",
+      source: "Lesson 0030 §四"
+    },
+    {
+      q: "关于 RAID 级别，正确的是？",
+      options: ["RAID 5 允许坏任意一块盘并恢复数据", "RAID 0 可靠性最高", "RAID 1 磁盘利用率最高", "RAID 6 只能坏一块盘"],
+      answer: 0,
+      opts: [
+        "✓ RAID 5 分布式奇偶校验：任何一块盘损坏，用其余盘 + 校验信息可算回数据。",
+        "RAID 0 条带化无冗余，坏一块全丢——是可靠性最差的。",
+        "RAID 1 镜像利用率只有 50%；利用率最高的是 RAID 0。",
+        "RAID 6 双重校验，可坏两块。"
+      ],
+      explain: "三句话背掉 RAID：0 快而裸奔、1 镜像对半、5 校验坏一可恢复。",
+      source: "Lesson 0030 §五"
+    },
+    {
+      q: "系统失效率为 λ（常数），其平均无故障时间 MTBF 为？",
+      options: ["1/λ", "λ", "e^(−λt)", "λt"],
+      answer: 0,
+      opts: [
+        "✓ R(t) = e^(−λt)，MTBF = 1/λ——失效率越低（λ 越小），平均无故障时间越长。",
+        "λ 是失效率本身，不是时间量纲。",
+        "e^(−λt) 是 t 时刻的可靠度函数，不是平均时间。",
+        "λt 是指数的幂，无量纲。"
+      ],
+      explain: "可靠性计算三板斧：R(t)=e^(−λt)、MTBF=1/λ、串并联公式——题就在这三者之间出。",
+      source: "Lesson 0030 §四"
+    }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js"></script>
+</body>
+</html>

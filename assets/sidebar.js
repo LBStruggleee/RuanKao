@@ -44,7 +44,13 @@
     { id: "0025", title: "UML 建模", file: "0025-uml.html" },
     { id: "0026", title: "设计模式", file: "0026-design-patterns.html" },
     { id: "0027", title: "知识产权与标准化", file: "0027-bonus.html" },
-    { id: "0028", title: "算法填空专项", file: "0028-algo-blanks.html" }
+    { id: "0028", title: "算法填空专项", file: "0028-algo-blanks.html" },
+    { id: "0029", title: "程序语言基础", file: "0029-programming-languages.html" },
+    { id: "0030", title: "组成计算专题", file: "0030-computer-math.html" },
+    { id: "0031", title: "数据结构补遗", file: "0031-ds-supplement.html" },
+    { id: "0032", title: "项目管理与质量", file: "0032-pm-quality.html" },
+    { id: "0033", title: "面向对象基础", file: "0033-oop-basics.html" },
+    { id: "0034", title: "数据库进阶", file: "0034-db-advanced.html" }
   ];
 
   function buildSidebar() {
