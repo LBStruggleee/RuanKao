@@ -53,6 +53,20 @@
     { id: "0034", title: "算法填空", file: "0034-algo-blanks.html" }
   ];
 
+  /* 十大学习阶段（序号区间 = 新手认知顺序） */
+  var PHASES = [
+    { name: "① 计算机组成", from: 1, to: 3 },
+    { name: "② 程序语言", from: 4, to: 4 },
+    { name: "③ 数据结构与算法", from: 5, to: 14 },
+    { name: "④ 操作系统", from: 15, to: 20 },
+    { name: "⑤ 数据库", from: 21, to: 23 },
+    { name: "⑥ 计算机网络", from: 24, to: 25 },
+    { name: "⑦ 信息安全", from: 26, to: 26 },
+    { name: "⑧ 软件工程", from: 27, to: 29 },
+    { name: "⑨ 面向对象", from: 30, to: 32 },
+    { name: "⑩ 保底与实战", from: 33, to: 34 }
+  ];
+
   function buildSidebar() {
     var path = window.location.pathname;
     var isLesson = path.indexOf("/lessons/") >= 0;
@@ -79,10 +93,21 @@
     html += '</div>';
 
     html += '<div class="sidebar-section">';
-    html += '<div class="sidebar-title">🎓 交互课程（按学习顺序）</div>';
-    LESSONS.forEach(function (l) {
-      var active = isLesson && currentFile === l.file ? " active" : "";
-      html += '<a href="' + REL_ROOT + 'lessons/' + l.file + '" class="sidebar-link sidebar-lesson' + active + '"><span class="lesson-num">' + l.id + '</span>' + l.title + '</a>';
+    html += '<div class="sidebar-title">🎓 交互课程 · 十大阶段（序号 = 学习顺序）</div>';
+    PHASES.forEach(function (ph) {
+      var first = LESSONS.filter(function (l) {
+        var n = parseInt(l.id, 10);
+        return n >= ph.from && n <= ph.to;
+      })[0];
+      if (first) {
+        html += '<a href="' + REL_ROOT + 'lessons/' + first.file + '" class="sidebar-phase" title="跳到「' + ph.name + '」第一课">' + ph.name + '</a>';
+      }
+      LESSONS.forEach(function (l) {
+        var n = parseInt(l.id, 10);
+        if (n < ph.from || n > ph.to) return;
+        var active = isLesson && currentFile === l.file ? " active" : "";
+        html += '<a href="' + REL_ROOT + 'lessons/' + l.file + '" class="sidebar-link sidebar-lesson' + active + '"><span class="lesson-num">' + l.id + '</span>' + l.title + '</a>';
+      });
     });
     html += '</div>';
 
