@@ -221,7 +221,10 @@
     rail.id = "pomodoroRail";
     rail.innerHTML =
       '<button class="pomo-pill" id="pomoPill" aria-expanded="false" aria-label="番茄钟：点击展开或收起" title="番茄钟">' +
-      '<span class="pomo-dot"></span>' +
+      '<span class="pomo-dot"><svg class="pomo-svg" width="15" height="17" viewBox="0 0 7 8" shape-rendering="crispEdges">' +
+      '<g fill="#2e7d32"><rect x="3" y="0" width="1" height="2"/><rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/></g>' +
+      '<rect x="1" y="2" width="5" height="6" fill="#b3372a"/>' +
+      '<rect x="2" y="3" width="1" height="1" fill="#e8a08c"/></svg></span>' +
       '<span class="pomo-mini">25:00</span>' +
       '<span class="pomo-chev">▾</span>' +
       "</button>" +

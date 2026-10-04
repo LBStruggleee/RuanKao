@@ -1462,3 +1462,133 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
 @media (max-width: 640px) {
   .lesson-header h1, .hero h1 { padding-right: 2rem; }
 }
+
+/* ============================================================
+   sprite-animation 风格层 ② —— 番茄钟 / 每日组件
+   玻璃底保留（像纸面上的一块 LCD 屏），边角、投影、按键
+   全部改为像素硬边 + steps() 顿挫反馈
+   ============================================================ */
+
+/* —— 桌面胶囊：硬边框 + 硬投影叠玻璃辉光 —— */
+.pomo-glass, .pomo-glass.open {
+  border: 2px solid var(--px-ink);
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-glass.open { border-radius: 8px; }
+.pomo-glass.running {
+  box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-accent-soft),
+              0 8px 28px var(--pg-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-glass.running.break {
+  box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-gold-soft),
+              0 8px 28px var(--pg-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-pill { border-radius: 4px; }
+
+/* —— 像素小番茄：运行时 steps() 硬闪烁（REC 式） —— */
+.pomo-dot {
+  width: auto; height: auto;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+.pomo-svg { display: block; image-rendering: pixelated; }
+.pomo-glass.running .pomo-dot { animation: pomoDotBlink 1.2s steps(1) infinite; }
+@keyframes pomoDotBlink { 0%, 70% { opacity: 1; } 71%, 100% { opacity: .15; } }
+
+/* —— 数字与模式芯片 —— */
+.pomo-mini { letter-spacing: .06em; }
+.pomo-time { letter-spacing: .06em; }
+.pomo-mode.focus, .pomo-mode.break {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  padding: .12rem .55rem;
+  border: 2px solid var(--px-ink);
+  border-radius: 2px;
+}
+.pomo-mode.focus { background: var(--pg-accent-soft); color: var(--pg-accent); }
+.pomo-mode.break { background: var(--pg-gold-soft); color: var(--pg-gold); }
+
+/* —— 时长计数器与按钮：像素按键 —— */
+.pomo-set-g b {
+  border: 2px solid var(--px-ink);
+  border-radius: 2px;
+  background: var(--input-bg);
+  min-width: 1.9rem;
+  padding: 0 .2rem;
+}
+.pomo-set-g button, .pomo-btns button {
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 var(--px-shadow);
+  transition: transform .12s steps(2), box-shadow .12s steps(2), filter .15s ease;
+}
+.pomo-set-g button:hover, .pomo-btns button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--px-shadow);
+}
+.pomo-set-g button:active, .pomo-btns button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--pg-shadow);
+}
+.pomo-start { background: var(--pg-accent); color: var(--on-accent); }
+.pomo-close { border: 2px solid var(--px-ink); border-radius: 4px; }
+
+/* —— 移动端圆圈与弹窗 —— */
+.pomo-circle {
+  border: 2px solid var(--px-ink);
+  box-shadow: 3px 3px 0 var(--px-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-ring circle { stroke-width: 4; }
+.pomo-ring-fg { stroke-linecap: butt; }
+.pomo-modal-card {
+  border: 2px solid var(--px-ink);
+  border-radius: 8px;
+  box-shadow: 5px 5px 0 var(--px-shadow), 0 18px 50px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+}
+
+/* —— 每日组件：方角 + 硬投影 + 像素按键 —— */
+.daily-tab {
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 var(--px-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.daily-card, .daily-card.open {
+  border: 2px solid var(--px-ink);
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 var(--px-shadow), 0 14px 40px var(--pg-shadow),
+              inset 0 1px 0 var(--pg-highlight);
+}
+.daily-tag { font-family: var(--mono); letter-spacing: .05em; }
+.daily-back { border-radius: 4px; }
+.daily-flip, .daily-btn {
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 var(--px-shadow);
+  transition: transform .12s steps(2), box-shadow .12s steps(2), filter .15s ease;
+}
+.daily-flip:hover, .daily-btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--px-shadow); }
+.daily-flip:active, .daily-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--pg-shadow); }
+.daily-opt {
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 var(--px-shadow);
+  transition: transform .12s steps(2), box-shadow .12s steps(2), border-color .12s ease;
+}
+.daily-opt:not(:disabled):hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--px-shadow); }
+.daily-opt:active:not(:disabled) { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--pg-shadow); }
+.daily-opt.right, .daily-opt.wrong { border-width: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pomo-glass.running .pomo-dot { animation: none !important; }
+  .pomo-btns button, .pomo-set-g button, .pomo-pill,
+  .daily-flip, .daily-btn, .daily-tab, .daily-opt { transition: none !important; }
+}

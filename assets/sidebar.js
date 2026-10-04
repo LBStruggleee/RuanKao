@@ -198,9 +198,9 @@
   document.head.appendChild(themeEl);
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=8：标签页标题不再带倒计时；窄屏展开为居中弹窗（内容优先）
+  // v=9：像素风格适配（像素小番茄 + 硬边硬投影）；窄屏展开为居中弹窗（内容优先）
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=8";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=9";
   document.head.appendChild(rail);
 
   // 右下角每日组件：必背考点 + 每日一题（daily.js 自带防重入守卫）
