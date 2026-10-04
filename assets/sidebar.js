@@ -50,7 +50,8 @@
     { id: "0031", title: "UML", file: "0031-uml.html" },
     { id: "0032", title: "设计模式", file: "0032-design-patterns.html" },
     { id: "0033", title: "保底专项", file: "0033-bonus.html" },
-    { id: "0034", title: "算法填空", file: "0034-algo-blanks.html" }
+    { id: "0034", title: "算法填空", file: "0034-algo-blanks.html" },
+    { id: "0035", title: "算法设计策略", file: "0035-algo-strategies.html" }
   ];
 
   /* 暴露给 pixel-stage.js 的走带字幕刻度（课号 + 课题，单一来源） */
@@ -67,7 +68,7 @@
     { name: "⑦ 信息安全", from: 26, to: 26 },
     { name: "⑧ 软件工程", from: 27, to: 29 },
     { name: "⑨ 面向对象", from: 30, to: 32 },
-    { name: "⑩ 保底与实战", from: 33, to: 34 }
+    { name: "⑩ 保底与实战", from: 33, to: 35 }
   ];
 
   function buildSidebar() {
@@ -91,6 +92,7 @@
     html += '<a href="' + REL_ROOT + 'pages/index.html" class="sidebar-link' + (isPage && currentFile === "index.html" ? " active" : "") + '">📖 文档目录</a>';
     html += '<a href="' + REL_ROOT + 'search.html" class="sidebar-link">🔍 全站搜索</a>';
     html += '<a href="' + REL_ROOT + 'reference/mistake-notebook.html" class="sidebar-link' + (isReference && currentFile === "mistake-notebook.html" ? " active" : "") + '">📓 错题本</a>';
+    html += '<a href="' + REL_ROOT + 'reference/books.html" class="sidebar-link' + (isReference && currentFile === "books.html" ? " active" : "") + '">📚 电子书资源</a>';
     html += '<a href="' + REL_ROOT + 'pages/practice/tracker.html" class="sidebar-link">🗓 打卡表</a>';
     html += '<a href="' + REL_ROOT + 'pages/exam-guide.html" class="sidebar-link">📋 考试大纲</a>';
     html += '</div>';
@@ -210,6 +212,6 @@
 
   // 全站像素小剧场：EP 顶条 + 页眉精灵/假名 + 底部走带字幕（自带防重入守卫）
   var px = document.createElement("script");
-  px.src = REL_ROOT + "assets/pixel-stage.js?v=5";
+  px.src = REL_ROOT + "assets/pixel-stage.js?v=6";
   document.head.appendChild(px);
 })();

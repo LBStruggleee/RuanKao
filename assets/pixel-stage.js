@@ -15,7 +15,7 @@
   if (window.__pxStageLoaded) return;
   window.__pxStageLoaded = true;
 
-  var TOTAL = 34;
+  var TOTAL = 35;
 
   /* 十大学习阶段：序号区间 + 纵排假名（两字）+ 像素精灵 */
   var PHASES = [
@@ -28,7 +28,7 @@
     { from: 26, to: 26, kana: ["安", "全"], sprite: "shield" },
     { from: 27, to: 29, kana: ["工", "程"], sprite: "diamond" },
     { from: 30, to: 32, kana: ["抽", "象"], sprite: "hexagon" },
-    { from: 33, to: 34, kana: ["実", "戦"], sprite: "sword" }
+    { from: 33, to: 35, kana: ["実", "戦"], sprite: "sword" }
   ];
   var PHASE_NAMES = [
     "① 组成", "② 程序语言", "③ 数据结构与算法", "④ 操作系统",
