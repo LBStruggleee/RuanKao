@@ -86,15 +86,13 @@
     });
     var t = dayStr(0);
     var todayMin = perDay[t] || 0;
-    var weekMin = 0;
-    for (var i = 0; i < 7; i++) weekMin += perDay[dayStr(i)] || 0;
     var allMin = 0;
     for (var k in perDay) allMin += perDay[k];
     /* 连续打卡：今天有记录从今天数，否则从昨天数（白天内不算断签） */
     var off = perDay[t] ? 0 : 1;
     var streak = 0;
     while (perDay[dayStr(off)] && streak < 900) { streak++; off++; }
-    return { todayMin: todayMin, weekMin: weekMin, allMin: allMin,
+    return { todayMin: todayMin, allMin: allMin,
              streak: streak, goal: log.goal || DEFAULT_GOAL };
   }
 
@@ -115,7 +113,7 @@
       '<div class="pomo-bar-line"><span>' + (met
         ? '<b style="color:var(--ok)">✓ 已达标</b>'
         : '目标 <b>' + s.goal + '</b> 分') +
-      '</span><span>本周 <b>' + fmtMin(s.weekMin) + '</b> · 累计 <b>' + fmtMin(s.allMin) + '</b></span></div>';
+      '</span><span>累计 <b>' + fmtMin(s.allMin) + '</b></span></div>';
   }
 
   var rail = null, circle = null, modal = null, veil = null;

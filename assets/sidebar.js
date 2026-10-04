@@ -198,9 +198,9 @@
   document.head.appendChild(themeEl);
 
   // 右侧番茄钟：由本脚本按需动态加载，页面无需单独引用（pomodoro.js 自带防重入守卫）
-  // v=10：学习时长记录（分钟级统计 + 每日目标 + 连续打卡）+ 像素风格
+  // v=11：去掉「本周」统计（无账号体系，每周记录对访客没有参考价值）
   var rail = document.createElement("script");
-  rail.src = REL_ROOT + "assets/pomodoro.js?v=10";
+  rail.src = REL_ROOT + "assets/pomodoro.js?v=11";
   document.head.appendChild(rail);
 
   // 右下角每日组件：必背考点 + 每日一题（daily.js 自带防重入守卫）
