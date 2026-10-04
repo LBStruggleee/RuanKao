@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="软考软件设计师（中级）备考站：34 节交互式课程（即时判分 + 逐选项解析）、全大纲知识点文档、10 套历年真题、错题本——纯静态 HTML，手机电脑皆可" />
   <title>软考软件设计师 · 备考站 | RuanKao</title>
-  <link rel="stylesheet" href="assets/base.css?v=4" />
+  <link rel="stylesheet" href="assets/base.css?v=5" />
   <style>
     .hero { text-align: left; padding: 1rem 0 .6rem; }
     .hero h1 { font-family: var(--serif); font-size: 1.9rem; margin: .2rem 0 .4rem; }
@@ -17,13 +17,16 @@
     .cards .card b { color: var(--accent); }
     .cards .card p { color: var(--ink-soft); font-size: .88rem; margin: .3rem 0 0; }
     #rk-badge {
-      position: fixed; right: 12px; bottom: 5.5rem; z-index: 999;  /* 避让右下角番茄钟圆圈 */
+      position: fixed; top: 0.8rem; left: 50%; transform: translateX(-50%);
+      z-index: 999;  /* 顶部居中：全宽度内唯一无组件冲突区（右上有 FAB/番茄钟，左上有汉堡） */
       background: var(--accent); color: var(--on-accent); font-size: 12px;
       padding: 6px 12px; border-radius: 999px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.25); user-select: none;
+      border: 2px solid var(--px-ink);
+      box-shadow: 3px 3px 0 var(--px-shadow); user-select: none;
+      white-space: nowrap;
     }
     @media (max-width: 720px) {
-      .page { padding: 1.4rem .9rem 3rem; }
+      .page { padding: 3.9rem .9rem 3rem; }  /* 顶部留白加大，kicker 让出居中徽标行 */
       table { display: block; overflow-x: auto; }
     }
   </style>

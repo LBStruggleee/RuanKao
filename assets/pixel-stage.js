@@ -117,8 +117,10 @@
 '.px-rec{color:#b3372a;font-weight:700;animation:pxRec 1.2s steps(1) infinite}' +
 'html.dark .px-rec{color:#ef7b72}' +
 '@keyframes pxRec{0%{opacity:1}50%{opacity:.15}100%{opacity:1}}' +
-'@media (max-width:720px){.px-dots,.px-rec{display:none}}' +
-'@media (max-width:850px){.px-topbar{padding-right:4.6rem}}' +  /* 右上角番茄钟圆圈避让 */
+/* 进度点/REC 逐档退场，保证顶条在任何宽度都不换行（换行后第二行会钻进右上角圆圈底下）：
+   点条 270px → ≤1024 藏；REC → ≤640 藏；slug 由 max-width+省略号兜底 */
+'@media (max-width:1024px){.px-dots{display:none}}' +
+'@media (max-width:640px){.px-rec{display:none}}' +
 
 '/* —— 页眉像素小剧场 —— */' +
 '.px-art{position:absolute;top:0;right:0;display:flex;align-items:flex-start;gap:.55rem;z-index:2}' +
@@ -144,6 +146,21 @@
 'animation:pxRibbon 34s linear infinite}' +
 '.px-ribbon-track b{color:#5cc2a2;font-weight:700}' +
 '@keyframes pxRibbon{from{transform:translateX(0)}to{transform:translateX(-50%)}}' +
+
+/* ≤990px 右上角有番茄钟圆圈：顶条与 h1 各留 4.6rem 白、页眉精灵退场
+   （硬约束：不与任何组件重叠）；≥991px 精灵回到页眉右上角（此时与圆圈 x 方向已错开）。
+   注意：本块必须位于 .px-art/.px-kana 基础规则之后，否则同级特异性会被后写的
+   .px-art{display:flex} 覆盖。 */
+'@media (max-width:990px){.px-topbar{padding-right:4.6rem}.px-art{display:none}' +
+'.lesson-header h1,.hero h1{padding-right:4.6rem}}' +
+/* ≤1024 与侧栏开启态（≤1299.98）：kicker 留同款右侧白，换行/贴边时末字不钻进圆圈 */
+'@media (max-width:1024px){.lesson-header .kicker{padding-right:4.6rem}}' +
+
+/* 1025–1198px 侧栏开启时，页眉精灵会被挤到圆圈底下（侧栏把 .page 右移 280px）。
+   只在这个确切冲突态隐藏精灵（body.sidebar-open 且番茄钟圆圈可见 ≤1299.98px）；
+   侧栏关着或 ≥1300px（圆圈退场、右侧胶囊接管）时精灵照常显示。 */
+'@media (max-width:1299.98px){body.sidebar-open .px-art{display:none}' +
+'body.sidebar-open .lesson-header .kicker{padding-right:4.6rem}}' +
 
 '@media (prefers-reduced-motion: reduce){.px-topbar *,.px-art *,.px-ribbon-track{animation:none !important}}';
 

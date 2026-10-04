@@ -1081,12 +1081,12 @@ html.dark .pomo-start { color: #0e2a22; }
 .pomo-done { font-size: 0.82rem; color: var(--pg-ink-soft); }
 .pomo-tip { font-size: 0.72rem; color: var(--pg-ink-soft); margin-top: 0.35rem; }
 
-/* —— 移动端：右上角小圆圈（FAB 正下方，环形进度 + 中央倒计时） —— */
+/* —— 移动端：右上角小圆圈（FAB 下方，避让 EP 顶条底沿） —— */
 .pomo-circle {
   display: none;
   position: fixed;
   right: 1rem;
-  top: 5.2rem;
+  top: 6.4rem;   /* 窄屏顶条最低到 ~96px，压到它下面彻底零重叠 */
   width: 3.6rem;
   height: 3.6rem;
   z-index: 900;
