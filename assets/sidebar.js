@@ -210,6 +210,6 @@
 
   // 全站像素小剧场：EP 顶条 + 页眉精灵/假名 + 底部走带字幕（自带防重入守卫）
   var px = document.createElement("script");
-  px.src = REL_ROOT + "assets/pixel-stage.js?v=2";
+  px.src = REL_ROOT + "assets/pixel-stage.js?v=3";
   document.head.appendChild(px);
 })();

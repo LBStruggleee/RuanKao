@@ -118,6 +118,7 @@
 'html.dark .px-rec{color:#ef7b72}' +
 '@keyframes pxRec{0%{opacity:1}50%{opacity:.15}100%{opacity:1}}' +
 '@media (max-width:720px){.px-dots,.px-rec{display:none}}' +
+'@media (max-width:850px){.px-topbar{padding-right:4.6rem}}' +  /* 右上角番茄钟圆圈避让 */
 
 '/* —— 页眉像素小剧场 —— */' +
 '.px-art{position:absolute;top:0;right:0;display:flex;align-items:flex-start;gap:.55rem;z-index:2}' +
