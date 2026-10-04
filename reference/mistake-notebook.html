@@ -12,7 +12,10 @@
 .nb-card .num { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; }
 .nb-card.bad .num { color: var(--bad); }
 .nb-card.good .num { color: var(--ok); }
+.nb-card.due .num { color: var(--warn); }
 .nb-card span { color: var(--ink-soft); font-size: .82rem; }
+.nb-card.click { cursor: pointer; }
+.nb-card.click:hover { border-color: var(--accent); }
 .nb-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin: .8rem 0; }
 .nb-item { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--bad); border-radius: 10px; padding: .8rem 1rem; margin: .7rem 0; }
 .nb-item.solved { border-left-color: var(--ok); }
@@ -27,6 +30,28 @@
 .nb-warn { background: var(--warn-soft); border: 1px solid #ecc4a4; border-radius: 10px; padding: .7rem 1rem; margin: .8rem 0; font-size: .9rem; }
 .nb-okbar { background: var(--ok-soft); border: 1px solid #bcd8cd; border-radius: 10px; padding: .7rem 1rem; margin: .8rem 0; font-size: .9rem; }
 .nb-verdict { min-height: 1.4em; font-weight: 700; }
+
+/* 薄弱点分析图表 */
+.nb-chart-row { display: flex; align-items: center; gap: .6rem; margin: .45rem 0; font-size: .88rem; }
+.nb-chart-label { flex: 0 0 7.5rem; text-align: right; color: var(--ink); }
+.nb-chart-track { flex: 1; height: 1.1rem; background: var(--input-bg); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+.nb-chart-fill { height: 100%; border-radius: 999px; }
+.nb-fill-bad { background: var(--bad); }
+.nb-fill-warn { background: var(--warn); }
+.nb-fill-ok { background: var(--ok); }
+.nb-chart-val { flex: 0 0 12rem; color: var(--ink-soft); font-size: .8rem; }
+.nb-chart-val a { color: var(--accent); }
+
+/* 掌握度徽章 */
+.nb-badge { display: inline-block; font-size: .72rem; font-weight: 700; padding: .06rem .5rem; border-radius: 999px; margin-left: .4rem; }
+.nb-badge.m0 { background: var(--bad-soft); color: var(--bad); }
+.nb-badge.m1 { background: var(--warn-soft); color: var(--warn); }
+.nb-badge.m2 { background: var(--ok-soft); color: var(--ok); }
+.nb-badge.due { background: var(--accent-soft); color: var(--accent); }
+.nb-weak { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem .8rem; margin: .45rem 0; font-size: .88rem; }
+.nb-weak b { color: var(--bad); }
+.nb-weak .due { color: var(--warn); font-size: .8rem; }
+.nb-analysis-note { color: var(--ink-soft); font-size: .82rem; }
 </style>
 </head>
 <body>
@@ -36,23 +61,28 @@
     <p class="kicker">Reference · 错题本</p>
     <h1>错题本：作答自动记录与错题整理</h1>
     <p class="meta">
-      数据来源：各课程页的<strong>每一次作答</strong>（quiz.js 自动写入本机存储，含整题快照与解析）｜
       返回：<a href="../reference/ds-learning-path.html">课程总目录</a>
     </p>
   </header>
 
   <div id="storageBar"></div>
 
-  <h2>一、总览（每道题按「最新一次作答」判定状态）</h2>
+  <h2>一、总览（每道题按「最新一次作答」判定状态；连对 2 次 = 已掌握）</h2>
   <div class="nb-cards" id="cards"></div>
   <div id="groupTable"></div>
 
-  <h2>二、整理与导出</h2>
+  <h2>二、薄弱点分析（该重学哪里）</h2>
+  <div id="analysis"></div>
+
+  <h2>三、整理与导出</h2>
   <div class="card">
     <p style="margin-top:0;">筛选后，下方列表即你的错题清单。<strong>「导出 Markdown」</strong>按你 <a href="../pages/practice/reflection.html">reflection.md</a> 的错题四要素模板生成（题目→错因(留空自填)→正确思路→知识点），可直接粘进去；<strong>「导出 JSON」</strong>是完整历史备份（可换机器/换浏览器导入合并）。</p>
     <div class="nb-bar no-print">
       <select id="fStatus">
-        <option value="wrong">只看待重做错题</option>
+        <option value="wrong">只看待重做错题（最近一次答错）</option>
+        <option value="due">📅 今日该复习（到期的错题）</option>
+        <option value="unmastered">未掌握 + 巩固中</option>
+        <option value="mastered">已掌握的错题（考前扫一眼）</option>
         <option value="solved">只看已攻克（曾错过现已对）</option>
         <option value="all">全部已答题</option>
       </select>
@@ -76,8 +106,8 @@
       <a href="../pages/practice/reflection.html">reflection.md（错题四要素登记处）</a>
       <a href="../pages/practice/tracker.html">tracker.md（正确率回填处）</a>
     </div>
-    <p>工作流建议：课程页答题（自动记录）→ 来错题本筛选「待重做」→ <strong>只练错题</strong>直到清零 → 导出 Markdown 把仍错的粘进 reflection.md → 里程碑日（10/8、10/13、10/22）把各组得分抄进 tracker。</p>
-    <p>💬 想要别的整理维度（比如按知识点聚合、按日期统计正确率曲线），直接告诉 ZCode。</p>
+    <p>工作流建议：课程页答题（自动记录）→ 来错题本按<strong>「📅 今日该复习」</strong>清到期错题 → <strong>只练错题</strong>直到连对 2 次自动掌握 → 看<strong>薄弱点分析</strong>决定重学哪课 → 导出 Markdown 把仍错的粘进 reflection.md。</p>
+    <p>💬 复习节奏：错后 1 天首刷 → 对了隔 2 天 → 再对隔 4 天 → 隔 7 天，连对 2 次即出队（艾宾浩斯简化版）。</p>
   </div>
 
 </div>
@@ -87,6 +117,41 @@
 <script>
 (function () {
   "use strict";
+
+  var DAY = 86400000;
+  var INTERVALS = [1, 2, 4, 7];          // 错后 1 天首刷，对了 2/4/7 天递增
+  var MIG_KEY = "rkLessonNumMigrationV1";
+
+  /* 旧课号 → 新课号（课程重排前的一次性数据迁移） */
+  var NUMMAP = {
+    "0030":"0001","0021":"0002","0022":"0003","0029":"0004",
+    "0001":"0005","0002":"0006","0003":"0007","0004":"0008","0005":"0009",
+    "0006":"0010","0007":"0011","0008":"0012","0009":"0013","0031":"0014",
+    "0014":"0015","0015":"0016","0010":"0017","0011":"0018","0012":"0019","0013":"0020",
+    "0019":"0021","0020":"0022","0034":"0023",
+    "0016":"0024","0017":"0025","0018":"0026",
+    "0023":"0027","0024":"0028","0032":"0029","0033":"0030","0025":"0031","0026":"0032",
+    "0027":"0033","0028":"0034"
+  };
+  var NUM2FILE = {
+    "0001":"0001-computer-math.html","0002":"0002-cpu-pipeline.html","0003":"0003-cache-bus.html",
+    "0004":"0004-programming-languages.html","0005":"0005-arrays-and-linked-lists.html",
+    "0006":"0006-stacks-and-queues.html","0007":"0007-binary-tree-basics.html","0008":"0008-tree-traversals.html",
+    "0009":"0009-huffman.html","0010":"0010-graphs-intro.html","0011":"0011-graph-algorithms.html",
+    "0012":"0012-searching.html","0013":"0013-sorting.html","0014":"0014-ds-supplement.html",
+    "0015":"0015-os-process.html","0016":"0016-os-memory.html","0017":"0017-disk-foundation.html",
+    "0018":"0018-disk-scheduling.html","0019":"0019-file-system-structures.html","0020":"0020-day03-os-exercises.html",
+    "0021":"0021-relational-sql.html","0022":"0022-normalization-er.html","0023":"0023-db-advanced.html",
+    "0024":"0024-network-layers.html","0025":"0025-tcp-subnet.html","0026":"0026-security.html",
+    "0027":"0027-process-models.html","0028":"0028-testing.html","0029":"0029-pm-quality.html",
+    "0030":"0030-oop-basics.html","0031":"0031-uml.html","0032":"0032-design-patterns.html",
+    "0033":"0033-bonus.html","0034":"0034-algo-blanks.html"
+  };
+  var PHASES = [
+    [1, 3, "计算机组成"], [4, 4, "程序语言"], [5, 14, "数据结构与算法"], [15, 20, "操作系统"],
+    [21, 23, "数据库"], [24, 25, "计算机网络"], [26, 26, "信息安全"], [27, 29, "软件工程"],
+    [30, 32, "面向对象"], [33, 33, "综合保底"], [34, 34, "大题专项"]
+  ];
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -98,53 +163,133 @@
   function letter(i) { return "ABCDEFGH".charAt(i); }
   function optText(r, i) { return r.options && r.options[i] !== undefined ? letter(i) + ". " + r.options[i] : String(i); }
   function download(name, text) {
-    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
+    a.href = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
     a.download = name;
-    document.body.appendChild(a);
-    a.click();
+    document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  /* 历史数据迁移：课程重排前的旧课号一次性映射为新课号（只跑一次） */
+  function migrateLessonNumbers() {
+    try {
+      if (localStorage.getItem(MIG_KEY)) return;
+      var arr = JSON.parse(localStorage.getItem("rkTeachAnswersV1") || "[]");
+      var changed = 0;
+      arr.forEach(function (r) {
+        var m = /^(Lesson|Drill) (\d{4})/.exec(r.lesson || "");
+        if (m && NUMMAP[m[2]]) { r.lesson = m[1] + " " + NUMMAP[m[2]]; changed++; }
+      });
+      if (changed) { localStorage.setItem("rkTeachAnswersV1", JSON.stringify(arr)); }
+      localStorage.setItem(MIG_KEY, "1");
+    } catch (e) { /* 存储不可用时静默 */ }
+  }
+
+  function subjectOf(lesson) {
+    if ((lesson || "").indexOf("每日一题") >= 0) return "每日一题";
+    var m = /(\d{4})/.exec(lesson || "");
+    if (!m) return "其他";
+    var n = parseInt(m[1], 10);
+    for (var i = 0; i < PHASES.length; i++) {
+      if (n >= PHASES[i][0] && n <= PHASES[i][1]) return PHASES[i][2];
+    }
+    return "其他";
+  }
+
+  /* ---------- 掌握度与复习队列（按题聚合全部历史） ---------- */
+  function questionStats() {
+    var by = {};
+    AnswerStore.all().forEach(function (r) {
+      var k = r.lesson + "|" + r.quiz + "|" + r.index;
+      (by[k] = by[k] || []).push(r);
+    });
+    var out = {};
+    Object.keys(by).forEach(function (k) {
+      var hist = by[k].slice().sort(function (a, b) { return a.t - b.t; });
+      var last = hist[hist.length - 1];
+      var streak = 0, round = 0, lastWrongT = null, wrongCount = 0;
+      hist.forEach(function (r) {
+        if (r.right) { streak += 1; round += 1; }
+        else { streak = 0; round = 0; lastWrongT = r.t; wrongCount += 1; }
+      });
+      var mastery;
+      if (wrongCount === 0) { mastery = 2; }            // 首答即对，非错题
+      else if (streak >= 2) { mastery = 2; }            // 连对 2 次 → 出队
+      else if (last.right) { mastery = 1; }             // 巩固中
+      else { mastery = 0; }                             // 未掌握
+      var interval = INTERVALS[Math.min(round, 3)];
+      var due = (lastWrongT || last.t) + interval * DAY;
+      out[k] = {
+        key: k, rec: last, streak: streak, round: round,
+        lastWrongT: lastWrongT, wrongCount: wrongCount, mastery: mastery,
+        due: due, dueToday: (mastery < 2 && Date.now() >= due)
+      };
+    });
+    return out;
+  }
+
+  function masteryLabel(m) {
+    return m === 2 ? "已掌握" : (m === 1 ? "巩固中" : "未掌握");
+  }
+  function dueText(st) {
+    if (st.mastery >= 2) return "";
+    if (st.dueToday) return "📅 今日该复习";
+    var d = Math.ceil((st.due - Date.now()) / DAY);
+    return "📅 " + d + " 天后复习";
   }
 
   var verdict = document.getElementById("verdict");
 
-  /* ---------- 存储状态条 ---------- */
+  /* ---------- 总览 ---------- */
   function renderStorageBar() {
+    var s = AnswerStore.summary();
     var bar = document.getElementById("storageBar");
     bar.textContent = "";
-    if (AnswerStore.lsOK()) {
-      bar.appendChild(el("div", "nb-okbar", "✓ 自动记录已开启：本机浏览器的课程页作答会实时存入这里。换浏览器/换机器时用「导出 JSON → 导入 JSON」迁移。"));
-    } else {
-      bar.appendChild(el("div", "nb-warn", "⚠ 当前环境未开放本地存储（常见于内嵌浏览器打开 file:// 页面）。本次会话内仍可记录与整理；要持久保存：①改用系统浏览器（Edge/Chrome）直接双击打开课程 HTML；②或每次答完点「导出 JSON」，下次「导入 JSON」合并。"));
+    if (!s.lsOK) {
+      bar.appendChild(el("div", "nb-warn", "⚠ 当前环境 localStorage 不可用，记录仅保存在本次会话——请用「导出 JSON」保留数据。"));
     }
   }
 
-  /* ---------- 总览 ---------- */
   function renderSummary() {
     var s = AnswerStore.summary();
+    var stats = questionStats();
+    var keys = Object.keys(stats);
+    var dueCount = keys.filter(function (k) { return stats[k].dueToday; }).length;
+    var masteredCount = keys.filter(function (k) { return stats[k].mastery === 2 && stats[k].wrongCount > 0; }).length;
+    var unmasteredCount = keys.filter(function (k) { return stats[k].mastery < 2 && stats[k].wrongCount > 0; }).length;
+
     var cards = document.getElementById("cards");
     cards.textContent = "";
     [["累计作答次数", s.attempts, ""],
      ["覆盖题目数", s.questions, ""],
-     ["待重做错题", s.wrong.length, "bad"],
-     ["已攻克（曾错现对）", s.solved.length, "good"]].forEach(function (c) {
+     ["未掌握 + 巩固中", unmasteredCount, "bad"],
+     ["已掌握（连对 2 次）", masteredCount, "good"]].forEach(function (c) {
       var d = el("div", "nb-card" + (c[2] ? " " + c[2] : ""));
       d.appendChild(el("b", "num", String(c[1])));
       d.appendChild(el("span", null, c[0]));
       cards.appendChild(d);
     });
+    var dueCard = el("div", "nb-card due click");
+    dueCard.appendChild(el("b", "num", String(dueCount)));
+    dueCard.appendChild(el("span", null, "📅 今日该复习（点击筛选）"));
+    dueCard.title = dueCount ? "点击查看今日到期的错题" : "今日没有到期的错题";
+    dueCard.addEventListener("click", function () {
+      document.getElementById("fStatus").value = "due";
+      renderList();
+      document.getElementById("list").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    cards.appendChild(dueCard);
 
     var gt = document.getElementById("groupTable");
     gt.textContent = "";
-    var keys = Object.keys(s.groups).sort();
-    if (!keys.length) { return; }
+    var gkeys = Object.keys(s.groups).sort();
+    if (!gkeys.length) { return; }
     gt.appendChild(el("h3", null, "各组最新得分（对照 tracker 合格线回填）"));
     var table = el("table", "tight nb-group");
     var head = el("tr");
     ["课程", "组", "最新正确 / 题数", "正确率"].forEach(function (h) { head.appendChild(el("th", null, h)); });
     table.appendChild(head);
-    keys.forEach(function (k) {
+    gkeys.forEach(function (k) {
       var g = s.groups[k];
       var tr = el("tr");
       tr.appendChild(el("td", null, g.lesson));
@@ -156,7 +301,86 @@
     gt.appendChild(table);
   }
 
-  /* ---------- 列表 ---------- */
+  /* ---------- 薄弱点分析 ---------- */
+  function renderAnalysis() {
+    var stats = questionStats();
+    var box = document.getElementById("analysis");
+    box.textContent = "";
+
+    /* 科目正确率（按全部作答次数） */
+    var subj = {};
+    AnswerStore.all().forEach(function (r) {
+      var sn = subjectOf(r.lesson);
+      subj[sn] = subj[sn] || { a: 0, w: 0, lessons: {} };
+      subj[sn].a += 1;
+      if (!r.right) {
+        subj[sn].w += 1;
+        subj[sn].lessons[r.lesson] = (subj[sn].lessons[r.lesson] || 0) + 1;
+      }
+    });
+    var rows = Object.keys(subj).map(function (sn) {
+      var o = subj[sn];
+      return { s: sn, a: o.a, w: o.w, acc: 1 - o.w / o.a, lessons: o.lessons };
+    }).sort(function (a, b) { return a.acc - b.acc; });
+
+    box.appendChild(el("h3", null, "科目正确率（从弱到强，红 = 优先重学）"));
+    if (!rows.length) {
+      box.appendChild(el("p", "nb-analysis-note", "还没有作答记录——先去课程页答题，这里会自动生成薄弱科目排名。"));
+    }
+    rows.forEach(function (r) {
+      var pct = Math.round(r.acc * 100);
+      var cls = r.acc < 0.6 ? "nb-fill-bad" : (r.acc < 0.8 ? "nb-fill-warn" : "nb-fill-ok");
+      var row = el("div", "nb-chart-row");
+      row.appendChild(el("span", "nb-chart-label", r.s));
+      var track = el("div", "nb-chart-track");
+      var fill = el("div", "nb-chart-fill " + cls);
+      fill.style.width = Math.max(3, pct) + "%";
+      track.appendChild(fill);
+      row.appendChild(track);
+      var val = el("span", "nb-chart-val", "正确率 " + pct + "%（" + r.a + " 次作答，错 " + r.w + "）");
+      /* 最弱课程直达链接 */
+      var worstLesson = null, worstN = 0;
+      Object.keys(r.lessons).forEach(function (l) {
+        if (r.lessons[l] > worstN) { worstN = r.lessons[l]; worstLesson = l; }
+      });
+      if (worstLesson) {
+        var wm = /(\d{4})/.exec(worstLesson);
+        if (wm && NUM2FILE[wm[1]]) {
+          val.appendChild(document.createTextNode(" "));
+          var a = el("a", null, "重学 " + wm[1] + " →");
+          a.href = "../lessons/" + NUM2FILE[wm[1]];
+          val.appendChild(a);
+        }
+      }
+      row.appendChild(val);
+      box.appendChild(row);
+    });
+
+    /* 薄弱题 TOP5（未掌握且错得最多的题） */
+    box.appendChild(el("h3", null, "薄弱题 TOP5（错得最多且尚未掌握）"));
+    var weak = Object.keys(stats).map(function (k) { return stats[k]; })
+      .filter(function (st) { return st.wrongCount > 0 && st.mastery < 2; })
+      .sort(function (a, b) { return b.wrongCount - a.wrongCount || b.rec.t - a.rec.t; })
+      .slice(0, 5);
+    if (!weak.length) {
+      box.appendChild(el("p", "nb-analysis-note", "暂无未掌握的错题——保持节奏，考前把「已掌握」的再扫一眼即可。"));
+    }
+    weak.forEach(function (st) {
+      var r = st.rec;
+      var d = el("div", "nb-weak");
+      var p = el("p", null, "");
+      p.appendChild(el("b", null, "错 " + st.wrongCount + " 次｜" + r.lesson + " · " + r.quiz + " · Q" + (r.index + 1)));
+      p.appendChild(document.createTextNode("　"));
+      var due = el("span", "due", dueText(st));
+      p.appendChild(due);
+      d.appendChild(p);
+      d.appendChild(el("p", null, r.q.length > 60 ? r.q.slice(0, 60) + "…" : r.q));
+      box.appendChild(d);
+    });
+    box.appendChild(el("p", "nb-analysis-note", "口径：按当前 34 课编号统计；历史记录已在打开本页时自动迁移为新课号。"));
+  }
+
+  /* ---------- 清单 ---------- */
   function currentFilter() {
     return {
       status: document.getElementById("fStatus").value,
@@ -166,23 +390,46 @@
 
   function renderList() {
     var s = AnswerStore.summary();
+    var stats = questionStats();
     var f = currentFilter();
-    var pool = f.status === "wrong" ? s.wrong : (f.status === "solved" ? s.solved : s.wrong.concat(s.solved));
+    var keys = Object.keys(stats);
+    var pool;
+    if (f.status === "wrong") {
+      pool = s.wrong.slice();
+    } else if (f.status === "due") {
+      pool = keys.filter(function (k) { return stats[k].dueToday; }).map(function (k) { return stats[k].rec; });
+    } else if (f.status === "unmastered") {
+      pool = keys.filter(function (k) { return stats[k].mastery < 2 && stats[k].wrongCount > 0; }).map(function (k) { return stats[k].rec; });
+    } else if (f.status === "mastered") {
+      pool = keys.filter(function (k) { return stats[k].mastery === 2 && stats[k].wrongCount > 0; }).map(function (k) { return stats[k].rec; });
+    } else if (f.status === "solved") {
+      pool = s.solved.slice();
+    } else {
+      pool = s.wrong.concat(s.solved);
+    }
     if (f.course) { pool = pool.filter(function (r) { return r.lesson === f.course; }); }
     pool.sort(function (a, b) { return b.t - a.t; });
 
     var list = document.getElementById("list");
     list.textContent = "";
-    list.appendChild(el("h2", null, "三、清单（" + pool.length + " 题，按最近作答排序）"));
+    list.appendChild(el("h2", null, "四、清单（" + pool.length + " 题，按最近作答排序）"));
     if (!pool.length) {
-      list.appendChild(el("p", null, f.status === "wrong" ? "没有待重做错题——去课程页继续推进，或切换筛选。" : "还没有作答记录：先去课程页答题（自动记录）。"));
+      list.appendChild(el("p", null, f.status === "due" ? "今日没有到期的错题——继续保持，明天再看。" :
+        (f.status === "wrong" ? "没有待重做错题——去课程页继续推进，或切换筛选。" : "还没有符合条件的记录。")));
       return;
     }
     pool.forEach(function (r) {
-      var d = el("div", "nb-item" + (r.right ? " solved" : ""));
+      var st = stats[r.lesson + "|" + r.quiz + "|" + r.index];
+      var m = st ? st.mastery : (r.right ? 2 : 0);
+      var d = el("div", "nb-item" + (m === 2 ? " solved" : ""));
       var head = el("p", "meta", "");
       head.appendChild(el("b", null, r.lesson + " · " + r.quiz + " · Q" + (r.index + 1)));
-      head.appendChild(document.createTextNode("　" + fmtTime(r.t) + (r.right ? "　状态：已攻克" : "　状态：待重做")));
+      head.appendChild(document.createTextNode("　" + fmtTime(r.t) + "　"));
+      head.appendChild(el("span", "nb-badge m" + m, masteryLabel(m)));
+      if (st) {
+        var dt = dueText(st);
+        if (dt) { head.appendChild(el("span", "nb-badge due", dt)); }
+      }
       d.appendChild(head);
       d.appendChild(el("p", "q", r.q));
       var pair = el("p", "pair");
@@ -230,7 +477,7 @@
     var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes());
     lines.push("# 错题本导出（" + fmtTime(Date.now()) + "）");
     lines.push("");
-    lines.push("> 由 teach 课程页自动生成。「错因」留空请自填（当时为什么选错）；");
+    lines.push("> 由课程页自动生成。「错因」留空请自填（当时为什么选错）；");
     lines.push("> 仍错的题可整段粘进 docs/practice/reflection.md 的对应日期错题区。");
     lines.push("");
     lines.push("## 得分速览（对照 tracker 合格线）");
@@ -336,9 +583,12 @@
   function refresh() {
     renderStorageBar();
     renderSummary();
+    renderAnalysis();
     renderCourseOptions();
     renderList();
   }
+
+  migrateLessonNumbers();
   refresh();
 })();
 </script>
