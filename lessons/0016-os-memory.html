@@ -41,6 +41,12 @@
     <li>缺页中断是<strong>内部异常</strong>，在<strong>指令执行期间</strong>产生，处理后<strong>重新执行该指令</strong>。</li>
   </ul>
 
+  <div class="callout mission" style="margin-top:1rem;">
+    <span class="tag">🎬 像素小剧场</span>
+    先看约 25 秒动画：同一访问串 7 0 1 2 0 3 0 4、3 个页框，FIFO 与 LRU 各轮演一遍——注意红色「将被逐出」标签提前停在要被踢的页框上，再用下面的模拟器亲手操作。
+  </div>
+  <div id="odp-holder"></div>
+
   <h2>三、虚拟内存与置换算法</h2>
   <p><strong>虚拟内存</strong>：进程只装部分页面即可运行（依据<strong>局部性原理</strong>）。三特征：<strong>多次性、对换性、虚拟性</strong>。访问不在内存的页 → 缺页 → 从磁盘调入 → 内存满则<strong>置换</strong>一页出去。谁出去？四种算法：</p>
   <table class="tight">
@@ -88,6 +94,7 @@
 </div>
 
 <script src="../assets/page-replacement.js"></script>
+<script src="../assets/sprite-paging.js"></script>
 <script src="../assets/calc-drill.js?v=2"></script>
 <script src="../assets/answer-store.js"></script>
 <script src="../assets/quiz.js"></script>

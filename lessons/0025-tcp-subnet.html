@@ -33,6 +33,12 @@
     <tr><td>场景</td><td>网页 HTTP、邮件、文件传输</td><td>DNS 查询、视频直播、语音</td></tr>
   </table>
 
+  <div class="callout mission" style="margin-top:1rem;">
+    <span class="tag">🎬 像素小剧场</span>
+    先看约 17 秒动画：SYN / SYN+ACK / ACK 三次握手把连接建立起来，传几包数据后 FIN / ACK / FIN / ACK 四次挥手断开——主机下方的状态芯片实时切换，状态名看着动画背。
+  </div>
+  <div id="otc-holder"></div>
+
   <h2>二、三次握手 / 四次挥手（状态名必背）</h2>
   <pre>三次握手（建立）：                       四次挥手（释放）：
 客户端 SYN ──→ 服务端    [SYN_SENT]      主动方 FIN ──→          [FIN_WAIT_1]
@@ -89,6 +95,7 @@
 </div>
 
 <script src="../assets/calc-drill.js?v=2"></script>
+<script src="../assets/sprite-tcp.js"></script>
 <script src="../assets/answer-store.js"></script>
 <script src="../assets/quiz.js"></script>
 <script>

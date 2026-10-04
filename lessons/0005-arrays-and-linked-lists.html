@@ -75,6 +75,12 @@
     插入一个新节点 = <strong>改 2 个指针</strong>（前驱的 next 指向新节点、新节点的 next 指向后继），其余节点原地不动。删除同理。适合<strong>增删频繁、长度难预估</strong>的场景（代价：每个节点多花一个指针的空间）。<br>补充一个考试小点：很多教材在链表头部加一个「不存数据的<strong>头结点</strong>（哨兵）」，好处是插删第一个元素时不用特殊处理 head——选择题出现过。
   </div>
 
+  <div class="callout mission" style="margin-top:1rem;">
+    <span class="tag">🎬 像素小剧场</span>
+    先看约 10 秒动画：同一个「把 X 插到中间」的操作，数组要把后面的格子全部右移（O(n)），链表只需重接 2 根指针（O(1)）——两种结构的成本差异全部画在带子里。
+  </div>
+  <div id="ols-holder"></div>
+
   <h2>四、必背对比表（考题直接从这行行出）</h2>
   <table class="tight">
     <tr><th>操作</th><th>数组（顺序表）</th><th>链表</th></tr>
@@ -119,6 +125,7 @@
 </div>
 
 <script src="../assets/answer-store.js"></script>
+<script src="../assets/sprite-list.js"></script>
 <script src="../assets/quiz.js"></script>
 <script>
 /* ---------- 数组 vs 链表 实验室 ---------- */

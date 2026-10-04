@@ -38,7 +38,7 @@
 '@keyframes odqDot{0%,100%{opacity:1}33%{opacity:.35}}' +
 
 /* —— 大字「循環」：长周期故障 + 扫描线 —— */
-'.odq-year{position:absolute;left:4.5%;bottom:15%;z-index:4;font-family:var(--serif,serif);' +
+'.odq-year{position:absolute;left:4.5%;bottom:17%;z-index:4;font-family:var(--serif,serif);' +
 'font-size:clamp(3rem,8.5vw,5.8rem);font-weight:900;line-height:.95;color:#26313b;' +
 'animation:odqGlitch 12s steps(1) infinite}' +
 '.odq-year small{display:block;font-size:clamp(.72rem,1.5vw,.95rem);font-weight:400;letter-spacing:.3em;color:#8a8474;margin-top:.4rem}' +

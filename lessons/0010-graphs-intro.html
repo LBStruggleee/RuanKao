@@ -48,6 +48,12 @@
     <tr><td>判「i、j 有无邻边」</td><td>O(1) 直查</td><td>要遍历链表</td></tr>
   </table>
 
+  <div class="callout mission" style="margin-top:1rem;">
+    <span class="tag">🎬 像素小剧场</span>
+    先看约 20 秒动画：同一张 6 节点图，DFS 靠栈「一条路走到黑、走不通就回溯」，BFS 靠队列「一层一层铺开」——注意右边面板里栈和队列的进出方式，遍历形状的差别全在这里。
+  </div>
+  <div id="odg-holder"></div>
+
   <h2>三、DFS 与 BFS（0006 的两条暗线在此交汇）</h2>
   <ul>
     <li><strong>DFS 深度优先</strong>：一条路走到底，走不动才回头——<strong>栈 / 递归</strong>实现；</li>
@@ -89,6 +95,7 @@
 </div>
 
 <script src="../assets/graph-lab.js"></script>
+<script src="../assets/sprite-graph.js"></script>
 <script src="../assets/answer-store.js"></script>
 <script src="../assets/quiz.js"></script>
 <script>
