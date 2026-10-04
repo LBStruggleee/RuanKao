@@ -416,12 +416,16 @@
     var dragState = null;
     var suppressClick = false;
     var DRAG_THRESHOLD = 8;
+    /* 顶部 HUD 禁区高度：☰（左上）/ 主题按钮（右上）/ EP 顶条（最低 ~96px）
+       都落在此带内——计时块拖拽与恢复位置一律钳在其下，防止角标重叠 */
+    var HUD_FLOOR = 104;
 
     function clampPos(x, y) {
       var w = circle.offsetWidth, h = circle.offsetHeight;
       var maxX = Math.max(4, window.innerWidth - w - 4);
-      var maxY = Math.max(4, window.innerHeight - h - 4);
-      return { x: Math.min(Math.max(4, x), maxX), y: Math.min(Math.max(4, y), maxY) };
+      var minY = Math.min(HUD_FLOOR, Math.max(4, window.innerHeight - h - 4));
+      var maxY = Math.max(minY, window.innerHeight - h - 4);
+      return { x: Math.min(Math.max(4, x), maxX), y: Math.min(Math.max(minY, y), maxY) };
     }
     function setPos(x, y, animate) {
       var pt = clampPos(x, y);
