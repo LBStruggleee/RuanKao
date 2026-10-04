@@ -96,7 +96,7 @@
 '.odg-panel{right:auto;left:50%;transform:translateX(-50%);top:336px;width:172px}' +
 '.odg-struct{flex-direction:row;flex-wrap:wrap;justify-content:center;padding:.3rem .4rem}' +
 '.odg-entry{width:28px;height:26px;font-size:.85rem}' +
-'.odg-hint{font-size:.56rem;margin-top:.3rem}' +
+'.odg-hint{font-size:.64rem;margin-top:.3rem}' +
 '.odg-year{left:4%;top:8px;bottom:auto;font-size:1.5rem}' +
 '.odg-year small{display:none}' +
 '.odg-caption{font-size:.66rem}}' +
@@ -121,6 +121,8 @@
   var VIEW_BOX = "0 0 520 360";
 
   var els = {};
+  var capLen = 0;   // 当前字幕可见字数，用于自适应停顿
+  var timer = null;
   var actions = [];
   var actIdx = 0;
   var mode = "DFS";
@@ -151,12 +153,19 @@
   ];
 
   function caption(text) {
+    capLen = text.replace(/<[^>]+>/g, "").replace(/\s/g, "").length;
     clearTimeout(caption._t);
     els.caption.style.opacity = "0";
     caption._t = setTimeout(function () {
       els.caption.innerHTML = text;
       els.caption.style.opacity = "1";
     }, 180);
+  }
+
+  /* 按字幕字数自适应停顿：中文阅读约 9 字/秒；下限 ACTION_MS，上限 7s */
+  function scheduleNext() {
+    var dwell = Math.min(Math.max(ACTION_MS, capLen * 110 + 450), 7000);
+    timer = setTimeout(function () { step(); scheduleNext(); }, dwell);
   }
 
   function setMode(m) {
@@ -360,7 +369,7 @@
 
     setTimeout(function () {
       step();
-      setInterval(step, ACTION_MS);
+      scheduleNext();
     }, 1000);
   }
 

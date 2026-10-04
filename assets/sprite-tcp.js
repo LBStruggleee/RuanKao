@@ -61,10 +61,10 @@
 '.otc-client{left:7%;top:30%}' +
 '.otc-server{right:7%;top:30%}' +
 
-/* —— 飞行航道 —— */
+/* —— 飞行航道：虚线穿过两主机屏幕中线，报文压线飞行 —— */
 '.otc-lane{position:absolute;left:0;right:0;top:34%;height:4px;z-index:2;' +
 'background:repeating-linear-gradient(90deg,#c9bfa8 0 10px,transparent 10px 18px)}' +
-'.otc-packet{position:absolute;top:26%;z-index:3;width:78px;height:30px;' +
+'.otc-packet{position:absolute;left:7%;top:31%;z-index:3;width:78px;height:30px;' +
 'background:#fffdf6;border:2px solid #26313b;box-shadow:3px 3px 0 rgba(38,49,59,.22);' +
 'display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;' +
 'letter-spacing:.06em;color:#26313b;opacity:0;' +
@@ -86,10 +86,10 @@
 '@media (max-width:640px){.otc-stage{width:100%;height:300px}' +
 '.otc-host{top:14%}' +
 '.otc-host .pic{width:44px;height:50px}' +
-'.otc-host .name{font-size:.6rem}' +
-'.otc-host .state{font-size:.56rem;padding:.14rem .42rem}' +
-'.otc-packet{top:6%;width:64px;height:26px;font-size:.6rem}' +
-'.otc-lane{top:10%}' +
+'.otc-host .name{font-size:.64rem}' +
+'.otc-host .state{font-size:.64rem;padding:.14rem .42rem}' +
+'.otc-packet{top:15%;width:64px;height:26px;font-size:.6rem}' +
+'.otc-lane{top:18%}' +
 '.otc-year{left:4%;bottom:24%;font-size:1.4rem}' +
 '.otc-year small{display:none}' +
 '.otc-caption{font-size:.66rem}}' +
@@ -98,6 +98,8 @@
   var ACTION_MS = 1100;
   /* 飞行端点（舞台坐标百分比 → 像素在 render 时算） */
   var els = {};
+  var capLen = 0;   // 当前字幕可见字数，用于自适应停顿
+  var timer = null;
   var actions = [];
   var actIdx = 0;
 
@@ -130,6 +132,7 @@
   ];
 
   function caption(text) {
+    capLen = text.replace(/<[^>]+>/g, "").replace(/\s/g, "").length;
     clearTimeout(caption._t);
     els.caption.style.opacity = "0";
     caption._t = setTimeout(function () {
@@ -138,16 +141,30 @@
     }, 180);
   }
 
+  /* 按字幕字数自适应停顿：中文阅读约 9 字/秒；下限 ACTION_MS（含 560ms 飞行时间），上限 7s */
+  function scheduleNext() {
+    var dwell = Math.min(Math.max(ACTION_MS, capLen * 110 + 450), 7000);
+    timer = setTimeout(function () { step(); scheduleNext(); }, dwell);
+  }
+
   function setState(host, arr) {
     if (!arr || !arr[0]) return;
     host.state.textContent = arr[0];
     host.state.className = "state" + (arr[1] ? " " + arr[1] : "");
   }
 
+  /* 主机水平中心（每次飞行实时算：主机宽度随状态文本变化 52→80px，
+     挂载时缓存的端点会偏 14px） */
+  function hostCenterX(hostEl) {
+    var sr = els.stage.getBoundingClientRect();
+    var hr = hostEl.getBoundingClientRect();
+    return (hr.left + hr.width / 2) - sr.left;
+  }
+
   /* 飞一次报文：从 from 端出发（应用 sendX 状态），0.56s 后抵达（应用 arrX 状态） */
   function fly(st) {
-    var startX = st.from === "C" ? els.xC : els.xS;
-    var endX = st.from === "C" ? els.xS : els.xC;
+    var startX = hostCenterX(st.from === "C" ? els.client : els.server);
+    var endX = hostCenterX(st.from === "C" ? els.server : els.client);
     var p = els.packet;
     p.className = "otc-packet" + (st.data ? " data" : (st.label === "FIN" ? " fin" : ""));
     p.innerHTML = st.label + '<span class="dir">' + (st.from === "C" ? "▶" : "◀") + "</span>";
@@ -265,15 +282,12 @@
     els.idx = holder.querySelector(".otc-idx");
     els.dots = Array.prototype.slice.call(holder.querySelectorAll(".otc-dots span"));
     els.packet = holder.querySelector(".otc-packet");
-    els.client = { state: holder.querySelector(".otc-client .state") };
-    els.server = { state: holder.querySelector(".otc-server .state") };
-
-    /* 飞行端点像素坐标（客户端中心 / 服务端中心） */
-    var stage = holder.querySelector(".otc-stage").getBoundingClientRect();
-    var cRect = holder.querySelector(".otc-client").getBoundingClientRect();
-    var sRect = holder.querySelector(".otc-server").getBoundingClientRect();
-    els.xC = (cRect.left + cRect.width / 2) - stage.left;
-    els.xS = (sRect.left + sRect.width / 2) - stage.left;
+    els.stage = holder.querySelector(".otc-stage");
+    /* 主机用元素本身，state 引用挂其上（fly 每次按实时 rect 算端点） */
+    els.client = holder.querySelector(".otc-client") || null;
+    els.server = holder.querySelector(".otc-server") || null;
+    if (els.client) els.client.state = holder.querySelector(".otc-client .state");
+    if (els.server) els.server.state = holder.querySelector(".otc-server .state");
 
     buildScript();
 
@@ -282,7 +296,7 @@
 
     setTimeout(function () {
       step();
-      setInterval(step, ACTION_MS);
+      scheduleNext();
     }, 1000);
   }
 

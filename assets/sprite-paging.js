@@ -61,7 +61,7 @@
 '.odp-frame{position:relative;width:64px;height:64px;background:#fffdf6;border:3px solid #26313b;' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.22);display:flex;align-items:center;justify-content:center;' +
 'transition:border-color .25s ease,box-shadow .25s ease}' +
-'.odp-frame .n{position:absolute;top:-1.35rem;left:50%;transform:translateX(-50%);font-size:.62rem;color:#8a8474}' +
+'.odp-frame .n{position:absolute;top:-1.35rem;left:50%;transform:translateX(-50%);font-size:.68rem;color:#8a8474}' +
 '.odp-frame .p{font-weight:700;font-size:1.4rem;color:#26313b;opacity:0}' +
 '.odp-frame.filled .p{opacity:1}' +
 '.odp-frame.popping .p{animation:odpPop .45s cubic-bezier(.3,1.4,.5,1) 1}' +
@@ -80,7 +80,7 @@
 /* —— 淘汰目标标签（教学重点：预先停在将被逐出的页框上） —— */
 '.odp-victim{position:absolute;top:47%;z-index:4;transform:translateX(-50%);margin-top:86px;' +
 'transition:left .5s cubic-bezier(.34,1.25,.5,1);text-align:center;pointer-events:none}' +
-'.odp-victim .k{font-size:.6rem;letter-spacing:.06em;color:#b3372a;font-weight:700;white-space:nowrap}' +
+'.odp-victim .k{font-size:.66rem;letter-spacing:.06em;color:#b3372a;font-weight:700;white-space:nowrap}' +
 '.odp-victim .arrow{font-size:.8rem;color:#b3372a;line-height:1}' +
 
 /* —— 右侧面板：算法 + 计数器 —— */
@@ -124,6 +124,8 @@
 
   var S = null;
   var els = {};
+  var capLen = 0;   // 当前字幕可见字数，用于自适应停顿
+  var timer = null;
   var actions = [];
   var actIdx = 0;
   var lastFIFO = 0, lastLRU = 0;
@@ -136,12 +138,19 @@
   function frameX(i) { return i * (FRAME_W + FRAME_GAP) + FRAME_W / 2; }
 
   function caption(text) {
+    capLen = text.replace(/<[^>]+>/g, "").replace(/\s/g, "").length;
     clearTimeout(caption._t);
     els.caption.style.opacity = "0";
     caption._t = setTimeout(function () {
       els.caption.innerHTML = text;
       els.caption.style.opacity = "1";
     }, 180);
+  }
+
+  /* 按字幕字数自适应停顿：中文阅读约 9 字/秒；下限 ACTION_MS，上限 7s */
+  function scheduleNext() {
+    var dwell = Math.min(Math.max(ACTION_MS, capLen * 110 + 450), 7000);
+    timer = setTimeout(function () { step(); scheduleNext(); }, dwell);
   }
 
   function refreshPanel() {
@@ -386,7 +395,7 @@
 
     setTimeout(function () {
       step();
-      setInterval(step, ACTION_MS);
+      scheduleNext();
     }, 1100);
   }
 

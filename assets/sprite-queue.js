@@ -119,7 +119,8 @@
 '.odq-cells{height:44px}' +
 '.odq-cell{width:48px;height:44px}' +
 '.odq-sprite{top:-36px}.odq-svg{width:22px;height:27px}' +
-'.odq-tag{font-size:.52rem}' +
+/* 特异性须 ≥ 基础规则 .odq-sprite .odq-tag，否则永远不生效 */
+'.odq-sprite .odq-tag{font-size:.64rem}' +
 '.odq-kana{display:none}' +
 '.odq-year{left:4%;top:10px;bottom:auto;font-size:1.7rem}' +
 '.odq-year small{display:none}' +
@@ -141,6 +142,7 @@
 
   var els = {};
   var timer = null;
+  var capLen = 0;   // 当前字幕可见字数，用于自适应停顿
 
   function spriteX(i) { return i * STEP + CELL_W / 2; }
 
@@ -148,6 +150,7 @@
 
   var capTimer = null;
   function caption(text) {
+    capLen = text.replace(/<[^>]+>/g, "").replace(/\s/g, "").length;
     clearTimeout(capTimer);
     els.caption.style.opacity = "0";
     capTimer = setTimeout(function () {
@@ -262,6 +265,13 @@
     setTimeout(function () { refreshBoard(); }, 460);
   }
 
+  /* 按字幕字数自适应停顿：中文阅读约 9 字/秒；下限 ACTION_MS（不低于内部动画时长），
+     上限 7s——教学字幕要来得及读完，短字幕节拍保住节奏感 */
+  function scheduleNext() {
+    var dwell = Math.min(Math.max(ACTION_MS, capLen * 110 + 450), 7000);
+    timer = setTimeout(function () { step(); scheduleNext(); }, dwell);
+  }
+
   function step() {
     if (action >= ACTIONS_PER_CYCLE) {
       doReset();
@@ -364,7 +374,7 @@
 
     setTimeout(function () {
       step();
-      timer = setInterval(step, ACTION_MS);
+      scheduleNext();
     }, 1200);
   }
 

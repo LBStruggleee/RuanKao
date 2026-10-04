@@ -79,6 +79,10 @@
 '.ols-arrow{position:absolute;height:4px;background:#26313b;z-index:1;transform-origin:left center;' +
 'transition:width .4s cubic-bezier(.34,1.2,.5,1),transform .4s cubic-bezier(.34,1.2,.5,1),opacity .3s ease}' +
 '.ols-arrow.new{background:#0e6b5c}' +
+/* 箭头头：指针方向必须可见，节点间距再小也能看出“谁指向谁” */
+'.ols-arrow::after{content:"";position:absolute;right:-7px;top:50%;width:0;height:0;' +
+'border:5px solid transparent;border-left:8px solid #26313b;transform:translateY(-50%)}' +
+'.ols-arrow.new::after{border-left-color:#0e6b5c}' +
 
 /* —— 走带字幕与讲解 —— */
 '.ols-ribbon{position:absolute;left:0;right:0;bottom:2.6rem;height:1.7rem;background:#26313b;overflow:hidden;z-index:4}' +
@@ -94,7 +98,7 @@
 '.ols-array{top:11%}' +
 '.ols-list{top:42%}' +
 '.ols-cell{width:38px;height:42px;font-size:.85rem}' +
-'.ols-node{width:34px;height:34px;font-size:.8rem}' +
+'.ols-node{width:32px;height:32px;font-size:.78rem}' +
 '.ols-marker{top:45px;font-size:.75rem}' +
 '.ols-year{left:4%;top:8px;bottom:auto;font-size:1.5rem}' +
 '.ols-year small{display:none}' +
@@ -109,33 +113,45 @@
   var ARR_BASE_X = 250;   // 第一格 left（行内坐标）
   var R = 21;             // 节点半边
 
-  /* —— 链表带：5 节点散落，X 插在 n1 与 n2 之间（移动端缩小+左移）—— */
+  /* —— 链表带：5 节点散落，X 插在 B 与 C 之间。
+     等距 90px 链式排布（中心距）→ 每段指针净露 ~37px+箭头头，
+     B→C 预留整段空隙，插入时一分为二仍有充足指针段。—— */
   var LIST_DESKTOP = [
-    { v: "A", x: 240, y: 46 }, { v: "B", x: 350, y: 22 }, { v: "C", x: 480, y: 58 },
-    { v: "D", x: 610, y: 20 }, { v: "E", x: 680, y: 50 }
+    { v: "A", x: 200, y: 46 }, { v: "B", x: 290, y: 22 }, { v: "C", x: 470, y: 58 },
+    { v: "D", x: 560, y: 24 }, { v: "E", x: 650, y: 50 }
   ];
+  /* —— 移动端：303px 宽单行挤不下 6 节点的可读指针，改两行蛇形排布 —— */
   var LIST_MOBILE = [
-    { v: "A", x: 24, y: 34 }, { v: "B", x: 82, y: 20 }, { v: "C", x: 140, y: 44 },
-    { v: "D", x: 198, y: 20 }, { v: "E", x: 256, y: 34 }
+    { v: "A", x: 40, y: 16 }, { v: "B", x: 110, y: 44 }, { v: "C", x: 55, y: 104 },
+    { v: "D", x: 140, y: 76 }, { v: "E", x: 225, y: 104 }
   ];
   var LIST = LIST_DESKTOP;
-  var X_DESKTOP = { v: "X", x: 415, y: 44 };
-  var X_MOBILE = { v: "X", x: 111, y: 34 };
+  var X_DESKTOP = { v: "X", x: 380, y: 44 };
+  var X_MOBILE = { v: "X", x: 190, y: 20 };
   var X_NODE = X_DESKTOP;
 
   var els = {};
+  var capLen = 0;   // 当前字幕可见字数，用于自适应停顿
+  var timer = null;
   var actions = [];
   var actIdx = 0;
   var arrayInserted = false;
   var listInserted = false;
 
   function caption(text) {
+    capLen = text.replace(/<[^>]+>/g, "").replace(/\s/g, "").length;
     clearTimeout(caption._t);
     els.caption.style.opacity = "0";
     caption._t = setTimeout(function () {
       els.caption.innerHTML = text;
       els.caption.style.opacity = "1";
     }, 180);
+  }
+
+  /* 按字幕字数自适应停顿：中文阅读约 9 字/秒；下限 ACTION_MS，上限 7s */
+  function scheduleNext() {
+    var dwell = Math.min(Math.max(ACTION_MS, capLen * 110 + 450), 7000);
+    timer = setTimeout(function () { step(); scheduleNext(); }, dwell);
   }
 
   /* ---------- 数组带 ---------- */
@@ -184,13 +200,17 @@
 
   /* ---------- 链表带 ---------- */
 
-  var R = 21; // 节点半边
-
+  /* 中心到中心换算为「边缘到边缘」：从源节点边缘出发，
+     止于目标边缘前 7px，把位置让给箭头头（头尖正好抵住目标边） */
   function placeArrow(el, sx, sy, tx, ty) {
     var dx = tx - sx, dy = ty - sy;
     var len = Math.sqrt(dx * dx + dy * dy);
-    el.style.width = len + "px";
-    el.style.transform = "translate(" + sx + "px," + sy + "px) rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI) + "deg)";
+    if (len < 1) { el.style.width = "0px"; return; }
+    var ux = dx / len, uy = dy / len;
+    var reach = Math.max(len - 2 * R - 7, 6);
+    var x0 = sx + ux * R, y0 = sy + uy * R;
+    el.style.width = reach + "px";
+    el.style.transform = "translate(" + x0 + "px," + y0 + "px) rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI) + "deg)";
   }
 
   function listReset() {
@@ -317,7 +337,7 @@
     if (MOB) {
       CELL_W = 38; CELL_GAP = 4; CELL_STEP = CELL_W + CELL_GAP;
       ARR_BASE_X = 5;
-      R = 17;
+      R = 16;   // 移动端节点 32px
       LIST = LIST_MOBILE;
       X_NODE = X_MOBILE;
     }
@@ -364,7 +384,7 @@
 
     setTimeout(function () {
       step();
-      setInterval(step, ACTION_MS);
+      scheduleNext();
     }, 1000);
   }
 
