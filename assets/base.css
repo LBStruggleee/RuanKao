@@ -107,6 +107,7 @@ body {
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;   /* 全宽走带字幕 100vw 突围不产生横向滚动 */
+  transition: padding-left .28s ease;   /* 侧边栏展开时主内容区平滑让位 */
 }
 html.dark body {
   background-image:
@@ -786,14 +787,16 @@ body.sidebar-open .sidebar-toggle { display: none; }  /* 展开时用侧边栏�
   background: var(--lesson-num-bg);
 }
 
-body.sidebar-open .page {
-  margin-left: 280px;
+/* 侧边栏展开：偏移上移到 body 层——.page/.topnav 的 margin:0 auto 自动
+   把整条主内容列居中在「去掉侧边栏后的剩余空间」，且与正文同轴 */
+body.sidebar-open {
+  padding-left: 280px;
 }
 
 @media (max-width: 1024px) {
   .sidebar-overlay { display: block; pointer-events: none; }
   .sidebar-overlay.show { pointer-events: auto; }
-  body.sidebar-open .page { margin-left: 0; }
+  body.sidebar-open { padding-left: 0; }   /* 移动端侧边栏为浮层模式，内容不缩 */
   /* 固定定位的汉堡按钮占据左上角，内容让出空间避免遮挡 */
   .topnav { padding-left: 3.8rem; padding-right: 3.4rem; }
   .page { padding-top: 3.9rem; }

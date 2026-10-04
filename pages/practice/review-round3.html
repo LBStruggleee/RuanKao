@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <title>错题回归日 ③：8 套真题卷错题重做清单（三轮收口） · 软考软件设计师备考站</title>
-<link rel="stylesheet" href="../../assets/base.css?v=6">
+<link rel="stylesheet" href="../../assets/base.css?v=7">
 </head>
 <body>
 <nav class="topnav">
@@ -19,7 +19,7 @@
 <div class="crumb">📖 文档 · practice 📁 review-round3.md</div>
 <h1>错题回归日 ③：8 套真题卷错题重做清单（三轮收口）</h1>
 <blockquote>
-<p><strong>适用日</strong>：Day 23（10/13）。本清单是 <strong>Step 1</strong> 的执行文件：把 Phase 2 八套真题卷（卷 1 = 2020 下、卷 2 = 2021 上、卷 3 = 2021 下、卷 4 = 2022 上、卷 5 = 2022 下、卷 6 = 2023 上、卷 7 = 2019 上、卷 8 = 2019 下）<strong>各卷剩余的高频错题</strong>集中起来，<strong>闭卷重做一遍</strong>并记录正确率。</p>
+<p><strong>适用阶段</strong>：学完 Day 23 后。本清单是 <strong>Step 1</strong> 的执行文件：把 Phase 2 八套真题卷（卷 1 = 2020 下、卷 2 = 2021 上、卷 3 = 2021 下、卷 4 = 2022 上、卷 5 = 2022 下、卷 6 = 2023 上、卷 7 = 2019 上、卷 8 = 2019 下）<strong>各卷剩余的高频错题</strong>集中起来，<strong>闭卷重做一遍</strong>并记录正确率。</p>
 <p><strong>这是三轮回归的最后一轮</strong>：一轮（<code>review-round1.md</code>，Day 17）做了卷 1+卷 2 的 22 题，二轮（<code>review-round2.md</code>，Day 20）做了卷 3+卷 4 的 20 题组。本轮<strong>不重复前两轮已选的题</strong>，主攻<strong>前两轮没覆盖到的卷 5–8</strong>（2022 下 / 2023 上 / 2019 上 / 2019 下），并从卷 1–4 中挑出<strong>仍未重做过的剩余错题</strong>。</p>
 <p><strong>选题原则（为什么是这些题）</strong>：
 1. <strong>覆盖全部 8 卷</strong>：每卷 2–4 组，共 26 组，杜绝"只刷近三年、漏掉 2019"的盲区；
@@ -868,7 +868,7 @@ P3 已获 1 个 R1 + 1 个 R2，仍需 1 个 R2。</p>
 </tr>
 </tbody>
 </table>
-<h3>3.2 按知识点回填（填进 knowledge-checklist.md 二轮重点清单的"我的正确率"列）</h3>
+<h3>3.2 按知识点回填（填进 knowledge-checklist.md 二轮重点清单的"你的正确率"列）</h3>
 <table>
 <thead>
 <tr>
@@ -1068,7 +1068,7 @@ P3 已获 1 个 R1 + 1 个 R2，仍需 1 个 R2。</p>
 <h2>四、重做后的固定动作</h2>
 <ol>
 <li><strong>仍错的题组</strong>：按"错题四要素"（题目 → 错因 → 正确思路 → 知识点）登记到 <code>docs/practice/reflection.md</code> 的 <strong>Day 23 节</strong>；计算题必须把<strong>每一步中间量</strong>写出来（关键路径长度列表、主键与传递依赖推导、位示图除法、Huffman 树、PV 操作的前驱数统计），不允许只写结论。</li>
-<li><strong>把 3.2 表的正确率回填</strong>到 <code>knowledge-checklist.md</code> 的「二轮重点清单 · 我的正确率」列；<strong>&lt; 70% 的项升级为 ⭐ 必刷</strong>，Phase 3 每天必做。</li>
+<li><strong>把 3.2 表的正确率回填</strong>到 <code>knowledge-checklist.md</code> 的「二轮重点清单 · 你的正确率」列；<strong>&lt; 70% 的项升级为 ⭐ 必刷</strong>，Phase 3 每天必做。</li>
 <li><strong>把 3.3 的汇总填到</strong> <code>tracker.md</code> Day 23 行的「正确率」列（格式建议：<code>重做 __%</code>），并在备注里写明判定结果（已修复 / 待重做 / 回笔记）。</li>
 <li><strong>分歧题归档</strong>：卷 5 第 13 题（教材 B / 法条 D）、卷 6 第 55–56 题（改判 B）、卷 7 第 14、56 题（裁决 B、C）的推导已在 key 文件中钉死，考前<strong>不再变动</strong>，当作结论记住；卷 7 第 67 题保持存疑标注，考前若遇到同类题按"解析显示在前、断开连接在后"的通行表述作答。</li>
 <li><strong>三轮回归总收口</strong>：本轮是最后一轮集中回归。若总正确率 ≥ 85%，说明 Phase 2 的错题已全部修复，<strong>从明天起进入 Phase 3（新卷 + 大题专项）</strong>，本清单归档为"已修复错题库"，仅在 3.2 表里有 ☑ 的知识点上回来翻看。若 &lt; 85%，把仍错题组抄进 Phase 3 每日清单的开头，<strong>每天先做完这些再做新内容</strong>，直到连续两次全对。</li>
