@@ -20,7 +20,7 @@
   window.__otcLoaded = true;
 
   var CSS =
-'.otc-stage{position:relative;margin:1.2rem 0;max-width:860px;aspect-ratio:16/9;background:#f5efe2;' +
+'.otc-stage{position:relative;margin:1.2rem 0;width:820px;height:462px;background:#f5efe2;' +
 'border:2px solid #26313b;border-radius:6px;overflow:hidden;font-family:var(--mono,monospace);' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.18)}' +
 '.otc-grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background:' +
@@ -82,7 +82,17 @@
 '.otc-caption{position:absolute;left:4.5%;right:4.5%;bottom:.55rem;z-index:4;font-size:.74rem;' +
 'line-height:1.5;color:#4a4a42;transition:opacity .2s ease}' +
 '.otc-caption b{color:#0e6b5c}.otc-caption i{color:#b3372a;font-style:normal}' +
-'@media (max-width:640px){.otc-year{bottom:22%}.otc-host .state{font-size:.58rem}}' +
+/* —— 移动端：主机缩小下移，报文航道抬高，标题落回主机下方 —— */
+'@media (max-width:640px){.otc-stage{width:100%;height:300px}' +
+'.otc-host{top:14%}' +
+'.otc-host .pic{width:44px;height:50px}' +
+'.otc-host .name{font-size:.6rem}' +
+'.otc-host .state{font-size:.56rem;padding:.14rem .42rem}' +
+'.otc-packet{top:6%;width:64px;height:26px;font-size:.6rem}' +
+'.otc-lane{top:10%}' +
+'.otc-year{left:4%;bottom:24%;font-size:1.4rem}' +
+'.otc-year small{display:none}' +
+'.otc-caption{font-size:.66rem}}' +
 '@media (prefers-reduced-motion: reduce){.otc-stage *{animation:none !important}.otc-packet{transition:none !important}}';
 
   var ACTION_MS = 1100;
@@ -236,6 +246,20 @@
     style.textContent = CSS;
     document.head.appendChild(style);
     holder.innerHTML = buildHTML();
+
+    /* 桌面窄容器整体 zoom（640–820px）；横竖屏翻转模式变化 → 重载 */
+    var st = holder.querySelector(".otc-stage");
+    var holderW = holder.clientWidth;
+    if (window.innerWidth >= 640 && holderW > 0 && holderW < 820) st.style.zoom = holderW / 820;
+
+    var mobMode = window.innerWidth < 640;
+    var rsT = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rsT);
+      rsT = setTimeout(function () {
+        if ((window.innerWidth < 640) !== mobMode) location.reload();
+      }, 400);
+    });
 
     els.caption = holder.querySelector(".otc-caption");
     els.idx = holder.querySelector(".otc-idx");

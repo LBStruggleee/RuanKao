@@ -21,7 +21,7 @@
   window.__odgLoaded = true;
 
   var CSS =
-'.odg-stage{position:relative;margin:1.2rem 0;max-width:860px;aspect-ratio:16/9;background:#f5efe2;' +
+'.odg-stage{position:relative;margin:1.2rem 0;width:820px;height:462px;background:#f5efe2;' +
 'border:2px solid #26313b;border-radius:6px;overflow:hidden;font-family:var(--mono,monospace);' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.18)}' +
 '.odg-grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background:' +
@@ -89,13 +89,28 @@
 '.odg-caption{position:absolute;left:4.5%;right:4.5%;bottom:.55rem;z-index:4;font-size:.74rem;' +
 'line-height:1.5;color:#4a4a42;transition:opacity .2s ease}' +
 '.odg-caption b{color:#0e6b5c}.odg-caption i{color:#b3372a;font-style:normal}' +
-'@media (max-width:640px){.odg-board{left:2%;transform:scale(.78);transform-origin:left top}.odg-panel{right:2%;width:120px}}' +
+/* —— 移动端：图板居中上移，面板横排堆到下方 —— */
+'@media (max-width:640px){.odg-stage{width:100%;height:540px}' +
+'.odg-board{left:50%;top:9%;transform:translateX(-50%);width:260px;height:260px}' +
+'.odg-node{width:36px;height:36px;font-size:.9rem}' +
+'.odg-panel{right:auto;left:50%;transform:translateX(-50%);top:336px;width:172px}' +
+'.odg-struct{flex-direction:row;flex-wrap:wrap;justify-content:center;padding:.3rem .4rem}' +
+'.odg-entry{width:28px;height:26px;font-size:.85rem}' +
+'.odg-hint{font-size:.56rem;margin-top:.3rem}' +
+'.odg-year{left:4%;top:8px;bottom:auto;font-size:1.5rem}' +
+'.odg-year small{display:none}' +
+'.odg-caption{font-size:.66rem}}' +
 '@media (prefers-reduced-motion: reduce){.odg-stage *{animation:none !important}.odg-node,.odg-edges line{transition:none !important}}';
 
-  var NODES = {
+  var NODES_DESKTOP = {
     A: { x: 150, y: 92 }, B: { x: 300, y: 52 }, C: { x: 150, y: 190 },
     D: { x: 300, y: 172 }, E: { x: 450, y: 92 }, F: { x: 300, y: 302 }
   };
+  var NODES_MOBILE = {
+    A: { x: 55, y: 46 }, B: { x: 130, y: 22 }, C: { x: 55, y: 118 },
+    D: { x: 130, y: 90 }, E: { x: 205, y: 46 }, F: { x: 130, y: 166 }
+  };
+  var NODES = NODES_DESKTOP;   // 挂载时按移动/桌面布局切换
   var EDGES = [["A", "B"], ["A", "C"], ["B", "D"], ["B", "E"], ["C", "D"], ["D", "F"]];
   /* 两种遍历的父边（来到该节点所走的边）与顺序 */
   var PARENT = {
@@ -103,6 +118,7 @@
     BFS: { B: "A", C: "A", D: "B", E: "B", F: "D" }
   };
   var ACTION_MS = 950;
+  var VIEW_BOX = "0 0 520 360";
 
   var els = {};
   var actions = [];
@@ -264,7 +280,7 @@
   }
 
   function buildHTML() {
-    var edgesSvg = '<svg class="odg-edges" viewBox="0 0 520 360" preserveAspectRatio="none">';
+    var edgesSvg = '<svg class="odg-edges" viewBox="' + VIEW_BOX + '" preserveAspectRatio="none">';
     EDGES.forEach(function (e) {
       var a = NODES[e[0]], b = NODES[e[1]];
       edgesSvg += '<line data-k="' + e.join("") + '" x1="' + a.x + '" y1="' + a.y +
@@ -299,10 +315,28 @@
   function mount() {
     var holder = document.getElementById("odg-holder");
     if (!holder || holder.querySelector(".odg-stage")) return;
+
+    /* 布局选择：视口 ≤640px 走移动竖排（小图 + 下方面板）；桌面窄容器 zoom */
+    var MOB = window.innerWidth < 640;
+    if (MOB) { NODES = NODES_MOBILE; VIEW_BOX = "0 0 260 260"; }
+
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);
     holder.innerHTML = buildHTML();
+
+    var st = holder.querySelector(".odg-stage");
+    var holderW = holder.clientWidth;
+    if (!MOB && holderW > 0 && holderW < 820) st.style.zoom = holderW / 820;
+
+    var mobMode = MOB;
+    var rsT = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rsT);
+      rsT = setTimeout(function () {
+        if ((window.innerWidth < 640) !== mobMode) location.reload();
+      }, 400);
+    });
 
     els.caption = holder.querySelector(".odg-caption");
     els.idx = holder.querySelector(".odg-idx");

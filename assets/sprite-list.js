@@ -19,7 +19,7 @@
   window.__olsLoaded = true;
 
   var CSS =
-'.ols-stage{position:relative;margin:1.2rem 0;max-width:860px;aspect-ratio:16/9;background:#f5efe2;' +
+'.ols-stage{position:relative;margin:1.2rem 0;width:820px;height:462px;background:#f5efe2;' +
 'border:2px solid #26313b;border-radius:6px;overflow:hidden;font-family:var(--mono,monospace);' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.18)}' +
 '.ols-grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background:' +
@@ -88,22 +88,40 @@
 '.ols-caption{position:absolute;left:4.5%;right:4.5%;bottom:.55rem;z-index:4;font-size:.74rem;' +
 'line-height:1.5;color:#4a4a42;transition:opacity .2s ease}' +
 '.ols-caption b{color:#0e6b5c}.ols-caption i{color:#b3372a;font-style:normal}' +
-'@media (max-width:640px){.ols-band{left:2%;right:2%}.ols-year{bottom:20%}}' +
+/* —— 移动端：两条带子竖排堆叠，格子/节点缩小到可读档 —— */
+'@media (max-width:640px){.ols-stage{width:100%;height:420px}' +
+'.ols-band{left:2%;right:2%}' +
+'.ols-array{top:11%}' +
+'.ols-list{top:42%}' +
+'.ols-cell{width:38px;height:42px;font-size:.85rem}' +
+'.ols-node{width:34px;height:34px;font-size:.8rem}' +
+'.ols-marker{top:45px;font-size:.75rem}' +
+'.ols-year{left:4%;top:8px;bottom:auto;font-size:1.5rem}' +
+'.ols-year small{display:none}' +
+'.ols-caption{font-size:.66rem}}' +
 '@media (prefers-reduced-motion: reduce){.ols-stage *{animation:none !important}.ols-cell,.ols-arrow,.ols-marker{transition:none !important}}';
 
   var ACTION_MS = 1200;
 
-  /* —— 数组带：初始 6 格，X 插入位置 2 —— */
+  /* —— 数组带：初始 6 格，X 插入位置 2（挂载时按布局重设尺寸）—— */
   var ARR = ["A", "B", "C", "D", "E", "F"];
   var CELL_W = 54, CELL_GAP = 8, CELL_STEP = CELL_W + CELL_GAP;
-  var ARR_BASE_X = 250;   // 第一格 left（舞台坐标）
+  var ARR_BASE_X = 250;   // 第一格 left（行内坐标）
+  var R = 21;             // 节点半边
 
-  /* —— 链表带：5 节点散落，X 插在 n1 与 n2 之间（坐标相对行容器，行宽约 710） —— */
-  var LIST = [
+  /* —— 链表带：5 节点散落，X 插在 n1 与 n2 之间（移动端缩小+左移）—— */
+  var LIST_DESKTOP = [
     { v: "A", x: 240, y: 46 }, { v: "B", x: 350, y: 22 }, { v: "C", x: 480, y: 58 },
     { v: "D", x: 610, y: 20 }, { v: "E", x: 680, y: 50 }
   ];
-  var X_NODE = { v: "X", x: 415, y: 44 };
+  var LIST_MOBILE = [
+    { v: "A", x: 24, y: 34 }, { v: "B", x: 82, y: 20 }, { v: "C", x: 140, y: 44 },
+    { v: "D", x: 198, y: 20 }, { v: "E", x: 256, y: 34 }
+  ];
+  var LIST = LIST_DESKTOP;
+  var X_DESKTOP = { v: "X", x: 415, y: 44 };
+  var X_MOBILE = { v: "X", x: 111, y: 34 };
+  var X_NODE = X_DESKTOP;
 
   var els = {};
   var actions = [];
@@ -293,10 +311,34 @@
   function mount() {
     var holder = document.getElementById("ols-holder");
     if (!holder || holder.querySelector(".ols-stage")) return;
+
+    /* 布局选择：视口 ≤640px 走移动竖排（小坐标）；桌面窄容器 zoom */
+    var MOB = window.innerWidth < 640;
+    if (MOB) {
+      CELL_W = 38; CELL_GAP = 4; CELL_STEP = CELL_W + CELL_GAP;
+      ARR_BASE_X = 5;
+      R = 17;
+      LIST = LIST_MOBILE;
+      X_NODE = X_MOBILE;
+    }
+
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);
     holder.innerHTML = buildHTML();
+
+    var st = holder.querySelector(".ols-stage");
+    var holderW = holder.clientWidth;
+    if (!MOB && holderW > 0 && holderW < 820) st.style.zoom = holderW / 820;
+
+    var mobMode = MOB;
+    var rsT = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rsT);
+      rsT = setTimeout(function () {
+        if ((window.innerWidth < 640) !== mobMode) location.reload();
+      }, 400);
+    });
 
     els.caption = holder.querySelector(".ols-caption");
     els.idx = holder.querySelector(".ols-idx");

@@ -19,7 +19,7 @@
   window.__odpLoaded = true;
 
   var CSS =
-'.odp-stage{position:relative;margin:1.2rem 0;max-width:860px;aspect-ratio:16/9;background:#f5efe2;' +
+'.odp-stage{position:relative;margin:1.2rem 0;width:820px;height:462px;background:#f5efe2;' +
 'border:2px solid #26313b;border-radius:6px;overflow:hidden;font-family:var(--mono,monospace);' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.18)}' +
 '.odp-grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background:' +
@@ -100,12 +100,26 @@
 '.odp-caption{position:absolute;left:4.5%;right:4.5%;bottom:.55rem;z-index:4;font-size:.74rem;' +
 'line-height:1.5;color:#4a4a42;transition:opacity .2s ease}' +
 '.odp-caption b{color:#0e6b5c}.odp-caption i{color:#b3372a;font-style:normal}' +
-'@media (max-width:640px){.odp-refs{transform:translateX(-50%) scale(.72)}.odp-panel{top:30%;right:3%}.odp-year{bottom:20%}}' +
+/* —— 移动端：竖排堆叠，面板下移居中 —— */
+'@media (max-width:640px){.odp-stage{width:100%;height:440px}' +
+'.odp-refs{top:11%;gap:6px}' +
+'.odp-ref{width:30px;height:34px;font-size:.9rem}' +
+'.odp-frames{top:26%}' +
+'.odp-frame{width:56px;height:56px}' +
+'.odp-frame .p{font-size:1.2rem}' +
+'.odp-victim{top:26%;margin-top:80px}' +
+'.odp-panel{right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:96px;text-align:center}' +
+'.odp-algo{margin:0 0 .3rem}' +
+'.odp-counts{line-height:1.6}' +
+'.odp-year{left:4%;top:8px;bottom:auto;font-size:1.5rem}' +
+'.odp-year small{display:none}' +
+'.odp-caption{font-size:.66rem}}' +
 '@media (prefers-reduced-motion: reduce){.odp-stage *{animation:none !important}.odp-victim{transition:none !important}}';
 
   var REF = [7, 0, 1, 2, 0, 3, 0, 4];
   var M = 3;                       // 页框数
   var FRAME_W = 64, FRAME_GAP = 18;
+  var MOB = false;                 // 移动端竖排布局标记
   var ACTION_MS = 1050;
 
   var S = null;
@@ -323,10 +337,29 @@
   function mount() {
     var holder = document.getElementById("odp-holder");
     if (!holder || holder.querySelector(".odp-stage")) return;
+
+    MOB = window.innerWidth < 640;     // 与 CSS 媒体查询同阈值
+    FRAME_W = MOB ? 56 : 64;
+    FRAME_GAP = MOB ? 18 : 18;
+
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);
     holder.innerHTML = buildHTML();
+
+    /* 桌面窄容器：整体 zoom 适配（640–820px）；横竖屏翻转模式变化 → 重载 */
+    var st = holder.querySelector(".odp-stage");
+    var holderW = holder.clientWidth;
+    if (!MOB && holderW > 0 && holderW < 820) st.style.zoom = holderW / 820;
+
+    var mobMode = MOB;
+    var rsT = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rsT);
+      rsT = setTimeout(function () {
+        if ((window.innerWidth < 640) !== mobMode) location.reload();
+      }, 400);
+    });
 
     els.caption = holder.querySelector(".odp-caption");
     els.idx = holder.querySelector(".odp-idx");

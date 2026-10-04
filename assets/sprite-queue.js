@@ -23,7 +23,7 @@
   window.__odqLoaded = true;
 
   var CSS =
-'.odq-stage{position:relative;margin:1.2rem 0;max-width:860px;aspect-ratio:16/9;background:#f5efe2;' +
+'.odq-stage{position:relative;margin:1.2rem 0;width:820px;height:462px;background:#f5efe2;' +
 'border:2px solid #26313b;border-radius:6px;overflow:hidden;font-family:var(--mono,monospace);' +
 'box-shadow:4px 4px 0 rgba(38,49,59,.18)}' +
 '.odq-grain{position:absolute;inset:0;pointer-events:none;opacity:.5;background:' +
@@ -113,13 +113,24 @@
 '.odq-caption{position:absolute;left:4.5%;right:4.5%;bottom:.55rem;z-index:4;font-size:.74rem;' +
 'line-height:1.5;color:#4a4a42;transition:opacity .2s ease}' +
 '.odq-caption b{color:#0e6b5c}.odq-caption i{color:#b3372a;font-style:normal}' +
-'@media (max-width:640px){.odq-board{transform:translate(-50%,-50%) scale(.82)}.odq-year{bottom:22%}}' +
+/* —— 移动端：竖排布局，保持可读字号（不整体缩放）—— */
+'@media (max-width:640px){.odq-stage{width:100%;height:330px}' +
+'.odq-board{width:280px;top:50%}' +
+'.odq-cells{height:44px}' +
+'.odq-cell{width:48px;height:44px}' +
+'.odq-sprite{top:-36px}.odq-svg{width:22px;height:27px}' +
+'.odq-tag{font-size:.52rem}' +
+'.odq-kana{display:none}' +
+'.odq-year{left:4%;top:10px;bottom:auto;font-size:1.7rem}' +
+'.odq-year small{display:none}' +
+'.odq-caption{font-size:.66rem}}' +
 '@media (prefers-reduced-motion: reduce){.odq-stage *{animation:none !important}.odq-sprite{transition:none !important}}';
 
   var M = 5;            // 格数
-  var CELL_W = 60;
+  var CELL_W = 60;      // 挂载时按移动/桌面布局重设
   var STEP = 72;        // 格宽 + 间隔
   var BOARD_W = 348;
+  var MOB = false;      // 移动端竖排布局标记
   var ACTION_MS = 1400;
   var ACTIONS_PER_CYCLE = 10;
   var ENQUEUE_LETTERS = ["E", "F", "G", "H", "I"];
@@ -304,10 +315,31 @@
   function mount() {
     var holder = document.getElementById("odq-holder");
     if (!holder || holder.querySelector(".odq-stage")) return;
+
+    /* 布局选择：视口 ≤640px 走移动竖排（可读字号，与 CSS 媒体查询同阈值）；
+       桌面但容器 < 820px 整体 zoom 适配。横竖屏翻转时模式变化 → 重载 */
+    var holderW = holder.clientWidth;
+    MOB = window.innerWidth < 640;
+    CELL_W = MOB ? 48 : 60;
+    STEP = MOB ? 58 : 72;
+    BOARD_W = MOB ? 280 : 348;
+
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);
     holder.innerHTML = buildHTML();
+
+    var st = holder.querySelector(".odq-stage");
+    if (!MOB && holderW > 0 && holderW < 820) st.style.zoom = holderW / 820;
+
+    var mobMode = MOB;
+    var rsT = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rsT);
+      rsT = setTimeout(function () {
+        if ((window.innerWidth < 640) !== mobMode) location.reload();
+      }, 400);
+    });
 
     els.caption = holder.querySelector(".odq-caption");
     els.idx = holder.querySelector(".odq-idx");
