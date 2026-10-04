@@ -983,7 +983,7 @@ html.dark .daily-tab {
               transform 0.35s ease;
 }
 .pomo-glass.open .pomo-body {
-  max-height: 22rem;
+  max-height: 26rem;   /* 统计区加入后内容约 363px，留余量防裁切 */
   opacity: 1;
   padding: 0.15rem 0.95rem 0.95rem;
   width: 13.5rem;
@@ -1555,6 +1555,36 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
               inset 0 1px 0 var(--pg-highlight);
 }
 
+/* —— 学习时长统计：mono 双行 + 像素硬边进度条 —— */
+.pomo-stats { margin: .4rem 0 .15rem; }
+.pomo-bar {
+  height: 10px;
+  border: 2px solid var(--px-ink);
+  border-radius: 2px;
+  background: var(--input-bg);
+  overflow: hidden;
+  margin: .35rem 0;
+}
+.pomo-bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--pg-accent);
+  transition: width .5s steps(8);
+}
+.pomo-bar.met > i { background: var(--ok); }
+.pomo-bar-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .35rem;
+  font-family: var(--mono);
+  font-size: .66rem;
+  color: var(--pg-ink-soft);
+  white-space: nowrap;
+}
+.pomo-bar-line b { color: var(--pg-ink); font-weight: 700; }
+
 /* —— 每日组件：方角 + 硬投影 + 像素按键 —— */
 .daily-tab {
   border: 2px solid var(--px-ink);
@@ -1591,4 +1621,5 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
   .pomo-glass.running .pomo-dot { animation: none !important; }
   .pomo-btns button, .pomo-set-g button, .pomo-pill,
   .daily-flip, .daily-btn, .daily-tab, .daily-opt { transition: none !important; }
+  .pomo-bar > i { transition: none !important; }
 }

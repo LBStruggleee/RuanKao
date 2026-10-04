@@ -29,6 +29,8 @@
   var BREAK = 5 * 60;
   var KEY = "rkPomodoroState";
   var POS_KEY = "rkPomodoroPos";      // 移动端圆圈拖拽位置
+  var LOG_KEY = "rkStudyLog";         // 学习时长记录（分钟级，跨页持久）
+  var DEFAULT_GOAL = 120;             // 默认每日目标（分钟）
   var RING_C = 169.6;               // r=27 的圆周长（进度环）
 
   function today() {
@@ -48,6 +50,73 @@
   if (state.day !== today()) { state.day = today(); state.done = 0; }
   if (!state.focusMin) state.focusMin = 25;
   if (!state.breakMin) state.breakMin = 5;
+
+  /* ---------- 学习时长记录 ---------- */
+  function loadLog() {
+    try {
+      var l = JSON.parse(localStorage.getItem(LOG_KEY) || "null");
+      if (l && Array.isArray(l.entries)) return l;
+    } catch (e) { /* 损坏记录忽略 */ }
+    return { v: 1, goal: DEFAULT_GOAL, entries: [] };
+  }
+  var log = loadLog();
+
+  function saveLog() {
+    try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); } catch (e) {}
+  }
+
+  /* 老用户迁移：只有番茄数、没有分钟记录时，按其专注时长估算今日 minutes，
+   * 让「今日已完成 N 个」的历史努力不丢失 */
+  if (!log.entries.length && state.done > 0) {
+    log.entries.push({ d: state.day, m: state.done * (state.focusMin || 25) });
+    saveLog();
+  }
+
+  /* 日期串与 today() 同格式（不补零），offset 负数为前几天 */
+  function dayStr(offset) {
+    var d = new Date();
+    d.setDate(d.getDate() - offset);
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+
+  function computeStats() {
+    var perDay = {};
+    log.entries.forEach(function (e) {
+      if (e && typeof e.m === "number" && e.m > 0) perDay[e.d] = (perDay[e.d] || 0) + e.m;
+    });
+    var t = dayStr(0);
+    var todayMin = perDay[t] || 0;
+    var weekMin = 0;
+    for (var i = 0; i < 7; i++) weekMin += perDay[dayStr(i)] || 0;
+    var allMin = 0;
+    for (var k in perDay) allMin += perDay[k];
+    /* 连续打卡：今天有记录从今天数，否则从昨天数（白天内不算断签） */
+    var off = perDay[t] ? 0 : 1;
+    var streak = 0;
+    while (perDay[dayStr(off)] && streak < 900) { streak++; off++; }
+    return { todayMin: todayMin, weekMin: weekMin, allMin: allMin,
+             streak: streak, goal: log.goal || DEFAULT_GOAL };
+  }
+
+  /* 紧凑时长：<60 分用分钟，否则小时 */
+  function fmtMin(m) {
+    if (m < 60) return m + "分";
+    var h = m / 60;
+    return (h % 1 === 0 ? h : h.toFixed(1)) + "h";
+  }
+
+  function statsHtml() {
+    var s = computeStats();
+    var pct = Math.min(100, Math.round(s.todayMin / s.goal * 100));
+    var met = s.todayMin >= s.goal;
+    return '<div class="pomo-bar-line"><span>🍅 今日 <b>' + state.done +
+      '</b> 个 · <b>' + s.todayMin + '</b> 分</span><span>连续 <b>' + s.streak + '</b> 天</span></div>' +
+      '<div class="pomo-bar' + (met ? " met" : "") + '"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="pomo-bar-line"><span>' + (met
+        ? '<b style="color:var(--ok)">✓ 已达标</b>'
+        : '目标 <b>' + s.goal + '</b> 分') +
+      '</span><span>本周 <b>' + fmtMin(s.weekMin) + '</b> · 累计 <b>' + fmtMin(s.allMin) + '</b></span></div>';
+  }
 
   var rail = null, circle = null, modal = null, veil = null;
   var els = {};
@@ -97,6 +166,18 @@
 
   /* ---------- 渲染 ---------- */
 
+  /* 统计区只在数值变化时重绘，避免 250ms tick 反复重建 DOM 打断进度条过渡 */
+  var statsSig = "";
+  function renderStats() {
+    var sig = state.done + "|" + JSON.stringify(computeStats());
+    if (sig === statsSig) return;
+    statsSig = sig;
+    els.statsBoxes.forEach(function (box) { box.innerHTML = statsHtml(); });
+    els.goalVals.forEach(function (b) { b.textContent = log.goal || DEFAULT_GOAL; });
+    var s = computeStats();
+    if (circle) circle.title = "番茄钟 · 今日已学 " + s.todayMin + " 分钟";
+  }
+
   function render() {
     var txt = fmt(remaining());
     var isFocus = state.mode === "focus";
@@ -125,7 +206,8 @@
 
     var startTxt = state.running ? "暂停" : "开始";
     els.starts.forEach(function (b) { b.textContent = startTxt; });
-    els.dones.forEach(function (d) { d.textContent = "🍅 今日已完成 " + state.done + " 个"; });
+    if (els.dones.length) els.dones.forEach(function (d) { d.textContent = "🍅 今日已完成 " + state.done + " 个"; });
+    renderStats();
 
     rail.classList.toggle("running", state.running);
     rail.classList.toggle("break", !isFocus);
@@ -141,6 +223,10 @@
     state.running = false;
     if (state.mode === "focus") {
       state.done += 1;
+      // 入账：一轮完整专注 = 该轮专注时长（分钟，至少 1）
+      log.entries.push({ d: today(), m: Math.max(1, Math.round(totalSec("focus") / 60)) });
+      if (log.entries.length > 3000) log.entries = log.entries.slice(-2000);
+      saveLog();
       state.mode = "break";
       state.remain = totalSec("break");
     } else {
@@ -197,6 +283,13 @@
 
   function onSet(e) {
     var act = e.currentTarget.getAttribute("data-set");
+    if (act.indexOf("goal") === 0) {
+      var d = act.indexOf("plus") >= 0 ? 10 : -10;
+      log.goal = Math.min(480, Math.max(30, (log.goal || DEFAULT_GOAL) + d));
+      saveLog();
+      render();
+      return;
+    }
     var isFocus = act.indexOf("focus") === 0;
     var d = act.indexOf("plus") >= 0 ? 1 : -1;
     if (isFocus) {
@@ -234,12 +327,13 @@
       '<div class="pomo-set">' +
       '<span class="pomo-set-g">专注<button data-set="focus-minus" type="button" aria-label="专注减一分钟">−</button><b data-set-val="focus">25</b><button data-set="focus-plus" type="button" aria-label="专注加一分钟">+</button></span>' +
       '<span class="pomo-set-g">休息<button data-set="break-minus" type="button" aria-label="休息减一分钟">−</button><b data-set-val="break">5</b><button data-set="break-plus" type="button" aria-label="休息加一分钟">+</button></span>' +
+      '<span class="pomo-set-g">目标<button data-set="goal-minus" type="button" aria-label="每日目标减十分钟">−</button><b data-goal-val="1">120</b><button data-set="goal-plus" type="button" aria-label="每日目标加十分钟">+</button>分</span>' +
       "</div>" +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" type="button">开始</button>' +
       '<button class="pomo-reset" type="button">重置</button>' +
       "</div>" +
-      '<div class="pomo-done">🍅 今日已完成 0 个</div>' +
+      '<div class="pomo-stats" data-od-id="study-stats"></div>' +
       "</div>";
     document.body.appendChild(rail);
 
@@ -276,12 +370,13 @@
       '<div class="pomo-set">' +
       '<span class="pomo-set-g">专注<button data-set="focus-minus" type="button" aria-label="专注减一分钟">−</button><b data-set-val="focus">25</b><button data-set="focus-plus" type="button" aria-label="专注加一分钟">+</button></span>' +
       '<span class="pomo-set-g">休息<button data-set="break-minus" type="button" aria-label="休息减一分钟">−</button><b data-set-val="break">5</b><button data-set="break-plus" type="button" aria-label="休息加一分钟">+</button></span>' +
+      '<span class="pomo-set-g">目标<button data-set="goal-minus" type="button" aria-label="每日目标减十分钟">−</button><b data-goal-val="1">120</b><button data-set="goal-plus" type="button" aria-label="每日目标加十分钟">+</button>分</span>' +
       "</div>" +
       '<div class="pomo-btns">' +
       '<button class="pomo-start" type="button">开始</button>' +
       '<button class="pomo-reset" type="button">重置</button>' +
       "</div>" +
-      '<div class="pomo-done">🍅 今日已完成 0 个</div>' +
+      '<div class="pomo-stats" data-od-id="study-stats-m"></div>' +
       "</div>";
     document.body.appendChild(modal);
 
@@ -296,7 +391,9 @@
     els.mMode = els.mcard.querySelector(".pomo-mode");
     els.setVals = Array.prototype.slice.call(document.querySelectorAll("[data-set-val]"));
     els.starts = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-start, .pomo-modal .pomo-start"));
-    els.dones = Array.prototype.slice.call(document.querySelectorAll(".pomo-glass .pomo-done, .pomo-modal .pomo-done"));
+    els.dones = [];   // 已并入统计条首行
+    els.statsBoxes = Array.prototype.slice.call(document.querySelectorAll(".pomo-stats"));
+    els.goalVals = Array.prototype.slice.call(document.querySelectorAll("[data-goal-val]"));
 
     // 恢复上次计时：仍在跑 → 继续倒计时；离开期间已到点 → 按完成处理
     if (state.running && (state.endAt - Date.now()) / 1000 <= 0) {
