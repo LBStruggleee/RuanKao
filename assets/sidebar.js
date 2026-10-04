@@ -59,7 +59,6 @@
     html += '<div class="sidebar-header">';
     html += '<a href="' + REL_ROOT + 'index.html" class="sidebar-brand">📚 软考备考站</a>';
     html += '<span class="sidebar-actions">';
-    html += '<button class="sidebar-theme" data-theme-toggle type="button" aria-label="切换深浅色">🌙</button>';
     html += '<button class="sidebar-close" id="sidebarClose" aria-label="收起侧边栏">×</button>';
     html += '</span>';
     html += '</div>';
