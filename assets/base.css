@@ -4,11 +4,13 @@
    ============================================================ */
 
 :root {
-  --paper: #f6f3ec;
-  --card: #fffdf8;
+  --paper: #f5efe2;        /* 奶油纸面（sprite-animation 舞台色） */
+  --card: #fffdf6;
   --ink: #26313b;
   --ink-soft: #5b6875;
-  --line: #ddd5c6;
+  --line: #d8cfba;
+  --px-ink: #26313b;       /* 像素硬边框 */
+  --px-shadow: rgba(38, 49, 59, .22);  /* 像素硬投影 */
   --accent: #0e6b5c;      /* 深松绿：主强调 */
   --accent-soft: #e3efe9;
   --warn: #b3541e;        /* 赭石：易错点/警告 */
@@ -53,6 +55,8 @@ html.dark {
   --paper: #1e1c17;
   --card: #282520;
   --ink: #e8e4da;
+  --px-ink: #e8e4da;
+  --px-shadow: rgba(0, 0, 0, .5);
   --ink-soft: #a39d8e;
   --line: #3d3931;
   --accent: #5cc2a2;
@@ -94,11 +98,20 @@ html { font-size: 16px; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(38, 49, 59, .03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(38, 49, 59, .02) 0 1px, transparent 1px 4px);
   color: var(--ink);
   font-family: var(--sans);
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;   /* 全宽走带字幕 100vw 突围不产生横向滚动 */
+}
+html.dark body {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(232, 228, 218, .035) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(232, 228, 218, .025) 0 1px, transparent 1px 4px);
 }
 
 .page {
@@ -107,15 +120,24 @@ body {
   padding: 2.5rem 1.25rem 4rem;
 }
 
-/* ---------- 页眉 ---------- */
+/* ---------- 页眉（sprite-animation：EP 条下的大号衬线标题 + 故障扫描线） ---------- */
 .lesson-header {
-  border-bottom: 3px double var(--line);
-  padding-bottom: 1.1rem;
+  position: relative;
+  border-bottom: 2px solid var(--px-ink);
+  padding-bottom: .2rem;
   margin-bottom: 1.8rem;
 }
+.lesson-header::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: 1rem 0 0;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 8px, transparent 8px 14px);
+}
 .lesson-header .kicker {
-  font-size: .8rem;
-  letter-spacing: .12em;
+  font-family: var(--mono);
+  font-size: .76rem;
+  letter-spacing: .18em;
   color: var(--accent);
   text-transform: uppercase;
   margin: 0 0 .3rem;
@@ -125,8 +147,32 @@ body {
   font-size: 1.9rem;
   line-height: 1.35;
   margin: 0 0 .5rem;
+  padding-right: 6.5rem;   /* 右上角像素小剧场留位 */
   color: var(--ink);
 }
+/* 大字故障 + 扫描线：长周期轻微抖动，不干扰阅读 */
+.px-glitch, .lesson-header h1, .hero h1 {
+  position: relative;
+  animation: pxGlitch 12s steps(1) infinite;
+}
+@keyframes pxGlitch {
+  0%, 92% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+  93% { clip-path: inset(15% 0 55% 0); transform: translate(-2px, 0); }
+  95% { clip-path: inset(55% 0 20% 0); transform: translate(2px, 0); }
+  97%, 100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+.px-glitch::after, .lesson-header h1::after, .hero h1::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(38, 49, 59, .05) 0 2px, transparent 2px 5px);
+  animation: pxScan 4s linear infinite;
+}
+html.dark .px-glitch::after, html.dark .lesson-header h1::after, html.dark .hero h1::after {
+  background: repeating-linear-gradient(0deg, rgba(232, 228, 218, .06) 0 2px, transparent 2px 5px);
+}
+@keyframes pxScan { from { background-position-y: 0; } to { background-position-y: 30px; } }
 .lesson-header .meta {
   color: var(--ink-soft);
   font-size: .9rem;
@@ -138,8 +184,9 @@ h2 {
   font-family: var(--serif);
   font-size: 1.35rem;
   margin: 2.6rem 0 .9rem;
-  padding-left: .65rem;
-  border-left: 5px solid var(--accent);
+  padding: .15rem 0 .15rem .7rem;
+  border-left: 6px solid var(--accent);
+  border-bottom: 2px solid var(--px-ink);
 }
 h3 { font-size: 1.08rem; margin: 1.6rem 0 .6rem; }
 p { margin: .7rem 0; }
@@ -1288,4 +1335,130 @@ html.dark .daily-tag { color: var(--pg-accent); }
     bottom: auto;
     transform: translate(-50%, -50%);
   }
+}
+
+/* ============================================================
+   sprite-animation 风格层：奶油纸面 · 像素硬边 · 硬投影 · 方角 · steps() 动效
+   追加在文件末尾——同等特异性下覆盖前面的圆角/柔影组件规则。
+   覆盖面：面板 / 标注 / 公式 / 表格 / 选项按钮 / 实验室格子 / 课尾 / 侧栏 / 顶导航
+   ============================================================ */
+
+/* —— 面板：2px 硬墨边 + 4px 硬投影 + 方角 —— */
+.card, .quiz-q, .dsim, .icap, .cdrv, .steps-box,
+.tlab, .sq-lab, .glab, .sortlab, .hlab, .lab-panel,
+.win-box, .dsim-done, .bt-blankcard {
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 var(--px-shadow);
+}
+.card, .quiz-q, .dsim, .icap, .cdrv, .steps-box,
+.tlab, .sq-lab, .glab, .sortlab, .hlab, .lab-panel, .bt-blankcard {
+  background: var(--card);
+}
+
+/* —— 标注与公式：厚色条 + 方角 —— */
+.callout { border-width: 2px; border-left-width: 8px; border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+.formula { border: 2px solid var(--gold); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+
+/* —— 代码块：终端感硬框 —— */
+pre, .steps-code, .icap-derive { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+
+/* —— 表格：硬网格 + mono 表头 —— */
+table { border: 2px solid var(--px-ink); border-radius: 2px; }
+th, td { border: 1px solid var(--px-ink); }
+th { font-family: var(--mono); font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+
+/* —— 测验选项：像素按键，steps(2) 顿挫反馈 —— */
+.q-option {
+  background: var(--card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 2px solid var(--px-ink);
+  border-radius: 4px;
+  box-shadow: 3px 3px 0 var(--px-shadow);
+  transition: transform .14s steps(2), box-shadow .14s steps(2),
+              border-color .14s ease, background .14s ease;
+}
+.q-option:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--px-shadow);
+}
+.q-option:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--px-shadow); }
+.q-option.correct {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+  box-shadow: 3px 3px 0 var(--px-shadow);
+  font-weight: 700;
+  animation: pxPop .32s steps(2);
+}
+.q-option.wrong {
+  background: var(--bad-soft);
+  border-color: var(--bad);
+  animation: pxShake .3s steps(2);
+}
+.q-option.reveal { border-color: var(--ok); }
+@keyframes pxPop {
+  0% { transform: translate(0, 0) scale(1); }
+  35% { transform: translate(-2px, -2px) scale(1.03); }
+  75% { transform: translate(1px, 1px) scale(.99); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes pxShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.q-explain { border-radius: 4px; }
+.quiz-score { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 4px 4px 0 var(--px-shadow); }
+
+/* —— 按钮：硬投影按压 —— */
+button.btn { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); transition: transform .12s steps(2), box-shadow .12s steps(2), filter .15s ease; }
+button.btn:hover { filter: brightness(1.08); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--px-shadow); }
+button.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--px-shadow); }
+button.btn.ghost { background: transparent; color: var(--accent); border: 2px solid var(--accent); box-shadow: 3px 3px 0 var(--px-shadow); }
+
+/* —— 实验室格子与控件：像素格 —— */
+.lab-cell { background: var(--card); border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+.lab-cell.hit { box-shadow: 0 0 0 3px var(--accent-soft), 3px 3px 0 var(--px-shadow); }
+.sortlab-cell { border: 2px solid var(--px-ink); border-radius: 4px; }
+.dsim-tab, .dsim-choice { border-radius: 4px; }
+.dsim-choice { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 2px 2px 0 var(--px-shadow); background: var(--card); }
+.icap select, .icap input, .cdrv input { border: 2px solid var(--px-ink); border-radius: 4px; background: var(--card); }
+.tlab-node, .glab-v, .glab-e { border: 2px solid var(--px-ink); border-radius: 4px; }
+.sq-pointer { border-radius: 4px; }
+
+/* —— 课尾：点状像素条 —— */
+.lesson-footer { border-top: 2px solid var(--px-ink); }
+.lesson-footer::before {
+  content: ""; display: block; height: 3px; margin: 1rem 0 1.2rem;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 8px, transparent 8px 14px);
+}
+
+/* —— 侧栏与悬浮按钮：方角硬框 —— */
+.sidebar { border-right: 2px solid var(--px-ink); box-shadow: 6px 0 0 var(--px-shadow); }
+.sidebar-title { font-family: var(--mono); letter-spacing: .08em; }
+.sidebar-phase { font-family: var(--mono); }
+.sidebar-link.active { border-left: 6px solid var(--accent); }
+.sidebar-toggle { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+.rk-theme-fab { border: 2px solid var(--px-ink); border-radius: 4px; box-shadow: 3px 3px 0 var(--px-shadow); }
+.topnav { border-bottom: 2px solid var(--px-ink); }
+.topnav a { font-family: var(--mono); font-size: .85rem; }
+
+/* —— 减弱动态效果：标题故障 / 按键顿挫 / 像素组件动画全部关闭 —— */
+@media (prefers-reduced-motion: reduce) {
+  .px-glitch, .lesson-header h1, .hero h1 { animation: none !important; }
+  .px-glitch::after, .lesson-header h1::after, .hero h1::after { animation: none !important; }
+  .q-option, button.btn { transition: none !important; }
+  .q-option.correct, .q-option.wrong { animation: none !important; }
+  [class^="px-"], [class*=" px-"] { animation: none !important; }
+}
+
+@media print {
+  .px-topbar, .px-art, .px-ribbon { display: none !important; }
+}
+
+/* —— 窄屏：页眉只留小号精灵，标题不再为大图让位 —— */
+@media (max-width: 640px) {
+  .lesson-header h1, .hero h1 { padding-right: 2rem; }
 }

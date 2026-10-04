@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="软考软件设计师（中级）备考站：28 节交互式课程（即时判分 + 逐选项解析）、全大纲知识点文档、10 套历年真题、错题本——纯静态 HTML，手机电脑皆可" />
+  <meta name="description" content="软考软件设计师（中级）备考站：34 节交互式课程（即时判分 + 逐选项解析）、全大纲知识点文档、10 套历年真题、错题本——纯静态 HTML，手机电脑皆可" />
   <title>软考软件设计师 · 备考站 | RuanKao</title>
-  <link rel="stylesheet" href="assets/base.css" />
+  <link rel="stylesheet" href="assets/base.css?v=2" />
   <style>
     .hero { text-align: left; padding: 1rem 0 .6rem; }
     .hero h1 { font-family: var(--serif); font-size: 1.9rem; margin: .2rem 0 .4rem; }
@@ -17,7 +17,7 @@
     .cards .card b { color: var(--accent); }
     .cards .card p { color: var(--ink-soft); font-size: .88rem; margin: .3rem 0 0; }
     #rk-badge {
-      position: fixed; right: 12px; bottom: 12px; z-index: 999;
+      position: fixed; right: 12px; bottom: 5.5rem; z-index: 999;  /* 避让右下角番茄钟圆圈 */
       background: var(--accent); color: var(--on-accent); font-size: 12px;
       padding: 6px 12px; border-radius: 999px;
       box-shadow: 0 2px 10px rgba(0,0,0,.25); user-select: none;
@@ -31,6 +31,10 @@
 <body>
 <div class="page">
   <header class="lesson-header hero">
+    <div class="px-art" data-od-id="sprite">
+      <div class="px-kana" data-od-id="kana"><span>勉</span><span>強</span></div>
+      <div class="px-sprite"><svg class="px-svg" width="27" height="30" viewBox="0 0 9 10" shape-rendering="crispEdges"><g fill="currentColor"><rect x="0" y="2" width="4" height="5"/><rect x="5" y="2" width="4" height="5"/></g><g class="pk"><rect x="4" y="2" width="1" height="5"/><rect x="1" y="3" width="2" height="1"/><rect x="6" y="3" width="2" height="1"/><rect x="1" y="5" width="2" height="1"/><rect x="6" y="5" width="2" height="1"/></g></svg></div>
+    </div>
     <p class="kicker">软考软件设计师（中级）· 公开复习站</p>
     <h1>零基础冲刺 · 交互课程 + 全大纲文档 + 真题解析</h1>
     <p>📅 考试：<b>2026 年 10 月 24 日</b> ｜ 纯静态 HTML，无需登录，手机/电脑皆可，内容离线可用</p>
@@ -39,11 +43,11 @@
   </header>
 
   <div class="cards">
-    <div class="card"><a href="reference/ds-learning-path.html"><b>🎓 交互课程（28 课）</b>
-      <p>按序号学习：数据结构 → OS → 网络 → 数据库 → 组成 → 软工 → 设计模式 → 算法大题套路。每课配实验室与逐选项解析测验。</p></a></div>
+    <div class="card"><a href="reference/ds-learning-path.html"><b>🎓 交互课程（34 课）</b>
+      <p>按序号学习：组成 → 程序语言 → 数据结构与算法 → OS → 数据库 → 网络 → 软工 → 面向对象 → 实战。每课配实验室与逐选项解析测验。</p></a></div>
     <div class="card"><a href="reference/mistake-notebook.html"><b>📓 错题本</b>
       <p>课程作答自动记录，按题判定「待重做 / 已攻克」，只练错题，支持导出 Markdown / JSON。</p></a></div>
-    <div class="card"><a href="pages/index.html"><b>📖 知识点文档（89 篇全文）</b>
+    <div class="card"><a href="pages/index.html"><b>📖 知识点文档（81 篇全文）</b>
       <p>docs/ 原资料全文 HTML 版：考试大纲、六大科目精讲、24 天计划、真题转录与逐题解析、应试策略。</p></a></div>
     <div class="card"><a href="search.html"><b>🔍 全站搜索</b>
       <p>按关键词检索全部文档（如：子网、候选码、Belady、关键路径）。</p></a></div>
@@ -77,6 +81,6 @@
     setInterval(tick, 3600000);
   })();
 </script>
-<script src="assets/sidebar.js"></script>
+<script src="assets/sidebar.js?v=2"></script>
 </body>
 </html>

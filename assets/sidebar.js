@@ -53,6 +53,9 @@
     { id: "0034", title: "算法填空", file: "0034-algo-blanks.html" }
   ];
 
+  /* 暴露给 pixel-stage.js 的走带字幕刻度（课号 + 课题，单一来源） */
+  window.__rkLessons = LESSONS;
+
   /* 十大学习阶段（序号区间 = 新手认知顺序） */
   var PHASES = [
     { name: "① 计算机组成", from: 1, to: 3 },
@@ -116,10 +119,11 @@
     return html;
   }
 
-  /* 根目录相对前缀：由本脚本自身的 src 推导（"../assets/sidebar.js" → "../"）。
-   * 不用 location.pathname 数层数——那会把文件名也当目录层，多跳一级跳出站点。 */
+  /* 根目录相对前缀：由本脚本自身的 src 推导（"../assets/sidebar.js?v=2" → "../"）。
+   * 不用 location.pathname 数层数——那会把文件名也当目录层，多跳一级跳出站点。
+   * 用 src*= 而非 src$=：缓存破坏参数（?v=N）会让 src 不再以 "sidebar.js" 结尾。 */
   var REL_ROOT = (function () {
-    var el = document.querySelector('script[src$="sidebar.js"]');
+    var el = document.querySelector('script[src*="sidebar.js"]');
     var up = el ? (el.getAttribute("src").match(/\.\.\//g) || []).length : 0;
     return new Array(up + 1).join("../");
   })();
@@ -203,4 +207,9 @@
   var daily = document.createElement("script");
   daily.src = REL_ROOT + "assets/daily.js?v=2";
   document.head.appendChild(daily);
+
+  // 全站像素小剧场：EP 顶条 + 页眉精灵/假名 + 底部走带字幕（自带防重入守卫）
+  var px = document.createElement("script");
+  px.src = REL_ROOT + "assets/pixel-stage.js?v=2";
+  document.head.appendChild(px);
 })();
