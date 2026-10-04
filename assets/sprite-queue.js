@@ -113,7 +113,7 @@
 '<div class="odq-cell" style="left:72px"><span class="n">格1</span><span class="odq-token odq-t2">B</span></div>' +
 '<div class="odq-cell" style="left:144px"><span class="n">格2</span><span class="odq-token odq-t3">C</span></div>' +
 '<div class="odq-cell" style="left:216px"><span class="n">格3</span><span class="odq-token odq-t4">D</span></div>' +
-'<div class="odq-cell odq-wrapflash" style="left:288px"><span class="n">格4 · 犧牲</span><span class="odq-token odq-t5">E</span></div>' +
+'<div class="odq-cell odq-wrapflash" style="left:288px"><span class="n">格4</span><span class="odq-token odq-t5">E</span></div>' +
 '<div class="odq-sprite front odq-front" data-od-id="sprite-front"><svg class="odq-svg" width="28" height="34" viewBox="0 0 7 9" shape-rendering="crispEdges"><rect x="3" y="0" width="1" height="9" fill="#0e6b5c"/><rect x="3" y="0" width="4" height="3" fill="#0e6b5c"/><rect x="1" y="1" width="2" height="1" fill="#0e6b5c"/><rect x="2" y="3" width="1" height="1" fill="#0e6b5c"/><rect x="2" y="5" width="1" height="4" fill="#26313b"/></svg></div>' +
 '<div class="odq-sprite rear odq-rear"><svg class="odq-svg" width="28" height="34" viewBox="0 0 7 9" shape-rendering="crispEdges"><rect x="3" y="0" width="1" height="9" fill="#b3372a"/><rect x="0" y="0" width="3" height="3" fill="#b3372a"/><rect x="0" y="3" width="1" height="1" fill="#b3372a"/><rect x="4" y="5" width="1" height="4" fill="#26313b"/></svg></div>' +
 '</div></div>' +
