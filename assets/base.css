@@ -1124,25 +1124,12 @@ html.dark .pomo-start { color: #0e2a22; }
   position: relative;
   z-index: 1;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
-.pomo-ring {
-  position: absolute;
-  inset: -1px;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  transform: rotate(-90deg);
-}
-.pomo-ring circle { fill: none; stroke-width: 3; }
-.pomo-ring-bg { stroke: rgba(128, 128, 128, 0.2); }
-.pomo-ring-fg {
-  stroke: var(--pg-accent);
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.3s linear, stroke 0.3s ease;
-}
-.pomo-circle.break .pomo-ring-fg { stroke: var(--pg-gold); }
+.pomo-ring { display: none; }   /* 已由方形充能槽 .pomo-fill 替代 */
 
 /* —— 移动端：屏幕中央玻璃弹窗 —— */
 .pomo-modal {
@@ -1155,7 +1142,9 @@ html.dark .pomo-start { color: #0e2a22; }
   background: rgba(20, 26, 32, 0.4);
 }
 .pomo-modal.open { display: flex; }
-@media (min-width: 1280px) { .pomo-modal { display: none !important; } }
+/* 与 .pomo-glass 的显隐断点（1300px）对齐：1280–1299.98px 区间
+   计时块仍可见，点击弹窗必须可用；用 1280 会出现点了没反应的死区 */
+@media (min-width: 1300px) { .pomo-modal { display: none !important; } }
 .pomo-modal-card {
   width: min(84vw, 20rem);
   border-radius: 1.4rem;
@@ -1475,11 +1464,11 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
 /* —— 桌面胶囊：硬边框 + 硬投影叠玻璃辉光 —— */
 .pomo-glass, .pomo-glass.open {
   border: 2px solid var(--px-ink);
-  border-radius: 6px;
+  border-radius: 4px;
   box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-shadow),
               inset 0 1px 0 var(--pg-highlight);
 }
-.pomo-glass.open { border-radius: 8px; }
+.pomo-glass.open { border-radius: 6px; }
 .pomo-glass.running {
   box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-accent-soft),
               0 8px 28px var(--pg-shadow), inset 0 1px 0 var(--pg-highlight);
@@ -1488,7 +1477,12 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
   box-shadow: 3px 3px 0 var(--px-shadow), 0 8px 28px var(--pg-gold-soft),
               0 8px 28px var(--pg-shadow), inset 0 1px 0 var(--pg-highlight);
 }
-.pomo-pill { border-radius: 4px; }
+.pomo-pill {
+  border-radius: 4px;
+  transition: transform .12s steps(2);
+}
+.pomo-pill:hover { transform: translate(-1px, -1px); }
+.pomo-pill:active { transform: translate(2px, 2px); }
 
 /* —— 像素小番茄：运行时 steps() 硬闪烁（REC 式） —— */
 .pomo-dot {
@@ -1544,13 +1538,34 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
 .pomo-start { background: var(--pg-accent); color: var(--on-accent); }
 .pomo-close { border: 2px solid var(--px-ink); border-radius: 4px; }
 
-/* —— 移动端圆圈与弹窗 —— */
+/* —— 移动端计时块：方形机身 + 像素番茄 + 底部充能槽（替代圆环） —— */
 .pomo-circle {
+  border-radius: 4px;
   border: 2px solid var(--px-ink);
   box-shadow: 3px 3px 0 var(--px-shadow), inset 0 1px 0 var(--pg-highlight);
+  overflow: hidden;
+  flex-direction: column;
+  gap: .1rem;
+  padding: .28rem .2rem .3rem;
 }
-.pomo-ring circle { stroke-width: 4; }
-.pomo-ring-fg { stroke-linecap: butt; }
+.pomo-circle:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--px-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-circle.dragging {
+  box-shadow: 6px 6px 0 var(--px-shadow), inset 0 1px 0 var(--pg-highlight);
+}
+.pomo-fill {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 0%;
+  background: var(--pg-accent);
+  opacity: .25;
+  transition: height .3s steps(10);
+  z-index: 0;
+}
+.pomo-circle .pomo-dot { position: relative; z-index: 1; }
+.pomo-circle.break .pomo-fill { background: var(--pg-gold); }
 .pomo-modal-card {
   border: 2px solid var(--px-ink);
   border-radius: 8px;

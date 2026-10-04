@@ -31,7 +31,6 @@
   var POS_KEY = "rkPomodoroPos";      // 移动端圆圈拖拽位置
   var LOG_KEY = "rkStudyLog";         // 学习时长记录（分钟级，跨页持久）
   var DEFAULT_GOAL = 120;             // 默认每日目标（分钟）
-  var RING_C = 169.6;               // r=27 的圆周长（进度环）
 
   function today() {
     var d = new Date();
@@ -186,11 +185,11 @@
     els.mode.textContent = isFocus ? "专注" : "休息";
     els.mode.className = "pomo-mode " + state.mode;
 
-    // 移动端圆圈：中央倒计时 + 环形进度
+    // 移动端计时块：中央倒计时 + 底部充能槽（剩余时间 = 液面高度）
     els.circ.textContent = txt;
     var total = totalSec(state.mode);
     var frac = total > 0 ? Math.max(0, Math.min(1, remaining() / total)) : 0;
-    els.ring.style.strokeDashoffset = (RING_C * (1 - frac)).toFixed(1);
+    els.fill.style.height = (frac * 100).toFixed(1) + "%";
 
     // 时长设置行
     els.setVals.forEach(function (b) {
@@ -306,16 +305,20 @@
   function build() {
     if (document.getElementById("pomodoroRail")) return;
 
+    // 像素小番茄（胶囊与移动计时块共用）
+    var TOMATO =
+      '<svg class="pomo-svg" width="15" height="17" viewBox="0 0 7 8" shape-rendering="crispEdges">' +
+      '<g fill="#2e7d32"><rect x="3" y="0" width="1" height="2"/><rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/></g>' +
+      '<rect x="1" y="2" width="5" height="6" fill="#b3372a"/>' +
+      '<rect x="2" y="3" width="1" height="1" fill="#e8a08c"/></svg>';
+
     // 桌面：贴右缘胶囊 + 展开卡片
     rail = document.createElement("aside");
     rail.className = "pomo-glass";
     rail.id = "pomodoroRail";
     rail.innerHTML =
       '<button class="pomo-pill" id="pomoPill" aria-expanded="false" aria-label="番茄钟：点击展开或收起" title="番茄钟">' +
-      '<span class="pomo-dot"><svg class="pomo-svg" width="15" height="17" viewBox="0 0 7 8" shape-rendering="crispEdges">' +
-      '<g fill="#2e7d32"><rect x="3" y="0" width="1" height="2"/><rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/></g>' +
-      '<rect x="1" y="2" width="5" height="6" fill="#b3372a"/>' +
-      '<rect x="2" y="3" width="1" height="1" fill="#e8a08c"/></svg></span>' +
+      '<span class="pomo-dot">' + TOMATO + '</span>' +
       '<span class="pomo-mini">25:00</span>' +
       '<span class="pomo-chev">▾</span>' +
       "</button>" +
@@ -347,10 +350,8 @@
     circle.setAttribute("aria-label", "打开番茄钟");
     circle.title = "番茄钟";
     circle.innerHTML =
-      '<svg class="pomo-ring" viewBox="0 0 60 60" aria-hidden="true">' +
-      '<circle class="pomo-ring-bg" cx="30" cy="30" r="27"></circle>' +
-      '<circle class="pomo-ring-fg" cx="30" cy="30" r="27" stroke-dasharray="169.6" stroke-dashoffset="0"></circle>' +
-      "</svg>" +
+      '<span class="pomo-fill" aria-hidden="true"></span>' +
+      '<span class="pomo-dot">' + TOMATO + '</span>' +
       '<span class="pomo-circ-time">25:00</span>';
     document.body.appendChild(circle);
 
@@ -382,7 +383,7 @@
     els.mini = rail.querySelector(".pomo-mini");
     els.time = rail.querySelector(".pomo-time");
     els.mode = rail.querySelector(".pomo-mode");
-    els.ring = circle.querySelector(".pomo-ring-fg");
+    els.fill = circle.querySelector(".pomo-fill");
     els.circ = circle.querySelector(".pomo-circ-time");
     els.mcard = modal.querySelector(".pomo-modal-card");
     els.mTime = els.mcard.querySelector(".pomo-time");
