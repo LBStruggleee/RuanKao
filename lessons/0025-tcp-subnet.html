@@ -54,6 +54,19 @@
   <p>流量控制 = <strong>滑动窗口</strong>（接收方通告窗口）；拥塞控制四招：<strong>慢开始（指数增）→ 拥塞避免（线性加 1）→ 超时则 ssthresh=当前一半、cwnd 重回 1；快重传（3 个重复 ACK）+ 快恢复</strong>。</p>
 
   <h2>三、子网划分 5 步法（必考计算）</h2>
+  <p><strong>先补地基：有类地址与默认掩码</strong>（子网划分就是把有类地址再切细）。IP 32 位 = 网络位 + 主机位，首几位定类：</p>
+  <table class="tight">
+    <tr><th>类</th><th>首段范围</th><th>默认掩码</th><th>网络位/主机位</th><th>用途</th></tr>
+    <tr><td><strong>A</strong></td><td class="num">1 ~ 126</td><td class="num">255.0.0.0（/8）</td><td>8 / 24</td><td>超大网络</td></tr>
+    <tr><td><strong>B</strong></td><td class="num">128 ~ 191</td><td class="num">255.255.0.0（/16）</td><td>16 / 16</td><td>大网络</td></tr>
+    <tr><td><strong>C</strong></td><td class="num">192 ~ 223</td><td class="num">255.255.255.0（/24）</td><td>24 / 8</td><td>小网络（常见考点）</td></tr>
+  </table>
+  <ul>
+    <li><strong>判类口诀：看首段数字</strong>——1~126 是 A、128~191 是 B、192~223 是 C（127 环回、0 和 224+ 不做单播类）；</li>
+    <li><strong>私有地址段（必背）</strong>：A 类 <strong>10.0.0.0/8</strong>、B 类 <strong>172.16.0.0 ~ 172.31.255.255</strong>（/12）、C 类 <strong>192.168.0.0/16</strong>——不进公网路由；</li>
+    <li><strong>特殊地址</strong>：<strong>127.x.x.x 环回测试</strong>；主机位全 0 = 网络地址、全 1 = 广播地址（这就是可用主机 −2 的原因）；</li>
+    <li>掩码里<strong>连续 1 = 网络位、连续 0 = 主机位</strong>——子网掩码本身不是 IP，它只标「哪段是门牌号、哪段是房间号」。</li>
+  </ul>
   <span class="formula">①掩码 /n → ②块大小 = 256 − 掩码末字节值 → ③网络地址 = IP 按块取整段起点<br>④广播地址 = 下一网络地址 − 1 → ⑤可用主机数 = 2^(32−n) − 2</span>
   <div class="card">
     <p style="margin-top:0;"><strong>例 1</strong>：192.168.1.130 /26（掩码 255.255.255.192）：</p>

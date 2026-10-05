@@ -54,7 +54,22 @@
     <li>例：两个串联 if 的程序：E=6、N=5 → V = 6−5+2 = <strong>3</strong>；用判定数验证：2 个判定 + 1 = 3 ✓。</li>
   </ul>
 
-  <h2>四、自查（先画图数一遍再点）</h2>
+  <h2>四、模块独立性：耦合七级 vs 内聚七级（必背排序）</h2>
+  <p>「模块独立」 = <strong>低耦合 + 高内聚</strong>，考法是给场景判级别或排顺序。<strong>耦合</strong>看模块<strong>之间</strong>怎么相连（越弱越好）；<strong>内聚</strong>看模块<strong>内部</strong>元素抱得多紧（越强越好）。</p>
+  <table class="tight">
+    <tr><th>耦合（低 → 高，越左越好）</th><th>判别关键词</th><th>内聚（低 → 高，越右越好）</th><th>判别关键词</th></tr>
+    <tr><td><strong>非直接耦合</strong></td><td>彼此无关，仅通过接口传递信息</td><td><strong>偶然内聚</strong></td><td>「顺手塞一起」——无逻辑关系的代码凑一个模块</td></tr>
+    <tr><td><strong>数据耦合</strong></td><td>只传<strong>简单数据值</strong>（参数）</td><td><strong>逻辑内聚</strong></td><td>「同类任务选一个执行」（如把所有打印塞一起，用开关选择）</td></tr>
+    <tr><td><strong>标记耦合</strong></td><td>传<strong>数据结构名</strong>（整个记录）</td><td><strong>时间内聚</strong></td><td>「同一时间段执行」（如初始化模块）</td></tr>
+    <tr><td><strong>控制耦合</strong></td><td>传<strong>开关量/标志</strong>控制对方逻辑</td><td><strong>过程内聚</strong></td><td>「按固定流程先后执行」</td></tr>
+    <tr><td><strong>外部耦合</strong></td><td>受外部环境/工具约束</td><td><strong>通信内聚</strong></td><td>「对同一数据集操作」（读同一个文件的不同统计）</td></tr>
+    <tr><td><strong>公共耦合</strong></td><td>共享<strong>全局数据区</strong></td><td><strong>顺序内聚</strong></td><td>「前一个的输出 = 后一个的输入」</td></tr>
+    <tr><td><strong>内容耦合</strong></td><td>直接改对方代码/内部数据（最坏）</td><td><strong>功能内聚</strong></td><td>「一个模块一件事办到底」（最好）</td></tr>
+  </table>
+  <p><strong>记忆钩子</strong>：耦合「非数标控外公内」、内聚「偶逻时过通顺功」——考试给场景判级别：传参数=数据、传记录=标记、传标志=控制、共享全局=公共、改对方内部=内容；初始化一堆活=时间、流水处理=顺序、单一件事=功能。</p>
+  <p><strong>维护四类型</strong>（概念题，考占比与场景）：<strong>完善性</strong>（加功能改善性能，<strong>占比约 50% 最高</strong>）、<strong>适应性</strong>（适应环境/平台变化）、<strong>纠正性</strong>（修 bug）、<strong>预防性</strong>（为将来改动打基础，占比最小）。口诀「完适纠预」，顺序按占比背。</p>
+
+  <h2>五、自查（先画图数一遍再点）</h2>
   <div id="quiz24"></div>
 
   <div class="win-box">

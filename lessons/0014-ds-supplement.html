@@ -61,7 +61,14 @@
   </div>
 
   <h2>四、平衡二叉树（AVL）：不让二叉搜索树退化成链</h2>
-  <p><strong>二叉搜索树 BST</strong>：左 < 根 < 右，查找走折半的路径。但按 1,2,3,… 顺序插入会退化成<strong>一条链</strong>，查找从 O(log n) 掉到 O(n)。<strong>AVL 平衡二叉树</strong>在 BST 上加一条约束：</p>
+  <p><strong>先把 BST 本尊讲清楚（二叉排序树 / 二叉搜索树 / BST 是同一个东西）</strong>：定义只有一句——<strong>任意节点，左子树所有节点 &lt; 根 &lt; 右子树所有节点</strong>（递归成立）。</p>
+  <ul>
+    <li><strong>插入</strong>：比根小往左走、比根大往右走，走到空位就放下——新节点<strong>永远插在叶子</strong>上；</li>
+    <li><strong>查找</strong>：同一条路，像折半一样每次排除一半，平均 O(log n)；</li>
+    <li><strong>中序遍历（左根右）得到升序序列</strong>——「BST + 中序 = 排序」是高频判断题；</li>
+    <li><strong>最坏情形</strong>：按 1,2,3,… 有序插入 → 全在右链上，退化成链表，查找 O(n)。</li>
+  </ul>
+  <p>退化问题正是 AVL 要治的病。<strong>AVL 平衡二叉树</strong> = BST 加一条约束：</p>
   <span class="formula">任意节点：左子树高度 − 右子树高度 ∈ {−1, 0, 1}</span>
   <p>插入导致失衡时靠<strong>旋转</strong>（LL/RR/LR/RL 四种）恢复平衡。中级只考概念判断：<strong>AVL 是平衡的二叉搜索树；n 个节点的 AVL 高度是 O(log n)</strong>；哈夫曼树不是 AVL（先记住两者目的不同：<a href="0009-huffman.html">0009 哈夫曼</a>管带权路径最短）。</p>
 

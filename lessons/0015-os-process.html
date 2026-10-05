@@ -61,6 +61,25 @@
     <tr><td>读者-写者</td><td>读读可并、写写互斥、读写互斥</td><td>计数器 + 互斥保护计数器</td></tr>
   </table>
 
+  <h3>3.1 前驱图 → PV 代码（下午试题一的固定填空）</h3>
+  <p>给一张前驱图（A→B、A→C、B→D、C→D 这种），要求补齐边上的 P/V——<strong>机械翻译四规则</strong>，不用理解也能填对：</p>
+  <ol>
+    <li><strong>每条边设一个信号量，初值 0</strong>（如 S1 对应 A→B，S2 对应 A→C…）；</li>
+    <li><strong>边的起点：干完自己的活再 V 对应信号量</strong>——A 干完 → V(S1)、V(S2)；</li>
+    <li><strong>边的终点：开干之前先 P 所有指向它的信号量</strong>——D 开干前 → P(S3)、P(S4)；</li>
+    <li>顺序不能反：<strong>先 P 后干活、干完才 V</strong>；一个节点被几条边指进来，就先 P 几个。</li>
+  </ol>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例</strong>：A→B，A→C，B→D，C→D（A 先行，B、C 并行，都完成后 D 才开始）：</p>
+    <pre>信号量：S1(A→B) = S2(A→C) = S3(B→D) = S4(C→D) = 0
+
+进程 A：            进程 B：          进程 C：          进程 D：
+  A 的操作;           P(S1);            P(S2);            P(S3);
+  V(S1);  V(S2);      B 的操作;         C 的操作;         P(S4);
+                      V(S3);            V(S4);            D 的操作;</pre>
+    <p style="margin-bottom:0;">考法就是挖掉其中某个 P/V：数节点<strong>几条入边</strong>（几个 P）、<strong>几条出边</strong>（几个 V），对号入座即可。</p>
+  </div>
+
   <h2>四、动手：亲手把死锁“做”出来</h2>
   <div id="pvsim"></div>
   <div class="callout tip">
