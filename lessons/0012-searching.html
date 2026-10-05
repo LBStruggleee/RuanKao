@@ -15,7 +15,7 @@
     <h1>查找：折半砍一半，哈希一步到位</h1>
     <p class="meta">
       <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>35 分钟</b> ｜ 上一课：<a href="0011-graph-algorithms.html">0011 图四大算法</a><br>
-      考点定位：折半比较次数 ⌊log₂n⌋+1、哈希冲突处理与 ASL 手算（<a href="../pages/practice/phase1-comprehensive-quiz.html">阶段综合卷</a> 与真题反复出现）
+      考点定位：折半比较次数 ⌊log₂n⌋+1、哈希冲突处理与 ASL 手算、B/B+ 树概念判断（<a href="../pages/practice/phase1-comprehensive-quiz.html">阶段综合卷</a> 与真题反复出现）
     </p>
   </header>
 
@@ -54,10 +54,26 @@
     <p style="margin-bottom:0;"><strong>ASL(成功) = (1 + 1 + 3 + 3) ÷ 4 = 2</strong>；装填因子 α = 4/7 ≈ 0.57。</p>
   </div>
 
-  <h2>三、动手：折半次数 + ASL 计算挑战（先动笔再填）</h2>
+  <h2>三、B 树与 B+ 树：放不进内存的「多路查找树」</h2>
+  <p>数据量大到<strong>存在磁盘上</strong>时，二叉树每层都要读一次盘、树太深代价太高——于是把一个节点放宽成<strong>多路</strong>，树一下子变矮，读盘次数就少。<strong>m 阶 B 树</strong>三条硬规矩（概念题必背）：</p>
+  <ul>
+    <li>每节点<strong>最多 m 棵子树</strong>（最多 m−1 个关键字）；</li>
+    <li>根节点至少 2 棵子树；<strong>非根非叶至少 ⌈m/2⌉ 棵子树</strong>（即 ⌈m/2⌉−1 个关键字）——3 阶 B 树 = 每节点 2~3 棵子树，就是「2-3 树」；</li>
+    <li><strong>所有叶子在同一层</strong>——绝对平衡，不存在 BST 那种退化。</li>
+  </ul>
+  <table class="tight">
+    <tr><th>对比点</th><th>B 树</th><th>B+ 树</th></tr>
+    <tr><td>子树数与关键字数</td><td>n 棵子树 → n−1 个关键字</td><td><strong>n 棵子树 → n 个关键字</strong></td></tr>
+    <tr><td>数据存哪</td><td>所有节点都存关键字（和数据）</td><td><strong>非叶节点只当索引</strong>，记录全在叶子</td></tr>
+    <tr><td>叶子之间</td><td>互不相连</td><td><strong>叶子链成有序链表</strong> → 支持范围/顺序查询</td></tr>
+    <tr><td>典型应用</td><td>文件系统索引</td><td><strong>数据库索引（InnoDB）</strong></td></tr>
+  </table>
+  <p><strong>考法两句</strong>：「数据库索引用 B+ 树是因为叶子链表便于范围查询」→ 对；「m 阶 B 树所有叶子在同一层」→ 对（这是定义，不是巧合）。</p>
+
+  <h2>四、动手：折半次数 + ASL 计算挑战（先动笔再填）</h2>
   <div id="cd8"></div>
 
-  <h2>四、自查（全对过课）</h2>
+  <h2>五、自查（全对过课）</h2>
   <div id="quiz-ds8"></div>
 
   <div class="win-box">
@@ -67,6 +83,7 @@
       <li>H(k)=k mod p，p = 不大于表长的最大质数；线性探测会堆积、二次探测跳跃、链地址挂链表。</li>
       <li>α = 元素数/表长，越大越挤；ASL(成功) = 比较次数总和 ÷ 元素数（样例表 = 2）。</li>
       <li>判定树 = 折半过程的树形化，深度就是比较次数上限。</li>
+      <li>B 树三条规矩：最多 m 棵子树、非根非叶至少 ⌈m/2⌉ 棵、<strong>叶子全同层</strong>；B+ 树三差异：n 子树 n 关键字、非叶只索引、叶子链成有序链表（数据库索引用它）。</li>
     </ol>
   </div>
 
@@ -106,8 +123,8 @@ CalcDrill.mount("cd8", {
 });
 
 Quiz.render("quiz-ds8", {
-  title: "本课自查（7 题，先算再点）",
-  passNote: "7/7，错题登记 reflection.md",
+  title: "本课自查（8 题，先算再点）",
+  passNote: "8/8，错题登记 reflection.md",
   shuffle: true,
   questions: [
     {
@@ -200,6 +217,19 @@ Quiz.render("quiz-ds8", {
       ],
       explain: "链地址还有个好处：删除方便（开放定址删除要打删除标记）。",
       source: "Lesson 0012 §二 ｜ 0005 §三"
+    },
+    {
+      q: "关于 B+ 树，说法错误的是？",
+      options: ["数据记录可以存放在非叶节点", "叶子节点链成有序链表，便于范围查询", "n 棵子树的节点含有 n 个关键字", "数据库索引常用 B+ 树"],
+      answer: 0,
+      opts: [
+        "✓ 错的正是它——B+ 树非叶节点只当索引（存关键字副本），全部记录在叶子；『所有节点都存数据』是 B 树。",
+        "对：叶子链表让范围/顺序查询不用回溯树上。",
+        "对：B 树是 n 子树 n−1 关键字，B+ 树恰好多一个，n 对 n。",
+        "对：InnoDB 索引就是 B+ 树。"
+      ],
+      explain: "三差异连背：n 对 n、非叶只索引、叶子链表；B 树的对应点反过来记。",
+      source: "Lesson 0012 §三"
     }
   ]
 });

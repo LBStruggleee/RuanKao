@@ -15,7 +15,7 @@
     <h1>排序总表：一张表 + 一句口诀收官</h1>
     <p class="meta">
       <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0012-searching.html">0012 查找</a><br>
-      考点定位：稳定性判别、复杂度对比（<a href="../pages/practice/papers/2021H1-morning-key.html">2021H1-Q63</a> 原题）、一趟排序结果手算
+      考点定位：稳定性判别、复杂度对比（<a href="../pages/practice/papers/2021H1-morning-key.html">2021H1-Q63</a> 原题）、一趟排序结果手算、外部排序趟数与败者树概念
     </p>
   </header>
 
@@ -53,14 +53,29 @@
     <li><strong>一趟排序之后</strong>：冒泡把最大值顶到末尾；快排把<strong>枢轴放到它的最终位置</strong>——「第 k 趟后某元素是否就位」就按这两句验算。</li>
   </ol>
 
-  <h2>四、动手：三种 O(n²) 排序逐步看</h2>
+  <h2>四、外部排序：内存装不下怎么办（磁盘上的归并）</h2>
+  <p>文件太大，内存一次装不下，前面的排序全用不上——<strong>外部排序</strong>就是「分批排、再归并」，两步走：</p>
+  <ol>
+    <li><strong>生成初始归并段</strong>：每次读一段进内存，用内部排序（如堆排）排好写回磁盘，得到 r 个有序段；</li>
+    <li><strong>多路归并</strong>：k 路归并（每步从 k 个段首挑最小者输出），反复到只剩 1 段。</li>
+  </ol>
+  <span class="formula">归并趟数 <strong>S = ⌈log<sub>k</sub> r⌉</strong>（r 个初始段、k 路归并）——例：9 个段 3 路归并 → ⌈log₃9⌉ = <strong>2 趟</strong>；80 段 4 路 → ⌈log₄80⌉ = <strong>4 趟</strong>（3⁴=81 ≥ 80）</span>
+  <p><strong>提速两手（考「哪个方法能提高外部排序速度」）</strong>：</p>
+  <table class="tight">
+    <tr><th>手段</th><th>作用</th><th>原理一句</th></tr>
+    <tr><td><strong>增大归并路数 k</strong></td><td>趟数 S 变少 → 读写盘次数少</td><td>k 大了每步「挑最小」要比较 k−1 次 → 用<strong>败者树</strong>把选最小降到 O(log k)</td></tr>
+    <tr><td><strong>减少初始段数 r</strong></td><td>r 变小 → S 也变少</td><td><strong>置换-选择排序</strong>：平均段长可达内存容量的 2 倍</td></tr>
+  </table>
+  <p><strong>考法三句</strong>：①趟数套 ⌈log_k r⌉；②「败者树/最佳归并树服务于多路归并」→ 对（<strong>最佳归并树</strong>用哈夫曼思想安排归并顺序，让读写次数最少）；③外部排序=内部排序+归并，<strong>稳定性由归并保证</strong>（外部排序本身是归并，稳定）。</p>
+
+  <h2>五、动手：三种 O(n²) 排序逐步看</h2>
   <div id="sortlab"></div>
   <div class="callout tip">
     <span class="tag">💡 观察任务</span>
     同一个序列 [5,2,8,3,9,1] 分别跑三种算法，盯住右下角的<strong>比较次数</strong>：选择排序的比较次数固定不变；插入排序在基本有序序列（如 [1,2,3,5,8,9]）上会骤降——把序列换成基本有序的再跑一遍插入试试。
   </div>
 
-  <h2>五、自查（全对过课）</h2>
+  <h2>六、自查（全对过课）</h2>
   <div id="quiz-ds9"></div>
 
   <div class="win-box">
@@ -70,6 +85,7 @@
       <li>基本有序：直接插入 ≈O(n) 最爽、快排 O(n²) 最惨。</li>
       <li>快排一趟 = 枢轴归位；冒泡一趟 = 最大值沉底。</li>
       <li>堆建堆 O(n)、堆排 O(n log n) 不稳定；归并稳定但要 O(n) 辅助空间。</li>
+      <li>外部排序 = 分批内部排序生成 r 个初始段 + k 路归并；趟数 ⌈log_k r⌉；败者树加速多路归并、置换-选择造更长初始段。</li>
       <li>🏁 数据结构路线到此完成——去做出关测试：<a href="../pages/knowledge-points/data-structures/day01-diagnostic.html">30 题诊断卷（计时 40 分钟）</a>，≥24/30 达标。</li>
     </ol>
   </div>
@@ -94,8 +110,8 @@
 SortLab.mount("sortlab", { array: [5, 2, 8, 3, 9, 1] });
 
 Quiz.render("quiz-ds9", {
-  title: "本课自查（7 题，全对过课 → 出关）",
-  passNote: "7/7，错题登记 reflection.md",
+  title: "本课自查（8 题，全对过课 → 出关）",
+  passNote: "8/8，错题登记 reflection.md",
   shuffle: true,
   questions: [
     {
@@ -188,6 +204,19 @@ Quiz.render("quiz-ds9", {
       ],
       explain: "稳定的价值：多关键字排序可以『分趟排、后趟不破坏前趟』。",
       source: "Lesson 0013 §二"
+    },
+    {
+      q: "8 个初始归并段做 4 路归并，需要几趟？",
+      options: ["2", "3", "4", "8"],
+      answer: 0,
+      opts: [
+        "✓ S = ⌈log₄8⌉ = ⌈1.5⌉ = 2 趟——4¹=8，一趟最多把段数除以 4，8 段一趟归成 2 段、再一趟归成 1 段。",
+        "3 是套了 ⌈log₄8⌉ 又向上多取一层的习惯性失误。",
+        "4 趟是当二路归并算的（log₂8 = 3 也不是 4）。",
+        "8 是段数，不是趟数。"
+      ],
+      explain: "趟数公式 S = ⌈log_k r⌉；提速两招：增大 k（配败者树）、减少 r（置换-选择排序）。",
+      source: "Lesson 0013 §四 外部排序"
     }
   ]
 });
