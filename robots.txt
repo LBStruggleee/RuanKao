@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /resource/
+
+Sitemap: https://lbstruggleee.github.io/RuanKao/sitemap.xml
