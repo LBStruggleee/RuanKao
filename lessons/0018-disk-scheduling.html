@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0018 · 磁盘调度：寻道计算（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -25,7 +25,9 @@
     磁盘调度是考试大纲里 <strong>OS 板块的必考计算题</strong>（高频清单：SSTF/SCAN 计算寻道长度）。今天的 25 道综合练习里有 3 道寻道计算。学完本课，你应当能在 <strong>90 秒内</strong>独立算出任意算法的总寻道距离——这是今天上午输入时段的第一个「可带走的赢面」。
   </div>
 
-  <h2>一、最小必要知识（先记住这三块）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 设备文件线</b>——六种磁盘调度算法手算。上游：0017；下游：0019（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、最小必要知识（先记住这三块）</h2>
 
   <h3>1. 存取时间三段式：调度算法只优化其中一段</h3>
   <span class="formula">平均存取时间 Ta = 平均寻道时间 Ts + 平均旋转延迟 Tr + 传输时间 Tt</span>
@@ -282,6 +284,6 @@ Quiz.render("quiz-main", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

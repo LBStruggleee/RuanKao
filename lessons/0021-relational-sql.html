@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0021 · 关系代数与 SQL：除运算与查询顺序（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     两把钥匙：①关系代数五个符号各管一件事（σ 选行、π 投影列、⋈ 连接、× 笛卡尔积、÷ 除）；②SQL 的<strong>执行顺序 FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY</strong>——一多半的查询结果题靠它推。
   </div>
 
-  <h2>一、关系模型三要素与三类完整性</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 5 数据库 · 关系模型与 SQL 线</b>——关系代数/SQL 执行顺序/授权。上游：0004 语言直觉；下游：0022（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、关系模型三要素与三类完整性</h2>
   <ul>
     <li>三要素：<strong>数据结构（二维表）、操作集合（关系代数/SQL）、完整性约束</strong>。</li>
     <li><strong>实体完整性</strong>：主键非空且唯一；<strong>参照完整性</strong>：外键要么为空、要么必须存在于被参照表；<strong>用户定义完整性</strong>：如年龄 0–150。</li>
@@ -203,6 +205,6 @@ Quiz.render("quiz19", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0004 · 程序语言基础：编译过程、正规式与传值传引用（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     三张表打天下：①<strong>编译六阶段</strong>对号入座（哪个阶段查哪种错）；②<strong>正规式三套路</strong>（以 ab 开头 / 以 ab 结尾 / 含 ab）；③<strong>传值 vs 传引用</strong>一句话判据（传拷贝还是传地址）。加起来就是每年稳定的 2~3 分。
   </div>
 
-  <h2>一、编译与解释：一条流水线 vs 逐句翻译</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 7 程序语言 · 翻译执行线</b>——编译解释/正则自动机/传值/后缀式。上游：无（起点）；下游：0034 后缀式求值=栈的应用（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、编译与解释：一条流水线 vs 逐句翻译</h2>
   <p><strong>编译型</strong>（C、C++）：整个源程序一次翻译成目标程序，之后脱离编译器独立运行，<strong>执行速度快</strong>，但跨平台差。<strong>解释型</strong>（Python、JavaScript 的典型实现）：边翻译边执行、不生成完整目标程序，<strong>跨平台好</strong>，执行慢。Java 特殊：先编译成字节码，再由 JVM 解释/即时编译执行。</p>
   <p>编译的六个阶段（一条流水线，符号表全程服务、错误处理随时介入）：</p>
   <table class="tight">
@@ -230,6 +232,6 @@ Quiz.render("quiz-pl29", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

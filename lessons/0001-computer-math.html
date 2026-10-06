@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0001 · 组成计算专题：补码、浮点、校验码、可靠性、RAID（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     五个公式五个分：<strong>补码范围 −2<sup>n−1</sup> ~ 2<sup>n−1</sup>−1</strong>；<strong>海明 2<sup>k</sup> ≥ n+k+1</strong>；<strong>串联 R=R₁R₂ / 并联 1−(1−R₁)(1−R₂)</strong>；奇偶校验<strong>只能检奇数位错</strong>；RAID5 <strong>坏 1 块可恢复</strong>。全是套公式，动笔就能拿分。
   </div>
 
-  <h2>一、机器数四兄弟：原码 → 反码 → 补码 → 移码</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 信息表示线</b>——机器码四兄弟/浮点/校验是一切计算题的地基。上游：无（起点）；下游：0002 存取指令、0025 子网用二进制（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、机器数四兄弟：原码 → 反码 → 补码 → 移码</h2>
   <p>计算机里整数一律用<strong>补码</strong>存储、浮点数阶码用<strong>移码</strong>（下一节就用到），但题目会来回考四种码的互换。按「发明顺序」走一遍，规则就不用死记：</p>
   <ol>
     <li><strong>原码</strong>：最高位当符号位（0 正 1 负），其余位是绝对值。最直观，但有两个死穴：<strong>0 占了两个编码</strong>（[+0]=0000 0000、[−0]=1000 0000）；加减法要判断符号再挑运算，电路复杂。</li>
@@ -290,6 +292,6 @@ Quiz.render("quiz-cm30", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

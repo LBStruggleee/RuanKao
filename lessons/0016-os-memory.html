@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0016 · OS 内存管理：分页、虚拟内存与置换算法（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     两个「算分器」：①页式地址转换三步公式（P=LA÷S 取整、W=LA mod S、物理地址=块号×S+W）——用下面的计算挑战刷到条件反射；②置换算法缺页次数——用模拟器亲眼看 FIFO 怎么触发 Belady 异常（块数变多缺页反而变多）。
   </div>
 
-  <h2>一、分页存储：把内存切成固定大小的页框</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 存储管理线</b>——分页变换/TLB/虚拟内存/置换。上游：0003 局部性（跨面接线）、0015；下游：0017（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、分页存储：把内存切成固定大小的页框</h2>
   <p>逻辑地址空间切成<strong>页</strong>，物理内存切成同样大小的<strong>块（页框）</strong>，靠<strong>页表</strong>记录「第 i 页 → 第 b 块」。优点：无外部碎片（<a href="0020-day03-os-exercises.html">0020 Q10</a>：只有内部碎片）；缺点：页表本身占内存、多一次访存。</p>
   <span class="formula">页号 P = 逻辑地址 LA ÷ 页大小 S（取整）　页内偏移 W = LA mod S<br>物理地址 = 块号 × S + W　　（口诀：页式乘、段式加）</span>
   <p><strong>例</strong>：页大小 1 KB（1024 B），逻辑地址 5000 → P = 5000÷1024 取整 = <strong>4</strong>，W = 5000 mod 1024 = <strong>904</strong>；查页表第 4 页 → 块 8 → 物理地址 = 8×1024+904 = <strong>9224</strong>。页大小是 2 的幂时可直接<strong>二进制切位</strong>：低位 = 偏移，高位 = 页号。</p>
@@ -231,6 +233,6 @@ Quiz.render("quiz15", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

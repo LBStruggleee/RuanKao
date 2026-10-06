@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0007 · 二叉树：概念与三大性质（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     一个公式吃一半分：<strong>树叶数 = 度为 2 的节点数 + 1</strong>（n₀ = n₂ + 1），配合「完全二叉树深度 = ⌊log₂n⌋ + 1」，2019H2-Q59 就是这么考的。学完还能在下面的树上亲手点出叶子验证它。
   </div>
 
-  <h2>一、树是什么，二叉树特殊在哪</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 树线</b>——二叉树性质与满/完全。上游：0005/0006；下游：0008 遍历重建（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、树是什么，二叉树特殊在哪</h2>
   <p>树是<strong>层级结构</strong>：公司组织图、文件夹目录。最顶上叫<strong>根</strong>，没有孩子的节点叫<strong>叶子</strong>。</p>
   <p><strong>二叉树</strong>：每个节点<strong>至多两个孩子</strong>，且孩子<strong>分左右</strong>（左右是两棵不同的子树，位置有意义）。注意两个易混点：</p>
   <div class="callout warn">
@@ -209,6 +211,6 @@ Quiz.render("quiz-ds3", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

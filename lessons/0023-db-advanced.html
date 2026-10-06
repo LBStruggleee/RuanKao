@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0023 · 数据库进阶：视图、并发控制与模式分解（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     两张表 + 一句判据：<strong>并发三类问题</strong>（丢失更新 / 不可重复读 / 读脏数据）按「谁动了谁的数据」对号；<strong>S 锁相容 X 锁不相容</strong>；视图是<strong>虚表</strong>——简化查询 + 提供安全隔离。
   </div>
 
-  <h2>一、视图：一张「存查询」的虚表</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 5 数据库 · 设计理论线收口</b>——视图/并发控制/模式分解。上游：0022；试题二主产区（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、视图：一张「存查询」的虚表</h2>
   <p><strong>视图（VIEW）</strong>是从一个或多个基本表（或其他视图）导出的<strong>虚表</strong>：数据库只存视图的定义（SELECT 语句），不存视图的数据——查询视图时实时从基本表算出来。</p>
   <span class="formula">CREATE VIEW 视图名 AS SELECT …（WITH CHECK OPTION 可限制通过视图的更新必须满足条件）</span>
   <table class="tight">
@@ -212,6 +214,6 @@ Quiz.render("quiz-db34", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

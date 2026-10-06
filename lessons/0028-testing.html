@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0028 · 测试与 McCabe：黑盒白盒 + 圈复杂度（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     一句定位词分清测试类型（单元/集成/系统/验收、黑盒看功能白盒看结构），六级覆盖按强度排序，<strong>McCabe 三个公式互相换算</strong>：V = E − N + 2 = 判定节点数 + 1 = 封闭区域数。
   </div>
 
-  <h2>一、测试分类（一句定位词）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 2 软件工程 · 构造测试线</b>——测试分级/白盒覆盖/McCabe/耦合内聚/维护。上游：0027 生命周期中的测试阶段（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、测试分类（一句定位词）</h2>
   <table class="tight">
     <tr><th>阶段</th><th>谁来做</th><th>定位词</th></tr>
     <tr><td>单元测试</td><td>开发者</td><td>单个模块；常用<strong>白盒</strong>；需要驱动/桩模块</td></tr>
@@ -210,6 +212,6 @@ Quiz.render("quiz24", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

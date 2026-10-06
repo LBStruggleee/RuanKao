@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0006 · 栈与队列：只能在一头动的两种结构（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     学完你能：①秒判「一个出栈序列合不合法」；②背死循环队列三条公式（个数 / 判满 / 判空）。这两类题年年见。另外记住一条暗线：<strong>DFS 用栈、BFS 用队列</strong>——Lesson 0010 图遍历直接踩在这。
   </div>
 
-  <h2>一、栈：叠盘子（后进先出 LIFO）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 线性结构线</b>——栈 LIFO / 队列 FIFO 与循环队列。上游：0005；下游：0008 遍历、0010 DFS/BFS——两种遍历全靠这对结构（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、栈：叠盘子（后进先出 LIFO）</h2>
   <p>栈就是<strong>一摞只能动最上面那只的盘子</strong>：放盘子叫<strong>进栈（push）</strong>，拿走最上面的叫<strong>出栈（pop）</strong>，最上面那只叫<strong>栈顶</strong>。规则只有一条：<strong>后进先出</strong>——最后放的最先被拿走。</p>
   <p><strong>为什么要有它</strong>：凡是「最近发生的要先处理」的场景都是栈——</p>
   <ul>
@@ -212,6 +214,6 @@ Quiz.render("quiz-ds2", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

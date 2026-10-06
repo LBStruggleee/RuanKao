@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0030 · 面向对象基础：封装、继承、多态与 OO 原则（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     三组一句话判据：<strong>重载看参数、重看父子类</strong>（重载=编译期绑定，重写=运行期动态绑定）；<strong>接口是『能做什么』，抽象类是『是什么』</strong>；设计原则考场景对应——「对扩展开放对修改关闭」= <strong>开闭原则</strong>。
   </div>
 
-  <h2>一、面向对象三大特征：封装、继承、多态</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 8 面向对象 · OO 基础线</b>——三大特征/类接口抽象类/七原则。上游：新面起点（0027 的面向对象分支）；下游：0031/0032（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、面向对象三大特征：封装、继承、多态</h2>
   <table class="tight">
     <tr><th>特征</th><th>一句话定义</th><th>带来的好处 / 考点</th></tr>
     <tr><td><strong>封装</strong></td><td>把数据与操作捆绑在类里，隐藏内部实现，只暴露接口</td><td>信息隐藏、降低耦合；考法：private 字段 + public 方法 = 封装</td></tr>
@@ -217,6 +219,6 @@ Quiz.render("quiz-oo33", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

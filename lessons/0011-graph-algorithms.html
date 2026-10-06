@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0011 · 图四大算法：MST / 最短路 / 拓扑 / 关键路径（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     关键路径是高频计算大分值题：背下两句口诀——<strong>ve 从前往后取 max，vl 从后往前取 min</strong>——再用本课的 AOE 例题（工期 9 天）把 ve/vl 全表算熟。加上 Kruskal 亲手选边和拓扑序列判定，四大算法各拿一分。
   </div>
 
-  <h2>一、最小生成树 MST：Prim vs Kruskal</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 图线</b>——MST/最短路/拓扑/关键路径。上游：0010；策略视角：0035（Prim/Kruskal/Dijkstra 都是贪心）（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、最小生成树 MST：Prim vs Kruskal</h2>
   <p>给带权连通图，挑 <strong>n−1</strong> 条边把所有点连起来且<strong>总权最小</strong>。两种贪心：</p>
   <table class="tight">
     <tr><th></th><th>Prim（加点法）</th><th>Kruskal（加边法）</th></tr>
@@ -228,6 +230,6 @@ Quiz.render("quiz-ds7", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

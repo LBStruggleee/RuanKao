@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0009 · 哈夫曼树与编码（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     两件事：①给出几个权值，<strong>3 分钟算出 WPL</strong>（带权路径长度）——用「内部节点求和」这条捷径，比逐叶算深度快一倍；②记住哈夫曼树的三个数字特征（n−1 次合并、2n−1 个节点、没有度为 1 的节点）。
   </div>
 
-  <h2>一、它解决什么问题</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 树线 ∩ 策略线</b>——哈夫曼 = 贪心构造 + 前缀码。上游：0008；策略视角：0035 贪心法（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、它解决什么问题</h2>
     <p>压缩：字符出现频率不同，<strong>高频字符用短编码</strong>，总长才能最短。哈夫曼树 = 让「总长」最省的那棵二叉树——<strong>带权路径长度（WPL）最小的二叉树</strong>。</p>
   <span class="formula">路径长度 = 从根到该节点的边数　　WPL = Σ（权值 × 路径长度），对所有叶子求和</span>
 
@@ -190,6 +192,6 @@ Quiz.render("quiz-ds5", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

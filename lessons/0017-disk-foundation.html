@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0017 · 先修：磁盘是怎么工作的（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     0005 默认了你已经知道：磁盘长什么样、「寻道/旋转/传输」在物理上各自对应什么动作、ms 和 μs 怎么换算、「平均半圈」是怎么来的。<strong>这些本来就是零基础时最容易断的地方</strong>——这课把它们一次垫平。我已把这条记入学习档案：之后每个新模块都先上直觉课、再上计算课。
   </div>
 
-  <h2>一、磁盘长什么样：一张「会转的黑胶唱片」</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 设备文件线（先修）</b>——磁盘物理结构与四步读盘。上游：0016；下游：0018（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、磁盘长什么样：一张「会转的黑胶唱片」</h2>
   <p>机械硬盘就是<strong>若干张涂了磁性涂层的圆盘（盘片）串在一根主轴上高速旋转</strong>，每张盘面的上方悬浮一根「唱针」（<strong>磁头</strong>）。数据就是盘面上一个个磁性小格子。</p>
   <pre>      一张盘片（像黑胶唱片）              三张盘片叠在同一根主轴上
     ┌─────────────────────────┐
@@ -273,6 +275,6 @@ Quiz.render("quiz-found", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

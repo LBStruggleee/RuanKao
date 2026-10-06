@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0002 · 计算机组成：CPU、寻址与流水线（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     流水线是组成板块<strong>最稳定的计算题</strong>：一个公式族（T = 首条指令时间 + (n−1)×Δt；S = nk/(k+n−1)；TP = 1/Δt 极限）通吃。寻址方式背「有效地址公式表」，寄存器背「PC 存下一条指令地址」。
   </div>
 
-  <h2>一、CPU 里谁管什么（寄存器职责）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · CPU 执行线</b>——寄存器分工 → 八种寻址 → 流水线。上游：0001 机器码；下游：0003 存储供给指令数据（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、CPU 里谁管什么（寄存器职责）</h2>
   <table class="tight">
     <tr><th>部件</th><th>职责</th><th>考点一句话</th></tr>
     <tr><td><strong>PC 程序计数器</strong></td><td>存<strong>下一条</strong>指令的地址</td><td>『自动 +1』指向下一条，转移指令改写它</td></tr>
@@ -224,6 +226,6 @@ Quiz.render("quiz21", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

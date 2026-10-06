@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0019 · 文件系统与索引计算（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     文件物理结构对比是<strong>上午卷每年必见的概念题</strong>；「索引块能管多大文件」和「读第 i 块要几次磁盘 I/O」是两个<strong>送分计算点</strong>——公式只有两条，但各有一个高频陷阱（索引块也算一次 I/O、块因子向下取整）。本课目标：把这两条公式变成本能。
   </div>
 
-  <h2>一、最小必要知识</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 设备文件线</b>——文件逻辑/物理结构与索引容量。上游：0018；下游：0020 收口（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、最小必要知识</h2>
 
   <h3>1. 逻辑结构（用户视角）与记录成组</h3>
   <p>逻辑结构与磁盘怎么存无关：<strong>流式文件</strong> = 一串字节（Linux 普通文件）；<strong>记录式文件</strong> = 若干逻辑记录（数据库文件）。把若干记录打包进一个物理块叫<strong>成组</strong>：</p>
@@ -257,6 +259,6 @@ Quiz.render("quiz-main", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0024 · 计算机网络：分层模型与协议归属（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     网络第一题永远是「某某协议/设备在第几层」。背下一张归属总表 + 三个高频陷阱（<strong>ARP 在网际层、ICMP 在网络层、端口在 TCP/UDP 头部</strong>），这部分分就稳了。
   </div>
 
-  <h2>一、两层楼对照：OSI 七层 vs TCP/IP 四层</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 4 网络安全 · 体系结构线</b>——OSI/TCP-IP 对照/协议归属/设备层次。上游：新面起点；下游：0025（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、两层楼对照：OSI 七层 vs TCP/IP 四层</h2>
   <table class="tight">
     <tr><th>OSI 七层</th><th>TCP/IP 四层</th><th>干什么（一句话）</th><th>代表协议/设备</th></tr>
     <tr><td>7 应用</td><td rowspan="3">4 应用</td><td>给用户软件用的接口</td><td>HTTP/FTP/SMTP/DNS/Telnet/SNMP</td></tr>
@@ -195,6 +197,6 @@ Quiz.render("quiz16", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

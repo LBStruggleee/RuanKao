@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0013 · 排序总表：稳定性与复杂度（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     排序题的答案 90% 在一张表里：<strong>复杂度 + 稳定性</strong>。口诀记不稳定家族「<strong>快选希堆</strong>」（快排、简单选择、希尔、堆），其余都稳定。再用步进实验室亲眼看完三种 O(n²) 排序的每一步比较。
   </div>
 
-  <h2>一、总表（必背，建议打印）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 查找排序线</b>——排序总表/稳定性/外部排序。上游：0012；下游：0034 堆排快排骨架入题（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、总表（必背，建议打印）</h2>
   <table class="tight">
     <tr><th>算法</th><th>平均时间</th><th>最坏</th><th>稳定性</th><th>一句话特征</th></tr>
     <tr><td>直接插入</td><td class="num">O(n²)</td><td class="num">O(n²)</td><td><strong>稳定</strong></td><td>基本有序时 ≈ O(n)，最受益</td></tr>
@@ -221,6 +223,6 @@ Quiz.render("quiz-ds9", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

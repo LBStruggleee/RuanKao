@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0012 · 查找：折半与哈希（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     两个「一秒出答案」：折半查找 n 个元素最多比较 <strong>⌊log₂n⌋ + 1</strong> 次；哈希表成功查找平均次数 <strong>ASL = 每个元素的比较次数加起来 ÷ 元素数</strong>。把本课样例表算熟，计算器都不用开。
   </div>
 
-  <h2>一、折半查找：每次砍一半</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 查找排序线</b>——折半/哈希/B 树。上游：0007 判定树；下游：0013 排序（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、折半查找：每次砍一半</h2>
   <p>在<strong>有序</strong>序列里找 x：看中间那个，大了往左半、小了往右半。两个前提缺一不可：<strong>①序列有序 ②顺序存储（数组）</strong>——链表没法跳到中间（<a href="0005-arrays-and-linked-lists.html">Lesson 0005</a>：数组才能按下标直达）。</p>
   <span class="formula">mid = ⌊(low + high) / 2⌋　　最多比较次数 = ⌊log₂n⌋ + 1</span>
   <table class="tight">
@@ -234,6 +236,6 @@ Quiz.render("quiz-ds8", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

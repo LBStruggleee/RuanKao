@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0005 · 数组与链表：所有数据结构的地基（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 <style>
 .lab-panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; margin: .8rem 0; }
 .lab-panel h4 { margin: 0 0 .7rem; }
@@ -44,7 +44,9 @@
     学完你将能回答考试里两类必考题：①「顺序存储 vs 链式存储，谁能随机存取 / 谁插删快」；②「首地址 X、每个元素 Y 字节，第 i 个元素地址是多少」。更重要的是：后面树、图、哈希表全都建立在「连续存放 vs 指针相连」这一对概念上——这是整个数据结构的地基。
   </div>
 
-  <h2>一、先建立内存的心智模型：一排编了号的柜子</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 线性结构线</b>——数组连续 vs 链表牵手的内存模型。上游：0004 传引用；下游：0006 栈队列、0014（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、先建立内存的心智模型：一排编了号的柜子</h2>
   <p>把内存想成<strong>一排柜子，每个柜子有唯一编号（地址）</strong>。程序里的每个数据都住在某个柜子里，CPU 拿数据就是「报地址、开柜子」。整个数据结构学科其实在回答一个问题：</p>
   <div class="card" style="text-align:center; font-size:1.05rem;">
     <strong>数据放柜子里时，是「挨着放」还是「散着放 + 互相记地址」？</strong><br>
@@ -454,6 +456,6 @@ Quiz.render("quiz-ds1", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

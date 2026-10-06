@@ -1641,3 +1641,17 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
   .daily-flip, .daily-btn, .daily-tab, .daily-opt { transition: none !important; }
   .pomo-bar > i { transition: none !important; }
 }
+
+/* —— 知识体系定位行（每课头部的 🧭 行，指回 knowledge-map） —— */
+.map-loc {
+  font-family: var(--mono);
+  font-size: .78rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  padding: .35rem .7rem;
+  margin: .4rem 0 1.4rem;
+}
+.map-loc b { color: var(--accent); }
+.map-loc a { color: var(--ink-soft); text-decoration: underline dotted; }

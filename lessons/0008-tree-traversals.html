@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0008 · 四种遍历与序列重建（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     考卷最爱问「给先序+中序，求后序」。套路只有一句话：<strong>先（后）序定根，中序分左右</strong>——反复做，直到 3 分钟内算完。本课还把 Lesson 0006 的「5」再次带回来：n 个节点的二叉树形状数也是卡特兰数。
   </div>
 
-  <h2>一、四种遍历（口诀 + 亲手点）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 树线</b>——四种遍历与序列重建。上游：0007；下游：0009 哈夫曼编码（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、四种遍历（口诀 + 亲手点）</h2>
   <p>遍历 = 把树上每个节点恰好访问一次。四种方式的区别只在<strong>根什么时候被访问</strong>：</p>
   <table class="tight">
     <tr><th>方式</th><th>口诀</th><th>访问顺序</th></tr>
@@ -206,6 +208,6 @@ Quiz.render("quiz-ds4", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

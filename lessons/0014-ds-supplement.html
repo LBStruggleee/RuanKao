@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0014 · 数据结构补遗：矩阵地址、串、森林与平衡树（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     一个公式吃一题：<strong>行优先 Loc(a[i][j]) = 基址 + (i×n + j)×L</strong>（n 为列数）。再带三句话：树转二叉树「<strong>左孩子右兄弟</strong>」；树的后序 = 对应二叉树的<strong>中序</strong>；平衡树左右高度差 <strong>≤ 1</strong>。
   </div>
 
-  <h2>一、多维数组地址计算：先数前面排了多少个</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 树线+查找线收口</b>——地址计算/KMP/森林/AVL/BST/B 树。上游：0007-0013；收口 Phase 1 数据结构面（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、多维数组地址计算：先数前面排了多少个</h2>
   <p>地址计算的本质就一句话：<strong>目标元素前面一共存了多少个元素 × 每个元素的字节数，加到基址上</strong>。</p>
   <span class="formula">行优先（按行存）：Loc(a[i][j]) = Loc(a₀₀) + ( i × n + j ) × L　　（n = 列数，i/j 从 0 起）<br>列优先（按列存）：Loc(a[i][j]) = Loc(a₀₀) + ( j × m + i ) × L　　（m = 行数）</span>
   <div class="card">
@@ -233,6 +235,6 @@ Quiz.render("quiz-ds31", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>

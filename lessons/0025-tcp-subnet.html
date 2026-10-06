@@ -5,7 +5,7 @@
 <script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 0025 · TCP 与子网划分：可靠传输 + 必考计算（软考软件设计师）</title>
-<link rel="stylesheet" href="../assets/base.css?v=8">
+<link rel="stylesheet" href="../assets/base.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -24,7 +24,9 @@
     子网划分是网络板块<strong>计算量最大的必考点</strong>：5 步法（掩码→块大小→网络地址→广播地址→主机数）刷熟后 90 秒一题。TCP 三次握手/四次挥手的状态名则是送分概念题。
   </div>
 
-  <h2>一、TCP vs UDP（一句话分家）</h2>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 4 网络安全 · 互联网核心线</b>——TCP 握手挥手/IP 分类/子网划分。上游：0024、0001 二进制（跨面接线）；下午无、上午 3-4 题（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+    <h2>一、TCP vs UDP（一句话分家）</h2>
   <table class="tight">
     <tr><th></th><th>TCP</th><th>UDP</th></tr>
     <tr><td>连接</td><td><strong>面向连接</strong>（三次握手建立）</td><td>无连接，发完就算</td></tr>
@@ -242,6 +244,6 @@ Quiz.render("quiz17", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=6"></script>
+<script src="../assets/sidebar.js?v=7"></script>
 </body>
 </html>
