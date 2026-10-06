@@ -59,14 +59,69 @@
   <span class="formula">图像 = 水平像素 × 垂直像素 × 颜色深度(bit) ÷ 8（字节）<br>声音 = 采样频率(Hz) × 量化位数 × 声道数 ÷ 8 × 时间(s)</span>
   <p><strong>例</strong>：800×600 的 24 位真彩图像 = 800×600×24÷8 = <strong>1,440,000 B ≈ 1.44 MB</strong>；CD 音质（44.1kHz、16 位、双声道）每秒 = 44100×16×2÷8 = <strong>176,400 B ≈ 172 KB</strong>。</p>
 
-  <h2>四、专业英语（上午卷 71–75 题）完形套路</h2>
+  <h2>四、专业英语（上午卷 71–75 题，每年固定 5 分）</h2>
+
+  <h3>4.1 完形四步法</h3>
   <ol>
     <li><strong>先读首句定主题</strong>：这句话通常告诉你文章在讲什么技术（networking/database/testing…）；</li>
     <li><strong>看空格前后搭配</strong>：介词（between…and）、冠词、固定动词搭配往往直接锁定词性；</li>
     <li><strong>术语优先</strong>：选项里若有本课学过的技术名词（requirement/specification/algorithm/protocol），大概率就是答案；</li>
     <li>五个空通常对应五段逻辑——每段各出一个，<strong>段落主旨 = 空格答案</strong>。</li>
   </ol>
-  <p>高频词小表：requirement 需求 / specification 规格 / algorithm 算法 / protocol 协议 / interface 接口 / middleware 中间件 / repository 仓库 / evaluation 评估 / maintenance 维护 / inheritance 继承。</p>
+
+  <h3>4.2 主题轮换规律（先认主题，再认单词）</h3>
+  <p>71–75 是一篇 150 词左右的科技短文完形，<strong>主题近年在下面六个里轮换</strong>。读到信号词就知道该到哪个词汇区找答案：</p>
+  <table class="tight">
+    <tr><th>近年主题</th><th>信号词（读到就定性）</th><th>词汇区</th></tr>
+    <tr><td>面向对象 / 设计模式</td><td>inheritance, polymorphism, class, pattern</td><td>A 区（<a href="0030-oop-basics.html">0030</a>-<a href="0032-design-patterns.html">0032</a> 学过）</td></tr>
+    <tr><td>软件过程 / 敏捷 / 测试</td><td>agile, iteration, testing, requirement</td><td>B 区（<a href="0027-process-models.html">0027</a>-<a href="0028-testing.html">0028</a>）</td></tr>
+    <tr><td>算法与数据结构</td><td>algorithm, complexity, sorting, stack</td><td>C 区（<a href="0012-searching.html">0012</a>-<a href="0013-sorting.html">0013</a>、<a href="0035-algo-strategies.html">0035</a>）</td></tr>
+    <tr><td>计算机网络</td><td>protocol, network, router, transmission</td><td>D 区（<a href="0024-network-layers.html">0024</a>-<a href="0025-tcp-subnet.html">0025</a>）</td></tr>
+    <tr><td>信息安全</td><td>encryption, authentication, firewall, attack</td><td>E 区（<a href="0026-security.html">0026</a>）</td></tr>
+    <tr><td>数据库 / 其他</td><td>database, query, index, transaction</td><td>F 区（<a href="0021-relational-sql.html">0021</a>-<a href="0023-db-advanced.html">0023</a>）</td></tr>
+  </table>
+
+  <h3>4.3 六主题高频词库（遮住中文自测）</h3>
+  <table class="tight">
+    <tr><th>区</th><th>高频词（英 → 中）</th></tr>
+    <tr>
+      <td><strong>A 面向对象</strong></td>
+      <td>encapsulation 封装 · inheritance 继承 · polymorphism 多态 · abstraction 抽象 · class 类 · object 对象 · attribute 属性 · method 方法 · interface 接口 · instance 实例 · override 覆盖 · overload 重载 · coupling 耦合 · cohesion 内聚 · reuse 复用</td>
+    </tr>
+    <tr>
+      <td><strong>B 软件工程</strong></td>
+      <td>requirement 需求 · specification 规格说明 · implementation 实现 · maintenance 维护 · validation 确认 · verification 验证 · agile 敏捷 · iteration 迭代 · prototype 原型 · milestone 里程碑 · deliverable 交付物 · refactoring 重构 · evaluation 评估</td>
+    </tr>
+    <tr>
+      <td><strong>C 算法与结构</strong></td>
+      <td>algorithm 算法 · complexity 复杂度 · efficiency 效率 · recursion 递归 · sorting 排序 · searching 查找 · stack 栈 · queue 队列 · linked list 链表 · traversal 遍历 · pointer 指针 · array 数组 · node 节点</td>
+    </tr>
+    <tr>
+      <td><strong>D 网络</strong></td>
+      <td>protocol 协议 · transmission 传输 · packet 分组 · bandwidth 带宽 · router 路由器 · switch 交换机 · client 客户端 · server 服务器 · topology 拓扑 · latency 延迟 · wireless 无线 · middleware 中间件</td>
+    </tr>
+    <tr>
+      <td><strong>E 信息安全</strong></td>
+      <td>encryption 加密 · decryption 解密 · authentication 认证 · authorization 授权 · digital signature 数字签名 · certificate 证书 · firewall 防火墙 · vulnerability 漏洞 · malicious code 恶意代码 · integrity 完整性 · confidentiality 保密性 · availability 可用性</td>
+    </tr>
+    <tr>
+      <td><strong>F 数据库与其他</strong></td>
+      <td>database 数据库 · query 查询 · index 索引 · transaction 事务 · record 记录 · field 字段 · repository 仓库 · compiler 编译器 · interpreter 解释器 · cache 高速缓存 · register 寄存器 · specification 规格</td>
+    </tr>
+  </table>
+
+  <h3>4.4 高频搭配（空格前后的「钩子」）</h3>
+  <table class="tight">
+    <tr><th>搭配</th><th>含义</th><th>答题用法</th></tr>
+    <tr><td>be used to + 动词原形</td><td>被用来做…</td><td>空格在 used to 后 → 填<strong>动词原形</strong></td></tr>
+    <tr><td>be responsible for</td><td>负责…</td><td>for 后填<strong>名词/动名词</strong></td></tr>
+    <tr><td>consist of / be divided into</td><td>由…组成 / 被划分为</td><td>后接<strong>组成部分</strong>（layers/modules/components）</td></tr>
+    <tr><td>rely on / depend on / be based on</td><td>依赖 / 取决于 / 基于</td><td>on 后填<strong>名词</strong>（常考 mechanism/principle）</td></tr>
+    <tr><td>in order to / so as to</td><td>为了…</td><td>后填<strong>动词原形</strong>，答案多为 achieve/ensure/provide</td></tr>
+    <tr><td>between … and … / from … to …</td><td>两者之间 / 从…到…</td><td>锁定<strong>成对结构</strong>，两个空互相提示</td></tr>
+    <tr><td>such as / e.g.</td><td>例如</td><td>后接<strong>举例</strong>——例子常是学过的术语</td></tr>
+  </table>
+  <p><strong>考场流程</strong>：首句定主题（4.2 定区）→ 空格前后找搭配钩子（4.4 定词性）→ 四个选项里挑本区词库的术语（4.3 定词）。三步 <strong>2 分钟内</strong>完成——这 5 分是全场性价比最高的 5 分。</p>
 
   <h2>五、计算挑战（先动笔再填）</h2>
   <div id="cd27"></div>
@@ -114,7 +169,7 @@ CalcDrill.mount("cd27", {
 });
 
 Quiz.render("quiz27", {
-  title: "本课自查（8 题，全对过课）",
+  title: "本课自查（10 题，全对过课）",
   passNote: "≥ 7/8，错题登记 reflection.md",
   shuffle: true,
   questions: [
@@ -219,8 +274,34 @@ Quiz.render("quiz27", {
         "时间不够，性价比低。",
         "无依据的猜测期望只有 1-2 分。"
       ],
-      explain: "高频词表：requirement/specification/algorithm/protocol/middleware/inheritance…",
+      explain: "流程升级：4.2 定主题区 → 4.4 搭配钩子定词性 → 4.3 词库定词。",
       source: "Lesson 0033 §四"
+    },
+    {
+      q: "（英语实战）读到句子 \"The firewall examines packets passing through the network and blocks ______ traffic.\"，空格处最合适的词是？",
+      options: ["malicious", "encapsulation", "recursive", "relational"],
+      answer: 0,
+      opts: [
+        "✓ 信号词 firewall/packets/network 把文章定到 E 区安全主题；修饰 traffic 需要形容词，malicious（恶意的）是 E 区词库成员——恶意流量正是防火墙拦截的对象。",
+        "encapsulation 是 A 区 OO 名词，词性（名词）与语义都不合。",
+        "recursive 是 C 区算法形容词，与防火墙无关。",
+        "relational 是 F 区数据库形容词（关系的），语义不合。"
+      ],
+      explain: "三步法走一遍：信号词定主题区 → 空格位置定词性 → 区内词库挑术语。",
+      source: "Lesson 0033 §4.2-4.3"
+    },
+    {
+      q: "（英语实战）\"Agile methods develop software in short ______, delivering a working product at the end of each one.\" 空格处应填？",
+      options: ["iterations", "firewalls", "bandwidth", "certificates"],
+      answer: 0,
+      opts: [
+        "✓ 信号词 agile 定到 B 区软件过程主题；short + 复数名词且『each one 交付一个可用产品』正是迭代开发——iterations（迭代）。",
+        "firewalls 是 E 区安全词。",
+        "bandwidth 是 D 区网络词，不可数且语义不合。",
+        "certificates 是 E 区证书。"
+      ],
+      explain: "主题区 + 词性 + 常识三重定位：敏捷 = 迭代交付，这是 0027 学过的过程模型知识。",
+      source: "Lesson 0033 §4.2-4.3 ｜ 0027"
     }
   ]
 });
