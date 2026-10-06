@@ -94,7 +94,6 @@
     html += '<a href="' + REL_ROOT + 'reference/mistake-notebook.html" class="sidebar-link' + (isReference && currentFile === "mistake-notebook.html" ? " active" : "") + '">📓 错题本</a>';
     html += '<a href="' + REL_ROOT + 'reference/knowledge-map.html" class="sidebar-link' + (isReference && currentFile === "knowledge-map.html" ? " active" : "") + '">🗺 知识体系</a>';
     html += '<a href="' + REL_ROOT + 'reference/books.html" class="sidebar-link' + (isReference && currentFile === "books.html" ? " active" : "") + '">📚 电子书资源</a>';
-    html += '<a href="' + REL_ROOT + 'pages/practice/tracker.html" class="sidebar-link">🗓 打卡表</a>';
     html += '<a href="' + REL_ROOT + 'pages/exam-guide.html" class="sidebar-link">📋 考试大纲</a>';
     html += '</div>';
 

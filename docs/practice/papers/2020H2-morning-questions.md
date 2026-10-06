@@ -738,5 +738,5 @@ P：E → E+T | E−T | T
 ## 做完后
 
 1. 核对答案：打开同目录 `2020H2-morning-key.md`（含答案速查 + 逐题解析 + 知识点归属）。
-2. 填写答题卡得分，计算各科正确率，回填 `2020H2-morning-key.md` 的分科统计表与 `tracker.md` Day 15 行。
+2. 填写答题卡得分，计算各科正确率，回填 `2020H2-morning-key.md` 的分科统计表与 自己的学习笔记 Day 15 行。
 3. 错题按「错题四要素」登记到 `reflection.md` 的 Day 15 小节与 `2020H2-morning-key.md` 的错题登记区。

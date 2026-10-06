@@ -51,7 +51,7 @@
 
 ## 📅 冲刺安排
 
-34 天学习路线与每日打卡表以 [docs/practice/tracker.md](docs/practice/tracker.md) 为准；阶段安排：核心知识 → 真题实战 → 大题专项 → 考前冲刺（日期按自己的开学起排）。
+学习顺序按交互课程序号（0001→0035）推进，知识框架见站内「🗺 知识体系」；阶段安排：核心知识 → 真题实战 → 大题专项 → 考前冲刺（日期按自己的开学起排）。
 
 ## 🔗 快速入口
 
@@ -59,7 +59,6 @@
 - 🎓 课程总目录：<https://lbstruggleee.github.io/RuanKao/reference/ds-learning-path.html>
 - 📓 错题本：<https://lbstruggleee.github.io/RuanKao/reference/mistake-notebook.html>
 - 📖 考试指南：[docs/exam-guide.md](docs/exam-guide.md)
-- 🗓 每日打卡表（34 天学习路线）：[docs/practice/tracker.md](docs/practice/tracker.md)
 - 📚 知识点精讲：[docs/knowledge-points/](docs/knowledge-points/)
 - ✍️ 真题与解析：[docs/practice/](docs/practice/)
 

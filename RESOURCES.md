@@ -14,8 +14,6 @@
   覆盖链表/树/图/排序/查找。Use for：数据结构零基础路线（reference/ds-learning-path.html）学完后的出关测试。
 - [下午算法大题专项（动态规划/贪心，试题四）](docs/practice/subject2/patterns-algo-exercises.md)
   Use for：数据结构路线的地基验收场景（学完 Day 3–4 的数据结构基础后进入），算法填空的递推/边界都踩在数据结构基础上。
-- [34 天学习路线与打卡表](docs/practice/tracker.md)
-  34 天路线（日期栏留空自填）、每检查点合格线、各真题卷勘误结论备注。Use for：定今天学什么、考什么口径。
 - [高频必考清单](docs/strategies/high-frequency-topics.md)
   各科目分值定位（OS 6-8 题，磁盘调度为必考计算）。Use for：判断一个考点值不值得花交互课时。
 - [历年真题 PDF（只读原卷）](practice_dd/)
@@ -27,9 +25,9 @@
   软考真题讨论与答案勘误社区；本仓库真题 key 的交叉核对来源之一。Use for：对答案有分歧时搜讨论帖。
 - [希赛网（educity.cn）](https://www.educity.cn)
   软考题库与解析；同为 key 交叉来源。Use for：同上。
-- ⚠️ 社区答案与仓库口径冲突时：以仓库 tracker/各卷 key 的勘误结论为准（它们已做多源交叉 + 独立复算），不要临场改口径。
+- ⚠️ 社区答案与仓库口径冲突时：以仓库各卷 key 的勘误结论为准（它们已做多源交叉 + 独立复算），不要临场改口径。
 
 ## Gaps
 
-- 交互课程的测验得分是第一份真实掌握度数据：做完后把正确率回填 tracker.md，再用 knowledge-checklist.md 的「二轮重点清单」锁定薄弱点。
+- 交互课程的测验得分是第一份真实掌握度数据：做完后把正确率记入 knowledge-checklist.md 的统计表，用「二轮重点清单」锁定薄弱点。
 - 下午大题（UML/DFD/设计模式/算法填空）的交互训练组件暂缺，Phase 3（Day 27–29）大题专项目前以 docs/practice/subject2/ 的真题练习为主。

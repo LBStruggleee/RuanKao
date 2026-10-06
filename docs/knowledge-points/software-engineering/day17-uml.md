@@ -536,4 +536,4 @@ class Car {
 | Step 1 | 重做 Day 15–16 错题：`docs/practice/papers/review-round1.md` | 2h | 重做正确率填入统计表 |
 | Step 2 | **本笔记**（UML 五种图 + 六关系 + 下午考法） | 1h | §8 速记能口头复述 |
 | Step 3 | 弱项强化 25 题：`day17-exercises.md`（按 knowledge-checklist 二轮重点选题） | 2.5h | 得分与错题登记 |
-| Step 4 | 打卡：`tracker.md` Day 17 行 + `reflection.md` Day 17 节 | 1.5h | 重做正确率 + UML 自评 |
+| Step 4 | 打卡：记入自己的学习笔记 + `reflection.md` Day 17 节 | 1.5h | 重做正确率 + UML 自评 |

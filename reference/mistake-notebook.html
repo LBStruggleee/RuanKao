@@ -104,7 +104,7 @@
     <div class="nav">
       <a href="../reference/ds-learning-path.html">课程总目录</a>
       <a href="../pages/practice/reflection.html">reflection.md（错题四要素登记处）</a>
-      <a href="../pages/practice/tracker.html">tracker.md（正确率回填处）</a>
+      <a href="../pages/practice/knowledge-checklist.html">knowledge-checklist.md（正确率回填处）</a>
     </div>
     <p>工作流建议：课程页答题（自动记录）→ 来错题本按<strong>「📅 今日该复习」</strong>清到期错题 → <strong>只练错题</strong>直到连对 2 次自动掌握 → 看<strong>薄弱点分析</strong>决定重学哪课 → 导出 Markdown 把仍错的粘进 reflection.md。</p>
     <p>💬 复习节奏：错后 1 天首刷 → 对了隔 2 天 → 再对隔 4 天 → 隔 7 天，连对 2 次即出队（艾宾浩斯简化版）。</p>
@@ -113,7 +113,7 @@
 </div>
 
 <script src="../assets/answer-store.js"></script>
-<script src="../assets/quiz.js"></script>
+<script src="../assets/quiz.js?v=2"></script>
 <script>
 (function () {
   "use strict";
@@ -284,7 +284,7 @@
     gt.textContent = "";
     var gkeys = Object.keys(s.groups).sort();
     if (!gkeys.length) { return; }
-    gt.appendChild(el("h3", null, "各组最新得分（对照 tracker 合格线回填）"));
+    gt.appendChild(el("h3", null, "各组最新得分（对照各卷合格线回填）"));
     var table = el("table", "tight nb-group");
     var head = el("tr");
     ["课程", "组", "最新正确 / 题数", "正确率"].forEach(function (h) { head.appendChild(el("th", null, h)); });
@@ -480,7 +480,7 @@
     lines.push("> 由课程页自动生成。「错因」留空请自填（当时为什么选错）；");
     lines.push("> 仍错的题可整段粘进 docs/practice/reflection.md 的对应日期错题区。");
     lines.push("");
-    lines.push("## 得分速览（对照 tracker 合格线）");
+    lines.push("## 得分速览（对照各卷合格线）");
     lines.push("");
     lines.push("| 课程 | 组 | 最新正确/题数 | 正确率 |");
     lines.push("|---|---|---|---|");
@@ -592,6 +592,6 @@
   refresh();
 })();
 </script>
-<script src="../assets/sidebar.js?v=7"></script>
+<script src="../assets/sidebar.js?v=8"></script>
 </body>
 </html>

@@ -185,7 +185,7 @@
       }
       box.appendChild(el("p", null, msg));
       if (ratio < 0.7) {
-        box.appendChild(el("p", null, "⚠️ 建议把本组得分记入 docs/practice/reflection.md 今日错题区（题目→错因→正确思路→知识点），并回填 tracker 正确率。"));
+        box.appendChild(el("p", null, "⚠️ 建议把本组得分记入 docs/practice/reflection.md 今日错题区（题目→错因→正确思路→知识点），并把正确率记入自己的学习笔记。"));
       }
 
       var retry = el("button", "btn ghost", "重做本组");
