@@ -155,133 +155,16 @@
     var closeBtn = document.getElementById("sidebarClose");
     var overlayEl = document.getElementById("sidebarOverlay");
 
-    /* —— 弹性边缘模式（桌面 >1024px 且未开启减弱动效）——
-       侧栏的视觉（卡片底 + 像素硬投影 + 右边缘）由 SVG 路径绘制，
-       .sidebar 本体只承载内容并随弹簧平移；正文 paddingLeft 同帧驱动、
-       被边缘轻微拖拽（边缘前凸时多让、回弹时跟荡）——整体一套弹簧。 */
-    var el = null;
-
-    function elInit() {
-      if (el || window.innerWidth <= 1024) return;
-      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      var NS = "http://www.w3.org/2000/svg";
-      var W = 280;
-      var svg = document.createElementNS(NS, "svg");
-      svg.id = "elSidebarSvg";
-      svg.setAttribute("width", W + 46);
-      svg.setAttribute("height", window.innerHeight);
-      svg.style.cssText = "position:fixed;left:0;top:0;z-index:999;pointer-events:none";
-      el = {
-        W: W, H: window.innerHeight, w: 0, v: 0, target: 0, raf: null,
-        shadow: document.createElementNS(NS, "path"),
-        fill: document.createElementNS(NS, "path"),
-        edge: document.createElementNS(NS, "path")
-      };
-      el.shadow.setAttribute("fill", "var(--px-shadow, rgba(38,49,59,.22))");
-      el.shadow.setAttribute("transform", "translate(6,0)");   // 像素硬投影：同形右移 6px
-      el.fill.setAttribute("fill", "var(--card, #fffdf6)");
-      el.edge.setAttribute("fill", "none");
-      el.edge.setAttribute("stroke", "var(--px-ink, #26313b)");
-      el.edge.setAttribute("stroke-width", "2.5");
-      svg.appendChild(el.shadow); svg.appendChild(el.fill); svg.appendChild(el.edge);
-      document.body.appendChild(svg);
-      sidebar.classList.add("elastic");
-      document.body.classList.add("elastic-mode");
-      elRender(0);
-      window.addEventListener("resize", elResize);
-    }
-
-    function elRender(v) {
-      var H = window.innerHeight, W = el.W;
-      var w = Math.max(0, Math.min(W, el.w));
-      var bend = Math.max(-26, Math.min(26, -v * 1.15));   // 克制幅度：日常工具不闹
-      var d = "M0,0 L" + w + ",0 C" + (w + bend * 1.7) + "," + (H * .3) + " " +
-              (w - bend * 1.7) + "," + (H * .7) + " " + w + "," + H + " L0," + H + " Z";
-      el.fill.setAttribute("d", d);
-      el.shadow.setAttribute("d", d);
-      el.edge.setAttribute("d", "M" + w + ",0 C" + (w + bend * 1.7) + "," + (H * .3) + " " +
-              (w - bend * 1.7) + "," + (H * .7) + " " + w + "," + H);
-      sidebar.style.transform = "translateX(" + (w - W) + "px)";
-      /* 正文被边缘带动：前凸时多让一点、回弹时跟荡回来 */
-      document.body.style.paddingLeft = Math.max(0, w - bend * .25) + "px";
-    }
-
-    /* 弹簧循环：setTimeout(16) 驱动 + dt 帽——后台标签定时器被节流到 ~1s 时
-       检测到大间隔直接落定，避免侧栏冻在半路；前台 16ms ≈ 60fps 平滑 */
-    var elLast = 0;
-    function elStep(now) {
-      var dt = Math.min(now - elLast, 50);
-      elLast = now;
-      if (dt >= 50) {                                     // 切走/节流：一步落定
-        el.w = el.target; el.v = 0;
-        elRender(0);
-        document.body.style.paddingLeft = el.w + "px";
-        el.raf = null; return;
-      }
-      var f = dt / 16.7;
-      el.v += (el.target - el.w) * .055 * f;
-      el.v *= Math.pow(.82, f);
-      el.w += el.v * f;
-      if (Math.abs(el.v) < .05 && Math.abs(el.target - el.w) < .05) {
-        el.w = el.target; el.v = 0;
-        elRender(0);
-        document.body.style.paddingLeft = el.w + "px";    // 落定精确对位
-        el.raf = null; return;
-      }
-      elRender(el.v);
-      el.raf = setTimeout(function () { elStep(performance.now()); }, 16);
-    }
-
-    function elTo(t) {
-      if (!el) return false;                              // 无弹性环境走类切换
-      el.target = t;
-      if (!el.raf) { elLast = performance.now(); el.raf = setTimeout(function () { elStep(performance.now()); }, 16); }
-      return true;
-    }
-
-    function elDestroy() {
-      if (!el) return;
-      var s = document.getElementById("elSidebarSvg");
-      if (s) s.remove();
-      sidebar.classList.remove("elastic");
-      document.body.classList.remove("elastic-mode");
-      sidebar.style.transform = ""; document.body.style.paddingLeft = "";
-      if (el.raf) { clearTimeout(el.raf); el.raf = null; }
-      el = null;
-    }
-
-    var rsT = null;
-    window.addEventListener("resize", function () {
-      clearTimeout(rsT);
-      rsT = setTimeout(function () {
-        var desktop = window.innerWidth > 1024;
-        if (!desktop && el) {
-          var wasOpen = el.target > 0;
-          elDestroy();
-          if (!wasOpen) closeSidebar(); else openSidebar();
-        } else if (desktop && !el && window.innerWidth > 1024) {
-          elInit();
-          el.w = sidebar.classList.contains("open") ? el.W : 0;
-          el.target = el.w;
-          elRender(0);
-        } else if (el) {
-          el.H = window.innerHeight;
-          document.getElementById("elSidebarSvg").setAttribute("height", el.H);
-          elRender(0);
-        }
-      }, 250);
-    });
-
     function openSidebar() {
+      sidebar.classList.add("open");
       overlayEl.classList.add("show");
       document.body.classList.add("sidebar-open");
-      if (!elTo(el ? el.W : 0)) sidebar.classList.add("open");   // 弹性驱动；否则类切换
       try { localStorage.setItem("rkSidebarCollapsed", "0"); } catch (e) {}
     }
     function closeSidebar() {
+      sidebar.classList.remove("open");
       overlayEl.classList.remove("show");
       document.body.classList.remove("sidebar-open");
-      if (!elTo(0)) sidebar.classList.remove("open");
       // 记住收起偏好（仅桌面端收起才算数；移动端本来就默认收起）
       if (window.innerWidth > 1024) {
         try { localStorage.setItem("rkSidebarCollapsed", "1"); } catch (e) {}
@@ -299,13 +182,9 @@
     // 桌面端默认展开，但尊重用户上一次的收起偏好；移动端始终收起待展开
     var collapsedPref = null;
     try { collapsedPref = localStorage.getItem("rkSidebarCollapsed"); } catch (e) {}
-    if (window.innerWidth > 1024) {
-      elInit();
-      if (collapsedPref !== "1") {
-        if (el) { el.w = el.W; el.target = el.W; elRender(0); }
-        sidebar.classList.add("open");
-        document.body.classList.add("sidebar-open");
-      }
+    if (window.innerWidth > 1024 && collapsedPref !== "1") {
+      sidebar.classList.add("open");
+      document.body.classList.add("sidebar-open");
     }
   }
 
