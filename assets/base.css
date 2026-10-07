@@ -1655,3 +1655,17 @@ button.btn.ghost { background: transparent; color: var(--accent); border: 2px so
 }
 .map-loc b { color: var(--accent); }
 .map-loc a { color: var(--ink-soft); text-decoration: underline dotted; }
+
+/* —— 侧栏弹性模式（sidebar.js 注入 SVG 绘制卡片/投影/边缘，本体透明承载内容） —— */
+.sidebar.elastic {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: none;
+  will-change: transform;
+}
+body.elastic-mode { transition: none; }   /* 正文 padding 由弹簧逐帧驱动 */
+@media print { #elSidebarSvg { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .sidebar, body { transition: none !important; }
+}
