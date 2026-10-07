@@ -15,11 +15,11 @@
   if (window.__pxStageLoaded) return;
   window.__pxStageLoaded = true;
 
-  var TOTAL = 35;
+  var TOTAL = 36;
 
   /* 十大学习阶段：序号区间 + 纵排假名（两字）+ 像素精灵 */
   var PHASES = [
-    { from: 1,  to: 3,  kana: ["機", "械"], sprite: "chip" },
+    { from: 0,  to: 3,  kana: ["機", "械"], sprite: "chip" },
     { from: 4,  to: 4,  kana: ["言", "語"], sprite: "braces" },
     { from: 5,  to: 14, kana: ["構", "造"], sprite: "tree" },
     { from: 15, to: 20, kana: ["操", "作"], sprite: "frames" },
@@ -174,9 +174,9 @@
     var src = k ? k.textContent : "";
     m = /Lesson\s+0*(\d+)/i.exec(src);
     if (!m) m = /Lesson\s+0*(\d+)/i.exec(document.title || "");
-    if (!m) return 0;
+    if (!m) return -1;                       // 非课程页：无课号
     var n = parseInt(m[1], 10);
-    return (n >= 1 && n <= TOTAL) ? n : 0;
+    return (n >= 0 && n <= TOTAL) ? n : -1;  // Lesson 0000 是合法课号，不可当 falsy
   }
 
   function buildTopbar(n) {
@@ -185,7 +185,7 @@
     if (h1) title = h1.textContent.trim();
 
     var dots = "";
-    for (var i = 1; i <= TOTAL; i++) {
+    for (var i = 0; i < TOTAL; i++) {           // 36 课从 0000 起数，方块映射 0..35
       var cls = i === n ? "now" : (i < n ? "" : "future");
       dots += '<i class="' + cls + '"></i>';
     }
@@ -249,7 +249,7 @@
     var page = document.querySelector(".page");
     var header = document.querySelector(".lesson-header");
     var num = detectLesson();
-    if (num && header && page) {
+    if (num >= 0 && header && page) {
       page.insertBefore(buildTopbar(num), page.firstChild);
       header.appendChild(buildArt(num));
     }

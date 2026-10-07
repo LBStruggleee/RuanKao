@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<script>try{var t=localStorage.getItem("rkTheme");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0000 · 进制与转换：R 进制互转、按权展开、速记权值表（软考软件设计师）</title>
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<meta name="description" content="Lesson 0000 · 进制与转换：R 进制互转、按权展开、速记权值表（软考软件设计师）">
+<link rel="stylesheet" href="../assets/base.css?v=10">
+</head>
+<body>
+<div class="page">
+
+  <header class="lesson-header">
+    <p class="kicker">Teach · 软考软件设计师 · Lesson 0000（组成计算专题 · 进制地基）</p>
+    <h1>进制与转换：程序员从 0 开始数数</h1>
+    <p class="meta">
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>30 分钟</b>（第 0 课 · 全站先修地基）｜ 下一课：<a href="0001-computer-math.html">0001 组成计算专题</a><br>
+      考点定位：R 进制互转、按权展开、进制等式题（<a href="../pages/practice/papers/2021H1-morning-key.html">2021H1-Q63</a> 考过复杂度，进制转换每年 1~2 题）——更是 0001 补码、0025 子网划分共同的地基
+    </p>
+  </header>
+
+  <div class="callout mission">
+    <span class="tag">🎯 这课的赢面</span>
+    四套转换模板 + 一张权值速记表：<strong>R→十按权展开、十→R 除基取余、二↔八三四分组、进制等式解方程</strong>。上午卷每年 1~2 道直接考，且 <strong>0001 的补码、0025 的子网划分全部踩在这块地基上</strong>——这 30 分钟是全站性价比最高的 30 分钟。
+  </div>
+
+  <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 信息表示线（起点）</b>——进制是机器码、浮点、子网划分共同的地基。上游：无；下游：0001 补码直接建在二进制上、0025 子网划分用二进制（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+
+  <h2>一、R 进制 → 十进制：按权展开（一切转换的原点）</h2>
+  <p>每一位数字 × 它所在位的<strong>权</strong>（基数的幂）再相加。<strong>基数 R</strong> = 用几个数码（二进制 2 个、八进制 8 个、十六进制 16 个，A=10…F=15）；第 i 位（从右数、从 0 起）的权 = R<sup>i</sup>。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例 1</strong>：1011₂ = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = <strong>11</strong></p>
+    <p><strong>例 2（带字母）</strong>：1A₂₆? —— 1A₁₆ = 1×16 + 10 = <strong>26</strong>（A 就是 10，别看到字母就慌）</p>
+    <p style="margin-bottom:0;"><strong>例 3（小数）</strong>：11.01₂ = 2+1+0.25 = <strong>3.25</strong>（小数点后的权是 2⁻¹=0.5、2⁻²=0.25，往右减半）</p>
+  </div>
+  <span class="formula">按权展开通式：(d<sub>n</sub>…d<sub>1</sub>d<sub>0</sub>.d<sub>-1</sub>)<sub>R</sub> = Σ d<sub>i</sub> × R<sup>i</sup>　　——所有「×进制转十进制」都是它</span>
+
+  <h2>二、十进制 → R 进制：整数除基取余，小数乘基取整</h2>
+  <ul>
+    <li><strong>整数部分：除基取余，余数<strong>逆序</strong>读</strong>——除到商 0 为止，先得的余数是低位；</li>
+    <li><strong>小数部分：乘基取整，整数<strong>顺序</strong>读</strong>——每步取走整数部分，用剩下的小数继续乘；</li>
+    <li>巧算（二进制专用）：把十进制<strong>拆成 2 的幂之和</strong>，有幂的位写 1——25 = 16+8+1 = <strong>11001₂</strong>，考场比竖除快一倍。</li>
+  </ul>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例（整数）</strong>：25 ÷ 2 = 12 余 <strong>1</strong>；12 ÷ 2 = 6 余 <strong>0</strong>；6 ÷ 2 = 3 余 <strong>0</strong>；3 ÷ 2 = 1 余 <strong>1</strong>；1 ÷ 2 = 0 余 <strong>1</strong>。余数逆序 → <strong>11001₂</strong>（除了 5 次 → 二进制 5 位）。</p>
+    <p style="margin-bottom:0;"><strong>例（小数）</strong>：0.625 × 2 = <strong>1</strong>.25；0.25 × 2 = <strong>0</strong>.5；0.5 × 2 = <strong>1</strong>.0（小数部分归 0 即终止）。整数顺序 → <strong>0.101₂</strong>。</p>
+  </div>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频陷阱</span>
+    ① 余数<strong>逆序</strong>读、小数整数位<strong>顺序</strong>读——方向背反是最常见丢分；② 十进制小数转二进制<strong>可能除不尽</strong>（如 0.3 → 无限循环），题目会限定取几位；③ 除不尽时二进制无法精确表示该小数——这句本身就是判断题考点。
+  </div>
+
+  <h2>三、二进制 ↔ 八进制 / 十六进制：分组换算（秒杀技）</h2>
+  <p>因为 8 = 2³、16 = 2⁴：<strong>二进制转八进制按 3 位一组、转十六进制按 4 位一组</strong>，<strong>分组方向：以小数点为界，整数部分向左、小数部分向右</strong>，两端不足补零。反向转换每位展开即可——<strong>完全不用经过十进制</strong>。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>例 1（二 → 十六）</strong>：11011010₂ → 分组 <strong>1101 | 1010</strong> → D | A → <strong>DA₁₆</strong></p>
+    <p><strong>例 2（二 → 八）</strong>：11011010₂ → 整数向左分组 <strong>11 | 011 | 010</strong>（左端补 0 成 011）→ 3 | 3 | 2 → <strong>332₈</strong></p>
+    <p style="margin-bottom:0;"><strong>例 3（十六 → 二）</strong>：3C₁₆ → 3=0011，C=1100 → <strong>00111100₂</strong>（每位拆 4 位，原样拼接）</p>
+  </div>
+  <span class="formula">记忆钩子：8 = 2³ → 三位一组；16 = 2⁴ → 四位一组；分组从小数点向两侧，<strong>补零补在两端</strong></span>
+
+  <h2>四、两个必考题型：进制等式 与 位数范围</h2>
+  <h3>4.1 进制等式题（解方程）</h3>
+  <p>题面给「(41)<sub>x</sub> = (29)₁₀，求 x」——把左边<strong>按权展开</strong>，解一元一次方程即可：</p>
+  <span class="formula">4x + 1 = 29 → x = <strong>7</strong>　　（注意：算出的基数必须 ≤ 该数用到的最大数码 + 1）</span>
+  <h3>4.2 位数与表示范围</h3>
+  <ul>
+    <li>R 进制 <strong>n 位</strong>能表示的<strong>数</strong>共 R<sup>n</sup> 个；最大值 = R<sup>n</sup> − 1（每一位都顶格）；</li>
+    <li>二进制 8 位：0 ~ 2⁸−1 = <strong>255</strong>（这就是子网划分里「一个字节 0~255」的来源——<a href="0025-tcp-subnet.html">0025</a> 直接用）；</li>
+    <li>十进制数 D 转成 R 进制后的位数 = ⌊log<sub>R</sub>D⌋ + 1（如 25 → 二进制 5 位：2⁴ ≤ 25 < 2⁵）。</li>
+  </ul>
+
+  <h2>五、速记权值表（背熟 = 转换不用算）</h2>
+  <table class="tight">
+    <tr><th>2 的幂</th><th>值</th><th>十六进制</th><th>考点场景</th></tr>
+    <tr><td>2⁰ ~ 2³</td><td class="num">1 / 2 / 4 / 8</td><td class="num">1 / 2 / 4 / 8</td><td>按权展开逐位心算</td></tr>
+    <tr><td>2⁴</td><td class="num">16</td><td class="num">10₁₆</td><td>十六进制第二位的权</td></tr>
+    <tr><td>2⁶</td><td class="num">64</td><td class="num">40₁₆</td><td>/26 子网块大小（0025）</td></tr>
+    <tr><td>2⁸</td><td class="num">256</td><td class="num">FF+1=100₁₆</td><td>一个字节；FF=255</td></tr>
+    <tr><td><strong>2¹⁰</strong></td><td class="num"><strong>1024</strong></td><td class="num">400₁₆</td><td>1K；容量换算的地基</td></tr>
+    <tr><td>2¹⁶</td><td class="num">65536</td><td class="num">10000₁₆</td><td>B 类地址主机位（0025）</td></tr>
+  </table>
+  <p><strong>十六进制 A~F</strong>：A=10、B=11、C=12、D=13、E=14、F=15——倒背如流的要求：看到 C 立刻反应 12。</p>
+
+  <h2>六、动手：进制转换计算挑战（先动笔再填）</h2>
+  <div id="cdb0"></div>
+  <div class="callout tip">
+    <span class="tag">💡 使用方法</span>
+    每题先在草稿上用四套模板之一<strong>写出过程</strong>再填数——除基取余要能默写方向，考场上才不会紧张时背反。
+  </div>
+
+  <h2>七、自查（全对过课）</h2>
+  <div id="quiz-base0"></div>
+
+  <div class="win-box">
+    <span class="tag">✅ 本课一页收获</span>
+    <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li>R→十：按权展开（小数点后权为 R⁻¹、R⁻²…）；十→R：整数除基取余<strong>逆序</strong>、小数乘基取整<strong>顺序</strong>。</li>
+      <li>二↔八（3 位一组）/ 二↔十六（4 位一组）：分组从小数点向两侧、两端补零——不经过十进制。</li>
+      <li>进制等式 = 按权展开解方程；(41)ₓ=(29)₁₀ → x=7 这类题 30 秒拿下。</li>
+      <li>速记：2¹⁰=1024、2⁸=256、FF=255、A~F=10~15——0001 补码、0025 子网全靠它。</li>
+    </ol>
+  </div>
+
+  <div class="lesson-footer">
+    <div class="nav">
+      <a href="0001-computer-math.html">下一课 → 0001 组成计算专题</a>
+      <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
+      <a href="../reference/ds-learning-path.html">课程总目录</a>
+    </div>
+    <p><strong>下一步</strong>：带着二进制手感进 <a href="0001-computer-math.html">0001 组成计算专题</a>——补码的「按位取反加一」就是本课除基取余的亲戚；子网划分的「除以块大小」也是十进制转二进制的变体。</p>
+    <p>💬 卡在哪一步（比如「为什么余数要逆序读」），把 25 → 11001 的竖除重推一遍就通了。</p>
+  </div>
+
+</div>
+
+<script src="../assets/answer-store.js"></script>
+<script src="../assets/calc-drill.js"></script>
+<script src="../assets/quiz.js?v=2"></script>
+<script>
+CalcDrill.mount("cdb0", {
+  title: "进制转换计算挑战（先动笔再填）",
+  questions: [
+    { text: "二进制 1011 = ___（填十进制）", answer: 11, mode: "exact",
+      derive: "按权展开：8+0+2+1 = 11。" },
+    { text: "二进制 11011010 = ___（填十进制）", answer: 218, mode: "exact",
+      derive: "128+64+16+8+2 = 218；或先转 DA₁₆ = 13×16+10 = 218（两条路互相验算）。" },
+    { text: "十六进制 1A = ___（填十进制）", answer: 26, mode: "exact",
+      derive: "1×16 + 10（A）= 26。" },
+    { text: "八进制 745 = ___（填十进制）", answer: 485, mode: "exact",
+      derive: "7×64 + 4×8 + 5 = 448+32+5 = 485。" },
+    { text: "十进制 25 转二进制后共 ___ 位", answer: 5, mode: "exact",
+      derive: "25 = 16+8+1 = 11001₂；或 2⁴ ≤ 25 < 2⁵ → 5 位。" },
+    { text: "2 的 12 次方 = ___", answer: 4096, mode: "exact",
+      derive: "2¹⁰ = 1024，×2×2 → 4096。速记：2¹⁰=1024 往上翻。" },
+    { text: "已知 (41)ₓ = (29)₁₀，则基数 x = ___", answer: 7, mode: "exact",
+      derive: "按权展开：4x + 1 = 29 → x = 7。" },
+    { text: "十六进制 3C 转二进制后，1 的个数是 ___", answer: 4, mode: "exact",
+      derive: "3 = 0011、C = 1100 → 00111100 → 四个 1。" }
+  ]
+});
+
+Quiz.render("quiz-base0", {
+  title: "本课自查（7 题，全对过课）",
+  passNote: "7/7，错题登记错题本",
+  shuffle: true,
+  questions: [
+    { q: "十进制整数转换为 R 进制的方法是？",
+      options: ["除基取余，余数逆序读", "除基取余，余数顺序读", "乘基取整，整数顺序读", "按权展开直接相加"],
+      answer: 0,
+      opts: [
+        "✓ 除到商 0 为止，先得的余数是低位 → 必须逆序读；小数部分才是乘基取整顺序读。",
+        "顺序读正好把数反了——25 会读成 10011。",
+        "乘基取整是小数部分的转换方法。",
+        "按权展开是 R 进制转十进制的方向。"
+      ],
+      explain: "两句话背死：整数除基取余逆序、小数乘基取整顺序。", source: "Lesson 0000 §二" },
+    { q: "二进制数 11011010 转换为十六进制是？",
+      options: ["DA", "AD", "D8", "6A"],
+      answer: 0,
+      opts: [
+        "✓ 四位一组：1101 | 1010 → D | A。十六进制每位正好对应 4 位二进制。",
+        "分组顺序反了——从左往右整段分，1101 在前。",
+        "1010=A 不是 8；8 是 1000。",
+        "6 是 0110，第一组分错了。"
+      ],
+      explain: "二↔十六直接按 4 位分组拼接，不用经过十进制。", source: "Lesson 0000 §三" },
+    { q: "二进制整数部分向八进制转换时，分组方向是？",
+      options: ["从小数点向左，每 3 位一组，左端不足补零", "从最左边开始每 3 位一组", "从小数点向右，每 3 位一组", "每 4 位一组向左分组"],
+      answer: 0,
+      opts: [
+        "✓ 分组以小数点为界：整数向左、小数向右——这样权值才对齐（8=2³）。",
+        "从最左分会在左端错位，权值全乱。",
+        "向右分组是整数部分该向左时的反例。",
+        "4 位一组是十六进制（16=2⁴）。"
+      ],
+      explain: "记忆钩子：8=2³ 三位一组、16=2⁴ 四位一组；补零补在两端。", source: "Lesson 0000 §三" },
+    { q: "若六进制数 132 等于十进制数 X，则 X = ？",
+      options: ["56", "32", "132", "62"],
+      answer: 0,
+      opts: [
+        "✓ 按权展开：1×36 + 3×6 + 2 = 36+18+2 = 56。",
+        "那是只展了前两位。",
+        "132 是六进制写法，不是十进制值。",
+        "权算错了：第三位的权是 36 不是 6。"
+      ],
+      explain: "R 进制转十进制只有一个动作：按权展开再相加。", source: "Lesson 0000 §一" },
+    { q: "已知 (41)ₓ = (29)₁₀，则基数 x = ？",
+      options: ["7", "6", "8", "5"],
+      answer: 0,
+      opts: [
+        "✓ 按权展开：4x + 1 = 29 → x = 7。进制等式题就是解一元一次方程。",
+        "4×6+1 = 25 ≠ 29。",
+        "4×8+1 = 33 ≠ 29。",
+        "4×5+1 = 21 ≠ 29。"
+      ],
+      explain: "验算约束：x 必须大于该数最大数码（4）——四个选项都满足，所以必须靠方程定，不能猜。", source: "Lesson 0000 §4.1" },
+    { q: "8 位二进制（无符号）能表示的最大十进制数是？",
+      options: ["255", "256", "128", "511"],
+      answer: 0,
+      opts: [
+        "✓ 每位顶格全 1：11111111 = 2⁸ − 1 = 255——这也是一个字节的取值上限，0025 子网里主机数 −2 的来源。",
+        "256 是 2⁸，但 n 位最大值是 2ⁿ − 1（顶格全 1）。",
+        "128 = 2⁷，只有 7 位。",
+        "511 是 9 位全 1（2⁹ − 1）。"
+      ],
+      explain: "R 进制 n 位最大值 = Rⁿ − 1；255 = FF₁₆，速记表里必须长这根神经。", source: "Lesson 0000 §4.2" },
+    { q: "十进制小数 0.625 转二进制的结果是？",
+      options: ["0.101", "0.110", "0.011", "0.101 会除不尽"],
+      answer: 0,
+      opts: [
+        "✓ 乘基取整顺序读：0.625×2=1.25 取 1；0.25×2=0.5 取 0；0.5×2=1.0 取 1 → 0.101。",
+        "0.110 = 0.75，对应的十进制是 0.75 不是 0.625。",
+        "0.011 = 0.375。",
+        "0.625 = 5/8，分母是 8=2³ → 一定能精确表示、三位终止。"
+      ],
+      explain: "小数转二进制：乘 2 取整顺序读；能精确表示的充要条件是分母为 2 的幂——「除不尽」才是判断题考点。", source: "Lesson 0000 §二" }
+  ]
+});
+</script>
+<script src="../assets/sidebar.js?v=11"></script>
+</body>
+</html>

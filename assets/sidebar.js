@@ -17,6 +17,7 @@
   window.__rkSidebarLoaded = true;
 
   var LESSONS = [
+    { id: "0000", title: "进制与转换", file: "0000-number-bases.html" },
     { id: "0001", title: "组成计算专题", file: "0001-computer-math.html" },
     { id: "0002", title: "CPU 寻址与流水线", file: "0002-cpu-pipeline.html" },
     { id: "0003", title: "Cache 与总线", file: "0003-cache-bus.html" },
@@ -59,7 +60,7 @@
 
   /* 十大学习阶段（序号区间 = 新手认知顺序） */
   var PHASES = [
-    { name: "① 计算机组成", from: 1, to: 3 },
+    { name: "① 计算机组成", from: 0, to: 3 },
     { name: "② 程序语言", from: 4, to: 4 },
     { name: "③ 数据结构与算法", from: 5, to: 14 },
     { name: "④ 操作系统", from: 15, to: 20 },
@@ -212,6 +213,6 @@
 
   // 全站像素小剧场：EP 顶条 + 页眉精灵/假名 + 底部走带字幕（自带防重入守卫）
   var px = document.createElement("script");
-  px.src = REL_ROOT + "assets/pixel-stage.js?v=6";
+  px.src = REL_ROOT + "assets/pixel-stage.js?v=9";
   document.head.appendChild(px);
 })();

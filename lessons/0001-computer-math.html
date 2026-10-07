@@ -16,7 +16,7 @@
     <p class="kicker">Teach · 软考软件设计师 · Lesson 0001（计算机组成 · 1/3）</p>
     <h1>组成计算专题：补码 · 浮点 · 校验码 · 可靠性 · RAID</h1>
     <p class="meta">
-      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b>（第 1 课，无上一课）<br>
+      <a href="../reference/ds-learning-path.html">课程总目录</a> ｜ 预计 <b>40 分钟</b> ｜ 上一课：<a href="0000-number-bases.html">0000 进制与转换</a><br>
       考点定位：补码表示范围、海明码校验位数、可靠性串联并联——每年 3~4 道纯计算题的集中地，公式背熟就是送分
     </p>
   </header>
@@ -26,7 +26,7 @@
     五个公式五个分：<strong>补码范围 −2<sup>n−1</sup> ~ 2<sup>n−1</sup>−1</strong>；<strong>海明 2<sup>k</sup> ≥ n+k+1</strong>；<strong>串联 R=R₁R₂ / 并联 1−(1−R₁)(1−R₂)</strong>；奇偶校验<strong>只能检奇数位错</strong>；RAID5 <strong>坏 1 块可恢复</strong>。全是套公式，动笔就能拿分。
   </div>
 
-<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 信息表示线</b>——机器码四兄弟/浮点/校验是一切计算题的地基。上游：无（起点）；下游：0002 存取指令、0025 子网用二进制（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 信息表示线</b>——机器码四兄弟/浮点/校验建在进制地基上。上游：0000 进制与转换；下游：0002 存取指令、0025 子网用二进制（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、机器数四兄弟：原码 → 反码 → 补码 → 移码</h2>
   <p>计算机里整数一律用<strong>补码</strong>存储、浮点数阶码用<strong>移码</strong>（下一节就用到），但题目会来回考四种码的互换。按「发明顺序」走一遍，规则就不用死记：</p>
@@ -118,6 +118,7 @@
 
   <div class="lesson-footer">
     <div class="nav">
+      <a href="0000-number-bases.html">← 上一课 0000 进制与转换</a>
       <a href="../reference/mistake-notebook.html">📓 错题本（自动记录）</a>
       <a href="0002-cpu-pipeline.html">下一课 → 0002 CPU 寻址与流水线</a>
       <a href="../reference/ds-learning-path.html">课程总目录</a>
@@ -294,6 +295,6 @@ Quiz.render("quiz-cm30", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=10"></script>
+<script src="../assets/sidebar.js?v=11"></script>
 </body>
 </html>
