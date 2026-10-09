@@ -242,7 +242,7 @@ CPU = 运算器 + 控制器。<strong>ALU（算术逻辑单元）</strong>完成
 - B 错：说反了——基址用于重定位、变址用于数组遍历。
 - D 错：两者都只需 <strong>1 次</strong>访存取操作数（公式算出 EA 后访存 1 次）。</p>
 <p><strong>11. B。</strong>
-相对寻址 <strong>EA = (PC) + A</strong>，A 为 8 位补码。80H = 1000 0000₂，作为 8 位补码其真值 = <strong>−128</strong>。</p>
+相对寻址 <strong>EA = (PC) + A</strong>，A 为 8 位补码。80H = 1000 0000B，作为 8 位补码其真值 = <strong>−128</strong>。</p>
 <pre><code>EA = 2000H + (−128) = 2000H − 80H = 1F80H
 （十进制验算：2000H = 8192，8192 − 128 = 8064 = 1F80H ✓）
 </code></pre>

@@ -2,13 +2,13 @@
  * sprite-base.js — 进制转换·像素小剧场（sprite-animation 规范）
  *
  * 两个剧场，各挂各的容器（放在它所讲解的章节旁边）：
- *   BaseLab.mountExpand("oba-holder")  §一 按权展开：1011₂ → 11
- *   BaseLab.mountDivide("obd-holder")  §二 除基取余：25 → 11001₂
+ *   BaseLab.mountExpand("oba-holder")  §一 按权展开：1011B → 11
+ *   BaseLab.mountDivide("obd-holder")  §二 除基取余：25 → 11001B
  *
  * 剧场 A：四个数字格下方依次落下位权条（2³=8…2⁰=1）、乘积条
  *   （1×8=8…），最后汇聚成 8+0+2+1 = 11——「逐位相乘再相加」一眼看穿。
  * 剧场 B：除法阶梯一行一行落下，余数被收进右栏（从下往上），
- *   最后箭头点亮、拼出 11001₂ 并验算 16+8+1=25——「余数逆序读」。
+ *   最后箭头点亮、拼出 11001B 并验算 16+8+1=25——「余数逆序读」。
  *
  * 环境动画（REC/扫描线/大字故障/走带字幕）为纯 CSS keyframes；
  * prefers-reduced-motion 时序列机停摆、静态初始帧收场。
@@ -167,7 +167,7 @@
   }
 
   /* ============================================================
-   * 剧场 A：按权展开（1011₂ → 11）
+   * 剧场 A：按权展开（1011B → 11）
    * ============================================================ */
   var Expand = {
     mount: function (holderId) {
@@ -199,7 +199,7 @@
       }
       var dotsHtml = "";
       for (var d = 0; d < 5; d++) dotsHtml += "<span" + (d === 0 ? ' class="on"' : "") + "></span>";
-      var ribbonText = "按權展開 · 1011₂ = 11 · 位權 8 4 2 1 · 逐位相乘再相加 · 小數點右 0.5 0.25 · 任意 R 進制同理 · ";
+      var ribbonText = "按權展開 · 1011B = 11 · 位權 8 4 2 1 · 逐位相乘再相加 · 小數點右 0.5 0.25 · 任意 R 進制同理 · ";
 
       var html = '<div class="ob-stage oba-stage" data-od-id="stage-a">' +
         '<div class="ob-grain"></div>' +
@@ -253,7 +253,7 @@
 
       var runner = makeRunner(els, [
         function () {
-          runner.caption("R 进制 → 十进制只有一招：<i>按权展开</i>。看 1011₂ 一步步变成 11");
+          runner.caption("R 进制 → 十进制只有一招：<i>按权展开</i>。看 1011B 一步步变成 11");
         },
         function () {
           staggerOn(els.wchips);
@@ -268,7 +268,7 @@
           runner.caption("相加 = <b>11</b> ✓。这招在 0001 浮点、0025 子网划分里还要用一百遍");
         },
         function () {
-          runner.caption("带小数同理：小数点右边的权是 2⁻¹ = 0.5、2⁻² = 0.25，往右减半（11.01₂ = 3.25）");
+          runner.caption("带小数同理：小数点右边的权是 2⁻¹ = 0.5、2⁻² = 0.25，往右减半（11.01B = 3.25）");
         },
         function () {
           runner.caption("任意 R 进制都一样：把 2 换成 R——八进制就按 8 的幂展开");
@@ -285,14 +285,14 @@
   };
 
   /* ============================================================
-   * 剧场 B：除基取余（25 → 11001₂）
+   * 剧场 B：除基取余（25 → 11001B）
    * ============================================================ */
   var Divide = {
     mount: function (holderId) {
       var holder = document.getElementById(holderId);
       if (!holder || holder.querySelector(".ob-stage")) return;
 
-      /* [被除数, 商, 余数] —— 25 = 11001₂ */
+      /* [被除数, 商, 余数] —— 25 = 11001B */
       var ROWS = [[25, 12, 1], [12, 6, 0], [6, 3, 0], [3, 1, 1], [1, 0, 1]];
 
       var MOB = window.innerWidth < 640;
@@ -326,7 +326,7 @@
 
       var dotsHtml = "";
       for (var d = 0; d < 5; d++) dotsHtml += "<span" + (d === 0 ? ' class="on"' : "") + "></span>";
-      var ribbonText = "除基取餘 · 25 = 11001₂ · 餘數逆序讀 · 商 0 就停 · 最先得最低位 · 小數乘基取整順序讀 · ";
+      var ribbonText = "除基取餘 · 25 = 11001B · 餘數逆序讀 · 商 0 就停 · 最先得最低位 · 小數乘基取整順序讀 · ";
 
       var html = '<div class="ob-stage obd-stage" data-od-id="stage-b">' +
         '<div class="ob-grain"></div>' +
@@ -338,7 +338,7 @@
         (MOB ? "" : '<div class="obd-panel" data-od-id="panel"><div class="ptitle">余数收集栏 · 从下往上读</div></div>') +
         slotsHtml +
         (MOB ? "" : '<div class="obd-arrow">↑ 逆 序 读</div>') +
-        '<div class="obd-result">余数逆序读 → 11001₂　验算：16 + 8 + 1 = 25 ✓</div>' +
+        '<div class="obd-result">余数逆序读 → 11001B　验算：16 + 8 + 1 = 25 ✓</div>' +
         '<div class="ob-ribbon"><div class="ob-ribbon-track">' + ribbonText + ribbonText + "</div></div>" +
         '<div class="ob-caption">除基取余：十进制整数 → R 进制的标准动作，除到商为 0。</div>' +
         "</div>";
@@ -388,10 +388,10 @@
         function () {
           if (els.arrow) els.arrow.classList.add("on");
           els.result.classList.add("on");
-          runner.caption("余数<b>逆序</b>读：11001₂。验算：16 + 8 + 1 = 25 ✓（正是剧场 A 的按权展开）");
+          runner.caption("余数<b>逆序</b>读：11001B。验算：16 + 8 + 1 = 25 ✓（正是剧场 A 的按权展开）");
         },
         function () {
-          runner.caption("小数部分反着来：<b>乘基取整、顺序读</b>——0.625 → 0.101₂，见 §二例题");
+          runner.caption("小数部分反着来：<b>乘基取整、顺序读</b>——0.625 → 0.101B，见 §二例题");
         },
         function () {
           resetAll();

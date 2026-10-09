@@ -28,16 +28,22 @@
 
   <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 信息表示线（起点）</b>——进制是机器码、浮点、子网划分共同的地基。上游：无；下游：0001 补码直接建在二进制上、0025 子网划分用二进制（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
+  <div class="callout tip">
+    <span class="tag">📝 书写规范（本课及全站通用）</span>
+    数字后缀的字母标注它是什么进制——<strong>B = 二进制、O = 八进制、D = 十进制、H = 十六进制</strong>（取英文首字母：Binary / Octal / Decimal / Hexadecimal，汇编语言与软考通用写法）。<br>
+    例：<code>1011B</code> 是二进制、<code>332O</code> 是八进制、<code>25D</code> 是十进制、<code>1AH</code> 是十六进制（A~F = 10~15）。<strong>不带标注的数字默认就是十进制</strong>；真题里偶尔用括号下标 <code>(1011)₂</code>，写法不同、读法一样，和 <code>1011B</code> 是同一个数。注意 O 是<strong>字母 O</strong>不是数字 0——手写笔记时写得圆一点以示区分。
+  </div>
+
   <h2>一、R 进制 → 十进制：按权展开（一切转换的原点）</h2>
   <p>每一位数字 × 它所在位的<strong>权</strong>（基数的幂）再相加。<strong>基数 R</strong> = 用几个数码（二进制 2 个、八进制 8 个、十六进制 16 个，A=10…F=15）；第 i 位（从右数、从 0 起）的权 = R<sup>i</sup>。</p>
   <div class="card">
-    <p style="margin-top:0;"><strong>例 1</strong>：1011₂ = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = <strong>11</strong></p>
-    <p><strong>例 2（带字母）</strong>：1A₂₆? —— 1A₁₆ = 1×16 + 10 = <strong>26</strong>（A 就是 10，别看到字母就慌）</p>
-    <p style="margin-bottom:0;"><strong>例 3（小数）</strong>：11.01₂ = 2+1+0.25 = <strong>3.25</strong>（小数点后的权是 2⁻¹=0.5、2⁻²=0.25，往右减半）</p>
+    <p style="margin-top:0;"><strong>例 1</strong>：1011B = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = <strong>11</strong></p>
+    <p><strong>例 2（带字母）</strong>：1AH = 1×16 + 10 = <strong>26</strong>（A 就是 10，别看到字母就慌）</p>
+    <p style="margin-bottom:0;"><strong>例 3（小数）</strong>：11.01B = 2+1+0.25 = <strong>3.25</strong>（小数点后的权是 2⁻¹=0.5、2⁻²=0.25，往右减半）</p>
   </div>
   <div class="callout tip">
     <span class="tag">🎬 像素小剧场 · 按权展开</span>
-    约 10 秒动画：1011₂ 的四个数字格下方依次落下位权条（8 4 2 1）和乘积条，最后汇聚成 8+0+2+1 = 11——「逐位相乘再相加」这一招，看一遍就长在脑子里。
+    约 10 秒动画：1011B 的四个数字格下方依次落下位权条（8 4 2 1）和乘积条，最后汇聚成 8+0+2+1 = 11——「逐位相乘再相加」这一招，看一遍就长在脑子里。
   </div>
   <div id="oba-holder"></div>
 
@@ -47,15 +53,15 @@
   <ul>
     <li><strong>整数部分：除基取余，余数<strong>逆序</strong>读</strong>——除到商 0 为止，先得的余数是低位；</li>
     <li><strong>小数部分：乘基取整，整数<strong>顺序</strong>读</strong>——每步取走整数部分，用剩下的小数继续乘；</li>
-    <li>巧算（二进制专用）：把十进制<strong>拆成 2 的幂之和</strong>，有幂的位写 1——25 = 16+8+1 = <strong>11001₂</strong>，考场比竖除快一倍。</li>
+    <li>巧算（二进制专用）：把十进制<strong>拆成 2 的幂之和</strong>，有幂的位写 1——25 = 16+8+1 = <strong>11001B</strong>，考场比竖除快一倍。</li>
   </ul>
   <div class="card">
-    <p style="margin-top:0;"><strong>例（整数）</strong>：25 ÷ 2 = 12 余 <strong>1</strong>；12 ÷ 2 = 6 余 <strong>0</strong>；6 ÷ 2 = 3 余 <strong>0</strong>；3 ÷ 2 = 1 余 <strong>1</strong>；1 ÷ 2 = 0 余 <strong>1</strong>。余数逆序 → <strong>11001₂</strong>（除了 5 次 → 二进制 5 位）。</p>
-    <p style="margin-bottom:0;"><strong>例（小数）</strong>：0.625 × 2 = <strong>1</strong>.25；0.25 × 2 = <strong>0</strong>.5；0.5 × 2 = <strong>1</strong>.0（小数部分归 0 即终止）。整数顺序 → <strong>0.101₂</strong>。</p>
+    <p style="margin-top:0;"><strong>例（整数）</strong>：25 ÷ 2 = 12 余 <strong>1</strong>；12 ÷ 2 = 6 余 <strong>0</strong>；6 ÷ 2 = 3 余 <strong>0</strong>；3 ÷ 2 = 1 余 <strong>1</strong>；1 ÷ 2 = 0 余 <strong>1</strong>。余数逆序 → <strong>11001B</strong>（除了 5 次 → 二进制 5 位）。</p>
+    <p style="margin-bottom:0;"><strong>例（小数）</strong>：0.625 × 2 = <strong>1</strong>.25；0.25 × 2 = <strong>0</strong>.5；0.5 × 2 = <strong>1</strong>.0（小数部分归 0 即终止）。整数顺序 → <strong>0.101B</strong>。</p>
   </div>
   <div class="callout tip">
     <span class="tag">🎬 像素小剧场 · 除基取余</span>
-    同一个 25，换他法：除法阶梯一行行落下，每一步的余数被收进右栏（注意收集方向——<b>先得到的在最低位</b>），最后拼出 11001₂ 还顺手验算一遍。
+    同一个 25，换他法：除法阶梯一行行落下，每一步的余数被收进右栏（注意收集方向——<b>先得到的在最低位</b>），最后拼出 11001B 还顺手验算一遍。
   </div>
   <div id="obd-holder"></div>
 
@@ -67,15 +73,15 @@
   <h2>三、二进制 ↔ 八进制 / 十六进制：分组换算（秒杀技）</h2>
   <p>因为 8 = 2³、16 = 2⁴：<strong>二进制转八进制按 3 位一组、转十六进制按 4 位一组</strong>，<strong>分组方向：以小数点为界，整数部分向左、小数部分向右</strong>，两端不足补零。反向转换每位展开即可——<strong>完全不用经过十进制</strong>。</p>
   <div class="card">
-    <p style="margin-top:0;"><strong>例 1（二 → 十六）</strong>：11011010₂ → 分组 <strong>1101 | 1010</strong> → D | A → <strong>DA₁₆</strong></p>
-    <p><strong>例 2（二 → 八）</strong>：11011010₂ → 整数向左分组 <strong>11 | 011 | 010</strong>（左端补 0 成 011）→ 3 | 3 | 2 → <strong>332₈</strong></p>
-    <p style="margin-bottom:0;"><strong>例 3（十六 → 二）</strong>：3C₁₆ → 3=0011，C=1100 → <strong>00111100₂</strong>（每位拆 4 位，原样拼接）</p>
+    <p style="margin-top:0;"><strong>例 1（二 → 十六）</strong>：11011010B → 分组 <strong>1101 | 1010</strong> → D | A → <strong>DAH</strong></p>
+    <p><strong>例 2（二 → 八）</strong>：11011010B → 整数向左分组 <strong>11 | 011 | 010</strong>（左端补 0 成 011）→ 3 | 3 | 2 → <strong>332O</strong></p>
+    <p style="margin-bottom:0;"><strong>例 3（十六 → 二）</strong>：3CH → 3=0011，C=1100 → <strong>00111100B</strong>（每位拆 4 位，原样拼接）</p>
   </div>
   <span class="formula">记忆钩子：8 = 2³ → 三位一组；16 = 2⁴ → 四位一组；分组从小数点向两侧，<strong>补零补在两端</strong></span>
 
   <h2>四、两个必考题型：进制等式 与 位数范围</h2>
   <h3>4.1 进制等式题（解方程）</h3>
-  <p>题面给「(41)<sub>x</sub> = (29)₁₀，求 x」——把左边<strong>按权展开</strong>，解一元一次方程即可：</p>
+  <p>题面给「(41)<sub>x</sub> = (29)D，求 x」——把左边<strong>按权展开</strong>，解一元一次方程即可：</p>
   <span class="formula">4x + 1 = 29 → x = <strong>7</strong>　　（注意：算出的基数必须 ≤ 该数用到的最大数码 + 1）</span>
   <h3>4.2 位数与表示范围</h3>
   <ul>
@@ -88,11 +94,11 @@
   <table class="tight">
     <tr><th>2 的幂</th><th>值</th><th>十六进制</th><th>考点场景</th></tr>
     <tr><td>2⁰ ~ 2³</td><td class="num">1 / 2 / 4 / 8</td><td class="num">1 / 2 / 4 / 8</td><td>按权展开逐位心算</td></tr>
-    <tr><td>2⁴</td><td class="num">16</td><td class="num">10₁₆</td><td>十六进制第二位的权</td></tr>
-    <tr><td>2⁶</td><td class="num">64</td><td class="num">40₁₆</td><td>/26 子网块大小（0025）</td></tr>
-    <tr><td>2⁸</td><td class="num">256</td><td class="num">FF+1=100₁₆</td><td>一个字节；FF=255</td></tr>
-    <tr><td><strong>2¹⁰</strong></td><td class="num"><strong>1024</strong></td><td class="num">400₁₆</td><td>1K；容量换算的地基</td></tr>
-    <tr><td>2¹⁶</td><td class="num">65536</td><td class="num">10000₁₆</td><td>B 类地址主机位（0025）</td></tr>
+    <tr><td>2⁴</td><td class="num">16</td><td class="num">10H</td><td>十六进制第二位的权</td></tr>
+    <tr><td>2⁶</td><td class="num">64</td><td class="num">40H</td><td>/26 子网块大小（0025）</td></tr>
+    <tr><td>2⁸</td><td class="num">256</td><td class="num">FF+1=100H</td><td>一个字节；FF=255</td></tr>
+    <tr><td><strong>2¹⁰</strong></td><td class="num"><strong>1024</strong></td><td class="num">400H</td><td>1K；容量换算的地基</td></tr>
+    <tr><td>2¹⁶</td><td class="num">65536</td><td class="num">10000H</td><td>B 类地址主机位（0025）</td></tr>
   </table>
   <p><strong>十六进制 A~F</strong>：A=10、B=11、C=12、D=13、E=14、F=15——倒背如流的要求：看到 C 立刻反应 12。</p>
 
@@ -111,7 +117,7 @@
     <ol style="margin:.3rem 0 0; padding-left:1.3rem;">
       <li>R→十：按权展开（小数点后权为 R⁻¹、R⁻²…）；十→R：整数除基取余<strong>逆序</strong>、小数乘基取整<strong>顺序</strong>。</li>
       <li>二↔八（3 位一组）/ 二↔十六（4 位一组）：分组从小数点向两侧、两端补零——不经过十进制。</li>
-      <li>进制等式 = 按权展开解方程；(41)ₓ=(29)₁₀ → x=7 这类题 30 秒拿下。</li>
+      <li>进制等式 = 按权展开解方程；(41)ₓ=(29)D → x=7 这类题 30 秒拿下。</li>
       <li>速记：2¹⁰=1024、2⁸=256、FF=255、A~F=10~15——0001 补码、0025 子网全靠它。</li>
     </ol>
   </div>
@@ -131,7 +137,7 @@
 <script src="../assets/answer-store.js"></script>
 <script src="../assets/calc-drill.js"></script>
 <script src="../assets/quiz.js?v=2"></script>
-<script src="../assets/sprite-base.js?v=1"></script>
+<script src="../assets/sprite-base.js?v=2"></script>
 <script>
 BaseLab.mountExpand("oba-holder");
 BaseLab.mountDivide("obd-holder");
@@ -143,16 +149,16 @@ CalcDrill.mount("cdb0", {
     { text: "二进制 1011 = ___（填十进制）", answer: 11, mode: "exact",
       derive: "按权展开：8+0+2+1 = 11。" },
     { text: "二进制 11011010 = ___（填十进制）", answer: 218, mode: "exact",
-      derive: "128+64+16+8+2 = 218；或先转 DA₁₆ = 13×16+10 = 218（两条路互相验算）。" },
+      derive: "128+64+16+8+2 = 218；或先转 DAH = 13×16+10 = 218（两条路互相验算）。" },
     { text: "十六进制 1A = ___（填十进制）", answer: 26, mode: "exact",
       derive: "1×16 + 10（A）= 26。" },
     { text: "八进制 745 = ___（填十进制）", answer: 485, mode: "exact",
       derive: "7×64 + 4×8 + 5 = 448+32+5 = 485。" },
     { text: "十进制 25 转二进制后共 ___ 位", answer: 5, mode: "exact",
-      derive: "25 = 16+8+1 = 11001₂；或 2⁴ ≤ 25 < 2⁵ → 5 位。" },
+      derive: "25 = 16+8+1 = 11001B；或 2⁴ ≤ 25 < 2⁵ → 5 位。" },
     { text: "2 的 12 次方 = ___", answer: 4096, mode: "exact",
       derive: "2¹⁰ = 1024，×2×2 → 4096。速记：2¹⁰=1024 往上翻。" },
-    { text: "已知 (41)ₓ = (29)₁₀，则基数 x = ___", answer: 7, mode: "exact",
+    { text: "已知 (41)ₓ = (29)D，则基数 x = ___", answer: 7, mode: "exact",
       derive: "按权展开：4x + 1 = 29 → x = 7。" },
     { text: "十六进制 3C 转二进制后，1 的个数是 ___", answer: 4, mode: "exact",
       derive: "3 = 0011、C = 1100 → 00111100 → 四个 1。" }
@@ -204,7 +210,7 @@ Quiz.render("quiz-base0", {
         "权算错了：第三位的权是 36 不是 6。"
       ],
       explain: "R 进制转十进制只有一个动作：按权展开再相加。", source: "Lesson 0000 §一" },
-    { q: "已知 (41)ₓ = (29)₁₀，则基数 x = ？",
+    { q: "已知 (41)ₓ = (29)D，则基数 x = ？",
       options: ["7", "6", "8", "5"],
       answer: 0,
       opts: [
@@ -223,7 +229,7 @@ Quiz.render("quiz-base0", {
         "128 = 2⁷，只有 7 位。",
         "511 是 9 位全 1（2⁹ − 1）。"
       ],
-      explain: "R 进制 n 位最大值 = Rⁿ − 1；255 = FF₁₆，速记表里必须长这根神经。", source: "Lesson 0000 §4.2" },
+      explain: "R 进制 n 位最大值 = Rⁿ − 1；255 = FFH，速记表里必须长这根神经。", source: "Lesson 0000 §4.2" },
     { q: "十进制小数 0.625 转二进制的结果是？",
       options: ["0.101", "0.110", "0.011", "0.101 会除不尽"],
       answer: 0,
