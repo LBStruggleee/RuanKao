@@ -35,6 +35,12 @@
     <p><strong>例 2（带字母）</strong>：1A₂₆? —— 1A₁₆ = 1×16 + 10 = <strong>26</strong>（A 就是 10，别看到字母就慌）</p>
     <p style="margin-bottom:0;"><strong>例 3（小数）</strong>：11.01₂ = 2+1+0.25 = <strong>3.25</strong>（小数点后的权是 2⁻¹=0.5、2⁻²=0.25，往右减半）</p>
   </div>
+  <div class="callout tip">
+    <span class="tag">🎬 像素小剧场 · 按权展开</span>
+    约 10 秒动画：1011₂ 的四个数字格下方依次落下位权条（8 4 2 1）和乘积条，最后汇聚成 8+0+2+1 = 11——「逐位相乘再相加」这一招，看一遍就长在脑子里。
+  </div>
+  <div id="oba-holder"></div>
+
   <span class="formula">按权展开通式：(d<sub>n</sub>…d<sub>1</sub>d<sub>0</sub>.d<sub>-1</sub>)<sub>R</sub> = Σ d<sub>i</sub> × R<sup>i</sup>　　——所有「×进制转十进制」都是它</span>
 
   <h2>二、十进制 → R 进制：整数除基取余，小数乘基取整</h2>
@@ -47,6 +53,12 @@
     <p style="margin-top:0;"><strong>例（整数）</strong>：25 ÷ 2 = 12 余 <strong>1</strong>；12 ÷ 2 = 6 余 <strong>0</strong>；6 ÷ 2 = 3 余 <strong>0</strong>；3 ÷ 2 = 1 余 <strong>1</strong>；1 ÷ 2 = 0 余 <strong>1</strong>。余数逆序 → <strong>11001₂</strong>（除了 5 次 → 二进制 5 位）。</p>
     <p style="margin-bottom:0;"><strong>例（小数）</strong>：0.625 × 2 = <strong>1</strong>.25；0.25 × 2 = <strong>0</strong>.5；0.5 × 2 = <strong>1</strong>.0（小数部分归 0 即终止）。整数顺序 → <strong>0.101₂</strong>。</p>
   </div>
+  <div class="callout tip">
+    <span class="tag">🎬 像素小剧场 · 除基取余</span>
+    同一个 25，换他法：除法阶梯一行行落下，每一步的余数被收进右栏（注意收集方向——<b>先得到的在最低位</b>），最后拼出 11001₂ 还顺手验算一遍。
+  </div>
+  <div id="obd-holder"></div>
+
   <div class="callout warn">
     <span class="tag">⚠ 高频陷阱</span>
     ① 余数<strong>逆序</strong>读、小数整数位<strong>顺序</strong>读——方向背反是最常见丢分；② 十进制小数转二进制<strong>可能除不尽</strong>（如 0.3 → 无限循环），题目会限定取几位；③ 除不尽时二进制无法精确表示该小数——这句本身就是判断题考点。
@@ -119,6 +131,11 @@
 <script src="../assets/answer-store.js"></script>
 <script src="../assets/calc-drill.js"></script>
 <script src="../assets/quiz.js?v=2"></script>
+<script src="../assets/sprite-base.js?v=1"></script>
+<script>
+BaseLab.mountExpand("oba-holder");
+BaseLab.mountDivide("obd-holder");
+</script>
 <script>
 CalcDrill.mount("cdb0", {
   title: "进制转换计算挑战（先动笔再填）",
@@ -220,6 +237,6 @@ Quiz.render("quiz-base0", {
   ]
 });
 </script>
-<script src="../assets/sidebar.js?v=11"></script>
+<script src="../assets/sidebar.js?v=12"></script>
 </body>
 </html>
