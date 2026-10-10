@@ -208,7 +208,7 @@
 
   // 右下角每日组件：必背考点 + 每日一题（daily.js 自带防重入守卫）
   var daily = document.createElement("script");
-  daily.src = REL_ROOT + "assets/daily.js?v=2";
+  daily.src = REL_ROOT + "assets/daily.js?v=5";
   document.head.appendChild(daily);
 
   // 全站像素小剧场：EP 顶条 + 页眉精灵/假名 + 底部走带字幕（自带防重入守卫）
