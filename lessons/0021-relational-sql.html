@@ -31,6 +31,14 @@
     <h2>一、关系模型三要素与三类完整性</h2>
   <ul>
     <li>三要素：<strong>数据结构（二维表）、操作集合（关系代数/SQL）、完整性约束</strong>。</li>
+  </ul>
+  <div class="card">
+    <p style="margin-top:0;"><strong>先把二维表的黑话掰开</strong>——考题全用这套语言，先认熟：</p>
+    <p><strong>元组</strong> = 表里的一<strong>行</strong>（一条记录，如一个学生的全部信息）；<strong>属性</strong> = 表里的一<strong>列</strong>（如「姓名」「年龄」）；属性的<strong>取值范围</strong>叫域（如性别 ∈ {男, 女}）。<br>
+    <strong>候选码</strong> = 能唯一确定一行的<strong>最小</strong>列组合（学号可以，(姓名,年龄) 不行）；从候选码里选一个当<strong>主键</strong>（主码）；<strong>外键</strong> = 本表里存放的<strong>别家的候选码</strong>（选课表里的"学号"是学生表的主键——用它把两张表牵起来）。<br>
+    记住行的对应关系：元组=行、属性=列、候选码=唯一身份证、主键=选定的身份证、外键=存着的别人身份证。</p>
+  </div>
+  <ul>
     <li><strong>实体完整性</strong>：主键非空且唯一；<strong>参照完整性</strong>：外键要么为空、要么必须存在于被参照表；<strong>用户定义完整性</strong>：如年龄 0–150。</li>
   </ul>
 

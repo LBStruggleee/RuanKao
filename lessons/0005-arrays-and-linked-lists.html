@@ -51,7 +51,7 @@
     <h2>一、先建立内存的心智模型：一排编了号的柜子</h2>
   <p>把内存想成<strong>一排柜子，每个柜子有唯一编号（地址）</strong>。程序里的每个数据都住在某个柜子里，CPU 拿数据就是「报地址、开柜子」。整个数据结构学科其实在回答一个问题：</p>
   <div class="card" style="text-align:center; font-size:1.05rem;">
-    <strong>数据放柜子里时，是「挨着放」还是「散着放 + 互相记地址」？</strong><br>
+    <strong>数据放柜子里时，是「挨着放」还是「散着放 + 互相记地址」？</strong>——前者叫<strong>顺序存储</strong>（数组），后者叫<strong>链式存储</strong>（链表）。<br>
     两种选择，各自付出什么代价、换来什么好处？
   </div>
   <p>挨着放的就是<strong>数组</strong>，散着放、用指针牵手的<strong>就是链表</strong>。往下看。</p>
