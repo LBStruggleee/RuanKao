@@ -1133,15 +1133,25 @@ html.dark .pomo-start { color: #0e2a22; }
 
 /* —— 移动端：屏幕中央玻璃弹窗 —— */
 .pomo-modal {
-  display: none;
+  display: flex;
   position: fixed;
   inset: 0;
   z-index: 1200;
   align-items: center;
   justify-content: center;
   background: rgba(20, 26, 32, 0.4);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  /* 统一到侧栏约定：开与关共用同一 transition */
+  transition: opacity .22s ease, visibility 0s linear .22s;
 }
-.pomo-modal.open { display: flex; }
+.pomo-modal.open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity .22s ease;
+}
 /* 与 .pomo-glass 的显隐断点（1300px）对齐：1280–1299.98px 区间
    计时块仍可见，点击弹窗必须可用；用 1280 会出现点了没反应的死区 */
 @media (min-width: 1300px) { .pomo-modal { display: none !important; } }
@@ -1156,11 +1166,10 @@ html.dark .pomo-start { color: #0e2a22; }
               inset 0 1px 0 var(--pg-highlight);
   padding: 1rem 1.2rem 1.2rem;
   text-align: center;
-  animation: pomoPop 0.3s cubic-bezier(0.34, 1.4, 0.5, 1);
+  transform: scale(.92);
+  transition: transform .22s cubic-bezier(.3, 1.3, .5, 1);
 }
-@keyframes pomoPop {
-  from { transform: scale(0.85); opacity: 0; }
-}
+.pomo-modal.open .pomo-modal-card { transform: scale(1); }
 
 /* ---------- 右下角每日组件：必背考点 + 每日一题 ---------- */
 .daily-dock {
@@ -1194,7 +1203,7 @@ html.dark .pomo-start { color: #0e2a22; }
 .daily-tab:active { transform: scale(0.95); }
 
 .daily-card {
-  display: none;
+  display: block;
   position: fixed;
   right: 0.9rem;
   bottom: 4.3rem;
@@ -1210,12 +1219,21 @@ html.dark .pomo-start { color: #0e2a22; }
   box-shadow: 0 14px 40px var(--pg-shadow), inset 0 1px 0 var(--pg-highlight);
   padding: 0.9rem 1rem 0.8rem;
   color: var(--pg-ink);
-  animation: dailyPop 0.25s cubic-bezier(0.34, 1.3, 0.5, 1);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px) scale(.97);
+  pointer-events: none;
+  /* 统一到侧栏约定：开与关共用同一 transition，对称、干净 */
+  transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+}
+.daily-card.open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition: opacity .22s ease, transform .22s ease;   /* 打开：visibility 立即可见 */
 }
 @media (min-width: 1300px) { .daily-card.open { display: block; } }
-@keyframes dailyPop {
-  from { transform: translateY(8px) scale(0.96); opacity: 0; }
-}
 
 .daily-head {
   display: flex;
@@ -1305,15 +1323,24 @@ html.dark .daily-tag { color: var(--pg-accent); }
 
 /* ---------- 内容优先：窄于 1500px 时，展开的卡片改为居中弹窗 + 遮罩 ---------- */
 .pomo-veil, .daily-veil {
-  display: none;
+  display: block;
   position: fixed;
   inset: 0;
   z-index: 898;
   background: rgba(20, 26, 32, 0.42);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  /* 对齐侧栏遮罩约定：opacity 淡入淡出，关闭延迟到淡出结束 */
+  transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.pomo-veil.show, .daily-veil.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity .25s ease;
 }
 @media (max-width: 1499.98px) {
-  .pomo-veil.show { display: block; }
-  .daily-veil.show { display: block; }
   .pomo-glass.open {
     left: 50%;
     top: 50%;
