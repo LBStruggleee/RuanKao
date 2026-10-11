@@ -59,7 +59,21 @@
     <tr><td>重放攻击</td><td>截获合法报文再重发</td><td><strong>时间戳/一次性令牌/序列号</strong></td></tr>
   </table>
 
-  <h2>四、防火墙与 IDS/IPS</h2>
+  <h2>四、恶意代码分类（选择题常客）</h2>
+  <table class="tight">
+    <tr><th>类型</th><th>特征一句话</th><th>考点钩子</th></tr>
+    <tr><td><strong>计算机病毒</strong></td><td>寄生在宿主程序中，<strong>用户运行宿主时激活</strong></td><td>需要宿主、可自我复制</td></tr>
+    <tr><td><strong>蠕虫（Worm）</strong></td><td><strong>独立程序</strong>，主动利用漏洞在网络自我传播</td><td>不需要宿主（与病毒的本质区别）</td></tr>
+    <tr><td><strong>木马（Trojan）</strong></td><td>伪装成有用软件，<strong>开后门盗信息</strong>，不自我复制</td><td>伪装 + 远程控制</td></tr>
+    <tr><td><strong>逻辑炸弹</strong></td><td>满足特定条件（日期/事件）时才触发破坏</td><td>潜伏触发条件</td></tr>
+    <tr><td><strong>后门（陷门）</strong></td><td>绕过正常认证进入系统的秘密通道</td><td>绕过访问控制</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="tag">⚠ 高频判断</span>
+    「蠕虫需要宿主程序」——<strong>错</strong>（蠕虫独立传播，病毒才需要宿主）；「木马能自我复制」——<strong>错</strong>（木马不复制，蠕虫才复制）。
+  </div>
+
+  <h2>五、防火墙与 IDS/IPS</h2>
   <table class="tight">
     <tr><th>设备</th><th>原理</th><th>位置/特点</th></tr>
     <tr><td>包过滤防火墙</td><td>网络层查 IP/端口规则</td><td>快、粒度粗</td></tr>
@@ -70,7 +84,7 @@
     <tr><td>VPN / IPSec</td><td>AH = 只认证；ESP = 认证+加密；传输模式护载荷、隧道模式护整包</td><td>公共网络上建加密通道</td></tr>
   </table>
 
-  <h2>五、自查（全对过课）</h2>
+  <h2>六、自查（全对过课）</h2>
   <div id="quiz18"></div>
 
   <div class="win-box">

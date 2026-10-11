@@ -62,7 +62,8 @@
     <tr><th>场景</th><th>信号量设置</th><th>要点</th></tr>
     <tr><td>互斥（一个临界资源）</td><td>mutex = 1</td><td>P(mutex)…临界区…V(mutex)，成对出现</td></tr>
     <tr><td><strong>生产者-消费者（缓冲区 n）</strong></td><td><strong>mutex=1, empty=n, full=0</strong></td><td><em>资源量 P 在互斥量 P 之前</em>（顺序颠倒可能死锁）</td></tr>
-    <tr><td>读者-写者</td><td>读读可并、写写互斥、读写互斥</td><td>计数器 + 互斥保护计数器</td></tr>
+    <tr><td>读者-写者</td><td>读读可并、写写互斥、读写互斥</td><td>计数器 + 互斥保护计数器（第一个读者锁写、最后一个解锁）</td></tr>
+    <tr><td><strong>哲学家进餐</strong></td><td>5 支筷子 = 5 个互斥量</td><td>死锁经典：全员各拿一支等另一支 → 死锁；解法<strong>最多 4 人同时拿</strong> / <strong>奇数号先左后右、偶数号先右后左</strong>（破坏循环等待）</td></tr>
   </table>
 
   <h3>3.1 前驱图 → PV 代码（下午试题一的固定填空）</h3>

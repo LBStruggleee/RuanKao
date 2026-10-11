@@ -85,7 +85,15 @@
   </div>
   <div id="ols-holder"></div>
 
-  <h2>四、必背对比表（考题直接从这行行出）</h2>
+  <h2>四、链表三大经典操作（概念层，选择题常客）</h2>
+  <table class="tight">
+    <tr><th>操作</th><th>思路一句话</th><th>指针/复杂度</th></tr>
+    <tr><td><strong>反转链表</strong></td><td>逐个摘下头节点，头插到新链表</td><td>三指针 prev/cur/next，O(n) 一趟</td></tr>
+    <tr><td><strong>找环（快慢指针）</strong></td><td>快指针一次走 2 步、慢指针 1 步；<strong>有环必相遇</strong></td><td>相遇即有环，O(n) 不需额外空间</td></tr>
+    <tr><td><strong>合并有序链表</strong></td><td>两指针比大小，小的先接，接完接剩余</td><td>O(m+n)；递归写法更短</td></tr>
+  </table>
+
+  <h2>五、必背对比表（考题直接从这行行出）</h2>
   <table class="tight">
     <tr><th>操作</th><th>数组（顺序表）</th><th>链表</th></tr>
     <tr><td>按下标访问第 i 个</td><td><strong>O(1)</strong> 公式直达</td><td><strong>O(n)</strong> 从头沿链走</td></tr>
@@ -95,14 +103,14 @@
   </table>
   <p style="font-size:.9rem; color:var(--ink-soft);">脚注：O(1) = 步数是常数，与元素多少无关；O(n) = 最坏要走约 n 步，随元素个数线性增长。考试不考符号定义，但爱考「哪个更快、为什么」。</p>
 
-  <h2>五、动手：亲手感受「1 步 vs 一步步走」</h2>
+  <h2>六、动手：亲手感受「1 步 vs 一步步走」</h2>
   <div id="listlab"></div>
   <div class="callout tip">
     <span class="tag">💡 观察任务</span>
     两个任务各玩一遍：任务 A 用<strong>同一个目标下标</strong>分别在左右两边取元素，数一数各点了几下；任务 B 对比插入时「搬元素」和「改指针」的区别。<strong>考卷上所有「顺序表 vs 链表」的选项，背后就是这两种手感。</strong>
   </div>
 
-  <h2>六、自查（全对才算过这课）</h2>
+  <h2>七、自查（全对才算过这课）</h2>
   <div id="quiz-ds1"></div>
 
   <div class="win-box">
