@@ -84,26 +84,53 @@
   </ul>
 
   <h2>三、校验码三兄弟：检一位、纠一位、检任意位</h2>
-  <p><strong>先明白「校验」在干嘛</strong>：数据在传输/存储中可能被干扰出错（0 变 1）。校验码 = 额外添的几位，让合法数据带某种规律——收方检查规律破没破，破了大喊「传错了」。下面三个兄弟就是三种「添规律」的方法，一个比一个强。</p>
-  <table class="tight">
-    <tr><th>校验码</th><th>原理</th><th>能力</th></tr>
-    <tr><td><strong>奇偶校验</strong></td><td>补 1 位使整个码字 1 的个数为奇/偶</td><td><strong>只能发现奇数个位错</strong>，不能纠错，不能发现偶数位错</td></tr>
-    <tr><td><strong>海明码</strong></td><td>k 位校验位嵌入 2<sup>i</sup> 位置（1,2,4,8…），分组偶校验</td><td><strong>发现并纠正 1 位错</strong>（检测 2 位错）</td></tr>
-    <tr><td><strong>CRC 循环冗余</strong></td><td>模 2 除法（异或）得校验位拼接在尾部</td><td><strong>检错能力极强</strong>（教材口径：只检错不纠错），靠硬件实现</td></tr>
-  </table>
+
+  <h3>3.0 先明白「校验」在干嘛（一句话）</h3>
+  <p>数据在传输/存储中可能被干扰出错（0 变 1）。<strong>校验码 = 额外添的几位，让合法数据带某种规律</strong>——收方检查规律破没破，破了大喊「传错了」。就像寄快递时在箱子上写「共 5 件」：收货时数一数只有 4 件，立刻知道丢了一件。三个兄弟就是三种「写规律」的方法，一个比一个强。</p>
+
+  <h3>3.1 奇偶校验：数 1 的个数（最简单的规律）</h3>
+  <p><strong>规律就一句话：让整个码字里 1 的个数是奇数（或偶数）</strong>。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>手算一遍</strong>：要传数据 <strong>1011001</strong>（4 个 1）。约定用「偶校验」——1 的个数必须是偶数。现在是 4 个（偶数）✓，那校验位补 <strong>0</strong>，码字 = 1011001<strong>0</strong>。</p>
+    <p><strong>传输中出错会怎样</strong>？任何<strong>一位</strong>被干扰翻转（0↔1），1 的个数就会变奇数——收方一数：奇数！大喊「传错了」。</p>
+    <p style="margin-bottom:0;"><strong>它的死穴</strong>：要是<strong>同时错 2 位</strong>，1 的个数又变回偶数——规律没破，检查不出来。<strong>只能发现奇数个位错、不能纠错</strong>（只知道错了，不知道哪位错）。这就是考试判断题的考点。</p>
+  </div>
+
+  <h3>3.2 海明码：分成几组各查各的（能纠错的秘诀）</h3>
+  <p><strong>奇偶校验只知道「错了」，海明码怎么知道「哪位错了」</strong>？思路：<strong>把每一位编进几个不同的组，每组各做一次奇偶检查</strong>——哪几组报警，交叉一下就能定位到出错的那一位。好比宿舍楼查人：A 组查「1、2、3 号房」，B 组查「2、4、6 号房」，两个组都缺人 → 只有 2 号房两边都对不上，缺的就是他。</p>
+  <p><strong>校验位放哪、要几位</strong>：校验位放在第 <strong>1、2、4、8…（2 的幂）</strong>位置上，每一位校验位管一个组。k 位校验位能区分「没错 + 哪一位错」共 n+k+1 种情况，所以：</p>
   <div class="card">
     <p style="margin-top:0;"><strong>海明码位数公式（必考）</strong>：信息位 n 位需校验位 k 位，满足：</p>
     <span class="formula">2<sup>k</sup> ≥ n + k + 1</span>
-    <p style="margin-bottom:0;"><strong>例</strong>：n=4 → 试 k=3：2³=8 ≥ 4+3+1=8 ✓ → 需 <strong>3 位</strong>校验。n=11 → k=4：16 ≥ 16 ✓ → 4 位。口诀：4 位信息 3 校验，11 位信息 4 校验，26 位信息 5 校验。</p>
+    <p style="margin-bottom:0;"><strong>例</strong>：n=4 → 试 k=3：2³=8 ≥ 4+3+1=8 ✓ → 需 <strong>3 位</strong>校验。n=11 → k=4：16 ≥ 16 ✓ → 4 位。口诀：4 位信息 3 校验，11 位信息 4 校验，26 位信息 5 校验。能力：<strong>发现并纠正 1 位错</strong>（2 位错能发现但纠不了）。</p>
+  </div>
+
+  <h3>3.3 CRC：除法取余数（检错能力最强的）</h3>
+  <p><strong>思路</strong>：把整串数据当一个二进制大数，<strong>除以双方约定好的除数，余数拼在数据尾部一起发</strong>。收方用同一除数再除一遍——<strong>除得尽（余 0）就无错</strong>，除不尽就是传错了。改动任何一位，余数几乎必变，所以检错能力极强（教材口径：只检错不纠错）。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>先弄懂「模 2 除法」（就是按位异或）</strong>：不借位不进位——上一位和下一位<strong>相同得 0、不同得 1</strong>（1⊕0=1、1⊕1=0、0⊕0=0），和普通减法完全不同。</p>
+    <p style="margin-bottom:0;"><strong>G(x)=x³+x+1 → 除数 1011 怎么来的</strong>：x³+x+1 就是「2³+2¹+2⁰」，第 3、1、0 位是 1 → 写出来就是 <strong>1011</strong>。多项式 ↔ 二进制，一一对应。</p>
   </div>
   <div class="card">
-    <p style="margin-top:0;"><strong>CRC 完整手算</strong>（模 2 除 = 按位异或、不借位不进位）：信息 <strong>1101</strong>，G(x)=x³+x+1 → 除数 <strong>1011</strong>（r=3 位）。</p>
-    <pre>信息左移 r 位 → 1101000，逐「4 位窗口」异或（首位 1 商 1 异或除数；首位 0 商 0 直接落下一位）：
-1101 ⊕ 1011 = 0110 ，落下一位 0 → 1100
-1100 ⊕ 1011 = 0111 ，落下一位 0 → 1110
-1110 ⊕ 1011 = 0101 ，落下一位 0 → 1010
-1010 ⊕ 1011 = 0001 → 余数 = 001</pre>
-    <p style="margin-bottom:0;">发送码字 = 信息 ⊕ 余数 = <strong>1101 001</strong>。接收方用同一 1011 除码字：<strong>余数为 0 → 无错</strong>。口诀：首位是 1 就异或除数、是 0 就商 0 直落——除到最后剩 r 位就是校验位。</p>
+    <p style="margin-top:0;"><strong>CRC 完整手算</strong>：信息 <strong>1101</strong>，除数 <strong>1011</strong>（r=3 位）。</p>
+    <pre>第 1 步：信息左移 r 位（补 3 个 0）→ 1101000
+第 2 步：从左往右逐段异或（首位是 1 → 异或除数；首位是 0 → 商 0，直接落一位）：
+
+  1101 ⊕ 1011 = 0110 ，落下一位 0 → 1100
+  1100 ⊕ 1011 = 0111 ，落下一位 0 → 1110
+  1110 ⊕ 1011 = 0101 ，落下一位 0 → 1010
+  1010 ⊕ 1011 = 0001 → 最后剩 r 位：余数 = <strong>001</strong></pre>
+    <p style="margin-bottom:0;">第 3 步：发送码字 = 信息 + 余数 = <strong>1101 001</strong>。接收方用同一 1011 除码字：<strong>余数为 0 → 无错</strong>。口诀：首位是 1 就异或除数、是 0 就商 0 直落——除到最后剩 r 位就是校验位。</p>
+  </div>
+
+  <div class="card">
+    <p style="margin-top:0;"><strong>三兄弟对比收口（考试怎么挑）</strong>：</p>
+    <table class="tight" style="margin-bottom:0;">
+      <tr><th>校验码</th><th>一句话规律</th><th>能力</th><th>考法</th></tr>
+      <tr><td>奇偶校验</td><td>数 1 的个数凑奇/偶</td><td>只发现奇数位错，<strong>不纠错</strong></td><td>判断题（偶数位错查不出）</td></tr>
+      <tr><td>海明码</td><td>分组各查各的</td><td><strong>发现并纠正 1 位</strong>错</td><td>计算 k（2^k ≥ n+k+1）</td></tr>
+      <tr><td>CRC</td><td>除法取余拼尾部</td><td><strong>检错最强</strong>，不纠错</td><td>手算余数（模 2 除法）</td></tr>
+    </table>
   </div>
 
   <h2>四、可靠性：串联靠乘，并联靠补</h2>
