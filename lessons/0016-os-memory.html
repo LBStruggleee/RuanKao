@@ -29,9 +29,9 @@
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 存储管理线</b>——分页变换/TLB/虚拟内存/置换。上游：0003 局部性（跨面接线）、0015；下游：0017（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、分页存储：把内存切成固定大小的页框</h2>
-  <p>逻辑地址空间切成<strong>页</strong>，物理内存切成同样大小的<strong>块（页框）</strong>，靠<strong>页表</strong>记录「第 i 页 → 第 b 块」。优点：无外部碎片（<a href="0020-day03-os-exercises.html">0020 Q10</a>：只有内部碎片）；缺点：页表本身占内存、多一次访存。</p>
+  <p>先打个比方：程序里写的地址，就像<strong>快递单上写的门牌号</strong>——程序自己只认这套编号，这叫<strong>逻辑地址</strong>；而内存条上真正存放的位置，像<strong>仓库里的实际货架号</strong>，叫<strong>物理地址</strong>。快递到站后，分拣员要拿一张「单号 → 货架」的对照表才能找到货——这张表就是<strong>页表</strong>。分页就是把程序用的一串编号<strong>切成固定大小的「页」</strong>，把内存切成<strong>同样大小的「块（页框）」</strong>，页表负责记录「第 i 页 → 第 b 块」。为什么要这么折腾？因为程序在内存里的摆放位置是零散的、不连续的，有了页表这一层翻译，程序可以装进任意几块货架，照样觉得自己在连续编号里跑。两个「碎片」术语先看懂再记：<strong>外部碎片</strong> = 货架<strong>之间</strong>剩下的边角空隙——空隙太小，谁也放不进东西，只能白白浪费（如果内存按需随意切块，块与块之间就会留下这种空隙）；<strong>内部碎片</strong> = 货架<strong>里面</strong>没装满的空位——最后一页往往装不满，页框里剩下的空位浪费掉（固定大小才有的浪费）。分页因为切块大小固定，可以随时把程序塞进任意空块，所以<strong>无外部碎片</strong>（<a href="0020-day03-os-exercises.html">0020 Q10</a>：只有内部碎片）；缺点：页表本身占内存、多一次访存。</p>
   <span class="formula">页号 P = 逻辑地址 LA ÷ 页大小 S（取整）　页内偏移 W = LA mod S<br>物理地址 = 块号 × S + W　　（口诀：页式乘、段式加）</span>
-  <p><strong>例</strong>：页大小 1 KB（1024 B），逻辑地址 5000 → P = 5000÷1024 取整 = <strong>4</strong>，W = 5000 mod 1024 = <strong>904</strong>；查页表第 4 页 → 块 8 → 物理地址 = 8×1024+904 = <strong>9224</strong>。页大小是 2 的幂时可直接<strong>二进制切位</strong>：低位 = 偏移，高位 = 页号。</p>
+  <p><strong>例</strong>：页大小 1 KB（1024 B），逻辑地址 5000 → P = 5000÷1024 取整 = <strong>4</strong>，W = 5000 mod 1024 = <strong>904</strong>；查页表第 4 页 → 块 8 → 物理地址 = 8×1024+904 = <strong>9224</strong>。页大小是 2 的幂时还可<strong>二进制切位</strong>：把地址写成二进制，<strong>低若干位 = 偏移，剩下的高位 = 页号</strong>。30 秒对照例：5000 的二进制是 1001110001000，页大小 1024=2<sup>10</sup>，所以低 10 位 1110001000 = 904（正好是偏移 W），剩下的高位 100 = 4（正好是页号 P）——和上面除法算出的结果一模一样，考试两种写法任选其一。</p>
   <div class="callout warn">
     <span class="tag">⚠ 对比：段式</span>
     段式 = <strong>段基址 + 段内偏移</strong>（段长可变、利于共享保护、产生外部碎片）；段页式 = 先分段、段内分页（先查段表再查页表）。
@@ -39,10 +39,11 @@
 
   <h2>二、访存次数与 TLB</h2>
   <span class="formula">一级页表：2 次访存（查表 1 + 取数 1）｜二级：3 次｜三级：4 次｜<strong>TLB 命中：1 次</strong></span>
+  <p>「一级 / 二级 / 三级页表」是什么？<strong>一级页表</strong>就是一张对照表，查它 = 去内存跑一趟；<strong>二级页表</strong>是把这张大表再分成两层——先查「目录页」拿到真页表的位置、再查真正的页表，等于要多跑一趟内存；三级再多一层。口诀：<strong>层数 = 查表要跑的趟数</strong>，再加取数 1 趟，就是总访存次数。</p>
   <ul>
-    <li><strong>TLB（快表）</strong> = <strong>相联存储器</strong>实现的页表项缓存——硬件并行查找，<strong>不算访存</strong>；命中则页框号直接到手。</li>
-    <li><strong>有效访问时间 EAT = h×(t1+t2) + (1−h)×(t1+2t2)</strong>（t1 查表、t2 取数，h 为命中率；二级页表把 t1 展开）。</li>
-    <li>缺页中断是<strong>内部异常</strong>，在<strong>指令执行期间</strong>产生，处理后<strong>重新执行该指令</strong>。</li>
+    <li><strong>TLB（快表）</strong> = <strong>相联存储器</strong>实现的页表项缓存。为什么查它「<strong>不算访存</strong>」？打个比方：TLB 是 CPU 旁边一块<strong>极快的小抄</strong>（不是内存条），翻小抄几乎不花时间——就像你桌上的便利贴，扫一眼就有答案；而普通页表<strong>存在内存条里</strong>，查它就是真的「去内存跑一趟」，跑一趟才算一次访存。所以 TLB 命中则页框号直接到手。</li>
+    <li><strong>有效访问时间 EAT</strong>：先按两条白话分支想——<br>① <strong>命中</strong>：查快表（快）+ 去内存取数，共 2 步；<br>② <strong>未命中</strong>：查快表（快，但没查到）+ 去内存查页表（慢，跑一趟）+ 取数（再跑一趟），共 3 步；<br>然后按概率加权：<span class="formula">EAT = 命中率 h × 命中耗时 + 未命中率 (1−h) × 未命中耗时 = h×(t1+t2) + (1−h)×(t1+2t2)</span>（<strong>t1 = 快表查找时间</strong>、t2 = 访存一次的时间；二级页表把「查页表」那趟展开成两趟）。</li>
+    <li><strong>缺页中断</strong>：程序正执行到某条指令、发现要用的页不在内存——这是<strong>程序自己引发的问题</strong>，叫<strong>内部异常</strong>（不是打印机这类外部设备喊的<strong>外部中断</strong>）；它发生在<strong>指令执行期间</strong>。为什么处理完要「<strong>重新执行该指令</strong>」而不是接着往下走？因为那条指令还没执行成功——页从磁盘调进来之后，这条指令得从头再执行一遍才算数。</li>
   </ul>
 
   <div class="callout mission" style="margin-top:1rem;">
@@ -52,20 +53,21 @@
   <div id="odp-holder"></div>
 
   <h2>三、虚拟内存与置换算法</h2>
-  <p><strong>虚拟内存</strong>：进程只装部分页面即可运行（依据<strong>局部性原理</strong>）。三特征：<strong>多次性、对换性、虚拟性</strong>。访问不在内存的页 → 缺页 → 从磁盘调入 → 内存满则<strong>置换</strong>一页出去。谁出去？四种算法：</p>
+  <p><strong>虚拟内存</strong>：进程只装部分页面即可运行。为什么装一部分就够跑？依据是<strong>局部性原理</strong>——程序倾向于<strong>反复用最近用过的页</strong>（时间局部性）、<strong>用到某页时也爱用它旁边的页</strong>（空间局部性），所以一次只装少量页，绝大多数时候够用（详见 <a href="../reference/knowledge-map.html">0003 局部性</a>）。三特征：<strong>多次性</strong>（作业分好几次搬进内存，不是一口气全装）、<strong>对换性</strong>（内存不够时可以把页换出去、腾地方再换进来）、<strong>虚拟性</strong>（程序以为自己有一大片内存——逻辑容量大于物理容量）。访问不在内存的页 → 缺页 → 从磁盘调入 → 内存满则<strong>置换</strong>一页出去。谁出去？四种算法：</p>
   <table class="tight">
     <tr><th>算法</th><th>淘汰谁</th><th>要点</th></tr>
     <tr><td>OPT 最优</td><td>未来最久不用的页</td><td>理论最低缺页率，<strong>无法实现</strong>（要预知未来），作评价基准</td></tr>
-    <tr><td>FIFO 先进先出</td><td>最早进入的页</td><td><strong>唯一会出现 Belady 异常</strong>（块数变多缺页反而变多）</td></tr>
-    <tr><td>LRU 最近最久未用</td><td>最久未被访问的页</td><td>看「过去」，硬件开销大；<strong>LRU ≠ LFU</strong>（LFU 数次数）</td></tr>
-    <tr><td>Clock（NRU）</td><td>访问位循环扫描</td><td>LRU 的低成本近似</td></tr>
+    <tr><td>FIFO 先进先出</td><td>最早进入的页</td><td><strong>唯一会出现 Belady 异常</strong>（块数变多缺页反而变多）</td></tr>    <tr><td>LRU 最近最久未用</td><td>最久未被访问的页</td><td>看「过去」，硬件开销大；<strong>LRU ≠ LFU</strong>（LFU 数次数）</td></tr>
+    <tr><td>Clock（NRU）</td><td>按「访问位」循环扫描，淘汰第一个访问位为 0 的页</td><td>LRU 的低成本近似</td></tr>
   </table>
+  <p>为什么只有 FIFO 会出 <strong>Belady 异常</strong>？LRU、OPT 这类算法有个性质：<strong>给它更多块时，它手里的页集合是原来的超集</strong>（俗称「栈式」）——块变多只会更好、不会变差，就像条件宽松了成绩不会退步。而 FIFO 只记「谁先进来」，跟访问历史无关，块数变多时它手里的页集合可能整个换掉一套，所以缺页反而可能变多。</p>
+  <p>Clock 的「<strong>访问位</strong>」和「<strong>循环扫描</strong>」是什么？每个页框配一个 <strong>1 位小标记</strong>：这页最近被访问过就置 1，像查岗时给来过的人<strong>画个勾</strong>；要淘汰时，指针像<strong>钟表针一样转圈</strong>扫——遇到标记为 0（没画勾）的页就<strong>直接踢出去</strong>，遇到标记为 1 的就<strong>清零跳过</strong>（再给它一次机会）。这样不用像 LRU 那样精确记录时间，成本极低，效果接近 LRU。</p>
 
   <h2>四、动手：置换模拟器 + Belady 亲手触发</h2>
   <div id="pgrep"></div>
   <div class="callout tip">
     <span class="tag">💡 观察任务</span>
-    引用串 1,2,3,4,1,2,5,1,2,3,4,5：①FIFO 3 块 → 缺页 <strong>9</strong>；切到 4 块 → 缺页 <strong>10</strong>（点 Belady 对比按钮）——块变多反而更差！②切 LRU 3 块 → 缺页 10，OPT 3 块 → 缺页 7（理论下限）。这三个数字建议背下来，选择题可能原样出现。
+    引用串 1,2,3,4,1,2,5,1,2,3,4,5：①FIFO 3 块 → 缺页 <strong>9</strong>；切到 4 块 → 缺页 <strong>10</strong>（点 Belady 对比按钮）——块变多反而更差！②切 LRU 3 块 → 缺页 10，OPT 3 块 → 缺页 7（理论下限）。这<strong>四个数字 9、10、10、7</strong>（FIFO 3 块 / FIFO 4 块、LRU 3 块、OPT 3 块）建议整套背下来，选择题可能原样出现。
   </div>
 
   <h2>五、计算挑战（先动笔再填）</h2>
@@ -199,9 +201,9 @@ Quiz.render("quiz15", {
       answer: 0,
       opts: [
         "✓ FIFO 只记进入顺序，与访问历史无关——经典反例 3 块缺 9 次、4 块缺 10 次。",
-        "LRU 是栈式算法，块多缺页单调不增。",
+        "LRU 满足『块多时页集合是块少时页集合的超集』的性质，块多缺页单调不增。",
         "OPT 是理论最优，永远不会 Belady。",
-        "Clock 是 LRU 的近似，同样栈式。"
+        "Clock 是 LRU 的近似，同样满足『块多页集合是超集』的性质。"
       ],
       explain: "经典数字：引用串 1,2,3,4,1,2,5,1,2,3,4,5 下 FIFO 3块=9、4块=10（模拟器一键复现）。",
       source: "day02-memory.md §7 ｜ Lesson 0016 §三、§四"

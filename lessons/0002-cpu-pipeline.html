@@ -29,6 +29,14 @@
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · CPU 执行线</b>——寄存器分工 → 八种寻址 → 流水线。上游：0001 机器码；下游：0003 存储供给指令数据（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、CPU 里谁管什么（寄存器职责）</h2>
+  <p><strong>先给个框架</strong>：把 CPU 想成一间<strong>小工厂</strong>，里面分两个车间——<strong>控制器</strong>是「指挥的」（决定下一步干什么、去哪取指令），<strong>运算器</strong>是「干活的」（真正做加减乘除、比大小）。寄存器就是工厂里一个个贴了名字的小格子，每个格子只干一件事：</p>
+  <ul>
+    <li><strong>PC 程序计数器 = 书签</strong>：夹在程序这本「书」里，永远指着<strong>下一页（下一条指令在哪）</strong>，读完一页自动翻到下一页（自动 +1）；遇到跳转指令就像「翻到第 50 页」，书签被改写。</li>
+    <li><strong>IR 指令寄存器 = 正在读的那一行字</strong>：当前正在执行的指令本体就放在这里。配对记：<strong>PC 管地址、IR 管指令本体</strong>。</li>
+    <li><strong>ACC 累加器 = 草稿纸</strong>：算术运算的中间结果先搁在这，比如加法的一个加数和得数都经过它。</li>
+    <li><strong>PSW 状态字 = 考核板</strong>：记下这次运算的状态——进位了没？溢出了没？结果是零吗？（就是几个标志位）</li>
+  </ul>
+  <p>次要点一笔带过：指令译码器负责「看懂」操作码（属于控制器）；MAR/MDR 是访问内存的「门牌」与「包裹」（送地址、收数据）。</p>
   <table class="tight">
     <tr><th>部件</th><th>职责</th><th>考点一句话</th></tr>
     <tr><td><strong>PC 程序计数器</strong></td><td>存<strong>下一条</strong>指令的地址</td><td>『自动 +1』指向下一条，转移指令改写它</td></tr>
@@ -40,7 +48,7 @@
   <p>指令执行三步：<strong>取指 → 译码（分析） → 执行</strong>。控制器 = PC/IR/译码器/时序；运算器 = ALU/ACC/PSW。</p>
 
   <h2>二、8 种寻址方式（有效地址公式表）</h2>
-  <p><strong>「寻址」掰开说</strong>：指令里写不下那么长的真实地址，只写一个「线索」——CPU 顺藤摸瓜找到操作数的过程叫寻址，「藤」的种类就是寻址方式。线索给得越直接越快（立即/直接寻址），越绕越慢（间接/变址）但换来灵活性。考点就是背下面这张「有效地址 EA」公式表。</p>
+  <p><strong>「寻址」掰开说</strong>：指令里写不下那么长的真实地址，只写一个「线索」——CPU 顺藤摸瓜找到操作数的过程叫寻址，「藤」的种类就是寻址方式。线索给得越直接越快（立即/直接寻址），越绕越慢（间接/变址）但换来灵活性。考点就是背下面这张「有效地址 EA」公式表。<strong>先看懂两个记号</strong>：① <strong>带括号 = 间接一层</strong>——把括号里的值当作「地址」，再去内存取一次才拿到真正的数。比如 A=2000，内存 2000 号格子里放着 3000，3000 号格子里放着 55：EA=A 就是直接去 2000 号拿；EA=(A) 是先去 2000 号取出 3000，再去 3000 号拿 55——多跑一趟。② <strong>访存 = 去内存取一次数</strong>，每访存一次就慢一点，所以表里「访存次数」就是速度排行的依据。</p>
   <table class="tight">
     <tr><th>方式</th><th>有效地址 EA</th><th>特点/速度</th><th>典型用途</th></tr>
     <tr><td>立即寻址</td><td>操作数就在指令里</td><td><strong>最快</strong>（不访存）</td><td>常数赋值</td></tr>
@@ -48,7 +56,7 @@
     <tr><td>间接寻址</td><td>EA = (A)</td><td>访存 2 次以上，最慢</td><td>—</td></tr>
     <tr><td>寄存器寻址</td><td>EA = Ri（操作数在寄存器）</td><td>最快访问之一</td><td>—</td></tr>
     <tr><td>寄存器间接</td><td>EA = (Ri)</td><td>访存 1 次</td><td>指针</td></tr>
-    <tr><td><strong>基址寻址</strong></td><td>EA = 基址寄存器 + 偏移</td><td><strong>系统管理基址，程序不可改</strong></td><td>程序重定位/浮动</td></tr>
+    <tr><td><strong>基址寻址</strong></td><td>EA = 基址寄存器 + 偏移</td><td><strong>系统管理基址，程序不可改</strong></td><td>程序重定位/浮动（类比：程序搬家时只换基址寄存器这一个「门牌号基准」，代码一个字都不用改，整个程序就搬进新地址了）</td></tr>
     <tr><td><strong>变址寻址</strong></td><td>EA = 变址寄存器 + 形式地址</td><td><strong>用户可改变址</strong></td><td>数组循环遍历</td></tr>
     <tr><td>相对寻址</td><td>EA = PC + 偏移</td><td>与位置无关</td><td>转移指令</td></tr>
   </table>
@@ -58,13 +66,34 @@
   </div>
 
   <h2>三、指令流水线（必考计算）</h2>
+  <p><strong>先打比方</strong>：流水线就像<strong>洗衣房</strong>——洗、烘、熨、叠四道工序。第一批衣服要走完全部工序才能拿出来，但第一批之后，每当洗完一批，烘也空出来了，所以<strong>每隔「最慢那道工序」的时间就能出一批</strong>。CPU 流水线同理：一条指令分成 k 段（k 道工序），n 条指令排着队过。</p>
+  <p><strong>符号对号入座</strong>（记公式前先把字母认全）：</p>
+  <ul>
+    <li><strong>k</strong> = 流水线段数（工序数）</li>
+    <li><strong>n</strong> = 指令条数（要洗多少批衣服）</li>
+    <li><strong>Δt</strong> = 每一段花的时间（等长流水线里每道工序一样长）</li>
+    <li><strong>Σti</strong> = 一条指令走完全部段的时间之和（ti 是第 i 段的时间，Σ 是「全部加起来」）</li>
+    <li><strong>max(ti)</strong> = 最慢那一段的时间（瓶颈工序）</li>
+  </ul>
+  <p><strong>为什么 T = (k + n − 1)Δt</strong>：第 1 条指令要走完 k 段，花 kΔt；从它走出第 1 段开始，后面每 Δt 就有一条新指令进入流水线——所以第 1 条「铺管道」花了 kΔt，剩下 n−1 条每条只隔 Δt 出来：T = kΔt + (n−1)Δt = (k+n−1)Δt。</p>
+  <p><strong>另外两个量怎么来的</strong>：加速比 S = <strong>不用流水线的串行时间 ÷ 流水线时间</strong>（不流水线时每条指令都要完整走一遍 k 段，即 nkΔt），所以 S = nkΔt ÷ (k+n−1)Δt = <strong>nk/(k+n−1)</strong>；n→∞ 时 nk/(k+n−1)→k，意思是「流水线最多能快到段数那么倍」——段数就是天花板。吞吐率 TP = n / T（单位时间出多少条）。</p>
   <span class="formula">等长 Δt，k 段 n 条：T = (k + n − 1)Δt　　加速比 S = nk / (k + n − 1)（极限 → k）<br>不等长各段 ti：T = Σti（首条） + (n − 1) × max(ti)　　吞吐率 TP = n / T</span>
   <div class="card">
     <p style="margin-top:0;"><strong>例（原资料 §4 原题）</strong>：4 段流水线，各段 10/15/20/10 ns，共 100 条指令：</p>
-    <p>T = (10+15+20+10) + (100−1)×20 = 55 + 1980 = <strong>2035 ns</strong>；<br>S = 100×55 ÷ 2035 ≈ <strong>2.70</strong>；TP = 100 ÷ 2035ns ≈ <strong>4.91×10⁷ 条/秒</strong>。</p>
-    <p style="margin-bottom:0;">等长例：5 段 × Δt=1ns × 10 条 → T = (5+9)×1 = 14ns，S = 50/14 ≈ 3.57。</p>
+    <p><strong>先一步步看流水线怎么走</strong>（四段：取指 10ns → 译码 15ns → 执行 20ns → 写回 10ns）：</p>
+    <ul>
+      <li>第 1 条：10→25→45→55，即 <strong>55ns</strong> 走完全部 4 段（Σti = 10+15+20+10 = 55）。</li>
+      <li>第 2 条：在第 20ns 进入第一段（等第一段空出来），之后 40→55→60→70 出来；第 3 条 35→…→85 出来……</li>
+      <li>规律：从第 2 条起，<strong>每 20ns 出一条</strong>——20 就是<strong>最慢那段 max(ti)</strong>（瓶颈是执行段）。</li>
+    </ul>
+    <p>所以：<strong>100 条 = 首条 55ns + 后面 99 条每条隔 20ns</strong>：<br>
+    T = (10+15+20+10) + (100−1)×20 = 55 + 99×20 = 55 + 1980 = <strong>2035 ns</strong>。</p>
+    <p><strong>S 怎么算</strong>：分子是<strong>不流水线的串行总时间</strong>——不流水线时每条指令都要完整走 4 段共 55ns，100 条就是 100×55 = 5500ns；分母是流水线时间 2035ns：<br>
+    S = 5500 ÷ 2035 ≈ <strong>2.70</strong>。</p>
+    <p><strong>TP 的单位换算别跳步</strong>：TP = 100 条 ÷ 2035ns = 0.0491 条/ns；1 秒 = 10⁹ ns，所以 0.0491×10⁹ = <strong>4.91×10⁷ 条/秒</strong>（即 2035ns ≈ 2.035µs，每微秒出约 49.1 条）。</p>
+    <p style="margin-bottom:0;">等长例：5 段 × Δt=1ns × 10 条 → T = (5+10−1)×1 = 14ns，S = nk/(k+n−1) = 50/14 ≈ 3.57。</p>
   </div>
-  <p><strong>CISC vs RISC</strong>：RISC = 指令<strong>定长、种类少</strong>、寻址方式少、<strong>寄存器多</strong>、以硬布线/组合逻辑为主、适合流水线；CISC = 指令变长、种类多、微程序控制。</p>
+  <p><strong>CISC vs RISC</strong>：先解释两个词——<strong>微程序控制</strong> = 把每条指令再拆成若干小步骤，交给一个内置的「小解释器」一步一步执行（灵活、好加新指令，但慢）；<strong>硬布线/组合逻辑</strong> = 直接用电路连线把控制信号「焊死」出来（快，但指令定死了就不好改）。于是区别就好懂了：<strong>RISC</strong> = 指令<strong>定长、种类少</strong>、寻址方式少、<strong>寄存器多</strong>、以硬布线/组合逻辑为主——指令又简单又定长，正好一段一段排队过流水线，<strong>适合流水线</strong>；<strong>CISC</strong> = 指令变长、种类多、微程序控制——每条指令步数不一样，流水线没法整齐排队。</p>
 
   <h2>四、计算挑战（先动笔再填）</h2>
   <div id="cd21"></div>

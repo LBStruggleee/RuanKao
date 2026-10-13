@@ -33,6 +33,11 @@
     <li>三要素：<strong>数据结构（二维表）、操作集合（关系代数/SQL）、完整性约束</strong>。</li>
   </ul>
   <div class="card">
+    <p style="margin-top:0;"><strong>先用一句话卸掉「约束」这堵墙</strong>——约束 = 数据库替你把关的<strong>规矩</strong>：你往表里塞不合格的数据，它直接报错拒收，不用你写代码检查。三要素打比方：数据结构是<strong>仓库长什么样</strong>（二维表），操作集合是<strong>你能对仓库做什么</strong>（查、改），完整性约束是<strong>仓库管理员定的验收标准</strong>。</p>
+  </div>
+  <ul>
+  </ul>
+  <div class="card">
     <p style="margin-top:0;"><strong>先把二维表的黑话掰开</strong>——考题全用这套语言，先认熟：</p>
     <p><strong>元组</strong> = 表里的一<strong>行</strong>（一条记录，如一个学生的全部信息）；<strong>属性</strong> = 表里的一<strong>列</strong>（如「姓名」「年龄」）；属性的<strong>取值范围</strong>叫域（如性别 ∈ {男, 女}）。<br>
     <strong>候选码</strong> = 能唯一确定一行的<strong>最小</strong>列组合（学号可以，(姓名,年龄) 不行）；从候选码里选一个当<strong>主键</strong>（主码）；<strong>外键</strong> = 本表里存放的<strong>别家的候选码</strong>（选课表里的"学号"是学生表的主键——用它把两张表牵起来）。<br>
@@ -41,26 +46,62 @@
   <ul>
     <li><strong>实体完整性</strong>：主键非空且唯一；<strong>参照完整性</strong>：外键要么为空、要么必须存在于被参照表；<strong>用户定义完整性</strong>：如年龄 0–150。</li>
   </ul>
+  <div class="card">
+    <p style="margin-top:0;"><strong>三类完整性，各配一个「违反了会怎样」</strong>——看见报错场景就不抽象了：</p>
+    <p>① <strong>实体完整性</strong>管<strong>主键</strong>：往学生表插第二行「学号 1001」→ 主键重复，报错；插一行学号为空 → 也报错。<br>
+    ② <strong>参照完整性</strong>管<strong>外键</strong>：往选课表插一条「学号 9999 选了数据库」→ 学生表里根本没有 9999 这个人，外键指空，报错。<br>
+    ③ <strong>用户定义完整性</strong>管<strong>业务规矩</strong>：插一行「年龄 -5」→ 不在 0–150 范围，报错。<br>
+    一句话收口：主键管自己（不重不空）、外键管别人（必须真存在）、用户定义管业务（范围自己定）。</p>
+  </div>
 
   <h2>二、五种关系代数运算（符号 → 白话）</h2>
   <table class="tight">
     <tr><th>符号</th><th>名称</th><th>白话</th><th>例</th></tr>
     <tr><td>σ（sigma）</td><td>选择</td><td><strong>挑行</strong></td><td>σ<sub>年龄&gt;20</sub>(学生)</td></tr>
     <tr><td>π（pi）</td><td>投影</td><td><strong>挑列</strong>（自动去重）</td><td>π<sub>姓名,年龄</sub>(学生)</td></tr>
-    <tr><td>⋈</td><td>连接</td><td>按条件横向拼表；<strong>自然连接</strong> = 等值连接 + 去掉重复列</td><td>学生 ⋈ 选课</td></tr>
+    <tr><td>⋈</td><td>连接</td><td>两表的<strong>同名/指定列相等</strong>才拼成一行；<strong>等值连接</strong> = 用「某列相等」当拼接条件，重复列<strong>都保留</strong>；<strong>自然连接</strong> = 等值连接<strong>再去掉重复列</strong></td><td>学生 ⋈ 选课</td></tr>
     <tr><td>×</td><td>笛卡尔积</td><td>两表所有行两两组合（列相加、行相乘）</td><td>R × S</td></tr>
     <tr><td>÷</td><td>除</td><td>「<strong>全部都…</strong>」查询：选出与 S 中<strong>每一个</strong>值都关联的 R 元组</td><td>π<sub>学生</sub>(选课) ÷ π<sub>课程</sub>(课程)</td></tr>
   </table>
+  <div class="card">
+    <p style="margin-top:0;"><strong>除法手算一遍：就是「先分组、再检查缺不缺课」</strong>——3 行选课表 + 2 门课程：</p>
+    <p>课程表：{数据库, 网络}。选课表：<code>(张三,数据库)</code>、<code>(张三,网络)</code>、<code>(李四,数据库)</code>。<br>
+    逐行判断——<strong>按学生分组</strong>：张三组 = {数据库, 网络}，李四组 = {数据库}；<strong>再检查是否缺课</strong>：张三两门都有，不缺 → 留下；李四缺「网络」→ 扔掉。<br>
+    结果：选课 ÷ 课程 = {张三}。这就是除法：谁的课<strong>一个不缺</strong>，谁就留在答案里。一句话：除法 = 「对 S 中<strong>每一个</strong>都成立」的查询。</p>
+  </div>
   <div class="callout warn">
     <span class="tag">⚠ 除运算 = 大题常客</span>
-    「查询<strong>选修了全部课程</strong>的学生」→ 学生 ÷ 课程。SQL 里对应<strong>双重否定</strong>：不存在一门课程是他没选的（NOT EXISTS 套 NOT EXISTS）。
+    「查询<strong>选修了全部课程</strong>的学生」→ 学生 ÷ 课程。SQL 里没有除号，用<strong>双重否定</strong>翻译：先说白话——「<strong>没有一门课是他没选的</strong>」。这句白话正好拆成两层否定：<br>
+    ① <strong>NOT EXISTS(课程)</strong>：不存在一门课程……（第一层否定管「没有一门课」）<br>
+    ② <strong>NOT EXISTS(选课记录)</strong>：……是他没选的（第二层否定管「他没选」）<br>
+    为什么「全部」要绕两道否定？因为 SQL 没有「对所有都成立」的直接写法，只能说「挑不出反例」——反例就是「他没选的那门课」，挑不出反例 = 全都选了。</p>
+  </div>
+  <div class="card">
+    <p style="margin-top:0;"><strong>等值连接 vs 自然连接，拼一下就懂</strong>——等值连接就是「两列相等才拼一行」，区别只在重复列留不留：</p>
+    <p>学生表 2 行：<code>(1001, 张三)</code>、<code>(1002, 李四)</code>；选课表 2 行：<code>(1001, 数据库)</code>、<code>(1003, 王五)</code>。<br>
+    <strong>等值连接</strong>（学号=学号）：张三那行匹配上了 → 结果 <code>1001,张三,1001,数据库</code> —— 同名「学号」出现<strong>两列</strong>（4 列）；李四没有课、王五没有人，都被扔掉，只剩 1 行。<br>
+    <strong>自然连接</strong>：同样只剩 <code>1001,张三,数据库</code> 这 1 行，但重复的「学号」只留<strong>一列</strong>（3 列）。<br>
+    口诀：拼法一样（等值匹配），自然连接多收拾一步——把重复列扔掉。所以自然连接列数 = 两表列数之和 − 同名列数。</p>
   </div>
 
   <h2>三、SQL 执行顺序（结果题的钥匙）</h2>
   <span class="formula">FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</span>
+  <div class="card">
+    <p style="margin-top:0;"><strong>把顺序跑一遍：一条 SQL，看每一步数据库手里有什么</strong>——</p>
+    <p><code>SELECT 姓名, COUNT(*) AS 门数 FROM 选课 WHERE 成绩&gt;=60 GROUP BY 姓名 HAVING COUNT(*)&gt;=2 ORDER BY 门数 DESC</code><br>
+    ① <strong>FROM</strong>：拿到整张选课表（所有选课记录，含不及格的）。<br>
+    ② <strong>WHERE</strong>：逐行刷掉成绩 &lt; 60 的行——<strong>此刻只剩及格的选课记录</strong>。<br>
+    ③ <strong>GROUP BY 姓名</strong>：把行按姓名分堆——<strong>此刻是一堆一堆的行</strong>（张三一堆、李四一堆）。<br>
+    ④ <strong>HAVING</strong>：整堆整堆地检查，扔掉不到 2 门的组——<strong>此刻留下合格的小组</strong>。<br>
+    ⑤ <strong>SELECT</strong>：最后才从每组里抽出「姓名 + COUNT(*)」拼成结果列。这也解释了两个高频坑：<strong>WHERE 里不能用 COUNT</strong>——因为 WHERE 跑的时候还在逐行看，分组根本没发生，没得可数；<strong>ORDER BY 能用别名「门数」</strong>——因为 SELECT 已经执行完，别名已存在。<br>
+    ⑥ <strong>ORDER BY</strong>：对最终结果按门数倒序排。<br>
+    一句话：顺序不是书写顺序，是数据库干活顺序——<strong>先定位(FROM)、再刷行(WHERE)、再分堆(GROUP BY)、再刷堆(HAVING)、最后才出列(SELECT)、收尾排序(ORDER BY)</strong>。</p>
+  </div>
   <ul>
     <li><strong>WHERE</strong>：行级过滤，<strong>不能用聚合函数</strong>；<strong>HAVING</strong>：组级过滤，配合 GROUP BY 用聚合。</li>
-    <li><strong>NULL 陷阱</strong>：NULL 与任何值比较结果都是 UNKNOWN；<strong>COUNT(*) 数行（含 NULL），COUNT(列) 不数该列的 NULL</strong>；SUM/AVG 忽略 NULL。</li>
+    <li><strong>NULL 陷阱</strong>：NULL 与任何值比较结果都是 UNKNOWN；<strong>COUNT(*) 数行（含 NULL），COUNT(列) 不数该列的 NULL</strong>；SUM/AVG 忽略 NULL。
+      <br><strong>先把 UNKNOWN 落地</strong>：NULL 不是 0、不是空字符串，是「<strong>不知道</strong>」。问「NULL &gt; 60 吗？」——答案是「不知道」（UNKNOWN），既不是「是」也不是「不是」。它和 FALSE 的区别：WHERE 只要「真」的行，<strong>UNKNOWN 的行会被扔掉</strong>（不知道 ≈ 不合格），而 COUNT(*) 数的是行本身，不问真假，所以照样数。
+      <br><strong>手算一遍</strong>：5 行的表，某列的值是 <code>100, 100, NULL, NULL, NULL</code>：COUNT(*) = <strong>5</strong>（数行，行行都算）；COUNT(该列) = <strong>2</strong>（数有值的，3 个 NULL 跳过）；SUM = 200、AVG = 100（NULL 都不参与计算，<strong>分母也是 2 不是 5</strong>）。</li>
     <li><strong>JOIN 行数</strong>：内连接只留匹配行；<strong>左外</strong>连接左表全保留（右表补 NULL）。</li>
     <li>集合：UNION 去重、UNION ALL 不去重；INTERSECT 交、EXCEPT 差。</li>
   </ul>

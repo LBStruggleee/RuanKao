@@ -23,7 +23,7 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    两张表 + 一句判据：<strong>并发三类问题</strong>（丢失更新 / 不可重复读 / 读脏数据）按「谁动了谁的数据」对号；<strong>S 锁相容 X 锁不相容</strong>；视图是<strong>虚表</strong>——简化查询 + 提供安全隔离。
+    两张表 + 一句判据：<strong>并发三类问题</strong>（丢失更新 / 不可重复读 / 读脏数据）按「谁动了谁的数据」对号；<strong>共享读锁（S 锁）互相兼容、写锁（X 锁）跟谁都不兼容</strong>——细节见§二；视图是<strong>虚表</strong>——简化查询 + 提供安全隔离。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 5 数据库 · 设计理论线收口</b>——视图/并发控制/模式分解。上游：0022；试题二主产区（<a href="../reference/knowledge-map.html">回地图</a>）</p>
@@ -31,47 +31,53 @@
     <h2>一、视图：一张「存查询」的虚表</h2>
   <p><strong>视图（VIEW）</strong>是从一个或多个基本表（或其他视图）导出的<strong>虚表</strong>：数据库只存视图的定义（SELECT 语句），不存视图的数据——查询视图时实时从基本表算出来。</p>
   <span class="formula">CREATE VIEW 视图名 AS SELECT …（WITH CHECK OPTION 可限制通过视图的更新必须满足条件）</span>
+  <p>实际写出来长这样（两行就够）：</p>
+  <span class="formula">CREATE VIEW 计算机系学生 AS SELECT 学号, 姓名 FROM 学生 WHERE 系别='计算机' WITH CHECK OPTION</span>
+  <p>意思：建一张叫「计算机系学生」的视图，只放计算机系学生的学号和姓名；<strong>WITH CHECK OPTION</strong> = 以后通过这张视图插入/修改学生时，系别必须是「计算机」，否则拒绝——这就是「通过视图的更新必须满足条件」。</p>
   <table class="tight">
     <tr><th>作用</th><th>说明</th></tr>
     <tr><td><strong>简化查询</strong></td><td>把复杂的多表连接/嵌套封装成一个视图，之后当表用</td></tr>
-    <tr><td><strong>安全隔离（逻辑独立性）</strong></td><td>对用户只开放视图（如隐藏工资列），Grant 权限授到视图粒度；基本表结构变化时改视图定义即可，应用不改——<strong>外模式/模式映像保证逻辑独立性</strong></td></tr>
+    <tr><td><strong>安全隔离（逻辑独立性）</strong></td><td>对用户只开放视图（如隐藏工资列），Grant 权限授到视图粒度；基本表结构变化时改视图定义即可，应用不改。白话版：用户看到的只是视图这一层（术语叫<strong>外模式</strong>），底下的基本表怎么改，都被这层「映像」挡住了，所以应用不用跟着改——这就是<strong>外模式/模式映像保证逻辑独立性</strong>（「外模式」是数据库三级模式结构的术语，见体系课程三级模式一节）</td></tr>
     <tr><td><strong>数据独立性</strong></td><td>视图随基本表数据实时更新（虚表）；个别系统支持物化视图（实存数据、需刷新）</td></tr>
   </table>
   <div class="callout warn">
     <span class="tag">⚠ 高频判断</span>
-    「视图中的数据在数据库中单独存储」——<strong>错</strong>（虚表只存定义）。但「通过视图可以更新基本表数据」——<strong>对</strong>（有限制：通常只允许更新单表、无聚合的视图）。
+    「视图中的数据在数据库中单独存储」——<strong>错</strong>（虚表只存定义）。但「通过视图可以更新基本表数据」——<strong>对</strong>（有限制：通常只允许更新单表、无聚合的视图。<strong>聚合</strong> = COUNT、SUM 这种把多行算成一个数的操作，比如「每系平均工资」视图——算出来的平均数没法对应改回某一行，所以这种视图不能更新）。
   </div>
 
   <h2>二、并发控制：三类问题与两种锁</h2>
-  <p>多事务并发执行如果不加控制，会出三类数据不一致问题——识别它们的关键是<strong>谁读、谁写、先后顺序</strong>：</p>
+  <p><strong>先说清两个词</strong>：<strong>事务</strong>就是一段不可拆分的数据库操作，比如转账 =「扣款 + 入账」两步，要么都完成、要么都不算；<strong>T1、T2 只是给两个同时执行的事务起的代号</strong>，不是什么技术名词，你可以理解成「顾客甲」「顾客乙」。</p>
+  <p>举个两人同时抢改银行余额的例子：卡里有 1000 元，甲（T1）存 500、乙（T2）取 300，两笔几乎同时进行——如果数据库不打招呼地乱序处理，最后余额可能算错。多事务并发执行如果不加控制，就会出三类这样的数据不一致问题——识别它们的关键是<strong>谁读、谁写、先后顺序</strong>：</p>
   <table class="tight">
     <tr><th>问题</th><th>场景（T1 与 T2）</th><th>关键词</th></tr>
     <tr><td><strong>丢失更新</strong></td><td>T1、T2 都<strong>读后写</strong>同一数据：T2 的写覆盖了 T1 的写</td><td>「更新丢失」「两写互相覆盖」</td></tr>
     <tr><td><strong>不可重复读</strong></td><td>T1 <strong>两次读同一数据之间</strong>，T2 修改（或删除）了它 → T1 两次读到的值不一样</td><td>「重复读值不同」</td></tr>
     <tr><td><strong>读脏数据</strong></td><td>T2 读到了 T1 <strong>已撤销（回滚）</strong>的中间值</td><td>「回滚后读到旧值」</td></tr>
   </table>
+  <p><strong>为什么加锁能解决上面三类问题？</strong>因果就一句话：写数据前必须先拿到 <strong>X 锁</strong>，而 <strong>X 锁谁也不兼容</strong>——T1 一旦对余额加了 X 锁，T2 既读不了也写不了，只能等 T1 干完（包括回滚）再动手。于是「T2 覆盖 T1 的写」「T1 两次读之间被 T2 插一脚」「T2 读到 T1 回滚前的值」这三类问题全被堵住了。具体规则：</p>
   <p>解法：<strong>封锁</strong>。两种基本锁——<strong>S 锁（共享锁/读锁）</strong>：读数据前加；<strong>X 锁（排他锁/写锁）</strong>：写数据前加。相容矩阵：</p>
   <table class="tight">
     <tr><th>已持有 \ 请求</th><th>S 锁</th><th>X 锁</th></tr>
     <tr><td><strong>S 锁</strong></td><td class="num">✓ 兼容（都可读）</td><td class="num">✗ 冲突</td></tr>
     <tr><td><strong>X 锁</strong></td><td class="num">✗ 冲突</td><td class="num">✗ 冲突</td></tr>
   </table>
-  <p><strong>两段锁协议（2PL）</strong>：事务分两个阶段——先只加锁/升级（扩展段），后只解锁（收缩段），两阶段之间不交叉。遵守 2PL <strong>可保证可串行化</strong>（并发结果等价于某个串行执行），但<strong>不能避免死锁</strong>（判断题）。</p>
+  <p><strong>两段锁协议（2PL）</strong>：把事务的用锁过程规定成两段，像打球赛的上下半场——①<strong>前半场（扩展段）只借不还</strong>：只加锁（读锁不够用可以<strong>升级</strong>成写锁，比如先加了 S 锁要改数据时，把它换成 X 锁），不还任何锁；②<strong>后半场（收缩段）只还不借</strong>：只解锁，不再加新的。两段之间不交叉。为什么这样就好？因为每个事务都在前半场把要动的数据全部锁定了，并发跑出来的结果和<strong>一件一件排队执行</strong>（术语叫<strong>串行执行</strong>）一样，不会乱——这就是<strong>可串行化</strong>。但 2PL <strong>不能避免死锁</strong>（判断题）：比如 T1 拿着 A 的锁等 T2 手里 B 的锁，T2 又拿着 B 等 A——各自都攥着自己的锁等对方还，谁都动不了。判断题考点：2PL → 可串行化 + 可能死锁，两个半句一起记。</p>
 
   <h2>三、模式分解：拆表拆得对不对</h2>
+  <p><strong>先补两个 0022 的词</strong>：<strong>函数依赖 X→Y</strong> = 只要 X 定了，Y 就跟着定了（学号→姓名：学号一报，姓名唯一确定）；<strong>码</strong> = 能唯一确定一行（整行所有属性）的最小属性组，比如学号就是学生表的码。</p>
   <p>范式化（<a href="0022-normalization-er.html">0022</a>）把大表拆成小表的过程就是<strong>模式分解</strong>。拆完必须检查两点：</p>
   <table class="tight">
     <tr><th>标准</th><th>含义</th><th>常见考法</th></tr>
-    <tr><td><strong>无损连接</strong></td><td>拆开的两表<strong>自然连接</strong>后能完全还原原表，不多不少</td><td>判断给定分解是否无损（Chase 列表法/公式法：公共属性至少包含一侧的码）</td></tr>
+    <tr><td><strong>无损连接</strong></td><td>拆开的两表<strong>自然连接</strong>后能完全还原原表，不多不少（自然连接 = <strong>按公共属性把两表拼回一张表</strong>：R1、R2 都有学号，学号对得上的行就拼成一行——对得全就是无损）</td><td>判断给定分解是否无损（公式法：<strong>公共属性至少包含一侧的码</strong>即无损；Chase 列表法是另一种逐列画表验证的笨办法，考试记住公式判据即可）</td></tr>
     <tr><td><strong>保持函数依赖</strong></td><td>原表的函数依赖在分解后仍能在各表上验证</td><td>「分解后能否仍判断 X→Y」</td></tr>
   </table>
-  <p><strong>快速判据</strong>：R 分解为 R1、R2，若 <strong>R1 ∩ R2 → R1 或 R1 ∩ R2 → R2</strong>（公共属性能函数决定其中一张表的全部属性），则分解<strong>无损</strong>。例：R(学号,姓名,系别) 拆成 R1(学号,姓名) 与 R2(学号,系别)：交集 {学号} → 学号 是 R1 的码 → 无损 ✓。<strong>3NF 一定可以达到既无损又保持依赖的分解；BCNF 能保证无损，不一定保持依赖</strong>（判断题）。</p>
+  <p><strong>快速判据</strong>：R 分解为 R1、R2，若 <strong>R1 ∩ R2 → R1 或 R1 ∩ R2 → R2</strong>（公共属性能函数决定其中一张表的全部属性），则分解<strong>无损</strong>。例：R(学号,姓名,系别) 拆成 R1(学号,姓名) 与 R2(学号,系别)，分三步看：①两表的公共属性只有<strong>学号</strong>一个；②学号能唯一确定 R1 里的姓名（因为学号→姓名，学号是 R1 的码）；③所以按上面的公式判据，这个分解<strong>无损</strong> ✓。<strong>3NF 一定可以达到既无损又保持依赖的分解；BCNF 能保证无损，不一定保持依赖</strong>（判断题）。</p>
 
-  <h2>四、触发器与存储过程：数据厍里的自动机关</h2>
+  <h2>四、触发器与存储过程：数据库里的自动机关</h2>
   <ul>
-    <li><strong>触发器（Trigger）</strong>：绑定在表上的 <strong>ECA</strong> 规则——<strong>E</strong>vent 事件（INSERT/UPDATE/DELETE）→ <strong>C</strong>ondition 条件 → <strong>A</strong>ction 动作自动执行。用途：复杂完整性约束（如「删除系别时级联删除学生」）、审计日志。定义在表上、由事件自动触发，不能像函数一样手动调用。</li>
-    <li><strong>存储过程</strong>：预编译存放在数据库中的 SQL 程序集，可带参数、被显式调用；优点：预编译效率高、减少网络流量、便于复用。</li>
-    <li><strong>主键 vs 外键</strong>：主键 = 实体完整性（非空唯一）；外键 = 参照完整性（取值必须参照表的主键存在或为空）——两类完整性的定义句年年考。</li>
+    <li><strong>触发器（Trigger）</strong>：绑定在表上的 <strong>ECA</strong> 规则——<strong>E</strong>vent 事件（INSERT/UPDATE/DELETE）→ <strong>C</strong>ondition 条件 → <strong>A</strong>ction 动作自动执行。用途：复杂完整性约束（如「删除系别时级联删除学生」）、<strong>审计日志</strong>（谁在什么时候改了哪条记录，自动记一笔流水，方便事后查账）。定义在表上、由事件自动触发，不能像函数一样手动调用。</li>
+    <li><strong>存储过程</strong>：预编译存放在数据库中的 SQL 程序集，可带参数、被显式调用；<strong>预编译</strong> = 像提前把菜切好备着，每次调用不用现切（数据库提前把 SQL 解析优化好存起来，执行时直接跑，所以效率高）。优点：预编译效率高、减少网络流量、便于复用。</li>
+    <li><strong>主键 vs 外键</strong>：主键 = 实体完整性（非空唯一）；外键 = 参照完整性——外键列的取值必须能在它参照的那张表的主键里找到，或者干脆为空，不能填一个不存在的值。例：学生表里的「系别编号」是外键，它要么是系别表里已有的主键值，要么为空——不能填一个不存在的系。两类完整性的定义句年年考。</li>
   </ul>
 
   <h2>五、自查（全对过课）</h2>

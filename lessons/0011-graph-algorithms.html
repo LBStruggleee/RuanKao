@@ -29,44 +29,65 @@
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 图线</b>——MST/最短路/拓扑/关键路径。上游：0010；策略视角：0035（Prim/Kruskal/Dijkstra 都是贪心）（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、最小生成树 MST：Prim vs Kruskal</h2>
-  <p>给带权连通图，挑 <strong>n−1</strong> 条边把所有点连起来且<strong>总权最小</strong>。两种贪心：</p>
+  <p>先用人话拆题：给一张「带权连通图」——就是一张每条路上都标了花费（比如修路里程）的地图，而且任意两点都能走到。要挑 <strong>n−1</strong> 条边把所有点连起来且<strong>总权最小</strong>。这里的「生成树」意思是：<strong>用最少的边把所有点连成一棵树</strong>——6 个点永远恰好 5 条边（点数减一，n−1），少一条就有点连不上，多一条就有环（浪费）。考试只考两种贪心挑法：</p>
   <table class="tight">
     <tr><th></th><th>Prim（加点法）</th><th>Kruskal（加边法）</th></tr>
     <tr><td>策略</td><td>从某点出发，每次把「离已长成部分最近」的<strong>顶点</strong>拉进来</td><td>边按权排序，从小到大挑，<strong>成环就跳过</strong></td></tr>
-    <tr><td>判环</td><td>不需要（永远长在同一个连通块上）</td><td>需要（并查集思想）</td></tr>
+    <tr><td>判环</td><td>不需要（永远长在同一个连通块上）</td><td>需要（记录哪些点已经连在一起，「并查集」就是这个记录法的行话）</td></tr>
     <tr><td>适合</td><td><strong>稠密图</strong></td><td><strong>稀疏图</strong>（先排序）</td></tr>
   </table>
-  <p>边权互不相同时 MST <strong>唯一</strong>；边权相同则可能多棵，但总权相同。下图 A–C（权4）被跳过就是因为它和 A–B、B–D、C–D 围成环：</p>
+  <p>边权互不相同时 MST <strong>唯一</strong>；边权相同则可能多棵，但总权相同。对照下图直接给答案：按权从小到大选边，最后选中的是 <strong>A–B(1)、B–D(2)、C–D(3)、C–E(5)、E–F(6)，总权 1+2+3+5+6 = 17</strong>。而 <strong>A–C（权4）被跳过</strong>，就是因为它和已选的 A–B、B–D、C–D 围成环（A→B→D→C→A 绕一圈回来，树里不允许）；<strong>D–F（权7）也被跳过</strong>——轮到它时 A、B、C、D、E、F 已经全连通了，只要 n−1=5 条边，再选就成环。</p>
 
   <div id="glab"></div>
 
   <h2>二、最短路：Dijkstra（单源）</h2>
-  <p>求<strong>一个起点到其余各点</strong>的最短路径：<strong>贪心</strong>——每轮把「当前距离最小的未确定点」定型，再用它松弛邻居。考试要点：①适用于<strong>无负权</strong>边；②贪心逐步扩大「已确定集」；③求<strong>两点间</strong>最短路也用它（从起点算出到终点的答案）。</p>
+  <p>「单源」= <strong>固定一个起点</strong>，算它到其他所有点的最短路（不是问一次算一次，而是一口气算全）。求<strong>一个起点到其余各点</strong>的最短路径：<strong>贪心</strong>——每轮把「当前距离最小的未确定点」<strong>定型</strong>（宣布它的距离就是最终答案，不再变），再用它<strong>松弛</strong>邻居（看绕道它这里走，会不会比邻居当前记录的距离更近，更近就更新）。循环就是「<strong>定型一个 → 松弛一片</strong>」。考试要点：①适用于<strong>无负权</strong>边；②贪心逐步扩大「已确定集」；③求<strong>两点间</strong>最短路也用它（从起点算出到终点的答案）。</p>
   <div class="card">
-    <p style="margin-top:0;"><strong>微例</strong>：A→B 权 1，A→C 权 4，B→C 权 2。A 到 C？直接走 4，但 A→B→C = 3 更短 → <strong>3</strong>。Dijkstra 的「松弛」就是干这件事：看经过中间点会不会更近。</p>
+    <p style="margin-top:0;"><strong>微例</strong>：A→B 权 1，A→C 权 4，B→C 权 2。A 到 C？直接走 4，但 A→B→C = 3 更短 → <strong>3</strong>。Dijkstra 的「松弛」就是干这件事：看经过中间点会不会更近。拿这个微例走一遍「定型 + 松弛」的循环：</p>
+    <table class="tight">
+      <tr><th>轮次</th><th>定型谁</th><th>距离表（A 的距离不用算）</th></tr>
+      <tr><td>开始</td><td>—</td><td>B：直接 A→B = 1；C：直接 A→C = 4</td></tr>
+      <tr><td>第 1 轮</td><td>B（1 最小）</td><td>用 B 松弛 C：1+2 = 3 &lt; 4 → C 更新为 <strong>3</strong></td></tr>
+      <tr><td>第 2 轮</td><td>C（3）</td><td>C 没有出边，表不再变</td></tr>
+    </table>
+    <p style="margin-bottom:0;">每一轮都是同一件事：挑未定型里距离最小的定型，再试着用它把邻居的距离改小。两轮就走完了。</p>
   </div>
 
   <h2>三、拓扑排序：AOV 网排先后</h2>
-  <p>课程有先修关系、任务有依赖——<strong>有向无环图（DAG）</strong>排出一个合法顺序：<strong>每次取「入度为 0」的点输出并删掉它的出边</strong>，直到全部输出；中途找不到入度 0 的点 = <strong>有环</strong>（依赖死锁）。</p>
+  <p>课程有先修关系、任务有依赖——<strong>有向无环图（DAG）</strong>排出一个合法顺序：<strong>每次取「入度为 0」的点输出并删掉它的出边</strong>，直到全部输出；中途找不到入度 0 的点 = <strong>有环</strong>（依赖死锁）。「入度」就是<strong>指向它的箭头条数</strong>（0010 讲过，这里复习半句）——入度为 0 = 没有任何前驱挡着，可以立刻开工。</p>
   <div class="callout warn">
     <span class="tag">⚠ 考点</span>
     拓扑序列<strong>不唯一</strong>（同一时刻可能多个入度 0 的点，选谁都行）；题干给一个序列问「是否可能」→ 逐点模拟入度即可；「拓扑序列存在 ⇔ 图无环」是判断题常客。
   </div>
 
   <h2>四、必考计算：关键路径（AOE 网）</h2>
-  <p>AOE 网边=活动（带工期），点=事件。问<strong>整个工程最少多少天</strong>、哪些活动一天都不能拖（<strong>关键活动</strong>）。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>AOV vs AOE，一字之差，先分清</strong>：上一节的 <strong>AOV 网：点 = 任务</strong>，管的是<strong>谁先谁后</strong>（拓扑排序）；本节的 <strong>AOE 网：边 = 活动（带工期），点 = 事件</strong>，管的是<strong>每件事要干多久</strong>（算工期）。问<strong>整个工程最少多少天</strong>、哪些活动一天都不能拖（<strong>关键活动</strong>）。</p>
+  </div>
+  <p>先认识四个符号（都是「时间」）：ve = 事件<strong>最早</strong>发生时间，vl = 事件<strong>最迟</strong>发生时间；<strong>e = 活动最早开始时间</strong>，<strong>l = 活动最迟开始时间</strong>。</p>
   <span class="formula">ve（最早）从前往后取 MAX：ve[j] = max(ve[i] + w(i,j))<br>vl（最迟）从后往前取 MIN：vl[i] = min(vl[j] − w(i,j))　　关键活动：e = l（无余量）</span>
+  <p>「从后往前」怎么倒推：vl 得先知道<strong>终点</strong>的规定时间（= 工期），再从终点往起点一站一站往回减。所以顺序是：先从前往后把 ve 算完（终点 ve 就是工期），再拿这个工期当终点的 vl，从 V5 倒着推回 V1。</p>
   <div class="card">
     <p style="margin-top:0;"><strong>样例 AOE（背熟这张表）</strong>：V1→V2 权3（a1）、V1→V3 权2（a2）、V2→V4 权4（a3）、V3→V4 权3（a4）、V4→V5 权2（a5）。</p>
     <table class="tight">
       <tr><th>事件</th><th>ve（最早，取max）</th><th>vl（最迟，取min）</th></tr>
-      <tr><td>V1</td><td class="num">0</td><td class="num">0</td></tr>
-      <tr><td>V2</td><td class="num">0+3 = 3</td><td class="num">7−4 = 3</td></tr>
-      <tr><td>V3</td><td class="num">0+2 = 2</td><td class="num">7−3 = 4</td></tr>
-      <tr><td>V4</td><td class="num">max(3+4, 2+3) = <strong>7</strong></td><td class="num">9−2 = 7</td></tr>
-      <tr><td>V5</td><td class="num">7+2 = <strong>9</strong>（工期）</td><td class="num">9</td></tr>
+      <tr><td>V1</td><td class="num">0（起点，开工就是 0）</td><td class="num">0</td></tr>
+      <tr><td>V2</td><td class="num">0+3 = 3</td><td class="num">出边只有 →V4：vl(V4)−4 = 7−4 = 3</td></tr>
+      <tr><td>V3</td><td class="num">0+2 = 2</td><td class="num">出边只有 →V4：vl(V4)−3 = 7−3 = 4</td></tr>
+      <tr><td>V4</td><td class="num">max(3+4, 2+3) = <strong>7</strong>（等最慢的入边到齐）</td><td class="num">出边只有 →V5：9−2 = 7</td></tr>
+      <tr><td>V5</td><td class="num">7+2 = <strong>9</strong>（工期）</td><td class="num">9（终点：最迟=最早=工期）</td></tr>
     </table>
-    <p style="margin-bottom:0;">活动 a2（V1→V3）：最早开始 e=0，最迟开始 l = vl(V3)−2 = 2 → 有 2 天余量，<strong>非关键</strong>；a1、a3、a5 的 e=l → <strong>关键路径 V1→V2→V4→V5，工期 3+4+2 = 9 天</strong>。</p>
+    <p>表里的「7」不是天上掉下来的：它是<strong>先算出来的 vl(V4)</strong>。倒推顺序是 V5 → V4 →（V2、V3）→ V1，每一行都是拿<strong>后继的 vl 减去边权</strong>。</p>
+    <p>事件的 ve/vl 怎么变成活动的 e/l：<strong>e = 活动起点的 ve，l = 活动终点的 vl − 活动工期</strong>。5 个活动全列出来亲手核对：</p>
+    <table class="tight">
+      <tr><th>活动</th><th>e = ve(起点)</th><th>l = vl(终点)−工期</th><th>余量 l−e</th><th>关键？</th></tr>
+      <tr><td>a1（V1→V2，权3）</td><td class="num">ve(V1)=0</td><td class="num">3−3=0</td><td class="num">0</td><td>✓ e=l</td></tr>
+      <tr><td>a2（V1→V3，权2）</td><td class="num">ve(V1)=0</td><td class="num">4−2=2</td><td class="num">2</td><td>✗</td></tr>
+      <tr><td>a3（V2→V4，权4）</td><td class="num">ve(V2)=3</td><td class="num">7−4=3</td><td class="num">0</td><td>✓ e=l</td></tr>
+      <tr><td>a4（V3→V4，权3）</td><td class="num">ve(V3)=2</td><td class="num">7−3=4</td><td class="num">2</td><td>✗</td></tr>
+      <tr><td>a5（V4→V5，权2）</td><td class="num">ve(V4)=7</td><td class="num">9−2=7</td><td class="num">0</td><td>✓ e=l</td></tr>
+    </table>
+    <p style="margin-bottom:0;">e=l（余量 0）的活动一天都不能拖：a1、a3、a5 → <strong>关键路径 V1→V2→V4→V5，工期 3+4+2 = 9 天</strong>；a2、a4 各有 2 天余量，拖 2 天内不影响工期，<strong>非关键</strong>。</p>
   </div>
 
   <h2>五、动手：Kruskal 选边 + ve/vl 计算挑战</h2>

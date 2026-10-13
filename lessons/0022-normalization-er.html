@@ -29,39 +29,60 @@
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 5 数据库 · 设计理论线</b>——函数依赖/候选码/范式/E-R。上游：0021；下游：0023、下午试题二（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、函数依赖（FD）三兄弟</h2>
+  <p>先补两个最基础的人话（没读过上一课也能从这里接上）：</p>
+  <ul>
+    <li><strong>候选码（码）</strong> = 能<strong>唯一认出一行数据</strong>的最小属性组——像<strong>学号之于学生表</strong>：报一个学号，就能锁定唯一一个学生，而且学号里没有多余的属性。一个表可能有多个候选码（比如身份证号也能），选定其中一个是「主键」。</li>
+    <li><strong>函数依赖 X→Y</strong> 读作「X 决定 Y」——只要知道 X，就能<strong>唯一查到</strong>一个 Y，像<strong>用学号查姓名</strong>：学号一样的人姓名必然一样。注意是「唯一确定」，不是「有点关系」。</li>
+    <li><strong>主属性</strong> = 进了某个候选码的属性；<strong>非主属性</strong> = 没进任何候选码的属性。后面 2NF、3NF 的要求全是只对非主属性提的，先记住这对词。</li>
+  </ul>
   <table class="tight">
     <tr><th>依赖</th><th>定义</th><th>例子</th><th>引发问题</th></tr>
-    <tr><td>完全依赖</td><td>码的<strong>全部</strong>才能决定它</td><td>(学号,课号) → 成绩</td><td>—</td></tr>
+    <tr><td>完全依赖</td><td>必须<strong>整个码</strong>（如学号+课号）才能决定成绩</td><td>(学号,课号) → 成绩</td><td>—（正常情形，不出问题；下面两行才是要消除的毛病）</td></tr>
     <tr><td><strong>部分依赖</strong></td><td>码的<strong>一部分</strong>就能决定非主属性</td><td>(学号,课号) → 学生姓名</td><td>违反 <strong>2NF</strong>（冗余/异常）</td></tr>
     <tr><td><strong>传递依赖</strong></td><td>A→B、B→C（B 不依赖于 A）</td><td>学号→系名→系主任</td><td>违反 <strong>3NF</strong></td></tr>
   </table>
+  <p>括号里「B 不依赖于 A」是在排除一种情况：传递依赖要求 C 是<strong>绕中间商 B 间接</strong>够到的——中间的 B 只听 A 的（A→B），C 只听 B 的（B→C），A 得经过 B 才够得着 C。但如果 A <strong>直接</strong>就能决定 C（有 A→C），那 C 对 A 就不是「传递」来的，是<strong>直接依赖</strong>，不构成传递。例：学号→系名→系主任是传递（学号不能直接决定系主任，系名就是中间商）。「排除直接依赖」这个条件有个<strong>隐藏前提</strong>：要先有「学号→系名」这条<strong>直接依赖</strong>摆在那里，我们才谈得上检查「它是不是间接来的」。还用这个例子打比方：快递从北京直达上海（学号→系名），那上海就是<strong>直接</strong>到的；哪怕同时还有一条「北京→济南→上海」的绕路（学号→班长 且 班长→系名），也不能说上海是「经济南中转」来的——因为直达线本来就在。所以判断顺序是：先确认 A→C 直接成立 → 再看中间是否存在 B（A→B、B→C）→ 只有当 C <strong>只能</strong>靠 B 绕过去时，才算传递依赖。</p>
 
   <h2>二、候选码判定 4 步法（一切范式题的起点）</h2>
   <ol>
     <li>把属性按在依赖中出现的位置分类：<strong>L</strong>（只出现在左部）、<strong>R</strong>（只在右部）、<strong>N</strong>（不出现）、<strong>LR</strong>（两边都有）；</li>
-    <li><strong>L 和 N 一定在候选码里</strong>；R 一定不在；</li>
-    <li>求 (L∪N) 的属性闭包（用 Armstrong：自反/增广/传递推）——若已含全部属性，它就是候选码；</li>
+    <li><strong>L 和 N 一定在候选码里</strong>；R 一定不在（R 类属性能被别人推出来，留着它就多余，不满足候选码的「最小」要求）；</li>
+    <li>求 (L∪N) 的<strong>属性闭包</strong>——闭包就是「这个属性组自己能推出的一堆属性」：从它出发，反复用依赖箭头把新属性拉进来，直到拉不动为止——若已含全部属性，它就是候选码；</li>
     <li>若没含全部，把 LR 属性逐个/组合加入再求闭包，恰好覆盖全属性的即为候选码（可能有多个）。</li>
   </ol>
+  <p><strong>支线说明：Armstrong 公理三条推规则</strong>（考试可能点名，逐个一句话说清，马上出现的手算例题会正好把它们全用到）：①<strong>自反律</strong>——任何属性组天然能推出自己（知道学号当然就知道学号），这是闭包一开始就包含自己的依据；②<strong>传递律</strong>——A→B、B→C，则 A→C，像一环扣一环地把新属性拉进群；③<strong>增广律</strong>——X→Y 成立时，两边加上同样的属性依然成立（学号→姓名成立，则 学号+课号→姓名+课号 也成立），这保证已推出的结论能带着新伙伴继续参与推导。「拉人进群」的求闭包过程，本质就是这三条规则的反复使用。</p>
   <div class="card">
-    <p style="margin-top:0;"><strong>例</strong>：R(A,B,C,D)，F = {A→B, B→C}。分类：A 是 L，D 是 N，B、C 是 R。候选码必含 A、D → (AD)⁺ = {A,D,B,C}（A→B→C）→ 覆盖全部 → <strong>候选码 AD</strong>。</p>
+    <p style="margin-top:0;"><strong>例</strong>：R(A,B,C,D)，F = {A→B, B→C}。分类：A 是 L，D 是 N，B、C 是 R。候选码必含 A、D，把手算过程逐行写出来：</p>
+    <ol style="margin:.3rem 0;">
+      <li>先有 {A, D}（L 和 N 直接入码）；</li>
+      <li>{A,D} 里有 A，用 <strong>A→B</strong> 把 B 拉进来 → {A, D, B}；</li>
+      <li>现在有 B 了，用 <strong>B→C</strong> 把 C 拉进来 → {A, D, B, C}；</li>
+      <li>再扫一遍 F = {A→B, B→C}，箭头两端都在里面，没有新属性可拉 → <strong>推不动了，收工</strong>。</li>
+    </ol>
+    <p style="margin-bottom:0;">所以 (AD)⁺ = {A,D,B,C}，覆盖全部属性 → <strong>候选码 AD</strong>。所谓「闭包」就是这么一个「拉人进群」的过程。</p>
   </div>
 
   <h2>三、范式：1NF → 2NF → 3NF → BCNF</h2>
   <span class="formula">1NF 属性原子 → 2NF 消除非主属性对码的部分依赖 → 3NF 消除传递依赖 → BCNF 所有决定因素都是候选码</span>
+  <p>「<strong>决定因素</strong>」是行话，其实就是<strong>依赖箭头左边的那个属性（组）</strong>——比如 A→B 里决定因素就是 A。所以 BCNF 这句等价于下面快解第三条「每个函数依赖的左部都是候选码」，两句话说的是一回事。</p>
   <p><strong>三条考场快解</strong>（原资料口径）：</p>
   <ul>
     <li>候选码都是<strong>单属性</strong> → 不存在部分依赖 → 至少 2NF；</li>
-    <li><strong>全部属性都是主属性</strong>（都在某候选码里）→ 至少 3NF；</li>
+    <li><strong>全部属性都是主属性</strong>（都在某候选码里，回忆第一节：主属性=进了候选码的属性）→ 至少 3NF。<strong>为什么？</strong>因为 2NF、3NF 抓的两种毛病——部分依赖和传递依赖——<strong>都只对非主属性判</strong>（见下一节例题里的点破段）。表里连一个非主属性都没有，这两种毛病压根没有判的对象，检查自动通过；</li>
     <li>每个函数依赖的<strong>左部都是候选码</strong> → BCNF。</li>
   </ul>
   <div class="card">
-    <p style="margin-top:0;"><strong>3NF vs BCNF 分界例（背）</strong>：R(A,B,C)，F = {AB→C, C→B}。候选码：AB 与 AC。C→B 的左部 C <strong>不是候选码</strong> → 不是 BCNF；但 B 是主属性、不存在非主属性传递依赖 → 仍是 <strong>3NF</strong>。结论：<strong>3NF 但非 BCNF</strong>。</p>
+    <p style="margin-top:0;"><strong>3NF vs BCNF 分界例（背）</strong>：R(A,B,C)，F = {AB→C, C→B}。<br>
+    先补两行候选码怎么来的：本题 A、B、C 三个属性在依赖里<strong>两边都出现，全是 LR 类</strong>，没有 L、N 可以直接入码，只能组合着试：<br>
+    ① 试 AB：AB→C 把 C 拉进来，(AB)⁺ = {A,B,C} 覆盖全部 → <strong>AB 是候选码</strong>；<br>
+    ② 试 AC：里面有 C，用 C→B 把 B 拉进来，(AC)⁺ = {A,C,B} 也覆盖全部 → <strong>AC 也是候选码</strong>（所以候选码有两个）。<br>
+    然后 C→B 的左部 C <strong>不是候选码</strong> → 不是 BCNF；但三个属性全进了候选码（都是主属性）→ 仍是 <strong>3NF</strong>。这里要先点破一个隐藏前提：<strong>「传递依赖」这条罪名只对非主属性判</strong>（回忆第一节：3NF 的要求全是对非主属性提的）。本题没有非主属性——A、B、C 全是主属性，所以 3NF 根本<strong>不检查</strong>本题里那对「互相决定」的依赖（AB→C 与 C→B，B 和 C 你推出我、我推出你）；3NF 只问「非主属性有没有被传递依赖牵着走」，本题没有非主属性，罪名自然不成立；而 BCNF 的标准更严——它<strong>对所有属性</strong>都要求「决定因素必须是候选码」，C→B 的左部 C 不是候选码，所以栽在这一关。结论：<strong>3NF 但非 BCNF</strong>。</p>
   </div>
 
   <h2>四、E-R 图与模式转换（下午大题铁律）</h2>
+  <p>先说两个词：「<strong>关系模式</strong>」就是<strong>一张具体的表</strong>（表名 + 列名那一行）；「<strong>外键</strong>」就是<strong>在一张表里放另一张表的主键，用来指回去</strong>——像员工表里存一列「部门编号」，顺着它能查回部门表。</p>
   <ul>
-    <li>E-R 三要素：<strong>实体、属性、联系</strong>；联系类型判定：两个方向各取一端问「最多几个」→ 1:1 / 1:N / M:N。</li>
+    <li>E-R 三要素：<strong>实体、属性、联系</strong>——画在图上：<strong>实体 = 矩形框</strong>（学生、部门这类要存的东西），<strong>属性 = 连在框上的椭圆</strong>（学号、姓名），<strong>联系 = 连接两个框的菱形</strong>（选修、属于），菱形旁标上 1 / N / M。联系类型判定：两个方向各取一端问「最多几个」→ 1:1 / 1:N / M:N。举个 30 字的小例子：问「一个部门最多几名员工？」——多名；再问「一名员工最多属几个部门？」——一个。一头是多、一头是一 → <strong>1:N</strong>。两头都多（学生↔课程）是 M:N，两头都一是 1:1。</li>
     <li>转换规则：<strong>实体 → 一个关系模式</strong>；<strong>1:1 联系</strong>：并入任意一端；<strong>1:N 联系</strong>：并入 <strong>N 端</strong>（加对方主键做外键）；<strong>M:N 联系</strong>：<strong>必须独立成一个关系模式</strong>，主键 = 双方主键的组合。</li>
   </ul>
   <div class="callout warn">
@@ -70,6 +91,7 @@
   </div>
 
   <h2>五、自查（先动笔推候选码再点）</h2>
+  <p>自查里有一题考「三类完整性」，正文先补一句人话：<strong>实体完整性</strong> = 主键不能空、不能重复（一行都得有个身份证）；<strong>参照完整性</strong> = 外键的值必须真的在被参照表里存在（员工表不能填一个不存在的部门编号）；<strong>用户定义完整性</strong> = 业务自己定的规则（如 CHECK 年龄&gt;0）。配对记：实体→主键、参照→外键、用户定义→业务规则。（这三类完整性的完整讲解在知识点手册 <a href="../pages/knowledge-points/databases/day07-sql.html">day07-sql.md</a>，配套课后练习见 day07-sql 之后的 day08-exercises。）</p>
   <div id="quiz20"></div>
 
   <div class="win-box">
@@ -178,8 +200,8 @@ Quiz.render("quiz20", {
         "那是用户定义完整性（如 CHECK 年龄>0）。",
         "『字段不重复』表述不成立——是主键取值不重复。"
       ],
-      explain: "三完整性配对：实体→主键、参照→外键、用户定义→业务规则。",
-      source: "day07-sql.md §1 ｜ Lesson 0022 §一"
+      explain: "三完整性配对：实体→主键、参照→外键、用户定义→业务规则（见 §五开头的补丁段，详细内容在上一课 day07-sql）。",
+      source: "day07-sql.md §1 ｜ Lesson 0022 §五（补丁段）"
     },
     {
       q: "1NF 的要求是？",
@@ -199,7 +221,7 @@ Quiz.render("quiz20", {
       options: ["AB", "AC", "AD", "BCD"],
       answer: 0,
       opts: [
-        "✓ A 是 L 类、B 是 LR、C 中转、D 是 R 类；(AB)⁺ = {A,B,C,D} 覆盖全部 → 候选码 AB。",
+        "✓ 分类：A 是 L 类（只在左部）、B 是 LR 类（两边都有）、C 和 D 是 R 类（只在右部）；L 类属性 A 必入码，与 LR 类 B 组合试：(AB)⁺ = {A,B,C,D} 覆盖全部 → 候选码 AB。",
         "(AC)⁺ = {A,C,D} 缺 B。",
         "(AD)⁺ = {A,D} 太少。",
         "C、D 是 R 类属性，不能进候选码。"

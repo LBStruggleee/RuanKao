@@ -35,11 +35,17 @@
   </div>
 
   <h2>一、R 进制 → 十进制：按权展开（一切转换的原点）</h2>
-  <p>每一位数字 × 它所在位的<strong>权</strong>（基数的幂）再相加。<strong>基数 R</strong> = 用几个数码（二进制 2 个、八进制 8 个、十六进制 16 个，A=10…F=15）；第 i 位（从右数、从 0 起）的权 = R<sup>i</sup>。</p>
+  <p>先从你最熟的十进制说起：25 为什么是 25？因为它是 <strong>2×10 + 5×1</strong>——「2」站在十位上所以乘 10，「5」站在个位上所以乘 1。每一位都有一个「座位值」，这个<strong>座位值就叫「权」</strong>；十进制的权从右往左是 1、10、100、1000…（每个是前一个的 10 倍），因为十进制<strong>逢十进一</strong>。</p>
+  <p>任何 R 进制都一样，只是「座位值」翻倍的节奏变了：</p>
+  <ul>
+    <li><strong>基数 R</strong> = 这个进制用几个数码：二进制用 2 个（0、1），八进制用 8 个（0~7），十六进制用 16 个（0~9 和 A~F，A=10…F=15）；</li>
+    <li><strong>每一位的权 = R 的若干次方</strong>：从最右边那位开始数，第 1 位是 R⁰（个位，值是 1）、往左每一位都乘一次 R——第 2 位是 R¹、第 3 位是 R²……就像十进制从个位往左是 1、10、100 一样；</li>
+    <li><strong>按权展开</strong>就是一句话：<strong>把每位数字乘上它所在位的权，再全部加起来</strong>。</li>
+  </ul>
   <div class="card">
     <p style="margin-top:0;"><strong>例 1</strong>：1011B = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = <strong>11</strong></p>
     <p><strong>例 2（带字母）</strong>：1AH = 1×16 + 10 = <strong>26</strong>（A 就是 10，别看到字母就慌）</p>
-    <p style="margin-bottom:0;"><strong>例 3（小数）</strong>：11.01B = 2+1+0.25 = <strong>3.25</strong>（小数点后的权是 2⁻¹=0.5、2⁻²=0.25，往右减半）</p>
+    <p><strong>例 3（小数）</strong>：小数点往右，权依次<strong>减半</strong>——小数点后第 1 位权是 0.5（=2⁻¹）、第 2 位是 0.25（=2⁻²）……11.01B = 1×2 + 1×1 + 0×0.5 + 1×0.25 = 2+1+0+0.25 = <strong>3.25</strong>（0.25 就是小数点后第 2 位那个 1 贡献的）</p>
   </div>
   <div class="callout tip">
     <span class="tag">🎬 像素小剧场 · 按权展开</span>
@@ -47,13 +53,13 @@
   </div>
   <div id="oba-holder"></div>
 
-  <span class="formula">按权展开通式：(d<sub>n</sub>…d<sub>1</sub>d<sub>0</sub>.d<sub>-1</sub>)<sub>R</sub> = Σ d<sub>i</sub> × R<sup>i</sup>　　——所有「×进制转十进制」都是它</span>
+  <span class="formula">按权展开通式：把每位数字（d）乘上它所在位的权（R 的幂），再全部加起来——所有「×进制转十进制」都是这一个动作。<br><small>选读：教材里会写成 (d<sub>n</sub>…d<sub>1</sub>d<sub>0</sub>.d<sub>-1</sub>)<sub>R</sub> = Σ d<sub>i</sub> × R<sup>i</sup>，Σ 是「把各项加起来」的求和记号——看不懂可跳过，不影响做题。</small></span>
 
   <h2>二、十进制 → R 进制：整数除基取余，小数乘基取整</h2>
   <ul>
-    <li><strong>整数部分：除基取余，余数<strong>逆序</strong>读</strong>——除到商 0 为止，先得的余数是低位；</li>
-    <li><strong>小数部分：乘基取整，整数<strong>顺序</strong>读</strong>——每步取走整数部分，用剩下的小数继续乘；</li>
-    <li>巧算（二进制专用）：把十进制<strong>拆成 2 的幂之和</strong>，有幂的位写 1——25 = 16+8+1 = <strong>11001B</strong>，考场比竖除快一倍。</li>
+    <li><strong>整数部分：除基取余，余数<strong>逆序</strong>读</strong>——除到商 0 为止。<strong>为什么这样做？</strong>每次除以 2，余数就是「这个数是奇还是偶」：奇数余 1、偶数余 0——这正好是二进制<strong>最低位</strong>（个位）的值；除完剩下的商，就是去掉最低位后剩下的部分，继续除它就拆出了更高一位。所以<strong>先算出来的余数是最低位，最后算出来的才是最高位</strong>——写的时候就得倒过来（逆序）。用 25 = 16+8+1 对照：25 除以 2 余 1（个位是 1），商 12 除以 2 余 0（第二位是 0）……一路拆到 0，逆着读正好是 11001；</li>
+    <li><strong>小数部分：乘基取整，整数<strong>顺序</strong>读</strong>——每步取走整数部分，用剩下的小数继续乘（道理对称：乘 2 后整数部分进到了小数点左边第一位）；</li>
+    <li>巧算（二进制专用）：把十进制<strong>拆成 2 的幂之和</strong>，有幂的位写 1——25 = 16+8+1 = <strong>11001B</strong>，考场比竖除快一倍（这招和除基取余结果一样，可以互相验算）。</li>
   </ul>
   <div class="card">
     <p style="margin-top:0;"><strong>例（整数）</strong>：25 ÷ 2 = 12 余 <strong>1</strong>；12 ÷ 2 = 6 余 <strong>0</strong>；6 ÷ 2 = 3 余 <strong>0</strong>；3 ÷ 2 = 1 余 <strong>1</strong>；1 ÷ 2 = 0 余 <strong>1</strong>。余数逆序 → <strong>11001B</strong>（除了 5 次 → 二进制 5 位）。</p>
@@ -82,12 +88,13 @@
   <h2>四、两个必考题型：进制等式 与 位数范围</h2>
   <h3>4.1 进制等式题（解方程）</h3>
   <p>题面给「(41)<sub>x</sub> = (29)D，求 x」——把左边<strong>按权展开</strong>，解一元一次方程即可：</p>
-  <span class="formula">4x + 1 = 29 → x = <strong>7</strong>　　（注意：算出的基数必须 ≤ 该数用到的最大数码 + 1）</span>
+  <span class="formula">4x + 1 = 29 → x = <strong>7</strong>　　（自查一句：基数必须比这个数里出现的最大数码<strong>大</strong>——本例最大数码是 4，所以 x > 4，x 至少是 5；解出的 7 满足，答案成立）</span>
+  <p>为什么要自查？因为「41」里写着一个数码 4，x 进制必须<strong>装得下</strong> 4 这个数码（比如二进制只有 0 和 1，写不出 4）——所以基数要比最大数码大。这道题光看约束只能框出 x ≥ 5，<strong>具体是几得靠方程解出来</strong>。</p>
   <h3>4.2 位数与表示范围</h3>
   <ul>
     <li>R 进制 <strong>n 位</strong>能表示的<strong>数</strong>共 R<sup>n</sup> 个；最大值 = R<sup>n</sup> − 1（每一位都顶格）；</li>
     <li>二进制 8 位：0 ~ 2⁸−1 = <strong>255</strong>（这就是子网划分里「一个字节 0~255」的来源——<a href="0025-tcp-subnet.html">0025</a> 直接用）；</li>
-    <li>十进制数 D 转成 R 进制后的位数 = ⌊log<sub>R</sub>D⌋ + 1（如 25 → 二进制 5 位：2⁴ ≤ 25 < 2⁵）。</li>
+    <li>十进制数 D 转成二进制后共几位？<strong>人人能算的判断法：找最大的 2ⁿ 不超过它</strong>——25 夹在 16（2⁴）和 32（2⁵）之间：2⁴ ≤ 25 < 2⁵，所以 25 至少要 5 位（16 只需 5 位 1，25 比 16 大、32 又装不下它）→ 5 位。教科书里的对数公式（位数 = ⌊log<sub>R</sub>D⌋ + 1，⌊⌋ 表示「向下取整、抹掉小数」）说的就是同一件事，看不懂可跳过，用上面的判断法足够做题。</li>
   </ul>
 
   <h2>五、速记权值表（背熟 = 转换不用算）</h2>
@@ -95,10 +102,11 @@
     <tr><th>2 的幂</th><th>值</th><th>十六进制</th><th>考点场景</th></tr>
     <tr><td>2⁰ ~ 2³</td><td class="num">1 / 2 / 4 / 8</td><td class="num">1 / 2 / 4 / 8</td><td>按权展开逐位心算</td></tr>
     <tr><td>2⁴</td><td class="num">16</td><td class="num">10H</td><td>十六进制第二位的权</td></tr>
-    <tr><td>2⁶</td><td class="num">64</td><td class="num">40H</td><td>/26 子网块大小（0025）</td></tr>
-    <tr><td>2⁸</td><td class="num">256</td><td class="num">FF+1=100H</td><td>一个字节；FF=255</td></tr>
+    <tr><td>2⁵</td><td class="num">32</td><td class="num">20H</td><td>判断位数时常用（25 夹在 16 和 32 之间 → 5 位）</td></tr>
+    <tr><td>2⁶</td><td class="num">64</td><td class="num">40H</td><td>/26 子网块大小（<small>0025 课会用到，现在先混个眼熟，学完子网划分再回来看</small>）</td></tr>
+    <tr><td>2⁸</td><td class="num">256</td><td class="num">100H（FF+1）</td><td>一个字节 0~255；FF = 255，255 加 1 进位成 100H = 256（就像十进制 99+1 进位成 100）</td></tr>
     <tr><td><strong>2¹⁰</strong></td><td class="num"><strong>1024</strong></td><td class="num">400H</td><td>1K；容量换算的地基</td></tr>
-    <tr><td>2¹⁶</td><td class="num">65536</td><td class="num">10000H</td><td>B 类地址主机位（0025）</td></tr>
+    <tr><td>2¹⁶</td><td class="num">65536</td><td class="num">10000H</td><td>B 类地址主机位（<small>0025 课会用到，先混个眼熟</small>）</td></tr>
   </table>
   <p><strong>十六进制 A~F</strong>：A=10、B=11、C=12、D=13、E=14、F=15——倒背如流的要求：看到 C 立刻反应 12。</p>
 

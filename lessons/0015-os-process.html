@@ -29,17 +29,54 @@
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 3 操作系统 · 处理机管理线</b>——进程/调度/PV/前驱图/死锁。上游：0006（PV 的队列直觉）；下游：0016（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、进程：程序的一次“活的”执行</h2>
+  <p>先回答最基础的疑问——<strong>进程和程序到底差在哪？</strong>打个比方：<strong>程序 = 菜谱</strong>（躺在磁盘上的死文件，谁都能拿去照着做）；<strong>进程 = 照着菜谱炒菜的整个过程</strong>（活物：正在占用锅碗、手上沾着油、炒到第几步都有记录）。同一本菜谱可以让三个人同时各炒各的——这就是一个程序对应多个进程。</p>
+  <p>另外记住一个词：<strong>阻塞 = 进程自己停下来等某件事发生</strong>（比如等用户敲键盘、等打印机打完）。等的事没发生，它就不动——后面状态图里会反复出现这个词。</p>
   <ul>
-    <li><strong>PCB（进程控制块）是进程存在的唯一标志</strong>——创建进程 = 建 PCB，撤销 = 删 PCB。</li>
-    <li><strong>资源分配单位 = 进程，CPU 调度单位 = 线程</strong>。线程共享进程的代码/数据/堆/文件，<strong>独享栈与寄存器</strong>。</li>
-    <li>引入线程的目的：让同进程内多线程<strong>并发/并行</strong>，切换开销更小。</li>
+    <li><strong>PCB（进程控制块）是进程存在的唯一标志</strong>——相当于给炒菜过程建的一份「登记档案」：炒到哪一步了、用着哪些锅。创建进程 = 建 PCB，撤销 = 删 PCB。</li>
+    <li><strong>资源分配单位 = 进程，CPU 调度单位 = 线程</strong>。打个比方：进程是<strong>同一间厨房</strong>，线程是<strong>厨房里的多个厨师</strong>。菜谱和食材（代码/数据/堆/文件）是全厨房共享的；但<strong>每个厨师的手和刀必须各归各</strong>——栈和寄存器就是「正在算的现场」（算到哪一步、中间结果是多少），两个厨师共用一双手必然打架，所以线程<strong>独享栈与寄存器</strong>。（没见过「堆」「寄存器」没关系：堆=程序运行时临时放东西的大仓库，寄存器=CPU 手边放当前正在算的几个数的小抽屉，下节课细讲。）</li>
+    <li>引入线程的目的：让同进程内多线程<strong>并发/并行</strong>（多个厨师同时开工），切换开销更小（在同一个厨房里换厨师，比搬去另一间厨房快得多）。</li>
   </ul>
 
   <h3>五状态模型（必背转换图）</h3>
-  <pre>   创建 ──→ 就绪 ⇄（时间片到/被抢占）──→ 运行 ──→ 终止
-             ↑  ↘（等待 I/O / P 失败）      ↑
-             │        【阻塞】 ────────────┘（I/O 完成 / V 唤醒）
-             └────── 就绪 ←── 阻塞</pre>
+  <p>一张图记五个状态怎么走：进程出生是「创建」，干完活是「终止」，中间在「就绪」（排队等 CPU）、「运行」（正在被 CPU 执行）、「阻塞」（停下来等某件事）之间转。</p>
+  <svg viewBox="0 0 860 300" style="max-width:100%;height:auto;font-family:inherit;" role="img" aria-label="五状态转换图">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 Z" fill="#666"/></marker>
+    </defs>
+    <g stroke="#888" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <line x1="90" y1="70" x2="180" y2="70"/>
+      <line x1="200" y1="55" x2="380" y2="55"/>
+      <line x1="380" y1="85" x2="200" y2="85"/>
+      <line x1="420" y1="70" x2="560" y2="70"/>
+      <line x1="620" y1="95" x2="620" y2="215"/>
+      <line x1="260" y1="245" x2="170" y2="245"/>
+      <path d="M 290 235 Q 290 160 320 90"/>
+    </g>
+    <g font-size="14">
+      <circle cx="60" cy="70" r="30" fill="#eef6ff" stroke="#4a90d9" stroke-width="2"/><text x="60" y="75" text-anchor="middle">创建</text>
+      <circle cx="290" cy="70" r="30" fill="#eef6ff" stroke="#4a90d9" stroke-width="2"/><text x="290" y="75" text-anchor="middle">就绪</text>
+      <circle cx="440" cy="70" r="30" fill="#e8ffe8" stroke="#3a9e3a" stroke-width="2"/><text x="440" y="75" text-anchor="middle">运行</text>
+      <circle cx="620" cy="70" r="30" fill="#f0f0f0" stroke="#888" stroke-width="2"/><text x="620" y="75" text-anchor="middle">终止</text>
+      <circle cx="260" cy="245" r="30" fill="#fff3e0" stroke="#d98c2b" stroke-width="2"/><text x="260" y="250" text-anchor="middle">阻塞</text>
+      <text x="135" y="62" text-anchor="middle" fill="#555">建好 PCB</text>
+      <text x="290" y="45" text-anchor="middle" fill="#555">被调度选中 →</text>
+      <text x="290" y="102" text-anchor="middle" fill="#555">← 时间片到 / 被抢占</text>
+      <text x="530" y="62" text-anchor="middle" fill="#555">干完活</text>
+      <text x="640" y="155" text-anchor="start" fill="#555">等 I/O / P 失败</text>
+      <text x="245" y="278" text-anchor="middle" fill="#555">← I/O 完成 / V 唤醒</text>
+      <text x="315" y="170" text-anchor="start" fill="#555">事件发生 → 回就绪排队</text>
+    </g>
+  </svg>
+  <p>每条边单列成表（这就是全部合法转换，图里没有的线都是非法的）：</p>
+  <table class="tight">
+    <tr><th>从 → 到</th><th>什么时候发生</th></tr>
+    <tr><td>创建 → 就绪</td><td>PCB 建好，进程排进就绪队列</td></tr>
+    <tr><td>就绪 → 运行</td><td>被调度程序选中，拿到 CPU</td></tr>
+    <tr><td><strong>运行 → 就绪</strong></td><td><strong>时间片用完 / 被更高优先级抢占</strong>（还能跑，只是被换下来排队）</td></tr>
+    <tr><td><strong>运行 → 阻塞</strong></td><td><strong>等待 I/O / P 操作失败</strong>（要等一件事发生）</td></tr>
+    <tr><td><strong>阻塞 → 就绪</strong></td><td><strong>等的事发生了（I/O 完成 / V 唤醒）</strong>——注意只回到就绪排队，不能直接上 CPU</td></tr>
+    <tr><td>运行 → 终止</td><td>进程干完活或被撤销</td></tr>
+  </table>
   <div class="callout warn">
     <span class="tag">⚠ 两个高频判断</span>
     ① <strong>阻塞 → 不能直接到运行</strong>，必须「阻塞 →（事件发生）→ 就绪 →（被调度）→ 运行」；② <strong>P 操作失败 → 阻塞</strong>，<strong>时间片用完 → 就绪</strong>（不是阻塞）。
@@ -48,20 +85,28 @@
   <h2>二、进程调度算法（选择题四件套）</h2>
   <table class="tight">
     <tr><th>算法</th><th>特点</th><th>缺点</th></tr>
-    <tr><td>FCFS 先来先服务</td><td>公平简单</td><td>护航效应，平均等待长</td></tr>
-    <tr><td><strong>SJF 短作业优先</strong></td><td><strong>平均等待/周转时间最短</strong></td><td>长作业<strong>饥饿</strong></td></tr>
+    <tr><td>FCFS 先来先服务</td><td>公平简单</td><td>护航效应（一个超长作业排在前面，后面一堆小作业全被它拖住，像小轿车被大货车护航堵死）</td></tr>
+    <tr><td><strong>SJF 短作业优先</strong></td><td><strong>平均等待/周转时间最短</strong></td><td>长作业<strong>饥饿</strong>（一直排不上队——短作业源源不断地来，长作业永远轮不到）</td></tr>
     <tr><td>RR 时间片轮转</td><td>分时响应好</td><td>时间片过大→退化为 FCFS；过小→切换开销大</td></tr>
     <tr><td>多级反馈队列</td><td>兼顾响应与吞吐</td><td>实现复杂（仍防饥饿）</td></tr>
-    <tr><td>优先级</td><td>紧急优先</td><td>低优先级饥饿（可老化 aging 缓解）</td></tr>
+    <tr><td>优先级</td><td>紧急优先</td><td>低优先级饥饿（可老化 aging 缓解：等得越久优先级慢慢涨，总有一天轮到它）</td></tr>
   </table>
-  <p><strong>SJF 平均周转时间计算</strong>（动笔）：周转 = 完成 − 到达；带权周转 = 周转 ÷ 运行。例：作业 A(0 到达,跑3)、B(1,跑5)、C(2,跑2)，SJF 顺序 A(0-3)→C(3-5)→B(5-10)：周转 A=3、C=3、B=9，平均 5。</p>
+  <p><strong>SJF 平均周转时间计算</strong>（动笔）：周转 = 完成 − 到达；带权周转 = 周转 ÷ 运行。例：作业 A(0 到达,跑3)、B(1,跑5)、C(2,跑2)。SJF 每次从「已到达、还没跑」的作业里挑最短的：</p>
+  <table class="tight">
+    <tr><th>轮到谁</th><th>到达</th><th>开始</th><th>完成</th><th>周转 = 完成 − 到达</th></tr>
+    <tr><td>A（0 时刻只有它，先跑；跑 3）</td><td>0</td><td>0</td><td>3</td><td>3 − 0 = <strong>3</strong></td></tr>
+    <tr><td>C（3 时刻 A、B、C 都到了，C 最短 2，先跑）</td><td>2</td><td>3</td><td>5</td><td>5 − 2 = <strong>3</strong></td></tr>
+    <tr><td>B（只剩它，跑 5）</td><td>1</td><td>5</td><td>10</td><td>10 − 1 = <strong>9</strong></td></tr>
+  </table>
+  <p>B 虽然最早（1 时刻）就到了，但每次都被更短的 C 插队——它一直等到 5 才开跑，10 才完成，这就是 SJF 对长作业的「饥饿」。平均周转 = (3 + 3 + 9) ÷ 3 = <strong>5</strong>。</p>
 
   <h2>三、PV 操作与信号量（下午大题核心）</h2>
-  <p>信号量 S 是一个带计数的门闸：<strong>P(S)：S−1，结果 &lt; 0 则阻塞自己</strong>；<strong>V(S)：S+1，若有等待者则唤醒一个</strong>。P 是荷兰语 Passeren（通过），V 是 Vrijgeven（释放）——记住「<strong>P 减 V 加</strong>」。</p>
+  <p>信号量 S 是一个带计数的门闸：<strong>P(S)：S−1，结果 &lt; 0 则阻塞自己</strong>（门闸放不下人了，你排队等着）；<strong>V(S)：S+1，若有等待者则唤醒一个</strong>（放一个人进去）。P 是荷兰语 Passeren（通过），V 是 Vrijgeven（释放）——记住「<strong>P 减 V 加</strong>」。</p>
+  <p>看表前先认识两个词：<strong>临界资源 = 一次只能一个人用的东西</strong>（比如打印机，两个人同时用纸就乱了）；<strong>临界区 = 使用临界资源的那段代码</strong>（比如「发送到打印机」那几行）。</p>
   <table class="tight">
     <tr><th>场景</th><th>信号量设置</th><th>要点</th></tr>
-    <tr><td>互斥（一个临界资源）</td><td>mutex = 1</td><td>P(mutex)…临界区…V(mutex)，成对出现</td></tr>
-    <tr><td><strong>生产者-消费者（缓冲区 n）</strong></td><td><strong>mutex=1, empty=n, full=0</strong></td><td><em>资源量 P 在互斥量 P 之前</em>（顺序颠倒可能死锁）</td></tr>
+    <tr><td>互斥（一个临界资源）</td><td>mutex = 1</td><td>P(mutex)…临界区…V(mutex)，成对出现（进门先 P、出门必 V）</td></tr>
+    <tr><td><strong>生产者-消费者（缓冲区 n）</strong></td><td><strong>mutex=1, empty=n, full=0</strong><br>（empty = <strong>数还剩几个空格子</strong>，初始 n 个全空；full = <strong>数已有几个产品</strong>，初始 0 个；mutex 守缓冲区这扇门）</td><td><em>资源量 P 在互斥量 P 之前</em>（顺序颠倒可能死锁）</td></tr>
     <tr><td>读者-写者</td><td>读读可并、写写互斥、读写互斥</td><td>计数器 + 互斥保护计数器（第一个读者锁写、最后一个解锁）</td></tr>
     <tr><td><strong>哲学家进餐</strong></td><td>5 支筷子 = 5 个互斥量</td><td>死锁经典：全员各拿一支等另一支 → 死锁；解法<strong>最多 4 人同时拿</strong> / <strong>奇数号先左后右、偶数号先右后左</strong>（破坏循环等待）</td></tr>
   </table>
@@ -93,14 +138,27 @@
   </div>
 
   <h2>五、死锁：四个必要条件与银行家</h2>
+  <p><strong>死锁 = 几个进程互相等对方的资源，谁都动不了</strong>。比如两人吃饭：你拿一支筷子等我手里那支，我拿一支等你手里那支——谁也吃不成。</p>
   <span class="formula">互斥 + 占有且等待 + 不可剥夺 + 循环等待（缺一不可，破坏其一即可预防）</span>
+  <ul>
+    <li><strong>互斥</strong>：资源一次只能一个人用（筷子你用了我就不能用）；</li>
+    <li><strong>占有且等待</strong>：手里拿着筷子不放，还伸手要另一支；</li>
+    <li><strong>不可剥夺</strong>：不能从别人手里硬抢筷子，只能等他自己松手；</li>
+    <li><strong>循环等待</strong>：你等我、我等他、他等你，围成一个圈——只要有一个人先松手（先放下筷子），圈就破了。</li>
+  </ul>
   <table class="tight">
     <tr><th>策略</th><th>做法</th><th>例子</th></tr>
-    <tr><td>预防（静态）</td><td>破坏四个条件之一</td><td>一次性申请全部资源 / 资源有序分配</td></tr>
+    <tr><td>预防（静态）</td><td>破坏四个条件之一</td><td>一次性申请全部资源（坐下一开始就拿齐两支筷子）/ 资源有序分配</td></tr>
     <tr><td><strong>避免（动态）</strong></td><td><strong>银行家算法：分配前判断安全状态</strong></td><td>安全序列存在才分配</td></tr>
     <tr><td>检测</td><td>资源分配图找环</td><td>允许发生再处理</td></tr>
     <tr><td>解除</td><td>撤销进程 / 剥夺资源</td><td>代价大，最后手段</td></tr>
   </table>
+  <p><strong>银行家算法在干嘛？</strong>先给两个词一句话定义：<strong>安全序列 = 按某种顺序把资源分下去，每个进程都最终能拿到全部所需资源、跑完再还回来</strong>；<strong>安全状态 = 存在这样一条安全序列</strong>的状态。就像银行放贷：每次放款前先算一遍「假定这样贷出去，每个客户最终都能凑够本钱、完工还钱吗？」——只要存在一种顺序能全还上（安全），就敢放；算出来有人会永远凑不够（不安全），这笔就不贷。</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>迷你例子</strong>：系统还剩 <strong>3 台打印机</strong>。进程甲已占 1 台、还<strong>最多再要 2</strong> 台；进程乙已占 1 台、还<strong>最多再要 3</strong> 台。现在甲申请 2 台——批不批？</p>
+    <p>批给甲：剩 1 台。甲凑齐 3 台 → 跑完<strong>还回 3 台</strong> → 剩 4 台 → 乙要 3 台也够 → 乙也能跑完。<strong>存在安全序列「甲→乙」</strong>，安全，批！</p>
+    <p style="margin-bottom:0;">反过来，若只剩 2 台时乙先申请 3 台：批了剩 0 台，乙永远凑不齐（甲也在等），谁也跑不完——<strong>不安全，不批</strong>，让乙先等着。这就是「分配前判断安全状态」。</p>
+  </div>
   <p><strong>银行家 = 死锁「避免」</strong>——这四个概念怎么配对，选择题年年考。</p>
 
   <h2>六、自查（全对过课）</h2>

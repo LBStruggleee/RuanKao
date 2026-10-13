@@ -23,12 +23,14 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    网络第一题永远是「某某协议/设备在第几层」。背下一张归属总表 + 三个高频陷阱（<strong>ARP 在网际层、ICMP 在网络层、端口在 TCP/UDP 头部</strong>），这部分分就稳了。
+    网络第一题永远是「某某协议/设备在第几层」——20 道网络题里有 12 道在问这个。所以这课就干一件事：<strong>把常考的协议和设备，一个个放到正确的楼层上</strong>。§一先搞懂「楼层」怎么分，§二给归属总表，最后送三个高频陷阱（先卖个关子，等你知道 ARP、ICMP 各是干什么的，陷阱一看就懂）。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 4 网络安全 · 体系结构线</b>——OSI/TCP-IP 对照/协议归属/设备层次。上游：新面起点；下游：0025（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、两层楼对照：OSI 七层 vs TCP/IP 四层</h2>
+  <p>先说<strong>为什么要分层</strong>。打个比方：你寄一个包裹，快递公司内部是分工的——<strong>打包的只管打包、分拣的只管分拣、开车的只管开车</strong>。每个环节只做自己那一件事，出问题也知道该找谁。网络传数据也一样：把「发数据」这件大事拆成几个环节，每个环节（层）只负责一件事，这就是<strong>分层模型</strong>。</p>
+  <p>这套「楼层图」有两个版本：<strong>OSI 画了 7 层</strong>（教科书版，分得细），<strong>TCP/IP 实际用 4 层</strong>（务实版，把细楼层合并了）。考试就爱考「某个协议住哪个版本的哪一层」。对应关系很简单：<strong>OSI 的上三层（应用、表示、会话）合起来 = TCP/IP 的应用层；OSI 的下两层（数据链路、物理）合起来 = TCP/IP 的网络接口层</strong>。看表：</p>
   <table class="tight">
     <tr><th>OSI 七层</th><th>TCP/IP 四层</th><th>干什么（一句话）</th><th>代表协议/设备</th></tr>
     <tr><td>7 应用</td><td rowspan="3">4 应用</td><td>给用户软件用的接口</td><td>HTTP/FTP/SMTP/DNS/Telnet/SNMP</td></tr>
@@ -39,24 +41,30 @@
     <tr><td>2 数据链路</td><td rowspan="2">1 网络接口</td><td>成帧、MAC 寻址、差错检测</td><td>以太网/PPP；<strong>交换机、网桥</strong></td></tr>
     <tr><td>1 物理</td><td>比特流上媒介</td><td>网线/光纤；<strong>中继器、集线器 Hub</strong></td></tr>
   </table>
-  <p>数据发送时逐层<strong>封装</strong>（加头部），接收时逐层<strong>解封装</strong>——顺序：应用 → 传输(段) → 网际(包) → 链路(帧) → 物理(比特)。</p>
+  <div class="callout warn">
+    <span class="tag">⚠ 名字先对齐</span>
+    表里 <strong>OSI 的「网络层」和 TCP/IP 的「网际层」是同一个楼层</strong>，只是两个版本叫法不同。后文两个名字会混用，不再区分——别以为是两层。
+  </div>
+  <p>再看数据怎么「下楼」。打个比方：你写一封信（内容），装进信封写上门牌号，再套一层写上城市邮编，最后装进邮袋由货车运走——<strong>每过一道环节，就多包一层壳</strong>。网络里这叫<strong>封装</strong>：你的数据先加上 TCP 头（这时叫<strong>段</strong>），再加上 IP 头（叫<strong>包</strong>），再加上 MAC 头（叫<strong>帧</strong>），最后变成电信号（<strong>比特</strong>）发出去。收信人反向拆壳，一层层去掉头部，叫<strong>解封装</strong>。顺序：<strong>应用 → 传输(段) → 网际(包) → 链路(帧) → 物理(比特)</strong>。</p>
 
   <h2>二、归属总表（必背，按楼层背）</h2>
+  <p>看表前先补一个词：<strong>端口号</strong>。一台电脑上同时跑着很多程序（浏览器、微信、游戏），数据到了电脑，该交给哪个程序？靠端口号——<strong>它就是同一台电脑上不同程序的「门牌号」</strong>（0–65535 号）。比如 80 号房间住着网站服务，25 号住着邮件服务。</p>
   <table class="tight">
     <tr><th>层</th><th>协议（全称顺一遍）</th><th>记忆锚点</th></tr>
-    <tr><td>应用</td><td>HTTP 万维网 / FTP 20+21 文件 / SMTP 25 发邮件 / POP3 110 收邮件 / DNS 53 域名→IP / Telnet 23 远程登录 / SNMP 161 网管 / DHCP 67-68 自动分配 IP / TFTP 69 简单文件</td><td>「上网收发找名字，远程网管自动配」</td></tr>
+    <tr><td>应用</td><td><strong>必背 5 个：HTTP 万维网 / FTP 20+21 文件 / SMTP 25 发邮件 / POP3 110 收邮件 / DNS 53 域名→IP</strong><br>了解即可：Telnet 23 远程登录 / SNMP 161 网管 / DHCP 自动分配 IP / TFTP 简单文件</td><td>「上网收发找名字，远程网管自动配」</td></tr>
     <tr><td>传输</td><td><strong>TCP</strong> 可靠连接 / <strong>UDP</strong> 无连接快速</td><td>端口（0–65535）装在 TCP/UDP 头部</td></tr>
-    <tr><td>网际/网络</td><td><strong>IP</strong> 寻址 / <strong>ICMP</strong> 差错报告（ping 用它）/ <strong>ARP</strong> IP→MAC / RARP MAC→IP / IGMP 组播</td><td><em>ARP/ICMP 都在网际层，不在应用层！</em></td></tr>
+    <tr><td>网际/网络</td><td><strong>IP</strong> 寻址（管 IP 地址） / <strong>ICMP</strong> 差错报告（ping 测连通用的就是它） / <strong>ARP</strong> 把 IP 翻译成 MAC 地址 / RARP 反过来 MAC→IP / IGMP 组播</td><td><em>ARP/ICMP 都在网际层，不在应用层！</em></td></tr>
     <tr><td>数据链路</td><td>以太网 Ethernet / PPP / VLAN(802.1Q) / CSMA/CD</td><td>MAC 地址 48 位</td></tr>
     <tr><td>物理</td><td>RJ45 / 光纤 / 比特流</td><td>只管信号</td></tr>
   </table>
   <div class="callout warn">
     <span class="tag">⚠ 三个高频陷阱</span>
-    ① <strong>ARP 在网际层</strong>（不是应用层）——它服务于 IP 到 MAC 的解析；② <strong>ICMP 在网络层</strong>（ping 是应用但承载它的 ICMP 在网络层）；③ <strong>端口号在传输层 TCP/UDP 首部</strong>（不在 IP 头部）。
+    ① <strong>ARP 在网际层</strong>（不是应用层）——ARP 是干什么的？它把 IP 地址翻译成 MAC 地址（网卡号），这个翻译活儿是替 IP 打下手的，所以归网际层；② <strong>ICMP 在网络（网际）层</strong>——ping 这个命令是应用，但它底下跑的 ICMP 是报告差错的，归网际层；③ <strong>端口号装在传输层 TCP/UDP 首部</strong>（不在 IP 头部——IP 头部只写 IP 地址）。
   </div>
 
   <h2>三、设备在几层（一个判断口诀）</h2>
-  <p>看设备「读到了哪一层地址」：<strong>只转发电信号 = 物理（中继器/Hub）；认 MAC = 数据链路（交换机/网桥）；认 IP = 网络（路由器）；还要管应用内容 = 网关/应用层防火墙</strong>。</p>
+  <p>先补两个地址概念：<strong>MAC 地址</strong>是网卡出厂时烙在芯片上的「身份证号」，全球唯一、终身不变；<strong>IP 地址</strong>则像「临时住址」，搬到哪儿变到哪儿。设备认哪个地址，就归哪层。生活场景帮你认设备：<strong>家里的路由器</strong>（连宽带、给手机分 IP 的那个盒子）认 IP，是网络层设备；<strong>楼道里的交换机</strong>（小区/公司把一堆网线插一起的那个铁盒子）只认 MAC，是数据链路层设备。</p>
+  <p>判断口诀——看设备「读到了哪一层地址」：<strong>只转发电信号 = 物理（中继器/Hub）；认 MAC = 数据链路（交换机/网桥）；认 IP = 网络（路由器）；还要管应用内容 = 网关/应用层防火墙</strong>。</p>
 
   <h2>四、自查（全对过课）</h2>
   <div id="quiz16"></div>

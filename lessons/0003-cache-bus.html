@@ -23,49 +23,67 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    一组公式通吃 Cache 计算题：<strong>ta = h×tc + (1−h)×tm；S = tm/ta；e = tc/ta</strong>。再加三种映射的「地址怎么切」（Tag | 行号/组号 | 块内偏移），和总线带宽 = 频率×宽度÷8。
+    一组公式通吃 Cache 计算题：<strong>ta = h×tc + (1−h)×tm；S = tm/ta；e = tc/ta</strong>（这四个符号§二马上逐个解释：h 是命中率，tc/tm 是 Cache/主存访问一次的时间，ta 是平均访问时间——现在扫一眼有个印象即可）。再加三种映射的「地址怎么切」（Tag | 行号/组号 | 块内偏移），和总线带宽 = 频率×宽度÷8。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 6 组成 · 存储层次线</b>——局部性/Cache/总线。上游：0002；下游：0016 虚拟内存重用局部性、0017 下探到磁盘——跨面「存储大线」的中段（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、存储层次与局部性</h2>
-  <p>寄存器 → Cache → 主存 → 辅存：越往上<strong>越快越贵越小</strong>。Cache 有效的前提是<strong>局部性原理</strong>：刚用过的很快再用（时间局部性）、相邻的马上要用（空间局部性）。</p>
+  <p>寄存器 → Cache → 主存 → 辅存：越往上<strong>越快越贵越小</strong>——寄存器是 CPU 手边的便签（CPU 计算只能直接用寄存器里的数，所以数据要一路往上搬，Cache 就是离 CPU 最近的中转站），Cache 是桌上的常用资料，主存是书架，辅存（硬盘）是库房。书架上的书比桌上那份多得多，但翻桌上那份只要一秒，去书架找要走上好几步。</p>
+  <p>Cache 这么小，凭什么能拦住大部分访问？靠的是<strong>局部性原理</strong>：程序访问内存也像你翻书——刚看过的段落，过一会儿还会回头看（<strong>时间局部性</strong>：刚用过的很快再用）；翻完这页多半接着看下一页（<strong>空间局部性</strong>：相邻的马上要用）。既然访问都集中在少数几块「热门数据」上，把它们搬进小而快的 Cache，绝大多数请求就直接命中了——这就是 Cache 敢比主存小的底气。</p>
 
   <h2>二、命中率计算（一组公式通吃）</h2>
+  <p>先定义 <strong>h（命中率）</strong>：访问时数据<strong>恰好在 Cache 里</strong>的比例。h = 0.9 就是每 10 次访问有 9 次直接从 Cache 拿到、只有 1 次落空去主存——公式里的 0.9、0.1 就是从这来的。</p>
   <span class="formula">平均访问时间 ta = h×tc + (1−h)×tm　　加速比 S = tm / ta　　访问效率 e = tc / ta</span>
   <div class="card">
     <p style="margin-top:0;"><strong>例</strong>：Cache 速度 tc=20ns，主存 tm=100ns，命中率 h=90%：<br>
     ta = 0.9×20 + 0.1×100 = <strong>28 ns</strong>；S = 100/28 ≈ <strong>3.57</strong>；e = 20/28 ≈ <strong>71.4%</strong>。</p>
     <p style="margin-bottom:0;"><strong>反解</strong>：要 ta ≤ 30ns，则 h ≥ (tm−ta)/(tm−tc) = (100−30)/(100−20) = <strong>87.5%</strong>（万能反解式）。</p>
+    <p style="margin-bottom:0;">这个式子不是从天而降的，就是把上面的公式当方程解：ta = h×tc + (1−h)×tm = h×tc + tm − h×tm = tm − h×(tm−tc)。移项得 h×(tm−tc) = tm−ta，两边一除就是 h = (tm−ta)/(tm−tc)。<br>
+    手算一遍：h×(100−20) = 100−30 → h×80 = 70 → h = 70/80 = 87.5%。<br>
+    ⚠ 若题目要求填<strong>整数</strong>：87.5% 不足 88% 时 ta 就会超过 30ns（87% 算出 ta = 0.87×20+0.13×100 = 30.4ns，超标），所以必须<strong>向上取整填 88</strong>，不能四舍五入、更不能直接填 87.5。</p>
   </div>
 
   <h2>三、三种映射：主存块能住 Cache 哪里？</h2>
+  <p>先认识四个词，表格才看得懂：<br>
+  <strong>块</strong>：主存和 Cache 之间不一个字节一个字节地搬，而是一次搬<strong>固定大小的一小段</strong>，这一段就叫一个块（像快递不寄单件，而是整箱整箱地入库）。<br>
+  <strong>行（行号）</strong>：Cache 内部一格一格的存位，第几格就是行号——好比停车位的车位编号。<br>
+  <strong>Tag（标签）</strong>：每格 Cache 数据旁边记的一张小纸条，写明「这块数据是从主存<strong>哪个位置</strong>搬来的」。因为很多主存块轮流住过同一个车位，不看纸条就分不清现在住的是谁。<br>
+  <strong>块内偏移</strong>：数据到了这一块以后，要取块内<strong>第几个字节</strong>——进了房间找第几张床。</p>
+  <p>主存的块怎么对号入座？三种规则，用「停车场」来比方。先说清一个符号：下面规则里的 <strong>i 是主存块的编号</strong>（第几个块），<strong>「mod」是取模运算，也就是除法取余数</strong>——比如 5 mod 4 = 1（5 除以 4 商 1 余 1）。于是「按 i mod 行数找车位」翻译成大白话就是：<strong>块号除以车位数，余数是几就停几号位</strong>：</p>
   <table class="tight">
-    <tr><th>映射</th><th>规则</th><th>主存地址切分</th><th>优缺点</th></tr>
-    <tr><td><strong>直接映射</strong></td><td>主存块 i → Cache 行 (i mod 行数)</td><td><strong>Tag | 行号 | 块内</strong></td><td>快、冲突多</td></tr>
-    <tr><td><strong>全相联</strong></td><td>想住哪行住哪行</td><td><strong>Tag | 块内</strong>（无行号字段）</td><td>最灵活、比较器多（贵）</td></tr>
-    <tr><td><strong>组相联</strong></td><td>组间直接、组内全相联</td><td><strong>Tag | 组号 | 块内</strong></td><td>折中（主流，2/4 路组相联）</td></tr>
+    <tr><th>映射</th><th>规则（停车比方）</th><th>主存地址切分</th><th>优缺点</th></tr>
+    <tr><td><strong>直接映射</strong></td><td>每块只许停<strong>指定</strong>的一个车位（块号 i 除以行数取余数，余几就停几号位）——如 8 行 Cache 里 5 号块停 5 mod 8 = 5 号位、12 号块停 12 mod 8 = 4 号位；来了直接停到算出的那一位，找到行号后再<strong>比对该位的 Tag 纸条，确认住的确实是这块</strong>（因为不同主存块轮流用同一个车位，余数相同不代表是同一块），对上了才用数据。找得快，但两块抢同一位就冲突</td><td><strong>Tag | 行号 | 块内</strong></td><td>快、冲突多</td></tr>
+    <tr><td><strong>全相联</strong></td><td>想停哪位停哪位——最自由，但车来了得<strong>挨个看每位的纸条</strong>才知道是谁（比较器多、贵）</td><td><strong>Tag | 块内</strong>（无行号字段）</td><td>最灵活、比较器多（贵）</td></tr>
+    <tr><td><strong>组相联</strong></td><td>先把车位分成几组，<strong>组是指定的、组内随便停</strong>——前两者的折中（主流，2/4 路组相联）</td><td><strong>Tag | 组号 | 块内</strong></td><td>折中（主流，2/4 路组相联）</td></tr>
   </table>
+  <p>注意<strong>行号 ≠ 组号</strong>：行号是 Cache 全部格子的编号，组号是分组后的组编号；直接映射按行号找、组相联先按组号找组、再到组内比 Tag。</p>
+  <p><strong>「几路」是什么？</strong>分组后<strong>每组里有几个车位，就叫几路</strong>——4 个车位一组就是 4 路组相联。举个手算例子：Cache 共 8 行，2 路 → 每组 2 个车位、共 4 组；改成 4 路 → 每组 4 个车位、共 2 组（组数减半）。组数从 4 变 2，组号从 2 位（00~11）缩成 1 位（0~1），腾出的 1 位归了 Tag——这就是陷阱②的「路数翻倍 ⇒ 组数减半 ⇒ Tag 加 1 位」。</p>
   <div class="callout warn">
     <span class="tag">⚠ 高频陷阱</span>
-    ① 全相联地址里<strong>没有行号字段</strong>（Tag 全长）；② 组相联『路数翻倍 ⇒ 组数减半 ⇒ Tag 加 1 位』；③ 计算各字段位数：块内 = log₂(块大小)，行号 = log₂(行数)，其余全是 Tag。
+    ① 全相联地址里<strong>没有行号字段</strong>（Tag 全长）；② 组相联『路数翻倍 ⇒ 组数减半 ⇒ Tag 加 1 位』；③ 计算各字段位数：块内位数 = 块大小翻倍几次，行号位数 = 行数翻倍几次，其余全是 Tag。为什么？每多 1 位二进制地址，能区分的位置就多一倍。手算示例：16 字节的块，块内偏移要能表示 0~15 这 16 个位置，4 位二进制 0000~1111 正好 16 个数——所以 16B 块的块内偏移占 4 位（16 = 2⁴，翻倍 4 次）。
   </div>
 
   <h2>四、替换与写入</h2>
   <ul>
-    <li>替换算法：<strong>LRU / FIFO / RAND</strong>（LRU ≠ LFU）——与页面置换思想一致（<a href="0016-os-memory.html">Lesson 0016</a>）。</li>
-    <li>写策略：<strong>写直达</strong>（同时写 Cache 与主存，简单慢）/ <strong>写回</strong>（只写 Cache、替换时才写主存，需脏位）。</li>
-    <li>与虚拟存储的分工：<strong>TLB 管「虚拟→物理」转换，Cache 管「物理→数据」</strong>——两级各司其职。</li>
+    <li>替换算法：Cache 满了、新块要进来，得挑一个旧的腾地方——
+      <strong>LRU（Least Recently Used，最近最少使用）</strong>：最久没被用过的先请走；
+      <strong>FIFO（First In First Out，先进先出）</strong>：最早住进来的先请走；
+      <strong>RAND（Random，随机）</strong>：随手挑一个。
+      注意 <strong>LRU ≠ LFU</strong>：LFU（Least Frequently Used）是数<strong>总共用了几次</strong>最少的先走，LRU 只看<strong>最近</strong>多久没用，不管总共用了几次——与页面置换思想一致（<a href="0016-os-memory.html">Lesson 0016</a>）。</li>
+    <li>写策略：<strong>写直达</strong>（同时写 Cache 与主存，简单慢）/ <strong>写回</strong>（只写 Cache、替换时才写主存，需脏位）。<strong>脏位</strong>就是给这一格挂的牌子：「这块被我改过、还没同步回主存」——替换时看到脏位，得先把数据写回主存才能腾地方。</li>
+    <li>与虚拟存储的分工：<strong>TLB 管「虚拟→物理」转换，Cache 管「物理→数据」</strong>——TLB 是一张<strong>缓存地址翻译结果的小表</strong>（CPU 先问它把虚拟地址翻成物理地址，再拿物理地址去 Cache 找数据），两级各司其职。最简铺垫：程序用的是<strong>虚拟地址</strong>（程序自己编的号），内存实际认的是<strong>物理地址</strong>（真实门牌），中间必须翻一次译——为什么要翻译、怎么翻译是 <a href="0016-os-memory.html">Lesson 0016</a> 的主题，这里只记住「先查 TLB 翻译、再查 Cache 取数」的顺序即可。TLB 细节在 0016/0017 展开。</li>
   </ul>
 
   <h2>五、总线</h2>
   <table class="tight">
     <tr><th>总线</th><th>方向</th><th>内容</th></tr>
-    <tr><td>数据总线 DB</td><td><strong>双向</strong></td><td>数据</td></tr>
-    <tr><td>地址总线 AB</td><td><strong>单向</strong>（CPU→外）</td><td>地址；<strong>宽度 n 位 → 寻址 2ⁿ 空间</strong></td></tr>
+    <tr><td>数据总线 DB</td><td><strong>双向</strong></td><td>数据——数据是「被问的答案」，CPU 要读（进来）也要写（出去），所以有来有回</td></tr>
+    <tr><td>地址总线 AB</td><td><strong>单向</strong>（CPU→外）</td><td>地址——地址是 CPU <strong>提出的问题</strong>（「我要找这个位置」），只出不进；<strong>宽度 n 位 → 寻址 2ⁿ 空间</strong></td></tr>
     <tr><td>控制总线 CB</td><td>双向（整体）</td><td>时序与控制信号</td></tr>
   </table>
-  <span class="formula">总线带宽 = 总线工作频率 × 总线宽度（字节）　例：100MHz × 32bit/8 = 400 MB/s</span>
+  <span class="formula">总线带宽 = 总线工作频率 × 总线宽度(位) ÷ 8　例：100MHz × 32bit ÷ 8 = 100M × 4B = 400 MB/s</span>
+  <p>一句话看懂：带宽 = 每秒运多少趟 × 每趟运多宽。<strong>÷ 8 是把「位」换算成「字节」</strong>（1 字节 = 8 位），公式里不除 8 就会算大 8 倍——这是本节最常见的坑。手算：100MHz = 每秒 1 亿次传输，每次 32 位 = 4 字节，1 亿 × 4B = 400 MB/s。</p>
 
   <h2>六、计算挑战（先动笔再填）</h2>
   <div id="cd22"></div>
@@ -106,7 +124,7 @@ CalcDrill.mount("cd22", {
     { text: "tc=20ns、tm=100ns、h=90%。平均访问时间 ta = ___ ns", answer: 28, mode: "exact",
       derive: "ta = 0.9×20 + 0.1×100 = 18 + 10 = 28 ns。" },
     { text: "同上，加速比 S = tm/ta = 100/28 ≈ ___（两位小数）", answer: 3.57, mode: "round",
-      derive: "S = 100/28 ≈ 3.57（不用流水线的时间比例换算）。" },
+      derive: "S = tm/ta = 100/28 ≈ 3.57：主存速度是平均速度的约 3.57 倍。" },
     { text: "同上，访问效率 e = tc/ta = 20/28 ≈ ___%（整数）", answer: 71, mode: "round",
       derive: "e = 20/28 ≈ 0.714 → 71%。" },
     { text: "要求 ta ≤ 30ns（tc=20、tm=100），命中率至少 h = (tm−ta)/(tm−tc) = ___%（整数）", answer: 88, mode: "round",
@@ -114,7 +132,7 @@ CalcDrill.mount("cd22", {
     { text: "总线频率 100MHz、宽度 32 位，带宽 = ___ MB/s", answer: 400, mode: "exact",
       derive: "带宽 = 100M × 32bit ÷ 8 = 100M × 4B = 400 MB/s（别忘了除 8 变字节）。" },
     { text: "Cache 8 行 × 块大小 16B，地址切分中『块内偏移』占 ___ 位", answer: 4, mode: "exact",
-      derive: "块内偏移 = log₂16 = 4 位；行号 = log₂8 = 3 位；其余高位都是 Tag。" }
+      derive: "16B 的块：块内偏移要表示 0~15，翻倍 4 次（16=2⁴）→ 4 位；8 行：行号要表示 0~7，翻倍 3 次（8=2³）→ 3 位；其余高位都是 Tag。" }
   ]
 });
 

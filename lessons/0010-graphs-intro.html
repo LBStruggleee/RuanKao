@@ -33,16 +33,17 @@
   <ul>
     <li><strong>无向图</strong>：边没有方向（好友关系）；<strong>有向图</strong>：边有箭头（微博关注）。</li>
     <li><strong>度</strong>：无向图 = 连接的边数；有向图分<strong>入度</strong>（多少箭头指进来）与<strong>出度</strong>（射出去多少）。</li>
-    <li><strong>连通</strong>：任意两点都有路可走；不连通就分成若干<strong>连通分量</strong>。</li>
+    <li><strong>连通</strong>：任意两点都有路可走；不连通就分成若干<strong>连通分量</strong>——比如 6 个人分成两拨，拨内互相认识、拨之间谁也不认识谁，每一拨就是一个连通分量。</li>
   </ul>
   <div class="callout tip">
     <span class="tag">💡 两个秒杀公式</span>
     ① 无向图所有顶点度数之和 = <strong>2 × 边数</strong>（每条边给两端各贡献 1 度）→「度数和为 20 ⇒ 边数 10」。<br>
     ② 完全图（两两都连边）边数 = <strong>n(n−1)/2</strong>（无向）；有向完全图 = n(n−1)。<br>
-    ③ 生成树：连通图里挑 <strong>n−1</strong> 条边且不成环——Lesson 0011 的 MST 就是其中总权最小的。
+    ③ 生成树：连通图里挑 <strong>n−1</strong> 条边且不成环——边上标的数字叫<strong>权</strong>（可以理解成两地之间的距离），把一条路径上（或一棵树所有边）的数字加起来叫<strong>总权</strong>；最小生成树（MST，<a href="0011-graph-algorithms.html">Lesson 0011</a> 讲）就是总权最小的那棵生成树。
   </div>
 
   <h2>二、怎么存图（考「选哪种存储」）</h2>
+  <p>表里的 O(…) 只表示「数量级」：n 是顶点数，e 是边数（edge 的首字母）。</p>
   <table class="tight">
     <tr><th></th><th>邻接矩阵</th><th>邻接表</th></tr>
     <tr><td>是什么</td><td>n×n 的二维数组，有边填 1</td><td>每个顶点挂一条「邻居链表」（<a href="0005-arrays-and-linked-lists.html">Lesson 0005</a> 的链表！）</td></tr>
@@ -63,13 +64,14 @@
     <li><strong>DFS 深度优先</strong>：一条路走到底，走不动才回头——<strong>栈 / 递归</strong>实现；</li>
     <li><strong>BFS 广度优先</strong>：先访问起点全部邻居，再一层层向外——<strong>队列</strong>实现。</li>
   </ul>
-  <p>两者对<strong>同一个图</strong>，访问序列通常不同；邻居访问顺序按<strong>字母序</strong>（考试默认按编号/字母从小到大）。复杂度：邻接矩阵 O(n²)、邻接表 O(n+e)。</p>
+  <p>两者对<strong>同一个图</strong>，访问序列通常不同；邻居访问顺序按<strong>字母序</strong>（考试默认按编号/字母从小到大）。<br>
+  <strong>注意区分</strong>：§二表格里的 O 说的是「存这张图占多大空间」，这里的 O 说的是「走完整个图要多少步」——遍历耗时：邻接矩阵 O(n²)（等于把整个二维表格都摸一遍）、邻接表 O(n+e)（每个顶点、每条边各摸一次）。存储方式不同，走的效率也不同。</p>
 
   <h2>四、动手：DFS / BFS / Kruskal 三连（Kruskal 是 0011 预告）</h2>
   <div id="glab"></div>
   <div class="callout tip">
     <span class="tag">💡 观察任务</span>
-    同一张图：DFS = A→B→D→F→E→C（一头扎到底）；BFS = A→B→C→D→E→F（水波纹）。把这两条序列在心里复现一遍再去做题。Kruskal 游戏先随便玩，0011 正式讲。
+    同一张图（图中的边：A-B、A-C、B-D、C-D、C-E、D-F、E-F）：DFS = A→B→D→F→E→C（一头扎到底）；BFS = A→B→C→D→E→F（水波纹）。DFS 里注意 F 之后没有新邻居了，才退回 E 再去 C——这一步退回就是「回溯」。把这两条序列在心里复现一遍再去做题。Kruskal 游戏先随便玩，0011 正式讲。
   </div>
 
   <h2>五、自查（全对过课）</h2>
@@ -129,7 +131,7 @@ Quiz.render("quiz-ds6", {
         "40 方向反了。",
         "19 是按树（n−1）猜的。"
       ],
-      explain: "握手定理：Σ度 = 2e。有向图则是 Σ入度 = Σ出度 = 边数。",
+      explain: "握手定理：所有顶点度数加起来 = 2×边数（每条边被两端各数一次）。有向图则是入度总和 = 出度总和 = 边数。",
       source: "Lesson 0010 §一"
     },
     {

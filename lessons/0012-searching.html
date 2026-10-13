@@ -23,7 +23,7 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    两个「一秒出答案」：折半查找 n 个元素最多比较 <strong>⌊log₂n⌋ + 1</strong> 次；哈希表成功查找平均次数 <strong>ASL = 每个元素的比较次数加起来 ÷ 元素数</strong>。把本课样例表算熟，计算器都不用开。
+    两个「一秒出答案」：折半查找 n 个元素最多比较 <strong>⌊log₂n⌋ + 1</strong> 次；哈希表成功查找的平均比较次数 <strong>ASL（平均查找长度，就是平均每个元素要比较几次）= 每个元素的比较次数加起来 ÷ 元素数</strong>。把本课样例表算熟，计算器都不用开。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 查找排序线</b>——折半/哈希/B 树。上游：0007 判定树；下游：0013 排序（<a href="../reference/knowledge-map.html">回地图</a>）</p>
@@ -31,43 +31,53 @@
     <h2>一、折半查找：每次砍一半</h2>
   <p>在<strong>有序</strong>序列里找 x：看中间那个，大了往左半、小了往右半。两个前提缺一不可：<strong>①序列有序 ②顺序存储（数组）</strong>——链表没法跳到中间（<a href="0005-arrays-and-linked-lists.html">Lesson 0005</a>：数组才能按下标直达）。</p>
   <span class="formula">mid = ⌊(low + high) / 2⌋　　最多比较次数 = ⌊log₂n⌋ + 1</span>
+  <p>公式里两个符号看不懂？用人话说：<strong>⌊⌋</strong> 表示「不够整就把小数往下扔」（⌊4.7⌋=4）；<strong>log₂n</strong> 别按「最接近」去想，要按「往下扔」去想——它问的是「2 的几次方<strong>不超过</strong> n」：15 夹在 2³=8 和 2⁴=16 之间，16 已经超过 15，所以取 3，⌊log₂15⌋=3；64 恰好等于 2⁶，不超，取 6。整条公式不用背，用「砍一半数刀数」统一算：n=15 → 7 → 3 → 1，砍到剩 1 个共砍 3 刀，最后剩的那 1 个还要再比一次，所以 3+1 = 4 次；n=100 → 50 → 25 → 12 → 6 → 3 → 1，砍 6 刀 + 收尾 1 次 = 7 次。只有 63 和 64 这对邻居要单独点破：63 → 31 → 15 → 7 → 3 → 1，砍 5 刀 + 1 = 6 次；64 → 32 → 16 → 8 → 4 → 2 → 1，砍 6 刀 + 1 = 7 次——就多这 1 个元素，砍的刀数多 1，次数也就多 1。</p>
   <table class="tight">
     <tr><th>n</th><th>最多比较次数 ⌊log₂n⌋+1</th></tr>
     <tr><td>15</td><td class="num">4</td></tr>
     <tr><td>63</td><td class="num">6</td></tr>
-    <tr><td>64</td><td class="num">7（满树多一层）</td></tr>
+    <tr><td>64</td><td class="num">7（用上面「砍一半数刀数」那把尺子量：砍 6 刀 + 收尾 1 次；63 只砍 5 刀，是 6 次）</td></tr>
     <tr><td>100</td><td class="num">7</td></tr>
     <tr><td>1023</td><td class="num">10</td></tr>
   </table>
   <p>把比较过程画成树就是<strong>判定树</strong>：mid 是根，左右半区是左右子树——成功/失败的查找最多走树深（<a href="0007-binary-tree-basics.html">0007 的树性质</a>在背后撑腰）。</p>
+  <h3>样例手算：在数组里找 x = 50</h3>
+  <div class="card">
+    <p style="margin-top:0;">有序数组（下标 0~6）：<strong>8, 21, 34, 50, 66, 78, 90</strong>，找 <strong>x = 50</strong>。每轮 low 是左端下标、high 是右端下标、mid = ⌊(low+high)/2⌋：</p>
+    <p><strong>第 1 轮</strong>：low=0，high=6 → mid = ⌊(0+6)/2⌋ = 3，看 a[3]=50 → 正好命中，比较 1 次完事。</p>
+    <p>换个更典型的，找 <strong>x = 78</strong>：<strong>第 1 轮</strong> low=0，high=6，mid=3，a[3]=50 比 78 小 → 说明 x 在右半 → low=mid+1=4；<strong>第 2 轮</strong> low=4，high=6，mid=⌊(4+6)/2⌋=5，a[5]=78 → 命中，共比较 2 次。</p>
+    <p style="margin-bottom:0;">再找 <strong>x = 10</strong>（数组里没有）：mid=3（50&gt;10 → x 在左半 → high=mid−1=2）→ mid=⌊(0+2)/2⌋=1（21&gt;10 → high=0）→ mid=0（8&lt;10 → x 在右半 → low=mid+1=1）。注意到这里还没结束：<strong>low=1、high=0，左端跑到右端右边去了</strong>，才判定查找失败——「low &gt; high」就是失败的信号。看懂这三轮，low/high/mid 怎么动就全会了。</p>
+  </div>
 
   <h2>二、哈希：算出地址直接住进去</h2>
-  <p>不想比较，想<strong>用关键字直接算出存储地址</strong>：H(key) = key mod p（<strong>除留余数法</strong>，p 取<strong>不大于表长的最大质数</strong>，让散布均匀）。两个 key 算出同一地址 = <strong>冲突</strong>，处理办法三种：</p>
+  <p>不想比较，想<strong>用关键字直接算出存储地址</strong>：H(key) = key mod p（<strong>除留余数法</strong>；mod 就是取余数——16 除以 7 商 2 余 2，所以 16 mod 7 = 2。p 取<strong>不大于表长的最大质数</strong>，让散布均匀）。两个 key 算出同一地址 = <strong>冲突</strong>，处理办法三种：</p>
   <table class="tight">
     <tr><th>方法</th><th>做法</th><th>要点</th></tr>
-    <tr><td><strong>线性探测</strong></td><td>占了就往后挪一格（di = 1,2,3…）</td><td>简单，但会<strong>堆积</strong>（连片占满，越堵越堵）</td></tr>
+    <tr><td><strong>线性探测</strong></td><td>占了就往后挪一格：探测第 1 次发现格子被占，就挪 1 格再看；又被占，再挪 1 格……直到找到空格（记号上写成 di = 1,2,3…，di 就是「探测到第 i 次时往后挪几格」）</td><td>简单，但会<strong>堆积</strong>（连片占满，越堵越堵）</td></tr>
     <tr><td><strong>二次探测</strong></td><td>跳 1², −1², 2², −2²…</td><td>跳跃式，缓解堆积</td></tr>
     <tr><td><strong>链地址</strong></td><td>同义词挂成一条链表</td><td>本质就是 <a href="0005-arrays-and-linked-lists.html">Lesson 0005 的链表</a>；删除方便</td></tr>
   </table>
-  <span class="formula">装填因子 α = 元素数 ÷ 表长（越大越挤，冲突越多，ASL 越大）　　ASL(成功) = Σ每个元素的比较次数 ÷ 元素数</span>
+  <span class="formula">装填因子 α = 元素数 ÷ 表长（越大越挤，冲突越多，ASL 越大）　　ASL(成功) = (第1个的比较次数 + 第2个 + …最后一个) ÷ 元素数，就是把每个元素的比较次数全部加起来再平均</span>
 
   <h3>样例手算（背熟流程）</h3>
   <div class="card">
     <p style="margin-top:0;">H(k) = k mod 7，表长 7，依次插入 <strong>16, 24, 9, 3</strong>（线性探测）：</p>
-    <p>16 → 16 mod 7 = <strong>2</strong>（空 → 入格2，比较1次）；24 → <strong>3</strong>（空 → 格3，1次）；9 → 2（被 16 占）→ 探 3（被 24 占）→ 探 <strong>4</strong>（入，3次）；3 → 3（占）→ 探 4（占）→ 探 <strong>5</strong>（入，3次）。</p>
-    <p style="margin-bottom:0;"><strong>ASL(成功) = (1 + 1 + 3 + 3) ÷ 4 = 2</strong>；装填因子 α = 4/7 ≈ 0.57。</p>
+    <p>16 → 16 mod 7 = <strong>2</strong>（空 → 入格2，比较1次）；24 → <strong>3</strong>（空 → 格3，1次）；9 → 算出 H(9)=2（被 16 占，这次「看一眼发现被占」也算 1 次比较）→ 探 3（被 24 占，又 1 次）→ 探 <strong>4</strong>（空，放入，再 1 次）→ 一共看了 3 格，所以是 3 次；3 → 3（占）→ 探 4（占）→ 探 <strong>5</strong>（入，3次）。<strong>计数口径</strong>：每次「看一格」就算 1 次比较——包括第一次按公式算出来的那个位置，以及每一格「发现被占」的那一眼，全部累计。</p>
+    <p style="margin-bottom:0;"><strong>ASL(成功) = (1 + 1 + 3 + 3) ÷ 4 = 2</strong>（每个元素的比较次数全部加起来再平均）；装填因子 α = 4/7 ≈ 0.57。</p>
   </div>
+  <p>上面线性探测、二次探测这类「撞上了不往外另开一张表，而是在<strong>同一张表里另找一格</strong>」的方法，合称<strong>开放定址法</strong>（题干里见到这个词，指的就是它们俩）。</p>
 
   <h2>三、B 树与 B+ 树：放不进内存的「多路查找树」</h2>
   <p>数据量大到<strong>存在磁盘上</strong>时，二叉树每层都要读一次盘、树太深代价太高——于是把一个节点放宽成<strong>多路</strong>，树一下子变矮，读盘次数就少。<strong>m 阶 B 树</strong>三条硬规矩（概念题必背）：</p>
   <ul>
-    <li>每节点<strong>最多 m 棵子树</strong>（最多 m−1 个关键字）；</li>
-    <li>根节点至少 2 棵子树；<strong>非根非叶至少 ⌈m/2⌉ 棵子树</strong>（即 ⌈m/2⌉−1 个关键字）——3 阶 B 树 = 每节点 2~3 棵子树，就是「2-3 树」；</li>
+    <li>每节点<strong>最多 m 棵子树</strong>（最多 m−1 个关键字）。为什么关键字反而少 1？关键字是把节点内部分成 n 段的「隔板」：n−1 块隔板隔出 n 段，就像 n−1 刀把纸条剪成 n 截——所以子树数总比关键字数多 1；</li>
+    <li>根节点至少 2 棵子树；<strong>非根非叶至少 ⌈m/2⌉ 棵子树</strong>，也就是至少 ⌈m/2⌉−1 个关键字。⌈⌉ 是「向上进一」，和折半那节的 ⌊⌋（往下扔小数）方向正好相反：⌈3/2⌉ = 2（1.5 进上去成 2）。拿 m=4 口算一遍：每节点最多 4 棵子树，非根非叶最少 ⌈4/2⌉=2 棵。再把 m 换小一点试试 m=3：这时每节点最多 3 棵、根至少 2 棵、非根非叶也至少 2 棵——合起来每个节点只有 2 棵或 3 棵子树，这就是俗称的 2-3 树，名字里的 2 和 3 说的正是节点能有的孩子数；</li>
     <li><strong>所有叶子在同一层</strong>——绝对平衡，不存在 BST 那种退化。</li>
   </ul>
+  <p><strong>注意</strong>：下表的 <strong>n 指某个节点实际有几棵子树</strong>（n ≤ m，别和「m 阶」的 m 混了——m 是上限，n 是实际数量）。比如 m=4 的 B 树里，某个节点实际 n=3 棵子树 → 按下表 B 树规律就放 3−1=2 个关键字。</p>
   <table class="tight">
     <tr><th>对比点</th><th>B 树</th><th>B+ 树</th></tr>
-    <tr><td>子树数与关键字数</td><td>n 棵子树 → n−1 个关键字</td><td><strong>n 棵子树 → n 个关键字</strong></td></tr>
+    <tr><td>子树数与关键字数</td><td>n 棵子树 → n−1 个关键字（隔板类比见上面规矩第一条）</td><td><strong>n 棵子树 → n 个关键字</strong>（B+ 树每个关键字都配一个指向孩子的入口，一个关键字配一棵子树，一一对应，正好 n 个）</td></tr>
     <tr><td>数据存哪</td><td>所有节点都存关键字（和数据）</td><td><strong>非叶节点只当索引</strong>，记录全在叶子</td></tr>
     <tr><td>叶子之间</td><td>互不相连</td><td><strong>叶子链成有序链表</strong> → 支持范围/顺序查询</td></tr>
     <tr><td>典型应用</td><td>文件系统索引</td><td><strong>数据库索引（InnoDB）</strong></td></tr>
@@ -136,7 +146,7 @@ Quiz.render("quiz-ds8", {
       options: ["序列有序且顺序存储", "只需序列有序", "元素互不相同即可", "必须是完全二叉树"],
       answer: 0,
       opts: [
-        "✓ 有序才能决定『往左还是往右』；顺序存储才能 O(1) 跳到中点（链表跳不了）。",
+        "✓ 有序才能决定『往左还是往右』；顺序存储才能一步跳到中点（O(1)＝一步到位、与元素个数无关；链表跳不了）。",
         "无序时中点没有任何淘汰一半的依据。",
         "重复元素影响的是相等时的处理，不是前提。",
         "判定树只是过程的抽象，不是存储前提。"
@@ -149,7 +159,7 @@ Quiz.render("quiz-ds8", {
       options: ["7", "6", "8", "64"],
       answer: 0,
       opts: [
-        "✓ ⌊log₂64⌋ + 1 = 6 + 1 = 7——64 = 2⁶，判定树是 7 层满到第 6 层再多一层。",
+        "✓ ⌊log₂64⌋ + 1 = 6 + 1 = 7——64 = 2⁶，前 6 层每层都排满、第 7 层还有节点，共 7 层。",
         "6 = ⌊log₂64⌋ 忘了 +1（高频错误！）。",
         "8 多算一层。",
         "64 是顺序查找最坏次数。"
@@ -217,7 +227,7 @@ Quiz.render("quiz-ds8", {
         "✓ 每个格子挂一条链表，同义词依次入链——正是 Lesson 0005『数组 + 链表』的合体。",
         "那是再哈希法。",
         "开放定址才纠结删除问题（需标记），链地址直接摘节点。",
-        "哈希追求 O(1)，排序折半是 O(log n)，方向反了。"
+        "哈希追求一步到位（O(1)，次数与元素个数无关），排序折半是 O(log n)（次数随元素个数增长很慢，就是折半那种），方向反了。"
       ],
       explain: "链地址还有个好处：删除方便（开放定址删除要打删除标记）。",
       source: "Lesson 0012 §二 ｜ 0005 §三"

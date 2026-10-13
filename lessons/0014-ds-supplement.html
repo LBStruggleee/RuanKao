@@ -23,14 +23,15 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    一个公式吃一题：<strong>行优先 Loc(a[i][j]) = 基址 + (i×n + j)×L</strong>（n 为列数）。再带三句话：树转二叉树「<strong>左孩子右兄弟</strong>」；树的后序 = 对应二叉树的<strong>中序</strong>；平衡树左右高度差 <strong>≤ 1</strong>。
+    一个公式吃一题：<strong>行优先 Loc(a[i][j]) = 基址 + (i×n + j)×L</strong>（n 为列数）。<br><small>记号说明：Loc = Location（地址）；基址 = 第 a[0][0] 个元素存在内存的哪个位置（相当于起始门牌号）；L = 每个元素占几个字节。</small>再带三句话：树转二叉树「<strong>左孩子右兄弟</strong>」；树的后序 = 对应二叉树的<strong>中序</strong>；平衡树左右高度差 <strong>≤ 1</strong>。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 1 数据结构 · 树线+查找线收口</b>——地址计算/KMP/森林/AVL/BST/B 树。上游：0007-0013；收口 Phase 1 数据结构面（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、多维数组地址计算：先数前面排了多少个</h2>
-  <p>地址计算的本质就一句话：<strong>目标元素前面一共存了多少个元素 × 每个元素的字节数，加到基址上</strong>。</p>
+  <p>地址计算的本质就一句话：<strong>目标元素前面一共存了多少个元素 × 每个元素的字节数，加到基址上</strong>。这里沿用 0005 的记号：Loc 是 Location（地址）；<strong>基址</strong>就是 a[0][0] 那个元素存的门牌号；<strong>L</strong> 是每个元素占几个字节。</p>
   <span class="formula">行优先（按行存）：Loc(a[i][j]) = Loc(a₀₀) + ( i × n + j ) × L　　（n = 列数，i/j 从 0 起）<br>列优先（按列存）：Loc(a[i][j]) = Loc(a₀₀) + ( j × m + i ) × L　　（m = 行数）</span>
+  <p>为什么<strong>行优先乘列数 n、列优先反而乘行数 m</strong>？拿 Excel 表想：行优先是「一行一行横着存」，要走到第 i 行，得先越过前面 i 个<strong>整行</strong>，每个整行有 n（列数）个元素；列优先是「一列一列竖着存」，要走到第 j 列，得先越过前面 j 个<strong>整列</strong>，每个整列有 m（行数）个元素——被乘的永远是「一整段」的长度，行优先的一整段是整行（n 个），列优先的一整段是整列（m 个）。</p>
   <div class="card">
     <p style="margin-top:0;"><strong>例</strong>：a[5][6] 二维数组（5 行 6 列），基址 1000，每元素 4 字节，<strong>行优先</strong>，求 a[2][3] 的地址：</p>
     <p>前面有 2 整行（2×6=12 个）+ 本行前 3 个 = 15 个 → 1000 + 15×4 = <strong>1060</strong>。</p>
@@ -41,16 +42,19 @@
     若题目说 a[1..5, 1..6]（下标从 1 起），则 a[2,3] 前面有 (2−1)×6 + (3−1) = 8 个 → 1000+8×4 = 1032。公式随下标起点变，<strong>别背死公式，数清前面有几个</strong>。
   </div>
   <h3>对称矩阵与稀疏矩阵</h3>
+  <p>矩阵里有很多「重复」或「零」的元素时，可以只存必要的部分，这叫<strong>压缩存储</strong>。三种常考方式：</p>
   <table class="tight">
     <tr><th>压缩方式</th><th>做法</th><th>考试点</th></tr>
-    <tr><td><strong>下三角/对称矩阵</strong></td><td>只存下三角（含对角线），共 n(n+1)/2 个元素</td><td>给 i、j 求一维下标（数第 i 行前共有几行）</td></tr>
-    <tr><td><strong>三对角矩阵</strong></td><td>只存主对角线及上下两条斜线，3n−2 个元素</td><td>下标换算</td></tr>
-    <tr><td><strong>稀疏矩阵</strong></td><td>非零元素极少，用<strong>三元组 (行,列,值)</strong> 或十字链表存</td><td>三元组表失去了随机存取特性（判断题）</td></tr>
+    <tr><td><strong>下三角/对称矩阵</strong></td><td>对称矩阵满足 a[i][j] = a[j][i]（沿对角线一折，两边一样），所以只存下三角（含对角线），共 n(n+1)/2 个元素（第 1 行存 1 个、第 2 行存 2 个……1+2+…+n = n(n+1)/2）</td><td>给 i、j 求一维下标（数第 i 行前共有几行）</td></tr>
+    <tr><td><strong>三对角矩阵</strong></td><td>只有主对角线及上下两条斜线非零。数一数：主对角线 n 个，上下两条斜线各 n−1 个，共 n + 2(n−1) = <strong>3n−2</strong> 个。拿 3 阶验证：3×3−2 = 7 个——就是主对角线 a₁₁,a₂₂,a₃₃ 加上斜线 a₁₂,a₂₁,a₂₃,a₃₂，恰好 7 个 ✓</td><td>下标换算</td></tr>
+    <tr><td><strong>稀疏矩阵</strong></td><td>非零元素极少，用<strong>三元组 (行,列,值)</strong> 或十字链表存——只登记非零元素「住在几行几列、值是多少」</td><td>三元组表失去了随机存取特性（判断题）——原来二维数组可以按位置一步跳到任何元素，现在想找某个元素只能顺着表一个一个扫</td></tr>
   </table>
+  <p>下三角求一维下标的小例子：3×3 矩阵按行存下三角（a₁₁、a₂₁、a₂₂、a₃₁、a₃₂、a₃₃ 依次存进一维数组 b[1..6]），求 a[2][1] 在 b 里的位置——它前面有第 1 行的 1 个（a₁₁）+ 第 2 行它前面的 0 个 = 1 个，所以 a[2][1] = b[2]。</p>
 
   <h2>二、串：KMP 的思想一句话</h2>
   <p><strong>串</strong>是内容受限的线性表（元素是字符）。<strong>空串</strong>长度为 0；<strong>空格串</strong>只有空格、长度为空格数——两者不相等（判断题）。</p>
-  <p>朴素模式匹配最坏 O(n×m)（主串回溯）。<strong>KMP 改进</strong>：主串指针<strong>永不回溯</strong>，失配时利用<strong> next 数组</strong>把模式串滑到合适位置继续比，复杂度 O(n+m)。中级只考思想判断，不考手推 next。</p>
+  <p><strong>「模式匹配」就是在主串（一长串字符，比如一整篇文章）里找一个子串（比如搜一个词）</strong>——就像在 Word 里按 Ctrl+F 搜「数据」两个字，从文章开头逐个位置试着对上。最笨的试法叫<strong>朴素模式匹配</strong>：从主串第 1 个字符起，拿模式串一位一位对着比；对不上（<strong>失配</strong>）就把模式串往右挪一格、从头再比——主串里已经看过的位置还得回头重看，最坏每个位置都要比 m 遍，所以是 <strong>O(n×m)</strong>（主串回溯）。</p>
+  <p><strong>KMP 改进</strong>：失配时，主串里已经比过的部分其实是「白比了吗」？不是——模式串自己最清楚「我刚比过的这段里，开头和结尾有没有重叠的部分」，这份信息提前算好放在 <strong>next 数组</strong>里。于是失配时主串指针<strong>永不回头</strong>，只按 next 数组把模式串滑到合适位置继续比，主串每个字符最多看一遍，复杂度降到 <strong>O(n+m)</strong>。举个 3 字符小例：模式串 "aba" 的 next 数组是 [0, 0, 1]——第 1 位前面没有可重叠的前缀记 0；第 2 位（前面只有 "a"）真前缀与真后缀无重叠记 0；第 3 位（前面是 "ab"）真前缀 "a" 与真后缀 "a" 重叠、长度 1。中级只考思想判断，不考手推 next。</p>
 
   <h2>三、树、森林与二叉树的互转：左孩子右兄弟</h2>
   <p>任何树/森林都能唯一转成二叉树（<a href="0007-binary-tree-basics.html">0007 的二叉树</a>是万能底座）：</p>
@@ -58,10 +62,12 @@
     <tr><th>转换</th><th>规则</th><th>要点</th></tr>
     <tr><td>树 → 二叉树</td><td><strong>左孩子、右兄弟</strong>：节点的左指针指向第一个孩子，右指针指向下一个兄弟</td><td>转换后<strong>根没有右子树</strong></td></tr>
     <tr><td>森林 → 二叉树</td><td>各棵树先各自转换，第二棵树作为第一棵树<strong>根的右子树</strong>依次连上</td><td>转换后根仍有右子树</td></tr>
-    <tr><td>遍历对应</td><td>树的前序 = 对应二叉树的<strong>前序</strong>；树的后序 = 对应二叉树的<strong>中序</strong></td><td>森林的中序 = 对应二叉树的中序</td></tr>
+    <tr><td>遍历对应</td><td>树的前序（先根）= 对应二叉树的<strong>前序</strong>；树的后根（后序）= 对应二叉树的<strong>中序</strong></td><td>森林的中序 = 对应二叉树的中序</td></tr>
   </table>
   <div class="card">
-    <p style="margin-top:0;margin-bottom:0;"><strong>例</strong>：树有根 R，孩子 A、B（A 的孩子 C）。转二叉树：R 左指 A；A 左指 C，A 右指 B；C、B 无孩子。前序遍历（根左右）：R A C B —— 与树的前序（根 R → 孩子 A → C → B）完全一致 ✓。</p>
+    <p style="margin-top:0;"><strong>例</strong>：树有根 R，孩子 A、B（A 的孩子 C）。转二叉树：R 左指 A；A 左指 C，A 右指 B；C、B 无孩子。</p>
+    <p><strong>前序对照</strong>：树的前序（先根遍历：根 → 依次遍历各孩子子树）= R A C B；二叉树前序（根左右）= R A C B —— 一致 ✓。</p>
+    <p style="margin-bottom:0;"><strong>后根对照（最常考）</strong>：树的后根（后序）遍历 = 先依次遍历各孩子子树、最后访问根 = 先访问 A 的子树（A 的子树里先 C 后 A）再 B，最后 R → <strong>C A B R</strong>；对应二叉树的中序（左根右）= 先走 R 的左子树（C、A、B），再回根 R → C → A → B → R = <strong>C A B R</strong> —— 一致 ✓。两种叫法统一记作「<strong>树的后根（后序）遍历</strong>」，结论只有一句：树的后根（后序）= 对应二叉树的中序。</p>
   </div>
 
   <h2>四、平衡二叉树（AVL）：不让二叉搜索树退化成链</h2>
@@ -74,7 +80,7 @@
   </ul>
   <p>退化问题正是 AVL 要治的病。<strong>AVL 平衡二叉树</strong> = BST 加一条约束：</p>
   <span class="formula">任意节点：左子树高度 − 右子树高度 ∈ {−1, 0, 1}</span>
-  <p>插入导致失衡时靠<strong>旋转</strong>（LL/RR/LR/RL 四种）恢复平衡。中级只考概念判断：<strong>AVL 是平衡的二叉搜索树；n 个节点的 AVL 高度是 O(log n)</strong>；哈夫曼树不是 AVL（先记住两者目的不同：<a href="0009-huffman.html">0009 哈夫曼</a>管带权路径最短）。</p>
+  <p><strong>「高度」的白话定义</strong>：从该节点往下数，最长路径经过几<strong>层</strong>——只有一个节点时高度为 1。比如某节点左子树有 3 层、右子树只有 1 层（右子树只剩一个叶子），高度差 3−1 = 2 &gt; 1，这就<strong>失衡</strong>了。失衡时靠<strong>旋转</strong>恢复平衡——想象提着那个失衡节点，把整棵（子）树转一下，让两边一样高，像跷跷板往低的一边挪支点。四个黑话名其实是「哪边重、转哪个方向」的记号：<strong>LL</strong>（左孩子的左边重，往右转一次）、<strong>RR</strong>（右孩子的右边重，往左转一次）、<strong>LR</strong>（左孩子的右边重，先左转再右转两步）、<strong>RL</strong>（右孩子的左边重，先右转再左转两步）。中级只考概念判断：<strong>AVL 是平衡的二叉搜索树；n 个节点的 AVL 高度是 O(log n)</strong>；哈夫曼树不是 AVL（先记住两者目的不同：<a href="0009-huffman.html">0009 哈夫曼</a>管带权路径最短）。</p>
 
   <h2>五、动手：地址计算挑战（先动笔再填）</h2>
   <div id="cd31"></div>

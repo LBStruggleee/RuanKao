@@ -33,34 +33,76 @@
     <tr><th>静态图（结构）</th><th>动态图（行为）</th></tr>
     <tr><td><strong>类图</strong>、对象图、构件图、部署图、包图、组合结构图、制品图</td><td><strong>用例图</strong>、<strong>顺序图</strong>、通信图、<strong>状态图</strong>、<strong>活动图</strong>、定时图、交互概览图</td></tr>
   </table>
+  <div class="callout">
+    <span class="tag">📦 先别慌：这 14 个名字怎么记</span>
+    判断标准一句话：<b>静态图 = 「画的是系统长什么样」</b>（像建筑效果图，不随时间变），<b>动态图 = 「画的是系统怎么运转」</b>（像监控录像，有时间先后）。<br>
+    每个名字配一句人话提示（括号里就是它管的事）：
+    <ul style="margin:.3rem 0 0; padding-left:1.3rem;">
+      <li><b>静态</b>：<strong>类图</strong>（类与类的关系，考频最高）、对象图（某一时刻的具体对象快照）、构件图（软件拆成哪几个零件模块）、部署图（软件装在哪些机器上）、包图（文件夹式的归类）、组合结构图（类内部的零件结构）、制品图（生成的文件/安装包）。</li>
+      <li><b>动态</b>：<strong>用例图</strong>（用户能用系统干什么）、<strong>顺序图</strong>（办事流程的时间先后）、通信图（谁给谁发消息，不带时间轴）、<strong>状态图</strong>（一个对象的状态变化）、<strong>活动图</strong>（跨部门的流程图）、定时图（消息的时间点）、交互概览图（多段交互拼成一张总图）。</li>
+    </ul>
+    📌 应试策略：<strong>先只记加粗的 4 个</strong>（类图、用例图、顺序图、状态图）——它们直接进考题；其余 10 个混脸熟，见到能归到「静态/动态」哪一堆就够用了。
+  </div>
   <ul>
     <li><strong>用例图</strong>：参与者 + 用例 + 关系（下午大题第一问常考补用例名）。</li>
-    <li><strong>顺序图</strong>：把一次业务流程画成「谁给谁发消息、按时间从上往下」——列是参与的对象（每个下面垂一根生命线），横向箭头是消息，从上到下就是时间先后；同步消息实心三角箭头、异步开放箭头、返回虚线；对象下有生命线与激活条。</li>
-    <li><strong>状态图</strong>：单个对象的状态变迁（状态→事件/动作→状态）；<strong>活动图</strong>：跨对象的工作流，有<strong>泳道</strong>、分叉汇合，类似流程图但描述的是行为流转。</li>
+    <li><strong>顺序图</strong>：把一次业务流程画成「谁给谁发消息、按时间从上往下」。打个比方：像微信聊天记录竖着排——每一列是一个参与者，谁发的话就横着画一条箭头过去，<strong>越往下时间越晚</strong>。三个新词先用大白话记住：
+      <ul style="margin:.3rem 0 0; padding-left:1.3rem;">
+        <li><strong>生命线</strong>：对象下面垂的那条虚线——「这个人全程在线」。</li>
+        <li><strong>激活条</strong>：生命线上那根细长矩形——「这段时间他在忙这件事」。</li>
+        <li><strong>同步消息</strong>（实心三角箭头 ▶）= <strong>打电话</strong>：发出后必须等对方回话才能继续办下一件事；<strong>异步消息</strong>（开放箭头 →）= <strong>发微信</strong>：发完就走，不用等回信；<strong>返回消息</strong>（虚线）= 对方把结果递回来。</li>
+      </ul>
+      一个最小的两对象例子（「你」在 ATM 取钱）：
+      <pre style="background:var(--code-bg,#f6f6f8); padding:.6rem .8rem; border-radius:8px; overflow-x:auto; font-size:.85rem; line-height:1.6;">你                ATM
+│                  │
+│──①取款(500元)──▶ │   ← 同步消息：实心三角▶，你等着 ATM 处理
+│                  │
+│◀- -②吐钱+回执- - │   ← 返回消息：虚线，ATM 把结果递回来
+│                  │
+│──③发短信通知───▶ │   ← 异步消息：开放箭头→，发完不等回执
+│                  │</pre>
+      ①③ 从「你」指向 ATM 是请求消息，② 虚线返回；同步（①，等吐钱）画实心三角，异步（③，通知后不管）画开放箭头。</li>
+    <li><strong>状态图</strong>：单个对象的状态变迁。先把三个词拆开：<strong>状态</strong> = 对象此刻「处于什么情况」（待付款）；<strong>事件</strong> = 让它换状态的那一下「触发」（用户点了付款）；<strong>动作</strong> = 变状态时顺手干的活（扣款、发通知）。拿一张网购订单举例：<pre style="background:var(--code-bg,#f6f6f8); padding:.6rem .8rem; border-radius:8px; overflow-x:auto; font-size:.85rem; line-height:1.6;">[待付款] ── 事件：买家付款成功 ／ 动作：扣款、发通知 ──▶ [已付款]
+[已付款] ── 事件：仓库揽收 ／ 动作：打印运单 ──▶ [已发货]</pre>
+      读法：箭头上写「事件 ／ 动作」，事件触发转换，动作是转换时做的事，两个圆角框是前后两个状态。<br>
+      <strong>活动图</strong>：跨对象的工作流，像一张流程图但重点是「事情怎么流转」；<strong>泳道</strong> = 每个部门（角色）一条竖道，看每一步落在谁的道里就知道「这步谁负责」；分叉/汇合 = 一件事拆成几件同时做、做完再合到一起。</li>
   </ul>
 
   <h2>二、类间六关系「依关聚组泛实」（强度从弱到强）</h2>
   <table class="tight">
     <tr><th>关系</th><th>含义</th><th>判别口诀</th><th>UML 记号</th></tr>
-    <tr><td>依赖</td><td>临时用一下（参数、局部变量）</td><td>『用完就走』</td><td>虚线箭头</td></tr>
-    <tr><td>关联</td><td>长期知道对方（成员变量）</td><td>『长期认识』</td><td>实线（可有箭头/多重性 1..*）</td></tr>
-    <tr><td>聚合 Aggregation</td><td>整体-部分，<strong>部分能独立存在</strong></td><td>『部门走了员工还在』</td><td>空心菱形（在整体端）</td></tr>
-    <tr><td>组合 Composition</td><td>整体-部分，<strong>同生共死</strong></td><td>『公司没了部门也没了』</td><td>实心菱形（在整体端）</td></tr>
+    <tr><td>依赖</td><td>临时用一下，用完就走（生活例子：打车——那 20 分钟你临时用了司机的车，下车就再无关系；写代码时对应「参数、局部变量」，即只在方法里临时用一下的变量）</td><td>『用完就走』</td><td>虚线箭头</td></tr>
+    <tr><td>关联</td><td>长期知道对方（生活例子：自己有辆固定车——车登记在你名下，长期绑定；写代码时对应「成员变量」，即长期挂在对象身上、随时能用的变量）</td><td>『长期认识』</td><td>实线（可有箭头/多重性 1..*）</td></tr>
+    <tr><td>聚合 Aggregation</td><td>整体-部分，<strong>部分能独立存在</strong></td><td>『部门走了员工还在』</td><td>空心菱形 ◇（贴在整体一端）</td></tr>
+    <tr><td>组合 Composition</td><td>整体-部分，<strong>同生共死</strong></td><td>『公司没了部门也没了』</td><td>实心菱形 ◆（贴在整体一端）</td></tr>
     <tr><td>泛化 Generalization</td><td>继承，is-a</td><td>『老虎是动物』</td><td>空心三角实线（指向父类）</td></tr>
     <tr><td>实现 Realization</td><td>实现接口，can-do</td><td>『实现接口的承诺』</td><td>空心三角虚线（指向接口）</td></tr>
   </table>
   <div class="callout warn">
     <span class="tag">⚠ 聚合 vs 组合（最易混）</span>
-    问一句「部分能离开整体独立存在吗」：能 → <strong>聚合</strong>（空心菱形）；不能（同生共死）→ <strong>组合</strong>（实心菱形）。菱形永远画在<strong>整体端</strong>。
+    问一句「部分能离开整体独立存在吗」：能 → <strong>聚合</strong>（空心菱形 ◇）；不能（同生共死）→ <strong>组合</strong>（实心菱形 ◆）。<br>
+    菱形长什么样、贴在哪头？直接看图——<strong>菱形贴在连线靠「整体」的那一端</strong>（像挂件挂在整体身上）：
+    <pre style="background:var(--code-bg,#f6f6f8); padding:.6rem .8rem; border-radius:8px; overflow-x:auto; font-size:.85rem; line-height:1.6;">组合（同生共死）    发动机 ◆━━━━ 汽车
+                    （实心◆贴在整体「汽车」端：汽车没了，发动机跟着报废）
+
+聚合（可分可合）    员工   ◇━━━━ 部门
+                    （空心◇贴在整体「部门」端：部门解散，员工跳槽还在）</pre>
+    考试看图判别：先找到菱形在哪一端、那一端是谁——那一端就是<strong>整体</strong>；再看菱形是空心还是实心定聚合/组合。
   </div>
 
   <h2>三、用例图的 include / extend（方向相反！）</h2>
+  <p>先认识两个词：<strong>基用例 = 系统的主要功能</strong>（比如「登录」——用户真正要做的那件事）；从它身上拆出去的步骤/插曲都不是基用例（「验证密码」只是登录路上的一个必经步骤）。</p>
   <table class="tight">
     <tr><th></th><th>include 包含</th><th>extend 扩展</th></tr>
-    <tr><td>语义</td><td>基用例<strong>必然</strong>执行被包含用例（公共子流程抽取）</td><td>扩展用例<strong>可选</strong>地插入基用例（异常/可选流程）</td></tr>
+    <tr><td>语义</td><td>基用例<strong>必然</strong>执行被包含用例——把每次都要走的「公共子流程」抽出来（登录每次都要验证密码）</td><td>扩展用例<strong>可选</strong>地插入基用例——只在特殊情况发生的「异常/可选流程」（登录密码连错 3 次，才触发「账号锁定」）</td></tr>
     <tr><td>箭头</td><td>基用例 ──«include»──▶ 被包含用例</td><td><strong>扩展用例</strong> ──«extend»──▶ <strong>基用例</strong></td></tr>
   </table>
-  <p>记忆：<strong>include 从基指向被包含（必经之路）；extend 从扩展指回基（可选插曲）——两者方向相反</strong>，这是用例图最高频的一分。</p>
+  <p>拿「登录」把两个方向各画一遍：</p>
+  <pre style="background:var(--code-bg,#f6f6f8); padding:.6rem .8rem; border-radius:8px; overflow-x:auto; font-size:.85rem; line-height:1.6;">include（必经之路，从基出发）：
+  [登录] ──«include»──▶ [验证密码]     ← 每次登录都必然执行 → 箭头从「基用例(登录)」指向被包含的步骤
+
+extend（可选插曲，指回基）：
+  [账号锁定] ──«extend»──▶ [登录]      ← 只有密码连错才触发（可选）→ 箭头从「扩展用例」指回「基用例」</pre>
+  <p>记忆：<strong>include 从基指向被包含（必经之路）；extend 从扩展指回基（可选插曲）——两者方向相反</strong>，这是用例图最高频的一分。方向记法一句话：<strong>「必然」的从主功能出发，「可选」的指回主功能</strong>。</p>
 
   <h2>四、自查（全对过课）</h2>
   <div id="quiz25"></div>

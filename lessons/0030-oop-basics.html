@@ -23,25 +23,26 @@
 
   <div class="callout mission">
     <span class="tag">🎯 这课的赢面</span>
-    三组一句话判据：<strong>重载看参数、重看父子类</strong>（重载=编译期绑定，重写=运行期动态绑定）；<strong>接口是『能做什么』，抽象类是『是什么』</strong>；设计原则考场景对应——「对扩展开放对修改关闭」= <strong>开闭原则</strong>。
+    三组一句话判据：<strong>重载看参数</strong>（同一个类里同名方法、参数不同），<strong>重写看父子类</strong>（子类把父类同名同参的方法重新实现一遍）；<strong>接口是『能做什么』，抽象类是『是什么』</strong>；设计原则考场景对应——「对扩展开放对修改关闭」= <strong>开闭原则</strong>。
   </div>
 
 <p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 8 面向对象 · OO 基础线</b>——三大特征/类接口抽象类/七原则。上游：新面起点（0027 的面向对象分支）；下游：0031/0032（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、面向对象三大特征：封装、继承、多态</h2>
+  <p>先打个比方：<strong>类</strong>就像一张「月饼模子 / 建筑图纸」——它本身不能吃也不能住，只是规定了形状和做法；<strong>对象</strong>则是照着模子压出来的一块块真月饼、照图纸盖好的一栋栋真房子。类是定义，对象是照着定义造出来的具体产物。有了这个底，三大特征就好懂了（表里的「耦合」指两个模块互相牵扯的程度，牵扯越少越好改）：</p>
   <table class="tight">
     <tr><th>特征</th><th>一句话定义</th><th>带来的好处 / 考点</th></tr>
-    <tr><td><strong>封装</strong></td><td>把数据与操作捆绑在类里，隐藏内部实现，只暴露接口</td><td>信息隐藏、降低耦合；考法：private 字段 + public 方法 = 封装</td></tr>
-    <tr><td><strong>继承</strong></td><td>子类自动拥有父类的属性与方法，并可扩展/重写</td><td>复用 + 建立层次；继承是<strong>类之间</strong>的关系（ general→special 泛化）</td></tr>
-    <tr><td><strong>多态</strong></td><td>同一消息发给不同对象，各自有不同的响应</td><td>父类引用指向子类对象，调用的是<strong>实际对象</strong>的方法——动态绑定</td></tr>
+    <tr><td><strong>封装</strong></td><td>把数据与操作捆绑在类里，隐藏内部实现，只暴露接口（好比遥控器只给你几个按钮，内部电路藏起来）</td><td>信息隐藏（外面的代码看不到内部细节）、降低耦合；考法：private 字段 + public 方法 = 封装</td></tr>
+    <tr><td><strong>继承</strong></td><td>子类自动拥有父类的属性与方法，并可扩展/重写</td><td>复用 + 建立层次；继承是<strong>类之间</strong>的关系，即从父类（一般）到子类（特殊）的「一般→特殊」关系——软考卷子上把这种关系叫「泛化」</td></tr>
+    <tr><td><strong>多态</strong></td><td>同一消息发给不同对象，各自有不同的响应（同一句「叫一声」，猫答喵、狗答汪）</td><td>父类引用指向子类对象，调用的是<strong>实际对象</strong>的方法——这种「运行时才确定调用谁的版本」的机制叫动态绑定</td></tr>
   </table>
   <div class="card">
-    <p style="margin-top:0;"><strong>多态的两种形态（必考区分）</strong>：</p>
+    <p style="margin-top:0;"><strong>多态的两种形态（必考区分）</strong>。先记住一个判断依据：<strong>方法签名 = 方法名 + 参数列表（不看返回类型）</strong>。下面表里的「绑定」就是「确定到底调用哪个方法」——绑定时机比的就是什么时候确定：</p>
     <table class="tight">
       <tr><th></th><th>重载 Overload</th><th>重写 Override</th></tr>
       <tr><td>发生位置</td><td><strong>同一个类</strong>里</td><td><strong>父子类</strong>之间</td></tr>
       <tr><td>方法签名</td><td>同名<strong>不同参数</strong>（返回类型可同可不同）</td><td>同名<strong>同参数</strong>（子类重新实现）</td></tr>
-      <tr><td>绑定时机</td><td><strong>编译期</strong>静态绑定</td><td><strong>运行期</strong>动态绑定</td></tr>
+      <tr><td>绑定时机</td><td><strong>编译时</strong>就确定：看变量声明时写的类型，按参数个数与类型挑方法（静态绑定）</td><td><strong>运行时</strong>才确定：看 <strong>new 的是哪个实际对象</strong>，就执行谁重写后的版本（动态绑定）</td></tr>
     </table>
     <p style="margin-bottom:0;">判断句式：「根据参数个数与类型在编译时确定调用哪个方法」= 重载；「运行时根据对象实际类型决定执行哪个版本」= 重写/动态绑定。</p>
   </div>
@@ -61,9 +62,9 @@
     <tr><th>原则</th><th>一句话</th><th>场景关键词</th></tr>
     <tr><td><strong>开闭原则（OCP）</strong></td><td>对扩展开放，对修改关闭</td><td>加新功能不改老代码（多态/策略实现）</td></tr>
     <tr><td><strong>单一职责（SRP）</strong></td><td>一个类只负责一件事</td><td>「职责过多导致变化相互影响」</td></tr>
-    <tr><td><strong>里氏替换（LSP）</strong></td><td>子类必须能替掉父类而不破坏程序</td><td>「子类不应加强前置条件/削弱后置条件」</td></tr>
+    <tr><td><strong>里氏替换（LSP）</strong></td><td>子类必须能替掉父类而不破坏程序</td><td>「子类不能提出比父类更苛刻的使用要求（前置条件），也不能承诺更少的结果（后置条件）」——例如父类方法只要「余额≥0 就能取钱」，子类不能改成「余额≥100 才让取」</td></tr>
     <tr><td><strong>依赖倒置（DIP）</strong></td><td>依赖抽象，不依赖具体实现</td><td>「高层模块不应依赖低层模块」</td></tr>
-    <tr><td><strong>接口隔离（ISP）</strong></td><td>多个专用接口好过一个胖接口</td><td>「不应强迫客户依赖用不到的方法」</td></tr>
+    <tr><td><strong>接口隔离（ISP）</strong></td><td>多个专用接口好过一个方法又多又杂的大接口（俗称「胖接口」）</td><td>「不应强迫『客户』（这里指调用这段代码的其他代码，不是商业客户）依赖用不到的方法」</td></tr>
     <tr><td><strong>迪米特法则（LoD）</strong></td><td>只与直接朋友通信，少知道别人内部</td><td>「降低耦合、中介转达」</td></tr>
     <tr><td><strong>组合复用（CRP）</strong></td><td>优先用组合/聚合，少用继承</td><td>「继承滥用导致强耦合」</td></tr>
   </table>
@@ -76,7 +77,7 @@
   <ul>
     <li><strong>对象三要素</strong>：对象标识（OID）、属性（状态）、服务/方法（行为）。</li>
     <li><strong>类 vs 对象</strong>：类是模板/抽象，对象是实例——「类是静态定义，对象是运行期动态创建」。</li>
-    <li><strong>用例图三要素</strong>：参与者、用例、关系；<strong>include</strong> = 必然包含的公共行为（抽取复用），<strong>extend</strong> = 可选/异常扩展。</li>
+    <li><strong>用例图三要素</strong>：用例图就是画出「谁（参与者）用系统做什么（用例）」的图（下一课 0031 细讲 UML，这里先记住两个关系的区别）。三要素=参与者、用例、关系；<strong>include</strong> = 必然包含的公共行为（抽取复用），如「取钱」必然包含「登录验证」；<strong>extend</strong> = 可选/异常扩展，如「取钱」可以选扩展「打印回执」。</li>
     <li><strong>OOA → OOD → OOP</strong>：分析建「做什么」的模型（用例/领域模型），设计建「怎么做」的模型（类图/交互图），编程落地。</li>
   </ul>
 

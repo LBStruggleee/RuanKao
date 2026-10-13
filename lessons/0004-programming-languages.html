@@ -30,13 +30,13 @@
 
     <h2>一、编译与解释：一条流水线 vs 逐句翻译</h2>
   <p><strong>编译型</strong>（C、C++）：整个源程序一次翻译成目标程序，之后脱离编译器独立运行，<strong>执行速度快</strong>，但跨平台差。<strong>解释型</strong>（Python、JavaScript 的典型实现）：边翻译边执行、不生成完整目标程序，<strong>跨平台好</strong>，执行慢。Java 特殊：先编译成字节码，再由 JVM 解释/即时编译执行。</p>
-  <p>编译的六个阶段（一条流水线，符号表全程服务、错误处理随时介入）：</p>
+  <p>编译的六个阶段（一条流水线，<strong>符号表</strong>全程服务、错误处理随时介入。符号表可以想成编译器边读边记的「<strong>生词本</strong>」：遇到变量就记下它叫什么名字、是什么类型、在哪儿——后面每个阶段要查「这个变量声明过没有、类型对不对」，都翻这本生词本）：</p>
   <table class="tight">
     <tr><th>阶段</th><th>干什么</th><th>能查出什么错（必考）</th></tr>
     <tr><td>① 词法分析</td><td>字符流 → 单词序列（标识符、关键字、常数、运算符）</td><td><strong>非法字符、单词拼写错误</strong></td></tr>
     <tr><td>② 语法分析</td><td>单词序列 → 语法树（按文法规则组句子）</td><td><strong>if 缺 then、括号不匹配、分号缺失</strong>（结构错误）</td></tr>
     <tr><td>③ 语义分析</td><td>检查含义：类型检查、声明先于使用</td><td><strong>类型不匹配、使用未声明的变量</strong></td></tr>
-    <tr><td>④ 中间代码生成</td><td>产生与机器无关的中间表示（四元式/三元式）</td><td>—</td></tr>
+    <tr><td>④ 中间代码生成</td><td>产生与机器无关的中间表示（四元式/三元式）——四元式就是一行四格的小纸条 <code>(运算符, 数1, 数2, 结果)</code>，如 <code>(+, 1, 2, t1)</code> 读作 <code>t1 = 1 + 2</code></td><td>—</td></tr>
     <tr><td>⑤ 代码优化</td><td>等价变换提效率（合并常量、删公共子表达式）</td><td>—</td></tr>
     <tr><td>⑥ 目标代码生成</td><td>中间代码 → 汇编/机器码，分配寄存器</td><td>—</td></tr>
   </table>
@@ -46,7 +46,7 @@
   </div>
 
   <h2>二、正规式与有限自动机：给单词画模板</h2>
-  <p>词法分析靠<strong>正规式（正则表达式）</strong>描述单词的模板。三种运算：<strong>|</strong> 或、<strong>连接</strong>（隐含）、<strong>*</strong> 重复 0 次或多次。优先级：* 最高，连接次之，| 最低。</p>
+  <p>词法分析靠<strong>正规式（正则表达式）</strong>描述单词的模板。先看三个基础名词：<strong>字母表</strong>就是「允许出现的字符集合」，比如 {a,b,c} 表示串里只能出现 a、b、c 这三种字符。三种运算：<strong>|</strong> 表示「或」（a|b 就是 a 或者 b）、<strong>连接</strong>表示「紧挨着拼起来」（ab 写在一起就是先 a 后 b，中间不用写符号，所以叫「隐含」）、<strong>*</strong> 表示「重复 0 次或多次」（b* 可以是空、b、bb、bbb……）。优先级：* 最高，连接次之，| 最低——所以 ab|c 先算 ab 再或 c。</p>
   <table class="tight">
     <tr><th>要求</th><th>正规式套路</th><th>记忆</th></tr>
     <tr><td>以 ab 开头</td><td><strong>ab(a|b|c)*</strong>（字母表 {a,b,c}）</td><td>开头写死，后面任意串</td></tr>
@@ -54,13 +54,17 @@
     <tr><td>含 ab</td><td><strong>(a|b|c)*ab(a|b|c)*</strong></td><td>前后任意，中间写死</td></tr>
     <tr><td>偶数个 a</td><td>b* (ab*ab*)*</td><td>a 成对出现，b 随意填缝</td></tr>
   </table>
-  <p><strong>有限自动机</strong>是正规式的机器形态，两者等价（正规式 ⇄ 自动机可互相转换）：</p>
+  <div class="card">
+    <p style="margin-top:0;"><strong>手推「偶数个 a」怎么来的</strong>：核心思路是让 a <strong>两个两个成对出现</strong>。看式子的最小单元 <code>ab*ab*</code>——里面有且只有 <strong>2 个 a</strong>（每个 a 后面跟一段任意的 b*），所以整串的 a 数量 = 2 × 重复次数，必然是偶数；外层 b* 负责开头那几段 b（不引入 a）。</p>
+    <p style="margin-bottom:0;">逐个验证：串 <code>abba</code> = 先 b* 取空，再 (ab*ab*) 取一次 = a·bb·a，共 2 个 a ✓；串 <code>ababa</code> 是 3 个 a，套进去只会得到「a b…a b…a b…a」这种 4 个 a 的串，3 个 a 的串套不进去 ✗；空串 = b* 取空、重复 0 次，0 也是偶数 ✓。想写「奇数个 a」就照葫芦画瓢：在偶数版前面再挂一个 a，即 <code>a b* (ab*ab*)*</code>。</p>
+  </div>
+  <p><strong>有限自动机</strong>是正规式的机器形态，两者等价（正规式 ⇄ 自动机可互相转换）。先想象它的长相：几个<strong>圆圈（状态）</strong>用<strong>箭头（边）</strong>连起来，箭头上标着字母。机器从「起始圈」出发，<strong>读一个字母、跳到下一个圈</strong>；字符串读完后停在了「双圈（终点）」上，就说明这个字符串符合模板。比如识别 ab 的小自动机：起始圈 —读 a→ 中间圈 —读 b→ 终点双圈，读字符串 ab 就正好走到底，读 aa 中途就没路可走了。</p>
   <table class="tight">
     <tr><th>对比</th><th>DFA 确定有限自动机</th><th>NFA 非确定有限自动机</th></tr>
-    <tr><td>一个状态 + 一个输入</td><td><strong>唯一</strong>的后继状态</td><td>可有<strong>多个</strong>后继状态</td></tr>
-    <tr><td>空边 ε</td><td>不允许</td><td>允许</td></tr>
+    <tr><td>一个状态 + 一个输入</td><td><strong>唯一</strong>的后继状态（站在一个圈上，读到某个字母，下一步只能去唯一一个圈）</td><td>可有<strong>多个</strong>后继状态（同一个字母可以同时走好几个圈，像分身）</td></tr>
+    <tr><td>空边 ε</td><td>不允许</td><td>允许（ε = 不读字母的<strong>免费跳转</strong>：站在圈上可以白跳到另一个圈，字符串没消耗字符）</td></tr>
     <tr><td>初态</td><td>唯一</td><td>可以有多个</td></tr>
-    <tr><td>关系</td><td colspan="2">NFA 可确定化 → DFA；DFA 可最小化（合并等价状态）。识别能力<strong>等价</strong></td></tr>
+    <tr><td>关系</td><td colspan="2">NFA 可<strong>确定化</strong>（把「分身」合并成一个确定走法）→ DFA；DFA 可<strong>最小化</strong>（把走法完全一样的圈合并成一个，省状态）。两者识别能力<strong>等价</strong>——能识别的字符串集合一模一样</td></tr>
   </table>
 
   <h2>三、传值 vs 传引用：拷贝还是地址</h2>
@@ -71,12 +75,15 @@
     <tr><td><strong>引用调用（传地址）</strong></td><td>实参的<strong>地址</strong></td><td><strong>直接影响</strong>实参</td><td>C 的数组/指针参数、Java 的对象引用</td></tr>
   </table>
   <div class="card">
-    <p style="margin-top:0;"><strong>经典考题</strong>：<code>void f(int x){ x = 100; }</code> 调用 <code>f(a)</code> 后 a 不变（传值，改的是拷贝）；改成 <code>void f(int *x){ *x = 100; }</code> 调用 <code>f(&a)</code> 后 a = 100（传地址）。</p>
-    <p style="margin-bottom:0;"><strong>Java 判定口诀</strong>：基本类型（int/double…）传值拷贝；对象传的是「引用的拷贝」——函数内改对象<strong>字段</strong>会影响原对象，但让引用指向新对象不影响原变量。</p>
+    <p style="margin-top:0;"><strong>经典考题</strong>：<code>void f(int x){ x = 100; }</code> 调用 <code>f(a)</code> 后 a 不变（传值，改的是拷贝）。两个符号先翻译：<code>&a</code> = 「拿到 a <strong>家的门牌号</strong>」（取地址）；<code>*x</code> = 「<strong>顺着门牌号进门</strong>去改东西」（解引用）。所以改成 <code>void f(int *x){ *x = 100; }</code> 调用 <code>f(&a)</code> 后 a = 100（传地址）——不是把 a 复印一份进来改，而是拿着门牌号进到 a 家里直接改，改的就是原来的 a。</p>
+    <p><strong>Java 判定口诀</strong>：基本类型（int/double…）传值拷贝，改了也是改复印件。对象传的是「<strong>门牌号的复印件</strong>」，分两种情形看：<br>
+    ① 复印件上的门牌号还指着原来的屋子，函数内照着它<strong>进屋搬东西</strong>（如 <code>list.add(x)</code> 改字段）——<strong>屋里真变了，影响原对象</strong>；<br>
+    ② 函数内把复印件上的门牌号<strong>划掉写上新地址</strong>（如 <code>list = new ArrayList()</code>，让引用指向新对象）——只是复印件换了地方，<strong>原来的屋子毫发无损，不影响原变量</strong>。</p>
   </div>
 
   <h2>四、动手：后缀表达式求值挑战（编译配套·先动笔再填）</h2>
-  <p><strong>后缀式 = 逆波兰式</strong>（同义别名，题目两个叫法都会用）：运算符写在两个操作数之后，求值用一个栈——操作数入栈、遇运算符弹出两个数计算再把结果入栈。中缀转后缀也是编译原理「中间代码」的常见形式（另有四元式、三元式）。</p>
+  <p>先分清两种写法：<strong>中缀式</strong> = 我们平时写的、<strong>运算符夹在两个数中间</strong>的普通写法，如 <code>1+2</code>、<code>(1+2)×3</code>；<strong>后缀式 = 逆波兰式</strong>（同义别名，题目两个叫法都会用）= <strong>运算符写在两个操作数之后</strong>，如 <code>1 2 +</code> 表示 1+2。求值用一个栈——操作数入栈、遇运算符弹出两个数计算再把结果入栈。中缀转后缀也是编译原理「中间代码」的常见形式（另有四元式、三元式，见 §一）。</p>
+  <p><strong>转换看一个完整例子</strong>就明白了：<code>(1+2)×3</code> → 先算括号里的 <code>1+2</code>，写成后缀是 <code>1 2 +</code>；再把「这个结果」和 3 相乘，运算符 × 排在最后 → 得到 <code>1 2 + 3 ×</code>。规则就一条：<strong>运算符挪到它的两个操作数后面</strong>，括号随之消失（先后顺序已由运算符的位置表达）。</p>
   <div id="cd29"></div>
 
   <h2>五、自查（全对过课）</h2>

@@ -44,18 +44,41 @@
   <div id="otc-holder"></div>
 
   <h2>二、三次握手 / 四次挥手（状态名必背）</h2>
-  <pre>三次握手（建立）：                       四次挥手（释放）：
-客户端 SYN ──→ 服务端    [SYN_SENT]      主动方 FIN ──→          [FIN_WAIT_1]
-     ←── SYN+ACK         [SYN_RCVD]           ←── ACK            [CLOSE_WAIT→LAST_ACK]
-客户端 ACK ──→           [ESTABLISHED]        ←── FIN
-                                              ACK ──→            [TIME_WAIT→CLOSED]
-  双方进入 ESTABLISHED                  等待 2MSL 后 CLOSED（确保最后 ACK 达到）</pre>
+  <p><strong>状态是什么</strong>：TCP 连接从建立到断开，双方各自像一个有「进度条」的人——每个阶段都有一个状态名。考试就考「谁在什么时候进入哪个状态」，所以下面按步骤走一遍，状态名旁边都配了人话。</p>
+  <p><strong>三次握手（建立连接），逐步看：</strong></p>
+  <ol>
+    <li><strong>第 1 步</strong>：客户端发出 <code>SYN</code>（连接请求，相当于「我想跟你通话」）。<br>→ 发完客户端进入 <strong>SYN_SENT</strong>（= 我发出连接请求了，在等对方回应）；服务端收到后进入 <strong>SYN_RCVD</strong>（= 收到请求了，我也回一个表示同意）。</li>
+    <li><strong>第 2 步</strong>：服务端回 <code>SYN+ACK</code>（= 同意，且我也想确认你能收到我说话）。</li>
+    <li><strong>第 3 步</strong>：客户端回 <code>ACK</code>（= 收到！）。<br>→ 服务端收到后，<strong>双方都进入 ESTABLISHED</strong>（= 通话正式接通，可以传数据了）。</li>
+  </ol>
+  <p><strong>四次挥手（断开连接），逐步看</strong>（假设客户端先挂电话，主动方 = 客户端）：</p>
+  <ol>
+    <li><strong>第 1 步</strong>：主动方发出 <code>FIN</code>（= 我说完了）。→ 发完进入 <strong>FIN_WAIT_1</strong>（= 我关了我这边，在等对方确认）。</li>
+    <li><strong>第 2 步</strong>：被动方回 <code>ACK</code>。→ 被动方进入 <strong>CLOSE_WAIT</strong>（= 对方说完了，我这边可能还有话没说完）。</li>
+    <li><strong>第 3 步</strong>：被动方数据发完后也发 <code>FIN</code>。→ 被动方进入 <strong>LAST_ACK</strong>（= 我也说完了，等最后一次确认）。</li>
+    <li><strong>第 4 步</strong>：主动方回 <code>ACK</code>。→ 主动方进入 <strong>TIME_WAIT</strong>（= 等一会儿再彻底挂断，见下面 2MSL），最终 <strong>CLOSED</strong>。</li>
+  </ol>
   <ul>
     <li><strong>为什么三次</strong>：双方都确认「我能发你能收」；两次会导致失效的连接请求突然到达造成资源浪费。</li>
     <li><strong>为什么四次</strong>：关闭是两个方向各关一次（半关闭）。</li>
-    <li><strong>TIME_WAIT 等 2MSL</strong>：保证最后的 ACK 能重发、旧报文消亡。</li>
+    <li><strong>TIME_WAIT 等什么？等 2MSL</strong>：MSL = <strong>报文在网络里存活的最长时间</strong>（Maximum Segment Lifetime，比如设为 30 秒）。2MSL = <strong>一来一回都等完</strong>——主动方最后那个 ACK 万一在路上丢了，对方重发的 FIN 还能赶到，本方来得及重发 ACK；同时等满 2MSL，旧连接的残留报文也彻底在网络里消亡，不会串到新连接里。</li>
   </ul>
-  <p>流量控制 = <strong>滑动窗口</strong>（接收方通告窗口）；拥塞控制四招：<strong>慢开始（指数增）→ 拥塞避免（线性加 1）→ 超时则 ssthresh=当前一半、cwnd 重回 1；快重传（3 个重复 ACK）+ 快恢复</strong>。</p>
+  <p><strong>先分清两件事</strong>：流量控制管「<strong>对方</strong>」（别淹没接收方），拥塞控制管「<strong>网络</strong>」（别压垮路由器）。</p>
+  <ul>
+    <li><strong>流量控制 = 滑动窗口</strong>：接收方每次回 ACK 时都附带一个窗口值（= 我缓冲区还剩多少地方），发送方发出去但没确认的数据量不许超过它。</li>
+  </ul>
+  <p><strong>拥塞控制</strong>先记两个名词：</p>
+  <ul>
+    <li><strong>cwnd</strong>（拥塞窗口）= 发送方<strong>当前</strong>敢往网络里发多少（全靠猜网络堵不堵，猜得保守就发得少）；</li>
+    <li><strong>ssthresh</strong>（门限值）= 慢开始和拥塞避免的<strong>切换线</strong>：cwnd 低于它就指数猛涨（慢开始），涨到它就改成一次加 1 慢慢试探（拥塞避免）。</li>
+  </ul>
+  <p>出问题时两种处理，对比着记：</p>
+  <table class="tight">
+    <tr><th></th><th>① 超时（收不到任何 ACK）</th><th>② 收到 3 个重复 ACK</th></tr>
+    <tr><td>网络状况</td><td>严重拥塞（包全丢了）</td><td>轻度拥塞（只丢了一包，后面的还在到）</td></tr>
+    <tr><td>处理</td><td>ssthresh = 当前 cwnd 的一半；cwnd 重回 1，重新慢开始</td><td>快重传：不等超时立刻重发丢失的包；快恢复：ssthresh 减半，cwnd 从新 ssthresh 起线性加 1</td></tr>
+    <tr><td>数字小例</td><td>cwnd=16 超时 → ssthresh=8，cwnd=1 从头慢开始</td><td>cwnd=16 收到 3 个重复 ACK → ssthresh=8，cwnd 从 8 起线性加 1（不归 1，因为网络还没全瘫）</td></tr>
+  </table>
 
   <h2>三、子网划分 5 步法（必考计算）</h2>
   <p><strong>「网段」掰开说</strong>：一个网段 = 一组「前半截门牌号相同」的 IP 集合，同网段内的设备可以直接互喊（不经过路由器）。掩码就是那条「前半截/后半截」的分界线——掩码 1 的位数定门牌号占多长；判断两个 IP 是否同网段：按掩码一遮，网络位完全一样就是同网段。</p>
@@ -67,12 +90,13 @@
     <tr><td><strong>C</strong></td><td class="num">192 ~ 223</td><td class="num">255.255.255.0（/24）</td><td>24 / 8</td><td>小网络（常见考点）</td></tr>
   </table>
   <ul>
-    <li><strong>判类口诀：看首段数字</strong>——1~126 是 A、128~191 是 B、192~223 是 C（127 环回、0 和 224+ 不做单播类）；</li>
+    <li><strong>判类口诀：看首段数字</strong>——1~126 是 A、128~191 是 B、192~223 是 C。为什么只看这三段？<strong>单播</strong> = 一对一的普通地址（一台电脑发给另一台），A/B/C 三类就是干这个的；而 <strong>224~239 是 D 类（组播）</strong>= 一对多（一台机器同时发给一组人，如视频会议），<strong>240 以上是 E 类</strong> = 保留做实验用，都不发给普通设备；0 开头则表示「本网络」也有特殊用途——所以判类只看 A/B/C 三段，127 单独留给环回测试；</li>
     <li><strong>私有地址段（必背）</strong>：A 类 <strong>10.0.0.0/8</strong>、B 类 <strong>172.16.0.0 ~ 172.31.255.255</strong>（/12）、C 类 <strong>192.168.0.0/16</strong>——不进公网路由；</li>
     <li><strong>特殊地址</strong>：<strong>127.x.x.x 环回测试</strong>；主机位全 0 = 网络地址、全 1 = 广播地址（这就是可用主机 −2 的原因）；</li>
     <li>掩码里<strong>连续 1 = 网络位、连续 0 = 主机位</strong>——子网掩码本身不是 IP，它只标「哪段是门牌号、哪段是房间号」。</li>
   </ul>
-  <span class="formula">①掩码 /n → ②块大小 = 256 − 掩码末字节值 → ③网络地址 = IP 按块取整段起点<br>④广播地址 = 下一网络地址 − 1 → ⑤可用主机数 = 2^(32−n) − 2</span>
+  <p><strong>5 步法的原理先说一句</strong>：掩码末字节（掩码最后一个不为 0 的那个字节）把 0~255 这 256 个数<strong>整块一分为几</strong>——一个字节最多装 0~255 共 256 个数，掩码值占了开头一段，剩下的就是每块的大小，所以 <strong>块大小 = 256 − 掩码末字节值</strong>。「按块取整段起点」就是：从 0 开始，每跳一块大小数一次，看 IP 落在哪一块的开头。另外，第⑤步的 <code>2^(32−n) − 2</code> 和按块算是<strong>同一件事的两种算法</strong>：n 是网络位个数，主机位个数 = 32 − n，主机位有几位就有 2 的几次方个地址，再去掉网络地址和广播地址两个。</p>
+  <span class="formula">①掩码 /n → ②块大小 = 256 − 掩码末字节值 → ③网络地址 = IP 按块取整段起点<br>④广播地址 = 下一网络地址 − 1 → ⑤可用主机数 = 2^(32−n) − 2（主机位 = 32−n 个）</span>
   <div class="card">
     <p style="margin-top:0;"><strong>例 1</strong>：192.168.1.130 /26（掩码 255.255.255.192）：</p>
     <p>块大小 = 256−192 = <strong>64</strong> → 段起点：0, 64, <strong>128</strong>, 192 → 130 落在 <strong>128–191</strong> 段 → 网络地址 <strong>192.168.1.128</strong>，广播 <strong>192.168.1.191</strong>，可用主机 2⁶−2 = <strong>62</strong>。</p>
@@ -80,7 +104,7 @@
   </div>
   <div class="callout warn">
     <span class="tag">⚠ 三个陷阱</span>
-    ① 可用主机数要 <strong>−2</strong>（网络地址 + 广播地址不可用）；② <strong>CIDR 聚合</strong>：4 个连续 /24 聚合成一个 <strong>/22</strong>（往左退 2 位）；③ 同一子网判断 = 网络地址相同（按最长掩码算）。
+    ① 可用主机数要 <strong>−2</strong>（网络地址 + 广播地址不可用）；② <strong>CIDR 聚合</strong>：先说人话——把 4 个连续的小网段<strong>合并成 1 个大网段对外宣告</strong>，就叫聚合（路由表里 4 行变 1 行）。为什么前缀要往左退 2 位？4 = 2²，每个 /24 占 24 位网络位，4 个连续的 /24 拼起来多的正好是 2 个主机位，所以网络位 24 − 2 = 22，即 <strong>/24 → /22</strong>（可想象 4 个小方块拼成 1 个大方块，边长扩大 2 倍）；③ 同一子网判断 = 网络地址相同（按最长掩码算）。
   </div>
 
   <h2>四、计算挑战（先动笔再填）</h2>

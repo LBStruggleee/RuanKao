@@ -26,7 +26,7 @@
     一张「五层楼」把整个板块串起来：<strong>数字摘要 → 数字签名 → 数字证书 → 数字信封 → 加密</strong>。必背数字一把抓（DES 56、3DES 168、AES 轮数 10/12/14、MD5 128、SHA-1 160），再加「数字签名 = 发方私钥」这一句，本板块选择题基本清空。
   </div>
 
-<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 4 网络安全 · 安全线</b>——加密五层楼/攻防配对/防火墙。上游：0025；保底数字同 0033（<a href="../reference/knowledge-map.html">回地图</a>）</p>
+<p class="map-loc">🧭 <a href="../reference/knowledge-map.html">体系定位</a>：<b>面 4 网络安全 · 安全线</b>——加密五层楼/攻防配对/防火墙。上游：0025；保底数字与 0033（保底拿分课：法规/标准/多媒体/英语）相同（<a href="../reference/knowledge-map.html">回地图</a>）</p>
 
     <h2>一、对称加密 vs 非对称加密</h2>
   <table class="tight">
@@ -36,13 +36,27 @@
     <tr><td>优/劣</td><td>快，适合大量数据；<em>密钥分发难</em>（n 人两两需 n(n−1)/2 把）</td><td>密钥分发简单（公钥公开）；<em>慢</em>，适合小数据/密钥交换</td></tr>
   </table>
 
+  <p>先把表格里的行话掰开。<strong>「密钥分发难」是什么意思？</strong>对称加密两个人必须拿到<strong>同一把</strong>钥匙——就像你和朋友共用一个密码本，可密码本怎么寄过去？路上会被偷，被偷了对方就能解开你们所有的信。人一多更糟：<strong>钥匙必须两两配对</strong>。手算一遍 n=3：甲-乙、甲-丙、乙-丙，每两个人共享一把，共 3×(3−1)/2 = <strong>3 把</strong>；n=100 就是 100×99/2 = 4950 把——分发和保管都是灾难。</p>
+  <p><strong>非对称加密怎么破这个局？</strong>一句话：密码本随便寄、锁钥匙留家里。公钥（挂在外面的锁）发给谁都行，被偷也无所谓；私钥（开锁的钥匙）永远不出门。所以分发简单，代价是算法慢。</p>
+  <p>再看代表算法里那句行话。<strong>RSA「基于大整数分解」</strong>：把两个大素数<strong>乘起来</strong>一瞬间就算完（容易），但拿到乘积想<strong>拆回去</strong>算到天荒地老也算不完（难）——世界上的计算机算不完，这就是安全性的来源。ECC「椭圆曲线离散对数」同理，也是数学上的单向难题，记名字即可。IDEA、RC4 也是对称算法，知道名字是「对称阵营」即可。</p>
+  <p><strong>「分组」「有效密钥」「轮数」是什么？</strong><strong>分组</strong>＝每次加密的一块数据多长（DES 每次嚼 64 位一块）；<strong>轮数</strong>＝把这块数据反复搅几遍——搅的遍数越多越难还原，所以<strong>密钥越长、搅的遍数越多、越安全</strong>。AES 密钥 128/192/256 位，对应轮数 10/12/14 遍：密钥长 64 位，就多搅 2 遍——10/12/14 从死数字变成有逻辑的对应。DES 名义密钥 64 位，其中 <strong>8 位是校验位</strong>（用来查错的），真正干活的有效密钥只剩 56 位——这就是「56/64」两个数字的来历。</p>
+
   <h2>二、五层楼：从摘要到加密</h2>
+  <p>先给每层一个生活类比，再看术语：</p>
   <ol>
-    <li><strong>数字摘要</strong>：对报文做 Hash 得固定长度指纹——<strong>MD5 128 位、SHA-1 160 位、SHA-256 256 位</strong>；保证<strong>完整性</strong>（防篡改）。</li>
-    <li><strong>数字签名</strong>：发方用<strong>自己的私钥</strong>对摘要加密；收方用<strong>发方的公钥</strong>验证。保证完整性 + <strong>不可否认性</strong>（发方抵赖不了）。<em>不保密！</em></li>
-    <li><strong>数字证书（CA）</strong>：CA 用<strong>自己的私钥</strong>签发「公钥属于某人」的证书，解决「公钥是真是假」。</li>
-    <li><strong>数字信封</strong>：数据用<strong>对称密钥加密</strong>（快），对称密钥再用<strong>对方公钥加密</strong>（安全分发）——两者结合，HTTPS 的思路。</li>
-    <li><strong>加密体系</strong>：HTTPS = HTTP over SSL/TLS（443 端口）。</li>
+    <li><strong>数字摘要</strong>——像<strong>行李过秤出的重量单</strong>：行李多少公斤，秤只吐一个数字，<strong>从数字还原不出行李</strong>。对报文做 Hash 得固定长度指纹——<strong>MD5 128 位、SHA-1 160 位、SHA-256 256 位</strong>；保证<strong>完整性</strong>（防篡改）：报文改一个字，指纹就完全变样，但指纹本身藏不住也还原不出原文。</li>
+    <li><strong>数字签名</strong>——像<strong>盖了章的合同</strong>：章只有你有，盖上去就赖不掉。发方用<strong>自己的私钥</strong>对摘要「盖章」，收方用<strong>发方的公钥</strong>验章：公钥人人可得，谁都能拿它验出「这章真是不是他盖的、内容改没改」。<strong>为什么不保密？</strong>——验得出真假，但藏不住内容（公钥谁都拿得到，等于公告栏里的章样）。所以签名保证完整性 + <strong>不可否认性</strong>（发方抵赖不了），<em>不保密！</em></li>
+    <li><strong>数字证书（CA）</strong>——像<strong>派出所给公章做的备案</strong>：你说「这章是我的」没用，得有权威机构盖官方章担保。<strong>骗子场景</strong>：黑客宣称「我发的公钥是银行的」，你一加密，钱就进了他的锁。CA（网上公证处）用<strong>自己的私钥</strong>签发证书，担保「这把公钥真的属于银行」。和上一层对比：<strong>签名盖在报文摘要上，证书盖在公钥上</strong>。<br><strong>收方拿到证书后怎么验真伪？</strong>和验普通签名一个路子：用<strong>CA 的公钥</strong>去验证书上的章。那 CA 的公钥从哪来？<strong>浏览器和操作系统出厂时就内置了一批知名 CA 的公钥</strong>（信任链的起点，不用联网取、也没人能半路换掉）。<strong>骗子为什么伪造不了？</strong>骗子可以自己印一张假证书，但「CA 的章」要用 CA 的私钥才盖得出来——私钥在 CA 手里从不出门，骗子手里只有公钥，盖不出这个章；他用自己的私钥盖个假章，浏览器一拿内置的 CA 公钥去验，<strong>立刻穿帮</strong>。这就好比骗子能模仿奖状的花纹，却造不出教育局那枚备案公章。
+    <li><strong>数字信封</strong>——像<strong>用保险箱寄钥匙</strong>：货（数据）用普通锁锁好（对称加密，快），开货的钥匙放进只有对方能打开的保险箱（对方公钥加密）。数据用<strong>对称密钥加密</strong>（快），对称密钥再用<strong>对方公钥加密</strong>（安全分发）——两者结合，HTTPS 的思路。</li>
+    <li><strong>加密体系</strong>——五层楼的落地：HTTPS = 在 HTTP 下面<strong>垫了 SSL/TLS 这层保险</strong>。SSL/TLS 就是干「数字信封」这件事的协议：先用<strong>证书</strong>验明对方身份（第 3 层），再<strong>协商对称密钥</strong>加密数据（第 4 层）。「443」是它的默认端口号（普通 HTTP 是 80）。</li>
+  </ol>
+  <p><strong>把「摘要→签名」两步走一遍</strong>（发方甲、收方乙）：</p>
+  <ol>
+    <li>甲写好合同，先过秤出<strong>重量单</strong>（算摘要）；</li>
+    <li>甲在重量单上<strong>盖自己的章</strong>（私钥加密摘要）；</li>
+    <li>甲把「合同 + 盖章的重量单」一起发出去；</li>
+    <li>坏人半路把合同金额从 1 万改成 10 万；</li>
+    <li>乙收到后：自己给合同再过一次秤（重算摘要），再用甲的公钥<strong>验章</strong>——验出来的单子还是「1 万」，和手上这份「10 万」对不上，<strong>一验就穿帮</strong>。</li>
   </ol>
   <div class="callout warn">
     <span class="tag">⚠ 最高频陷阱</span>
@@ -50,16 +64,19 @@
   </div>
 
   <h2>三、攻击与防护配对</h2>
+  <p>先看一个最经典的攻击怎么发生。<strong>SQL 注入</strong>：网站登录时后台会拼一句「用户名 = 你填的，密码 = 你填的」去数据库核对。坏人在输入框里填 <code>' or '1'='1</code>——注意开头那个<strong>单引号</strong>是关键：后台拼句子时，你的输入本来会被塞进一对引号中间，变成「密码 = '<strong>你填的</strong>」；现在你填的内容自己带了一个引号，就<strong>提前把引号截断</strong>了——前半句变成「密码 = 空」（两个引号贴在一起，中间什么都没有，即<strong>空字符串</strong>），后半句的 <code> or '1'='1</code> 则<strong>混成了 SQL 指令的一部分</strong>。于是整句条件变成「密码 = 空 <strong>或者</strong> 1=1」，而 1 永远等于 1，条件永远成立，<strong>密码就绕过去了</strong>。防御「参数化查询」就是不让你填的内容混进指令本身：你填什么，都只当<strong>数据</strong>，不当<strong>命令</strong>。</p>
+  <p>再看两个脚本类攻击的场景：<strong>XSS</strong>（坏人把一段脚本藏进留言板，别人一看这条留言，脚本就在<em>他</em>的浏览器里偷 cookie——防御「输出转义」是让脚本只显示成文字、不执行，「CSP」是浏览器的一道白名单，规定页面只准加载哪些来源的脚本）；<strong>CSRF</strong>（你登录着购物网站没退出，坏人在别的网页里偷偷用<strong>你已登录的身份</strong>向购物网站发一个下单请求——防御「Token 校验」是要求请求里带一个坏人拿不到的暗号，「Referer」是请求头里标明「从哪个页面发来的」，网站一看来源不对就拒绝）。</p>
   <table class="tight">
     <tr><th>攻击</th><th>手法</th><th>防御</th></tr>
-    <tr><td>SQL 注入</td><td>输入框拼接 SQL 语句</td><td>参数化查询/过滤输入</td></tr>
-    <tr><td>XSS 跨站脚本</td><td>向页面注入脚本</td><td>输出转义/CSP</td></tr>
-    <tr><td>CSRF 跨站请求伪造</td><td>盗用已登录会话发伪造请求</td><td>Token 校验/验证 Referer</td></tr>
-    <tr><td>DDoS</td><td>傀儡机洪泛耗尽资源</td><td>流量清洗/CDN 分流</td></tr>
-    <tr><td>重放攻击</td><td>截获合法报文再重发</td><td><strong>时间戳/一次性令牌/序列号</strong></td></tr>
+    <tr><td>SQL 注入</td><td>输入框拼接 SQL 语句（如 <code>' or '1'='1</code> 绕过密码）</td><td>参数化查询/过滤输入</td></tr>
+    <tr><td>XSS 跨站脚本</td><td>把脚本藏进页面（如留言板），访客浏览器替他执行</td><td>输出转义/CSP（脚本白名单）</td></tr>
+    <tr><td>CSRF 跨站请求伪造</td><td>盗用你<strong>已登录的会话</strong>（登录状态）冒充你发请求</td><td>Token 校验/验证 Referer（请求来源）</td></tr>
+    <tr><td>DDoS</td><td>控制大量<strong>傀儡机</strong>（被黑的肉鸡）一起<strong>洪泛</strong>（几万台机器同时疯狂发请求，把服务器门口堵死、资源耗尽），耗尽资源</td><td><strong>流量清洗</strong>（专业设备把恶意流量洗掉再放行）/CDN 分流</td></tr>
+    <tr><td>重放攻击</td><td>截获合法报文，过段时间原样重发</td><td><strong>时间戳/一次性令牌/序列号</strong></td></tr>
   </table>
 
   <h2>四、恶意代码分类（选择题常客）</h2>
+  <p>五类恶意代码各给一个场景：<strong>病毒</strong>＝附着在正常程序上的寄生虫，你双击运行那个程序它才活过来；<strong>蠕虫</strong>＝不用寄生、自己就在网络里爬的虫，只要网里有一台机器有漏洞，它自己钻进去再扩散；<strong>木马</strong>＝伪装成免费软件/外挂的窃贼，你以为是工具，装上后它开后门把你的信息往外送；<strong>逻辑炸弹</strong>＝平时安静潜伏、等条件的定时破坏装置，比如埋在公司系统里「我被开除那天生效」；<strong>后门</strong>＝绕过正常登录检查的秘密通道。</p>
   <table class="tight">
     <tr><th>类型</th><th>特征一句话</th><th>考点钩子</th></tr>
     <tr><td><strong>计算机病毒</strong></td><td>寄生在宿主程序中，<strong>用户运行宿主时激活</strong></td><td>需要宿主、可自我复制</td></tr>
@@ -68,20 +85,31 @@
     <tr><td><strong>逻辑炸弹</strong></td><td>满足特定条件（日期/事件）时才触发破坏</td><td>潜伏触发条件</td></tr>
     <tr><td><strong>后门（陷门）</strong></td><td>绕过正常认证进入系统的秘密通道</td><td>绕过访问控制</td></tr>
   </table>
+  <p><strong>五类怎么区分？三个问题收口</strong>：①看<strong>宿主</strong>——病毒要、蠕虫不要；②看<strong>复制</strong>——病毒、蠕虫会自我复制，木马不会；③看<strong>目的</strong>——木马偷信息，逻辑炸弹搞破坏。逻辑炸弹和病毒、木马的差别：它<strong>既不复制也不伪装</strong>，只等条件触发。</p>
   <div class="callout warn">
     <span class="tag">⚠ 高频判断</span>
     「蠕虫需要宿主程序」——<strong>错</strong>（蠕虫独立传播，病毒才需要宿主）；「木马能自我复制」——<strong>错</strong>（木马不复制，蠕虫才复制）。
   </div>
 
   <h2>五、防火墙与 IDS/IPS</h2>
+  <p>先补一句类比再进表格。这里的「网络层」指只看<strong>信封地址</strong>（IP/端口），「应用层」指<strong>拆开信看内容</strong>。三类防火墙：包过滤 = <strong>门卫只看胸牌</strong>（IP/端口对不对就放行，快但粗）；应用级网关 = <strong>安检员开包逐件查</strong>（内容一条条检查，细但慢）；状态检测 = 记住「这个连接是不是我们自己发起的」，只放行正常来回，折中、主流。</p>
+  <p>IDS 和 IPS 的区别用两个东西记：<strong>IDS = 监控摄像头</strong>——挂在旁边看，看到贼只<strong>报警</strong>，拦不住（旁路监听）；<strong>IPS = 闸机</strong>——<strong>必须拦在通道上</strong>（串联部署），过的人都要被它检查一遍，发现贼直接<strong>丢包阻断</strong>。为什么 IPS 必须串在链路上？因为不挡在通道中间，包就不经过它，它根本没机会拦——摄像头再聪明也拦不住人，闸机才行。</p>
   <table class="tight">
     <tr><th>设备</th><th>原理</th><th>位置/特点</th></tr>
-    <tr><td>包过滤防火墙</td><td>网络层查 IP/端口规则</td><td>快、粒度粗</td></tr>
-    <tr><td>应用级网关（代理）</td><td>应用层逐条检查内容</td><td>细、慢</td></tr>
+    <tr><td>包过滤防火墙</td><td>网络层查 IP/端口规则（门卫看胸牌）</td><td>快、粒度粗</td></tr>
+    <tr><td>应用级网关（代理）</td><td>应用层逐条检查内容（安检员开包）</td><td>细、慢</td></tr>
     <tr><td>状态检测</td><td>跟踪连接状态动态放行</td><td>折中，主流</td></tr>
-    <tr><td><strong>IDS 入侵检测</strong></td><td><strong>旁路监听、发现报警</strong></td><td>只喊不打</td></tr>
-    <tr><td><strong>IPS 入侵防御</strong></td><td><strong>串联部署、直接阻断</strong></td><td>又喊又打</td></tr>
-    <tr><td>VPN / IPSec</td><td>AH = 只认证；ESP = 认证+加密；传输模式护载荷、隧道模式护整包</td><td>公共网络上建加密通道</td></tr>
+    <tr><td><strong>IDS 入侵检测</strong></td><td><strong>旁路监听、发现报警</strong>（摄像头，只喊不打）</td><td>不能阻断</td></tr>
+    <tr><td><strong>IPS 入侵防御</strong></td><td><strong>串联部署、直接阻断</strong>（闸机，又喊又打）</td><td>必须拦在链路上才能丢包</td></tr>
+  </table>
+
+  <p><strong>VPN</strong>：在公共网络上挖一条<strong>只有你们俩能读的加密隧道</strong>——别人看得见有车过，看不见拉的什么货。IPSec 是实现 VPN 的协议族，两个部件一张小表：</p>
+  <table class="tight">
+    <tr><th>概念</th><th>大白话</th></tr>
+    <tr><td>ESP</td><td>既锁箱子又贴封条：<strong>加密 + 认证</strong>（藏住内容，还验得出没被改、没被冒充）</td></tr>
+    <tr><td>AH</td><td>只贴封条不锁箱：<strong>只认证不加密</strong>（验得出真假，内容裸奔）</td></tr>
+    <tr><td>传输模式</td><td>只护<strong>载荷</strong>：一个 IP 包 = <strong>信封（原 IP 头，写地址）+ 信纸（里面的数据）</strong>。「载荷」就是信纸——拆掉信封后真正要送的那部分内容。传输模式<strong>只给信纸套护套</strong>，信封地址原样不动，两台主机直接点到点护送</td></tr>
+    <tr><td>隧道模式</td><td>护<strong>整包</strong>（连信封带信纸整个套一层新信封）</td></tr>
   </table>
 
   <h2>六、自查（全对过课）</h2>

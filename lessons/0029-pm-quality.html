@@ -33,11 +33,13 @@
     <tr><th>工具</th><th>强项</th><th>弱项 / 考点</th></tr>
     <tr><td><strong>甘特图（横道图）</strong></td><td>直观展示各任务的<strong>起止时间与进度</strong>，一目了然</td><td><strong>不能清晰反映任务间的依赖关系</strong>；难以定位关键任务——经典判断题</td></tr>
     <tr><td><strong>PERT 图（网络图）</strong></td><td>用节点/箭头表示<strong>任务依赖</strong>与工期，可求关键路径</td><td>三点估算：(a + 4m + b) ÷ 6，方差 σ² = ((b−a)/6)²</td></tr>
-    <tr><td><strong>关键路径</strong></td><td>耗时最长的路径 = 项目<strong>最短完工时间</strong>；关键路径上的任务松弛时间为 0</td><td>关键路径工期 = 期望工期；压缩非关键任务不影响总工期</td></tr>
+    <tr><td><strong>关键路径</strong></td><td>耗时最长的路径 = 项目<strong>最短完工时间</strong>；关键路径上的任务松弛时间为 0（松弛时间 = 一项任务<strong>最多能晚开工几天而不拖累整个项目</strong>）</td><td>关键路径工期 = 期望工期；压缩非关键任务不影响总工期</td></tr>
   </table>
   <div class="card">
-    <p style="margin-top:0;"><strong>PERT 三点估算例</strong>：某任务乐观 4 天、最可能 6 天、悲观 10 天 → 期望工期 = (4 + 4×6 + 10) ÷ 6 = 40/6 ≈ <strong>6.7 天</strong>；方差 = ((10−4)/6)² = 1。</p>
-    <p style="margin-bottom:0;"><strong>关键路径例</strong>：A→B 工期 3+5=8 天，A→C→D 工期 2+4+3=9 天 → 关键路径 A→C→D，项目最短 <strong>9 天</strong>完工。赶工要压关键路径上的任务才有效。</p>
+    <p style="margin-top:0;"><strong>为什么「最长的路」反而决定「最早的完工时间」？</strong>打个比方：几条生产线<strong>同时开工</strong>，产品要<strong>每条线都做完</strong>才能出厂——先做完的那几条只能干等，<strong>最慢的那条线几点收工，大家就几点一起收工</strong>。所以耗时最长的那条路（关键路径）决定了整个项目最早什么时候能交付：项目想早完工，就必须去压缩这条最长的路。</p>
+    <p><strong>PERT 三点估算例</strong>：某任务乐观 4 天、最可能 6 天、悲观 10 天 → 期望工期 = (4 + 4×6 + 10) ÷ 6 = 40/6 ≈ <strong>6.7 天</strong>；方差 σ² = ((10−4)/6)² = 1。</p>
+    <p><strong>关键路径例</strong>：A→B 工期 3+5=8 天，A→C→D 工期 2+4+3=9 天 → 关键路径 A→C→D，项目最短 <strong>9 天</strong>完工。走 A→B 的活第 8 天就干完了，但还得等 A→C→D 到第 9 天——所以 9 天才是「最早完工」的时间。赶工要压关键路径上的任务才有效；反过来，关键路径上的任务<strong>一点都晚不起</strong>（晚 1 天项目就晚 1 天），所以它的松弛时间为 0。</p>
+    <p style="margin-bottom:0;"><strong>方差 σ² 怎么理解、要不要算？</strong>σ 读「西格玛」，σ²（方差）衡量的是<strong>悲观和乐观差距带来的「不确定程度」</strong>：两头差得越远，说明这个工期越没把握，方差就越大。软考只考<strong>套公式</strong>——把 (b−a) 代进 ((b−a)/6)² 一除一平方就完事，不需要理解更深。</p>
   </div>
 
   <h2>二、CMM / CMMI：软件过程成熟度五级</h2>
@@ -46,11 +48,11 @@
     <tr><th>级别</th><th>特征关键词</th></tr>
     <tr><td>1 初始级</td><td>混乱，依赖<strong>个人英雄</strong>，过程无序</td></tr>
     <tr><td>2 可重复级</td><td><strong>项目级</strong>管理：基本的项目成本、进度跟踪，能重复以往成功</td></tr>
-    <tr><td>3 已定义级</td><td><strong>组织级</strong>标准过程：全组织统一 documented 过程</td></tr>
+    <tr><td>3 已定义级</td><td><strong>组织级</strong>标准过程：全组织统一成文的、有文档的标准过程</td></tr>
     <tr><td>4 已管理级</td><td><strong>定量</strong>管理：过程与质量用度量指标控制</td></tr>
     <tr><td>5 优化级</td><td><strong>持续改进</strong>：新技术、量化反馈驱动过程优化</td></tr>
   </table>
-  <p><strong>CMMI</strong> 是 CMM 的新版本，融合多学科，分阶段式（同样五级）与连续式两种表示。考法：给一句特征选等级——「项目级跟踪」=2 级、「组织统一标准」=3 级、「定量」=4 级、「持续改进」=5 级。</p>
+  <p><strong>CMMI</strong> 是 CMM 的新版本，融合多学科，分阶段式（同样五级）与连续式两种表示。<strong>这两种表示的区别（了解即可，软考基本只考五级）</strong>：分阶段式 = 还是像上面那样给整个组织<strong>按五级打一个总分</strong>；连续式 = <strong>按单个过程域（比如「需求管理」这一个过程）单独打分</strong>，各过程可以处于不同级别。考法：给一句特征选等级——「项目级跟踪」=2 级、「组织统一标准」=3 级、「定量」=4 级、「持续改进」=5 级。</p>
 
   <h2>三、风险管理与配置管理：两套流程各走各的</h2>
   <table class="tight">
@@ -58,6 +60,9 @@
     <tr><td><strong>风险管理</strong></td><td>风险识别 → 风险评估（概率×影响，排序）→ 风险应对 → 风险监控；应对策略四选：<strong>规避、转移（买保险/外包）、减轻（降低概率影响）、接受</strong></td></tr>
     <tr><td><strong>配置管理</strong></td><td>配置项（纳入管理的产物：代码/文档/数据）→ 基线（通过评审的稳定版本，变更需走流程）→ 版本控制 → 变更控制委员会 <strong>CCB</strong> 审批变更</td></tr>
   </table>
+  <div class="card">
+    <p style="margin:0;"><strong>基线和 CCB 打个比方</strong>：基线就像一份<strong>「盖章定稿的 v1.0 合同」</strong>——双方评审通过、盖了章，从此谁都不能随手改；之后想改条款，必须<strong>打申请、走审批</strong>，批下来才能改，改完留痕。而 <strong>CCB（变更控制委员会）就是那个负责盖章审批的小组</strong>：一堆人坐在一起评估「这个改动值不值得做、会不会影响别人」，批了才放行。平时电脑里存的版本（改一版存一版）跟基线的区别就在这：基线是<strong>经过正式评审、被公认稳定的节点</strong>，改它有门槛。</p>
+  </div>
   <div class="callout warn">
     <span class="tag">⚠ 高频判断</span>
     「基线一经确定不可变更」——<strong>错</strong>。基线可以变更，但必须走正式的变更控制流程（申请 → CCB 评估审批 → 实施 → 验证）。配置管理管的是<strong>变更</strong>，不是禁止变更。
@@ -66,15 +71,16 @@
   <h2>四、软件质量：ISO 9126 六大特性</h2>
   <span class="formula">六大特性（口诀：<strong>功可易效维移</strong>）：功能性 · 可靠性 · 易用性 · 效率 · 维护性 · 可移植性</span>
   <table class="tight">
-    <tr><th>特性</th><th>一句话定义</th><th>子特性举例</th></tr>
-    <tr><td><strong>功能性</strong></td><td>该做的都做了、做对了</td><td>适合性、准确性、<strong>互操作性</strong>、安全性</td></tr>
-    <tr><td><strong>可靠性</strong></td><td>规定条件下规定时间内不失效</td><td>成熟性、容错性、易恢复性</td></tr>
-    <tr><td><strong>易用性</strong></td><td>用户学得会、用得顺</td><td>易理解、易学、易操作</td></tr>
-    <tr><td><strong>效率</strong></td><td>资源占用与响应速度</td><td>时间特性、资源特性</td></tr>
-    <tr><td><strong>维护性</strong></td><td>改起来容易</td><td>易分析、易修改、稳定性、易测试</td></tr>
-    <tr><td><strong>可移植性</strong></td><td>换环境能跑</td><td>适应性、易安装、一致性、易替换</td></tr>
+    <tr><th>特性</th><th>一句话定义</th><th>常考子特性（白话）</th><th>其余子特性</th></tr>
+    <tr><td><strong>功能性</strong></td><td>该做的都做了、做对了</td><td><strong>互操作性</strong> = 和别的软件/系统<strong>对接交换数据</strong>的能力（如 Word 能打开 PDF）；安全性 = 有权限保护</td><td>适合性、准确性（了解即可）</td></tr>
+    <tr><td><strong>可靠性</strong></td><td>规定条件下规定时间内不失效</td><td><strong>容错性</strong> = 出点小错也不崩（出错时能扛住或降级运行）</td><td>成熟性、易恢复性（了解即可）</td></tr>
+    <tr><td><strong>易用性</strong></td><td>用户学得会、用得顺</td><td>易理解、易学、易操作（字面即意）</td><td>—</td></tr>
+    <tr><td><strong>效率</strong></td><td>资源占用与响应速度</td><td>时间特性（快不快）、资源特性（占多少内存/CPU）</td><td>—</td></tr>
+    <tr><td><strong>维护性</strong></td><td>改起来容易</td><td><strong>易修改</strong> = 改代码不费劲；易分析 = 出问题能定位</td><td>稳定性、易测试（了解即可）</td></tr>
+    <tr><td><strong>可移植性</strong></td><td>换环境能跑</td><td><strong>适应性</strong> = 换个操作系统不用大改就能跑</td><td>易安装、一致性、易替换（了解即可）</td></tr>
   </table>
-  <p>考法：给一句描述选特性——「换操作系统仍能运行」→ 可移植性（适应性）；「界面友好易学」→ 易用性；「故障后能恢复」→ 可靠性（易恢复性）。「互操作性」归属<strong>功能性</strong>（不是效率/可移植）——易错。</p>
+  <p>考法：给一句描述选特性——「换操作系统仍能运行」→ 可移植性（适应性）；「界面友好易学」→ 易用性；「故障后能恢复」→ 可靠性（易恢复性）。</p>
+  <p><strong>「互操作性」为什么归功能性（易错点）</strong>：互操作性说的是「能不能和别的系统对接、交换数据」——这是<strong>「功能做没做到」的问题</strong>，不是「快不快」（效率）、也不是「搬到新环境行不行」（可移植性）。记忆锚点：能对接 = 多了一项本事 = 功能性。</p>
 
   <h2>五、动手：PERT 与可靠性小算（先动笔再填）</h2>
   <div id="cd32"></div>

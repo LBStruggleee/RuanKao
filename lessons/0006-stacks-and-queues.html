@@ -32,13 +32,14 @@
   <p>栈就是<strong>一摞只能动最上面那只的盘子</strong>：放盘子叫<strong>进栈（push）</strong>，拿走最上面的叫<strong>出栈（pop）</strong>，最上面那只叫<strong>栈顶</strong>。规则只有一条：<strong>后进先出</strong>——最后放的最先被拿走。</p>
   <p><strong>为什么要有它</strong>：凡是「最近发生的要先处理」的场景都是栈——</p>
   <ul>
-    <li><strong>函数调用 / 递归</strong>：调用的函数先返回（系统帮你用栈管现场）——递归的本质就是栈；</li>
+    <li><strong>函数调用 / 递归</strong>：调用的函数先返回（系统用栈保存每个还没运行完的函数的「进度条」——它有哪些局部变量、执行到哪一行；函数返回时再从栈里恢复这份进度条）——递归的本质就是栈；</li>
     <li><strong>表达式求值、括号匹配</strong>：最近出现的左括号最先被匹配；</li>
     <li><strong>深度优先搜索 DFS</strong>（Lesson 0010 会亲手用到）。</li>
   </ul>
 
   <h2>二、必考：出栈序列合不合法？</h2>
-  <p>元素按 1, 2, 3, … 顺序<strong>进栈</strong>（进栈时机可以自己选），问某个出栈序列是否可能。方法只有一种：<strong>亲手模拟</strong>——按出栈序列逐个处理，需要谁就先把比它小的全进栈：</p>
+  <p><strong>先明确游戏规则</strong>：数字 1, 2, 3, … 排成一队等着进栈，但<strong>任何时刻都可以按一下暂停键</strong>——先让栈顶的数字出栈，再继续放后面的数字进栈。「进栈」和「出栈」可以随时交替进行，这就是「进栈时机可以自己选」的意思。问某个出栈序列（一串出栈顺序）是否可能。方法只有一种：<strong>亲手模拟</strong>——按出栈序列逐个处理：轮到哪个数字，就先把所有比它小、<strong>还没进过栈的</strong>数字依次放进栈（已经出过栈的数字不用管），让它能到达栈顶：</p>
+  <p><strong>什么时候判不合法</strong>：想要的那个数字被别的数字压在栈底，同时又没有新数字能进栈了——两头都堵死，这个序列就出不来。</p>
   <div class="card">
     <p style="margin-top:0;"><strong>例</strong>：判断 4, 3, 5, 2, 1 是否合法（进栈序 1–5）：</p>
     <p>要出 4 → 先进 1,2,3,4 → 出 4；要出 3 → 栈顶正好 3 → 出 3；要出 5 → 进 5 → 出 5；要出 2 → 栈顶 2 → 出 2；要出 1 → 出 1。<strong>全程顺畅 → 合法 ✓</strong></p>
@@ -46,25 +47,26 @@
   </div>
   <div class="callout tip">
     <span class="tag">💡 背一个数字</span>
-    n 个元素的<strong>合法出栈序列共有卡特兰数种</strong> = C(2n, n) ÷ (n+1)：n=3 → <strong>5 种</strong>，n=4 → <strong>14 种</strong>。小题直接选。另一个冷知识：n 个节点的二叉树<strong>形状数</strong>也是这个数（Lesson 0008 会见到同一个 5）。
+    n 个元素的<strong>合法出栈序列共有卡特兰数种</strong> = C(2n, n) ÷ (n+1)。<strong>C(2n, n) 是组合数记号，意思是「从 2n 个东西里选 n 个」有多少种选法</strong>——不用背怎么算，小题直接代入：n=3 时 C(6,3)=20（6 选 3 共 20 种），20 ÷ (3+1) = <strong>5 种</strong>；n=4 → C(8,4)=70，70÷5 = <strong>14 种</strong>。另一个冷知识：n 个节点的二叉树<strong>形状数</strong>也是这个数（Lesson 0008 会见到同一个 5）——这不是巧合：卡特兰数是很多「数个数」问题的通用答案，出栈序列和二叉树形状只是其中两个。
   </div>
 
   <h2>三、队列：排队（先进先出 FIFO）</h2>
   <p>队列是<strong>排队</strong>：从队尾<strong>入队</strong>，从队头<strong>出队</strong>，<strong>先进先出</strong>。「入队出队分别在两端」——记牢这句，2021H2 真题就是把「同一端」的栈混进队列选项里。</p>
-  <p>应用场景：打印缓冲、消息队列、操作系统<strong>就绪队列</strong>（RR 时间片轮转调度就是从队列头取下一个进程运行）、<strong>广度优先搜索 BFS</strong>。</p>
+  <p>应用场景：打印缓冲、消息队列、操作系统<strong>就绪队列</strong>（操作系统让每个程序轮流用 CPU，每人只跑一小段「时间片」就被换下来、回队尾重新排队——<strong>RR（Round Robin，轮转）调度</strong>就是这样从队头取下一个程序运行）、<strong>广度优先搜索 BFS</strong>。</p>
+  <p>另外还有一种是「<strong>两端都能进出</strong>」的<strong>双端队列</strong>，别和普通队列混——2021H2 真题选项里就出现过它。</p>
 
   <h2>四、必考计算：循环队列</h2>
-  <p>数组实现的队列会「假溢出」——出队后前面空着却不能再入队。解决办法：<strong>首尾相连成环</strong>（取模绕圈）。</p>
+  <p>数组实现的队列会「<strong>假溢出</strong>」：出队几次后，数组前头空出了格子，但 rear 已经走到数组末尾，照普通数组队列的规矩就再也不能入队了——其实后面明明还有空位，像柜台前明明空着位置、队伍却被告知「排满了」，这就是「假」溢出。解决办法：<strong>把数组首尾相连成一个环</strong>，rear 走到末尾就绕回开头。怎么「绕回」？用 <strong>mod（取余数）</strong>：<strong>mod 就是「除以 M 求余数」</strong>，比如 5 mod 5 = 0（5 除以 5 余 0）、6 mod 5 = 1（6 除以 5 余 1）。以 M=5（5 个格子，编号 0–4）为例：rear 从 3 走到 4 后，(4+1) mod 5 = <strong>0</strong>——正好绕回格子 0，空出来的前头又能用了。</p>
   <span class="formula">入队：rear = (rear + 1) mod M　　出队：front = (front + 1) mod M</span>
   <table class="tight">
     <tr><th>判断</th><th>公式（必背）</th><th>为什么</th></tr>
-    <tr><td><strong>元素个数</strong></td><td class="num">(rear − front + M) mod M</td><td>加减 M 保证非负（rear 可能绕到了 front 后面）</td></tr>
-    <tr><td><strong>队满</strong></td><td class="num">(rear + 1) mod M == front</td><td><em>牺牲一格</em>：永远留一格空，否则满和空都是 front==rear，无法区分</td></tr>
-    <tr><td><strong>队空</strong></td><td class="num">front == rear</td><td>进出追平了</td></tr>
+    <tr><td><strong>元素个数</strong></td><td class="num">(rear − front + M) mod M</td><td>先加 M 再减，保证结果不是负数，再 mod 取余。为什么可能出负数？举个具体数：M=5，front=2、rear=1（rear 绕回圈后落到了 front 的「前面」格上，圈上没有绝对的先后），直接算 1−2 = <strong>−1</strong>，个数不可能是负的；加上 M：1−2+5 = 4，再 mod 5 得 4——正好是圈上从 front 到 rear 的真实格数。所以口算顺序固定是：<strong>先减、不够就加 M、最后 mod M</strong>。</td></tr>
+    <tr><td><strong>队满</strong></td><td class="num">(rear + 1) mod M == front</td><td><em>牺牲一格</em>：永远留一格空。<strong>先记住口径</strong>：本课 rear 指向队尾元素的下一位置。用 M=5 列一个满时的对照表：装 4 个元素、留 1 格空——<br>格 0：A｜格 1：B｜格 2：C｜格 3：D｜格 4：<strong>空</strong>。<br>front=0（指向 A），rear 指向队尾元素 D 的下一格，所以 <strong>rear=4</strong>。看判满条件：(rear+1) mod 5 = (4+1) mod 5 = 0 == front ✓——<strong>正是那格空位（格 4）的下一格撞上了 front</strong>，说明再装一格就撞脸，满了。如果不牺牲这一格、5 格全装满，rear 会绕一圈回到和 front 重合（front==rear），而这恰好是「队空」的条件——满和空长得一模一样，没法区分。所以宁可少装一格，把「满」和「空」区分开。</td></tr>
+    <tr><td><strong>队空</strong></td><td class="num">front == rear</td><td>入队一次 rear 走一格、出队一次 front 走一格，两者走过的格数一样多（进出追平）时，front 和 rear 指向同一格——队列里一个不剩。</td></tr>
   </table>
   <div class="callout warn">
     <span class="tag">⚠ 口径与陷阱</span>
-    本课口径：<strong>rear 指向队尾元素的下一位置</strong>（进队先放元素再 rear+1）。题目若声明别的口径（如带 count 变量），按题干走——但「牺牲一格」是教材默认，最能出计算题。
+    本课口径：<strong>rear 指向队尾元素的下一位置</strong>（进队先放元素再 rear+1）。题目若声明别的口径（如带 count 变量），按题干走——但「牺牲一格」（最多装 M−1 个、永远留一格空）是教材默认，最能出计算题。
   </div>
 
   <div class="callout mission" style="margin-top:1rem;">
